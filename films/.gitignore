@@ -13,3 +13,9 @@
 
 # Oversized intermediate WAVs (the mixed track, hundreds of MB) never enter git
 **/mix.wav
+
+# The speech cache, the scratch pages and the render locks stay local
+**/voice/.cache/
+**/test/
+**/scratch/
+**/*.lock

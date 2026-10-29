@@ -1,0 +1,128 @@
+[
+{
+"id": "hook",
+"text": "Có những ngày không làm việc gì cả, mà vẫn mệt như vừa đi xa bốn mươi ki lô mét.",
+"voice": "vi-VN-NamMinhNeural",
+"rate": "+5%",
+"pitch": "-8Hz"
+},
+{
+"id": "hook2",
+"text": "Vấn đề không phải là bạn thiếu việc. Vấn đề là đầu bạn không ngừng nghĩ.",
+"voice": "vi-VN-NamMinhNeural",
+"rate": "+5%",
+"pitch": "-8Hz"
+},
+{
+"id": "intro",
+"text": "Mình là Kẻ Nghĩ Nhiều. Hôm nay: tại sao càng rảnh, ta càng thấy mệt?",
+"voice": "vi-VN-NamMinhNeural",
+"rate": "+5%",
+"pitch": "-8Hz"
+},
+{
+"id": "f1",
+"text": "Người ta dành gần bốn mươi bảy phần trăm thời gian thức để nghĩ về chuyện không liên quan gì tới việc đang làm.",
+"voice": "vi-VN-NamMinhNeural",
+"rate": "+5%",
+"pitch": "-8Hz"
+},
+{
+"id": "f2",
+"text": "Và điều lạ nhất là: những lúc đầu lang thang thế đó, ta càng ít vui, kể cả khi đang làm thứ mình thích.",
+"voice": "vi-VN-NamMinhNeural",
+"rate": "+5%",
+"pitch": "-8Hz"
+},
+{
+"id": "drift",
+"text": "Người ta trôi đi cả khi đang nói chuyện với nhau.",
+"voice": "vi-VN-NamMinhNeural",
+"rate": "+5%",
+"pitch": "-8Hz"
+},
+{
+"id": "bored",
+"text": "Cái cảm giác ấy có tên là chán. Mệt, và bồn chồn, vì chẳng thấy gì thú vị.",
+"voice": "vi-VN-NamMinhNeural",
+"rate": "+5%",
+"pitch": "-8Hz"
+},
+{
+"id": "scroll1",
+"text": "Nên khi rảnh, não bạn tự đi tìm việc: mở điện thoại, lướt mấy trang mạng xã hội, rồi nghĩ lại chuyện đã qua.",
+"voice": "vi-VN-NamMinhNeural",
+"rate": "+5%",
+"pitch": "-8Hz"
+},
+{
+"id": "scroll2",
+"text": "Mà mỗi trang mạng lại đẩy thêm một đống thứ vào đầu. Rảnh thế, mà đầu lại đông.",
+"voice": "vi-VN-NamMinhNeural",
+"rate": "+5%",
+"pitch": "-8Hz"
+},
+{
+"id": "myth",
+"text": "Nghe quen chứ? Rảnh thì nghỉ, sao lại mệt? Câu trả lời quen thuộc nhất là: hết pin ý chí.",
+"voice": "vi-VN-NamMinhNeural",
+"rate": "+5%",
+"pitch": "-8Hz"
+},
+{
+"id": "truth",
+"text": "Nhưng hai mươi ba phòng thí nghiệm đã lặp lại thí nghiệm cạn kiệt ý chí, và không tìm thấy hiệu ứng nào đáng kể.",
+"voice": "vi-VN-NamMinhNeural",
+"rate": "+5%",
+"pitch": "-8Hz"
+},
+{
+"id": "rest",
+"text": "Vậy nên mệt khi rảnh, có lẽ không phải vì hết pin, mà vì đầu bạn chưa từng được nghỉ.",
+"voice": "vi-VN-NamMinhNeural",
+"rate": "+5%",
+"pitch": "-8Hz"
+},
+{
+"id": "nature",
+"text": "Nghỉ thật, theo nhà tâm lý học Stephen Kaplan, là đưa đầu về chỗ nhẹ nhàng, không cần hướng chú ý, như đi dạo ngoài trời.",
+"voice": "vi-VN-NamMinhNeural",
+"rate": "+5%",
+"pitch": "-8Hz"
+},
+{
+"id": "screen",
+"text": "Còn màn hình thì không phải là nghỉ. Nó vẫn giữ chú ý của bạn bận rộn, chỉ là bận với thứ vô nghĩa.",
+"voice": "vi-VN-NamMinhNeural",
+"rate": "+5%",
+"pitch": "-8Hz"
+},
+{
+"id": "feedwork",
+"text": "Lướt mạng xã hội không phải là nghỉ. Đó là một công việc không lương.",
+"voice": "vi-VN-NamMinhNeural",
+"rate": "+5%",
+"pitch": "-8Hz"
+},
+{
+"id": "roi",
+"text": "Đó là lý do Rối luôn cảnh báo: nghỉ mà không có kế hoạch, cũng là một việc, và nó tốn pin.",
+"voice": "vi-VN-NamMinhNeural",
+"rate": "+5%",
+"pitch": "-8Hz"
+},
+{
+"id": "close",
+"text": "Càng rảnh, bạn càng cần nghỉ thật, chứ không phải nghỉ giả.",
+"voice": "vi-VN-NamMinhNeural",
+"rate": "+3%",
+"pitch": "-8Hz"
+},
+{
+"id": "next",
+"text": "Lần sau khi rảnh, thử đi bộ mười phút mà không mang điện thoại. Mình là Kẻ Nghĩ Nhiều. Hẹn gặp lại ở trạm tiếp theo.",
+"voice": "vi-VN-NamMinhNeural",
+"rate": "+3%",
+"pitch": "-8Hz"
+}
+]
