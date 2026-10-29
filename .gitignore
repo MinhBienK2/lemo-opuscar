@@ -83,8 +83,7 @@ styles/*/demo/stills/*
 # Illustrative plates a demo's build needs (AI-generated, credited in CREDITS) are committed, not re-fetched
 !styles/news-package/demo/assets/plates/*.jpg
 
-# 用户自己的片子（agent 输出）
-/films/
+# 用户自己的片子（agent 输出）：成片与源码入库，中间产物留在本地（规则见 films/.gitignore）
 
 
 # Production logs are internal: they stay local

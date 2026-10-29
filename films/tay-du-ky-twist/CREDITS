@@ -1,0 +1,48 @@
+CREDITS — Một vòng lộn, mười bốn năm (a 10-minute film about Journey to the West)
+
+Text and film
+  The essay, the narration and every Vietnamese rendering in this film are original to it.
+  The 1592 novel 西遊記 (世德堂本, attributed to 吳承恩 / Ngô Thừa Ân) is public domain.
+  No existing translation is quoted; the Vietnamese wording is the film's own.
+  The paper figures are generic cut-outs drawn from the text's descriptions only — no adaptation's
+  characters, costumes, sets, logos or music are used or referenced on screen.
+  Chapter citations for every claim on screen: research/FACTS.md.
+
+Voice
+  Vietnamese narration: Microsoft Edge neural voice "vi-VN-HoaiMyNeural" via edge-tts
+  (rany2/edge-tts, LGPL-3.0). https://github.com/rany2/edge-tts
+  Synthetic speech. No real person's voice was cloned or used.
+
+Speech-to-text check (build-time only, no audio in the film)
+  faster-whisper "small" and "medium" (Systran, MIT) — https://github.com/SYSTRAN/faster-whisper
+  Used to verify every narration line; the accepted transcripts are in voice/lines.json.
+
+Images and environment (all CC0)
+  Poly Haven — https://polyhaven.com
+    lythwood_lounge_2k.hdr        (room lighting)
+    photo_studio_loft_hall_2k.hdr (fill light)
+    american_walnut_veneer        (walnut_diff.jpg, walnut_nor.jpg, walnut_rough.jpg — the desk)
+    desk_lamp_arm_01              (the lamp on the desk)
+    tea_set_01                    (the props on the desk)
+  Full list with the source of each file: assets/SOURCES.md
+
+Fonts (SIL Open Font License 1.1)
+  Be Vietnam Pro — https://fonts.google.com/specimen/Be+Vietnam+Pro
+  Fredoka         — https://fonts.google.com/specimen/Fredoka
+  Lilita One      — https://fonts.google.com/specimen/Lilita+One
+  Subset locally into fonts/ by fetch_fonts.mjs, so the film renders offline and offline-free of
+  any font-tracking request.
+
+Music and sound
+  The score is synthesised from scratch in mix.py (music box, pizzicato, clarinet, glockenspiel,
+  toy piano, low piano, brushed kit, drone, gong) and the foley is synthesised in the same file
+  (paper, creak, stamp, splash, tear, water). No sample library, no recorded music, no stock sound.
+
+Software
+  three.js r170 — MIT — https://threejs.org
+  Node.js and ffmpeg for the render and the master.
+
+Rights
+  The film is the user's to use and to publish. The materials it shows — the public-domain novel,
+  the CC0 environment maps and the OFL typefaces — are listed above with their licences. Anything
+  you add to it later is yours to license.

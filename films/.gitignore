@@ -1,0 +1,15 @@
+# Films: the finished film, its source, its stills and its credits go to GitHub.
+# Render outputs and generated audio stay local — build.sh regenerates them.
+
+# Render outputs (segments, video-only mux, mixes)
+**/out/
+
+# Generated speech and music (TTS lines, processed chunks, score renders) — the scripts next to them are kept
+**/*.wav
+**/*.mp3
+
+# node_modules lives in the repo root; the film's symlink would dangle in a clone
+/tay-du-ky-twist/node_modules
+
+# Oversized intermediate WAVs (the mixed track, hundreds of MB) never enter git
+**/mix.wav

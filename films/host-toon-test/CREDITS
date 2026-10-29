@@ -1,0 +1,17 @@
+# Credits & licences: Phi vụ triệu đô trong 2 phút
+
+| Asset | Source | Licence |
+|---|---|---|
+| All drawing, the host, sets, animation (`src/`) | Canvas 2D code written for this film | yours |
+| `src/cel.js` (cel fill / line tools) | adapted from the Lemo-Opuscar library, `styles/cel-anime-80s/demo/cel.js` | MIT License |
+| Mouth drive from the voice (`voice/process.py`) | technique from the Lemo-Opuscar library, `styles/scifi-toon/demo/voice.py` | MIT License |
+| Score, ambiences, foley (`mix.py`) | synthesized in numpy for this film (uses `core/audio/sfx.py` from the library) | yours / MIT |
+| Voice (`voice/*.wav`) | Microsoft Edge neural TTS via `edge-tts`, voice `vi-VN-HoaiMyNeural` | check Microsoft's terms for your use (commercial use of Edge TTS output is not clearly licensed) |
+| Speech check | faster-whisper (`base` model) | MIT |
+| Font: Be Vietnam Pro | Lâm Bảo, Tony Le, ViệtAnh Nguyễn — Google Fonts | SIL OFL 1.1 (`fonts/OFL-bevietnampro.txt`) |
+| Font: Patrick Hand | Patrick Wagesreiter — Google Fonts | SIL OFL 1.1 (`fonts/OFL-patrickhand.txt`) |
+
+The film summarises the plot of the TV series *La casa de papel* (Money Heist, Parts 1–2). Sources for the facts: `research/FACTS.md`.
+No footage, stills, music, logos, masks or actors' likenesses from the series are used: the robbers are generic figures in plain red jumpsuits,
+the Mint is a generic neoclassical building, the banknotes are a made-up design. The show's name, characters' code names and plot belong to their owners;
+you are responsible for how you publish this summary.

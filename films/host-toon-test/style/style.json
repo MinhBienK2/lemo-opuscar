@@ -1,0 +1,11 @@
+{
+ "slug": "host-toon",
+ "en": "Talking-Head Host Toon",
+ "cn": "解说主持人卡通",
+ "based_on": "cel-anime-80s",
+ "borrows": ["scifi-toon"],
+ "library_version": "3961ddb",
+ "created": "2026-10-22",
+ "line": "A cute bespectacled scholar hosts the explainer from her study, pops into the b-roll and steps into the story herself, all in clean modern cel.",
+ "line_cn": "戴眼镜的可爱学者主持人在书房里讲解，跳进画中画，也亲自走进故事现场，全部是干净的现代赛璐璐线条。"
+}

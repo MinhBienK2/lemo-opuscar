@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <title>Money Heist — Forensic Breakdown & 2D Explainer</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { width: 100%; height: 100%; overflow: hidden; background: #0B0C0E; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+    #canvas { width: 100vw; height: 100vh; display: block; }
+  </style>
+</head>
+<body>
+  <canvas id="canvas" width="1920" height="1080"></canvas>
+  <script type="module">
+    import { PAL, drawHead, drawBust, drawFullBody } from './character.js';
+
+    const cvs = document.getElementById('canvas');
+    const ctx = cvs.getContext('2d');
+
+    // Load cues
+    let CUES = [];
+    let TOTAL_DUR = 94.71;
+
+    try {
+      const resp = await fetch('./cues.json');
+      const data = await resp.json();
+      CUES = data.cues;
+      TOTAL_DUR = data.total_dur;
+    } catch (e) {
+      console.warn('cues.json not loaded, using embedded fallback');
+      CUES = [
+        { t0: 1.0, t1: 15.2, text: "Madrid, 10:00 sáng. 67 con tin bị giam giữ bên trong Xưởng đúc tiền Hoàng gia Tây Ban Nha. Nhưng họ đang bước vào một cái bẫy hoàn hảo." },
+        { t0: 16.4, t1: 28.9, text: "Chào các bạn, tôi là Ren. Nếu nghĩ đây là vụ cướp ngân hàng kinh điển, bạn đã bị Giáo sư lừa: Họ không chạm vào một xu trong két sắt." },
+        { t0: 30.1, t1: 42.4, text: "Hiện trường bên trong: Thay vì tẩu thoát, Giáo sư ra lệnh cố thủ 11 ngày để máy in công nghiệp chạy hết công suất." },
+        { t0: 43.6, t1: 55.2, text: "Mỗi giờ trôi qua: Xưởng in ra 8.000.000 € tiền mặt mới tinh, không số seri. Mục tiêu: Đúng 2,4 tỷ Euro." },
+        { t0: 56.4, t1: 68.0, text: "Chiêu bài con tin: 67 con tin mặc đồ đỏ và đeo mặt nạ Dalí giống hệt cướp. Lực lượng bắn tỉa hoàn toàn bị vô hiệu hóa." },
+        { t0: 69.2, t1: 79.5, text: "Cú đòn kết liễu: Đường hầm bí mật dài 180 mét khoét từ sàn kho tiền nối thẳng về nhà kho ngoại ô." },
+        { t0: 80.8, t1: 92.0, text: "2,4 tỷ Euro biến mất không dấu vết. Giáo sư biến vụ án thành màn ảo thuật vĩ đại nhất lịch sử truyền thông." }
+      ];
+    }
+
+    window.DUR = TOTAL_DUR;
+
+    // Helper functions
+    const TAU = Math.PI * 2;
+    function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+    function easeInOut(t) { return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t; }
+    function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+
+    // Lip sync helper: returns { talk: 0..1, viseme }
+    function getSpeech(t) {
+      let activeCue = null;
+      for (const c of CUES) {
+        if (t >= c.t0 && t <= c.t1) {
+          activeCue = c;
+          break;
+        }
+      }
+      if (!activeCue) return { talk: 0, viseme: 'closed', cue: null };
+
+      // Periodic mouth cycling while speaking
+      const cycle = ((t - activeCue.t0) * 4.5) % 1;
+      const talk = Math.sin(cycle * Math.PI);
+      const visemes = ['talk_a', 'talk_o', 'talk_e'];
+      const vIdx = Math.floor(((t - activeCue.t0) * 3) % visemes.length);
+      return { talk: Math.max(0, talk), viseme: visemes[vIdx], cue: activeCue };
+    }
+
+    // Natural eye blink helper
+    function getBlink(t) {
+      const cycle = (t * 0.35) % 1;
+      if (cycle > 0.94) {
+        return Math.sin((cycle - 0.94) / 0.06 * Math.PI);
+      }
+      return 0;
+    }
+
+    // --- Subtitle Rendering ---
+    function drawSubtitles(ctx, cue) {
+      if (!cue) return;
+      ctx.save();
+      // Background bar
+      ctx.fillStyle = 'rgba(10, 12, 16, 0.88)';
+      ctx.fillRect(140, 960, 1640, 80);
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = '#2E3238';
+      ctx.strokeRect(140, 960, 1640, 80);
+
+      // Red tag
+      ctx.fillStyle = '#FF4A2E';
+      ctx.fillRect(160, 976, 8, 48);
+
+      // Text
+      ctx.fillStyle = '#ECEAE4';
+      ctx.font = 'bold 26px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+      ctx.textAlign = 'left';
+      ctx.fillText(cue.text, 185, 1010);
+      ctx.restore();
+    }
+
+    // --- Header & Timecode HUD ---
+    function drawHUD(ctx, t, sceneTag) {
+      ctx.save();
+      // Top bar
+      ctx.fillStyle = '#141619';
+      ctx.fillRect(60, 40, 1800, 50);
+      ctx.strokeStyle = '#2E3238';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(60, 40, 1800, 50);
+
+      // Red status dot
+      ctx.fillStyle = '#FF4A2E';
+      ctx.beginPath();
+      ctx.arc(85, 65, 6, 0, TAU);
+      ctx.fill();
+
+      ctx.fillStyle = '#ECEAE4';
+      ctx.font = 'bold 16px monospace';
+      ctx.fillText('LEMO FORENSIC INVESTIGATION · LA CASA DE PAPEL ARCHIVE', 105, 71);
+
+      ctx.fillStyle = '#8B9097';
+      ctx.fillText(`SCENE: ${sceneTag}`, 820, 71);
+
+      // Timecode
+      const mins = Math.floor(t / 60);
+      const secs = Math.floor(t % 60);
+      const frms = Math.floor((t % 1) * 30);
+      const tc = `TC ${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}:${String(frms).padStart(2,'0')}`;
+      ctx.fillStyle = '#FF4A2E';
+      ctx.fillText(tc, 1720, 71);
+
+      ctx.restore();
+    }
+
+    // ==========================================
+    // SCENE 1: THE RED ALARM & MADRID RADAR (0.0s - 15.2s)
+    // ==========================================
+    function renderScene1(t) {
+      const p = t / 15.2;
+
+      // Dark map background with coordinate grid
+      ctx.fillStyle = '#0B0C0E';
+      ctx.fillRect(0, 0, 1920, 1080);
+
+      // Grid lines
+      ctx.strokeStyle = '#181C22';
+      ctx.lineWidth = 1;
+      for (let x = 60; x < 1860; x += 80) {
+        ctx.beginPath(); ctx.moveTo(x, 110); ctx.lineTo(x, 940); ctx.stroke();
+      }
+      for (let y = 110; y < 940; y += 80) {
+        ctx.beginPath(); ctx.moveTo(60, y); ctx.lineTo(1860, y); ctx.stroke();
+      }
+
+      // Radar scan circles
+      ctx.save();
+      ctx.translate(960, 520);
+      [150, 300, 460].forEach(r => {
+        ctx.strokeStyle = 'rgba(46, 50, 56, 0.6)';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.arc(0, 0, r, 0, TAU); ctx.stroke();
+      });
+
+      // Rotating Radar Beam
+      const sweepAngle = (t * 1.8) % TAU;
+      const grad = ctx.createConicGradient(sweepAngle, 0, 0);
+      grad.addColorStop(0, 'rgba(255, 74, 46, 0.28)');
+      grad.addColorStop(0.15, 'rgba(255, 74, 46, 0.0)');
+      grad.addColorStop(1, 'rgba(255, 74, 46, 0.0)');
+      ctx.fillStyle = grad;
+      ctx.beginPath(); ctx.arc(0, 0, 460, 0, TAU); ctx.fill();
+
+      // Target Lock Box: Royal Mint Madrid
+      ctx.strokeStyle = '#FF4A2E';
+      ctx.lineWidth = 2.5;
+      const boxSize = 90 + Math.sin(t * 6) * 4;
+      ctx.strokeRect(-boxSize/2, -boxSize/2, boxSize, boxSize);
+
+      ctx.fillStyle = '#FF4A2E';
+      ctx.font = 'bold 15px monospace';
+      ctx.fillText('TARGET LOCK: FNMT MADRID', 55, -25);
+      ctx.fillStyle = '#ECEAE4';
+      ctx.font = '13px monospace';
+      ctx.fillText('COORD: 40°25\'19"N 3°40\'16"W', 55, -5);
+      ctx.fillText('ALERT LEVEL: CODE RED', 55, 15);
+      ctx.restore();
+
+      // Emergency Alert Banners Left & Right
+      const blink = Math.sin(t * 8) > 0 ? 1 : 0.3;
+      ctx.fillStyle = `rgba(255, 74, 46, ${0.15 * blink})`;
+      ctx.fillRect(60, 110, 420, 820);
+      ctx.strokeStyle = `rgba(255, 74, 46, ${0.6 * blink})`;
+      ctx.strokeRect(60, 110, 420, 820);
+
+      ctx.fillStyle = '#FF4A2E';
+      ctx.font = 'bold 24px monospace';
+      ctx.fillText('STATUS: HOSTAGE CRISIS', 90, 160);
+      ctx.fillStyle = '#ECEAE4';
+      ctx.font = 'bold 36px monospace';
+      ctx.fillText('67 CON TIN', 90, 220);
+      ctx.fillStyle = '#8B9097';
+      ctx.font = '16px monospace';
+      ctx.fillText('VỊ TRÍ: XƯỞNG ĐÚC TIỀN HOÀNG GIA', 90, 260);
+
+      // Incident clock counter
+      ctx.fillStyle = '#141619';
+      ctx.fillRect(90, 300, 360, 140);
+      ctx.strokeStyle = '#2E3238';
+      ctx.strokeRect(90, 300, 360, 140);
+      ctx.fillStyle = '#8B9097';
+      ctx.font = '14px monospace';
+      ctx.fillText('THỜI GIAN CỐ THỦ DỰ KIẾN', 110, 335);
+      ctx.fillStyle = '#FF4A2E';
+      ctx.font = 'bold 44px monospace';
+      ctx.fillText('11 NGÀY ĐÊM', 110, 395);
+
+      // Tactical warning right side
+      ctx.fillStyle = '#141619';
+      ctx.fillRect(1440, 110, 420, 820);
+      ctx.strokeStyle = '#2E3238';
+      ctx.strokeRect(1440, 110, 420, 820);
+
+      ctx.fillStyle = '#FF4A2E';
+      ctx.font = 'bold 20px monospace';
+      ctx.fillText('LỰC LƯỢNG ĐẶC NHIỆM (GEO)', 1470, 160);
+      ctx.fillStyle = '#ECEAE4';
+      ctx.font = '16px sans-serif';
+      ctx.fillText('• 300 cảnh sát vũ trang bao vây', 1470, 210);
+      ctx.fillText('• Bắn tỉa phong tỏa tất cả lối ra', 1470, 245);
+      ctx.fillText('• Vệ tinh giám sát thời gian thực', 1470, 280);
+
+      ctx.fillStyle = 'rgba(255, 74, 46, 0.2)';
+      ctx.fillRect(1470, 330, 360, 110);
+      ctx.fillStyle = '#FF4A2E';
+      ctx.font = 'bold 18px monospace';
+      ctx.fillText('CẢNH BÁO BẪY TÂM LÝ:', 1490, 370);
+      ctx.fillStyle = '#ECEAE4';
+      ctx.font = '15px sans-serif';
+      ctx.fillText('Toàn bộ kế hoạch cảnh sát đã bị', 1490, 400);
+      ctx.fillText('Giáo sư dự đoán chính xác từng phút.', 1490, 425);
+    }
+
+    // ==========================================
+    // SCENE 2: REN TALKING HEAD & CASE DOSSIER (15.2s - 28.9s)
+    // ==========================================
+    function renderScene2(t, speech, blink) {
+      ctx.fillStyle = '#0B0C0E';
+      ctx.fillRect(0, 0, 1920, 1080);
+
+      // Split Screen: Left Case File, Right Ren Talking Head
+      // Left: Dossier
+      ctx.fillStyle = '#141619';
+      ctx.fillRect(60, 110, 980, 820);
+      ctx.strokeStyle = '#2E3238';
+      ctx.strokeRect(60, 110, 980, 820);
+
+      // Dossier Header
+      ctx.fillStyle = '#FF4A2E';
+      ctx.fillRect(90, 140, 10, 30);
+      ctx.fillStyle = '#ECEAE4';
+      ctx.font = 'bold 24px monospace';
+      ctx.fillText('HỒ SƠ MẬT: BÍ ẨN KHO TIỀN FNMT', 115, 165);
+
+      // Evidence File Card
+      ctx.fillStyle = '#1C2027';
+      ctx.fillRect(90, 200, 920, 420);
+      ctx.strokeStyle = '#30363D';
+      ctx.strokeRect(90, 200, 920, 420);
+
+      // Mock vault diagram
+      ctx.strokeStyle = '#5BC0EB';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(140, 250, 400, 320);
+      ctx.fillStyle = '#5BC0EB';
+      ctx.font = '16px monospace';
+      ctx.fillText('KHO TIỀN DỰ TRỮ QUỐC GIA', 160, 285);
+      ctx.fillText('TIỀN MẶT CÓ SẴN: ~140 TRIỆU €', 160, 320);
+
+      // Red Stamped Crossout
+      ctx.strokeStyle = '#FF4A2E';
+      ctx.lineWidth = 5;
+      ctx.beginPath();
+      ctx.moveTo(130, 240); ctx.lineTo(550, 580);
+      ctx.moveTo(550, 240); ctx.lineTo(130, 580);
+      ctx.stroke();
+
+      // Big Stamp Badge
+      ctx.save();
+      ctx.translate(620, 380);
+      ctx.rotate(-0.15);
+      ctx.fillStyle = 'rgba(255, 74, 46, 0.2)';
+      ctx.fillRect(-150, -45, 300, 90);
+      ctx.strokeStyle = '#FF4A2E';
+      ctx.lineWidth = 3.5;
+      ctx.strokeRect(-150, -45, 300, 90);
+      ctx.fillStyle = '#FF4A2E';
+      ctx.font = 'bold 22px monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText('HOÀN TOÀN BỎ QUA', 0, -5);
+      ctx.font = 'bold 15px monospace';
+      ctx.fillText('KHÔNG LẤY 1 XU TRONG KÉT', 0, 25);
+      ctx.restore();
+
+      // Key Finding Statement Box
+      ctx.fillStyle = '#201618';
+      ctx.fillRect(90, 650, 920, 240);
+      ctx.strokeStyle = '#A31515';
+      ctx.strokeRect(90, 650, 920, 240);
+
+      ctx.fillStyle = '#FF4A2E';
+      ctx.font = 'bold 20px monospace';
+      ctx.fillText('CÚ LỪA KINH ĐIỂN CỦA GIÁO SƯ:', 120, 695);
+      ctx.fillStyle = '#ECEAE4';
+      ctx.font = 'bold 28px sans-serif';
+      ctx.fillText('"Tại sao phải mạo hiểm cướp 140 triệu Euro', 120, 745);
+      ctx.fillText(' khi bạn có thể tự in ra 2.400 triệu Euro?"', 120, 785);
+
+      // Right: Ren Bust Explaining
+      ctx.fillStyle = '#141619';
+      ctx.fillRect(1080, 110, 780, 820);
+      ctx.strokeStyle = '#2E3238';
+      ctx.strokeRect(1080, 110, 780, 820);
+
+      ctx.fillStyle = '#FF4A2E';
+      ctx.font = 'bold 16px monospace';
+      ctx.fillText('FORENSIC NARRATOR · LIVE EXPLANATION', 1110, 150);
+
+      drawBust(ctx, {
+        x: 1470, y: 560, scale: 1.4,
+        gesture: 'explain_hand',
+        talk: speech.talk,
+        headPose: {
+          expression: 'smirk',
+          viseme: speech.viseme,
+          look: [-0.25, 0],
+          blink: blink,
+          headAngle: -0.04
+        }
+      });
+    }
+
+    // ==========================================
+    // SCENE 3: ZACK D. 2D IN THE PRINTING HALL (28.9s - 42.4s)
+    // ==========================================
+    function renderScene3(t, speech, blink) {
+      ctx.fillStyle = '#0A0C10';
+      ctx.fillRect(0, 0, 1920, 1080);
+
+      // Industrial Printing Hall Background
+      ctx.fillStyle = '#131820';
+      ctx.fillRect(60, 110, 1800, 820);
+
+      // Factory Girders
+      ctx.strokeStyle = '#202836';
+      ctx.lineWidth = 14;
+      for (let x = 120; x < 1860; x += 280) {
+        ctx.beginPath(); ctx.moveTo(x, 110); ctx.lineTo(x, 750); ctx.stroke();
+      }
+
+      // Massive Industrial Printing Rollers
+      const rollPhase = (t * 8) % TAU;
+      [420, 820, 1220].forEach((rx, idx) => {
+        // Machine body
+        ctx.fillStyle = '#1C2330';
+        ctx.fillRect(rx - 120, 260, 240, 480);
+        ctx.strokeStyle = '#303D52';
+        ctx.lineWidth = 3;
+        ctx.strokeRect(rx - 120, 260, 240, 480);
+
+        // Rotating Cylinders
+        ctx.fillStyle = '#404E66';
+        ctx.beginPath(); ctx.arc(rx, 420, 70, 0, TAU); ctx.fill();
+        ctx.strokeStyle = '#5B6E8C'; ctx.lineWidth = 4; ctx.stroke();
+
+        // Mechanical spokes
+        for (let a = 0; a < 4; a++) {
+          const ang = rollPhase + a * (Math.PI / 2);
+          ctx.beginPath();
+          ctx.moveTo(rx, 420);
+          ctx.lineTo(rx + Math.cos(ang) * 65, 420 + Math.sin(ang) * 65);
+          ctx.stroke();
+        }
+
+        // Piston moving vertically
+        const pistonY = 320 + Math.sin(t * 12 + idx) * 20;
+        ctx.fillStyle = '#C59B27';
+        ctx.fillRect(rx - 25, pistonY, 50, 40);
+      });
+
+      // Conveyor Belt of Green Euro Banknotes
+      ctx.fillStyle = '#0F1318';
+      ctx.fillRect(60, 680, 1800, 60);
+
+      const noteOffset = ((t * 220) % 180);
+      for (let nx = 60 - noteOffset; nx < 1860; nx += 180) {
+        // Euro note
+        ctx.fillStyle = '#2D6A4F';
+        ctx.fillRect(nx, 692, 120, 36);
+        ctx.strokeStyle = '#52B788';
+        ctx.lineWidth = 1.5;
+        ctx.strokeRect(nx, 692, 120, 36);
+
+        ctx.fillStyle = '#D8F3DC';
+        ctx.font = 'bold 14px monospace';
+        ctx.fillText('50 €', nx + 12, 715);
+      }
+
+      // Overhead Data Overlay Banner
+      ctx.fillStyle = 'rgba(20, 24, 32, 0.9)';
+      ctx.fillRect(100, 140, 600, 90);
+      ctx.strokeStyle = '#FF4A2E';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(100, 140, 600, 90);
+
+      ctx.fillStyle = '#FF4A2E';
+      ctx.font = 'bold 16px monospace';
+      ctx.fillText('HIỆN TRƯỜNG: XƯỞNG MÁY IN HOÀNG GIA (FNMT)', 125, 172);
+      ctx.fillStyle = '#ECEAE4';
+      ctx.font = 'bold 20px monospace';
+      ctx.fillText('MÁY IN CHẠY 24/24 · CÔNG SUẤT TỐI ĐA', 125, 205);
+
+      // Zack D. 2D In-Scene: Ren standing in full-body inside the factory pointing at the machine
+      drawFullBody(ctx, {
+        x: 1540, y: 780, scale: 1.15,
+        action: 'investigate_standing',
+        headPose: {
+          expression: 'explain',
+          viseme: speech.viseme,
+          talk: speech.talk,
+          look: [-0.4, 0],
+          blink: blink,
+          headAngle: -0.05
+        }
+      });
+    }
+
+    // ==========================================
+    // SCENE 4: MONEY SPEEDOMETER & 2.4 BILLION (42.4s - 55.2s)
+    // ==========================================
+    function renderScene4(t, speech, blink) {
+      ctx.fillStyle = '#0B0C0E';
+      ctx.fillRect(0, 0, 1920, 1080);
+
+      // Center Big Gauge Box
+      ctx.fillStyle = '#141619';
+      ctx.fillRect(60, 110, 1280, 820);
+      ctx.strokeStyle = '#2E3238';
+      ctx.strokeRect(60, 110, 1280, 820);
+
+      ctx.fillStyle = '#FF4A2E';
+      ctx.fillRect(90, 140, 12, 28);
+      ctx.fillStyle = '#ECEAE4';
+      ctx.font = 'bold 24px monospace';
+      ctx.fillText('TỐC ĐỘ SẢN XUẤT TIỀN MẶT THỜI GIAN THỰC', 115, 162);
+
+      // Speedometer Circular Arc
+      ctx.save();
+      ctx.translate(700, 480);
+
+      ctx.lineWidth = 32;
+      ctx.strokeStyle = '#222834';
+      ctx.beginPath();
+      ctx.arc(0, 0, 220, Math.PI * 0.75, Math.PI * 2.25);
+      ctx.stroke();
+
+      // Dynamic meter arc
+      const prog = 0.85 + Math.sin(t * 5) * 0.05;
+      const arcEnd = Math.PI * 0.75 + prog * (Math.PI * 1.5);
+      ctx.strokeStyle = '#FF4A2E';
+      ctx.beginPath();
+      ctx.arc(0, 0, 220, Math.PI * 0.75, arcEnd);
+      ctx.stroke();
+
+      // Central Speed Readout
+      ctx.fillStyle = '#ECEAE4';
+      ctx.font = 'bold 64px monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText('8.000.000 €', 0, -20);
+      ctx.fillStyle = '#8B9097';
+      ctx.font = 'bold 24px monospace';
+      ctx.fillText('MỖI 60 PHÚT TRÔI QUA', 0, 35);
+      ctx.restore();
+
+      // Target Progress Bar
+      const targetProg = clamp((t - 42.4) / 12.8, 0.4, 0.98);
+      const currentCash = (targetProg * 2400).toFixed(0);
+
+      ctx.fillStyle = '#1C2027';
+      ctx.fillRect(140, 750, 1120, 130);
+      ctx.strokeStyle = '#30363D';
+      ctx.strokeRect(140, 750, 1120, 130);
+
+      ctx.fillStyle = '#8B9097';
+      ctx.font = '16px monospace';
+      ctx.fillText(`MỤC TIÊU CUỐI CÙNG: 2.400.000.000 € (HIỆN TẠI: ${currentCash}.000.000 €)`, 170, 790);
+
+      // Progress bar fill
+      ctx.fillStyle = '#263040';
+      ctx.fillRect(170, 815, 1060, 36);
+      ctx.fillStyle = '#52B788';
+      ctx.fillRect(170, 815, 1060 * targetProg, 36);
+
+      // Right PIP: Ren looking up with analytical admiration
+      ctx.fillStyle = '#141619';
+      ctx.fillRect(1380, 110, 480, 820);
+      ctx.strokeStyle = '#2E3238';
+      ctx.strokeRect(1380, 110, 480, 820);
+
+      ctx.fillStyle = '#FF4A2E';
+      ctx.font = 'bold 16px monospace';
+      ctx.fillText('PHÂN TÍCH HIỆN TƯỢNG', 1410, 150);
+
+      drawBust(ctx, {
+        x: 1620, y: 560, scale: 1.25,
+        gesture: 'point_right',
+        talk: speech.talk,
+        headPose: {
+          expression: 'shock',
+          viseme: speech.viseme,
+          look: [-0.3, -0.2],
+          blink: blink,
+          headAngle: -0.06
+        }
+      });
+    }
+
+    // ==========================================
+    // SCENE 5: THE DALÍ MASK TACTICAL IMPASSE (55.2s - 68.0s)
+    // ==========================================
+    function renderScene5(t, speech, blink) {
+      ctx.fillStyle = '#0B0C0E';
+      ctx.fillRect(0, 0, 1920, 1080);
+
+      // Left Tactical Impasse Grid: Sniper View
+      ctx.fillStyle = '#141619';
+      ctx.fillRect(60, 110, 1180, 820);
+      ctx.strokeStyle = '#2E3238';
+      ctx.strokeRect(60, 110, 1180, 820);
+
+      ctx.fillStyle = '#FF4A2E';
+      ctx.fillRect(90, 140, 12, 28);
+      ctx.fillStyle = '#ECEAE4';
+      ctx.font = 'bold 24px monospace';
+      ctx.fillText('CHIẾN THUẬT LÀM MÙ: MẶT NẠ SALVADOR DALÍ', 115, 162);
+
+      // Grid of 6 Red Jumpsuit Targets
+      for (let row = 0; row < 2; row++) {
+        for (let col = 0; col < 3; col++) {
+          const tx = 180 + col * 340;
+          const ty = 260 + row * 260;
+
+          ctx.fillStyle = '#1C2027';
+          ctx.fillRect(tx, ty, 280, 210);
+          ctx.strokeStyle = '#30363D';
+          ctx.strokeRect(tx, ty, 280, 210);
+
+          // Red jumpsuit silhouette
+          ctx.fillStyle = '#C92A2A';
+          ctx.beginPath();
+          ctx.arc(tx + 140, ty + 70, 32, 0, TAU); // Hood
+          ctx.fill();
+          ctx.fillRect(tx + 95, ty + 105, 90, 80); // Body
+
+          // Dalí Mustache hint
+          ctx.strokeStyle = '#111';
+          ctx.lineWidth = 2.5;
+          ctx.beginPath();
+          ctx.arc(tx + 140, ty + 75, 12, 0.2, Math.PI - 0.2);
+          ctx.stroke();
+
+          // Target reticle
+          ctx.strokeStyle = 'rgba(255, 74, 46, 0.6)';
+          ctx.lineWidth = 1.5;
+          ctx.beginPath();
+          ctx.arc(tx + 140, ty + 70, 52, 0, TAU);
+          ctx.stroke();
+
+          // Question mark badge
+          ctx.fillStyle = '#FF4A2E';
+          ctx.font = 'bold 20px monospace';
+          ctx.fillText('? CON TIN HAY CƯỚP ?', tx + 25, ty + 195);
+        }
+      }
+
+      // Sniper Scope Warning Box
+      ctx.fillStyle = '#201618';
+      ctx.fillRect(140, 770, 1020, 120);
+      ctx.strokeStyle = '#A31515';
+      ctx.strokeRect(140, 770, 1020, 120);
+
+      ctx.fillStyle = '#FF4A2E';
+      ctx.font = 'bold 20px monospace';
+      ctx.fillText('KẾT LUẬN TÁC CHIẾN CỦA ĐẶC NHIỆM:', 170, 810);
+      ctx.fillStyle = '#ECEAE4';
+      ctx.font = 'bold 22px sans-serif';
+      ctx.fillText('"Xác suất bắn nhầm dân thường: 89,3% · Lệnh nổ súng bị phong tỏa."', 170, 855);
+
+      // Right: Ren Bust Explaining
+      ctx.fillStyle = '#141619';
+      ctx.fillRect(1280, 110, 580, 820);
+      ctx.strokeStyle = '#2E3238';
+      ctx.strokeRect(1280, 110, 580, 820);
+
+      ctx.fillStyle = '#FF4A2E';
+      ctx.font = 'bold 16px monospace';
+      ctx.fillText('ĐẤU TRÍ TÂM LÝ', 1310, 150);
+
+      drawBust(ctx, {
+        x: 1570, y: 560, scale: 1.35,
+        gesture: 'chin_touch',
+        talk: speech.talk,
+        headPose: {
+          expression: 'intense',
+          viseme: speech.viseme,
+          look: [-0.3, 0.1],
+          blink: blink,
+          headAngle: -0.04
+        }
+      });
+    }
+
+    // ==========================================
+    // SCENE 6: ZACK D. 2D ESCAPE TUNNEL (68.0s - 79.5s)
+    // ==========================================
+    function renderScene6(t, speech, blink) {
+      ctx.fillStyle = '#0A0B0E';
+      ctx.fillRect(0, 0, 1920, 1080);
+
+      // Cross-section Architectural Cutaway
+      ctx.fillStyle = '#141619';
+      ctx.fillRect(60, 110, 1800, 820);
+
+      // Above ground (Floor level 0.0m)
+      ctx.fillStyle = '#1C2330';
+      ctx.fillRect(60, 110, 1800, 260);
+
+      ctx.strokeStyle = '#4A5B75';
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.moveTo(60, 370); ctx.lineTo(1860, 370);
+      ctx.stroke();
+
+      ctx.fillStyle = '#5BC0EB';
+      ctx.font = 'bold 18px monospace';
+      ctx.fillText('MẶT ĐẤT (CẢNH SÁT ĐANG BAO VÂY CỬA CHÍNH)', 90, 160);
+
+      // Police vans above ground with flashing lights
+      for (let vx = 400; vx < 1400; vx += 350) {
+        ctx.fillStyle = '#2B3545';
+        ctx.fillRect(vx, 290, 160, 75);
+        // Flashing siren
+        const sirenCol = Math.sin(t * 15 + vx) > 0 ? '#3B82F6' : '#EF4444';
+        ctx.fillStyle = sirenCol;
+        ctx.fillRect(vx + 60, 275, 40, 15);
+      }
+
+      // Underground Earth (-12.0m)
+      ctx.fillStyle = '#0F1218';
+      ctx.fillRect(60, 370, 1800, 560);
+
+      // The 180-metre Secret Tunnel
+      ctx.fillStyle = '#251E18';
+      ctx.fillRect(200, 680, 1500, 120);
+      ctx.strokeStyle = '#6B4E3D';
+      ctx.lineWidth = 3;
+      ctx.strokeRect(200, 680, 1500, 120);
+
+      // Rails inside tunnel
+      ctx.strokeStyle = '#8B9097';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(200, 750); ctx.lineTo(1700, 750);
+      ctx.moveTo(200, 770); ctx.lineTo(1700, 770);
+      ctx.stroke();
+
+      // Tunnel arrow & distance marker
+      ctx.fillStyle = '#FF4A2E';
+      ctx.font = 'bold 22px monospace';
+      ctx.fillText('◄ ĐƯỜNG HẦM ĐÀO TẨU DÀI 180 MÉT · KHOÉT TỪ SÀN KHO TIỀN ◄', 420, 650);
+
+      ctx.fillStyle = '#52B788';
+      ctx.fillText('ĐÍCH ĐẾN: NHÀ KHO BỎ HOANG NGOẠI Ô MADRID', 1050, 745);
+
+      // Zack D. 2D: Ren crouching next to the tunnel entrance
+      drawFullBody(ctx, {
+        x: 340, y: 770, scale: 0.95,
+        action: 'crouch_examine',
+        headPose: {
+          expression: 'smirk',
+          viseme: speech.viseme,
+          talk: speech.talk,
+          look: [0.4, 0.2],
+          blink: blink,
+          headAngle: 0.08
+        }
+      });
+    }
+
+    // ==========================================
+    // SCENE 7: THE PRESTIGE & VERDICT (79.5s - 94.71s)
+    // ==========================================
+    function renderScene7(t, speech, blink) {
+      ctx.fillStyle = '#0B0C0E';
+      ctx.fillRect(0, 0, 1920, 1080);
+
+      // Left Map of Spain Exfil Route
+      ctx.fillStyle = '#141619';
+      ctx.fillRect(60, 110, 1080, 820);
+      ctx.strokeStyle = '#2E3238';
+      ctx.strokeRect(60, 110, 1080, 820);
+
+      ctx.fillStyle = '#FF4A2E';
+      ctx.fillRect(90, 140, 12, 28);
+      ctx.fillStyle = '#ECEAE4';
+      ctx.font = 'bold 24px monospace';
+      ctx.fillText('KẾT CỤC VỤ ÁN: MÀN ẢO THUẬT VĨ ĐẠI', 115, 162);
+
+      // Verdict Statement Table
+      const stats = [
+        { label: 'TỔNG SỐ TIỀN MANG ĐI', val: '2.400.000.000 €', sub: 'Tiền mặt mới tinh, không số seri' },
+        { label: 'THIỆT HẠI TÀI SẢN DÂN SỰ', val: '0 € (KHÔNG CƯỚP CỦA DÂN)', sub: 'Ngân hàng Trung ương tự bù trừ' },
+        { label: 'TỔNG THỜI GIAN CỐ THỦ', val: '11 NGÀY ĐÊM', sub: 'Thao túng toàn bộ truyền thông quốc tế' },
+        { label: 'TỶ LỆ THOÁT HIỂM CUỐI CÙNG', val: '100% QUA ĐƯỜNG HẦM', sub: 'Cảnh sát đột nhập chỉ thấy kho rỗng' }
+      ];
+
+      stats.forEach((st, idx) => {
+        const sy = 220 + idx * 160;
+        ctx.fillStyle = '#1A1E24';
+        ctx.fillRect(100, sy, 1000, 130);
+        ctx.strokeStyle = '#30363D';
+        ctx.strokeRect(100, sy, 1000, 130);
+
+        ctx.fillStyle = '#FF4A2E';
+        ctx.fillRect(100, sy, 8, 130);
+
+        ctx.fillStyle = '#8B9097';
+        ctx.font = 'bold 15px monospace';
+        ctx.fillText(st.label, 135, sy + 38);
+
+        ctx.fillStyle = '#52B788';
+        ctx.font = 'bold 36px monospace';
+        ctx.fillText(st.val, 135, sy + 85);
+
+        ctx.fillStyle = '#ECEAE4';
+        ctx.font = '15px sans-serif';
+        ctx.fillText(st.sub, 600, sy + 85);
+      });
+
+      // Right: Ren Hero Close-up
+      ctx.fillStyle = '#141619';
+      ctx.fillRect(1180, 110, 680, 820);
+      ctx.strokeStyle = '#2E3238';
+      ctx.strokeRect(1180, 110, 680, 820);
+
+      ctx.fillStyle = '#FF4A2E';
+      ctx.font = 'bold 16px monospace';
+      ctx.fillText('TỔNG KẾT HỒ SƠ', 1210, 150);
+
+      drawBust(ctx, {
+        x: 1520, y: 560, scale: 1.4,
+        gesture: 'explain_hand',
+        talk: speech.talk,
+        headPose: {
+          expression: 'smirk',
+          viseme: speech.viseme,
+          look: [0, 0],
+          blink: blink,
+          headAngle: 0.02
+        }
+      });
+    }
+
+    // ==========================================
+    // MAIN TIME-BASED RENDER DISPATCHER
+    // ==========================================
+    window.render = function(t) {
+      ctx.clearRect(0, 0, 1920, 1080);
+      const speech = getSpeech(t);
+      const blink = getBlink(t);
+
+      let sceneTag = 'SCENE 1: ALERT';
+      if (t < 15.2) {
+        renderScene1(t);
+        sceneTag = '01 / ĐỘT NHẬP & PHONG TỎA';
+      } else if (t < 28.9) {
+        renderScene2(t, speech, blink);
+        sceneTag = '02 / BÍ ẨN KHO TIỀN';
+      } else if (t < 42.4) {
+        renderScene3(t, speech, blink);
+        sceneTag = '03 / XƯỞNG IN HOÀNG GIA';
+      } else if (t < 55.2) {
+        renderScene4(t, speech, blink);
+        sceneTag = '04 / TỐC ĐỘ 8 TRIỆU € / GIỜ';
+      } else if (t < 68.0) {
+        renderScene5(t, speech, blink);
+        sceneTag = '05 / CHIÊU THỨC MẶT NẠ DALÍ';
+      } else if (t < 79.5) {
+        renderScene6(t, speech, blink);
+        sceneTag = '06 / ĐƯỜNG HẦM 180 MÉT';
+      } else {
+        renderScene7(t, speech, blink);
+        sceneTag = '07 / MÀN ẢO THUẬT VĨ ĐẠI';
+      }
+
+      // HUD and Subtitles
+      drawHUD(ctx, t, sceneTag);
+      drawSubtitles(ctx, speech.cue);
+    };
+
+    // Initialize first frame
+    window.render(0);
+    window.READY = true;
+  </script>
+</body>
+</html>

@@ -1,0 +1,186 @@
+[
+ {
+  "id": "hook1",
+  "text": "Có một vụ cướp mà bọn cướp không lấy tiền của ai cả.",
+  "voice": "vi-VN-HoaiMyNeural",
+  "rate": "+6%",
+  "pitch": "+8Hz"
+ },
+ {
+  "id": "hook2",
+  "text": "Bởi vì tiền… là do chính họ tự in ra.",
+  "voice": "vi-VN-HoaiMyNeural",
+  "rate": "+6%",
+  "pitch": "+8Hz",
+  "say": "Bởi vì tiền, là do chính họ tự in ra."
+ },
+ {
+  "id": "intro",
+  "text": "Chào bạn, mình là Nhi. Hôm nay: Phi vụ triệu đô, phần 1 và 2, gói gọn trong 2 phút.",
+  "voice": "vi-VN-HoaiMyNeural",
+  "rate": "+6%",
+  "pitch": "+8Hz",
+  "say": "Chào bạn, mình là Nhi. Hôm nay: Phi vụ triệu đô, phần một và hai, gói gọn trong hai phút."
+ },
+ {
+  "id": "prof",
+  "text": "Kẻ đứng sau là một người đàn ông được gọi là Giáo sư.",
+  "voice": "vi-VN-HoaiMyNeural",
+  "rate": "+6%",
+  "pitch": "+8Hz"
+ },
+ {
+  "id": "train",
+  "text": "Ông tuyển 8 tay tội phạm, huấn luyện họ suốt 5 tháng trong một trang trại bỏ hoang ở Toledo.",
+  "voice": "vi-VN-HoaiMyNeural",
+  "rate": "+0%",
+  "pitch": "+8Hz",
+  "say": "Ông tuyển tám tay tội phạm, huấn luyện họ suốt năm tháng trong một trang trại bỏ hoang ở Tô-lê-đô."
+ },
+ {
+  "id": "names",
+  "text": "Mỗi người lấy tên một thành phố: Tokyo, Berlin, Nairobi, Rio, Denver, Moscow, Helsinki và Oslo.",
+  "voice": "vi-VN-HoaiMyNeural",
+  "rate": "+6%",
+  "pitch": "+8Hz",
+  "say": "Mỗi người lấy tên một thành phố: Tô-ky-ô, Béc-lin, Nai-rô-bi, Ri-ô, Đen-vơ, Mát-xcơ-va, Hen-xin-ki, và Ô-xlô."
+ },
+ {
+  "id": "rules",
+  "text": "Và bốn luật: không tên thật, không hỏi chuyện riêng, không yêu đương… và không đổ một giọt máu.",
+  "voice": "vi-VN-HoaiMyNeural",
+  "rate": "+6%",
+  "pitch": "+8Hz",
+  "say": "Và bốn luật: không tên thật. Không hỏi chuyện riêng. Không yêu đương. Và, không đổ một giọt máu."
+ },
+ {
+  "id": "enter",
+  "text": "Sáng thứ Sáu, họ đột nhập Xưởng in tiền Hoàng gia Tây Ban Nha và khóa cửa cùng 67 con tin.",
+  "voice": "vi-VN-HoaiMyNeural",
+  "rate": "+6%",
+  "pitch": "+8Hz",
+  "say": "Sáng thứ sáu, họ đột nhập Xưởng in tiền Hoàng gia Tây Ban Nha, và khóa cửa cùng sáu mươi bảy con tin."
+ },
+ {
+  "id": "goal",
+  "text": "Mục tiêu: in 2,4 tỷ euro, toàn tờ 50, trong 11 ngày.",
+  "voice": "vi-VN-HoaiMyNeural",
+  "rate": "+6%",
+  "pitch": "+8Hz",
+  "say": "Mục tiêu: in hai phẩy bốn tỷ ơ-rô, toàn tờ năm mươi, trong mười một ngày."
+ },
+ {
+  "id": "trick",
+  "text": "Mẹo đầu tiên: bắt mọi con tin mặc đồ đỏ giống hệt bọn cướp.",
+  "voice": "vi-VN-HoaiMyNeural",
+  "rate": "+6%",
+  "pitch": "+8Hz"
+ },
+ {
+  "id": "police",
+  "text": "Cảnh sát nhìn vào, không biết ai là ai, nên không dám xông vào.",
+  "voice": "vi-VN-HoaiMyNeural",
+  "rate": "+6%",
+  "pitch": "+8Hz"
+ },
+ {
+  "id": "print",
+  "text": "Trong khi đó, máy in chạy suốt ngày đêm.",
+  "voice": "vi-VN-HoaiMyNeural",
+  "rate": "+6%",
+  "pitch": "+8Hz"
+ },
+ {
+  "id": "decoy",
+  "text": "Còn lối thoát? Con tin bị bắt đào một đường hầm… nhưng đó chỉ là đường hầm giả.",
+  "voice": "vi-VN-HoaiMyNeural",
+  "rate": "+6%",
+  "pitch": "+8Hz",
+  "say": "Còn lối thoát? Con tin bị bắt đào một đường hầm. Nhưng đó, chỉ là đường hầm giả."
+ },
+ {
+  "id": "tunnel",
+  "text": "Đường hầm thật nối thẳng từ một hầm kho ra nhà kho của Giáo sư.",
+  "voice": "vi-VN-HoaiMyNeural",
+  "rate": "+6%",
+  "pitch": "+8Hz"
+ },
+ {
+  "id": "but",
+  "text": "Nhưng kế hoạch hoàn hảo đến đâu, con người vẫn không hoàn hảo.",
+  "voice": "vi-VN-HoaiMyNeural",
+  "rate": "+6%",
+  "pitch": "+8Hz"
+ },
+ {
+  "id": "love1",
+  "text": "Luật bị phá gần như ngay lập tức: Tokyo và Rio yêu nhau.",
+  "voice": "vi-VN-HoaiMyNeural",
+  "rate": "+6%",
+  "pitch": "+8Hz",
+  "say": "Luật bị phá gần như ngay lập tức: Tô-ky-ô và Ri-ô yêu nhau."
+ },
+ {
+  "id": "love2",
+  "text": "Còn Giáo sư lại phải lòng chính nữ thanh tra đang truy lùng mình: Raquel Murillo.",
+  "voice": "vi-VN-HoaiMyNeural",
+  "rate": "+6%",
+  "pitch": "+8Hz",
+  "say": "Còn Giáo sư, lại phải lòng chính nữ thanh tra đang truy lùng mình: Ra-ken Mu-ri-dô."
+ },
+ {
+  "id": "blood",
+  "text": "Và luật cuối cùng, không đổ máu, cũng vỡ.",
+  "voice": "vi-VN-HoaiMyNeural",
+  "rate": "+6%",
+  "pitch": "+8Hz",
+  "say": "Và luật cuối cùng, không đổ máu, cũng vỡ."
+ },
+ {
+  "id": "dead",
+  "text": "Oslo, Moscow, và Berlin, anh trai của Giáo sư, không bao giờ ra khỏi đó.",
+  "voice": "vi-VN-HoaiMyNeural",
+  "rate": "+6%",
+  "pitch": "+8Hz",
+  "say": "Ô-xlô. Mát-xcơ-va. Và Béc-lin, anh trai của Giáo sư. Không bao giờ ra khỏi đó."
+ },
+ {
+  "id": "escape",
+  "text": "Sau 128 giờ, những người còn lại thoát ra qua đường hầm…",
+  "voice": "vi-VN-HoaiMyNeural",
+  "rate": "+6%",
+  "pitch": "+8Hz",
+  "say": "Sau một trăm hai mươi tám giờ, những người còn lại thoát ra qua đường hầm,"
+ },
+ {
+  "id": "haul",
+  "text": "mang theo 984 triệu euro.",
+  "voice": "vi-VN-HoaiMyNeural",
+  "rate": "+6%",
+  "pitch": "+8Hz",
+  "say": "mang theo chín trăm tám mươi bốn triệu ơ-rô."
+ },
+ {
+  "id": "half",
+  "text": "Chưa tới một nửa mục tiêu. Nhưng đủ để cả thế giới nhớ bộ đồ đỏ.",
+  "voice": "vi-VN-HoaiMyNeural",
+  "rate": "+6%",
+  "pitch": "+8Hz"
+ },
+ {
+  "id": "palawan",
+  "text": "Một năm sau, Raquel tìm lại Giáo sư trên một bờ biển ở Palawan, Philippines.",
+  "voice": "vi-VN-HoaiMyNeural",
+  "rate": "+6%",
+  "pitch": "+8Hz",
+  "say": "Một năm sau, Ra-ken tìm lại Giáo sư, trên một bờ biển ở Pa-la-oan, Phi-líp-pin."
+ },
+ {
+  "id": "next",
+  "text": "Và phi vụ tiếp theo… họ không in tiền nữa.",
+  "voice": "vi-VN-HoaiMyNeural",
+  "rate": "+6%",
+  "pitch": "+8Hz",
+  "say": "Và phi vụ tiếp theo, họ không in tiền nữa."
+ }
+]
