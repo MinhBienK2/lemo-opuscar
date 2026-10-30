@@ -15,6 +15,27 @@ Command reference for `core/` and `tools/`. How the pieces fit together is in [`
 
 Sizes are in TECHNIQUE.md §1.
 
+## The library: where the films are
+
+| Command | What it does |
+|---|---|
+| `node core/render/films.mjs --films` | every film of the library, one folder per line: the one-shots under `films/` and the episodes under `channels/`, at any depth |
+| `node core/render/films.mjs --channels` | every channel, one folder per line |
+| `node core/render/films.mjs --json` | the same, as JSON — what the Python tools parse |
+| `sh core/render/new_episode.sh <channel> <episode> [title]` | create the next episode of a channel |
+
+**`films.mjs` is the one module that knows where the films are.** No other tool globs `films/` or `channels/`: a tool that needs a film asks this module, or takes the folder as an argument. It answers three questions: which folders hold a film, which hold a channel, and which film a name belongs to — by folder name, by the name of its movie, or by its path. The rules it applies are in [`../docs/layout.md`](../docs/layout.md): a folder that holds `build.sh` (or `TREATMENT.md`, for a film in preparation) is a film; a folder that holds `CHANNEL.md` and no `build.sh` is a channel; the marker decides the kind, never the depth.
+
+```js
+import { listFilms, listChannels, findFilm } from './core/render/films.mjs';
+
+listFilms();    // [{ dir, name, kind: 'episode'|'oneshot', channel, episode, manifest }]
+listChannels(); // [{ dir, slug, name, episodes: [film…] }]
+findFilm('tram-nghi-nhieu-tap-01');   // the film with that folder name or that movie name
+```
+
+**`new_episode.sh`** creates `channels/<channel>/<episode>/` with the episode's own files — `TREATMENT.md`, `CREDITS`, `research/FACTS.md`, `film.json`, `index.html`, `build.sh` (with the episode's own movie name), `voice/lines.json` and an empty `src/` — and **attaches** the channel's shared code instead of copying it: the episode's `src/` imports the channel's `rig/` by relative path, and its `build.sh` calls the channel's `mix.py` (with `FILM=` the episode) and the channel's `voice/` scripts. It never copies the previous episode: an episode starts empty of identity. It refuses to run unless the channel exists and never overwrites an episode.
+
 ## The page contract
 
 | Global | Required | Meaning |
@@ -47,7 +68,7 @@ All four page tools take `--size WxH` (default `1920x1080`, even numbers) and `-
 
 **drawcheck** reads the film's own `src/*.js` and derives the calling convention from the film's own helper, because `rect` means `x0,y0,x1,y1` in some films and `x,y,w,h` in others. It reports a `rect()` with the wrong number of arguments, an inverted x corner (the helper mirrors it silently), a width or height of zero or less, a `cel()` with other than 3 arguments and a `path()` with none. Only calls whose arguments are plain numbers are compared, so nothing is reported that cannot be seen in the source. It never writes to the film.
 
-**review** runs the whole loop for one film: drawcheck, readcheck, the review stills every 2 s (the length comes from `events.json`), the contact sheet, and the loudness and the black frames of the finished `.mp4`. Every step runs even when an earlier one fails; the last line says PASS or FAIL.
+**review** runs the whole loop for one film — a one-shot or an episode, at any depth: filmcheck, drawcheck, the claims and facts checks, readcheck, the review stills every 2 s (the length comes from `events.json`), the contact sheet, and the loudness and the black frames of the finished `.mp4`. Every step runs even when an earlier one fails; the last line says PASS or FAIL.
 
 **mux** runs a two-pass `loudnorm` to −14 LUFS / true peak −1.2 dB, adds film grain (`grain` 0 = none) and prints the measured loudness. Silent audio is left at its level with a warning; short audio is padded, long audio cut at the picture's end; missing, damaged or truncated audio is refused. It never leaves a partial file.
 
@@ -71,13 +92,35 @@ All four page tools take `--size WxH` (default `1920x1080`, even numbers) and `-
 | `core/fonts/` | Fredoka, Lilita One, IM Fell English, ZCOOL KuaiLe (OFL, [`fonts/OFL.md`](fonts/OFL.md)) as subsets; ZCOOL holds only ≈ 200 characters |
 | `core/assets/polyhaven/` | CC0 HDRIs and models (`SOURCES.md`) |
 
+## The cast
+
+| File | It is |
+|---|---|
+| `core/cast/cast.mjs` | the cast module: the spec, the geometry, the pose model |
+| `core/cast/adapter-2d.mjs` | the 2D adapter: draws the character on a 2D canvas |
+| `core/cast/adapter-3d.mjs` | the 3D adapter: builds the character in three.js |
+
+Both adapters satisfy the same interface:
+
+```js
+export function createView(canvas);          // the target the character is drawn in
+export function createCharacter(spec);        // → { draw(view, pose), setPose(pose) }
+```
+
+A channel whose characters must live in 2D and in 3D keeps one cast spec per character —
+`channels/<ch>/cast/<name>.json` — and the two renderings of it are the same person. The spec format and the
+way to add a third adapter are in [`cast/README.md`](cast/README.md).
+
 ## Checks
 
 | Command | What it does |
 |---|---|
 | `.venv/bin/python tools/check_citations.py <file.md> [<file.md> ...]` | every source in a research file must be traceable: a source entry (a list item or a quote with a year next to an author, a journal or an identifier) needs a `DOI:`, a `PMID:`/`PubMed:`, an `http(s)://` link or an `arXiv:`. A source that is cited with an identifier elsewhere in the same file counts, so a short list of sources at the end of a file need not repeat the DOI |
-| `sh tools/install_precommit.sh [--force]` | install the pre-commit hook: the staged `.js` files under `films/` or `styles/` are parsed and every film with staged changes under its `src/` is audited by drawcheck. An existing hook is never overwritten without `--force` |
-| `.github/workflows/films.yml` | the same checks in CI, on every push and pull request that touches `films/`, `styles/**/src/**`, `core/` or `tools/` |
+| `node core/render/filmcheck.mjs <film-folder> [<film-folder> ...]` | the film is its own episode: its treatment, research, title and credits are not byte-identical to another film's, and the name its build writes must belong to no other film |
+| `.venv/bin/python tools/gen_films_index.py` | write `FILMS.md` from the manifests: the table of every film and the `## Channels` section. The index is generated — never edit it by hand |
+| `.venv/bin/python tools/check_films_index.py` | every film the discovery module lists has a manifest; every manifest names a movie that is there and a runtime `ffprobe` measures; `FILMS.md` has a row for every film and names no film that does not exist |
+| `sh tools/install_precommit.sh [--force]` | install the pre-commit hook: the staged `.js` files under `films/`, `channels/` or `styles/` are parsed, every film with staged changes is checked by filmcheck and drawcheck, every film with a staged research file by the citation, claims and facts checks, and the index when `FILMS.md` or a manifest is staged. The films are never globbed: the hook asks `core/render/films.mjs`. An existing hook is never overwritten without `--force` |
+| `.github/workflows/films.yml` | the same checks in CI, on every push and pull request that touches `films/`, `channels/`, `styles/**/src/**`, `core/` or `tools/` |
 
 ## Environment variables
 
@@ -85,7 +128,7 @@ All four page tools take `--size WxH` (default `1920x1080`, even numbers) and `-
 |---|---|
 | `LEMO_OPUSCAR_HOME` | where `setup.sh` keeps the library (default `~/lemo-opuscar`) |
 | `PLAYWRIGHT_CHROME` | a Chrome / headless-shell executable instead of Playwright's |
-| `LEMO_ANGLE` | WebGL backend (default `metal` on macOS; `default` passes none) |
+| `LEMO_ANGLE` | WebGL backend (default `metal` on macOS; `default` passes none). On a Linux box without GPU drivers the default backend loses the WebGL context and a 3D page renders blank — render those with `LEMO_ANGLE=swiftshader` (software, slower); the browser says so when it happens |
 | `RENDER_SLOTS` | optional; limits concurrent full renders across processes |
 | `LEMO_COLOR=bt709` | `mux.sh` writes limited-range BT.709 instead of the default full-range output |
 | `WHISPER_MODEL` | Whisper model name or local folder for `asr_check.py` (same as `--model`; default `base.en` for English, `small` for Chinese, `base` otherwise) |

@@ -1,5 +1,5 @@
 // Render stills: node core/render/still.mjs <demo> <t> [<t> ...] [--range a:b:step] [--q 'k=v&..'] [--prefix t_] [--out dir] [--size 1920x1080]
-// <demo> = the folder that holds index.html (e.g. styles/<slug>/demo, films/<name>); the page must expose window.READY and window.render(t).
+// <demo> = the folder that holds index.html (e.g. styles/<slug>/demo, films/<name>, channels/<channel>/<episode>); the page must expose window.READY and window.render(t).
 // A page error or a 404 on a required file exits immediately (non-zero); giving no time points is a usage error
 import fs from 'fs'; import path from 'path';
 import { openDemo, closeServer, requireDemo, takeSize } from './page.mjs';

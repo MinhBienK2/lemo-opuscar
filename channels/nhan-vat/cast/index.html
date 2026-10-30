@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><title>Nhân vật — Bích (2D và 3D)</title>
+<link rel="stylesheet" href="/core/fonts/fonts.css">
+<style>
+  html,body{margin:0;background:#12131A;color:#FAF8F5;overflow:hidden}
+  .sheet{position:absolute;inset:0}
+  h1{position:absolute;left:90px;top:52px;margin:0;font:400 66px/1 'Lilita One',system-ui,sans-serif;letter-spacing:3px}
+  .bar{position:absolute;left:90px;top:138px;width:96px;height:6px;background:#F2C14E;border-radius:3px}
+  .sub{position:absolute;left:90px;top:160px;margin:0;font:400 28px/1.4 'Fredoka',system-ui,sans-serif;color:#8A90A6}
+  .file{position:absolute;right:90px;top:70px;margin:0;font:400 24px/1 'Fredoka',system-ui,sans-serif;color:#5A6488}
+  canvas{position:absolute;display:block;background:#1B1D27;border:1px solid #2E3448;border-radius:18px}
+  .cap{position:absolute;margin:0;font:400 26px/1 'Fredoka',system-ui,sans-serif;color:#C7CCDD;letter-spacing:1px}
+</style>
+<script type="importmap">{"imports":{"three":"/node_modules/three/build/three.module.js","three/addons/":"/node_modules/three/examples/jsm/"}}</script>
+</head><body>
+<div class="sheet">
+  <h1 id="title" data-text="NHÂN VẬT">NHÂN VẬT</h1>
+  <div class="bar"></div>
+  <p class="sub" id="sub" data-text="Bích — một đặc tả nhân vật, hai hình hài: 2D và 3D">Bích — một đặc tả nhân vật, hai hình hài: 2D và 3D</p>
+  <p class="file" id="file" data-text="cast sheet · bich.json">cast sheet · bich.json</p>
+  <canvas id="c2d" width="840" height="720" style="left:90px;top:220px"></canvas>
+  <canvas id="c3d" width="840" height="720" style="left:990px;top:220px"></canvas>
+  <p class="cap" id="cap2d" data-text="2D · vẽ bằng canvas 2D" style="left:90px;top:966px">2D · vẽ bằng canvas 2D</p>
+  <p class="cap" id="cap3d" data-text="3D · dựng bằng three.js" style="left:990px;top:966px">3D · dựng bằng three.js</p>
+</div>
+<script type="module">
+import { loadSpec, poseAt } from '/core/cast/cast.mjs';
+import { createView, createCharacter } from '/core/cast/adapter-2d.mjs';
+import { createView as createView3D, createCharacter as createCharacter3D } from '/core/cast/adapter-3d.mjs';
+
+const DUR = 10;
+
+// one spec, two adapters
+const spec = await loadSpec('bich.json');
+
+const view2d = createView(document.getElementById('c2d'));
+const hero2d = createCharacter(spec);
+const view3d = createView3D(document.getElementById('c3d'));
+const hero3d = createCharacter3D(spec);
+
+window.DUR = DUR;
+window.render = t => {
+  const pose = poseAt(t);                 // the same pose for both adapters
+  hero2d.setPose(pose); hero2d.draw(view2d, pose);
+  hero3d.setPose(pose); hero3d.draw(view3d, pose);
+};
+window.TEXTS = () => [...document.querySelectorAll('[data-text]')].map(el => {
+  const r = el.getBoundingClientRect();
+  return { id: el.id, text: el.dataset.text, x0: r.left, y0: r.top, x1: r.right, y1: r.bottom };
+});
+
+await document.fonts.load("400 66px 'Lilita One'");
+await document.fonts.load("400 28px 'Fredoka'");
+window.render(0);
+window.READY = true;
+</script></body></html>

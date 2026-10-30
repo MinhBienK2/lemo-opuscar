@@ -1,0 +1,7 @@
+{
+  "name": "Bích",
+  "palette": { "skin": "#F2C9A0", "hair": "#2B2333", "hoodie": "#C25E4A" },
+  "proportions": { "head": 1.0, "body": 2.6, "limb": 1.0 },
+  "hair": { "style": "bob", "length": 0.6 },
+  "face": { "eyes": "round", "mouth": "small" }
+}

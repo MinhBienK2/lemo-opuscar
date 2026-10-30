@@ -15,7 +15,7 @@ What changes in skill mode:
 
 | | |
 |---|---|
-| Project folder | `<name>/` in the folder the user started from (lowercase letters, digits, hyphens; avoid `#` and `?` in the path). Wherever the guides say `films/<name>/`, read this folder |
+| Project folder | `<name>/` in the folder the user started from (lowercase letters, digits, hyphens; avoid `#` and `?` in the path). Wherever the guides say "the project folder", read this folder. An **episode of a channel** goes into the channel's own folder, next to the shared code it reaches by a relative path — never a copy of it |
 | Running tools | from `$LIB`, with the project's absolute path: `cd "$LIB" && node core/render/still.mjs "<project>" 1.5 3`. `sh tools/setup.sh` and `sh tools/fetch.sh` also run from `$LIB` |
 | Library files in pages | absolute URLs: `/core/lib.js`, `/node_modules/three/…` (the project is served at `/@film/`) |
 | Library files in scripts and `build.sh` | `$LIB/…`, with `LIB=<path>` at the top of `build.sh`; never `../..` |
@@ -24,3 +24,5 @@ What changes in skill mode:
 | Big downloads | only what the film needs, from the sources `$LIB/TECHNIQUE.md` §1 lists (npm, PyPI, Playwright's browser, this library's GitHub Releases, Hugging Face for the speech check). Name them in your one round of questions the first time |
 
 Deliver what `$LIB/DIRECTOR.md` §11 lists, in the project folder, and tell the user where it is.
+
+**A film in a channel.** A channel is a series of films that share an identity: it holds its own map, `CHANNEL.md`, and the code its episodes share (the rig, the mix, the fonts, the voice scripts). Read that map before you build an episode, and create the episode with the scaffold — `sh "$LIB/core/render/new_episode.sh" <channel> <episode> [title]` — so it starts empty of the previous episode's identity. The episode's own folder holds only what is its own: its treatment, its research, its shots, its voice and its movie. The channel's shared code stays in the channel and is used from there. (This edition ships no channels of the library: a channel the user keeps of their own is where its episodes go.)

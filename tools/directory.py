@@ -95,6 +95,35 @@ EDITS = [
     # tools/fetch.py is split out of fetch.sh by split_fetch(); this edition has no git checkout to pull
     ('tools/fetch.py', '(sh tools/setup.sh, or git pull) and try again', '(update the plugin) and try again'),
     ('tools/fetch.py', '(sh tools/setup.sh, or git pull) and run this again', '(update the plugin) and run this again'),
+    # this edition ships no channels: the channels and their episodes live in the repository, not in the plugin
+    ('AGENTS.md',
+     '| Another episode of a channel the library already makes | `channels/<channel>/CHANNEL.md` — the channel\'s own process, and the map of the episode\'s files |\n',
+     ''),
+    ('AGENTS.md',
+     '| A film in a channel the user keeps as their own style | the row for that channel in `~/lemo-my-styles/README.md` — it names the channel and the folder it is kept in |\n',
+     ''),
+    ('TECHNIQUE.md',
+     'The library has two channels, and each has its own map — the channel\'s process, where its voice model lives and\n'
+     'which file holds which part of the pipeline. Read the map before you build the next episode of that channel:\n'
+     '\n'
+     '- `channels/tram-nghi-nhieu/CHANNEL.md` — the reference channel: a psychology explainer in a vector toon, in Vietnamese, with three episodes (`tap-01`, `tap-02`, `tap-03`).\n'
+     '- `channels/nhan-vat/CHANNEL.md` — the second one: a channel about characters, whose cast lives in 2D and in 3D (`channels/nhan-vat/cast/`).\n',
+     'This edition ships no channels: the library\'s channels and their episodes live in the repository, not in the plugin. '
+     'A film you make here is a one-shot, in your own folder.\n'),
+    ('TECHNIQUE.md',
+     '| an **episode** — a film of a channel | `channels/<channel>/<episode>/` | `channels/tram-nghi-nhieu/tap-01` (three episodes today) |',
+     '| an **episode** — a film of a channel | `channels/<channel>/<episode>/` | — this edition ships no channels |'),
+    ('TECHNIQUE.md',
+     '**Start an episode with the scaffold, never with a copy of the previous one:**\n\n```sh\nsh core/render/new_episode.sh tram-nghi-nhieu tap-04 "Tại sao ta lại hoãn?"\n```\n',
+     '**This edition ships no channels**, so there is no channel to start an episode in: a film here is a one-shot.\n'),
+    ('TECHNIQUE.md',
+     'It writes the episode\'s own folder — `TREATMENT.md`, `CREDITS`, `research/FACTS.md`, `film.json`, `index.html`,\n'
+     '`build.sh` (with the episode\'s own movie name), `voice/lines.json` and an empty `src/` — and **attaches** the\n'
+     'channel\'s shared code instead of copying it: the episode\'s `src/` imports the channel\'s `rig/` by relative path,\n'
+     'its `build.sh` calls the channel\'s `mix.py` (with `FILM=` the episode) and the channel\'s `voice/` scripts. A\n'
+     'copied folder carries the previous episode\'s identity with it — its treatment, its research file, its title and\n'
+     'its name — and `core/render/filmcheck.mjs` reports those.\n',
+     ''),
 ]
 
 # fetch.sh runs its Python from a here-document, which the portal reads as "download and run": ship that Python as a file

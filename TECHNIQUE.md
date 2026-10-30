@@ -50,7 +50,8 @@ A `build.sh` that works in both modes (in skill mode, put `LIB=<path setup.sh pr
 #!/bin/sh
 set -e
 HERE=$(cd "$(dirname "$0")" && pwd)
-LIB=${LIB:-$(cd "$HERE/../.." && pwd)}          # clone mode: <repo>/films/<name>/
+# the library root: the upward search — the film may sit at any depth (films/<name>/, channels/<ch>/<episode>/)
+LIB=${LIB:-$(cd "$HERE" && while [ ! -f core/render/review.sh ] && [ "$PWD" != / ]; do cd ..; done && pwd)}
 export LIB
 [ -f "$LIB/core/render/video.mjs" ] || { echo "set LIB to the library folder"; exit 1; }
 cd "$LIB"
@@ -58,6 +59,14 @@ node core/render/events.mjs "$HERE"
 node core/render/video.mjs "$HERE" --fps 24 --out "$HERE/out/video.mp4"
 "$LIB/.venv/bin/python" "$HERE/mix.py"                               # score, foley, voice → out/mix.wav
 sh core/render/mux.sh "$HERE/out/video.mp4" "$HERE/out/mix.wav" "$HERE/<name>.mp4" 24
+```
+
+The mix is the one that belongs to the film: a one-shot mixes with its own `mix.py`, an episode of a channel
+mixes with the **channel's**, which reads the film from `FILM`:
+
+```sh
+CHANNEL=$(cd "$HERE/.." && pwd)                 # the channel: the folder above the episode
+FILM="$HERE" "$LIB/.venv/bin/python" "$CHANNEL/mix.py"
 ```
 
 Rules that keep it reliable:
@@ -167,9 +176,63 @@ Each style's `DEMO.md` says how its demo was built. Open it and the code only af
 
 ## 13. Anatomy of a reference film
 
-`films/host-toon-test` is the reference film of the vector-toon style, and the map an agent should read before reading it.
+A film is a folder that can build a film; what sits above it decides what it is. The whole contract is
+[`docs/layout.md`](docs/layout.md).
 
-**Read `style/STYLE.md` and `style/DEMO.md` first**: the style's invariants, and what the demo did with them. Then use this table to find the file that holds the part of the pipeline you are about to copy. The demo's story, shots and props are not yours to reuse — copy the technique only.
+| Shape | Where | Reference |
+|---|---|---|
+| a **one-shot** — a film that belongs to no channel | `films/<name>/` | `films/host-toon-test`, the vector-toon explainer |
+| an **episode** — a film of a channel | `channels/<channel>/<episode>/` | `channels/tram-nghi-nhieu/tap-01` (three episodes today) |
+
+The library has two channels, and each has its own map — the channel's process, where its voice model lives and
+which file holds which part of the pipeline. Read the map before you build the next episode of that channel:
+
+- `channels/tram-nghi-nhieu/CHANNEL.md` — the reference channel: a psychology explainer in a vector toon, in Vietnamese, with three episodes (`tap-01`, `tap-02`, `tap-03`).
+- `channels/nhan-vat/CHANNEL.md` — the second one: a channel about characters, whose cast lives in 2D and in 3D (`channels/nhan-vat/cast/`).
+
+**Start an episode with the scaffold, never with a copy of the previous one:**
+
+```sh
+sh core/render/new_episode.sh tram-nghi-nhieu tap-04 "Tại sao ta lại hoãn?"
+```
+
+It writes the episode's own folder — `TREATMENT.md`, `CREDITS`, `research/FACTS.md`, `film.json`, `index.html`,
+`build.sh` (with the episode's own movie name), `voice/lines.json` and an empty `src/` — and **attaches** the
+channel's shared code instead of copying it: the episode's `src/` imports the channel's `rig/` by relative path,
+its `build.sh` calls the channel's `mix.py` (with `FILM=` the episode) and the channel's `voice/` scripts. A
+copied folder carries the previous episode's identity with it — its treatment, its research file, its title and
+its name — and `core/render/filmcheck.mjs` reports those.
+
+### What the channel holds, what the episode holds
+
+| The channel holds (`channels/<channel>/`) | It is |
+|---|---|
+| `CHANNEL.md` | the channel map: identity, process, file map |
+| `STYLE.md`, `DEMO.md` | the channel's visual language, and what its first episode showed |
+| `rig/` | the shared drawing implementation: `cel.js` (the primitives), `character.js` (the rig), `sets.js` (the sets), `broll.js` (the b-roll props) |
+| `mix.py` | the shared mix: music, ambience, foley, ducking, master |
+| `fonts/` | the shared fonts (`fonts.css` and the files it names) |
+| `voice/` | the shared voice pipeline: `tts_vi.py`, `asr_vi.py`, `process.py` |
+
+| The episode holds (`channels/<channel>/<episode>/`) | It is |
+|---|---|
+| `TREATMENT.md` | the episode's own script and shot plan — written before the demo or the previous episode is opened |
+| `research/FACTS.md` | the episode's own research file: every number it may put on screen, and what it may not say |
+| `src/film.js` | the shots, one function per shot |
+| `src/timeline.js` | the shot order and every time, derived from the voice |
+| `voice/lines.json` | the episode's own script for the voice |
+| `build.sh` | the one-command rebuild: events → mix → video → srt → mux → poster |
+| `film.json` | the film's own facts (title, movie, runtime) — the film index is generated from it |
+
+A copy of the rig, the mix, the fonts or the voice scripts inside an episode is a defect: the shared
+implementation exists once, in the channel, and an episode that carries a copy has two places to change.
+
+### The one-shot, read as a map
+
+`films/host-toon-test` is a one-shot: it has no channel above it, so it holds its own drawing code. Read
+`style/STYLE.md` and `style/DEMO.md` first — the style's invariants, and what the demo did with them. Then use
+this table to find the file that holds the part of the pipeline you are about to read. The demo's story, shots and
+props are not yours to reuse — copy the technique only.
 
 | File | What it holds | What to copy when you build your own film |
 |---|---|---|
@@ -184,5 +247,9 @@ Each style's `DEMO.md` says how its demo was built. Open it and the code only af
 | `mix.py` | music, ambience, foley, ducking, master | the mix order and the ducking |
 | `voice/tts_vi.py`, `voice/asr_vi.py`, `voice/process.py` | the voice, the word timings, the mouth drive | the voice pipeline and the word-timing feed into the timeline |
 | `build.sh` | the one-command rebuild | the build order: events → mix → video → srt → mux → poster |
+
+In a channel, the same files are split: the ones the episodes share are in the channel's `rig/`, `mix.py`,
+`fonts/` and `voice/`; the ones that are the episode's own are its `src/film.js`, `src/timeline.js`,
+`TREATMENT.md`, `research/` and `voice/lines.json`.
 
 Review with `core/render/still.mjs` + `core/render/sheet.py` (or `sh core/render/review.sh <folder>`); do not hand-roll ffmpeg montages.

@@ -1,0 +1,1238 @@
+[
+ {
+  "id": "hook",
+  "text": "Bạn đang đọc dòng này, và đầu bạn vừa nghĩ sang một việc khác.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "hook2",
+  "text": "Có thể là bữa trưa. Có thể là tin nhắn vừa tới. Có thể là một câu hỏi không liên quan gì tới bài đang đọc.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "hook3",
+  "text": "Bạn sẽ không thấy điều đó. Bạn vẫn đọc, vẫn hiểu, và vẫn tưởng là mình đang tập trung.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "hook4",
+  "text": "Hôm nay mình sẽ giải thích: tại sao ta không tập trung được. Và làm sao lấy lại phần não đang mất đi.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "intro",
+  "text": "Mình là Kẻ Nghĩ Nhiều. Tập ba của Trạm Nghĩ Nhiều.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "intro2",
+  "text": "Tập này dài hơn những tập trước, vì một câu hỏi về sự tập trung không đứng vừa trong một phút trăm.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "intro3",
+  "text": "Nếu bạn đang xem trên điện thoại, hãy tưởng tượng mình sẽ gọi tên bạn giữa tập này. Bạn sẽ không nghe thấy.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "intro4",
+  "text": "Vậy mà bạn vẫn tin là mình tập trung được. Hôm nay mình sẽ nói rõ chỗ nào sai.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c1_1",
+  "text": "Năm hai nghìn không trăm mười, hai nhà tâm lý học ở Mỹ làm một việc khá lạ: bắt người ta trả lời tin nhắn trên điện thoại, suốt mấy tuần liền.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz",
+  "asr": "Năm 2010, hai nhà tâm lý học ở Mỹ là một việc khá lạ, bác người ta trả lời tin nhắn trên điện thoại suốt mấy tuần liên."
+ },
+ {
+  "id": "c1_2",
+  "text": "Mỗi lần điện thoại rung lên, câu hỏi chỉ có một: bạn đang nghĩ gì lúc này?",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c1_3",
+  "text": "Người ta bấm ngẫu nhiên một trong chín mươi ba chiếc chuông, để đầu bị hỏi bỗng nhiên, không có chuông báo trước.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c1_4",
+  "text": "Kết quả: gần bảy mươi phần trăm số lần bị hỏi, đầu người ta đang nghĩ về chuyện khác.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c1_19",
+  "text": "Và con số đó tính cả những lúc ta đang làm việc thật sự, không chỉ lúc ngồi không.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c1_20",
+  "text": "Nghĩa là mỗi ngày của bạn có hai phần: phần có mặt, và phần thật sự ở đó.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c1_5",
+  "text": "Không phải bảy mươi phần trăm thời gian ngồi không. Đó là tỷ lệ những lần bị hỏi mà đầu ta ở chỗ khác.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c1_6",
+  "text": "Chúng ta tưởng mình đang làm việc, nhưng phần lớn cái 'đang làm việc' đó chỉ là cơ thể có mặt tại bàn.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c1_7",
+  "text": "Và đây là điều lạ: những lúc lang thang ấy, phần lớn không phải khó chịu. Người ta còn vui hơn lúc đang làm việc.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c1_21",
+  "text": "Người ta hỏi thêm: lúc nào đầu ít đi lang thang nhất? Câu trả lời là lúc đang làm việc khó.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c1_22",
+  "text": "Việc dễ thì đầu có nhiều chỗ để đi. Việc khó thì không còn chỗ nào trống.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c1_8",
+  "text": "Nên câu kết của nhóm tác giả rất khó chịu: trạng thái mà bạn gọi là 'lãng phí thời gian' thực ra là trạng thái bình thường của một bộ não khỏe.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c1_23",
+  "text": "Nên khi bạn bảo \"tôi hôm nay không tập trung được\", có thể câu đúng hơn là: hôm nay việc của tôi chưa đủ khó.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c1_24",
+  "text": "Và nếu đúng vậy, thì thứ cần sửa không nằm ở cách bạn ngồi, mà ở việc bạn đang làm.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c1_9",
+  "text": "Vấn đề không phải là đầu ta hay đi lang thang. Vấn đề là ta đi lang thang vào đúng lúc không nên đi.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c1_13",
+  "text": "Không ai trả lời là \"mình đang tập trung\". Câu trả lời phổ biến nhất là một việc hoàn toàn khác.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c1_14",
+  "text": "Điều đó có nghĩa là đầu ta không ngồi yên được, kể cả khi tay ta đang làm đúng việc.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c1_15",
+  "text": "Và cũng có nghĩa: lúc đầu rảnh không phải lúc ta kém tập trung nhất, mà là lúc ta tự do nhất.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c1_16",
+  "text": "Tự do theo nghĩa xấu. Tự do để đi đâu cũng được.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c1_10",
+  "text": "Đó cũng là lý do tại sao một tập về sự tập trung không thể chỉ nói về ý chí. Ý chí là phần cuối cùng của câu chuyện, không phải phần đầu.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c1_11",
+  "text": "Ta sẽ đi theo thứ tự thật: đầu ta rảnh ra thế nào, mỗi lần rảnh ra tốn bao nhiêu, rồi tại sao ta cứ quay về chỗ đó.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c1_12",
+  "text": "Và cuối tập, sáu việc cụ thể, làm được ngay, không cần mua gì.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c1_17",
+  "text": "Người xem tập này sẽ thấy mình ở trong cả sáu chương. Và sẽ thấy mình đã trả tiền không ít.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c1_18",
+  "text": "Đó là lý do tập này dài. Không phải vì có nhiều thứ để nói, mà vì một câu hỏi nhỏ có sáu nhánh.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c2_1",
+  "text": "Giờ tới cái giá. Vì đi lang thang không miễn phí: mỗi lần bạn nhảy sang việc khác, não phải trả tiền để quay lại.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c2_18",
+  "text": "Chuyện này có một cái tên: chi phí chuyển đổi. Người ta đo nó bằng cách nhìn phản ứng của một người vừa bị cắt.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c2_19",
+  "text": "Cách đo đơn giản hơn bạn tưởng: cho một người một việc, giữa chừng cắt ngang bằng một việc khác, rồi đo xem họ mất bao lâu để quay lại.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c2_2",
+  "text": "Năm hai nghìn không trăm lăm, ba nhà nghiên cứu bấm giây bên cạnh hai mươi bốn nhân viên văn phòng, hơn bảy trăm giờ.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz",
+  "asr": "Năm 2005, ba nhà nghiên cứu bấm dây bên cạnh 24 nhân viên văn phòng, hơn 700 giờ."
+ },
+ {
+  "id": "c2_3",
+  "text": "Kết quả: trung bình mỗi người làm một việc liên tục mười một phút bốn giây, rồi nhảy sang việc khác.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c2_4",
+  "text": "Mười một phút. Và hơn một nửa số đoạn đó bị ngắt.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c2_5",
+  "text": "Việc bị gián đoạn thường được quay lại sau trung bình khoảng hai mươi lăm phút.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c2_20",
+  "text": "Kết quả luôn giống nhau: quay lại không phải là bấm công tắc. Nó là một quá trình, và nó tốn thời gian.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c2_21",
+  "text": "Và cái tệ nhất là: quãng thời gian đó không biến mất. Nó thành một khoảng trống trong ngày của bạn.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c2_22",
+  "text": "Nên một ngày làm việc dài không đồng nghĩa với nhiều việc hơn. Nhiều khi nó chỉ là nhiều lần bắt đầu hơn.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c2_6",
+  "text": "Hơn hai mươi phút. Không phải vài giây như mình tưởng.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz",
+  "asr": "Hơn 20 phút, không phải vài dây như mình tưởng."
+ },
+ {
+  "id": "c2_7",
+  "text": "Nghiên cứu đó là tự báo cáo, trên nhân viên văn phòng, nên không phải luật thiên hạ. Nhưng nó được nhiều nhóm khác lặp lại cùng kết luận.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c2_8",
+  "text": "Người ta cũng đo chi phí chuẩn bị: khoảng thời gian mà bộ não dành ra để 'nạp lại' công việc trước khi làm được thật sự.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c2_9",
+  "text": "Nó không phải con số chừng nào cũng giống nhau, nhưng nó luôn dương: quay lại bao giờ cũng tốn một khoản.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c2_23",
+  "text": "Người ta cũng làm một thí nghiệm khác: bảo người tham gia chuyển qua chuyển lại giữa hai nhiệm vụ, rồi đo xem mỗi lần chuyển tốn bao lâu.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c2_24",
+  "text": "Kết quả: mỗi lần chuyển, người ta chậm thêm khoảng một giây. Việc phức tạp hơn thì tốn hơn.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c2_25",
+  "text": "Đây là lý do câu \"làm nhiều việc cùng lúc cho năng suất cao hơn\" là sai.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c2_10",
+  "text": "Nên nếu bạn cứ mở mạng kiểm tra có gì mới mỗi lần chờ tài liệu tải, bạn đang trả tiền một khoảng thời gian dài, bằng thứ bạn tưởng là phần thưởng.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c2_11",
+  "text": "Có một hiệu ứng nữa tinh vi hơn nhiều: ngay cả khi bạn đã quay lại, một phần sự chú ý vẫn còn dính ở việc cũ.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c2_12",
+  "text": "Người ta gọi nó là vết chú ý. Bạn nhìn màn hình mới, nhưng một nửa đầu bạn vẫn đang nghĩ về con số trong bảng tính cũ.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c2_26",
+  "text": "Còn một điều nữa, ít ai nói: tốc độ cũng không phải lúc nào cũng là tốt.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c2_27",
+  "text": "Trong một thí nghiệm năm hai nghìn không trăm lăm, người bị gián đoạn làm xong nhanh hơn, nhưng tự chấm là căng thẳng hơn, bực bội hơn và áp lực thời gian nặng hơn.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c2_28",
+  "text": "Nghĩa là \"làm nhanh hơn\" không phải cách lấy lại sự tập trung. Nó chỉ là cách đổi căng thẳng lấy tốc độ.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c2_13",
+  "text": "Và bảng tính cũ thì không đợi bạn. Nó cũng không giảm hạn.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c2_14",
+  "text": "Người ta cũng đếm được: trước khi quay lại việc cũ, người lao động đã đi qua trung bình hơn hai việc khác.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c2_15",
+  "text": "Tức là một ngày làm việc không phải một dòng chảy. Nó là một đống những đoạn ngắn cắt vụn, và mỗi đoạn có giá riêng.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c2_16",
+  "text": "Nhìn lại tập trước của mình: trì hoãn cũng là một dạng chuyển việc. Cơ thể còn ngồi đó, đầu đã đi.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c2_29",
+  "text": "Nhớ lại tập trước: trì hoãn cũng là chuyển việc, sang một việc dễ chịu hơn. Cùng một cơ chế, chỉ khác hướng.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c2_17",
+  "text": "Chuyện ta kể ở đây không phải để dọa bạn bằng một con số. Nó để chỉ ra một điều: cơ thể ngồi yên không có nghĩa là não đang làm việc.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c2_30",
+  "text": "Chốt lại: mỗi lần bạn nhảy sang, bạn đang trả hai khoản. Một là thời gian quay lại. Hai là phần chú ý còn vương ở việc cũ.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c2_31",
+  "text": "Đó là lý do một ngày dài có thể chứa rất ít việc thật.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c3_1",
+  "text": "Giờ đến thủ phạm quen thuộc nhất: chiếc điện thoại đặt cạnh bàn phím.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c3_17",
+  "text": "Người ta cũng đo được ở một công ty công nghệ: trung bình bốn mươi bảy giây trên một màn hình, và hơn hai trăm bảy mục lần chuyển ứng dụng trong một ngày.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c3_18",
+  "text": "Và điều đó đổi cách ta nhìn: cái tốn kém không phải cái bạn nhìn, mà là cái bạn bỏ dở.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c3_19",
+  "text": "Ta hay tự thuyết phục rằng mình chỉ nhìn nhanh thôi.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c3_20",
+  "text": "Nhưng cái giá không nằm ở thời gian nhìn. Nó nằm ở chỗ quay lại.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c3_2",
+  "text": "Năm hai nghìn mười lăm, các nhà tâm lý học làm một thí nghiệm rất đơn giản và rất khó chịu.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz",
+  "asr": "Năm 2015, các nhà tâm lý học là một thí nghiệm rất đơn giản và rất khó chịu."
+ },
+ {
+  "id": "c3_3",
+  "text": "Người tham gia làm một nhiệm vụ đòi hỏi chú ý, và điện thoại của họ rung lên — mà họ không hề chạm vào máy.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c3_4",
+  "text": "Không cần chạm vào. Chỉ tiếng rung thôi.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c3_5",
+  "text": "Kết quả: hiệu suất của họ giảm rõ rệt, và mức nhiễu đó tương đương với lúc họ cầm máy lên gọi hoặc nhắn tin.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c3_6",
+  "text": "Chỉ cần tiếng rung thôi. Không cần chạm vào máy, cũng đã đủ.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c3_7",
+  "text": "Cần nói rõ: đây là một nhiệm vụ ngắn trong phòng thí nghiệm, và số người tham gia không nhiều.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c3_8",
+  "text": "Nó không có nghĩa là điện thoại phá hỏng trí nhớ của bạn. Nó có nghĩa là một tiếng rung thôi đã đủ để làm hỏng việc đang làm.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c3_21",
+  "text": "Có một thứ nữa đáng nói: điện thoại không phải thủ phạm duy nhất. Bàn làm việc cũng là thủ phạm.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c3_22",
+  "text": "Nếu trên bàn có sẵn thứ gì đó để cầm, tay bạn sẽ tự tìm nó trước khi bạn kịp nghĩ.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c3_23",
+  "text": "Ta không cần điện thoại để mất tập trung. Ta chỉ cần một thứ gì đó thú vị hơn việc đang làm.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c3_24",
+  "text": "Đó cũng là lý do thông báo của người khác nguy hiểm hơn thông báo của máy: nó có mặt người.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c3_9",
+  "text": "Một nghiên cứu khác, năm hai nghìn mười sáu, mời người dùng điện thoại mang máy theo suốt hai tuần.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz",
+  "asr": "Một nghiên cứu khác năm 2016, mời người dùng điện thoại mang máy theo suốt 2 tuần."
+ },
+ {
+  "id": "c3_10",
+  "text": "Kết quả: tuần có thông báo, người ta báo cáo bị gián đoạn nhiều hơn, mất chú ý nhiều hơn và hấp háp hơn.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c3_11",
+  "text": "Nói cách khác: mỗi cái răng nhỏ trên màn hình điện thoại là một cánh cửa mở ra khỏi phòng, rồi đóng lại.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c3_12",
+  "text": "Và bạn không cần thông báo để mở cánh cửa đó. Chính người xem đã tự mở, bằng tay, mỗi lần lướt xuống.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c3_13",
+  "text": "Có những lúc ta cầm điện thoại lên không phải để đọc gì. Ta cầm nó lên để có một việc gì đó để làm.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c3_14",
+  "text": "Và cứ mỗi lần như vậy, ta đánh dấu một cái mốc: lần sau cầm lên sẽ dễ hơn một chút.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c3_15",
+  "text": "Đó không phải lười. Đó là một thói quen đang được tập, và thói quen thì không cần lý do để tiếp tục.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c3_25",
+  "text": "Còn một cách nữa để mở cánh cửa: tự mở. Lướt xuống một chút, rồi lại lướt xuống một chút nữa.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c3_26",
+  "text": "Một thói quen nữa: mở điện thoại lúc chờ. Lúc chờ thì tay không biết để đâu, và đầu thì rảnh.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c3_27",
+  "text": "Lúc chờ là lúc đầu rảnh nhất trong ngày. Nên cũng là lúc nó hay đi lang thang nhất.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c3_28",
+  "text": "Nếu bạn phải chờ, hãy chuẩn bị trước một việc nhỏ để làm trong lúc chờ. Đó là cách đóng cánh cửa lại.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c3_16",
+  "text": "Nên câu hỏi đúng không phải là 'làm sao để không bao giờ cầm điện thoại'. Câu hỏi đúng là: mỗi lần cầm lên, ta đang tìm cái gì?",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c4_1",
+  "text": "Tới đây, có thể bạn đang nghĩ: thì tại sao lỗi không phải ở ta. Ta lười, ta yếu, ta thiếu kỷ luật.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c4_2",
+  "text": "Có một cách giải thích khác, lấy cảm hứng từ cách các nhà tâm lý học nghĩ về bộ não như một máy tính có giới hạn.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c4_3",
+  "text": "Cách đó không hỏi: bạn có cố gắng không. Nó hỏi: với lượng tính toán mà bạn có, việc này còn đáng làm không?",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c4_17",
+  "text": "Cách giải thích này không bỏ qua ý chí. Nó chỉ đặt ý chí đúng chỗ của nó: cuối chuỗi, không phải đầu.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c4_18",
+  "text": "Nếu não đã quyết định việc này không đáng, thì lời nhắc \"tập trung đi\" của bạn chỉ là một tiếng ồn.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c4_4",
+  "text": "Và câu trả lời thường là: không đáng, trong khoảnh khắc đó.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c4_5",
+  "text": "Não không ghét việc. Nó chỉ ghét việc khi cái giá phải trả là không chắc chắn.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c4_19",
+  "text": "Còn cách làm một việc đáng: làm cho nó đáng. Rút nó về một việc nhỏ, có phản hồi rõ ràng.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c4_20",
+  "text": "Đó là lý do tập trước của mình nói \"viết ba dòng\". Không phải vì ba dòng thay cả bài báo cáo. Mà vì ba dòng thì não chịu làm.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c4_6",
+  "text": "Có thêm một mảnh nữa: phần thưởng ở tương lai xa luôn bị chiết khấu. Một việc xong ngay bây giờ được trả đủ.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c4_7",
+  "text": "Cùng việc đó, xong sau một tiếng, thì không còn đáng. Dù nó y hệt, và cũng xong thật.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c4_8",
+  "text": "Đó là lý do ngay cả việc tốt cũng bị trì: không phải ta không muốn, mà là não không thấy lợi ích ở ngay trước mặt.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c4_21",
+  "text": "Khi não thấy phần thưởng ở ngay trước mặt, phần thưởng ở xa không còn là lý do để trốn nữa.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c4_22",
+  "text": "Và còn một mảnh nữa: hứng thú thường đến sau khi bắt đầu, chứ không phải trước.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c4_23",
+  "text": "Nên việc chờ một lần hứng thú là chờ mãi. Hứng thú đến sau khi bắt đầu, không trước.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c4_24",
+  "text": "Vì thế đừng chờ cảm giác thèm làm. Hãy bắt đầu bằng thứ nhỏ nhất, rồi để cảm giác đến sau.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c4_9",
+  "text": "Và còn một điều ngược hẳn với điều mọi người nghĩ: khi chán, ta thường chọn việc khó hơn.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c4_10",
+  "text": "Một tổng hợp mười ba nghiên cứu năm hai nghìn không trăm hai mươi ba, đo xem người ta chọn việc nào khi rảnh và khi chán.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz",
+  "asr": "Một tổng hợp 13 .000 cứu năm 2023 đò xem người ta chọn việc nào khí trảnh và khí tráng."
+ },
+ {
+  "id": "c4_11",
+  "text": "Người chán chọn việc khó hơn nhiều hơn mức ngẫu nhiên. Nhưng khi làm, độ chính xác thì gần như không đổi.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c4_25",
+  "text": "Về chuyện chán: khi chán, bộ não đi tìm phần thưởng. Nó chọn việc khó, chứ không phải việc nhàn.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c4_26",
+  "text": "Nên nếu bạn thấy mình chán lúc đang làm việc dễ, đó không phải tín hiệu để nghỉ. Đó là tín hiệu để làm việc khó hơn.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c4_12",
+  "text": "Cái mà chúng ta gọi là lười, có khi chỉ là một bộ não đang chán đang tìm việc đáng bị làm.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c4_13",
+  "text": "Còn cái gọi là tập trung yếu, có khi chỉ là việc đang dễ quá, và vì vậy nó không giữ được bạn.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c4_27",
+  "text": "Cách giải thích này còn giải thích cả một điều lạ: có những ngày ta tập trung được rất lâu.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c4_28",
+  "text": "Những ngày đó thường là ngày việc đủ rõ, đủ khó, và có phản hồi ngay.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c4_29",
+  "text": "Tức là ta không cần tập trung mạnh hơn. Ta cần một việc đáng tập trung hơn.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c4_30",
+  "text": "Và khi việc chưa rõ, ta thường tự làm nó rõ hơn: viết ra, chia nhỏ, đặt mốc.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c4_14",
+  "text": "Nói cách khác: cảm giác mệt khi làm việc khó, và cảm giác trống khi làm việc dễ, là hai mặt của cùng một cơ chế.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c4_15",
+  "text": "Não bộ không lười khi bạn ngồi xuống. Nó lười khi bạn ngồi xuống mà không biết mình sẽ làm gì trong năm phút tới.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c4_16",
+  "text": "Và trí nhớ làm việc của bạn chỉ chứa được khoảng bốn khối thông tin. Không phải bảy, như từng nghĩ — nhưng cũng đừng đổ lỗi cho nó: đó là giới hạn của trí nhớ, không phải nguyên nhân của việc bạn phân mãn.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c5_1",
+  "text": "Giờ mình bác bỏ một câu nói quen thuộc mà chắc bạn đã nghe không biết bao nhiêu lần: con người chỉ tập trung được tám giây.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c5_2",
+  "text": "Con số này không có nguồn khoa học. Nó xuất hiện năm hai nghìn không trăm mười lăm, trong một thông cáo của Microsoft Canada, kèm một trang slide.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz",
+  "asr": "Còn số này không có nguồn khoa học. Nó xuất hiện năm 2015, trong một thông cáo của Microsoft Canada, kèm 1 trang slide."
+ },
+ {
+  "id": "c5_3",
+  "text": "Trang trình bày đó đặt cạnh nhau ba con số: mười hai giây năm hai nghìn, tám giây năm hai nghìn không trăm mười ba, và chín giây cho con cá vàng.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz",
+  "asr": "Trang trình bậy đó đặt cảnh nhau ba con số, 12 giây năm 2000, 8 giây năm 2013 và 9 giây cho con cá vàng."
+ },
+ {
+  "id": "c5_4",
+  "text": "Câu nói đó được nhặt lại, rút ngắn thành 'não chỉ tập trung được tám giây', rồi được lặp lại khắp nơi như một sự thật.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c5_17",
+  "text": "Còn một vết nữa ta hay gặp: não người chỉ giữ được bảy thông tin cùng lúc. Con số này có thật, nhưng nó cũng cũ.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c5_18",
+  "text": "Nó đến từ một tổng hợp năm một nghìn chín trăm năm mươi sáu, và sau đó được cập nhật: trí nhớ làm việc giữ được khoảng bốn khối, không phải bảy.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz",
+  "asr": "Nó đến từ một tổng hợp năm 1956 và sau đó được cập nhật, trí nhớ làm việc giữ được khoảng 4 khối, không phải 7."
+ },
+ {
+  "id": "c5_19",
+  "text": "Và cái bốn đó không phải hạn chế riêng của bạn. Nó là cách bộ não sắp xếp để không bị tràn.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c5_20",
+  "text": "Và còn một vết nữa: sau mười lăm phút thì đầu người nghe tắt dần. Một nghiên cứu rà soát lại năm 2007 bảo: không có bằng chứng nào đúng như vậy.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c5_21",
+  "text": "Ngược lại, số liệu ghi nhớ bài giảng cho thấy người nghe giữ được khoảng bốn mươi đến bốn mươi sáu phần trăm nội dung sau nửa giờ nghe.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz",
+  "asr": "Ngược lại, số liệu ghi nhớ bài giản cho thấy người Nga giữ được khoảng 40 -46 % nội dung sau nửa giờ Nga."
+ },
+ {
+  "id": "c5_22",
+  "text": "Nghĩa là đừng tin vào con số về thời gian chú ý của bạn. Hãy tin vào việc bạn đang làm.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c5_5",
+  "text": "Nhưng bản thân tài liệu gốc còn nói một câu nữa, và câu đó mới đáng chú ý: nếu bạn cần thuyết trình bốn mươi phút, đừng ngắt người trình bày.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c5_6",
+  "text": "Nghĩa là tài liệu gốc không nói gì về việc bạn chỉ tập trung được tám giây. Câu đó do người khác thêm vào.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c5_7",
+  "text": "Bài học ở đây không chỉ về con số tám giây. Đó là bài học về cách một con số trở thành sự thật, khi nó đi qua đủ nhiều miệng.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c5_8",
+  "text": "Vậy thì tập trung thật sự là gì? Có một cách gọi rất nổi tiếng cho trạng thái tập trung sâu: dòng chảy.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c5_9",
+  "text": "Nhà tâm lý học Hungary mô tả dòng chảy: bạn biết rõ mình đang làm gì, phản hồi đến ngay, và độ khó vừa đúng năng lực.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c5_23",
+  "text": "Còn một điều về dòng chảy mà ít ai để ý: người trong dòng chảy thường bỏ qua thời gian.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c5_24",
+  "text": "Không phải họ quên mất thời gian. Mà là trong lúc đó, thời gian không phải thứ họ đang tính.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c5_25",
+  "text": "Nghĩa là dòng chảy không phải trạng thái đi tìm, mà là trạng thái cần được cho phép.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c5_26",
+  "text": "Cho phép thì cần một cái neo: một việc, một chỗ, một giờ.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c5_10",
+  "text": "Ba điều kiện đó không phải may rủi. Chúng đều làm được: một việc rõ ràng, một bước phản hồi tức thì, một độ khó vừa sức.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c5_11",
+  "text": "Ngược lại, thứ làm hỏng dòng chảy thì đơn giản hơn nhiều: một cái thông báo, một tab mới, và một việc khó chịu đang để dở.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c5_12",
+  "text": "Ba cái đó không xuất hiện giữa lúc bạn đang làm. Chúng xuất hiện vào đúng lúc đầu bạn chưa có việc gì để làm.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c5_13",
+  "text": "Nghe vậy thì có vẻ buồn cười: ta không bị phá trật tự bởi việc khó, ta bị phá trật tự bởi khoảng trống.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c5_14",
+  "text": "Nhưng tin tốt là khoảng trống thì lấp được. Không cần thần kỳ, chỉ cần một việc cụ thể, viết ra, trước khi bắt đầu.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c5_15",
+  "text": "Và cần một chốt chặn, để lúc đầu trống, ta có chỗ đổ hết thứ kia vào.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c5_16",
+  "text": "Bây giờ thì đến phần ai đó làm được ngay.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c6_1",
+  "text": "Không phải để hiểu thêm. Để làm.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c6_2",
+  "text": "Một: điện thoại không nằm trên bàn. Sang phòng bên, hoặc trong kéo. Chúng ta biết chỉ một tiếng rung thôi cũng đủ làm hỏng việc đang làm.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c6_14",
+  "text": "Nhiều người không dám mang điện thoại sang phòng khác, vì sợ trễ tin nhắn. Nhưng cái giá của việc trễ một tin nhắn, có khi nhỏ hơn khoảng hai mươi lăm phút mà việc kia nằm chờ.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c6_15",
+  "text": "Nếu cần, hãy bắt đầu bằng một thỏa thuận với chính mình: lúc này không có tin nhắn nào khẩn cấp.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c6_3",
+  "text": "Hai: tắt thông báo. Không phải bật chế độ im lặng, mà tắt từng ứng dụng một. Vì một thông báo không cần thiết vẫn mở cánh cửa.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c6_16",
+  "text": "Đừng chỉ bật chế độ im lặng. Chế độ im lặng vẫn để bạn thấy có gì mới. Tắt hẳn từng ứng dụng một.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c6_4",
+  "text": "Ba: đặt một quy tắc nhỏ trước khi ngồi xuống. Nếu tôi thấy mình muốn cầm điện thoại, tôi sẽ viết câu hỏi đó ra giấy.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c6_17",
+  "text": "Viết quy tắc ra giấy, để trước mặt. Một câu, ngắn, đủ để bạn làm theo mà không phải nghĩ.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c6_5",
+  "text": "Cách này không phải mẹo vặt. Trong một tổng hợp chín mươi bốn lần thử độc lập, kế hoạch viết ở dạng nếu thì đưa kết quả về đích mạnh hơn chỉ đặt mục tiêu.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c6_6",
+  "text": "Bốn: chừa hai mươi phút cho mỗi lần quay lại. Nếu bạn bị ngắt, hãy đợi hai mươi phút trước khi cố lao vào.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz",
+  "asr": "4. Chừa 20 phút cho mỗi lần quay lại. Nếu bạn bị ngắt, hãy đợi 20 phút trước khi cố lau vào."
+ },
+ {
+  "id": "c6_18",
+  "text": "Đây là lúc khó nhất, và cũng là lúc ta hay lao vào sớm nhất. Lau một cái cốc. Đi một vòng.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c6_7",
+  "text": "Năm: làm việc khó khi bạn chán, chứ không phải lúc bạn hứng thú. Chán không phải lỗi. Nó là tín hiệu.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c6_19",
+  "text": "Nhớ rằng cảm giác khó chịu kia là dấu hiệu, không phải lỗi.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c6_8",
+  "text": "Và sáu: nếu một việc không có phản hồi, hãy tự tạo ra nó. Viết ba dòng, đánh dấu xong một mục, đặt đồng hồ đếm.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c6_20",
+  "text": "Não cần biết mình đang tiến. Một dấu tick, một dòng gạch, một đồng hồ đếm, đều là phản hồi.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c6_9",
+  "text": "Nghe nhiều quá tải? Có thể. Nhưng sáu việc này không tốn thời gian. Chúng là cái giá của việc không làm gì cả.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c6_10",
+  "text": "Mình không hứa bạn sẽ tập trung được ngay. Não bạn vẫn sẽ đi lang thang. Bảy mươi phần trăm là bình thường, không phải lỗi.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c6_11",
+  "text": "Nhưng nếu bạn biết nó đang đi đâu, và bạn dựng một chốt chặn ở đúng chỗ, bạn sẽ lấy lại được một phần đáng kể của thời gian đang mất.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c6_12",
+  "text": "Hãy nghĩ về nó như một ngân sách. Chú ý là tiền. Và mỗi lần nhảy sang việc khác, bạn đang rút một khoản lớn, âm thầm.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c6_13",
+  "text": "Bạn không cần giàu hơn. Bạn chỉ cần biết mình đã tiêu ở đâu.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c6_21",
+  "text": "Nếu bạn đã thử cả sáu mà vẫn không tập trung được, có thể vấn đề không nằm ở kỹ thuật.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c6_22",
+  "text": "Giấc ngủ. Tổng hợp bảy mươi nghiên cứu cho thấy mất ngủ làm suy giảm khả năng giữ chú ý, và đó là hiệu ứng mạnh, không nhỏ.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c6_23",
+  "text": "Và cái giá đó không đổi bằng ý chí được. Ngủ đủ là biện pháp, không phải phần thưởng.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c6_24",
+  "text": "Còn nếu công việc của bạn quá nhiều việc cùng lúc, thì đừng cố làm nhanh hơn. Hãy bỏ bớt, và làm từng thứ một.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "c6_25",
+  "text": "Và mục tiêu không phải là không bao giờ đi lang thang. Mục tiêu là biết mình đã tiêu bao nhiêu, và hôm nay tiêu ít hơn hôm qua.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "close",
+  "text": "Lần tới khi bạn thấy mình đang lướt mạng trong lúc nên làm việc, đừng tự trách.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "close2",
+  "text": "Hãy hỏi: tôi đang chạy trốn cái gì? Rồi làm cái khó chịu đó, trong hai mươi phút. Chỉ hai mươi phút thôi.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "next",
+  "text": "Mình là Kẻ Nghĩ Nhiều. Hẹn gặp lại ở trạm tiếp theo.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+5%",
+  "pitch": "-8Hz"
+ }
+]

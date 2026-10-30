@@ -1,12 +1,16 @@
 # Checks the films' own source code: the drawing code must parse, must call its own helpers correctly and must cite
-# its sources. Runs on every push and pull request that touches the films, the styles' sources, core/ or tools/.
+# its sources. Runs on every push and pull request that touches the films, the channels, the styles' sources, core/ or
+# tools/.
+#
+# The films are not globbed here: core/render/films.mjs is the one module that knows where they are, and every step
+# asks it for the list. A step that finds no film fails: a check that cannot check is not a pass.
 name: films
 
 on:
   push:
-    paths: ['films/**', 'styles/**/src/**', 'core/**', 'tools/**', '.github/workflows/films.yml']
+    paths: ['films/**', 'channels/**', 'styles/**/src/**', 'core/**', 'tools/**', '.github/workflows/films.yml']
   pull_request:
-    paths: ['films/**', 'styles/**/src/**', 'core/**', 'tools/**', '.github/workflows/films.yml']
+    paths: ['films/**', 'channels/**', 'styles/**/src/**', 'core/**', 'tools/**', '.github/workflows/films.yml']
 
 permissions:
   contents: read
@@ -26,28 +30,107 @@ jobs:
         run: |
           status=0
           mkdir -p "$RUNNER_TEMP/check"
-          for f in $(find films/*/src styles/*/demo -name '*.js' -not -path '*/node_modules/*' 2>/dev/null); do
-            # a demo folder can carry its own package.json, so the file is checked as the ES module it is
-            cp "$f" "$RUNNER_TEMP/check/$(basename "$f" .js).mjs"
-            node --check "$RUNNER_TEMP/check/$(basename "$f" .js).mjs" || { echo "::error::$f does not parse"; status=1; }
+          FILMS=$(node core/render/films.mjs --films)
+          if [ -z "$FILMS" ]; then
+            echo "::error::no film was found: the discovery module found nothing, so nothing was parsed"
+            exit 1
+          fi
+          # every source of the films and the channels: the films' own src/, the channel's shared rig, the cast
+          # module. A file the films import is a file that must parse.
+          FILES=""
+          for f in $(find channels films -name '*.js' -not -path '*/out/*' -not -path '*/node_modules/*' 2>/dev/null); do
+            FILES="$FILES $f"
           done
-          echo "the source files of the films and the styles were parsed"
+          for f in $(find core/cast -name '*.mjs' -not -path '*/node_modules/*' 2>/dev/null); do
+            FILES="$FILES $f"
+          done
+          for f in $(find styles/*/demo -name '*.js' -not -path '*/node_modules/*' 2>/dev/null); do
+            FILES="$FILES $f"
+          done
+          COUNT=0
+          for f in $FILES; do
+            COUNT=$((COUNT + 1))
+            # a demo folder can carry its own package.json, so the file is checked as the ES module it is;
+            # the copy keeps the whole path, so two files with the same name never overwrite each other
+            NAME=$(printf '%s' "$f" | tr '/' '_')
+            cp "$f" "$RUNNER_TEMP/check/$NAME.mjs"
+            node --check "$RUNNER_TEMP/check/$NAME.mjs" || { echo "::error::$f does not parse"; status=1; }
+          done
+          if [ "$COUNT" -eq 0 ]; then
+            echo "::error::no source file was found: the parse step would pass without checking anything"
+            exit 1
+          fi
+          echo "the source files of the films, the channels and the styles were parsed ($COUNT files)"
+          exit $status
+      - name: every film is its own episode
+        run: |
+          status=0
+          FILMS=$(node core/render/films.mjs --films)
+          if [ -z "$FILMS" ]; then
+            echo "::error::no film was found: the discovery module found nothing, so no film was checked"
+            exit 1
+          fi
+          for d in $FILMS; do
+            node core/render/filmcheck.mjs "$d" || status=1
+          done
+          echo "every film's name, treatment, research and shots were checked"
           exit $status
       - name: the drawing code calls its own helpers correctly
         run: |
           status=0
-          for d in films/*/; do
-            [ -d "$d/src" ] || continue
-            node core/render/drawcheck.mjs "${d%/}" || status=1
+          FILMS=$(node core/render/films.mjs --films)
+          if [ -z "$FILMS" ]; then
+            echo "::error::no film was found: the discovery module found nothing, so no drawing code was audited"
+            exit 1
+          fi
+          for d in $FILMS; do
+            node core/render/drawcheck.mjs "$d" || status=1
           done
           echo "the drawing code of every film was audited"
           exit $status
       - name: every source in a research file is traceable
         run: |
           status=0
-          for f in films/*/research/FACTS.md; do
-            [ -f "$f" ] || continue
-            python3 tools/check_citations.py "$f" || status=1
+          FILMS=$(node core/render/films.mjs --films)
+          if [ -z "$FILMS" ]; then
+            echo "::error::no film was found: the discovery module found nothing, so no research file was checked"
+            exit 1
+          fi
+          for d in $FILMS; do
+            [ -f "$d/research/FACTS.md" ] || continue
+            python3 tools/check_citations.py "$d/research/FACTS.md" || status=1
           done
           echo "the sources of every research file were checked"
           exit $status
+      - name: the numbers on screen are the numbers the research file supports
+        run: |
+          status=0
+          FILMS=$(node core/render/films.mjs --films)
+          if [ -z "$FILMS" ]; then
+            echo "::error::no film was found: the discovery module found nothing, so no number was checked"
+            exit 1
+          fi
+          for d in $FILMS; do
+            [ -f "$d/research/FACTS.md" ] || continue
+            python3 tools/check_claims.py "$d" || status=1
+            python3 tools/check_facts.py "$d/research/FACTS.md" || status=1
+          done
+          echo "the numbers of every film were checked against its research file, and the research file against itself"
+          exit $status
+      - name: every film's treatment can be committed
+        run: |
+          status=0
+          FILMS=$(node core/render/films.mjs --films)
+          if [ -z "$FILMS" ]; then
+            echo "::error::no film was found: the discovery module found nothing, so no treatment was checked"
+            exit 1
+          fi
+          for d in $FILMS; do
+            python3 tools/check_tracked.py "$d" || status=1
+          done
+          echo "every film's treatment is tracked"
+          exit $status
+      - name: FILMS.md tells the truth about the films
+        run: |
+          python3 tools/check_films_index.py
+          echo "the film index was checked"

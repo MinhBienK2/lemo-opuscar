@@ -6,10 +6,13 @@ This repository is a library of film styles. Each style has a `styles/<slug>/STY
 |---|---|
 | Any request: first see the user's own styles; no request yet: offer the ways in | **Start** below |
 | A film about the user's topic (the normal case) | **Style and story**, **Workflow** below |
+| Another episode of a channel the library already makes | `channels/<channel>/CHANNEL.md` — the channel's own process, and the map of the episode's files |
+| A film in a channel the user keeps as their own style | the row for that channel in `~/lemo-my-styles/README.md` — it names the channel and the folder it is kept in |
 | "Which styles are there?" / no style chosen | **Finding the style** below |
 | Directing: story, sound, rhythm, camera, checks, delivery | [`DIRECTOR.md`](DIRECTOR.md) |
 | Building: install, pages, voice, music, mix | [`TECHNIQUE.md`](TECHNIQUE.md) |
 | Tool commands and flags | [`core/README.md`](core/README.md) |
+| Where a film, a channel or an episode lives, and what a tool may assume about it | [`docs/layout.md`](docs/layout.md) — the layout contract every tool is built against |
 | The user wants to change a style and keep it as their own, or make their own style from a blank page, or names a style in `~/lemo-my-styles/` | [`MY-STYLES.md`](MY-STYLES.md) |
 | Adding a style to the library (owner only) | [`MAINTAINING.md`](MAINTAINING.md) |
 | Session retro, lessons learned, what is now enforced | [`improvements/README.md`](improvements/README.md) |
@@ -18,7 +21,7 @@ This repository is a library of film styles. Each style has a `styles/<slug>/STY
 
 ## Start
 
-- **Their own styles first.** If `~/lemo-my-styles/README.md` exists, read it: it lists every style the user has saved, wherever it's kept, and their own styles ([`MY-STYLES.md`](MY-STYLES.md)) count like library styles. When they name a style, look there first, then in the library.
+- **Their own styles first.** If `~/lemo-my-styles/README.md` exists, read it: it lists every style the user has saved, wherever it's kept, and their own styles ([`MY-STYLES.md`](MY-STYLES.md)) count like library styles. A row may name a folder outside `~/lemo-my-styles/` — a channel the user keeps in the repository, for instance; the row says where it is. When they name a style, look there first, then in the library.
 - **Their language.** Talk to them in the language they write in. When they started the skill without writing anything, your first question is always the language, even when their settings, memory or earlier messages suggest one: the `AskUserQuestion` tool, a question of its own headed "Language 语言" with two options, 中文 and English (the tool adds Other, where they type any other language). Use it from then on, and as the film's default language.
 - **No request yet** (they only started the skill, or said hello): offer the ways in with one question, using the `AskUserQuestion` tool, in their language, with the first as the recommended one:
   1. a film in a library style (**Finding the style**);
@@ -34,11 +37,13 @@ This repository is a library of film styles. Each style has a `styles/<slug>/STY
 - **Everything else is yours to direct** from the user's topic: story, structure, characters, settings, shots, timings, references, how data is charted. Never bend the topic toward the demo.
 - **Treatment first, demo later.** Write your own `TREATMENT.md`, with three candidate structures and your choice (DIRECTOR.md §4), before you open `DEMO.md` or the demo code. Then use the demo only to learn techniques (a brush engine, a rig, a shader, a mix), never its story, arc, shots, props or timeline. One exception: a style cut from real material (Edit & Documentary) needs its material before the treatment, so the tools its `STYLE.md` names in `demo/tools/` for finding and logging material (`footage.py` and the like) may be used first, copied into the project folder and run there; still read `DEMO.md` and the rest of the demo only after the treatment is written.
 - **Scene styles** (a set-up guide, a spec walkthrough, a museum plate, a trail guide) list use cases in their `STYLE.md`. Read them as grammar for the order in which information arrives and how long each part needs on screen, then build the user's content in your own structure. Swapping text into a demo's `content.json` is only a technical check, never the way to deliver.
-- Never build inside `styles/`: copy what you need into the film's project folder.
+- Never build inside `styles/`: copy what you need into the film's project folder. For an episode of a channel, don't copy the channel either — import the channel's rig by a relative path and leave the shared code in the channel.
 
 ## Finding the style
 
 Users name a style by its gallery name in English or Chinese ("Impasto Oil Painting", "油画厚涂") or by its folder (`impasto`). Look it up in [`styles/README.md`](styles/README.md). If nothing matches clearly, show the closest two or three and ask.
+
+A **channel** is named the same way and is a style with a series behind it: its `CHANNEL.md` map says how its episodes are made, what they share and the rules they follow, and its episodes are films of that channel. When the user names a channel, read that map first.
 
 If the user hasn't picked a style:
 - Suggest two or three that fit their topic.
@@ -83,7 +88,10 @@ Report progress in the user's language. If a step fails, read the error, fix the
 
 ## Where things go
 
-- The film's project folder is `films/<name>/` in a clone (committed: source, credits and the finished film; render outputs and generated audio stay local, see `films/.gitignore`), or `<name>/` in the user's folder in skill mode (see the skill's `SKILL.md`). Wherever a guide says `films/<name>/`, read "the project folder". Work only there, unless the user asks you to work in their own project.
+- **In a clone** the film lives in one of two places, and which one depends on the film: a **one-shot** (a film that belongs to no channel) goes to `films/<name>/`; an **episode** of a channel goes to `channels/<channel>/<episode>/`, next to the channel's shared code — its rig, its mix, its fonts, its voice scripts — which the episode reaches by a relative path and never copies. The whole contract is [`docs/layout.md`](docs/layout.md).
+- **In skill mode** the project folder is `<name>/` in the folder the user started from (see the skill's `SKILL.md`); an episode still goes into its channel's own folder, wherever the user keeps that channel. Wherever a guide says "the project folder", read that folder. Work only there, unless the user asks you to work in their own project.
+- A channel the user keeps as their own style stays where `~/lemo-my-styles/README.md` says; its episodes go in that channel's folder, not in `films/`.
+- In a clone the source, the credits and the finished film are committed; render outputs and generated audio stay local (`films/.gitignore`, `channels/.gitignore`).
 - Run `node core/…` and `sh tools/…` from the library root (`$LIB` in skill mode).
 - `core/` has ready-made tools (rendering, TTS, speech check, sampler, sfx, mux). Use them or your own stack, but don't edit `core/` or `styles/` for a user's film.
 - Never kill processes you didn't start. Don't leave background processes running.

@@ -19,7 +19,8 @@ REPO = 'lemomo-ai/lemo-opuscar'
 OUT = os.path.join(ROOT, '.release')
 MANIFEST = os.path.join(ROOT, 'tools', 'assets.json')
 MAX_MB = 5
-FILM_MB = 60   # the finished movies under films/ are committed on purpose
+FILM_MB = 60   # the finished movies of a film are committed on purpose
+_DISCOVERY = None   # what core/render/films.mjs says, read once
 SAMPLE_LIBS = ('freepats', 'karoryfer', 'salamander', 'vcsl', 'vsco2ce')
 
 # Packs downloaded by tools/fetch.sh (paths relative to the repo root). Every instruments pack carries index.json.
@@ -60,12 +61,31 @@ def style_slugs():
     return sorted(s for s in os.listdir(base) if not s.startswith(('_', '.')) and os.path.isfile(os.path.join(base, s, 'STYLE.md')))
 
 
+def discovery():
+    """What core/render/films.mjs knows: the channels and the films of the library.
+
+    The layout is a rendering concern, so the module that knows it is the node one; this tool calls it and parses its
+    JSON. There is one implementation, not two: a tool that lists the films another way lists the wrong ones.
+    """
+    global _DISCOVERY
+    if _DISCOVERY is not None: return _DISCOVERY
+    script = os.path.join(ROOT, 'core', 'render', 'films.mjs')
+    try:
+        out = subprocess.run(['node', script, '--json'], capture_output=True, text=True, cwd=ROOT, timeout=120)
+    except (OSError, subprocess.SubprocessError) as e:
+        sys.exit(f'✗ the discovery module could not be run ({e}): node is needed to know where the films are')
+    if out.returncode != 0:
+        sys.exit(f'✗ the discovery module failed: {out.stderr.strip() or out.stdout.strip()}')
+    try:
+        _DISCOVERY = json.loads(out.stdout)
+    except ValueError as e:
+        sys.exit(f'✗ the discovery module printed something that is not JSON: {e}')
+    return _DISCOVERY
+
+
 def film_dirs():
-    """The films of the library: every folder under films/ with a build.sh (README.md and dot-folders are not films)."""
-    base = os.path.join(ROOT, 'films')
-    if not os.path.isdir(base): return []
-    return [os.path.join(base, f) for f in sorted(os.listdir(base))
-            if f != 'README.md' and not f.startswith('.') and os.path.isfile(os.path.join(base, f, 'build.sh'))]
+    """The films of the library: the folders the discovery module finds, in films/ and under channels/, at any depth."""
+    return [f['dir'] for f in discovery()['films']]
 
 
 def load(rel, default):
@@ -311,12 +331,14 @@ def check():
     info = []
     have = set(files)
     size = 0
+    # the folders of the films: a finished movie is committed on purpose (films/.gitignore), so it may be big
+    film_folders = [f['rel'] + '/' for f in discovery()['films']]
     for f in files:
         p = os.path.join(ROOT, f)
         n = os.path.getsize(p); size += n
-        # the films/ branch commits the finished movies on purpose (films/.gitignore); the library's own style
+        # the films commit the finished movies on purpose (films/.gitignore); the library's own style
         # films live in the Releases, so the size rule is for them
-        limit = FILM_MB if f.startswith('films/') else MAX_MB
+        limit = FILM_MB if f.startswith('films/') or any(f.startswith(d) for d in film_folders) else MAX_MB
         if n > limit * 1e6: bad.append(f'too big ({n / 1e6:.1f} MB): {f}')
         elif not BINARY.search(f):
             b = open(p, 'rb').read()

@@ -1,0 +1,20 @@
+# Credits & licences — Trạm Nghĩ Nhiều · Tập 01 "Tại sao càng rảnh, ta càng thấy mệt?"
+
+| Asset | Source | Licence |
+|---|---|---|
+| All drawing, the characters, the sets, the animation (`src/`, with the shared drawing code in the channel's `../rig/`) | Canvas 2D code written for this film | yours |
+| `../rig/cel.js` (cel fill / line / ribbon / IK tools) | adapted from the Lemo-Opuscar library, `styles/cel-anime-80s/demo/cel.js`; `rect()` and `rrect()` added for this film | MIT License |
+| The mix skeleton and the instrument code (`../mix.py`) | adapted from `films/host-toon-test/mix.py` in this repository (score rewritten: 84 BPM, A minor, lo-fi) | yours / MIT |
+| Mouth drive from the voice (`../voice/process.py`) | technique from the Lemo-Opuscar library, `styles/scifi-toon/demo/voice.py` (numpy STFT in place of librosa) | MIT License |
+| Speech check (`../voice/asr_vi.py`) | adapted from `films/host-toon-test/voice/asr_vi.py` (character similarity instead of word matching, for Vietnamese) | yours / MIT |
+| Voice (`voice/*.wav`) | Microsoft Edge neural TTS via `edge-tts`, voice `vi-VN-NamMinhNeural` | check Microsoft's terms for your use (commercial use of Edge TTS output is not clearly licensed) |
+| Speech check | faster-whisper (`small` model) | MIT |
+| Font: Be Vietnam Pro | Lâm Bảo, Tony Le, ViệtAnh Nguyễn — Google Fonts | SIL OFL 1.1 (`../fonts/OFL-bevietnampro.txt`) |
+| Font: Patrick Hand | Patrick Wagesreiter — Google Fonts | SIL OFL 1.1 (`../fonts/OFL-patrickhand.txt`) |
+
+The film explains findings from published research; the sources are in `research/FACTS.md`:
+Killingsworth & Gilbert (*Science*, 2010) · Eastwood et al. (*Perspectives on Psychological Science*, 2012) ·
+Danckert et al. (*Consciousness and Cognition*, 2018) · Hagger et al. (*Perspectives on Psychological Science*, 2016) ·
+Kaplan & Kaplan (1989, 1995).
+No figures, photographs, logos or datasets from those papers are used: every chart is drawn in code.
+No stock footage, no stock music, no third-party character designs.

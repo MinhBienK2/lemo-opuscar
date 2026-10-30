@@ -1,0 +1,19 @@
+# Channels: a channel's episodes are films. The finished film, its source, its stills and its credits go to
+# GitHub. Render outputs and generated speech stay local — build.sh regenerates them.
+# (The same rules as films/.gitignore: a channel's episodes are films, only deeper.)
+
+# Render outputs (segments, video-only mux, mixes)
+**/out/
+
+# Generated speech and music (TTS lines, processed chunks, score renders) — the scripts next to them are kept
+**/*.wav
+**/*.mp3
+
+# Oversized intermediate WAVs (the mixed track, hundreds of MB) never enter git
+**/mix.wav
+
+# The speech cache, the scratch pages and the render locks stay local
+**/voice/.cache/
+**/test/
+**/scratch/
+**/*.lock

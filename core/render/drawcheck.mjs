@@ -7,8 +7,14 @@
 // Also: cel() with other than 3 arguments, path() with none.
 // Only calls whose arguments are plain numbers are compared; anything else is left alone (no false alarms).
 // Comments and string literals are not code: they are blanked before the scan.
-// Exit code: 0 nothing found; 1 problems found; 2 usage.
+// The helper's definition is looked for in the film's own source AND in the files that source imports by a relative
+// path: an episode's helpers live in the channel's rig, which the episode imports as '../../rig/cel.js'. When both
+// the film and an imported file define a helper, the film's own wins.
+// A folder without src/, and a film whose source and imports hold no helper at all, cannot be audited: the check
+// says what it could not check and fails. A gate that cannot fail is decoration.
+// Exit code: 0 nothing found; 1 problems found (or a folder that could not be checked); 2 usage.
 import fs from 'fs'; import path from 'path';
+import { REPO_ROOT } from './films.mjs';
 
 const args = process.argv.slice(2);
 if (!args.length) { console.error('usage: node core/render/drawcheck.mjs <film-folder> [<film-folder> ...]'); process.exit(2); }
@@ -37,7 +43,8 @@ function numValue(text) {
 }
 
 // --- the source, without its comments and strings ----------------------------
-function mask(src) {
+// keepStrings: the import specifiers live in strings, so the scan of the imports asks for them back
+function mask(src, keepStrings) {
   const out = src.split('');
   const blank = (a, b) => { for (let k = a; k < b; k++) if (out[k] !== '\n') out[k] = ' '; };
   let i = 0, prev = '';
@@ -53,7 +60,8 @@ function mask(src) {
         if (c === '`' && src[j] === '\n') break;
         j++;
       }
-      blank(i, j); i = j; prev = c; continue;
+      if (!keepStrings) blank(i, j);
+      i = j; prev = c; continue;
     }
     if (c === '/' && (prev === '' || '(,=:[!&|?{};+-*%~^<>'.includes(prev))) {   // a regex literal, not a division
       let j = i + 1, cls = false;
@@ -129,7 +137,7 @@ function findHelpers(files) {
       if (close < 0) continue;
       const name = m[1];
       if (helpers[name]) continue;
-      helpers[name] = { name, params: parseParams(src.slice(open + 1, close)) };
+      helpers[name] = { name, params: parseParams(src.slice(open + 1, close)), file: f.file };
     }
     // function rect(x, y, w, h) { ... }
     CALL.lastIndex = 0;
@@ -140,7 +148,7 @@ function findHelpers(files) {
       if (close < 0) continue;
       const name = m[1];
       if (helpers[name]) continue;
-      helpers[name] = { name, params: parseParams(src.slice(open + 1, close)) };
+      helpers[name] = { name, params: parseParams(src.slice(open + 1, close)), file: f.file };
     }
   }
   return helpers;
@@ -205,6 +213,55 @@ const CEL = { name: 'cel', params: [{ name: 'g' }, { name: 'pts' }, { name: 'o' 
 const PATH = { name: 'path', params: [{ name: 'pts' }] };
 const FILLTEXT = /(?<![\w$])fillText\s*\(/g;        // a raw canvas call: the reading check cannot see that string
 
+// --- the files in scope ------------------------------------------------------
+// An import specifier: `from './x.js'`, `import './x.js'`, `import('./x.js')`
+const SPECIFIER = /\b(?:from|import)\s*\(?\s*['"]([^'"]+)['"]/g;
+
+// The files a file imports: the relative ones. An absolute import is the library's, not the film's convention,
+// so it is left out of the scan.
+function imports(file, raw) {
+  const out = [];
+  const code = mask(raw, true);        // the comments are blanked, the strings are kept
+  SPECIFIER.lastIndex = 0;
+  for (let m; (m = SPECIFIER.exec(code));) {
+    const spec = m[1];
+    if (!spec.startsWith('.')) continue;
+    const target = path.resolve(path.dirname(file), spec);
+    if (!target.endsWith('.js')) continue;
+    if (!fs.existsSync(target)) continue;
+    out.push(target);
+  }
+  return out;
+}
+
+// The film's own source, and the files it imports. An episode's helpers live in the channel's rig, which the
+// episode imports by a relative path, so the definitions are looked for there too. The film's own source comes
+// first: when both the film and an imported file define a helper, the film's own wins.
+function scope(own) {
+  const seen = new Set(own);
+  const imported = [];
+  const queue = [...own];
+  while (queue.length) {
+    const file = queue.shift();
+    let raw;
+    try { raw = fs.readFileSync(file, 'utf8'); } catch { continue; }
+    for (const dep of imports(file, raw)) {
+      if (seen.has(dep)) continue;
+      seen.add(dep);
+      imported.push(dep);
+      queue.push(dep);
+    }
+  }
+  return { own, imported };
+}
+
+// where a file is, for the message: inside the repository, its path from the root; otherwise, from the film
+function where(folder, file) {
+  const rel = path.relative(REPO_ROOT, file);
+  if (rel && !rel.startsWith('..')) return rel;
+  return path.relative(folder, file) || path.basename(file);
+}
+
 // In the file that draws the shots, every visible string has to go through text(): only text() registers the box
 // the reading check measures. A raw fillText() is a string no check can see.
 function checkRawText(files) {
@@ -219,20 +276,33 @@ function checkRawText(files) {
 
 function checkFilm(folder) {
   const srcDir = path.join(folder, 'src');
-  if (!fs.existsSync(srcDir)) { console.log(`drawcheck: no src/ in ${folder}; nothing to check`); return 0; }
-  const files = jsFiles(srcDir).map(file => {
-    const raw = fs.readFileSync(file, 'utf8');
-    return { file, masked: mask(raw) };
-  });
-  const helpers = findHelpers(files);
+  let hasSrc = false;
+  try { hasSrc = fs.statSync(srcDir).isDirectory(); } catch { hasSrc = false; }
+  // a folder without src/ cannot be audited: a gate that cannot check is not a pass, so this is a failure
+  if (!hasSrc) { console.log(`drawcheck: could not check ${folder}: no src/ — the drawing code was not audited`); return 1; }
+  const read = file => { try { return fs.readFileSync(file, 'utf8'); } catch { return ''; } };
+  const { own, imported } = scope(jsFiles(srcDir));
+  const ownFiles = own.map(file => ({ file, masked: mask(read(file)) }));
+  const importedFiles = imported.map(file => ({ file, masked: mask(read(file)) }));
+  const helpers = findHelpers([...ownFiles, ...importedFiles]);
   let n = 0;
   // the strings the reading check cannot see
-  for (const reason of checkRawText(files)) { n++; console.log(reason); }
+  for (const reason of checkRawText(ownFiles)) { n++; console.log(reason); }
   if (!helpers.rect) {
-    console.log(n ? `drawcheck: ${n} problem(s) in ${folder}` : `drawcheck: no rect helper in ${folder}; nothing to check`);
-    return n;
+    // a film without a rect helper is not audited by the rect rule, but cel() and path() still are: the check
+    // keeps going, and says what it could not check, so a silent pass never reads as an audit.
+    if (helpers.cel || helpers.path) {
+      console.log(`drawcheck: no rect helper in ${folder} — the rect rule does not apply; cel() and path() are checked`);
+    } else {
+      // no helper at all, in the film or in the files it imports: nothing was audited
+      console.log(`drawcheck: could not check ${folder}: no helper in the film's source or in the files it imports — nothing was audited`);
+      return 1;
+    }
+  } else if (!ownFiles.some(f => f.file === helpers.rect.file)) {
+    // the helper is in a file the film imports: the channel's rig
+    console.log(`drawcheck: the rect helper comes from ${where(folder, helpers.rect.file)} (imported by the film) — the rect rule applies`);
   }
-  for (const f of files) {
+  for (const f of ownFiles) {
     CALL.lastIndex = 0;
     for (let m; (m = CALL.exec(f.masked));) {
       const name = m[1], open = m.index + m[0].length - 1;

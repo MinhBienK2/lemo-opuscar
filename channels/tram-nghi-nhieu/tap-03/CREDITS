@@ -1,0 +1,13 @@
+# Credits & licences: Tại sao ta không tập trung được? (Trạm Nghĩ Nhiều, tập 03)
+
+| Asset | Source | Licence |
+|---|---|---|
+| All drawing, the host, the sets, the animation (`src/`, with the shared drawing code in the channel's `../rig/`) | Canvas 2D code written for this film | yours |
+| `../rig/cel.js` (cel fill / line tools) | adapted from the Lemo-Opuscar library, `styles/cel-anime-80s/demo/cel.js` | MIT License |
+| Character rig, sets and b-roll (`../rig/character.js`, `../rig/sets.js`, `../rig/broll.js`) | adapted from this channel's episode 1 (`channels/tram-nghi-nhieu/tap-01/src/`, the shared rig that now lives in `channels/tram-nghi-nhieu/rig/`) and, before it, `films/host-toon-test/src/` | yours |
+| Mouth drive from the voice (`../voice/process.py`) | technique from the Lemo-Opuscar library, `styles/scifi-toon/demo/voice.py` (numpy STFT in place of librosa) | MIT License |
+| Voice (`../voice/tts_vi.py`) | Microsoft Edge text-to-speech, `vi-VN-NamMinhNeural` | Microsoft service terms; no voice cloning, the voice is a stock neural voice |
+| Score, ambiences, foley (`../mix.py`) | synthesized in numpy for this film (uses `core/audio/sfx.py` from the library) | yours / MIT |
+| Fonts | Be Vietnam Pro, Patrick Hand — bundled in `../fonts/` | SIL Open Font License 1.1 (see `../fonts/OFL-*.txt`) |
+| Sources of the research | listed in `research/FACTS.md`; no image, audio, logo or dataset from any research group is used in the film — every chart is drawn in code | — |
+| Timeline (`src/timeline.js`) | generated from the script by `mk_timeline.py` (the episode is twenty minutes long, so the table of lines and subtitle chunks is generated rather than typed) | yours |

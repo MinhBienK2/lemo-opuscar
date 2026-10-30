@@ -29,9 +29,12 @@ export async function openDemo(dir, { w = 1920, h = 1080, q = '', warnings = fal
   const page = await browser.newPage({ viewport: { width: w, height: h }, deviceScaleFactor: 1 });
   const log = [];   // recent errors, printed together if READY is slow to arrive
   const note = s => { log.push(s); if (log.length > 8) log.shift(); console.error(s); };
+  let webglBroken = false;   // the page's own WebGL failed: the 3D is blank and the render still passes
   page.on('console', m => {
     const t = m.text();
     if (m.type() === 'error' && /^Failed to load resource/.test(t)) return;   // printed with its URL by the response event below
+    // the signatures a broken WebGL leaves in the log: the shader program does not validate, or there is no valid program
+    if (/VALIDATE_STATUS|no valid shader program|Shader Error|CONTEXT_LOST_WEBGL|WebGL context lost/i.test(t)) webglBroken = true;
     if (m.type() === 'error' || (warnings && m.type() === 'warning')) note('[page] ' + t.slice(0, 300));
   });
   page.on('pageerror', e => { console.error('[pageerror]', e.message); process.exit(1); });   // stop on an error during rendering, so no broken film is produced
@@ -57,6 +60,10 @@ export async function openDemo(dir, { w = 1920, h = 1080, q = '', warnings = fal
   catch (e) { console.error(`window.READY never became true (waited ${((Date.now() - t0) / 1000).toFixed(0)} s, limit 180 s): ${e.message.split('\n')[0]}`); process.exit(1); }
   finally { clearTimeout(hint); }
   await warnIfSoftwareGL(page);
+  if (webglBroken) {
+    console.error('[note] this page\'s WebGL failed while it rendered (the shader program did not validate): the 3D is blank '
+      + 'and the render still passes. Render it again with LEMO_ANGLE=swiftshader (Linux, no GPU) or LEMO_ANGLE=metal (macOS). See core/README.md.');
+  }
   return { browser, page };
 }
 export function closeServer() { if (srv) srv.server.close(); }
