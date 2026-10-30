@@ -77,7 +77,7 @@ Tool census of the session: `bash` 106, `read` 64, `write` 18, `todo` 17, `edit`
 
 ### F8 — medium — There is no map from "reference film" to "which files to read"
 
-**Evidence.** The session read 15 files / 190 KB of `films/host-toon-test` to learn the pipeline, and the `read` tool truncated long files, so it had to re-read them raw. `films/host-toon-test/build.sh:4` also carries `LIB=${LIB:-/home/pc599/Documents/lemo-opuscar}` — a path from a different machine, so `cd "$LIB"` fails in a fresh clone unless `LIB` is exported.
+**Evidence.** The session read 15 files / 190 KB of `films/host-toon-test` to learn the pipeline, and the `read` tool truncated long files, so it had to re-read them raw. `films/host-toon-test/build.sh:4` also carries a hard-coded `LIB=` pointing at another machine's home folder — so `cd "$LIB"` fails in a fresh clone unless `LIB` is exported.
 
 **Impact.** Most of the reading budget of the session went into reconstructing the pipeline that a table could have named in ten lines, and the sample build script still breaks on another machine.
 

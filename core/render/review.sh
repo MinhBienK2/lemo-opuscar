@@ -38,7 +38,7 @@ if [ -f "$FOLDER/voice/lines.json" ] && { [ -f "$FOLDER/voice/asr_vi.py" ] || [ 
     "$PY" "$HERE/core/tts/asr_check.py" "$VD/lines.json" "$VD/" >"$TMP/voice.txt" 2>&1
   fi
   if grep -qE 'PermissionError|LocalEntryNotFoundError|ConnectionError|couldn.t be found|no such host' "$TMP/voice.txt"; then
-    echo "    skipped: no whisper model available (set HF_HOME to a folder with the model, e.g. /home/minhbien/hf-cache)"
+    echo "    skipped: no whisper model available (point HF_HOME at a folder that holds the model)"
   elif grep -q '^DIFF' "$TMP/voice.txt"; then
     echo "    FAILED: some lines do not transcribe back to the script:"
     grep '^DIFF' "$TMP/voice.txt" | sed 's/^/      /'

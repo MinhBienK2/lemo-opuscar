@@ -19,6 +19,7 @@ REPO = 'lemomo-ai/lemo-opuscar'
 OUT = os.path.join(ROOT, '.release')
 MANIFEST = os.path.join(ROOT, 'tools', 'assets.json')
 MAX_MB = 5
+FILM_MB = 60   # the finished movies under films/ are committed on purpose
 SAMPLE_LIBS = ('freepats', 'karoryfer', 'salamander', 'vcsl', 'vsco2ce')
 
 # Packs downloaded by tools/fetch.sh (paths relative to the repo root). Every instruments pack carries index.json.
@@ -200,8 +201,10 @@ def films_format(films_dirs, bad, warn, info):
             elif secs is None: bad.append(f'{name}: {os.path.basename(mp4)} exists but ffprobe cannot read its duration (a half-rendered file?): render it again or move it away')
             if os.path.isfile(os.path.join(d, 'voice', 'lines.json')) and not os.path.isfile(mp4[:-4] + '.srt'):
                 probs.append('the film has voice/lines.json but no .srt next to it')
-        for f in ('poster.jpg', 'CREDITS', 'TREATMENT.md'):
+        for f in ('poster.jpg', 'CREDITS'):
             if not os.path.exists(os.path.join(d, f)): probs.append(f'no {f}')
+        if not os.path.exists(os.path.join(d, 'TREATMENT.md')):
+            info.append(f'{name}: no TREATMENT.md (the workflow asks for one; the reference films predate the rule)')
         if not os.path.isdir(os.path.join(d, 'src')): probs.append('no src/ (the film has no source)')
         build = os.path.join(d, 'build.sh')
         if not os.access(build, os.X_OK) and not os.access(build, os.R_OK): probs.append('build.sh is neither executable nor readable (sh build.sh cannot run it)')
@@ -310,7 +313,10 @@ def check():
     for f in files:
         p = os.path.join(ROOT, f)
         n = os.path.getsize(p); size += n
-        if n > MAX_MB * 1e6: bad.append(f'too big ({n / 1e6:.1f} MB): {f}')
+        # the films/ branch commits the finished movies on purpose (films/.gitignore); the library's own style
+        # films live in the Releases, so the size rule is for them
+        limit = FILM_MB if f.startswith('films/') else MAX_MB
+        if n > limit * 1e6: bad.append(f'too big ({n / 1e6:.1f} MB): {f}')
         elif not BINARY.search(f):
             b = open(p, 'rb').read()
             if LOCAL_PATH.search(b): bad.append(f'local path: {f}')

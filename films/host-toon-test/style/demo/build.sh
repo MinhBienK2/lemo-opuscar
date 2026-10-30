@@ -1,9 +1,10 @@
 #!/bin/sh
 # Rebuild the film from source: sh build.sh   (OUT=<folder> to choose where everything is written)
 # The voice is already in voice/; to make it again: $LIB/.venv/bin/python voice/tts_vi.py voice/lines.json voice/ && $LIB/.venv/bin/python voice/process.py
-LIB=${LIB:-/home/pc599/Documents/lemo-opuscar}
 set -e
-HERE=$(cd "$(dirname "$0")" && pwd); OUT=${OUT:-$HERE/../build}; mkdir -p "$OUT"; OUT=$(cd "$OUT" && pwd); export LIB OUT
+HERE=$(cd "$(dirname "$0")" && pwd)
+LIB=${LIB:-$(cd "$HERE/../../../../.." && pwd)}
+OUT=${OUT:-$HERE/../build}; mkdir -p "$OUT"; OUT=$(cd "$OUT" && pwd); export LIB OUT
 cd "$LIB"
 node core/render/events.mjs "$HERE"
 "$LIB/.venv/bin/python" "$HERE/mix.py"
