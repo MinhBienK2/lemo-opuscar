@@ -51,3 +51,7 @@ The 10-minute film is committed in a web-sized cut (83 MB, CRF 25). Its full-qua
 (172 MB, CRF 19) is attached to the repository's release
 [films-v1](https://github.com/MinhBienK2/lemo-opuscar-films/releases/tag/films-v1); the other films
 are committed at full quality.
+
+**Tập 3 của Trạm Nghĩ Nhiều (19:55) cũng theo quy ước đó**: commit là bản web (95 MB, CRF 25) vì
+GitHub không nhận file trên 100 MB, còn bản master (189 MB, CRF 14) nằm ở `.release/films/` để
+đính kèm release. Không có Git LFS trong repo này.

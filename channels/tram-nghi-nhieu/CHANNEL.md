@@ -133,7 +133,9 @@ Tập 03 (`channels/tram-nghi-nhieu/tap-03/`) dài khoảng **20 phút**, nên n
 Ba luật của tập dài:
 1. **Sự kiện âm thanh trong một cảnh có thời điểm tương đối** so với đầu cảnh; `film.js` cộng thêm thời điểm của cảnh. Nếu đẩy thẳng vào danh sách sự kiện, toàn bộ nhạc dồn vào giây đầu.
 2. **Chữ phải vừa khung nó nằm trong**: tiêu đề trên thẻ tự thu nhỏ, dòng dài tự xuống dòng (`fitPx`, `wrap` trong `film.js`).
-3. **Mảnh phụ đề không quá 58 ký tự** — mảnh dài hơn sẽ thành ba dòng, mà phụ đề chỉ được có hai dòng.
+3. **Mảnh phụ đề không quá 58 ký tự** — mảnh dài hơn sẽ thành ba dòng, mà phụ đề chỉ được có hai dòng; một mảnh vụn dưới 14 ký tự phải gộp vào mảnh trước, không để hiện một từ lơ lửng trên màn hình.
+4. **Chiều cao tấm thẻ theo số dòng nó chứa** — đo theo tiêu đề + các mảnh highlight, đừng để một tấm thẻ trống trơn ba phần tư (xem tập 03: tấm thẻ cao cố định 420–520 px trong khi câu chỉ có hai dòng).
+5. **Chữ trên thẻ tự thu nhỏ cho vừa khung** — tiêu đề dài phải co lại (`fitPx`) chứ không tràn ra ngoài tấm thẻ.
 
 ## 5. Đăng tải lên YouTube
 
