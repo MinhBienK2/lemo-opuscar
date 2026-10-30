@@ -35,6 +35,8 @@ The viewport is 1920×1080 at device scale 1, or `--size WxH`. `--q 'k=v&…'` r
 | `node core/render/video.mjs <demo> [--fps 24] [--workers 3] [--out <demo>/out/video.mp4]` | every frame to a video; up to 6 workers for a single render. Each parallel version needs its own `--out` |
 | `node core/render/events.mjs <demo> [--out <file>]` | export `{dur, ev}` to `<demo>/events.json` |
 | `node core/render/readcheck.mjs <demo> [--step 0.04] [--latin-cps 15] [--cjk-cps 4.5] [--pad 1.5] [--min 1.5]` | reading-time check (below) |
+| `node core/render/drawcheck.mjs <film-folder> [<film-folder> ...]` | audit a film's drawing code (below) |
+| `sh core/render/review.sh <film-folder>` | the whole review loop in one command (below) |
 | `.venv/bin/python core/render/sheet.py out.jpg img… [--cols 4] [--w 480]` | contact sheet |
 | `.venv/bin/python core/render/srt.py cues.json out.srt` | subtitles from `[{t0, t1, text}]` |
 | `sh core/render/mux.sh video.mp4 mix.wav out.mp4 [fps=24] [grain=2]` | mux and master (below) |
@@ -42,6 +44,10 @@ The viewport is 1920×1080 at device scale 1, or `--size WxH`. `--q 'k=v&…'` r
 All four page tools take `--size WxH` (default `1920x1080`, even numbers) and `--q 'k=v'`.
 
 **readcheck** asks the page for `window.TEXTS(t)` at every step. Each text must stay fully in frame, unchanged, for at least CJK characters ÷ 4.5 + other non-space characters ÷ 15 + 1.5 s, and never less than `--min`. A new `text` under the same `id` starts a new piece. Subtitles are checked by their `.srt`, not here.
+
+**drawcheck** reads the film's own `src/*.js` and derives the calling convention from the film's own helper, because `rect` means `x0,y0,x1,y1` in some films and `x,y,w,h` in others. It reports a `rect()` with the wrong number of arguments, an inverted x corner (the helper mirrors it silently), a width or height of zero or less, a `cel()` with other than 3 arguments and a `path()` with none. Only calls whose arguments are plain numbers are compared, so nothing is reported that cannot be seen in the source. It never writes to the film.
+
+**review** runs the whole loop for one film: drawcheck, readcheck, the review stills every 2 s (the length comes from `events.json`), the contact sheet, and the loudness and the black frames of the finished `.mp4`. Every step runs even when an earlier one fails; the last line says PASS or FAIL.
 
 **mux** runs a two-pass `loudnorm` to −14 LUFS / true peak −1.2 dB, adds film grain (`grain` 0 = none) and prints the measured loudness. Silent audio is left at its level with a warning; short audio is padded, long audio cut at the picture's end; missing, damaged or truncated audio is refused. It never leaves a partial file.
 
@@ -65,6 +71,14 @@ All four page tools take `--size WxH` (default `1920x1080`, even numbers) and `-
 | `core/fonts/` | Fredoka, Lilita One, IM Fell English, ZCOOL KuaiLe (OFL, [`fonts/OFL.md`](fonts/OFL.md)) as subsets; ZCOOL holds only ≈ 200 characters |
 | `core/assets/polyhaven/` | CC0 HDRIs and models (`SOURCES.md`) |
 
+## Checks
+
+| Command | What it does |
+|---|---|
+| `.venv/bin/python tools/check_citations.py <file.md> [<file.md> ...]` | every source in a research file must be traceable: a source entry (a list item or a quote with a year next to an author, a journal or an identifier) needs a `DOI:`, a `PMID:`/`PubMed:`, an `http(s)://` link or an `arXiv:`. A source that is cited with an identifier elsewhere in the same file counts, so a short list of sources at the end of a file need not repeat the DOI |
+| `sh tools/install_precommit.sh [--force]` | install the pre-commit hook: the staged `.js` files under `films/` or `styles/` are parsed and every film with staged changes under its `src/` is audited by drawcheck. An existing hook is never overwritten without `--force` |
+| `.github/workflows/films.yml` | the same checks in CI, on every push and pull request that touches `films/`, `styles/**/src/**`, `core/` or `tools/` |
+
 ## Environment variables
 
 | Variable | Meaning |
@@ -83,6 +97,7 @@ All four page tools take `--size WxH` (default `1920x1080`, even numbers) and `-
 |---|---|---|---|
 | render tools | done | page error, missing required file, ffmpeg failure | usage, no `index.html`, `--out` already being written |
 | `readcheck.mjs` | all texts long enough | some too short or never fully visible | could not check (no `TEXTS`) |
+| `drawcheck.mjs`, `check_citations.py` | nothing to report | problems found | usage |
 | `mux.sh` | film written | any failure | – |
 | `tts.py`, `srt.py` | done | bad input, missing model, path too long | usage |
 | `tts_zh.py` | done | bad input | network unreachable |

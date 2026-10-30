@@ -1,0 +1,12 @@
+# Credits & licences: Tại sao ta hay trì hoãn? (Trạm Nghĩ Nhiều, tập 02)
+
+| Asset | Source | Licence |
+|---|---|---|
+| All drawing, the host, the sets, the animation (`src/`) | Canvas 2D code written for this film | yours |
+| `src/cel.js` (cel fill / line tools) | adapted from the Lemo-Opuscar library, `styles/cel-anime-80s/demo/cel.js` | MIT License |
+| Character rig, sets and b-roll (`src/character.js`, `src/sets.js`, `src/broll.js`) | adapted from this channel's episode 1 (`films/tram-nghi-nhieu/src/`) and, before it, `films/host-toon-test/src/` | yours |
+| Mouth drive from the voice (`voice/process.py`) | technique from the Lemo-Opuscar library, `styles/scifi-toon/demo/voice.py` | MIT License |
+| Voice (`voice/tts_vi.py`) | Microsoft Edge text-to-speech, `vi-VN-NamMinhNeural` | Microsoft service terms; no voice cloning, the voice is a stock neural voice |
+| Score, ambiences, foley (`mix.py`) | synthesized in numpy for this film (uses `core/audio/sfx.py` from the library) | yours / MIT |
+| Fonts | Be Vietnam Pro, Patrick Hand — bundled in `fonts/` | SIL Open Font License 1.1 (see `fonts/OFL-*.txt`) |
+| Sources of the research | listed in `research/FACTS.md`; no image, audio, logo or dataset from any research group is used in the film — every chart is drawn in code | — |

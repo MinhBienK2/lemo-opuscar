@@ -8,6 +8,7 @@ local (`films/.gitignore`) — `build.sh` in each film rebuilds them.
 |---|---|---|---|
 | Phi vụ triệu đô trong 2 phút — a Money Heist explainer in a talking-head toon | `host-toon-test/` | 2:12 | `host-toon-test/phi-vu-trieu-do-2-phut.mp4` 
 | Trạm Nghĩ Nhiều — tập 1: Tại sao càng rảnh, ta càng thấy mệt? (a psychology explainer in a vector toon) | `tram-nghi-nhieu/` | 1:51 | `tram-nghi-nhieu/tram-nghi-nhieu-tap-01.mp4` |
+| Trạm Nghĩ Nhiều — tập 2: Tại sao ta hay trì hoãn? (the same channel, built with the review gate) | `tram-nghi-nhieu-tap-02/` | 1:42 | `tram-nghi-nhieu-tap-02/tram-nghi-nhieu-tap-02.mp4` |
 
 `host-toon-test/style/` is a style of its own — "Talking-Head Host Toon", cut from
 `styles/cel-anime-80s` — with its demo film in `host-toon-test/style/test.mp4`.
@@ -20,6 +21,7 @@ From the repository root, with the repo's `.venv` and `node_modules` in place:
 sh films/tay-du-ky-twist/build.sh
 sh films/host-toon-test/build.sh
 sh films/tram-nghi-nhieu/build.sh
+sh films/tram-nghi-nhieu-tap-02/build.sh
 ```
 
 The voice is generated speech and is not committed; the scripts that make it sit next to it in

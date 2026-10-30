@@ -4,9 +4,10 @@
 #   $LIB/.venv/bin/python voice/tts_vi.py voice/lines.json voice/
 #   $LIB/.venv/bin/python voice/asr_vi.py voice/lines.json voice/ --model small
 #   $LIB/.venv/bin/python voice/process.py
-LIB=${LIB:-/home/minhbien/Documents/lemo-opuscar}
 set -e
-HERE=$(cd "$(dirname "$0")" && pwd); OUT=${OUT:-$HERE/out}; mkdir -p "$OUT"; OUT=$(cd "$OUT" && pwd); export LIB OUT
+HERE=$(cd "$(dirname "$0")" && pwd)
+LIB=${LIB:-$(cd "$HERE/../.." && pwd)}
+OUT=${OUT:-$HERE/out}; mkdir -p "$OUT"; OUT=$(cd "$OUT" && pwd); export LIB OUT
 NAME=tram-nghi-nhieu-tap-01
 cd "$LIB"
 node core/render/events.mjs "$HERE"

@@ -112,6 +112,7 @@ Render 6–9 key shots with the real drawing code, tiled into one sheet (`core/r
 
 ## 11. Before you deliver
 
+- **One command first.** From the library root run `sh core/render/review.sh <folder>` (the film folder): it runs the whole review loop — drawcheck, readcheck, review stills, contact sheet, loudness, black frames — and exits non-zero on any failure. It must exit 0 before you commit and before you call the film done.
 - Run the review loop (TECHNIQUE.md §8): contact sheets, 0.2 s strips of key actions, one full-speed viewing with sound.
 - **One fix round.** Fix everything the review and the checks below find in one round, then check once more. Small fixes that second check turns up (a level, a frame) belong to the same round; anything bigger, tell the user in one line when you deliver. The user's notes after delivery are new rounds: change only what they ask.
 - **Not the demo again.** After the treatment, read `DEMO.md` and compare: structure, opening, signature shot, camera path, score shape, ending. At least four of the six must differ; rethink the ones that match. Before delivery, put your contact sheet next to the demo poster (`styles/<slug>/poster.jpg`) as a last check.
@@ -119,6 +120,13 @@ Render 6–9 key shots with the real drawing code, tiled into one sheet (`core/r
 - Loudness about −14 LUFS; no black frames, no NaN frames; subtitles in sync and not covering key action.
 - Every row of the sound design table is actually in the mix.
 - No LemoLab sign-off: `grep -rniE "lemo ?lab|opus 5\.5" <project folder>` finds nothing outside `LICENSE`, `CREDITS` and the library's path in `LIB=` lines, and you have watched the last seconds of the film (text drawn into an image can't be grepped).
+
+**Process rules while you work** (the full version, and why each exists: `CODING_STANDARDS.md`):
+
+- **Edit files with the file-editing tools** (`edit`, `ast_edit`, `write`), not with a shell heredoc or a shell redirect: a shell write can truncate a file before it fails.
+- **Re-read every file a codemod touched**, and report the edits that did not land: a patch script that aborts part-way leaves the file half-patched.
+- **Never commit a file the user has modified**: stage only your own change, and never `git add -A` over a dirty working tree.
+- **Start long jobs in the background and continue with other work**; never poll them with `sleep`.
 
 **Deliver**, in the project folder (the complete list):
 

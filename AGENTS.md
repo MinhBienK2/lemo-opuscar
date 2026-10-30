@@ -12,6 +12,7 @@ This repository is a library of film styles. Each style has a `styles/<slug>/STY
 | Tool commands and flags | [`core/README.md`](core/README.md) |
 | The user wants to change a style and keep it as their own, or make their own style from a blank page, or names a style in `~/lemo-my-styles/` | [`MY-STYLES.md`](MY-STYLES.md) |
 | Adding a style to the library (owner only) | [`MAINTAINING.md`](MAINTAINING.md) |
+| Session retro, lessons learned, what is now enforced | [`improvements/README.md`](improvements/README.md) |
 
 **Films outside `styles/` are the user's: no LemoLab credit, no watermark.**
 

@@ -123,10 +123,14 @@ Write an original score from the cue map, in the instruments of the style's soun
 
 ## 8. Review loop
 
+**One command runs the whole loop**: `sh core/render/review.sh <folder>` from the library root. It runs the drawing-code audit, `readcheck`, the review stills and their contact sheet, the loudness and black-frame passes, prints a PASS/FAIL summary and exits non-zero on any failure — it must exit 0 before you commit or call the film done. Its steps, if you run them by hand:
+
 1. Contact sheets: a frame every 1–2 s with `still.mjs --range`, tiled with `core/render/sheet.py`. At least two full passes.
 2. Frame strips at 0.2 s for every key action: hand-overs, falls, hits.
 3. On the final file: `ffmpeg -af ebur128` (loudness), `blackdetect` (blank frames), whisper again on the final mix if it has voice.
 4. Watch it once, at full speed, with sound.
+
+Build the sheet with `core/render/still.mjs` + `core/render/sheet.py`; do not hand-roll ffmpeg montages.
 
 ## 9. 3D notes
 
@@ -160,3 +164,25 @@ Fonts: Google Fonts (OFL), self-hosted in the project. The typefaces a `STYLE.md
 | a CRT or VHS look | `core/post/crt.js`, `styles/ascii-crt/`, `styles/backrooms/` |
 
 Each style's `DEMO.md` says how its demo was built. Open it and the code only after your treatment exists, to learn a technique, never to rebuild our film (an Edit & Documentary style's material tools in `demo/tools/` come first: AGENTS.md, "Treatment first"). In skill mode, get the source with `sh <skill folder>/scripts/setup.sh demo <slug>`. Copied demo code often reaches the library with `../..`: replace that with `$LIB` or absolute URLs.
+
+## 13. Anatomy of a reference film
+
+`films/host-toon-test` is the reference film of the vector-toon style, and the map an agent should read before reading it.
+
+**Read `style/STYLE.md` and `style/DEMO.md` first**: the style's invariants, and what the demo did with them. Then use this table to find the file that holds the part of the pipeline you are about to copy. The demo's story, shots and props are not yours to reuse — copy the technique only.
+
+| File | What it holds | What to copy when you build your own film |
+|---|---|---|
+| `style/STYLE.md`, `style/DEMO.md` | the style's invariants, and what the demo did with them | the invariants; the grammar, never the story |
+| `src/cel.js` | the drawing primitives: `path`, `rect`, `rrect`, cel fill and line, ribbons, limbs | your own helper layer; keep every call site's argument count in step with it |
+| `src/host.js`, `src/cast.js` | the rig: head, hair, body, expressions, gestures | the rig and the pose-blending rules (DIRECTOR.md §9) |
+| `src/sets.js` | the sets: desk, room, street | the set vocabulary, drawn in your own palette |
+| `src/broll.js` | the b-roll props: cards, stamps, charts, panels, highlights | the prop vocabulary and the paper/ink look |
+| `src/film.js` | the shots, one function per shot | the shot-per-function structure |
+| `src/timeline.js` | the shot order and every time, derived from the voice | the rule that all times come from the voice, never typed by hand |
+| `src/frames.js`, `src/sheets.js` | the model sheets | the sheet layout and the turnaround/pose set |
+| `mix.py` | music, ambience, foley, ducking, master | the mix order and the ducking |
+| `voice/tts_vi.py`, `voice/asr_vi.py`, `voice/process.py` | the voice, the word timings, the mouth drive | the voice pipeline and the word-timing feed into the timeline |
+| `build.sh` | the one-command rebuild | the build order: events → mix → video → srt → mux → poster |
+
+Review with `core/render/still.mjs` + `core/render/sheet.py` (or `sh core/render/review.sh <folder>`); do not hand-roll ffmpeg montages.

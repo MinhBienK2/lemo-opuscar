@@ -1,0 +1,53 @@
+# Checks the films' own source code: the drawing code must parse, must call its own helpers correctly and must cite
+# its sources. Runs on every push and pull request that touches the films, the styles' sources, core/ or tools/.
+name: films
+
+on:
+  push:
+    paths: ['films/**', 'styles/**/src/**', 'core/**', 'tools/**', '.github/workflows/films.yml']
+  pull_request:
+    paths: ['films/**', 'styles/**/src/**', 'core/**', 'tools/**', '.github/workflows/films.yml']
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: every source file parses
+        run: |
+          status=0
+          mkdir -p "$RUNNER_TEMP/check"
+          for f in $(find films/*/src styles/*/demo -name '*.js' -not -path '*/node_modules/*' 2>/dev/null); do
+            # a demo folder can carry its own package.json, so the file is checked as the ES module it is
+            cp "$f" "$RUNNER_TEMP/check/$(basename "$f" .js).mjs"
+            node --check "$RUNNER_TEMP/check/$(basename "$f" .js).mjs" || { echo "::error::$f does not parse"; status=1; }
+          done
+          echo "the source files of the films and the styles were parsed"
+          exit $status
+      - name: the drawing code calls its own helpers correctly
+        run: |
+          status=0
+          for d in films/*/; do
+            [ -d "$d/src" ] || continue
+            node core/render/drawcheck.mjs "${d%/}" || status=1
+          done
+          echo "the drawing code of every film was audited"
+          exit $status
+      - name: every source in a research file is traceable
+        run: |
+          status=0
+          for f in films/*/research/FACTS.md; do
+            [ -f "$f" ] || continue
+            python3 tools/check_citations.py "$f" || status=1
+          done
+          echo "the sources of every research file were checked"
+          exit $status

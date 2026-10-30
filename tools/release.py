@@ -59,6 +59,14 @@ def style_slugs():
     return sorted(s for s in os.listdir(base) if not s.startswith(('_', '.')) and os.path.isfile(os.path.join(base, s, 'STYLE.md')))
 
 
+def film_dirs():
+    """The films of the library: every folder under films/ with a build.sh (README.md and dot-folders are not films)."""
+    base = os.path.join(ROOT, 'films')
+    if not os.path.isdir(base): return []
+    return [os.path.join(base, f) for f in sorted(os.listdir(base))
+            if f != 'README.md' and not f.startswith('.') and os.path.isfile(os.path.join(base, f, 'build.sh'))]
+
+
 def load(rel, default):
     p = os.path.join(ROOT, rel)
     return json.load(open(p, encoding='utf-8')) if os.path.isfile(p) else default
@@ -148,6 +156,57 @@ def completeness(have, bad, warn, slugs):
                 if path in have: continue
                 if not os.path.isfile(os.path.join(ROOT, path)): warn.append(f'{slug}: {doc} points to demo/stills/{ref}, which does not exist here')
                 else: warn.append(f'{slug}: {doc} points to demo/stills/{ref}, which git would not commit (add `!{path}` to .gitignore)')
+
+
+def git_ignored(rel):
+    """True when git would ignore the path (a render output or a generated wav stays local)."""
+    r = subprocess.run(['git', '-C', ROOT, 'check-ignore', '-q', rel], capture_output=True, text=True)
+    return r.returncode == 0
+
+
+def ignored_files(d):
+    """The paths under the folder git would ignore; an ignored folder is one entry, it holds its own files."""
+    out = []
+    for root, dirs, files in os.walk(d):
+        rel = os.path.relpath(root, ROOT)
+        keep = []
+        for name in sorted(dirs):
+            p = os.path.join(rel, name)
+            if git_ignored(p): out.append(p + '/')
+            else: keep.append(name)
+        dirs[:] = keep
+        for name in sorted(files):
+            p = os.path.join(rel, name)
+            if git_ignored(p): out.append(p)
+    return out
+
+
+def films_format(films_dirs, bad, warn, info):
+    """The file layout every film folder must have: the finished film and its subtitles, the sources, the poster and the
+    credits. The problems are warnings; --strict turns them into failures. The files git ignores are only named: they are
+    the render outputs and the generated audio, which are meant to stay local, so they are not a problem."""
+    for d in films_dirs:
+        name = os.path.basename(d.rstrip(os.sep))
+        probs = []
+        mp4 = os.path.join(d, name + '.mp4')
+        if not os.path.isfile(mp4):
+            others = sorted(glob.glob(os.path.join(d, '*.mp4')))
+            mp4 = others[0] if others else ''
+        if not mp4:
+            probs.append('no finished film (*.mp4) in the folder')
+        else:
+            secs = film_seconds(mp4)
+            if secs == 'no-ffprobe': warn.append(f'{name}: ffprobe is not installed: the film could not be checked')
+            elif secs is None: bad.append(f'{name}: {os.path.basename(mp4)} exists but ffprobe cannot read its duration (a half-rendered file?): render it again or move it away')
+            if os.path.isfile(os.path.join(d, 'voice', 'lines.json')) and not os.path.isfile(mp4[:-4] + '.srt'):
+                probs.append('the film has voice/lines.json but no .srt next to it')
+        for f in ('poster.jpg', 'CREDITS', 'TREATMENT.md'):
+            if not os.path.exists(os.path.join(d, f)): probs.append(f'no {f}')
+        if not os.path.isdir(os.path.join(d, 'src')): probs.append('no src/ (the film has no source)')
+        build = os.path.join(d, 'build.sh')
+        if not os.access(build, os.X_OK) and not os.access(build, os.R_OK): probs.append('build.sh is neither executable nor readable (sh build.sh cannot run it)')
+        for p in probs: warn.append(f'{name}: {p}')
+        for p in ignored_files(d): info.append(f'{p}: git ignores this file (it stays local)')
 
 
 # Clutter and internal notes a commit should not carry. All three are warnings (failures with --strict) and lean towards
@@ -245,6 +304,7 @@ def check():
     unknown = [a for a in args if not os.path.isdir(os.path.join(ROOT, 'styles', a))]
     if unknown: sys.exit(f'✗ no style called {", ".join(unknown)}')
     files, bad, warn = committed(), [], []
+    info = []
     have = set(files)
     size = 0
     for f in files:
@@ -258,9 +318,11 @@ def check():
     print(f'git would hold {len(files)} files, {size / 1e6:.0f} MB')
     completeness(have, bad, warn, [s for s in style_slugs() if not args or s in args])
     hygiene(files, [s for s in style_slugs() if not args or s in args], warn)
+    films_format(film_dirs(), bad, warn, info)
     if strict:
         style_format([s for s in style_slugs() if not args or s in args], bad)
         bad += [f'(--strict) {w}' for w in warn]; warn = []
+    for i in info: print('  ·', i)
     for w in warn: print('  !', w)
     for b in bad: print('  ✗', b)
     if bad: sys.exit(1)

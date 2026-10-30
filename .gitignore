@@ -84,6 +84,7 @@ styles/*/demo/stills/*
 !styles/news-package/demo/assets/plates/*.jpg
 
 # 用户自己的片子（agent 输出）：成片与源码入库，中间产物留在本地（规则见 films/.gitignore）
+# 例外：treatment 是交付物之一（DIRECTOR.md §11），跟着片子一起进仓库（规则见下方 !films/*/TREATMENT.md）
 
 
 # Production logs are internal: they stay local
@@ -112,6 +113,8 @@ styles/*/demo/**/*.pdf
 
 # ---- Process notes and drafts stay local, anywhere in the repo ----
 **/TREATMENT.md
+# 例外：用户自己的片子的 treatment 是交付物（DIRECTOR.md §11），跟着片子进仓库
+!films/*/TREATMENT.md
 **/PRODUCTION_LOG*
 **/HANDOFF*.md
 **/NOTES.md

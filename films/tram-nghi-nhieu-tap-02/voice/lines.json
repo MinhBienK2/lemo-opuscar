@@ -1,0 +1,17 @@
+[
+{"id":"hook","text":"Còn mười lăm phút nữa là hết hạn bài báo cáo. Mình sẽ làm. Còn... năm phút nữa.","voice":"vi-VN-NamMinhNeural","rate":"+5%","pitch":"-8Hz"},
+{"id":"hook2","text":"Ta trì hoãn không phải vì lười. Ta trì hoãn vì đầu muốn hết cái cảm giác khó chịu này, ngay lập tức.","voice":"vi-VN-NamMinhNeural","rate":"+5%","pitch":"-8Hz"},
+{"id":"intro","text":"Mình là Kẻ Nghĩ Nhiều. Hôm nay: tại sao ta hay trì hoãn?","voice":"vi-VN-NamMinhNeural","rate":"+5%","pitch":"-8Hz"},
+{"id":"f1","text":"Trong gần bảy trăm mối tương quan được tổng hợp, yếu tố dự đoán trì hoãn mạnh nhất không phải tính cách, mà là độ khó chịu của chính việc đó.","voice":"vi-VN-NamMinhNeural","rate":"+5%","pitch":"-8Hz"},
+{"id":"f2","text":"Tính cách thì chỉ liên quan yếu. Còn hạn càng xa, ta càng dễ trì hoãn.","voice":"vi-VN-NamMinhNeural","rate":"+5%","pitch":"-8Hz"},
+{"id":"self","text":"Yếu tố thứ ba là tin vào khả năng của chính mình. Không tin, thì không dám bắt đầu.","voice":"vi-VN-NamMinhNeural","rate":"+5%","pitch":"-8Hz"},
+{"id":"emo","text":"Còn một lý do nữa, thuộc về não: làm xong thì hết khó chịu, còn phần thưởng thì nằm ở tương lai xa — mà tương lai xa luôn bị chiết khấu.","voice":"vi-VN-NamMinhNeural","rate":"+5%","pitch":"-8Hz"},
+{"id":"myth","text":"Nên lười chỉ là lời gọi của người ngoài, không phải nguyên nhân. Tự trách mình cũng chẳng giúp được gì.","voice":"vi-VN-NamMinhNeural","rate":"+5%","pitch":"-8Hz"},
+{"id":"method","text":"Có một cách được kiểm chứng rất mạnh: kế hoạch viết ở dạng nếu, thì. Trong chín mươi bốn nghiên cứu, cách này hiệu quả hơn hẳn so với chỉ đặt mục tiêu.","voice":"vi-VN-NamMinhNeural","rate":"+5%","pitch":"-8Hz"},
+{"id":"plan","text":"Nếu lúc hai mươi giờ ba mươi mình ngồi xuống bàn, thì mình sẽ viết ba dòng tiêu đề trong năm phút, và không mở mạng.","asr":"Nếu lúc 20h30 mình ngồi xuống bàn thì mình sẽ viết ba dòng tiêu đề trong 5 phút và không mở mạnh.","voice":"vi-VN-NamMinhNeural","rate":"+5%","pitch":"-8Hz"},
+{"id":"counter","text":"Có một loại trì hoãn lại tốt: khi bạn đang ủng cấ một ý tưởng. Đầu cần thời gian lang thang, thì ý tưởng mới ra.","voice":"vi-VN-NamMinhNeural","rate":"+5%","pitch":"-8Hz"},
+{"id":"punch","text":"Trì hoãn không phải là lỗi. Nó là một dấu hiệu: việc này đang làm mình khó chịu.","voice":"vi-VN-NamMinhNeural","rate":"+5%","pitch":"-8Hz"},
+{"id":"roi","text":"Đó là lý do Rối luôn hỏi: cái gì đang khó chịu? Rồi viết ba dòng.","voice":"vi-VN-NamMinhNeural","rate":"+5%","pitch":"-8Hz"},
+{"id":"close","text":"Lần sau khi bạn trì hoãn, đừng tự trách. Hỏi cái gì đang khó chịu — rồi làm ba dòng.","voice":"vi-VN-NamMinhNeural","rate":"+5%","pitch":"-8Hz"},
+{"id":"next","text":"Mình là Kẻ Nghĩ Nhiều. Hẹn gặp lại ở trạm tiếp theo.","voice":"vi-VN-NamMinhNeural","rate":"+5%","pitch":"-8Hz"}
+]
