@@ -1,10 +1,10 @@
 // "Tại sao càng rảnh, ta càng thấy mệt?" — Tập 01 của kênh Trạm Nghĩ Nhiều.
 // Shots are functions of local time; every time comes from timeline.js (the real voice).
 // Page contract: window.render(t), DUR, READY, EV (sound events), TEXTS(t) (on-screen text for the reading check), CUES (subtitles).
-import { figure, expr, blendE, PAL, roi, battery } from '../../rig/character.js';
-import { cel, path, poly, ellP, line, limb, mix, rgba, canvas, W, H, TAU, rect } from '../../rig/cel.js';
-import { ground, panel, hilite, stamp, pip, bubble, focusLines, subtitle, tag, ring, batteryBig, text, sharpText, font, ease, seg, clamp01, INK, CREAM, ACCENT, STORY, REG } from '../../rig/broll.js';
-import * as S from '../../rig/sets.js';
+import { figure, expr, blendE, PAL, roi, battery } from '../../../../rig/character.js';
+import { cel, path, poly, ellP, line, limb, mix, rgba, canvas, W, H, TAU, rect } from '../../../../rig/cel.js';
+import { ground, panel, hilite, stamp, pip, bubble, focusLines, subtitle, tag, ring, batteryBig, text, sharpText, font, ease, seg, clamp01, INK, CREAM, ACCENT, STORY, REG } from '../../../../rig/broll.js';
+import * as S from '../../../../rig/sets.js';
 import { build } from './timeline.js';
 
 const cv = document.getElementById('c'), G = cv.getContext('2d');
@@ -59,7 +59,7 @@ const pipHost = (o, T) => (gg, r) => {
   const grd = gg.createRadialGradient(0, 40, 10, 0, 40, r * 1.3);
   grd.addColorStop(0, 'rgba(255,183,3,.18)'); grd.addColorStop(1, 'rgba(255,183,3,0)');
   gg.fillStyle = grd; gg.fillRect(-r, -r, 2 * r, 2 * r);
-  gg.save(); gg.translate(0, 112); figure(gg, { s: 1.05, t: T, blink: blink(T), talk: talkAt(T), linePx: 3, ...o }); gg.restore();
+  gg.save(); gg.translate(0, 150); figure(gg, { s: .88, t: T, blink: blink(T), talk: talkAt(T), linePx: 3, ...o }); gg.restore();
 };
 const popP = (lt, a, b) => lt < b ? seg(lt, a, a + .3) : 1 - seg(lt, b, b + .22);
 

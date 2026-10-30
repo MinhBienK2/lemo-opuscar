@@ -39,7 +39,7 @@ case "$CHANNEL" in
   ''|.|..|*/*) die "not a channel name: '$CHANNEL'" ;;
 esac
 case "$EPISODE" in
-  ''|.|..|*/*) die "not an episode name: '$EPISODE'" ;;
+  ''|.|..|/*|*/|*//*|*..*) die "not a valid episode name or relative series path: '$EPISODE'" ;;
 esac
 
 CHANNEL_DIR="$LIB/channels/$CHANNEL"
@@ -55,7 +55,7 @@ fi
 [ -n "$TITLE" ] || TITLE="$CHANNEL — $EPISODE"
 # the movie name: the channel and the episode, so two channels with an episode of the same name
 # never write the same movie (filmcheck.mjs enforces that the name is unique in the library)
-NAME="$CHANNEL-$EPISODE"
+NAME="$CHANNEL-$(printf '%s' "$EPISODE" | tr '/' '-')"
 MOVIE="$NAME.mp4"
 
 # the title goes into JSON and into HTML: quote it so a " in the title cannot break the file
@@ -239,7 +239,7 @@ HERE=$(cd "$(dirname "$0")" && pwd)
 # the library root: the upward search of docs/layout.md — the depth of the channel never counts
 LIB=${LIB:-$(cd "$HERE" && while [ ! -f core/render/review.sh ] && [ "$PWD" != / ]; do cd ..; done && pwd)}
 # the channel: the folder above the episode, the one that holds CHANNEL.md
-CHANNEL=${CHANNEL:-$(cd "$HERE/.." && pwd)}
+CHANNEL=${CHANNEL:-$(cd "$HERE" && while [ ! -f CHANNEL.md ] && [ "$PWD" != / ]; do cd ..; done && pwd)}
 OUT=${OUT:-$HERE/out}; mkdir -p "$OUT"; OUT=$(cd "$OUT" && pwd); export LIB OUT CHANNEL
 EOF
   printf 'NAME=%s\n' "$NAME"

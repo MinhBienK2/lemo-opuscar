@@ -1,10 +1,10 @@
 // "Tại sao ta không tập trung được?" — Tập 03 của kênh Trạm Nghĩ Nhiều (bản dài, khoảng hai mươi phút).
 // Shots là hàm của thời gian cục bộ; mọi thời gian đến từ timeline.js (giọng đọc thật).
 // Trang hợp đồng: window.render(t), DUR, READY, EV (sự kiện âm thanh), TEXTS(t) (chữ trên hình cho bước đọc), CUES (phụ đề).
-import { figure, expr, blendE, PAL, roi } from '../../rig/character.js';
-import { cel, path, poly, ellP, line, taper, mix, rgba, canvas, W, H, TAU, rect } from '../../rig/cel.js';
-import { ground, panel, hilite, stamp, pip, bubble, subtitle, tag, text, sharpText, font, ease, seg, clamp01, ring, wrap, batteryBig, INK, CREAM, ACCENT, STORY, REG } from '../../rig/broll.js';
-import * as S from '../../rig/sets.js';
+import { figure, expr, blendE, PAL, roi } from '../../../../rig/character.js';
+import { cel, path, poly, ellP, line, taper, mix, rgba, canvas, W, H, TAU, rect } from '../../../../rig/cel.js';
+import { ground, panel, hilite, stamp, pip, bubble, subtitle, tag, text, sharpText, font, ease, seg, clamp01, ring, wrap, batteryBig, INK, CREAM, ACCENT, STORY, REG } from '../../../../rig/broll.js';
+import * as S from '../../../../rig/sets.js';
 import { build } from './timeline.js';
 import { buildShots } from './shots.js';
 
@@ -58,7 +58,7 @@ const pipHost = (o, T) => (gg, r) => {
   const grd = gg.createRadialGradient(0, 40, 10, 0, 40, r * 1.3);
   grd.addColorStop(0, 'rgba(255,183,3,.18)'); grd.addColorStop(1, 'rgba(255,183,3,0)');
   gg.fillStyle = grd; gg.fillRect(-r, -r, 2 * r, 2 * r);
-  gg.save(); gg.translate(0, 112); figure(gg, { s: 1.05, t: T, blink: blink(T), talk: talkAt(T), linePx: 3, ...o }); gg.restore();
+  gg.save(); gg.translate(0, 150); figure(gg, { s: .88, t: T, blink: blink(T), talk: talkAt(T), linePx: 3, ...o }); gg.restore();
 };
 const popP = (lt, a, b) => lt < b ? seg(lt, a, a + .3) : 1 - seg(lt, b, b + .22);
 

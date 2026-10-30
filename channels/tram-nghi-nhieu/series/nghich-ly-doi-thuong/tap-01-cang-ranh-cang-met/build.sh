@@ -7,7 +7,7 @@
 set -e
 HERE=$(cd "$(dirname "$0")" && pwd)
 LIB=${LIB:-$(cd "$HERE" && while [ ! -f core/render/review.sh ] && [ "$PWD" != / ]; do cd ..; done && pwd)}
-CHANNEL=$(cd "$HERE/.." && pwd)
+CHANNEL=${CHANNEL:-$(cd "$HERE" && while [ ! -f CHANNEL.md ] && [ "$PWD" != / ]; do cd ..; done && pwd)}
 OUT=${OUT:-$HERE/out}; mkdir -p "$OUT"; OUT=$(cd "$OUT" && pwd); export LIB OUT
 NAME=tram-nghi-nhieu-tap-01
 cd "$LIB"

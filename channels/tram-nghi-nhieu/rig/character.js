@@ -1,64 +1,77 @@
-// "Kẻ Nghĩ Nhiều" (The Overthinker) and his sidekick "Rối" — the channel's characters, drawn as minimalist vector cel.
-//
-// Look: a squircle head in off-white, messy dark-navy hair, an ahoge shaped like a lamp filament with a glowing bulb,
-// an oversized mustard hoodie with a low-battery icon on the chest, dark outlines. Rối is a purple tangled scribble ball.
-//
-// Units: the figure origin is the base of the neck, y down; the head centre is (0,-150) with a radius of 100; the feet are at y ≈ 860.
-// Everything is flat: one fill, one hard shadow, a dark line. No gradients.
+// "Kẻ Nghĩ Nhiều" (The Overthinker) and his sidekick "Rối" — 2D Character Rig
+// Faithfully matching the authentic vector cartoon aesthetic from the_overthinker_2d_character_rig.html
 import { cel, path, poly, ellP, line, taper, ribbon, limb, ik, mix, rgba, LWK, TAU, rect } from './cel.js';
 
 export const PAL = {
-  bg: '#12131A', bg2: '#1B1D27',
-  skin: { f: '#FAF8F5', s: '#E4E0DA', h: '#FFFFFF', l: '#1D202A' },
-  hair: { f: '#232A44', s: '#161B2E', h: '#3C4670', l: '#0E1220' },
-  hoodie: { f: '#FFB703', s: '#D98E00', h: '#FFD976', l: '#1D202A' },
-  ink: '#1D202A',
-  cream: '#FAF8F5',
-  muted: '#8A90A6',
-  panel: '#232838', panel2: '#2C3247',
-  violet: { f: '#8B5CF6', s: '#6D3FD6', h: '#B79BFA', l: '#2A1550' },
-  cyan: { f: '#67E8F9', s: '#22B8D6', h: '#B6F3FF', l: '#0B3B47' },
-  red: { f: '#F0525B', s: '#C22A38', h: '#FF9AA0', l: '#3A0B12' },
-  green: { f: '#4ADE80', s: '#2AA85A', h: '#A7F3C4', l: '#0B3A20' },
+  bg: '#12131a', bg2: '#0c0d13',
+  ink: '#171a2b',
+  skin: { f: '#fff0d8', s: '#ecd6b8', h: '#ffffff', l: '#171a2b' },
+  hair: { f: '#202746', s: '#161c36', h: '#46517a', l: '#171a2b' },
+  hoodie: { f: '#f7bd27', s: '#d99516', h: '#ffd34f', l: '#171a2b' },
+  pants: { f: '#252d50', s: '#191f3a', l: '#171a2b' },
+  cream: '#fff0d8',
+  muted: '#aaaaba',
+  panel: '#151722', panel2: '#2a2e40',
+  violet: { f: '#9a5be5', s: '#7d3fc4', h: '#be8df5', l: '#171a2b' },
+  cyan: { f: '#67e8f9', s: '#22b8d6', h: '#b6f3ff', l: '#171a2b' },
+  red: { f: '#f04462', s: '#c22a38', h: '#ff9aa0', l: '#171a2b' },
+  green: { f: '#4ade80', s: '#2aa85a', h: '#a7f3c4', l: '#171a2b' },
+  yellow: '#f7bd27',
+  bulb: '#ffd34f',
+  mouth: '#a94345',
+  blush: '#d9bda5'
 };
 
-// ——— expressions: flat number tables that blend ———
+// Expressions: mapped to the friendly vector facial rig
 const E0 = {
-  open: 1, lidL: 0, lidR: 0, lookX: 0, lookY: 0, smile: 0, mo: 0, mw: 1, ms: 0, mr: 0,
-  browL: 0, browR: 0, browY: 0, blush: 0, ahoge: 0, glint: 0, sweat: 0, gloom: 0, sparkles: 0,
-  q: 0, ex: 0, vein: 0, hatch: 0, spark: 0, tired: 0,
+  face: 'sleepy',
+  open: 1, lookX: 0, lookY: 0, smile: 0, mo: 0, mw: 1, ms: 0,
+  browL: 0, browR: 0, browY: 0, blush: 0, ahoge: 1, glow: 1,
+  sweat: 0, gloom: 0, sparkles: 0, tired: 0
 };
-const B = (l, r, y = 0) => ({ browL: l, browR: r, browY: y });
+
 export const EXPR = {
-  neutral: {},
-  talk: { smile: .12 },
-  smile: { smile: .8, ms: .12, blush: .18, ...B(-2, -2) },
-  happy: { smile: 1, mo: .28, mw: 1.05, blush: .3, ahoge: .9, ...B(-5, -5) },
-  excited: { smile: 1, mo: .5, mw: 1.15, blush: .28, ahoge: 1, sparkles: 1, ...B(-8, -8) },
-  surprised: { open: 1.1, mo: .45, mr: .9, ms: 0, ahoge: 1, ex: 1, ...B(-12, -12, 3) },
-  shocked: { open: 1.15, mo: .7, mr: .5, ms: -.3, sweat: 1, ahoge: 1, ex: 1, ...B(-14, -8) },
-  thinking: { lookX: .5, lookY: -.55, lidL: .16, lidR: .1, smile: -.1, mw: .7, q: 1, ...B(-7, 2, 2) },
-  skeptical: { lidL: .38, lidR: .16, lookX: .3, smile: -.15, mw: .8, ...B(6, -10, 1) },
-  smug: { lidL: .4, lidR: .4, smile: .9, glint: 1, blush: .25, ...B(3, -5) },
-  worried: { smile: -.45, mw: .72, mo: .08, sweat: 1, lookX: -.25, ahoge: -.35, ...B(-10, 5) },
-  sad: { lidL: .32, lidR: .32, smile: -.6, lookY: .5, ahoge: -1, gloom: 1, ...B(-9, 6) },
-  tired: { lidL: .5, lidR: .5, smile: -.25, lookY: .2, ahoge: -.6, gloom: .6, tired: 1, ...B(-4, 4) },
-  annoyed: { lidL: .45, lidR: .45, smile: -.35, mw: .65, vein: 1, ahoge: -.2, ...B(9, -2) },
-  embarrassed: { blush: 1, hatch: 1, smile: .3, mo: .1, sweat: 1, lookX: -.6, lookY: .35, ...B(-8, 2) },
-  determined: { lidL: .2, lidR: .2, smile: .1, ahoge: .75, ...B(8, -4) },
-  deadpan: { lidL: .55, lidR: .55, smile: 0, mw: .6, ...B(0, 0) },
-  flat: { lidL: .3, lidR: .3, smile: -.1, mw: .7, ...B(0, 0) },
-  spin: { open: 1.05, lookX: .1, smile: .2, mo: .2, mr: .6, ahoge: 1, ...B(-6, -6) },
+  neutral: { face: 'sleepy' },
+  talk: { face: 'sleepy', mo: .3 },
+  smile: { face: 'happy', smile: .8 },
+  happy: { face: 'happy', smile: 1, mo: .25 },
+  excited: { face: 'happy', smile: 1, mo: .45, sparkles: 1 },
+  surprised: { face: 'surprised', open: 1.2, mo: .6 },
+  shocked: { face: 'surprised', open: 1.3, mo: .75, sweat: 1 },
+  thinking: { face: 'thinking', lookX: .6, lookY: -.4, browL: -4, browR: 2 },
+  skeptical: { face: 'worried', lookX: .4, browL: 4, browR: -4 },
+  smug: { face: 'happy', smile: .9, lookX: -.2 },
+  worried: { face: 'worried', smile: -.6 },
+  sad: { face: 'worried', smile: -.8, gloom: 1 },
+  tired: { face: 'sleepy', tired: 1, smile: -.2 },
+  annoyed: { face: 'worried', smile: -.5, browL: -5, browR: -5 },
+  embarrassed: { face: 'happy', blush: 1, smile: .4 },
+  determined: { face: 'happy', browL: -6, browR: -6 },
+  deadpan: { face: 'sleepy', smile: 0 },
+  flat: { face: 'sleepy', smile: 0 },
+  spin: { face: 'happy', mo: .3 },
 };
-export function expr(name, over) { return { ...E0, ...(EXPR[name] || {}), ...(over || {}) }; }
+
+export function expr(name, over) {
+  const base = typeof name === 'string' ? (EXPR[name] || { face: name }) : (name || {});
+  return { ...E0, ...base, ...(over || {}) };
+}
+
 export function blendE(a, b, t) {
-  const A = typeof a === 'string' ? expr(a) : a, Bq = typeof b === 'string' ? expr(b) : b, o = {};
-  for (const k in E0) o[k] = A[k] + (Bq[k] - A[k]) * t;
+  const A = typeof a === 'string' ? expr(a) : (a || E0);
+  const Bq = typeof b === 'string' ? expr(b) : (b || E0);
+  const o = {};
+  for (const k in E0) {
+    if (typeof A[k] === 'number' && typeof Bq[k] === 'number') {
+      o[k] = A[k] + (Bq[k] - A[k]) * t;
+    } else {
+      o[k] = t < .5 ? A[k] : Bq[k];
+    }
+  }
   return o;
 }
 
-// ——— shapes ———
-// a squircle: a superellipse |x/a|^n + |y/b|^n = 1 (n = 4 gives the rounded-square look)
+// Export squircle & animeHead for any external caller compatibility
 export function squircle(x, y, a, b, n = 4.2, steps = 64) {
   const p = new Path2D();
   for (let i = 0; i <= steps; i++) {
@@ -68,410 +81,394 @@ export function squircle(x, y, a, b, n = 4.2, steps = 64) {
   }
   p.closePath(); return p;
 }
-function star(g, x, y, r, col) {
-  g.fillStyle = col; g.beginPath();
-  for (let i = 0; i < 8; i++) { const a = i * Math.PI / 4 - Math.PI / 2, rr = i % 2 ? r * .3 : r; g.lineTo(x + Math.cos(a) * rr, y + Math.sin(a) * rr); }
-  g.closePath(); g.fill();
+export function animeHead(x, y, a, b, yaw = 0) {
+  return new Path2D("M326 111 Q330 65 389 66 Q453 67 463 122 L454 195 Q439 224 394 225 Q343 222 326 188Z");
 }
 
-// ——— the head ———
-// E drives the face; yaw turns it; the hair is drawn in three passes (back mass, side locks, front fringe).
-function head(g, o) {
-  const { E, yaw = 0, roll = 0, pitch = 0, t = 0, blink = 0, talk = { o: 0, b: .5 }, lw } = o;
-  const S = PAL.skin, H = PAL.hair, HR = 100;
-  const hy = -150 + pitch * 6;          // the head rides on the neck
-  const yshift = yaw * 6;               // the features slide with the turn
-  g.save(); g.translate(yshift, 0); g.rotate(roll, 0, hy);
-  // the skull: a squircle, flat fill with a hard shadow on the left
-  const skull = squircle(0, hy, HR * 1.02, HR * 1.06);
-  cel(g, skull, { f: S.f, s: S.s, so: [-13, -9], l: S.l, lw });
-  // hair: the back mass, so the head reads as a head from behind
-  const back = squircle(0, hy - 12, HR * 1.1, HR * 1.12);
-  cel(g, back, { f: H.s, l: H.l, lw });
-  g.restore();
-  g.save(); g.translate(yshift, 0); g.rotate(roll, 0, hy);
-  // the face is drawn on top of the hair mass: a squircle again, slightly narrower
-  const face = squircle(yaw * 10, hy + 4, HR * .96, HR * .98);
-  cel(g, face, { f: S.f, s: S.s, so: [-11, -8], l: S.l, lw });
-  const fx = yaw * 14, fy = hy + 4 + pitch * 8;   // the feature box follows the turn
-  // the ears
-  for (const sx of [-1, 1]) {
-    const ex = fx + sx * 92 + yaw * 6;
-    cel(g, ellP(ex, fy + 20, 10, 17), { f: S.f, s: S.s, so: [sx * 3, 2], l: S.l, lw: lw * .85 });
-  }
-  // the eyes
-  const eyes = [-1, 1].map(sx => ({ sx, ex: fx + sx * 40, ey: fy + 22 }));
-  for (const e of eyes) eye(g, e.ex, e.ey, e.sx, E, blink, talk, lw);
-  // the brows
-  for (const e of eyes) {
-    const up = e.sx < 0 ? E.browL : E.browR;
-    const w = 30, x = e.ex + e.sx * 3, y = fy - 16 + E.browY - up * .8;
-    const tilt = up * .045;
-    taper(g, [[x - w, y + tilt * w], [x, y - 3], [x + w, y - tilt * w]], PAL.ink, lw * 1.25, [.2, .2]);
-  }
-  // the mouth
-  mouth(g, fx, fy + 74, E, talk, lw);
-  // the blush
-  for (const e of eyes) {
-    if (E.blush < .04) continue;
-    g.fillStyle = rgba('#F0525B', Math.min(.6, E.blush * .5));
-    g.beginPath(); g.ellipse(e.ex + e.sx * 46, fy + 48, 16, 7, 0, 0, TAU); g.fill();
-  }
-  // the nose: one small line
-  line(g, [[fx + 3, fy + 50], [fx + 9, fy + 56]], mix(S.l, S.f, .35), lw * .8);
-  // the hair on top of the face: messy navy locks
-  hair(g, hy, yaw, t, E, lw);
-  // the ahoge: a lamp filament, curling, with a glowing bulb
-  ahoge(g, hy, yaw, t, E, lw);
-  // the face effects
-  fxDraw(g, fx, fy, E, t, lw);
-  g.restore();
-  return { fx, fy, hy };
-}
+// SVG Path definitions from reference rig
+const PATHS = {
+  head: new Path2D("M326 111 Q330 65 389 66 Q453 67 463 122 L454 195 Q439 224 394 225 Q343 222 326 188Z"),
+  hair: new Path2D("M320 142 Q300 103 330 91 Q318 59 359 64 Q378 37 408 65 Q438 47 449 83 Q480 91 463 130 Q453 111 442 110 Q430 126 413 114 Q390 136 369 116 Q347 139 320 142Z"),
+  bulb: new Path2D("M390 69 Q377 49 392 34 Q409 19 421 36 Q433 53 413 69 L413 79 L393 79Z"),
+  hoodie: new Path2D("M315 220 Q330 197 360 196 L424 196 Q455 207 469 240 L450 393 Q391 416 319 393 L298 250Z"),
+  collarSh: new Path2D("M345 203 Q390 246 438 204"),
+  collarRim: new Path2D("M355 204 Q390 237 425 204"),
+  armL: new Path2D("M315 235 Q282 230 270 267 L249 335 Q248 354 269 357 Q285 358 294 339 L327 284Z"),
+  handL: new Path2D("M251 337 Q239 349 246 363 Q258 375 278 356 L286 342Z"),
+  armR: new Path2D("M458 236 Q490 239 502 275 L517 337 Q516 355 496 359 Q479 358 473 340 L448 284Z"),
+  handR: new Path2D("M499 337 Q519 339 525 355 Q521 371 499 364 L482 350Z"),
+  pantL: new Path2D("M330 390 L326 478 Q326 490 345 490 L369 490 L377 395Z"),
+  pantR: new Path2D("M385 395 L395 478 Q395 491 414 490 L437 490 L425 389Z"),
+  shoeL: new Path2D("M324 480 Q300 490 305 508 Q310 520 366 515 Q383 510 369 491Z"),
+  shoeR: new Path2D("M394 482 Q382 494 390 510 Q398 520 451 514 Q466 506 439 489Z")
+};
 
-function eye(g, cx, cy, sx, E, blink, talk, lw) {
-  const open = Math.max(0, E.open * (1 - blink));
-  const lid = E.sx === undefined ? 0 : 0;
-  const lidK = (sx < 0 ? E.lidL : E.lidR);
-  const W = 21, Hh = 25 * open * (1 - lidK * .55);
-  if (E.tired > .3 && open < .55) {   // a tired eye: a flat line under the lid
-    line(g, [[cx - W, cy], [cx + W, cy]], PAL.ink, lw * 1.1);
-    line(g, [[cx - W * .7, cy + 7], [cx + W * .6, cy + 7]], rgba(PAL.ink, .45), lw * .6);
-    return;
-  }
-  if (open < .1) { line(g, [[cx - W, cy + 2], [cx + W, cy + 1]], PAL.ink, lw * 1.1); return; }
-  const ix = cx + E.lookX * 11, iy = cy + E.lookY * 7;
-  // the sclera
-  g.save();
-  g.beginPath(); g.ellipse(cx, cy, W, Hh, 0, 0, TAU); g.clip();
-  g.fillStyle = '#FFFFFF'; g.fillRect(cx - W, cy - Hh, W * 2, Hh * 2);
-  // the iris
-  const ir = Math.min(W * .8, Hh * .92);
-  g.fillStyle = PAL.ink; g.beginPath(); g.ellipse(ix, iy, ir * .78, ir, 0, 0, TAU); g.fill();
-  g.fillStyle = '#fff'; g.beginPath(); g.arc(ix - ir * .32, iy - ir * .34, ir * .27, 0, TAU); g.fill();
-  if (E.sparkles > .1) star(g, ix + ir * .3, iy + ir * .2, ir * .55 * E.sparkles, '#fff');
-  g.restore();
-  // the lash line
-  g.strokeStyle = PAL.ink; g.lineWidth = lw * 1.05; g.lineCap = 'round';
-  g.beginPath(); g.ellipse(cx, cy, W, Hh, 0, Math.PI * 1.05, Math.PI * 2.05); g.stroke();
-}
-
-function mouth(g, cx, cy, E, talk, lw) {
-  const o = Math.max(E.mo, talk ? talk.o * .62 : 0);
-  const w = 26 * E.mw * (1 - E.mr * .4) * (E.smile < 0 ? 1.05 : 1);
-  const sm = E.ms;
-  if (E.q > .5 && o < .15) {   // a small "hmm" mouth
-    line(g, [[cx - w * .5, cy + 3], [cx - w * .15, cy - 2], [cx + w * .2, cy + 3], [cx + w * .5, cy - 1]], PAL.ink, lw);
-    return;
-  }
-  if (o < .1) {   // a closed mouth: a curve, smile or frown
-    const dip = sm * 7;
-    g.strokeStyle = PAL.ink; g.lineWidth = lw; g.lineCap = 'round';
-    g.beginPath(); g.moveTo(cx - w * .7, cy - dip * .5);
-    g.quadraticCurveTo(cx, cy + dip, cx + w * .7, cy - dip * .5); g.stroke();
-    return;
-  }
-  const h = 10 + o * 26, y0 = cy - sm * 6;
-  cel(g, [[cx - w, y0, 1], [cx - w * .35, y0 - 1], [cx + w * .35, y0 - 1], [cx + w, y0, 1],
-    [cx + w * .62, y0 + h * .78], [cx, y0 + h], [cx - w * .62, y0 + h * .78]],
-    { f: '#3A1520', s: '#7A1E30', l: PAL.ink, lw: lw * .85 });
-  // the tongue
-  if (o > .45) { g.fillStyle = '#F0525B'; g.beginPath(); g.ellipse(cx, y0 + h * .82, w * .42, h * .26, 0, 0, TAU); g.fill(); }
-}
-
-function hair(g, hy, yaw, t, E, lw) {
-  const H = PAL.hair, R = 100;
-  const wob = Math.sin(t * 1.7) * 1.6;
-  const a = R * 1.08, b = R * 1.1, n = 4.2;
-  const sp = (ct, st) => [a * Math.sign(ct) * Math.pow(Math.abs(ct), 2 / n), b * Math.sign(st) * Math.pow(Math.abs(st), 2 / n)];
-  // the cap: the top half of a squircle, closed along a ragged hairline
-  const cap = new Path2D();
-  for (let i = 0; i <= 40; i++) {
-    const th = Math.PI + i / 40 * Math.PI;
-    const [px, py] = sp(Math.cos(th), Math.sin(th));
-    i ? cap.lineTo(px, py + hy) : cap.moveTo(px, py + hy);
-  }
-  const hairline = [[.96, -.16], [.72, -.32], [.46, -.43], [.18, -.47], [-.18, -.49], [-.46, -.45], [-.72, -.35], [-.96, -.19]];
-  for (const [fx, fy] of hairline) cap.lineTo(fx * a, fy * b + hy);
-  cap.closePath();
-  cel(g, cap, { f: H.f, s: H.s, so: [-10, -8], l: H.l, lw });
-  // the fringe: tapered strands hanging from the hairline, clear of the eyes
-  const locks = [
-    [-88, -66, 14], [-54, -44, 22], [-14, -26, 26],
-    [26, 2, 24], [62, 28, 18], [88, 50, 10],
-  ];
-  locks.forEach(([x0, x1, drop], k) => {
-    // the locks trail the turn, and each one has its own rhythm: hair that shares one frequency moves like a helmet
-    const sway2 = Math.sin(t * (1.55 + k * .21) + x0) * 2.4 - yaw * 22;
-    const spine = [[x0, hy - 80 + wob], [(x0 + x1) / 2, hy - 74 + drop * .3], [x1 + sway2, hy - 70 + drop]];
-    cel(g, ribbon(spine, u => 24 * (1 - u * .78)), { f: k % 2 ? mix(H.f, H.h, .16) : H.f, s: H.s, so: [-5, -4], l: H.l, lw: lw * .8 });
-  });
-  // the crown: a few messy spikes
-  for (const [x, h, w, ang] of [[-58, 34, 20, -.45], [-6, 42, 23, -.1], [48, 30, 18, .3]]) {
-    const p = path([[x - w, hy - 98], [x + Math.sin(ang) * 18, hy - 98 - h], [x + w, hy - 92], [x + w * .5, hy - 104]], false);
-    cel(g, p, { f: H.f, s: H.s, so: [-6, -4], l: H.l, lw: lw * .8 });
-  }
-  // the shine on the cap
-  g.save(); g.clip(cap);
-  for (let k = 0; k < 3; k++) {
-    const pts = [];
-    for (let j = 0; j < 5; j++) { const ang = Math.PI * (1.15 + k * .12) + j * .04; pts.push([-14 + Math.cos(ang) * 70, hy - 34 + Math.sin(ang) * 48]); }
-    taper(g, pts, rgba(H.h, .7), 7, [.4, .4]);
-  }
-  g.restore();
-}
-
-function ahoge(g, hy, yaw, t, E, lw) {
-  const k = E.ahoge;                       // up for excitement, down for sadness
-  const bob = Math.sin(t * 3.1) * 4 + Math.sin(t * 7.3) * 1.4;
-  const base = [yaw * 8 + 4, hy - 104];
-  const pts = [];
-  // a filament: a small curl that leans and springs
-  const curl = 1 + k * .8;
-  for (let i = 0; i <= 16; i++) {
-    const u = i / 16;
-    const a = u * Math.PI * 1.8 * curl;
-    const rad = 38 * (1 - u * .5);
-    pts.push([base[0] + Math.sin(a) * rad * .6 + u * 20, base[1] - u * (58 + k * 44) + Math.cos(a) * rad * .4 + bob * u * .5]);
-  }
-  const P = ribbon(pts, u => 8 * Math.pow(1 - u, .5) + 1.2);
-  cel(g, P, { f: PAL.hair.f, l: PAL.hair.l, lw: lw * .8 });
-  // the bulb at the tip: it glows with the mood, and it trails behind the turn
-  const tip = pts[pts.length - 1];
-  tip[0] -= yaw * 16;
-  const glow = .35 + .65 * Math.max(0, k);
-  const r = 8 + 4 * glow;
-  const grd = g.createRadialGradient(tip[0], tip[1], 0, tip[0], tip[1], r * 3.4);
-  grd.addColorStop(0, rgba(PAL.hair.h, .55 * glow)); grd.addColorStop(1, rgba(PAL.hair.h, 0));
-  g.fillStyle = grd; g.beginPath(); g.arc(tip[0], tip[1], r * 3.4, 0, TAU); g.fill();
-  cel(g, ellP(tip[0], tip[1], r, r), { f: PAL.hair.h, s: PAL.hair.f, l: PAL.hair.l, lw: lw * .7 });
-  if (glow > .6) star(g, tip[0], tip[1], r * 1.7, rgba('#FFF3C4', .7));
-}
-
-function fxDraw(g, fx, fy, E, t, lw) {
-  if (E.sweat > .1) {   // a sweat drop at the temple
-    const x = fx + 78, y = fy - 18 + Math.sin(t * 3) * 2;
-    cel(g, poly([[x, y - 15], [x + 9, y + 6], [x, y + 14], [x - 9, y + 6]]), { f: '#8FD3FF', s: '#4FA8D8', l: PAL.ink, lw: lw * .7 });
-  }
-  if (E.vein > .1) {   // the pop-vein mark
-    const x = fx - 76, y = fy - 34;
-    line(g, [[x, y], [x + 6, y + 10], [x - 4, y + 14], [x + 4, y + 24]], PAL.red.f, lw * .9);
-    line(g, [[x + 14, y - 6], [x + 20, y + 4], [x + 10, y + 8], [x + 18, y + 18]], PAL.red.f, lw * .9);
-  }
-  if (E.hatch > .1) {   // the embarrassment hatch
-    for (let k = 0; k < 3; k++) line(g, [[fx - 80 + k * 9, fy + 30], [fx - 74 + k * 9, fy + 20]], rgba(PAL.red.f, E.hatch * .9), lw * .7);
-  }
-  if (E.gloom > .1) {   // the gloom cloud
-    const x = fx, y = fy - 92;
-    g.fillStyle = rgba('#3C4463', E.gloom * .8);
-    for (const [dx, dy, r] of [[-34, 0, 22], [-8, -8, 26], [24, 0, 20], [4, 10, 24]]) { g.beginPath(); g.arc(x + dx, y + dy, r, 0, TAU); g.fill(); }
-  }
-  if (E.glint > .1) {   // a star in the eye
-    star(g, fx + 40, fy + 18, 22 * E.glint, '#FFFFFF');
-  }
-}
-
-// ——— hands: a palm, a thumb and four fingers that curl ———
-// The hand points along the forearm: the local +x is the direction the fingers reach.
-function hand(g, x, y, rot, gest, flip, lw, prop) {
-  g.save(); g.translate(x, y); g.rotate(rot + (flip ? Math.PI : 0));
-  const S = PAL.skin;
-  const palm = (rx, ry) => cel(g, ellP(0, 0, rx, ry), { f: S.f, s: S.s, so: [-5, -4], l: S.l, lw });
-  // one finger: a tapered ribbon that curls towards the palm
-  const finger = (x0, y0, len, curl, w) => {
-    const pts = [];
-    for (let i = 0; i <= 7; i++) {
-      const u = i / 7, a = curl * u;
-      pts.push([x0 + Math.cos(a) * len * u, y0 + Math.sin(a) * len * u]);
-    }
-    cel(g, ribbon(pts, u => w * (1 - u * .28)), { f: S.f, s: S.s, so: [-3, -2], l: S.l, lw: lw * .82 });
-  };
-  // the thumb, along the side of the palm
-  const thumb = (a = .5) => cel(g, ribbon([[-6, -9], [-15, -14], [-22, -16 + a * 6]], u => 10 - u * 3),
-    { f: S.f, s: S.s, so: [-3, -2], l: S.l, lw: lw * .82 });
-  if (gest === 'point') {
-    palm(15, 13);
-    finger(8, -6, 30, .05, 7);      // the index, straight
-    finger(8, 1, 20, 1.15, 6.8);
-    finger(8, 7, 18, 1.3, 6.4);
-    finger(7, 12, 15, 1.35, 6);
-    thumb(.35);
-  } else if (gest === 'open') {
-    palm(17, 18);
-    finger(9, -11, 25, .18, 7.2); finger(10, -4, 28, .1, 7.4); finger(9, 3, 25, .16, 7); finger(8, 10, 21, .28, 6.6);
-    thumb(.2);
-  } else if (gest === 'fist') {
-    palm(16, 15);
-    for (let k = 0; k < 4; k++) cel(g, ellP(9, -8 + k * 6.4, 4.4, 3.6), { f: S.f, s: S.s, l: S.l, lw: lw * .7 });
-    thumb(.95);
-  } else if (gest === 'hold') {
-    palm(14, 15);
-    finger(6, -8, 18, 1.45, 6.4); finger(7, -2, 18, 1.5, 6.4); finger(7, 4, 17, 1.45, 6); finger(6, 10, 15, 1.35, 5.6);
-    thumb(.75);
-    if (prop) prop(g);
-  } else if (gest === 'four' || gest === 'three' || gest === 'two' || gest === 'one') {
-    const n = { one: 1, two: 2, three: 3, four: 4 }[gest] || 1;
-    palm(14, 13);
-    for (let k = 0; k < 4; k++) {
-      if (k < n) finger(8, -7 + k * 6.4, 27 - k * 1.6, .07, 6.8);
-      else finger(8, -7 + k * 6.4, 16, 1.4, 6.2);
-    }
-    thumb(.6);
-  } else {   // relaxed
-    palm(13, 17);
-    finger(7, -9, 21, .55, 6.8); finger(8, -2, 23, .62, 7); finger(8, 5, 21, .6, 6.6); finger(7, 11, 18, .55, 6.2);
-    thumb(.55);
-  }
-  g.restore();
-}
-
-// ——— the shoe: the toe points at the viewer, with a sole and laces ———
-// The character is drawn front on, so the shoe is drawn downwards from the ankle and mirrored per side.
-function shoe(g, x, y, ang, lw, sd = 1) {
-  g.save(); g.translate(x, y); g.rotate(ang); g.scale(sd, 1);
-  cel(g, path([[-24, -36], [20, -36], [29, -8], [25, 20], [-25, 20], [-29, -8]], true),
-    { f: '#EDEFF5', s: '#C6CBD8', so: [-4, 4], l: PAL.ink, lw });
-  cel(g, rect(-26, 12, 26, 24), { f: '#3A4258', s: '#262C3E', so: [0, 3], l: PAL.ink, lw: lw * .9 });
-  for (let k = 0; k < 3; k++) line(g, [[-13 + k * 12, -30], [-7 + k * 12, -19]], rgba('#5A6488', .9), lw * .7);
-  g.restore();
-}
-
-// ——— the figure ———
-// o: { t, E, s, blink, talk, headYaw, headRoll, headPitch, bodyYaw, lean, armL, armR, legs, crop, linePx, battery }
+// Main character figure
 export function figure(g, o = {}) {
-  const E = o.E || expr('neutral'), t = o.t || 0;
+  const E = o.E ? expr(o.E) : expr('sleepy');
+  const t = o.t || 0;
   const s = o.s === undefined ? 1 : o.s;
-  // the line weight is fixed on the screen: the drawing happens inside a scale of s, so the widths are divided by it
-  const lw = (o.linePx || 3.2) / s;
-  const HD = PAL.hoodie;
-  // the breathing and the float: two frequencies each, so the body never looks like a loop
-  const breathe = Math.sin(t * 1.55) * 3 + Math.sin(t * 3.1) * .8;
-  const sway = Math.sin(t * .8) * .012 + Math.sin(t * 2.27) * .004;
-  g.save(); g.scale(s, s);
-  // The head follows the arms a little: when one arm leads, the head turns with it. The rig's yaw unit is small
-  // (1 unit = 14 px of feature shift), so the number stays inside a quarter of it.
-  const lead = Math.max(-.25, Math.min(.25,
-    ((o.armR && o.armR.at ? o.armR.at[0] : 0) + (o.armL && o.armL.at ? o.armL.at[0] : 0)) * .003));
-  const bodyYaw = o.bodyYaw || 0, lean = o.lean || 0;
-  g.rotate(sway, 0, 0); g.translate(0, breathe * .3);
-  // legs (drawn first, behind the torso)
+  const blink = o.blink || 0;
+  const talk = o.talk || { o: 0 };
+  const batteryLevel = o.battery === undefined ? 0.12 : o.battery;
+
+  // The base scale factor maps the 800x560 SVG rig to the 1920x1080 canvas
+  const S_BASE = 1.35;
+  const scale = s * S_BASE;
+
+  g.save();
+  g.scale(scale, scale);
+
+  // Character origin is (0,0) at neck/chest center (SVG 390, 204)
+  // Gentle breathing and floating motion
+  const breathe = Math.sin(t * 1.55) * 2;
+  const sway = Math.sin(t * 0.8) * 0.015;
+  g.rotate(sway);
+  g.translate(0, breathe);
+  g.translate(-390, -204);
+
+  // 1. Legs & Shoes (drawn behind torso)
   if (o.crop !== 'bust') {
     const legs = o.legs || { mode: 'stand' };
-    const L = PAL.skin;
-    for (const sd of [-1, 1]) {
-      // standing: the leg swings; sitting: the thigh goes forward and the shin drops to the floor
-      const sit = legs.mode === 'sit';
-      // the walk: the leg swings, the knee lifts on the swing-through, the foot rolls from heel to toe
-      const ph = legs.mode === 'walk' ? (legs.ph || 0) + (sd > 0 ? .5 : 0) : 0;
-      const sw = legs.mode === 'walk' ? Math.sin(ph * TAU) : 0;
-      const lift = legs.mode === 'walk' ? Math.max(0, Math.sin(ph * TAU + .85)) : 0;
-      const hip = [sd * 34, 290];
-      const knee = sit ? [sd * 40 + 96, 420] : [sd * 34 + sw * 30, 460 - lift * 30];
-      const foot = sit ? [sd * 44 + 96, 660] : [sd * 36 + sw * 66, 650 - lift * 58];
-      cel(g, limb(hip, knee, 46, 38), { f: '#3A4258', s: '#2A3044', so: [-6, 0], l: PAL.ink, lw });
-      cel(g, limb(knee, foot, 38, 31), { f: '#3A4258', s: '#2A3044', so: [-6, 0], l: PAL.ink, lw });
-      shoe(g, foot[0], foot[1], (sit ? sd * .1 : sd * .12 - sw * .12 + lift * .24), lw, sd);
+    const isWalk = legs.mode === 'walk';
+    const isSit = legs.mode === 'sit';
+    const ph = isWalk ? (legs.ph || 0) : 0;
+    const sw = isWalk ? Math.sin(ph * TAU) * 16 : 0;
+
+    g.save();
+    g.lineJoin = 'round';
+    g.lineCap = 'round';
+    g.strokeStyle = PAL.ink;
+    g.lineWidth = 7;
+
+    // Sitting mode adjustments
+    if (isSit) {
+      g.translate(20, -10);
     }
+
+    // Left leg
+    g.save();
+    if (isWalk) g.translate(sw, 0);
+    g.fillStyle = PAL.pants.f;
+    g.fill(PATHS.pantL); g.stroke(PATHS.pantL);
+    g.fillStyle = PAL.cream;
+    g.fill(PATHS.shoeL); g.stroke(PATHS.shoeL);
+    g.strokeStyle = PAL.yellow; g.lineWidth = 5;
+    g.beginPath(); g.moveTo(309, 505); g.lineTo(366, 505); g.stroke();
+    g.restore();
+
+    // Right leg
+    g.save();
+    if (isWalk) g.translate(-sw, 0);
+    g.strokeStyle = PAL.ink; g.lineWidth = 7;
+    g.fillStyle = PAL.pants.f;
+    g.fill(PATHS.pantR); g.stroke(PATHS.pantR);
+    g.fillStyle = PAL.cream;
+    g.fill(PATHS.shoeR); g.stroke(PATHS.shoeR);
+    g.strokeStyle = PAL.yellow; g.lineWidth = 5;
+    g.beginPath(); g.moveTo(394, 505); g.lineTo(449, 505); g.stroke();
+    g.restore();
+
+    g.restore();
   }
-  // The upper body answers the pose: in a flat front-on drawing a yaw is not a rotation but a narrowing and a
-  // shift of the shoulders, and a lean is a real tilt around the hips. The head stays outside and inherits a little.
-  const yawK = Math.min(.22, Math.abs(bodyYaw) * .8);
+
+  // 2. Hoodie Torso
+  g.lineJoin = 'round';
+  g.lineCap = 'round';
+  g.strokeStyle = PAL.ink;
+  g.lineWidth = 8;
+  g.fillStyle = PAL.yellow;
+  g.fill(PATHS.hoodie);
+  g.stroke(PATHS.hoodie);
+
+  // Collar shadow & rim
+  g.strokeStyle = PAL.yellowSh;
+  g.lineWidth = 7;
+  g.stroke(PATHS.collarSh);
+
+  g.strokeStyle = PAL.ink;
+  g.lineWidth = 7;
+  g.stroke(PATHS.collarRim);
+
+  // 3. Arms
+  // Check if custom arm positions are passed
+  const hasArmL = o.armL && o.armL.at;
+  const hasArmR = o.armR && o.armR.at;
+
+  // Left arm
   g.save();
-  g.translate(bodyYaw * 46, 0);
-  g.scale(1 - yawK, 1);
-  g.translate(0, 300); g.rotate(lean); g.translate(0, -300);
-  // the torso: an oversized hoodie
-  const sh = 124;                                   // the shoulder half-width
-  const body = path([[-sh, 26], [-sh - 12, 170], [-sh - 2, 300], [sh + 2, 300], [sh + 12, 170], [sh, 26]], true);
-  cel(g, body, { f: HD.f, s: HD.s, so: [-16, -6], l: HD.l, lw });
-  // the hood, bunched behind the neck
-  cel(g, path([[-86, 34], [-34, -30], [34, -30], [86, 34], [54, 58], [-54, 58]], true),
-    { f: HD.s, s: mix(HD.s, PAL.ink, .25), so: [-10, -6], l: HD.l, lw });
-  // the hood opening
-  cel(g, path([[-56, 22], [-30, -24], [30, -24], [56, 22], [36, 38], [-36, 38]], true),
-    { f: mix(HD.s, PAL.ink, .45), l: HD.l, lw: lw * .9 });
-  // the pocket
-  cel(g, rect(-84, 244, 84, 318),
-    { f: mix(HD.f, HD.s, .35), s: HD.s, so: [0, 8], l: HD.l, lw: lw * .9 });
-  // the drawstrings
-  for (const sx of [-1, 1]) {
-    const dx = sx * 24, dy = 26 + Math.sin(t * 2.2 + sx) * 3;
-    line(g, [[dx, 20], [dx + sx * 3, dy + 62]], mix(PAL.cream, HD.s, .3), lw * 1.5);
-    cel(g, ellP(dx + sx * 3, dy + 70, 6, 8), { f: PAL.cream, l: PAL.ink, lw: lw * .6 });
+  if (hasArmL) {
+    const at = o.armL.at;
+    const ang = Math.atan2(at[1] - 250, at[0] - 315) - Math.PI / 2;
+    g.translate(315, 235); g.rotate(ang * 0.5); g.translate(-315, -235);
+  } else if (o.pose === 'explain' || (o.armL && o.armL.gest === 'open')) {
+    g.translate(315, 235); g.rotate(-0.38); g.translate(-315, -235);
+  } else if (o.pose === 'point' || (o.armL && o.armL.gest === 'point')) {
+    g.translate(315, 235); g.rotate(-0.55); g.translate(-315, -235);
   }
-  // the low-battery icon on the chest
-  battery(g, -86, 96, 54, o.battery === undefined ? .12 : o.battery, t, lw);
-  // the arms
-  const arm = (cfg, sx) => {
-    const a = cfg || {};
-    const shoulder = [sx * 118, 58];
-    const target = a.at || [sx * 140, 310];
-    const up = 140, fore = 130;
-    const elbow = ik(shoulder, target, up * (a.upper || 1), fore * (a.fore || 1), sx > 0 ? 1 : -1);
-    const sleeve = PAL.hoodie;
-    cel(g, limb(shoulder, elbow, 40, 32), { f: sleeve.f, s: sleeve.s, so: [-8, -4], l: sleeve.l, lw });
-    cel(g, limb(elbow, target, 32, 25), { f: sleeve.f, s: sleeve.s, so: [-8, -4], l: sleeve.l, lw });
-    // the cuff and the hand
-    const ang = Math.atan2(target[1] - elbow[1], target[0] - elbow[0]);
-    const cuff = [target[0] - Math.cos(ang) * 14, target[1] - Math.sin(ang) * 14];
-    cel(g, ellP(cuff[0], cuff[1], 27, 22, ang), { f: sleeve.s, s: mix(sleeve.s, PAL.ink, .3), so: [-6, -4], l: sleeve.l, lw });
-    hand(g, target[0], target[1], ang + (a.rot || 0), a.gest || 'relaxed', a.flip, lw, a.prop);
-  };
-  arm(o.armL, -1); arm(o.armR, 1);
-  g.restore();   // the upper body
-  // the head: it follows the twist of the torso a little, the way a real head does
-  const hd = head(g, { E, yaw: (o.headYaw || 0) + bodyYaw * .3 + lead, roll: o.headRoll || 0, pitch: o.headPitch || 0, t, blink: o.blink || 0, talk: o.talk || { o: 0, b: .5 }, lw });
+  g.strokeStyle = PAL.ink; g.lineWidth = 8; g.fillStyle = PAL.yellow;
+  g.fill(PATHS.armL); g.stroke(PATHS.armL);
+  g.lineWidth = 7; g.fillStyle = PAL.cream;
+  g.fill(PATHS.handL); g.stroke(PATHS.handL);
   g.restore();
-  return hd;
-}
 
-// the chest icon: a low battery
-export function battery(g, x, y, w, level, t, lw = 3) {
-  const h = w * .55;
-  cel(g, rect(x, y, x + w, y + h), { f: 'rgba(0,0,0,0)', l: PAL.ink, lw: lw * .8 });
-  cel(g, rect(x + w, y + h * .3, x + w + w * .12, y + h * .7), { f: PAL.ink, l: PAL.ink, lw: lw * .6 });
-  const lv = Math.max(0, Math.min(1, level));
-  if (lv > 0) {
-    const blink = lv < .25 ? (Math.sin(t * 7) > 0 ? 1 : .35) : 1;
-    g.globalAlpha = blink;
-    cel(g, rect(x + 3, y + 3, x + 3 + (w - 6) * lv, y + h - 3),
-      { f: lv < .25 ? PAL.red.f : PAL.green.f, l: PAL.ink, lw: lw * .5 });
-    g.globalAlpha = 1;
+  // Right arm
+  g.save();
+  if (hasArmR) {
+    const at = o.armR.at;
+    const ang = Math.atan2(at[1] - 250, at[0] - 460) - Math.PI / 2;
+    g.translate(458, 236); g.rotate(ang * 0.5); g.translate(-458, -236);
+  } else if (o.pose === 'explain') {
+    g.translate(458, 236); g.rotate(0.42); g.translate(-458, -236);
+  } else if (o.pose === 'point' || (o.armR && o.armR.gest === 'point')) {
+    g.translate(458, 236); g.rotate(0.65); g.translate(-458, -236);
   }
+  g.strokeStyle = PAL.ink; g.lineWidth = 8; g.fillStyle = PAL.yellow;
+  g.fill(PATHS.armR); g.stroke(PATHS.armR);
+  g.lineWidth = 7; g.fillStyle = PAL.cream;
+  g.fill(PATHS.handR); g.stroke(PATHS.handR);
+  g.restore();
+
+  // 4. Hoodie details: drawstrings & battery
+  // Drawstrings
+  g.strokeStyle = PAL.cream;
+  g.lineWidth = 5;
+  g.beginPath();
+  g.moveTo(369, 224); g.lineTo(367, 268);
+  g.moveTo(421, 222); g.lineTo(420, 318);
+  g.stroke();
+
+  // Zig-zag knot on right drawstring
+  g.strokeStyle = PAL.ink;
+  g.lineWidth = 3;
+  g.beginPath();
+  g.moveTo(416, 278); g.lineTo(425, 289); g.lineTo(416, 300); g.lineTo(426, 311);
+  g.stroke();
+
+  // Low battery icon on chest
+  const batColor = batteryLevel < 0.25 ? PAL.red.f : PAL.green.f;
+  g.fillStyle = batColor;
+  g.strokeStyle = PAL.ink;
+  g.lineWidth = 3;
+  g.beginPath();
+  g.roundRect(381, 303, 37, 17, 4);
+  g.fill(); g.stroke();
+
+  // Battery level bar
+  const batFillW = Math.max(2, Math.min(30, 30 * batteryLevel));
+  g.fillStyle = PAL.cream;
+  g.beginPath();
+  g.roundRect(385, 307, batFillW, 9, 1);
+  g.fill();
+
+  // Battery terminal notch
+  g.fillStyle = PAL.ink;
+  g.fillRect(420, 308, 4, 7);
+
+  // 5. Head, Hair, Bulb & Face
+  g.save();
+  const headSway = (o.headRoll || 0) + Math.sin(t * 1.8) * 0.02;
+  const headPitch = (o.headPitch || 0) * 4;
+  g.translate(390, 204);
+  g.rotate(headSway);
+  g.translate(0, headPitch);
+  g.translate(-390, -204);
+
+  // Head base
+  g.fillStyle = PAL.cream;
+  g.strokeStyle = PAL.ink;
+  g.lineWidth = 8;
+  g.fill(PATHS.head);
+  g.stroke(PATHS.head);
+
+  // Hair
+  g.fillStyle = PAL.hair.f;
+  g.fill(PATHS.hair);
+  g.stroke(PATHS.hair);
+
+  // Hair highlights
+  g.strokeStyle = PAL.hair.h;
+  g.lineWidth = 5;
+  g.beginPath();
+  g.moveTo(350, 83); g.lineTo(340, 101);
+  g.moveTo(380, 72); g.lineTo(373, 88);
+  g.moveTo(426, 77); g.lineTo(416, 94);
+  g.stroke();
+
+  // Glowing lightbulb on top of head
+  g.save();
+  g.shadowColor = PAL.bulb;
+  g.shadowBlur = E.glow === undefined ? 12 : 12 * E.glow;
+  g.strokeStyle = PAL.bulb;
+  g.lineWidth = 5;
+  g.stroke(PATHS.bulb);
+  g.beginPath();
+  g.moveTo(397, 84); g.lineTo(411, 84);
+  g.moveTo(399, 90); g.lineTo(409, 90);
+  g.lineWidth = 4;
+  g.stroke();
+  g.restore();
+
+  // Face features
+  const faceType = E.face || 'sleepy';
+
+  // Eyebrows
+  g.strokeStyle = PAL.ink;
+  g.lineWidth = 6;
+  if (faceType === 'worried' || E.smile < -0.2) {
+    g.beginPath();
+    g.moveTo(348, 147); g.quadraticCurveTo(367, 156, 383, 144);
+    g.moveTo(407, 144); g.quadraticCurveTo(426, 156, 442, 147);
+    g.stroke();
+  } else {
+    g.beginPath();
+    g.moveTo(348, 153); g.quadraticCurveTo(367, 139, 383, 153);
+    g.moveTo(407, 153); g.quadraticCurveTo(426, 139, 442, 153);
+    g.stroke();
+  }
+
+  // Eyes
+  if (blink > 0.5) {
+    g.strokeStyle = PAL.ink;
+    g.lineWidth = 5;
+    g.beginPath();
+    g.moveTo(356, 160); g.lineTo(376, 160);
+    g.moveTo(415, 160); g.lineTo(435, 160);
+    g.stroke();
+  } else if (faceType === 'happy' || E.smile > 0.7) {
+    g.strokeStyle = PAL.ink;
+    g.lineWidth = 5;
+    g.beginPath();
+    g.moveTo(356, 164); g.quadraticCurveTo(366, 154, 376, 164);
+    g.moveTo(415, 164); g.quadraticCurveTo(425, 154, 435, 164);
+    g.stroke();
+  } else {
+    g.fillStyle = PAL.ink;
+    const eyeRy = (faceType === 'surprised' || E.open > 1.1) ? 14 : 9;
+    const lookX = (E.lookX || 0) * 4;
+    const lookY = (E.lookY || 0) * 3;
+    g.beginPath();
+    g.ellipse(366 + lookX, 160 + lookY, 8, eyeRy, 0, 0, TAU);
+    g.ellipse(425 + lookX, 160 + lookY, 8, eyeRy, 0, 0, TAU);
+    g.fill();
+    // Specular dots
+    g.fillStyle = '#ffffff';
+    g.beginPath();
+    g.arc(364 + lookX, 157 + lookY, 2.5, 0, TAU);
+    g.arc(423 + lookX, 157 + lookY, 2.5, 0, TAU);
+    g.fill();
+  }
+
+  // Blush tick marks
+  g.strokeStyle = PAL.blush;
+  g.lineWidth = 3;
+  g.beginPath();
+  g.moveTo(346, 177); g.lineTo(356, 180);
+  g.moveTo(432, 180); g.lineTo(442, 177);
+  g.stroke();
+
+  // Mouth
+  const mouthOpen = Math.max(talk.o, E.mo || 0);
+  if (mouthOpen > 0.2 || faceType === 'surprised') {
+    const mo = Math.max(mouthOpen, faceType === 'surprised' ? 0.6 : 0);
+    g.fillStyle = PAL.mouth;
+    g.strokeStyle = PAL.ink;
+    g.lineWidth = 4;
+    g.beginPath();
+    g.ellipse(396, 192, 11, 6 + mo * 10, 0, 0, TAU);
+    g.fill(); g.stroke();
+  } else if (faceType === 'worried' || E.smile < -0.2) {
+    g.strokeStyle = PAL.mouth;
+    g.lineWidth = 5;
+    g.beginPath();
+    g.moveTo(385, 196); g.quadraticCurveTo(397, 185, 410, 196);
+    g.stroke();
+  } else if (faceType === 'happy' || E.smile > 0.4) {
+    g.strokeStyle = PAL.mouth;
+    g.lineWidth = 5;
+    g.beginPath();
+    g.moveTo(382, 184); g.quadraticCurveTo(397, 204, 413, 184);
+    g.stroke();
+  } else {
+    g.strokeStyle = PAL.mouth;
+    g.lineWidth = 5;
+    g.beginPath();
+    g.moveTo(384, 190); g.quadraticCurveTo(397, 198, 409, 189);
+    g.stroke();
+  }
+
+  g.restore(); // Head transform
+  g.restore(); // Main transform
+  return { fx: 0, fy: -100, hy: -100 };
 }
 
-// ——— Rối: the sidekick, a purple tangled scribble ball ———
+// Sidekick Rối: authentic purple scribble monster
 export function roi(g, x, y, s = 1, o = {}) {
-  const t = o.t || 0, E = o.E || {};
-  const V = PAL.violet;
-  const spin = t * (o.spin === undefined ? 1.4 : o.spin);
-  const squash = 1 + Math.sin(t * 6) * .06;
-  g.save(); g.translate(x, y); g.scale(s * squash, s / squash);
-  // the tangle: a looping scribble
-  const pts = [];
-  for (let i = 0; i <= 120; i++) {
-    const u = i / 120, a = u * TAU * 3.2 + spin, r = 46 * (1 - .38 * u) + Math.sin(a * 2.4) * 9;
-    pts.push([Math.cos(a) * r, Math.sin(a) * r * .92]);
-  }
-  const P = ribbon(pts, u => 7 * Math.sin(Math.PI * Math.min(1, u * 1.02)) + 1.5);
-  cel(g, P, { f: V.f, l: V.l, lw: 2.6 });
-  // a second, thinner loop for the tangle
-  const pts2 = [];
-  for (let i = 0; i <= 90; i++) {
-    const u = i / 90, a = -u * TAU * 2.4 + spin * .7, r = 30 * (1 - .3 * u) + Math.cos(a * 3) * 7;
-    pts2.push([Math.cos(a) * r, Math.sin(a) * r * .9]);
-  }
-  cel(g, ribbon(pts2, u => 5 * Math.sin(Math.PI * Math.min(1, u * 1.02)) + 1), { f: V.h, l: V.l, lw: 2 });
-  // the face: two eyes and a mouth
-  const ey = -4 + Math.sin(t * 2) * 1.5;
-  for (const sx of [-1, 1]) {
-    cel(g, ellP(sx * 15, ey, 8.5, 9.5), { f: PAL.cream, l: PAL.ink, lw: 2 });
-    cel(g, ellP(sx * 15 + (E.lookX || 0) * 3, ey + (E.lookY || 0) * 3, 4.4, 5), { f: PAL.ink });
-  }
-  const mo = E.mo === undefined ? .4 : E.mo;
-  cel(g, ellP(0, ey + 20, 8, 2 + mo * 7), { f: '#3A1520', l: PAL.ink, lw: 1.8 });
-  // the little antenna
-  line(g, [[0, -44], [4, -60]], PAL.ink, 3);
-  cel(g, ellP(4, -63, 5, 5), { f: V.h, l: PAL.ink, lw: 2 });
+  const t = o.t || 0;
+  const floatY = Math.sin(t * 2.5) * 8;
+  const floatRot = Math.sin(t * 1.8) * 0.08;
+
+  g.save();
+  g.translate(x, y + floatY);
+  g.rotate(floatRot);
+  g.scale(s, s);
+
+  // Scribble loops
+  g.strokeStyle = PAL.violet.f;
+  g.lineWidth = 5;
+  g.setLineDash([8, 5]);
+  g.lineCap = 'round';
+  const p1 = new Path2D("M-42 0 C-55 -42 4 -57 35 -30 S51 29 9 43 S-54 29 -42 0Z");
+  const p2 = new Path2D("M-34 -20 C-4 -57 49 -5 20 26 S-46 41 -26 -4 S36 -40 39 7");
+  const p3 = new Path2D("M-46 13 C-15 -22 5 55 45 8");
+  g.stroke(p1); g.stroke(p2); g.stroke(p3);
+  g.setLineDash([]);
+
+  // Eyes
+  g.fillStyle = '#ffffff';
+  g.beginPath();
+  g.ellipse(-13, -2, 12, 15, 0, 0, TAU);
+  g.ellipse(17, -3, 12, 15, 0, 0, TAU);
+  g.fill();
+
+  // Pupils
+  g.fillStyle = PAL.ink;
+  g.beginPath();
+  g.arc(-10, 1, 5, 0, TAU);
+  g.arc(20, 0, 5, 0, TAU);
+  g.fill();
+
+  // Specular dots
+  g.fillStyle = '#ffffff';
+  g.beginPath();
+  g.arc(-12, -4, 2, 0, TAU);
+  g.arc(18, -5, 2, 0, TAU);
+  g.fill();
+
+  g.restore();
+}
+
+// Low battery chest icon
+export function battery(g, x, y, w, level, t, lw = 3) {
+  g.save();
+  g.translate(x, y);
+  const s = w / 37;
+  g.scale(s, s);
+  const batColor = level < 0.25 ? PAL.red.f : PAL.green.f;
+  g.fillStyle = batColor;
+  g.strokeStyle = PAL.ink;
+  g.lineWidth = 3;
+  g.beginPath();
+  g.roundRect(0, 0, 37, 17, 4);
+  g.fill(); g.stroke();
+
+  const batFillW = Math.max(2, Math.min(30, 30 * level));
+  g.fillStyle = PAL.cream;
+  g.beginPath();
+  g.roundRect(4, 4, batFillW, 9, 1);
+  g.fill();
+
+  g.fillStyle = PAL.ink;
+  g.fillRect(39, 5, 4, 7);
   g.restore();
 }

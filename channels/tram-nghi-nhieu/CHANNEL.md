@@ -29,10 +29,14 @@ Mỗi tập thuộc đúng một cột; đổi cột là đổi bối cảnh (b�
 
 ## 3. Quy trình một tập
 
-Mỗi tập là một thư mục riêng: `channels/tram-nghi-nhieu/tap-01/`, `tap-02/`, `tap-03/`. **Không nhân bản thư mục tập nào** — tạo tập mới bằng scaffold, nó gắn code chung của kênh bằng đường dẫn tương đối chứ không copy:
+Mọi series và tập phim được gom gọn vào mục `series/`, bên trong phân chia theo chủ đề cụ thể:
+* `series/nghich-ly-doi-thuong/tap-01-cang-ranh-cang-met/` (Cột 1: Nghịch lý đời thường)
+* `series/tam-ly-hanh-vi/tap-01-tam-ly-tri-hoan/` (Cột 4: Tâm lý hành vi)
+* `series/vet-bam-than-kinh/tap-01-khong-the-tap-trung/` (Cột 2: Chuyên sâu thần kinh / bản dài)
 
+**Không nhân bản thư mục tập nào** — tạo tập mới bằng scaffold:
 ```sh
-sh core/render/new_episode.sh tram-nghi-nhieu tap-04 "Tiêu đề tập mới"
+sh core/render/new_episode.sh tram-nghi-nhieu series/nghich-ly-doi-thuong/tap-02-cang-co-cang-met "Tiêu đề tập mới"
 ```
 
 Trong thư mục tập, `$CHANNEL` là thư mục kênh (`channels/tram-nghi-nhieu`) và `$LIB` là thư mục gốc của thư viện:
@@ -80,18 +84,19 @@ Kênh giữ những gì mọi tập dùng chung; tập giữ những gì chỉ n
 channels/tram-nghi-nhieu/
 ├── CHANNEL.md          # file này: bản đồ của kênh (danh tính, quy trình, luật)
 ├── STYLE.md            # ngôn ngữ hình ảnh của kênh
-├── DEMO.md             # tập đầu tiên của kênh đã làm gì
-├── rig/                # code vẽ dùng chung
-│   ├── cel.js          # công cụ cel (bố cục, nét, ribbon, IK)
-│   ├── character.js    # Kẻ Nghĩ Nhiều + Rối: đầu, tóc, hoodie, biểu cảm, tay, chân
-│   ├── sets.js         # bàn làm việc ban đêm, sofa, phố bình minh, feed, người
-│   └── broll.js        # nền tối, panel, highlight, con dấu, pop-in, bong bóng, phụ đề
+├── DEMO.md             # demo của kênh
+├── cast-sheet.jpg      # bảng đặc tả nhân vật The Overthinker & Rối
+├── rig/                # code vẽ dùng chung (character.js, cel.js, hands.js, sets.js, broll.js)
 ├── mix.py              # âm thanh dùng chung: nhạc + ambience + foley + lùi dB + nén
 ├── fonts/              # Be Vietnam Pro + Patrick Hand (OFL) + fonts.css
 ├── voice/              # tts_vi.py, asr_vi.py, process.py (dùng chung)
-├── tap-01/             # tập 1
-├── tap-02/             # tập 2
-└── tap-03/             # tập 3
+└── series/             # MỤC SERIES CHÍNH (chứa các chủ đề chuyên biệt)
+    ├── nghich-ly-doi-thuong/   # Chủ đề Nghịch lý đời thường (Cột 1)
+    │   └── tap-01-cang-ranh-cang-met/
+    ├── tam-ly-hanh-vi/         # Chủ đề Tâm lý hành vi & vô thức (Cột 4)
+    │   └── tap-01-tam-ly-tri-hoan/
+    └── vet-bam-than-kinh/      # Chủ đề Vết bầm thần kinh & Chuyên sâu (Cột 2)
+        └── tap-01-khong-the-tap-trung/
 ```
 
 ```

@@ -20,7 +20,7 @@
 //   ch3s            — sau ch3g, trước ch3h
 //   ch3t            — sau ch3j, trước ch3k
 //   ch3u, ch3v      — sau ch3n, trước ch3o
-import { PAL } from '../../rig/character.js';
+import { PAL } from '../../../../rig/character.js';
 
 export const SHOTS_A = [
   // ——— chương 1: đầu ta rảnh ra thế nào (phần viết sau) ———

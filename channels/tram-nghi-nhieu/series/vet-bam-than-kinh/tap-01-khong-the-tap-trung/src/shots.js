@@ -1,5 +1,5 @@
 // Bảng cảnh của tập 03 — "Tại sao ta không tập trung được?".
-import { PAL } from '../../rig/character.js';
+import { PAL } from '../../../../rig/character.js';
 import { SEQ } from './timeline.js';
 import { SHOTS_A } from './shots_a.js';
 import { SHOTS_B } from './shots_b.js';

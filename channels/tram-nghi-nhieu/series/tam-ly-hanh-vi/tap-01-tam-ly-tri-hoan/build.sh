@@ -4,16 +4,13 @@
 #   $LIB/.venv/bin/python "$CHANNEL/voice/tts_vi.py" voice/lines.json voice/
 #   $LIB/.venv/bin/python "$CHANNEL/voice/asr_vi.py" voice/lines.json voice/ --model small
 #   $LIB/.venv/bin/python "$CHANNEL/voice/process.py" voice/
-# The timeline (the order of the lines and the subtitle chunks) is generated from the script:
-#   $LIB/.venv/bin/python mk_timeline.py
 set -e
 HERE=$(cd "$(dirname "$0")" && pwd)
 LIB=${LIB:-$(cd "$HERE" && while [ ! -f core/render/review.sh ] && [ "$PWD" != / ]; do cd ..; done && pwd)}
-CHANNEL=$(cd "$HERE/.." && pwd)
+CHANNEL=${CHANNEL:-$(cd "$HERE" && while [ ! -f CHANNEL.md ] && [ "$PWD" != / ]; do cd ..; done && pwd)}
 OUT=${OUT:-$HERE/out}; mkdir -p "$OUT"; OUT=$(cd "$OUT" && pwd); export LIB OUT
-NAME=tram-nghi-nhieu-tap-03
+NAME=tram-nghi-nhieu-tap-02
 cd "$LIB"
-"$LIB/.venv/bin/python" "$HERE/mk_timeline.py"
 node core/render/events.mjs "$HERE"
 FILM=$HERE "$LIB/.venv/bin/python" "$CHANNEL/mix.py"
 node core/render/video.mjs "$HERE" --workers 4 --out "$OUT/video.mp4"
@@ -23,7 +20,7 @@ const r = p => JSON.parse(fs.readFileSync('$HERE/' + p)); const T = build(r('voi
 fs.writeFileSync('$OUT/cues.json', JSON.stringify(T.cues.map(c => ({ t0: c.t0, t1: c.t1, text: c.text }))));"
 "$LIB/.venv/bin/python" core/render/srt.py "$OUT/cues.json" "$OUT/$NAME.transcript.srt"
 sh core/render/mux.sh "$OUT/video.mp4" "$OUT/mix.wav" "$OUT/$NAME.mp4" 24 0
-ffmpeg -v error -y -ss 27.5 -i "$OUT/$NAME.mp4" -frames:v 1 -q:v 2 "$OUT/poster.jpg"
+ffmpeg -v error -y -ss 12.5 -i "$OUT/$NAME.mp4" -frames:v 1 -q:v 2 "$OUT/poster.jpg"
 # the deliverables stay in the project folder, where they are committed and where the review finds them.
 # The captions are already burned into the picture: the .srt is the transcript for the platform, and it is not
 # named like the film so that a player does not load it on top of the captions that are in the picture.

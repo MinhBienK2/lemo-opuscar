@@ -1,7 +1,7 @@
 // Bảng cảnh phần viết sau — chương 4, 5, 6 của tập 03 (sinh bởi src/mk_shots_b.py).
 // Mỗi cảnh: { n (tên), at (câu neo), beat (loại hình), ...tham số, ev (sự kiện âm thanh) }.
 // Sự kiện âm thanh có thời điểm **tương đối** so với đầu cảnh; film.js cộng thêm thời điểm của cảnh.
-import { PAL } from '../../rig/character.js';
+import { PAL } from '../../../../rig/character.js';
 
 export const SHOTS_B = [
   { n: 'ch4p1', at: 'c4_17', off: -.2, beat: 'talk', line: 'c4_17',

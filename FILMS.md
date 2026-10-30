@@ -6,9 +6,9 @@ Every film of the library, one row each. The one-shots live in `films/`; the epi
 
 | Film | Folder | Runtime | Movie |
 |---|---|---|---|
-| Trạm Nghĩ Nhiều — tập 1: Tại sao càng rảnh, ta càng thấy mệt? | `channels/tram-nghi-nhieu/tap-01/` | 1:51 | `channels/tram-nghi-nhieu/tap-01/tram-nghi-nhieu-tap-01.mp4` |
-| Trạm Nghĩ Nhiều — tập 2: Tại sao ta hay trì hoãn? | `channels/tram-nghi-nhieu/tap-02/` | 1:42 | `channels/tram-nghi-nhieu/tap-02/tram-nghi-nhieu-tap-02.mp4` |
-| Trạm Nghĩ Nhiều — tập 3: Tại sao ta không tập trung được? | `channels/tram-nghi-nhieu/tap-03/` | 19:55 | `channels/tram-nghi-nhieu/tap-03/tram-nghi-nhieu-tap-03.mp4` |
+| Trạm Nghĩ Nhiều — tập 1: Tại sao càng rảnh, ta càng thấy mệt? | `channels/tram-nghi-nhieu/series/nghich-ly-doi-thuong/tap-01-cang-ranh-cang-met/` | 1:51 | `channels/tram-nghi-nhieu/series/nghich-ly-doi-thuong/tap-01-cang-ranh-cang-met/tram-nghi-nhieu-tap-01.mp4` |
+| Trạm Nghĩ Nhiều — tập 2: Tại sao ta hay trì hoãn? | `channels/tram-nghi-nhieu/series/tam-ly-hanh-vi/tap-01-tam-ly-tri-hoan/` | 1:42 | `channels/tram-nghi-nhieu/series/tam-ly-hanh-vi/tap-01-tam-ly-tri-hoan/tram-nghi-nhieu-tap-02.mp4` |
+| Trạm Nghĩ Nhiều — tập 3: Tại sao ta không tập trung được? | `channels/tram-nghi-nhieu/series/vet-bam-than-kinh/tap-01-khong-the-tap-trung/` | 19:55 | `channels/tram-nghi-nhieu/series/vet-bam-than-kinh/tap-01-khong-the-tap-trung/tram-nghi-nhieu-tap-03.mp4` |
 | Phi vụ triệu đô trong 2 phút — a Money Heist explainer in a talking-head toon | `films/host-toon-test/` | 2:12 | `films/host-toon-test/phi-vu-trieu-do-2-phut.mp4` |
 
 ## Channels
