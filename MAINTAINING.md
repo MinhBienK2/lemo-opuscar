@@ -22,6 +22,26 @@ Rules for library demos only (a user's film follows `DIRECTOR.md`, not these):
 - **Bilingual subtitles, one line per language.** Each cue has one Chinese line and one English line, never wrapped. When a line is too long, split it into two cues.
 - **Comparisons hold still before the verdict.** When the film compares options (four bridges, three plans), each one is fully in frame and held at least 2.5 s before it is judged, so the viewer can read it.
 
+## Add a channel
+
+A channel is a series of films that share an identity: a name, a cast, a visual language, a way of working. It lives in `channels/<channel>/` and holds what its episodes share; each episode is a film of its own, in `channels/<channel>/<episode>/`. The contract is [`docs/layout.md`](docs/layout.md).
+
+| File | What it holds |
+|---|---|
+| `CHANNEL.md` | the channel map: identity, process, file map — what an agent reads before it builds an episode |
+| `STYLE.md` | the channel's visual language, in the sections of a style's `STYLE.md` |
+| `DEMO.md` | what the channel's first episode showed, like a style's `DEMO.md` |
+| `style.json` | the channel's metadata: `slug`, `en`, `cn`, `based_on`, `created`, `line`, `line_cn` — the fields a user's `~/lemo-my-styles/README.md` row is written from |
+| `rig/`, `mix.py`, `fonts/`, `voice/` | the shared implementation: it exists once, in the channel, and every episode reaches it by a relative path |
+| `cast/` | the cast specs, when the channel's characters must live in 2D and in 3D (`core/cast/`) |
+
+Rules for channels:
+
+- **The shared code is never copied into an episode.** The episode imports the channel's `rig/`, calls the channel's `mix.py` (with `FILM=` the episode) and the channel's `voice/` scripts. A copy is a defect (`CODING_STANDARDS.md` R7).
+- **An episode starts empty.** Create it with `sh core/render/new_episode.sh <channel> <episode> [title]`: it writes the episode's own files and attaches the channel's. It never copies the previous episode, whose identity would come with it.
+- **Every film carries a manifest.** `film.json` in the film's folder: `title`, `movie`, `runtime` (measured with `ffprobe`, never promised). `FILMS.md` is generated from the manifests by `tools/gen_films_index.py` — never edit it by hand.
+- **An episode is checked like every other film.** `sh core/render/review.sh channels/<channel>/<episode>` must exit 0. CI and the pre-commit hook ask `core/render/films.mjs` for the list, so an episode is checked without anyone naming it.
+
 ## Register
 
 1. **Number.** `num` in `style.json` is the next free number after the highest in `styles/*/style.json` (two digits as a string, e.g. `"55"`); it orders the gallery within a category.
@@ -50,7 +70,7 @@ Back up first (old versions move out of the repository, not into git). Re-render
 
 ## Directory edition
 
-The Claude plugin directory lists a self-contained build of the plugin, on the orphan branch `directory` (the submission tracks that branch; `main` stays what visitors see). It carries the guides, every `STYLE.md` / `style.json` / `DEMO.md`, `core/` (without the Poly Haven models, which only demo code uses) and its own `README.md`, `SECURITY.md` and `SKILL.md`: nothing is cloned or fetched to tell the agent what to do, there are no demo sources, and Chinese edge-tts narration is used only with the user's consent. The sources of the plugin-only files are in `tools/directory/`; the build and its checks (file sizes, personal info) are in `tools/directory.py`.
+The Claude plugin directory lists a self-contained build of the plugin, on the orphan branch `directory` (the submission tracks that branch; `main` stays what visitors see). It carries the guides, every `STYLE.md` / `style.json` / `DEMO.md`, `core/` (without the Poly Haven models, which only demo code uses) and its own `README.md`, `SECURITY.md` and `SKILL.md`: nothing is cloned or fetched to tell the agent what to do, there are no demo sources, and Chinese edge-tts narration is used only with the user's consent. It carries no channels: the library's channels and their films stay in the repository, and a channel the user keeps of their own is where its episodes are made. The sources of the plugin-only files are in `tools/directory/`; the build and its checks (file sizes, personal info) are in `tools/directory.py`.
 
 After a release on `main` (new styles, changed guides or tools):
 

@@ -42,7 +42,7 @@ The benchmark lifts quality more than any rule below.
 
 ## 4. Write the treatment
 
-Write `TREATMENT.md` before drawing anything, and before you open the style's `DEMO.md` or demo code (an Edit & Documentary style gathers its material first: AGENTS.md, "Treatment first"):
+Write `TREATMENT.md` before drawing anything, and before you open the style's `DEMO.md` or demo code (an Edit & Documentary style gathers its material first: AGENTS.md, "Treatment first"). For an episode of a channel, the channel's previous episode is the demo of that channel: do not open it before the treatment is written either.
 
 1. **Three candidate structures**, a few lines each (for example: a single journey, a before/after, a countdown, a list that turns), then the one you chose and why. Choose the opening image, the ending and the shape of the score from the topic too; the first idea that comes to mind for a style is usually its cliché.
 2. **Logline and arc**: one sentence, then setup → turn → ending.
@@ -113,7 +113,7 @@ Render 6–9 key shots with the real drawing code, tiled into one sheet (`core/r
 
 ## 11. Before you deliver
 
-- **One command first.** From the library root run `sh core/render/review.sh <folder>` (the film folder): it runs the whole review loop — drawcheck, readcheck, review stills, contact sheet, loudness, black frames — and exits non-zero on any failure. It must exit 0 before you commit and before you call the film done.
+- **One command first.** From the library root run `sh core/render/review.sh <folder>` (the film folder): it runs the whole review loop — filmcheck, drawcheck, the claims and facts checks, readcheck, review stills, contact sheet, loudness, black frames — and exits non-zero on any failure. It works for a one-shot and for an episode of a channel, at any depth. It must exit 0 before you commit and before you call the film done.
 - Run the review loop (TECHNIQUE.md §8): contact sheets, 0.2 s strips of key actions, one full-speed viewing with sound.
 - **One fix round.** Fix everything the review and the checks below find in one round, then check once more. Small fixes that second check turns up (a level, a frame) belong to the same round; anything bigger, tell the user in one line when you deliver. The user's notes after delivery are new rounds: change only what they ask.
 - **Not the demo again.** After the treatment, read `DEMO.md` and compare: structure, opening, signature shot, camera path, score shape, ending. At least four of the six must differ; rethink the ones that match. Before delivery, put your contact sheet next to the demo poster (`styles/<slug>/poster.jpg`) as a last check.
@@ -144,7 +144,10 @@ Render 6–9 key shots with the real drawing code, tiled into one sheet (`core/r
 - `<name>.srt`, when the film has narration, dialogue or subtitles;
 - `TREATMENT.md`;
 - `CREDITS`: every third-party asset in the film (sample libraries, music, fonts, images, the voice engine) with its source and licence (TECHNIQUE.md §11);
+- `film.json`: the film's own facts — its title, the movie it writes and its runtime. The library's index is generated from these manifests (`tools/gen_films_index.py`), so the title you write here is the title the index prints;
 - the source, with a one-command `build.sh` (TECHNIQUE.md §2).
+
+**Where the film lives.** In a clone, a one-shot goes to `films/<name>/` and an episode of a channel to `channels/<channel>/<episode>/`; in skill mode it goes into the user's own folder (AGENTS.md, "Where things go"). An episode holds only what is its own — its treatment, its research, its shots, its voice, its movie — and reaches the channel's shared code from the channel; a copy of that code inside the episode is a defect (`CODING_STANDARDS.md` R7).
 
 **Tell the user**, in their language: where the project folder and the film are; that `CREDITS` lists the third-party assets in the film and their licences; and that they are responsible for the materials they use in it.
 

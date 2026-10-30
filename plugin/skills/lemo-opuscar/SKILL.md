@@ -15,10 +15,12 @@ What changes in skill mode:
 
 | | |
 |---|---|
-| Project folder | `<name>/` in the folder the user started from (lowercase letters, digits, hyphens; avoid `#` and `?` in the path). Wherever the guides say `films/<name>/`, read this folder |
+| Project folder | `<name>/` in the folder the user started from (lowercase letters, digits, hyphens; avoid `#` and `?` in the path). Wherever the guides say "the project folder", read this folder. An **episode of a channel** goes into the channel's own folder (`$LIB/channels/<channel>/<episode>/`), next to the shared code it reaches by a relative path — never a copy of it |
 | Running tools | from `$LIB`, with the project's absolute path: `cd "$LIB" && node core/render/still.mjs "<project>" 1.5 3` |
 | Library files in pages | absolute URLs: `/core/lib.js`, `/node_modules/three/…` (the project is served at `/@film/`) |
 | Library files in scripts and `build.sh` | `$LIB/…`, with `LIB=<path>` at the top of `build.sh`; never `../..` |
 | Demo source | not downloaded. `sh "<skill base directory>/scripts/setup.sh" demo <slug>`, only after your `TREATMENT.md` is written, to read its techniques; it is not meant to be rendered. An Edit & Documentary style is the exception: fetch it before the treatment to use the material tools its `STYLE.md` names in `demo/tools/` (`$LIB/AGENTS.md`, "Treatment first") |
 
 Deliver what `$LIB/DIRECTOR.md` §11 lists, in the project folder, and tell the user where it is.
+
+**A film in a channel.** The library's channels are in `$LIB/channels/`; each holds its own map, `CHANNEL.md`, and the code its episodes share. Read that map before you build an episode, and create the episode with the scaffold — `sh "$LIB/core/render/new_episode.sh" <channel> <episode> [title]` — so it starts empty of the previous episode's identity. The episode's own folder is `channels/<channel>/<episode>/`: its treatment, its research, its shots, its voice and its movie, and nothing else. The channel's rig, mix, fonts and voice scripts stay in the channel and are used from there.

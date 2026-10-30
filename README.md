@@ -80,7 +80,7 @@ cd lemo-opuscar
 claude
 ```
 
-Films go into `films/<name>/` inside the repo.
+Films go into `films/<name>/` inside the repo — a one-shot, a film that belongs to no channel. An episode of a channel goes into `channels/<channel>/<episode>/`, next to the code that channel's episodes share.
 
 ### Then just say what you want
 

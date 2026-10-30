@@ -10,6 +10,8 @@ Talk to the user in their language. Write the files in English, like the library
 
 Until the user confirms it (§6), a style is a draft in the demo film's project folder. Confirmed styles live in **`~/lemo-my-styles/`**, outside the library, so library updates and uninstalling never touch them. `~/lemo-my-styles/README.md` lists every style, one row each (English and Chinese name, slug, base, one line on what it is, and the folder when it isn't in `~/lemo-my-styles/`): it's how a later session finds a style by name. If the user wants a style kept in another folder, keep it there and still add its row, with the full path, to `~/lemo-my-styles/README.md`.
 
+**A channel is a style the user keeps.** A channel — a series of films that share an identity — is listed in the same table, and its row names the channel's folder with the full path, because the channel lives in the repository (`channels/<channel>/`), not in `~/lemo-my-styles/`. For that row to be honest the channel folder must carry the library's shape: `STYLE.md`, `DEMO.md` and a `style.json` with `slug`, `en`, `cn`, `based_on`, `created`, `line` and `line_cn`. Nothing is copied: the row points at the folder, and the episodes of that channel are films of the channel, made in its own folder.
+
 Each style has its own folder, `~/lemo-my-styles/<slug>/`, shaped like a library style (`MAINTAINING.md` **Add a style**, without the gallery and the release):
 
 | File | What it holds |
@@ -87,7 +89,7 @@ When the plan is complete, show the user a short summary in their language: each
 
 ## 3. Write it down
 
-Make the demo film's project folder now (`films/<slug>-test/` in a clone, `<slug>-test/` in the user's folder in skill mode) and work only there until §6. The draft style goes in its `style/` folder, with the files of the table above.
+Make the demo film's project folder now (`films/<slug>-test/` in a clone — a one-shot, it belongs to no channel — or `<slug>-test/` in the user's folder in skill mode) and work only there until §6. The draft style goes in its `style/` folder, with the files of the table above.
 
 - **`STYLE.md`**:
   - *Change a library style*: a full copy of the base `STYLE.md` with the changes written into their sections, so it reads like any style prompt (no "see the base" gaps). Change the title to the new name and add one line under it: `Based on <base name> (<base slug>) from Lemo-Opuscar.`
