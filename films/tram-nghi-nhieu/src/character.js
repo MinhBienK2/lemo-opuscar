@@ -201,8 +201,8 @@ function hair(g, hy, yaw, t, E, lw) {
     [26, 2, 24], [62, 28, 18], [88, 50, 10],
   ];
   locks.forEach(([x0, x1, drop], k) => {
-    // the locks trail the turn: they lag behind the head instead of moving with it
-    const sway2 = Math.sin(t * 1.9 + x0) * 2.4 - yaw * 22;
+    // the locks trail the turn, and each one has its own rhythm: hair that shares one frequency moves like a helmet
+    const sway2 = Math.sin(t * (1.55 + k * .21) + x0) * 2.4 - yaw * 22;
     const spine = [[x0, hy - 80 + wob], [(x0 + x1) / 2, hy - 74 + drop * .3], [x1 + sway2, hy - 70 + drop]];
     cel(g, ribbon(spine, u => 24 * (1 - u * .78)), { f: k % 2 ? mix(H.f, H.h, .16) : H.f, s: H.s, so: [-5, -4], l: H.l, lw: lw * .8 });
   });
@@ -325,13 +325,14 @@ function hand(g, x, y, rot, gest, flip, lw, prop) {
   g.restore();
 }
 
-// ——— the shoe: a rounded toe, a sole and a heel ———
-function shoe(g, x, y, ang, lw) {
-  g.save(); g.translate(x, y); g.rotate(ang);
-  cel(g, path([[-38, -8], [-30, -28], [2, -33], [32, -26], [50, -10], [53, 2], [-38, 2]], true),
-    { f: '#EDEFF5', s: '#C6CBD8', so: [-5, 3], l: PAL.ink, lw });
-  cel(g, path([[-40, 0], [53, 0], [55, 11], [-42, 11]], true), { f: '#3A4258', s: '#262C3E', so: [0, 3], l: PAL.ink, lw: lw * .9 });
-  for (let k = 0; k < 3; k++) line(g, [[-8 + k * 11, -27], [0 + k * 11, -19]], rgba('#5A6488', .9), lw * .7);
+// ——— the shoe: the toe points at the viewer, with a sole and laces ———
+// The character is drawn front on, so the shoe is drawn downwards from the ankle and mirrored per side.
+function shoe(g, x, y, ang, lw, sd = 1) {
+  g.save(); g.translate(x, y); g.rotate(ang); g.scale(sd, 1);
+  cel(g, path([[-24, -36], [20, -36], [29, -8], [25, 20], [-25, 20], [-29, -8]], true),
+    { f: '#EDEFF5', s: '#C6CBD8', so: [-4, 4], l: PAL.ink, lw });
+  cel(g, rect(-26, 12, 26, 24), { f: '#3A4258', s: '#262C3E', so: [0, 3], l: PAL.ink, lw: lw * .9 });
+  for (let k = 0; k < 3; k++) line(g, [[-13 + k * 12, -30], [-7 + k * 12, -19]], rgba('#5A6488', .9), lw * .7);
   g.restore();
 }
 
@@ -369,9 +370,16 @@ export function figure(g, o = {}) {
       const foot = sit ? [sd * 44 + 96, 660] : [sd * 36 + sw * 66, 650 - lift * 58];
       cel(g, limb(hip, knee, 46, 38), { f: '#3A4258', s: '#2A3044', so: [-6, 0], l: PAL.ink, lw });
       cel(g, limb(knee, foot, 38, 31), { f: '#3A4258', s: '#2A3044', so: [-6, 0], l: PAL.ink, lw });
-      shoe(g, foot[0], foot[1], (sit ? 0 : -sw * .14 + lift * .26), lw);
+      shoe(g, foot[0], foot[1], (sit ? sd * .1 : sd * .12 - sw * .12 + lift * .24), lw, sd);
     }
   }
+  // The upper body answers the pose: in a flat front-on drawing a yaw is not a rotation but a narrowing and a
+  // shift of the shoulders, and a lean is a real tilt around the hips. The head stays outside and inherits a little.
+  const yawK = Math.min(.22, Math.abs(bodyYaw) * .8);
+  g.save();
+  g.translate(bodyYaw * 46, 0);
+  g.scale(1 - yawK, 1);
+  g.translate(0, 300); g.rotate(lean); g.translate(0, -300);
   // the torso: an oversized hoodie
   const sh = 124;                                   // the shoulder half-width
   const body = path([[-sh, 26], [-sh - 12, 170], [-sh - 2, 300], [sh + 2, 300], [sh + 12, 170], [sh, 26]], true);
@@ -410,6 +418,7 @@ export function figure(g, o = {}) {
     hand(g, target[0], target[1], ang + (a.rot || 0), a.gest || 'relaxed', a.flip, lw, a.prop);
   };
   arm(o.armL, -1); arm(o.armR, 1);
+  g.restore();   // the upper body
   // the head: it follows the twist of the torso a little, the way a real head does
   const hd = head(g, { E, yaw: (o.headYaw || 0) + bodyYaw * .3 + lead, roll: o.headRoll || 0, pitch: o.headPitch || 0, t, blink: o.blink || 0, talk: o.talk || { o: 0, b: .5 }, lw });
   g.restore();

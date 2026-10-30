@@ -298,11 +298,12 @@ function shots() {
       const t0 = L('punch').t0, st = w('punch', 6);
       ground(g);
       panel(g, { x: 960, y: 460, w: 1220, h: 420, rot: -.015, tape: true }, (gg, cw, ch) => {
+        // the card asks the question; the voice answers it — the same sentence twice is the bug we fixed
         const x0 = -cw / 2 + 70, y0 = -ch / 2;
-        text(gg, 'TRÌ HOÃN KHÔNG PHẢI LỖI', x0, y0 + 170, { font: font(900, 60), fill: CREAM });
-        text(gg, 'Nó là một dấu hiệu:', x0, y0 + 280, { font: font(400, 46, 'Patrick Hand'), fill: PAL.muted });
-        hilite(gg, x0 + 560, y0 + 306, 300, 66, seg(T, st - .3, st + .3), PAL.hoodie.f, 7);
-        text(gg, 'việc này đang làm mình khó chịu', x0, y0 + 360, { font: font(800, 52), fill: CREAM });
+        text(gg, 'HỎI TRƯỚC KHI TỰ TRÁCH', x0, y0 + 170, { font: font(900, 60), fill: CREAM });
+        hilite(gg, x0 + 18, y0 + 236, 640, 70, seg(T, st - .3, st + .3), PAL.hoodie.f, 7);
+        text(gg, 'việc này đang làm gì với mình?', x0, y0 + 292, { font: font(800, 52), fill: CREAM });
+        text(gg, 'trả lời được, thì mình biết bắt đầu từ đâu', x0, y0 + 366, { font: font(400, 42, 'Patrick Hand'), fill: PAL.muted });
       });
       stamp(g, 'DẤU HIỆU', 1480, 760, { rot: -.13, px: 62, p: seg(T, st - .05, st + .2) });
       pip(g, 300, 740, 165, popP(lt, .9, dur('punch') + .3), pipHost({ E: ek(T, [[0, 'talk'], [st, 'determined']]), headYaw: -.2 }, T));

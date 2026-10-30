@@ -17,11 +17,13 @@ node --input-type=module -e "
 import fs from 'fs'; const { build } = await import('$HERE/src/timeline.js');
 const r = p => JSON.parse(fs.readFileSync('$HERE/' + p)); const T = build(r('voice/proc/dur.json'), r('voice/words.json'), r('voice/lips.json'));
 fs.writeFileSync('$OUT/cues.json', JSON.stringify(T.cues.map(c => ({ t0: c.t0, t1: c.t1, text: c.text }))));"
-"$LIB/.venv/bin/python" core/render/srt.py "$OUT/cues.json" "$OUT/$NAME.srt"
+"$LIB/.venv/bin/python" core/render/srt.py "$OUT/cues.json" "$OUT/$NAME.transcript.srt"
 sh core/render/mux.sh "$OUT/video.mp4" "$OUT/mix.wav" "$OUT/$NAME.mp4" 24 0
 ffmpeg -v error -y -ss 13.5 -i "$OUT/$NAME.mp4" -frames:v 1 -q:v 2 "$OUT/poster.jpg"
-# the deliverables stay in the project folder, where they are committed and where the review finds them
-cp "$OUT/$NAME.mp4" "$OUT/$NAME.srt" "$OUT/poster.jpg" "$HERE/"
+# the deliverables stay in the project folder, where they are committed and where the review finds them.
+# The captions are already burned into the picture: the .srt is the transcript for the platform, and it is not
+# named like the film so that a player does not load it on top of the captions that are in the picture.
+cp "$OUT/$NAME.mp4" "$OUT/$NAME.transcript.srt" "$OUT/poster.jpg" "$HERE/"
 # the review gate: the checks must pass before the film is called done (REVIEW=0 skips it)
 if [ "${REVIEW:-1}" = "1" ]; then
   set +e

@@ -49,6 +49,13 @@ Trong thư mục `films/tram-nghi-nhieu/` (nhân bản thư mục này cho tập
 8. **Kiểm tra bằng mắt**: xem 6–10 khung hình giữa mỗi cảnh; đọc phụ đề; xem lại `.srt` xem có câu nào rỗng (`t1 == t0`); đo mức giọng nói so với nền (`mix.py --stats`).
    Cổng ở bước 7 không thấy được: một nhãn nói sai trạng thái, một câu quay cận cảnh bị cắt, một chữ bị panel cắt cụt. Ba luật về nội dung nằm ở `DIRECTOR.md` §11 — đọc trước khi kể.
 
+## 3b. Phụ đề và file transcript
+
+Phụ đề được **khắc thẳng vào hình** (đó là một phần của phong cách kênh). File `*.transcript.srt` cạnh phim là
+**transcript để nạp lên nền tảng**, và nó **không** được đặt tên giống phim — nếu tên giống, VLC sẽ tự nạp và vẽ
+đè lên phụ đề đã có trong hình, trông như transcript bị đè hai lần. Khi build, `build.sh` xuất
+`$NAME.transcript.srt` và copy ra thư mục phim.
+
 ## 4. Cấu trúc thư mục
 
 ```

@@ -199,8 +199,9 @@ def films_format(films_dirs, bad, warn, info):
             secs = film_seconds(mp4)
             if secs == 'no-ffprobe': warn.append(f'{name}: ffprobe is not installed: the film could not be checked')
             elif secs is None: bad.append(f'{name}: {os.path.basename(mp4)} exists but ffprobe cannot read its duration (a half-rendered file?): render it again or move it away')
-            if os.path.isfile(os.path.join(d, 'voice', 'lines.json')) and not os.path.isfile(mp4[:-4] + '.srt'):
-                probs.append('the film has voice/lines.json but no .srt next to it')
+            if os.path.isfile(os.path.join(d, 'voice', 'lines.json')) and not any(
+                    os.path.isfile(mp4[:-4] + s) for s in ('.srt', '.transcript.srt')):
+                probs.append('the film has voice/lines.json but no transcript (.srt or .transcript.srt) next to it')
         for f in ('poster.jpg', 'CREDITS'):
             if not os.path.exists(os.path.join(d, f)): probs.append(f'no {f}')
         if not os.path.exists(os.path.join(d, 'TREATMENT.md')):

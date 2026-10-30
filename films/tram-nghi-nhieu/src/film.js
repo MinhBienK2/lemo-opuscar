@@ -172,7 +172,7 @@ function shots() {
         hilite(gg, x0 - 10, y0 + 78, 250, 76, seg(T, defT - .1, defT + .35), PAL.hoodie.f, 3);
         text(gg, 'CHÁN', x0, y0 + 150, { font: font(900, 108), fill: CREAM });
         text(gg, '=  mệt  +  bồn chồn', x0, y0 + 250, { font: font(800, 54), fill: CREAM });
-        text(gg, 'mệt và bồn chồn vì chẳng thấy gì thú vị', x0, y0 + 320, { font: font(400, 40, 'Patrick Hand'), fill: PAL.muted });
+        text(gg, 'một cảm giác có tên gọi', x0, y0 + 320, { font: font(400, 40, 'Patrick Hand'), fill: PAL.muted });
         text(gg, 'vì không có gì để tập trung', x0, y0 + 400, { font: font(400, 40, 'Patrick Hand'), fill: PAL.muted });
       });
       stamp(g, 'KHÔNG PHẢI LÀ THIẾU VIỆC', 900, 760, { rot: .09, px: 44, p: seg(T, t0 + 2.2, t0 + 2.45) });
@@ -213,7 +213,7 @@ function shots() {
         }
       }
       text(g, 'đầu lại đông', 1400, 140, { font: font(900, 64), align: 'center', fill: CREAM });
-      text(g, 'mỗi trang mạng lại đẩy thêm một đống thứ vào', 1400, 856, { font: font(400, 34, 'Patrick Hand'), align: 'center', fill: PAL.muted });
+      text(g, 'càng lướt, càng đầy', 1400, 856, { font: font(400, 34, 'Patrick Hand'), align: 'center', fill: PAL.muted });
     }, ev() { const r = [[this.t, 'amb', { kind: 'scroll', t1: at('myth', .3) }]]; for (let i = 0; i < 6; i++) r.push([this.t + i * .3, 'pop']); return r; } },
 
     // 10 — the familiar answer: a drained battery
