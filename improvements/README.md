@@ -27,8 +27,8 @@ Every row links to the record it came from: [`retro/2026-10-30-tram-nghi-nhieu.m
 | F8 | There was no map from "reference film" to "which files to read" | medium | `TECHNIQUE.md` §13 "Anatomy of a reference film" |
 | F9 | One source in the research file could not be checked | low | [`tools/check_citations.py`](../tools/check_citations.py) |
 | F10 | The film's treatment never reached the repository | low | `.gitignore`: `!films/*/TREATMENT.md` |
-| F11 | A caption contradicts the picture it labels for ~4.3 s (film content) | high | no guard possible — recorded only |
-| F12 | Three visual rough spots the contact sheet showed (film content) | medium | no guard possible — recorded only |
+| F11 | A caption contradicts the picture it labels for ~4.3 s (film content) | high | `DIRECTOR.md` §11 — "a caption that states a value may only be on screen while that value is" |
+| F12 | Three visual rough spots the contact sheet showed (film content) | medium | `DIRECTOR.md` §11 (measure the string against its box; a close-up keeps the body in frame) · the review contact sheet |
 
 ## The second record: what the new guardrails caught
 
@@ -46,3 +46,6 @@ skipped the loudness step) and what still needs a human eye.
 | T5 | A gate that cannot fail the build is decoration | high | `films/*/build.sh` exits with the review's status · `CODING_STANDARDS.md` R4 |
 | T6 | The review looked for the film in the wrong folder and skipped the loudness step | high | `core/render/review.sh` looks in the folder and in `out/` |
 | T7 | The whisper model sits on a drive that is often not mounted | medium | `core/render/review.sh` says "skipped: no whisper model available" instead of passing silently |
+| T8 | The desk lamp stands on the page the character writes on, and two of the three lines fall behind the desk edge | medium | no guard possible — recorded only; the contact sheet shows it |
+| T9 | A string drawn with a raw `fillText()` is a string the reading check cannot see | high | `core/render/drawcheck.mjs` now reports a raw `fillText()` in the shot file · `DIRECTOR.md` §11 |
+| T10 | The label "94 nghiên cứu" was not what the paper says (94 **independent tests**) and the pages of two sources were wrong | high | `tools/check_citations.py` cannot see that, but the research file now quotes the abstract and the pages are verified against Crossref |

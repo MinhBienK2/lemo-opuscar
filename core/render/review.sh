@@ -30,21 +30,28 @@ run readcheck node "$HERE/core/render/readcheck.mjs" "$FOLDER"
 # film's own words.json is never rewritten by a check.
 if [ -f "$FOLDER/voice/lines.json" ] && { [ -f "$FOLDER/voice/asr_vi.py" ] || [ -f "$HERE/core/tts/asr_check.py" ]; }; then
   echo "--- voice"
-  VD="$TMP/voice"; mkdir -p "$VD"; cp "$FOLDER/voice/lines.json" "$VD/lines.json"
-  for w in "$FOLDER"/voice/*.wav; do [ -f "$w" ] && cp "$w" "$VD/"; done
-  if [ -f "$FOLDER/voice/asr_vi.py" ]; then
-    "$PY" "$FOLDER/voice/asr_vi.py" "$VD/lines.json" "$VD/" --model small >"$TMP/voice.txt" 2>&1
+  # the model first: a missing model must not look like a failing check
+  HFC=${HF_HOME:-$HOME/.cache/huggingface}
+  MODEL=$(ls -d "$HFC"/hub/models--Systran--faster-whisper-* 2>/dev/null | head -1)
+  if [ -z "$MODEL" ] && [ -f "$FOLDER/voice/asr_vi.py" ]; then
+    echo "    skipped: no whisper model under HF_HOME=$HFC (point HF_HOME at a local folder that holds one)"
   else
-    "$PY" "$HERE/core/tts/asr_check.py" "$VD/lines.json" "$VD/" >"$TMP/voice.txt" 2>&1
-  fi
-  if grep -qE 'PermissionError|LocalEntryNotFoundError|ConnectionError|couldn.t be found|no such host' "$TMP/voice.txt"; then
-    echo "    skipped: no whisper model available (point HF_HOME at a folder that holds the model)"
-  elif grep -q '^DIFF' "$TMP/voice.txt"; then
-    echo "    FAILED: some lines do not transcribe back to the script:"
-    grep '^DIFF' "$TMP/voice.txt" | sed 's/^/      /'
-    FAIL=$((FAIL + 1))
-  else
-    echo "    ok: every line transcribes back"
+    VD="$TMP/voice"; mkdir -p "$VD"; cp "$FOLDER/voice/lines.json" "$VD/lines.json"
+    for w in "$FOLDER"/voice/*.wav; do [ -f "$w" ] && cp "$w" "$VD/"; done
+    if [ -f "$FOLDER/voice/asr_vi.py" ]; then
+      "$PY" "$FOLDER/voice/asr_vi.py" "$VD/lines.json" "$VD/" --model small >"$TMP/voice.txt" 2>&1
+    else
+      "$PY" "$HERE/core/tts/asr_check.py" "$VD/lines.json" "$VD/" >"$TMP/voice.txt" 2>&1
+    fi
+    if grep -qE 'PermissionError|LocalEntryNotFoundError|ConnectionError|couldn.t be found|no such host' "$TMP/voice.txt"; then
+      echo "    skipped: the whisper model could not be loaded (point HF_HOME at a local folder that holds one)"
+    elif grep -q '^DIFF' "$TMP/voice.txt"; then
+      echo "    FAILED: some lines do not transcribe back to the script:"
+      grep '^DIFF' "$TMP/voice.txt" | sed 's/^/      /'
+      FAIL=$((FAIL + 1))
+    else
+      echo "    ok: every line transcribes back"
+    fi
   fi
 fi
 

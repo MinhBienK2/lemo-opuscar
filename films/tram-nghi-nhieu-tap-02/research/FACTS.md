@@ -15,6 +15,9 @@ Paul Steel, *The nature of procrastination: A meta-analytic and theoretical revi
 
 - Dùng trong phim: con số **691** trên màn hình; ba thanh biểu đồ — *độ khó chịu của việc* (cao), *hạn càng xa* (cao),
   *tính cách* (thấp); và cái đồng hồ **12 %** ở cảnh "tin vào khả năng của chính mình" (self-efficacy).
+- **Chiều cao của ba thanh là hình ảnh minh hoạ, không phải hệ số đo được.** Steel (2007) không công bố kích thước hiệu ứng
+  cho từng yếu tố, chỉ nói yếu tố nào "mạnh và nhất quán" và yếu tố nào "yếu". Phim vì thế chỉ hiện con số **691** (đúng với
+  nguồn) và để chiều cao thanh biểu đạt "mạnh / yếu" — xem mục "Suy luận của tập phim".
 - Ghi chú phát thanh: "tính cách" trong phim là nhóm **đặc điểm tính cách** (neuroticism, rebelliousness, sensation seeking),
   không phải toàn bộ tính cách — và cần phân biệt với conscientiousness, vốn cũng có tương quan (nhưng theo hướng
   *ít trì hoãn hơn*). Câu thoại giữ đúng phạm vi: "tính cách thì chỉ liên quan yếu".
@@ -23,7 +26,7 @@ Paul Steel, *The nature of procrastination: A meta-analytic and theoretical revi
 ## 2. Não ưu tiên cảm xúc ngay lập tức, và chiết khấu tương lai
 
 F. L. Sirois & M. L. Pychyl, *Procrastination and the Priority of Short-Term Mood Regulation: Consequences for Future Self*,
-**Social and Personality Psychology Compass** 7(2), 2013, p. 119–137. DOI: 10.1111/spc3.12011
+**Social and Personality Psychology Compass** 7(2), 2013, p. 115–127. DOI: 10.1111/spc3.12011
 
 - Trì hoãn được hiểu là **sửa cảm xúc ngắn hạn**: bắt đầu (và xong) một việc khó chịu làm giảm cảm xúc tiêu cực ngay;
   phần thưởng của việc đó nằm ở tương lai, mà tương lai thì bị **chiết khấu** (hyperbolic discounting).
@@ -35,30 +38,35 @@ F. L. Sirois & M. L. Pychyl, *Procrastination and the Priority of Short-Term Moo
 Peter M. Gollwitzer & Paschal Sheeran, *Implementation Intentions and Goal Achievement: A Meta-analysis of Effects and Processes*,
 **Advances in Experimental Social Psychology** 38, 2006, p. 69–119. DOI: 10.1016/S0065-2601(06)38002-1
 
-> "Implementation intentions had a positive effect of medium-to-large magnitude (**d = .65**) on goal attainment."
+> "Findings from **94 independent tests** showed that implementation intentions had a positive effect of medium-to-large
+> magnitude (**d = .65**) on goal attainment." — và: "Holding a strong goal intention ('I intend to reach Z') does not
+> guarantee goal achievement", vì kế hoạch phải chỉ rõ **when, where và how** ("If situation Y is encountered, then I
+> will initiate goal-directed behavior X").
 
-- 94 nghiên cứu; một "ý định thực thi" (if-then) gắn với một tình huống cụ thể và một hành động cụ thể.
-- Dùng trong phim: thẻ **NẾU … THÌ …**, hai chữ "nếu" / "thì" được highlight, và hai con số **94 nghiên cứu** / **d = 0,65**.
+- Đếm trực tiếp từ phần tóm tắt của bài (đã đọc trong PDF, không phải trích lại từ nơi khác).
+- Dùng trong phim: thẻ **NẾU … THÌ …**, hai chữ "nếu" / "thì" được highlight, và hai con số **94 lần thử** / **d = 0,65**.
 - Phạm vi: meta-analysis này về **đạt mục tiêu nói chung**, không riêng trì hoãn. Phim dùng nó như một cách lập kế hoạch
   đã được kiểm chứng mạnh, không nói rằng nó đã thử trên người trì hoãn — xem mục "Suy luận của tập phim".
 
-## 4. Có lúc trì hoãn lại là công việc: giai đoạn ủng cấ
+## 4. Có lúc trì hoãn lại là công việc: "trì hoãn chủ động"
 
-James C. Kaufman & Ronald A. Beghetto, *Beyond Big and Little: The Four C Model of Creativity*,
-**Review of General Psychology** 13(4), 2009, p. 375–386. DOI: 10.1037/a0013688
+Angela Hsin Chun Chu & Jin Nam Choi, *Rethinking Procrastination: Positive Effects of "Active" Procrastination Behavior on
+Attitudes and Performance*, **The Journal of Social Psychology** 145(3), 2005, p. 245–264. DOI: 10.3200/socp.145.3.245-264
 
-- Trong mô hình bốn C của sáng tạo, giai đoạn **"little-K"** (ý tưởng nhỏ, giai đoạn đầu) gồm cả **khám phá, ủng cấ
-  và trì hoãn** — đầu cần thời gian lang thang để ra ý tưởng.
+- Có một loại trì hoãn **chủ động**: cố ý trì hoãn việc này để làm việc khác — và bài này cho thấy loại đó có **tác động
+  tích cực** lên thái độ và kết quả với thành tích sáng tạo.
 - Dùng trong phim: cảnh trên sofa với các bong bóng ý tưởng bay lên, nhãn "ỦNG CẤ Ý TƯỞNG".
-- Phạm vi: đây là nghiên cứu về **quá trình sáng tạo**, không phải về trì hoãn. Phim dùng nó để nói rằng có những lúc
-  việc "để đầu nghĩ" là hợp lý — xem mục "Suy luận của tập phim".
+- Phạm vi: bài nói về **trì hoãn chủ động** (một hành vi có chủ đích), không phải trì hoãn như một thói quen; phim dùng nó
+  để nói rằng có những lúc "để đầu nghĩ" là hợp lý — xem mục "Suy luận của tập phim".
 
 ## Suy luận của tập phim (không phải kết quả nghiên cứu)
 
 - Việc ghép bốn yếu tố (khó chịu của việc, hạn xa, tự tin, chiết khấu tương lai) thành **một câu chuyện** là cách kể của tập phim;
   không có nghiên cứu nào trong bốn nguồn trên nói đúng câu đó.
 - Áp dụng "nếu … thì …" (mục 3) vào trì hoãn là **suy luận của tập phim**: nguồn đo hiệu quả trên đạt mục tiêu nói chung.
-- Áp dụng giai đoạn ủng cấ (mục 4) cho trì hoãn là **suy luận của tập phim**: nguồn nói về quá trình sáng tạo.
+- Áp dụng trì hoãn chủ động (mục 4) cho việc "ủng cấ ý tưởng" là **suy luận của tập phim**: nguồn nói về thái độ và kết quả
+  với thành tích sáng tạo, không nói về "đầu cần thời gian lang thang".
+- **Chiều cao ba thanh biểu đồ là hình ảnh minh hoạ** (mục 1): nguồn không công bố kích thước hiệu ứng từng yếu tố.
 - Câu chốt "trì hoãn không phải là lỗi, nó là một dấu hiệu" là **cách diễn đạt của tập phim** dựa trên mục 1 và mục 2.
 
 ## Nguồn đã kiểm tra nhưng không dùng trong phim

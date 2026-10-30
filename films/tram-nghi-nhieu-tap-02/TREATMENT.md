@@ -22,7 +22,7 @@ Ngôn ngữ: tiếng Việt. Thời lượng mục tiêu: ~1:50–2:00.
 - **Luận điểm (sớm, trong 10 giây đầu)**: không phải lười — là muốn hết cảm giác khó chịu ngay lập tức.
 - **Bằng chứng (ba nhánh, mỗi nhánh một hình)**: 691 mối tương quan cho thấy yếu tố mạnh nhất là **độ khó chịu của việc** (tính cách thì yếu, hạn càng xa càng dễ trì hoãn); yếu tố thứ ba là **tự tin** (12 %); và lý do thuộc về não là **chiết khấu tương lai** (cân "bây giờ" nặng hơn "một giờ nữa").
 - **Chặn lời đồn**: "lười" chỉ là lời gọi của người ngoài; tự trách không giúp gì.
-- **Cách làm**: kế hoạch dạng "nếu … thì …" (94 nghiên cứu, d = 0,65) — và câu cụ thể của chính tập phim.
+- **Cách làm**: kế hoạch dạng "nếu … thì …" (94 lần thử, d = 0,65) — và câu cụ thể của chính tập phim.
 - **Ngoại lệ trung thực**: ủng cấ ý tưởng thì việc để đầu lang thang là công việc.
 - **Cú đấm + hành động**: "trì hoãn không phải là lỗi, nó là một dấu hiệu" → Rối hỏi "cái gì đang khó chịu?" → **ba dòng tiêu đề được viết ra trước mắt**, điện thoại úp xuống.
 
@@ -50,7 +50,7 @@ Ngôn ngữ: tiếng Việt. Thời lượng mục tiêu: ~1:50–2:00.
 | 5 | `self` | insert thẻ giấy | đứng yên | Yếu tố thứ ba là một cái đồng hồ 12 % — trạng thái và nhãn phải khớp |
 | 6 | `emo` | wide đồ hoạ | đứng yên | Cân "bây giờ" và "một giờ nữa": cơ chế chiết khấu, không cần lời giải thích dài |
 | 7 | `myth` | thẻ + con dấu | đứng yên | Chặn lời đồn bằng một con dấu "SAI" đặt lên chữ |
-| 8 | `method` | thẻ "nếu… thì…" | đứng yên | Cách làm, có số nghiên cứu ngay trên hình |
+| 8 | `method` | thẻ "nếu… thì…" | đứng yên | Cách làm, có số lần thử ngay trên hình |
 | 9 | `plan` | thẻ kế hoạch | đứng yên | Câu "nếu… thì…" cụ thể của tập phim, có đồng hồ 21:30 |
 | 10 | `counter` | sofa, iris wipe | đứng yên | Ngoại lệ trung thực: ủng cấ ý tưởng — cảnh sáng và ấm hơn, để không bị phán đoán |
 | 11 | `punch` | thẻ + con dấu | đứng yên | Cú đấm: "không phải lỗi, mà là dấu hiệu" |

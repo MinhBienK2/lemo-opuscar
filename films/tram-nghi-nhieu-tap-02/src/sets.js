@@ -58,7 +58,7 @@ export function roomBack(g, t, cam = { x: 0, y: 0 }) {
     cel(g, ellP(cx, cy, 6, 6), { f: PAL.hoodie.f, l: PAL.ink, lw: 2 });
   });
 }
-export function roomFront(g, t, cam = { x: 0, y: 0 }) {
+export function roomFront(g, t, cam = { x: 0, y: 0 }, o = {}) {
   g.save(); g.translate(-cam.x * 1.2, -cam.y * 1.2);
   // the desk
   cel(g, rect(-200, 960, W + 200, H + 200), { f: '#2A2118', s: '#1C1610', so: [0, -8], l: '#0E0B08', lw: 3 });
@@ -73,16 +73,18 @@ export function roomFront(g, t, cam = { x: 0, y: 0 }) {
     g.moveTo(mx - 16 + i * 16, my - 108 - k * 70);
     g.bezierCurveTo(mx - 28 + i * 16, my - 130 - k * 70, mx - 4 + i * 16, my - 145 - k * 70, mx - 16 + i * 16, my - 168 - k * 70); g.stroke();
   }
-  // the desk lamp: a warm pool of light
-  const lx = 900, ly = 946;
-  const grd = g.createRadialGradient(lx - 60, ly - 150, 10, lx - 60, ly - 150, 560);
-  grd.addColorStop(0, 'rgba(255,183,3,.17)'); grd.addColorStop(1, 'rgba(255,183,3,0)');
-  g.fillStyle = grd; g.beginPath(); g.arc(lx - 60, ly - 150, 560, 0, TAU); g.fill();
-  cel(g, poly([[lx - 62, ly], [lx + 62, ly], [lx + 44, ly - 26], [lx - 44, ly - 26]]), { f: '#33394E', s: '#222736', so: [0, -6], l: '#12131A', lw: 2.6 });
-  line(g, [[lx - 20, ly - 26], [lx - 74, ly - 150]], '#33394E', 11);
-  cel(g, poly([[lx - 168, ly - 158], [lx - 66, ly - 196], [lx - 40, ly - 132], [lx - 142, ly - 96]]),
-    { f: '#33394E', s: '#222736', so: [-6, -6], l: '#12131A', lw: 2.6 });
-  cel(g, poly([[lx - 158, ly - 120], [lx - 52, ly - 152], [lx - 44, ly - 134], [lx - 150, ly - 102]]), { f: rgba('#FFD976', .75), l: '#12131A', lw: 2 });
+  // the desk lamp: a warm pool of light. A shot that needs the desk clear passes { lamp: false }.
+  if (o.lamp !== false) {
+    const lx = 900, ly = 946;
+    const grd = g.createRadialGradient(lx - 60, ly - 150, 10, lx - 60, ly - 150, 560);
+    grd.addColorStop(0, 'rgba(255,183,3,.17)'); grd.addColorStop(1, 'rgba(255,183,3,0)');
+    g.fillStyle = grd; g.beginPath(); g.arc(lx - 60, ly - 150, 560, 0, TAU); g.fill();
+    cel(g, poly([[lx - 62, ly], [lx + 62, ly], [lx + 44, ly - 26], [lx - 44, ly - 26]]), { f: '#33394E', s: '#222736', so: [0, -6], l: '#12131A', lw: 2.6 });
+    line(g, [[lx - 20, ly - 26], [lx - 74, ly - 150]], '#33394E', 11);
+    cel(g, poly([[lx - 168, ly - 158], [lx - 66, ly - 196], [lx - 40, ly - 132], [lx - 142, ly - 96]]),
+      { f: '#33394E', s: '#222736', so: [-6, -6], l: '#12131A', lw: 2.6 });
+    cel(g, poly([[lx - 158, ly - 120], [lx - 52, ly - 152], [lx - 44, ly - 134], [lx - 150, ly - 102]]), { f: rgba('#FFD976', .75), l: '#12131A', lw: 2 });
+  }
   g.restore();
 }
 

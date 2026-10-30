@@ -7,7 +7,7 @@
 {"id":"self","text":"Yếu tố thứ ba là tin vào khả năng của chính mình. Không tin, thì không dám bắt đầu.","voice":"vi-VN-NamMinhNeural","rate":"+5%","pitch":"-8Hz"},
 {"id":"emo","text":"Còn một lý do nữa, thuộc về não: làm xong thì hết khó chịu, còn phần thưởng thì nằm ở tương lai xa — mà tương lai xa luôn bị chiết khấu.","voice":"vi-VN-NamMinhNeural","rate":"+5%","pitch":"-8Hz"},
 {"id":"myth","text":"Nên lười chỉ là lời gọi của người ngoài, không phải nguyên nhân. Tự trách mình cũng chẳng giúp được gì.","voice":"vi-VN-NamMinhNeural","rate":"+5%","pitch":"-8Hz"},
-{"id":"method","text":"Có một cách được kiểm chứng rất mạnh: kế hoạch viết ở dạng nếu, thì. Trong chín mươi bốn nghiên cứu, cách này hiệu quả hơn hẳn so với chỉ đặt mục tiêu.","voice":"vi-VN-NamMinhNeural","rate":"+5%","pitch":"-8Hz"},
+{"id":"method","text":"Có một cách được kiểm chứng rất mạnh: kế hoạch viết ở dạng nếu, thì. Trong chín mươi bốn lần thử, cách này hiệu quả hơn hẳn so với chỉ đặt mục tiêu.","voice":"vi-VN-NamMinhNeural","rate":"+5%","pitch":"-8Hz"},
 {"id":"plan","text":"Nếu lúc hai mươi giờ ba mươi mình ngồi xuống bàn, thì mình sẽ viết ba dòng tiêu đề trong năm phút, và không mở mạng.","asr":"Nếu lúc 20h30 mình ngồi xuống bàn thì mình sẽ viết ba dòng tiêu đề trong 5 phút và không mở mạnh.","voice":"vi-VN-NamMinhNeural","rate":"+5%","pitch":"-8Hz"},
 {"id":"counter","text":"Có một loại trì hoãn lại tốt: khi bạn đang ủng cấ một ý tưởng. Đầu cần thời gian lang thang, thì ý tưởng mới ra.","voice":"vi-VN-NamMinhNeural","rate":"+5%","pitch":"-8Hz"},
 {"id":"punch","text":"Trì hoãn không phải là lỗi. Nó là một dấu hiệu: việc này đang làm mình khó chịu.","voice":"vi-VN-NamMinhNeural","rate":"+5%","pitch":"-8Hz"},

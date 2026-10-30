@@ -20,6 +20,8 @@ fs.writeFileSync('$OUT/cues.json', JSON.stringify(T.cues.map(c => ({ t0: c.t0, t
 "$LIB/.venv/bin/python" core/render/srt.py "$OUT/cues.json" "$OUT/$NAME.srt"
 sh core/render/mux.sh "$OUT/video.mp4" "$OUT/mix.wav" "$OUT/$NAME.mp4" 24 0
 ffmpeg -v error -y -ss 12.5 -i "$OUT/$NAME.mp4" -frames:v 1 -q:v 2 "$OUT/poster.jpg"
+# the deliverables stay in the project folder, where they are committed and where the review finds them
+cp "$OUT/$NAME.mp4" "$OUT/$NAME.srt" "$OUT/poster.jpg" "$HERE/"
 # the review gate: the checks must pass before the film is called done (REVIEW=0 skips it)
 if [ "${REVIEW:-1}" = "1" ]; then
   set +e

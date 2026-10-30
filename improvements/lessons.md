@@ -14,8 +14,9 @@ Distilled from the retro records in [`retro/`](retro/). Each line is a rule; eac
 - **Use the tools the library already has: `core/render/still.mjs` and `core/render/sheet.py`, not a hand-rolled ffmpeg montage.** — Guard: `core/render/review.sh` builds the contact sheet with them.
 - **Derive a convention from the code in front of you, not from memory of the library.** — Guard: `drawcheck` reads each film's own `rect` helper, because the signature differs per style.
 - **Every source in a research file must be traceable.** — Guard: `tools/check_citations.py` requires DOI, PMID, arXiv or a URL per entry.
-- **A caption that names a state must be gated on that state.** — Guard: none — an eye is the only check; recorded in the retro.
+- **A caption that names a state must be gated on that state** — the label and the state share one clock. — Guard: `DIRECTOR.md` §11 (a doc rule: no check can see that a label lies about the picture); the cases are in the retro records.
 - **A value that changes every frame must not be rendered as text** — a label that ticks is a new text piece every tick, and the reading check needs each piece to hold. — Guard: `core/render/review.sh` (readcheck) reports it; the rule is in `retro/2026-10-30-tap-02.md`.
+- **Every visible string goes through `text()`** — only `text()` registers the box the reading check measures, so a raw `fillText()` is a string no check can see. — Guard: `core/render/drawcheck.mjs` reports a raw `fillText()` in the shot file; `DIRECTOR.md` §11.
 - **A marker stroke goes behind the words it marks.** — Guard: none — the contact sheet shows it; recorded in `retro/2026-10-30-tap-02.md`.
 - **Measure the string against the box it lives in, not the box against the frame** — a clipped panel cuts a title in half without any error. — Guard: none — the contact sheet shows it; recorded in `retro/2026-10-30-tap-02.md`.
 - **A gate that cannot fail the build is decoration.** — Guard: `films/*/build.sh` exits with the review's status; `CODING_STANDARDS.md` R4.

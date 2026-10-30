@@ -18,7 +18,7 @@ export const SUBS = {
   self: ['Yếu tố thứ ba là tin vào khả năng của chính mình.', ['Không', 'Không tin, thì không dám bắt đầu.']],
   emo: ['Còn một lý do nữa, thuộc về não:', ['làm', 'làm xong thì hết khó chịu,'], ['còn', 'còn phần thưởng thì nằm ở tương lai xa — mà tương lai xa luôn bị chiết khấu.']],
   myth: ['Nên lười chỉ là lời gọi của người ngoài, không phải nguyên nhân.', ['Tự', 'Tự trách mình cũng chẳng giúp được gì.']],
-  method: ['Có một cách được kiểm chứng rất mạnh:', ['kế', 'kế hoạch viết ở dạng nếu, thì.'], ['Trong', 'Trong chín mươi bốn nghiên cứu,'], ['cách', 'cách này hiệu quả hơn hẳn so với chỉ đặt mục tiêu.']],
+  method: ['Có một cách được kiểm chứng rất mạnh:', ['kế', 'kế hoạch viết ở dạng nếu, thì.'], ['Trong', 'Trong chín mươi bốn lần thử,'], ['cách', 'cách này hiệu quả hơn hẳn so với chỉ đặt mục tiêu.']],
   plan: ['Nếu lúc hai mươi giờ ba mươi mình ngồi xuống bàn,', ['thì', 'thì mình sẽ viết ba dòng tiêu đề'], ['trong', 'trong năm phút, và không mở mạng.']],
   counter: ['Có một loại trì hoãn lại tốt:', ['khi', 'khi bạn đang ủng cấ một ý tưởng.'], ['Đầu', 'Đầu cần thời gian lang thang, thì ý tưởng mới ra.']],
   punch: ['Trì hoãn không phải là lỗi.', ['Nó', 'Nó là một dấu hiệu: việc này đang làm mình khó chịu.']],

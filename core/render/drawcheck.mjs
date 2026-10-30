@@ -203,6 +203,19 @@ function jsFiles(dir) {
 
 const CEL = { name: 'cel', params: [{ name: 'g' }, { name: 'pts' }, { name: 'o' }] };   // the helper of the library
 const PATH = { name: 'path', params: [{ name: 'pts' }] };
+const FILLTEXT = /(?<![\w$])fillText\s*\(/g;        // a raw canvas call: the reading check cannot see that string
+
+// In the file that draws the shots, every visible string has to go through text(): only text() registers the box
+// the reading check measures. A raw fillText() is a string no check can see.
+function checkRawText(files) {
+  const shot = files.find(f => /window\.render\s*=/.test(f.masked));
+  if (!shot) return [];
+  const out = [];
+  FILLTEXT.lastIndex = 0;
+  for (let m; (m = FILLTEXT.exec(shot.masked));)
+    out.push(`${shot.file}:${lineOf(shot.masked, m.index)} raw fillText(): the reading check cannot see this string; draw it with text()`);
+  return out;
+}
 
 function checkFilm(folder) {
   const srcDir = path.join(folder, 'src');
@@ -212,8 +225,13 @@ function checkFilm(folder) {
     return { file, masked: mask(raw) };
   });
   const helpers = findHelpers(files);
-  if (!helpers.rect) { console.log(`drawcheck: no rect helper in ${folder}; nothing to check`); return 0; }
   let n = 0;
+  // the strings the reading check cannot see
+  for (const reason of checkRawText(files)) { n++; console.log(reason); }
+  if (!helpers.rect) {
+    console.log(n ? `drawcheck: ${n} problem(s) in ${folder}` : `drawcheck: no rect helper in ${folder}; nothing to check`);
+    return n;
+  }
   for (const f of files) {
     CALL.lastIndex = 0;
     for (let m; (m = CALL.exec(f.masked));) {

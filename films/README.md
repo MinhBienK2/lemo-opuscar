@@ -18,7 +18,6 @@ local (`films/.gitignore`) — `build.sh` in each film rebuilds them.
 From the repository root, with the repo's `.venv` and `node_modules` in place:
 
 ```sh
-sh films/tay-du-ky-twist/build.sh
 sh films/host-toon-test/build.sh
 sh films/tram-nghi-nhieu/build.sh
 sh films/tram-nghi-nhieu-tap-02/build.sh

@@ -34,14 +34,20 @@ Trong thư mục `films/tram-nghi-nhieu/` (nhân bản thư mục này cho tập
 3. **Giọng đọc**:
    ```sh
    $LIB/.venv/bin/python voice/tts_vi.py voice/lines.json voice/          # edge-tts, có tự thử lại khi câu bị "không có âm"
-   HF_HOME=~/.cache/hf $LIB/.venv/bin/python voice/asr_vi.py voice/lines.json voice/ --model small   # kiểm tra lời + mốc thời gian từng từ
+   HF_HOME=<một thư mục cục bộ có mô hình> $LIB/.venv/bin/python voice/asr_vi.py voice/lines.json voice/ --model small   # kiểm tra lời + mốc thời gian từng từ
    $LIB/.venv/bin/python voice/process.py                                   # 48 kHz + điều khiển miệng (lips.json)
    ```
-   Đọc kỹ các dòng `DIFF`: Whisper hay nghe sai dấu tiếng Việt, đó không phải lúc nào cũng là lỗi giọng đọc — nhưng nếu một câu nghe sai hẳn thì phải viết lại câu đó rồi làm lại từ bước 3.
+   `HF_HOME` phải trỏ tới một thư mục **cục bộ có mô hình** `faster-whisper-small`. Mặc định `~/.cache/huggingface` trên
+   máy này là một liên kết tới một ổ đĩa chưa mount, nên whisper sẽ không tải được — đừng dùng `~/.cache/hf`.
+   Đọc kỹ các dòng `DIFF`: Whisper hay nghe sai dấu tiếng Việt, đó không phải lúc nào cũng là lỗi giọng đọc — nếu câu nghe
+   sai **vì cách viết** (ví dụ "hai mươi giờ ba mươi" bị nghe thành "20h30") thì thêm trường `"asr"` vào câu đó trong
+   `lines.json` ghi đúng cách Whisper nghe, thay vì sửa kịch bản.
 4. **Timeline** → `src/timeline.js`: `SEQ` (thứ tự câu + khoảng lặng), `SUBS` (mảnh phụ đề, chia theo từ đầu tiên của mảnh).
 5. **Hình ảnh** → `src/film.js`: danh sách cảnh, máy quay, hiệu ứng, sự kiện âm thanh.
 6. **Dựng** → `sh build.sh`: `events.mjs` → `mix.py` → `video.mjs` → `srt.py` → `mux.sh` (−14 LUFS) → poster.
-7. **Kiểm tra**: xem 6–10 khung hình giữa mỗi cảnh; đọc phụ đề; xem lại `.srt` xem có câu nào rỗng (`t1 == t0`); đo mức giọng nói so với nền (`mix.py --stats`).
+7. **Cổng kiểm tra** → `sh $LIB/core/render/review.sh <thư mục phim>`: drawcheck, readcheck, whisper từng câu, khung hình review + contact sheet, độ lớn tiếng, khung đen. **Nó phải exit 0** trước khi tập được coi là xong (tập 02 gọi nó ngay trong `build.sh` và để build fail theo kết quả).
+8. **Kiểm tra bằng mắt**: xem 6–10 khung hình giữa mỗi cảnh; đọc phụ đề; xem lại `.srt` xem có câu nào rỗng (`t1 == t0`); đo mức giọng nói so với nền (`mix.py --stats`).
+   Cổng ở bước 7 không thấy được: một nhãn nói sai trạng thái, một câu quay cận cảnh bị cắt, một chữ bị panel cắt cụt. Ba luật về nội dung nằm ở `DIRECTOR.md` §11 — đọc trước khi kể.
 
 ## 4. Cấu trúc thư mục
 

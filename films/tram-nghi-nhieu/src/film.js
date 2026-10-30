@@ -286,7 +286,7 @@ function shots() {
       panel(g, { x: 500, y: 540, w: 780, h: 800, rot: 0 }, gg => {
         S.feedColumn(gg, 0, 0, 600, 660, T * 900);
         gg.fillStyle = rgba('#12131A', .82); gg.fillRect(-300, -320, 600, 120);
-        gg.fillStyle = PAL.cyan.h; gg.font = font(900, 46); gg.textAlign = 'center'; gg.fillText('MÀN HÌNH', 0, -240);
+        text(gg, 'MÀN HÌNH', 0, -240, { font: font(900, 46), align: 'center', fill: PAL.cyan.h });
       });
       // right: outside
       panel(g, { x: 1420, y: 540, w: 780, h: 800, rot: 0 }, gg => {
@@ -297,7 +297,7 @@ function shots() {
         gg.fillStyle = '#1E2130'; gg.fillRect(-300, 130, 600, 170);
         line(gg, [[-140, 130], [-140, 40]], '#232838', 10);
         cel(gg, ellP(-140, 10, 84, 68), { f: '#233A32', s: '#18271F', l: '#0E1A14', lw: 2.6 });
-        gg.fillStyle = PAL.cream; gg.font = font(900, 46); gg.textAlign = 'center'; gg.fillText('ĐI DẠO', 0, -240);
+        text(gg, 'ĐI DẠO', 0, -240, { font: font(900, 46), align: 'center', fill: PAL.cream });
       });
     }, ev() { return [[this.t, 'amb', { kind: 'dawn', t1: at('feedwork', .2) }]]; } },
 
@@ -323,10 +323,10 @@ function shots() {
       ground(g);
       roi(g, 620, 620, 3.1, { t: T, E: { mo: .5, lookX: .2 } });
       bubble(g, 1240, 420, 820, 300, (gg, w, h) => {
-        gg.fillStyle = INK; gg.font = font(800, 46); gg.textAlign = 'center'; gg.textBaseline = 'middle';
-        gg.fillText('Nghỉ mà không có kế hoạch,', 0, -34);
-        gg.fillText('cũng là một việc —', 0, 20);
-        gg.fillStyle = PAL.violet.f; gg.fillText('và nó tốn pin.', 0, 74);
+        // every string goes through text(): it registers the box, so the reading check can see it
+        text(gg, 'Nghỉ mà không có kế hoạch,', 0, -34, { font: font(800, 46), align: 'center', base: 'middle', fill: INK });
+        text(gg, 'cũng là một việc —', 0, 20, { font: font(800, 46), align: 'center', base: 'middle', fill: INK });
+        text(gg, 'và nó tốn pin.', 0, 74, { font: font(800, 46), align: 'center', base: 'middle', fill: PAL.violet.f });
       });
       batteryBig(g, 1420, 640, 300, .06, T);
       text(g, '6%', 1570, 730, { font: font(900, 54), fill: PAL.red.f });

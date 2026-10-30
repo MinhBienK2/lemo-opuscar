@@ -43,7 +43,7 @@ const FULL = .72;                       // the scale of a full-body figure (the 
 const feet = s => 1010 - 650 * (s || FULL);
 
 // the character at his desk: x, y of the neck base on screen
-function desk(g, T, o, z = 1, f = [1320, 420], cardFn, over) {
+function desk(g, T, o, z = 1, f = [1320, 420], cardFn, over, setOpts) {
   ground(g);
   g.save(); camera(g, z, f[0], f[1]);
   const cam = { x: 0, y: 0 };
@@ -51,7 +51,7 @@ function desk(g, T, o, z = 1, f = [1320, 420], cardFn, over) {
   if (cardFn) cardFn(g);
   kng(g, 1250, 640, { s: 1.15, talk: talkAt(T), headRoll: sway(T) * .6, ...o }, T);
   if (over) over(g);
-  S.roomFront(g, T, cam);
+  S.roomFront(g, T, cam, setOpts);
   g.restore();
 }
 const pipHost = (o, T) => (gg, r) => {
@@ -246,7 +246,7 @@ function shots() {
       const pnum = seg(T, nw - .2, nw + .5);
       if (pnum > 0) {
         g.globalAlpha = pnum;
-        text(g, '94 nghiên cứu', 1040, 390, { font: font(900, 48), fill: PAL.ink });
+        text(g, '94 lần thử', 1040, 390, { font: font(900, 48), fill: PAL.ink });
         text(g, 'd = 0,65', 1040, 470, { font: font(900, 46), fill: '#2A6E7A' });
         g.globalAlpha = 1;
       }
@@ -313,9 +313,9 @@ function shots() {
       ground(g);
       roi(g, 620, 620, 3.1, { t: T, E: { mo: .5, lookX: .2 } });
       bubble(g, 1240, 420, 860, 320, (gg, w2, h) => {
-        gg.fillStyle = INK; gg.font = font(800, 50); gg.textAlign = 'center'; gg.textBaseline = 'middle';
-        gg.fillText('Cái gì đang khó chịu?', 0, -44);
-        gg.fillStyle = PAL.violet.f; gg.fillText('Rồi viết ba dòng.', 0, 34);
+        // every string goes through text(): it registers the box, so the reading check can see it
+        text(gg, 'Cái gì đang khó chịu?', 0, -44, { font: font(800, 50), align: 'center', base: 'middle', fill: INK });
+        text(gg, 'Rồi viết ba dòng.', 0, 34, { font: font(800, 50), align: 'center', base: 'middle', fill: PAL.violet.f });
       });
     }, ev() { const t0 = L('roi').t0; return [[this.t, 'pop'], [this.t + .3, 'boing'], [t0 + 1.2, 'ting']]; } },
 
@@ -324,27 +324,27 @@ function shots() {
       const t0 = L('close').t0, wr = [w('close', 6), w('close', 9), w('close', 12)];
       const Ex = ek(T, [[0, 'determined'], [t0 + 2.6, 'smile']]);
       // the writing arm: it reaches the page and trembles a little while the lines appear
-      const arm = ak(T, [[0, { at: [-140, 250] }], [t0 + .3, { at: [-152, 208] }]], .4);
+      const arm = ak(T, [[0, { at: [-140, 250] }], [t0 + .3, { at: [-152, 120] }]], .4);
       const armL = { ...arm, at: [arm.at[0] + Math.sin(T * 9) * 7, arm.at[1] + Math.cos(T * 11) * 4] };
       desk(g, T, { E: Ex, headYaw: -.06 + sway(T) * .5, headPitch: nk(T, [[t0, .18], [t0 + 2, .06]]), armL },
         1.05, [1180, 430],
       g => {
-        // the page on the desk, and the three lines as they are written
-        const x0 = 830, y0 = 890, w2 = 540, h2 = 360;
+        // the page lies on the desk: the desk front covers its lower edge, so it reads as lying there
+        const x0 = 830, y0 = 760, w2 = 540, h2 = 300;
         g.save(); g.translate(x0, y0); g.rotate(-.02);
         g.fillStyle = rgba('#000000', .3); g.fillRect(-w2 / 2 + 8, -h2 / 2 + 10, w2, h2);
         cel(g, rect(-w2 / 2, -h2 / 2, w2 / 2, h2 / 2), { f: '#F3EFE6', s: '#D8D2C4', so: [0, 8], l: '#B9B2A2', lw: 2.2 });
         for (let i = 0; i < 3; i++) {
           const p = seg(T, wr[i] - .15, wr[i] + .55);
           if (p <= 0) continue;
-          const y = -h2 / 2 + 110 + i * 86;
-          cel(g, rect(-w2 / 2 + 40, y, -w2 / 2 + 40 + (w2 - 90) * p, y + 22), { f: '#5A5348', l: '#5A5348', lw: 1.6 });
-          if (p > .6) cel(g, ellP(-w2 / 2 + 24, y + 10, 9, 9), { f: PAL.ink, l: PAL.ink, lw: 1 });
+          const y = -h2 / 2 + 96 + i * 72;
+          cel(g, rect(-w2 / 2 + 40, y, -w2 / 2 + 40 + (w2 - 90) * p, y + 20), { f: '#5A5348', l: '#5A5348', lw: 1.6 });
+          if (p > .6) cel(g, ellP(-w2 / 2 + 24, y + 9, 8, 8), { f: PAL.ink, l: PAL.ink, lw: 1 });
         }
         g.restore();
-        // the phone, face down: the other choice, not taken
-        cel(g, rect(1420, 866, 1500, 930), { f: '#0E1017', s: '#1B1F2C', so: [0, 5], l: '#12131A', lw: 2.4 });
-      });
+        // the phone, face down on the desk: the other choice, not taken
+        cel(g, rect(400, 838, 482, 902), { f: '#0E1017', s: '#1B1F2C', so: [0, 5], l: '#12131A', lw: 2.4 });
+      }, null, { lamp: false });
     }, ev() { const t0 = L('close').t0; return [[this.t, 'amb', { kind: 'room', t1: at('next', .4) }], [this.t + .4, 'marker'], [this.t + 1.5, 'marker'], [this.t + 2.6, 'marker'], [this.t, 'music', { cue: 'G' }]]; } },
 
     // 14 — the end card

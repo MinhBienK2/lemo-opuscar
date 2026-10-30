@@ -58,13 +58,14 @@ Khoa học về sau đã kiểm tra lại và **không tìm thấy hiệu ứng*
 Stephen Kaplan & Rachel E. Kaplan, *Toward a theory of restoration and recovery in the natural environment*,
 **Human Behavior & the Environment** 3, 1989, p. 254–271 · và Kaplan, *Restoring the capacity to attend: the need for
 attention restoration theory*, in *The Costs of Habitat: Working in an Unforgiving Environment*, 1995.
+(Hai mục này là **sách**, không có DOI; phần đối chiếu bên dưới là các bài có DOI.)
 
 - Lý thuyết phục hồi chú ý (Attention Restoration Theory, ART): đầu mệt vì "chú ý có hướng" (directed attention) bị hao mòn;
   nghỉ cần trải nghiệm "soft fascination" — thứ nhẹ nhàng, cuốn hút mà không đòi hỏi tập trung, như cây cối, nước, mây.
 - Màn hình không thuộc loại đó: xem màn hình vẫn dùng chú ý có hướng (nó vẫn bận), chỉ là bận với nội dung vô nghĩa.
-- Đối chiếu: Hartig et al., *Nature and mental health: a review of the evidence* (2015) và các tổng quan về mức độ
-  phục hồi chú ý sau tiếp xúc với thiên nhiên (ví dụ *The relationship between nature exposures and attention restoration*,
-  2025) — đều cho thấy thiên nhiên là nguồn phục hồi chú ý đáng tin hơn môi trường xây dựng.
+- Đối chiếu (có DOI):
+  - Avik Basu, Jason Duvall & Rachel Kaplan, *Attention Restoration Theory: Exploring the Role of Soft Fascination and Mental Bandwidth*, **Environment and Behavior** 51(9–10), 2019, p. 1055–1081. DOI: 10.1177/0013916518774400
+  - Cameron N. Bell, Rebecca St George, Cynthia Honan, Lachlan J. Bell & Alex T. W. Jolly, *The relationship between nature exposures and attention restoration, as moderated by exposure duration: A systematic review and meta-analysis*, **Journal of Environmental Psychology** 104, 2025, p. 102632. DOI: 10.1016/j.jenvp.2025.102632
 
 - Dùng trong phim: cảnh đi dạo lúc bình minh ("soft fascination") và cặp bảng "MÀN HÌNH / ĐI DẠO".
 
@@ -74,6 +75,7 @@ attention restoration theory*, in *The Costs of Habitat: Working in an Unforgivi
 - Eastwood, J. D. et al. (2012), Perspectives on Psychological Science 7(5): 599–611.
 - Danckert, J. et al. (2018), Consciousness and Cognition 61: 24–37.
 - Hagger, M. S. et al. (2016), Perspectives on Psychological Science 11(4): 546–573.
-- Kaplan, S. R. & Kaplan, R. E. (1989), Human Behavior & the Environment 3: 254–271.
+- Basu, A., Duvall, J. & Kaplan, R. (2019), Environment and Behavior 51(9–10): 1055–1081, DOI 10.1177/0013916518774400.
+- Bell, C. N. et al. (2025), Journal of Environmental Psychology 104: 102632, DOI 10.1016/j.jenvp.2025.102632.
 
 Không dùng hình ảnh, âm thanh, logo hay tài liệu nào của các nhóm nghiên cứu trong phim; mọi biểu đồ được vẽ bằng mã.

@@ -124,9 +124,16 @@ Render 6–9 key shots with the real drawing code, tiled into one sheet (`core/r
 **Process rules while you work** (the full version, and why each exists: `CODING_STANDARDS.md`):
 
 - **Edit files with the file-editing tools** (`edit`, `ast_edit`, `write`), not with a shell heredoc or a shell redirect: a shell write can truncate a file before it fails.
-- **Re-read every file a codemod touched**, and report the edits that did not land: a patch script that aborts part-way leaves the file half-patched.
-- **Never commit a file the user has modified**: stage only your own change, and never `git add -A` over a dirty working tree.
+- **Re-read every file a codemod touched**, and report the edits that did not land: a patch script that aborts part-way leaves a file half-patched.
+- **Never commit a file the user has modified**: stage only your own change, and never `git add -A` on a dirty working tree.
 - **Start long jobs in the background and continue with other work**; never poll them with `sleep`.
+
+**Rules about what the film says** (the checks can only see the mechanical part of these; `improvements/lessons.md` has the cases):
+
+- **A caption that states a value may only be on screen while that value is.** The label and the state it names share one clock: a word over a full battery that is about to drain is a lie the viewer sees.
+- **A value that changes every frame must not be drawn as text.** A number that ticks is a new text piece every tick, and the reading check needs each piece to hold; animate the graphic (a bar, a needle) and let a fixed label name it, switching the label only at a word the voice says.
+- **Every visible string goes through `text()`**, never a raw `fillText()`: only `text()` registers the box the reading check measures, so a raw string is a string no check can see. `drawcheck` reports the raw ones.
+- **Measure the string against the box it lives in.** A panel that clips its own text cuts a title in half without any error; the contact sheet shows it, no check does.
 
 **Deliver**, in the project folder (the complete list):
 
