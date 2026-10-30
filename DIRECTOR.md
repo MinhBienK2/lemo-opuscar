@@ -109,6 +109,7 @@ Render 6–9 key shots with the real drawing code, tiled into one sheet (`core/r
 - A gag or failure too fast to understand.
 - Blank frames in transitions.
 - A timed effect (iris, zoom, follow cam) that doesn't track the subject after the camera moves (one world → screen function, TECHNIQUE.md §2).
+- Words smeared into a stack of ghosts by a whip pan: the picture may blur, the letters must stay readable — draw the text again on top of the blur.
 
 ## 11. Before you deliver
 
@@ -133,6 +134,8 @@ Render 6–9 key shots with the real drawing code, tiled into one sheet (`core/r
 - **A caption that states a value may only be on screen while that value is.** The label and the state it names share one clock: a word over a full battery that is about to drain is a lie the viewer sees.
 - **A value that changes every frame must not be drawn as text.** A number that ticks is a new text piece every tick, and the reading check needs each piece to hold; animate the graphic (a bar, a needle) and let a fixed label name it, switching the label only at a word the voice says.
 - **Every visible string goes through `text()`**, never a raw `fillText()`: only `text()` registers the box the reading check measures, so a raw string is a string no check can see. `drawcheck` reports the raw ones.
+- **The bottom of the frame belongs to the subtitles.** The subtitle bar is the bottom ~150 px; nothing else may be drawn there, and `readcheck --band 880` reports whatever is. A caption under the words is the same sentence twice.
+- **The picture carries labels and numbers, not the voice.** The subtitle already says the sentence; a graphic that repeats it verbatim puts the same words on screen twice. Write the label that the sentence does not say.
 - **Measure the string against the box it lives in.** A panel that clips its own text cuts a title in half without any error; the contact sheet shows it, no check does.
 
 **Deliver**, in the project folder (the complete list):

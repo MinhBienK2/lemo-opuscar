@@ -201,7 +201,8 @@ function hair(g, hy, yaw, t, E, lw) {
     [26, 2, 24], [62, 28, 18], [88, 50, 10],
   ];
   locks.forEach(([x0, x1, drop], k) => {
-    const sway2 = Math.sin(t * 1.9 + x0) * 2.4;
+    // the locks trail the turn: they lag behind the head instead of moving with it
+    const sway2 = Math.sin(t * 1.9 + x0) * 2.4 - yaw * 22;
     const spine = [[x0, hy - 80 + wob], [(x0 + x1) / 2, hy - 74 + drop * .3], [x1 + sway2, hy - 70 + drop]];
     cel(g, ribbon(spine, u => 24 * (1 - u * .78)), { f: k % 2 ? mix(H.f, H.h, .16) : H.f, s: H.s, so: [-5, -4], l: H.l, lw: lw * .8 });
   });
@@ -235,8 +236,10 @@ function ahoge(g, hy, yaw, t, E, lw) {
   }
   const P = ribbon(pts, u => 8 * Math.pow(1 - u, .5) + 1.2);
   cel(g, P, { f: PAL.hair.f, l: PAL.hair.l, lw: lw * .8 });
-  // the bulb at the tip: it glows with the mood
-  const tip = pts[pts.length - 1], glow = .35 + .65 * Math.max(0, k);
+  // the bulb at the tip: it glows with the mood, and it trails behind the turn
+  const tip = pts[pts.length - 1];
+  tip[0] -= yaw * 16;
+  const glow = .35 + .65 * Math.max(0, k);
   const r = 8 + 4 * glow;
   const grd = g.createRadialGradient(tip[0], tip[1], 0, tip[0], tip[1], r * 3.4);
   grd.addColorStop(0, rgba(PAL.hair.h, .55 * glow)); grd.addColorStop(1, rgba(PAL.hair.h, 0));
@@ -268,34 +271,67 @@ function fxDraw(g, fx, fy, E, t, lw) {
   }
 }
 
-// ——— hands: a simple mitten with a thumb, plus a few gestures ———
+// ——— hands: a palm, a thumb and four fingers that curl ———
+// The hand points along the forearm: the local +x is the direction the fingers reach.
 function hand(g, x, y, rot, gest, flip, lw, prop) {
   g.save(); g.translate(x, y); g.rotate(rot + (flip ? Math.PI : 0));
   const S = PAL.skin;
+  const palm = (rx, ry) => cel(g, ellP(0, 0, rx, ry), { f: S.f, s: S.s, so: [-5, -4], l: S.l, lw });
+  // one finger: a tapered ribbon that curls towards the palm
+  const finger = (x0, y0, len, curl, w) => {
+    const pts = [];
+    for (let i = 0; i <= 7; i++) {
+      const u = i / 7, a = curl * u;
+      pts.push([x0 + Math.cos(a) * len * u, y0 + Math.sin(a) * len * u]);
+    }
+    cel(g, ribbon(pts, u => w * (1 - u * .28)), { f: S.f, s: S.s, so: [-3, -2], l: S.l, lw: lw * .82 });
+  };
+  // the thumb, along the side of the palm
+  const thumb = (a = .5) => cel(g, ribbon([[-6, -9], [-15, -14], [-22, -16 + a * 6]], u => 10 - u * 3),
+    { f: S.f, s: S.s, so: [-3, -2], l: S.l, lw: lw * .82 });
   if (gest === 'point') {
-    cel(g, path([[-13, -6], [26, -3], [30, 3], [26, 8], [-13, 10]], true), { f: S.f, s: S.s, so: [-4, -3], l: S.l, lw });
-    cel(g, ellP(-6, 4, 13, 12), { f: S.f, s: S.s, so: [-4, -3], l: S.l, lw });
+    palm(15, 13);
+    finger(8, -6, 30, .05, 7);      // the index, straight
+    finger(8, 1, 20, 1.15, 6.8);
+    finger(8, 7, 18, 1.3, 6.4);
+    finger(7, 12, 15, 1.35, 6);
+    thumb(.35);
   } else if (gest === 'open') {
-    cel(g, ellP(0, 0, 20, 22), { f: S.f, s: S.s, so: [-5, -4], l: S.l, lw });
-    for (let k = 0; k < 4; k++) line(g, [[-11 + k * 7, -18], [-11 + k * 7, -24]], S.l, lw * .8);
-    line(g, [[-20, 2], [-27, -4]], S.l, lw * .8);
+    palm(17, 18);
+    finger(9, -11, 25, .18, 7.2); finger(10, -4, 28, .1, 7.4); finger(9, 3, 25, .16, 7); finger(8, 10, 21, .28, 6.6);
+    thumb(.2);
   } else if (gest === 'fist') {
-    cel(g, ellP(0, 0, 17, 16), { f: S.f, s: S.s, so: [-5, -4], l: S.l, lw });
-    line(g, [[-8, -4], [8, -4]], S.l, lw * .8);
+    palm(16, 15);
+    for (let k = 0; k < 4; k++) cel(g, ellP(9, -8 + k * 6.4, 4.4, 3.6), { f: S.f, s: S.s, l: S.l, lw: lw * .7 });
+    thumb(.95);
   } else if (gest === 'hold') {
-    cel(g, ellP(0, 0, 15, 16), { f: S.f, s: S.s, so: [-5, -4], l: S.l, lw });
+    palm(14, 15);
+    finger(6, -8, 18, 1.45, 6.4); finger(7, -2, 18, 1.5, 6.4); finger(7, 4, 17, 1.45, 6); finger(6, 10, 15, 1.35, 5.6);
+    thumb(.75);
     if (prop) prop(g);
   } else if (gest === 'four' || gest === 'three' || gest === 'two' || gest === 'one') {
     const n = { one: 1, two: 2, three: 3, four: 4 }[gest] || 1;
-    cel(g, ellP(0, 4, 15, 13), { f: S.f, s: S.s, so: [-4, -3], l: S.l, lw });
-    for (let k = 0; k < n; k++) {
-      const fx2 = -8 + k * 8;
-      cel(g, rect(fx2 - 3, -24 - (n === 1 ? 4 : 0), fx2 + 3, -6), { f: S.f, s: S.s, l: S.l, lw: lw * .8 });
+    palm(14, 13);
+    for (let k = 0; k < 4; k++) {
+      if (k < n) finger(8, -7 + k * 6.4, 27 - k * 1.6, .07, 6.8);
+      else finger(8, -7 + k * 6.4, 16, 1.4, 6.2);
     }
+    thumb(.6);
   } else {   // relaxed
-    cel(g, ellP(0, 2, 14, 18), { f: S.f, s: S.s, so: [-4, -3], l: S.l, lw });
-    line(g, [[-12, 6], [12, 6]], rgba(S.l, .35), lw * .6);
+    palm(13, 17);
+    finger(7, -9, 21, .55, 6.8); finger(8, -2, 23, .62, 7); finger(8, 5, 21, .6, 6.6); finger(7, 11, 18, .55, 6.2);
+    thumb(.55);
   }
+  g.restore();
+}
+
+// ——— the shoe: a rounded toe, a sole and a heel ———
+function shoe(g, x, y, ang, lw) {
+  g.save(); g.translate(x, y); g.rotate(ang);
+  cel(g, path([[-38, -8], [-30, -28], [2, -33], [32, -26], [50, -10], [53, 2], [-38, 2]], true),
+    { f: '#EDEFF5', s: '#C6CBD8', so: [-5, 3], l: PAL.ink, lw });
+  cel(g, path([[-40, 0], [53, 0], [55, 11], [-42, 11]], true), { f: '#3A4258', s: '#262C3E', so: [0, 3], l: PAL.ink, lw: lw * .9 });
+  for (let k = 0; k < 3; k++) line(g, [[-8 + k * 11, -27], [0 + k * 11, -19]], rgba('#5A6488', .9), lw * .7);
   g.restore();
 }
 
@@ -307,27 +343,33 @@ export function figure(g, o = {}) {
   // the line weight is fixed on the screen: the drawing happens inside a scale of s, so the widths are divided by it
   const lw = (o.linePx || 3.2) / s;
   const HD = PAL.hoodie;
-  const breathe = Math.sin(t * 1.9) * 3;
-  const sway = Math.sin(t * .8) * .012;
+  // the breathing and the float: two frequencies each, so the body never looks like a loop
+  const breathe = Math.sin(t * 1.55) * 3 + Math.sin(t * 3.1) * .8;
+  const sway = Math.sin(t * .8) * .012 + Math.sin(t * 2.27) * .004;
   g.save(); g.scale(s, s);
+  // The head follows the arms a little: when one arm leads, the head turns with it. The rig's yaw unit is small
+  // (1 unit = 14 px of feature shift), so the number stays inside a quarter of it.
+  const lead = Math.max(-.25, Math.min(.25,
+    ((o.armR && o.armR.at ? o.armR.at[0] : 0) + (o.armL && o.armL.at ? o.armL.at[0] : 0)) * .003));
   const bodyYaw = o.bodyYaw || 0, lean = o.lean || 0;
   g.rotate(sway, 0, 0); g.translate(0, breathe * .3);
   // legs (drawn first, behind the torso)
   if (o.crop !== 'bust') {
     const legs = o.legs || { mode: 'stand' };
-    const walk = legs.mode === 'walk' ? Math.sin((legs.ph || 0) * TAU) : 0;
-    const walk2 = legs.mode === 'walk' ? Math.sin((legs.ph || 0) * TAU + Math.PI) : 0;
     const L = PAL.skin;
-    for (const [sd, ph] of [[-1, walk], [1, walk2]]) {
+    for (const sd of [-1, 1]) {
       // standing: the leg swings; sitting: the thigh goes forward and the shin drops to the floor
       const sit = legs.mode === 'sit';
+      // the walk: the leg swings, the knee lifts on the swing-through, the foot rolls from heel to toe
+      const ph = legs.mode === 'walk' ? (legs.ph || 0) + (sd > 0 ? .5 : 0) : 0;
+      const sw = legs.mode === 'walk' ? Math.sin(ph * TAU) : 0;
+      const lift = legs.mode === 'walk' ? Math.max(0, Math.sin(ph * TAU + .85)) : 0;
       const hip = [sd * 34, 290];
-      const knee = sit ? [sd * 40 + 96, 420] : [sd * 34 + ph * 34, 460];
-      const foot = sit ? [sd * 44 + 96, 660] : [sd * 36 + ph * 70, 650];
+      const knee = sit ? [sd * 40 + 96, 420] : [sd * 34 + sw * 30, 460 - lift * 30];
+      const foot = sit ? [sd * 44 + 96, 660] : [sd * 36 + sw * 66, 650 - lift * 58];
       cel(g, limb(hip, knee, 46, 38), { f: '#3A4258', s: '#2A3044', so: [-6, 0], l: PAL.ink, lw });
       cel(g, limb(knee, foot, 38, 31), { f: '#3A4258', s: '#2A3044', so: [-6, 0], l: PAL.ink, lw });
-      cel(g, path([[foot[0] - 40, foot[1]], [foot[0] + 46, foot[1]], [foot[0] + 54, foot[1] + 30], [foot[0] - 44, foot[1] + 30]], true),
-        { f: '#EDEFF5', s: '#C6CBD8', so: [-5, 3], l: PAL.ink, lw });
+      shoe(g, foot[0], foot[1], (sit ? 0 : -sw * .14 + lift * .26), lw);
     }
   }
   // the torso: an oversized hoodie
@@ -365,11 +407,11 @@ export function figure(g, o = {}) {
     const ang = Math.atan2(target[1] - elbow[1], target[0] - elbow[0]);
     const cuff = [target[0] - Math.cos(ang) * 14, target[1] - Math.sin(ang) * 14];
     cel(g, ellP(cuff[0], cuff[1], 27, 22, ang), { f: sleeve.s, s: mix(sleeve.s, PAL.ink, .3), so: [-6, -4], l: sleeve.l, lw });
-    hand(g, target[0], target[1], ang + Math.PI / 2 + (a.rot || 0), a.gest || 'relaxed', a.flip, lw, a.prop);
+    hand(g, target[0], target[1], ang + (a.rot || 0), a.gest || 'relaxed', a.flip, lw, a.prop);
   };
   arm(o.armL, -1); arm(o.armR, 1);
-  // the head
-  const hd = head(g, { E, yaw: o.headYaw || 0, roll: o.headRoll || 0, pitch: o.headPitch || 0, t, blink: o.blink || 0, talk: o.talk || { o: 0, b: .5 }, lw });
+  // the head: it follows the twist of the torso a little, the way a real head does
+  const hd = head(g, { E, yaw: (o.headYaw || 0) + bodyYaw * .3 + lead, roll: o.headRoll || 0, pitch: o.headPitch || 0, t, blink: o.blink || 0, talk: o.talk || { o: 0, b: .5 }, lw });
   g.restore();
   return hd;
 }

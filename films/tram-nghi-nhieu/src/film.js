@@ -3,7 +3,7 @@
 // Page contract: window.render(t), DUR, READY, EV (sound events), TEXTS(t) (on-screen text for the reading check), CUES (subtitles).
 import { figure, expr, blendE, PAL, roi, battery } from './character.js';
 import { cel, path, poly, ellP, line, limb, mix, rgba, canvas, W, H, TAU, rect } from './cel.js';
-import { ground, panel, hilite, stamp, pip, bubble, focusLines, subtitle, tag, ring, batteryBig, text, font, ease, seg, clamp01, INK, CREAM, ACCENT, STORY, REG } from './broll.js';
+import { ground, panel, hilite, stamp, pip, bubble, focusLines, subtitle, tag, ring, batteryBig, text, sharpText, font, ease, seg, clamp01, INK, CREAM, ACCENT, STORY, REG } from './broll.js';
 import * as S from './sets.js';
 import { build } from './timeline.js';
 
@@ -134,7 +134,7 @@ function shots() {
       g.globalAlpha = 1;
       text(g, 'thời gian thức', 700, 580, { font: font(400, 40, 'Patrick Hand'), align: 'center', fill: PAL.muted });
       S.hourRow(g, 290, 830, 820, 44, p * .47, { n: 24, hi: .47 });
-      text(g, 'nghĩ về chuyện không liên quan gì tới việc đang làm', 700, 940, { font: font(400, 40, 'Patrick Hand'), align: 'center', fill: PAL.muted });
+      // no caption under the chart: the voice says the sentence, and the band under it belongs to the subtitles
       g.restore();
       pip(g, 1650, 720, 165, popP(lt, 1.0, dur('f1') + .3), pipHost({ E: ek(T, [[0, 'talk'], [w('f1', 7), 'excited']]), headYaw: -.25 }, T));
     }, ev() { const t0 = L('f1').t0; return [[this.t + .1, 'pop'], [t0 + .9, 'ting'], [this.t, 'music', { cue: 'C' }]]; } },
@@ -213,7 +213,7 @@ function shots() {
         }
       }
       text(g, 'đầu lại đông', 1400, 140, { font: font(900, 64), align: 'center', fill: CREAM });
-      text(g, 'mỗi trang mạng lại đẩy thêm một đống thứ vào', 1400, 900, { font: font(400, 34, 'Patrick Hand'), align: 'center', fill: PAL.muted });
+      text(g, 'mỗi trang mạng lại đẩy thêm một đống thứ vào', 1400, 856, { font: font(400, 34, 'Patrick Hand'), align: 'center', fill: PAL.muted });
     }, ev() { const r = [[this.t, 'amb', { kind: 'scroll', t1: at('myth', .3) }]]; for (let i = 0; i < 6; i++) r.push([this.t + i * .3, 'pop']); return r; } },
 
     // 10 — the familiar answer: a drained battery
@@ -227,8 +227,8 @@ function shots() {
         text(gg, 'câu trả lời quen thuộc nhất', x0, y0 + 220, { font: font(400, 40, 'Patrick Hand'), fill: PAL.muted });
       });
       g.restore();
-      // the battery running down
-      batteryBig(g, 170, 350, 540, 1 - seg(T, mv, mv + 2.4), T);
+      // the battery is already empty: the caption "hết pin" names the state that is on screen
+      batteryBig(g, 170, 350, 540, .04, T);
       text(g, 'hết pin', 440, 760, { font: font(900, 58), align: 'center', fill: PAL.red.f });
       pip(g, 1640, 700, 165, popP(lt, .9, dur('myth') + .3), pipHost({ E: ek(T, [[0, 'talk'], [mv, 'skeptical']]), headYaw: -.2, headRoll: .06 }, T));
     }, ev() { const mv = w('myth', 9); return [[this.t - .12, 'whoosh'], [this.t, 'amb', { kind: 'low', t1: at('truth', .3) }], [this.t, 'music', { cue: 'E' }], [mv, 'drain']]; } },
@@ -312,7 +312,7 @@ function shots() {
           const yy = y0 + 230 + i * 110, w = (cw - 140) * (1 - i * .22);
           cel(gg, rect(x0, yy, x0 + w, yy + 54), { f: i === 0 ? ACCENT.s : '#2A3145', s: '#1E2333', so: [0, 6], l: '#12131A', lw: 2 });
         }
-        text(gg, 'lướt mạng xã hội không phải là nghỉ', x0, y0 + 520, { font: font(400, 40, 'Patrick Hand'), fill: PAL.muted });
+        text(gg, 'giờ của bạn, đi làm', x0, y0 + 520, { font: font(400, 40, 'Patrick Hand'), fill: PAL.muted });
       });
       stamp(g, 'CÔNG VIỆC', 700, 780, { rot: -.13, px: 66, p: seg(T, st - .05, st + .15) });
     }, ev() { const st = w('feedwork', 8); return [[this.t, 'amb', { kind: 'scroll', t1: at('roi', .9) }], [st - .05, 'stamp']]; } },
@@ -368,12 +368,19 @@ function shots() {
 
 // ——— transitions ———
 function drawShot(g, i, T) { const sh = SHOTS[i]; REG.id = sh.n; g.save(); sh.f(g, T - sh.t, T); g.restore(); }
+// the words of a smeared frame are drawn sharp again on top: a blurred picture is a look, blurred letters are a mess
+function drawSharp(g, texts, dx) {
+  for (const t of texts) sharpText(g, t, dx);
+}
 function smear(g, i, T, dx) {   // whip pan: the frame drawn several times along x (a directional blur)
-  const list = REG.list; REG.list = null;
-  B.setTransform(1, 0, 0, 1, 0, 0); B.clearRect(0, 0, W, H); drawShot(B, i, T);
+  const list = REG.list; REG.list = [];
+  B.setTransform(1, 0, 0, 1, 0, 0); B.clearRect(0, 0, W, H);
+  REG.skip = true; drawShot(B, i, T); REG.skip = false;   // the picture only: the words are painted sharp on top
+  const texts = REG.list; REG.list = list;
   const n = 7, step = dx > 0 ? 70 : -70;
   for (let k = 0; k < n; k++) { g.globalAlpha = 1 / (k + 1); g.drawImage(buf, dx - step * k, 0); }
   g.globalAlpha = 1; REG.list = list;
+  drawSharp(g, texts, dx);
 }
 
 window.render = T => {

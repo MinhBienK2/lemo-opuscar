@@ -37,18 +37,27 @@ export function ground(g, col = PAL.bg) {
 
 // ——— type ———
 export function font(w, px, fam = 'Be Vietnam Pro') { return `${w} ${px}px "${fam}"`; }
-export const REG = { list: null, id: '' };
-export function reg(g, s, x0, y0, x1, y1) {
+export const REG = { list: null, id: '', skip: false };
+export function reg(g, s, x0, y0, x1, y1, style) {
   if (!REG.list) return;
   const m = g.getTransform(), P = [[x0, y0], [x1, y0], [x0, y1], [x1, y1]].map(([x, y]) => [m.a * x + m.c * y + m.e, m.b * x + m.d * y + m.f]);
-  REG.list.push({ id: REG.id + ':' + s, text: s, x0: Math.min(...P.map(p => p[0])), y0: Math.min(...P.map(p => p[1])), x1: Math.max(...P.map(p => p[0])), y1: Math.max(...P.map(p => p[1])) });
+  const item = { id: REG.id + ':' + s, text: s, x0: Math.min(...P.map(p => p[0])), y0: Math.min(...P.map(p => p[1])), x1: Math.max(...P.map(p => p[0])), y1: Math.max(...P.map(p => p[1])) };
+  // a piece that was drawn through text() also keeps where it was written, so a transition can draw it sharp again
+  if (style && style.ax !== undefined) {
+    item.ax = m.a * style.ax + m.c * style.ay + m.e;
+    item.ay = m.b * style.ax + m.d * style.ay + m.f;
+    item.font = style.font; item.align = style.align; item.base = style.base;
+    item.fill = style.fill; item.stroke = style.stroke; item.sw = style.sw;
+  }
+  REG.list.push(item);
 }
 export function text(g, s, x, y, o = {}) {
   g.font = o.font || font(800, 48); g.textAlign = o.align || 'left'; g.textBaseline = o.base || 'alphabetic';
   if (REG.list && !o.noreg) {
     const w = g.measureText(s).width, px = parseFloat(/(\d+(\.\d+)?)px/.exec(g.font)[1]), x0 = o.align === 'center' ? x - w / 2 : o.align === 'right' ? x - w : x;
-    reg(g, s, x0, y - px * .8, x0 + w, y + px * .25);
+    reg(g, s, x0, y - px * .8, x0 + w, y + px * .25, { ax: x, ay: y, font: g.font, align: g.textAlign, base: g.textBaseline, fill: o.fill || CREAM, stroke: o.stroke, sw: o.sw });
   }
+  if (REG.skip) return;   // a transition is drawing the picture: the words are painted sharp on top instead
   if (o.stroke) { g.lineJoin = 'round'; g.strokeStyle = o.stroke; g.lineWidth = o.sw || 8; g.strokeText(s, x, y); }
   g.fillStyle = o.fill || CREAM; g.fillText(s, x, y);
   return g.measureText(s).width;
@@ -135,6 +144,19 @@ export function focusLines(g, cx, cy, t, col = '#2A2F42', n = 64, r0 = 380) {
     g.beginPath(); g.moveTo(cx + Math.cos(a) * r1, cy + Math.sin(a) * r1);
     g.lineTo(cx + Math.cos(a - w) * r2, cy + Math.sin(a - w) * r2); g.lineTo(cx + Math.cos(a + w) * r2, cy + Math.sin(a + w) * r2); g.fill();
   }
+  g.restore();
+}
+
+// ——— redraw a registered text piece sharply ———
+// A transition can blur the picture (a whip pan draws the frame several times); the words are drawn again on top,
+// so the letters stay readable instead of becoming a stack of ghosts.
+export function sharpText(g, t, dx = 0) {
+  if (!t || t.ax === undefined || !t.font) return;
+  g.save();
+  g.font = t.font; g.textAlign = t.align || 'left'; g.textBaseline = t.base || 'alphabetic';
+  const x = t.ax + dx, y = t.ay;
+  if (t.stroke) { g.lineJoin = 'round'; g.strokeStyle = t.stroke; g.lineWidth = t.sw || 8; g.strokeText(t.text, x, y); }
+  g.fillStyle = t.fill || CREAM; g.fillText(t.text, x, y);
   g.restore();
 }
 

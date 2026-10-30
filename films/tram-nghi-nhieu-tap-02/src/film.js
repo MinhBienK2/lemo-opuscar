@@ -3,7 +3,7 @@
 // Page contract: window.render(t), DUR, READY, EV (sound events), TEXTS(t) (on-screen text for the reading check), CUES (subtitles).
 import { figure, expr, blendE, PAL, roi } from './character.js';
 import { cel, path, poly, ellP, line, mix, rgba, canvas, W, H, TAU, rect } from './cel.js';
-import { ground, panel, hilite, stamp, pip, bubble, subtitle, tag, text, font, ease, seg, clamp01, INK, CREAM, ACCENT, STORY, REG } from './broll.js';
+import { ground, panel, hilite, stamp, pip, bubble, subtitle, tag, text, sharpText, font, ease, seg, clamp01, INK, CREAM, ACCENT, STORY, REG } from './broll.js';
 import * as S from './sets.js';
 import { build } from './timeline.js';
 
@@ -160,16 +160,16 @@ function shots() {
       ground(g);
       g.save(); camera(g, 1.02, 780, 540);
       text(g, '691 mối tương quan', 250, 190, { font: font(800, 44), fill: PAL.muted });
-      line(g, [[250, 830], [1420, 830]], '#3A4260', 4);
-      bar(g, 330, 830, 250, 400, p1, PAL.red.f);
-      bar(g, 760, 830, 250, 320, p2, PAL.hoodie.f);
-      bar(g, 1190, 830, 250, 120, p3, '#5A6488');
-      text(g, 'độ khó chịu', 455, 890, { font: font(800, 40), align: 'center', fill: CREAM });
-      text(g, 'của việc', 455, 934, { font: font(400, 34, 'Patrick Hand'), align: 'center', fill: PAL.muted });
-      text(g, 'hạn càng xa', 885, 890, { font: font(800, 40), align: 'center', fill: CREAM });
-      text(g, 'càng trì hoãn', 885, 934, { font: font(400, 34, 'Patrick Hand'), align: 'center', fill: PAL.muted });
-      text(g, 'tính cách', 1315, 890, { font: font(800, 40), align: 'center', fill: CREAM });
-      text(g, 'chỉ liên quan yếu', 1315, 934, { font: font(400, 34, 'Patrick Hand'), align: 'center', fill: PAL.muted });
+      line(g, [[250, 740], [1420, 740]], '#3A4260', 4);
+      bar(g, 330, 740, 250, 400, p1, PAL.red.f);
+      bar(g, 760, 740, 250, 320, p2, PAL.hoodie.f);
+      bar(g, 1190, 740, 250, 120, p3, '#5A6488');
+      text(g, 'độ khó chịu', 455, 794, { font: font(800, 40), align: 'center', fill: CREAM });
+      text(g, 'của việc', 455, 834, { font: font(400, 34, 'Patrick Hand'), align: 'center', fill: PAL.muted });
+      text(g, 'hạn càng xa', 885, 794, { font: font(800, 40), align: 'center', fill: CREAM });
+      text(g, 'càng trì hoãn', 885, 834, { font: font(400, 34, 'Patrick Hand'), align: 'center', fill: PAL.muted });
+      text(g, 'tính cách', 1315, 794, { font: font(800, 40), align: 'center', fill: CREAM });
+      text(g, 'chỉ liên quan yếu', 1315, 834, { font: font(400, 34, 'Patrick Hand'), align: 'center', fill: PAL.muted });
       g.restore();
       pip(g, 1650, 740, 175, popP(lt, 1.0, dur('f1') + .3), pipHost({ E: ek(T, [[0, 'talk'], [w('f1', 12), 'excited']]), headYaw: -.25 }, T));
     }, ev() { const t0 = L('f1').t0, t2 = L('f2').t0; return [[this.t + .1, 'pop'], [t0 + .4, 'rise'], [t2 + .3, 'rise'], [t2 + 1.9, 'ting'], [this.t, 'music', { cue: 'C' }]]; } },
@@ -207,11 +207,11 @@ function shots() {
       cel(g, ellP(-460, 156, 104, 104), { f: PAL.red.f, s: PAL.red.s, so: [-10, -8], l: PAL.ink, lw: 3 });
       cel(g, ellP(460, -156, 44, 44), { f: '#8A90A6', s: '#5A6488', so: [-6, -6], l: PAL.ink, lw: 2.6 });
       g.restore();
-      text(g, 'BÂY GIỜ', 500, 880, { font: font(900, 54), align: 'center', fill: PAL.red.f });
-      text(g, 'hết khó chịu', 500, 934, { font: font(400, 38, 'Patrick Hand'), align: 'center', fill: PAL.muted });
+      text(g, 'BÂY GIỜ', 500, 810, { font: font(900, 54), align: 'center', fill: PAL.red.f });
+      text(g, 'hết khó chịu', 500, 856, { font: font(400, 38, 'Patrick Hand'), align: 'center', fill: PAL.muted });
       text(g, 'MỘT GIỜ NỮA', 1420, 700, { font: font(900, 54), align: 'center', fill: '#8A90A6' });
       text(g, 'xong việc, nhận thưởng', 1420, 754, { font: font(400, 38, 'Patrick Hand'), align: 'center', fill: PAL.muted });
-      text(g, 'tương lai xa luôn bị chiết khấu', 960, 1010, { font: font(400, 42, 'Patrick Hand'), align: 'center', fill: PAL.muted });
+      text(g, 'XA XÔI', 1420, 195, { font: font(900, 44), align: 'center', fill: '#8A90A6' });
     }, ev() { const t0 = L('emo').t0; return [[this.t + .1, 'pop'], [t0 + .2, 'swish'], [t0 + 1.6, 'thump'], [this.t, 'amb', { kind: 'low', t1: at('myth', .3) }], [this.t, 'music', { cue: 'E' }]]; } },
 
     // 7 — the myth, stamped out
@@ -262,10 +262,11 @@ function shots() {
       note(g, 900, 500, 1300, 620, -.01);
       // the marker strokes go behind the words
       hilite(g, 320, 286, 250, 62, seg(T, t0 + .3, t0 + .8), PAL.hoodie.f, 2);
-      hilite(g, 320, 516, 250, 62, seg(T, hi, hi + .5), PAL.cyan.f, 5);
-      text(g, 'NẾU 21:30 mình ngồi xuống bàn,', 340, 330, { font: font(800, 52), fill: PAL.ink });
-      text(g, 'THÌ mình viết 3 dòng tiêu đề', 340, 560, { font: font(800, 52), fill: PAL.ink });
-      text(g, 'trong 5 phút, không mở mạng.', 340, 620, { font: font(800, 52), fill: PAL.ink });
+      hilite(g, 320, 486, 250, 62, seg(T, hi, hi + .5), PAL.cyan.f, 5);
+      // the card carries its own words: the voice says the sentence, the picture says the shape of the plan
+      text(g, 'NẾU 21:30', 340, 330, { font: font(800, 60), fill: PAL.ink });
+      text(g, 'THÌ 5 PHÚT', 340, 530, { font: font(800, 60), fill: PAL.ink });
+      text(g, 'một kế hoạch viết ra, không chỉ nghĩ trong đầu', 340, 610, { font: font(400, 38, 'Patrick Hand'), fill: '#5A5348' });
       g.restore();
       clockFace(g, 1560, 300, 120, 21, 30, { tick: '#3A4260' });
       pip(g, 330, 780, 160, popP(lt, 1.0, dur('plan') + .3), pipHost({ E: ek(T, [[0, 'determined'], [hi, 'smile']]), headYaw: -.18 }, T));
@@ -375,12 +376,19 @@ function shots() {
 
 // ——— transitions ———
 function drawShot(g, i, T) { const sh = SHOTS[i]; REG.id = sh.n; g.save(); sh.f(g, T - sh.t, T); g.restore(); }
+// the words of a smeared frame are drawn sharp again on top: a blurred picture is a look, blurred letters are a mess
+function drawSharp(g, texts, dx) {
+  for (const t of texts) sharpText(g, t, dx);
+}
 function smear(g, i, T, dx) {   // whip pan: the frame drawn several times along x (a directional blur)
-  const list = REG.list; REG.list = null;
-  B.setTransform(1, 0, 0, 1, 0, 0); B.clearRect(0, 0, W, H); drawShot(B, i, T);
+  const list = REG.list; REG.list = [];
+  B.setTransform(1, 0, 0, 1, 0, 0); B.clearRect(0, 0, W, H);
+  REG.skip = true; drawShot(B, i, T); REG.skip = false;   // the picture only: the words are painted sharp on top
+  const texts = REG.list; REG.list = list;
   const n = 7, step = dx > 0 ? 70 : -70;
   for (let k = 0; k < n; k++) { g.globalAlpha = 1 / (k + 1); g.drawImage(buf, dx - step * k, 0); }
   g.globalAlpha = 1; REG.list = list;
+  drawSharp(g, texts, dx);
 }
 
 window.render = T => {

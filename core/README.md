@@ -34,7 +34,7 @@ The viewport is 1920×1080 at device scale 1, or `--size WxH`. `--q 'k=v&…'` r
 | `node core/render/still.mjs <demo> <t> [<t> …] [--range a:b:step] [--prefix t_] [--out dir]` | review stills as JPEGs (default `<demo>/stills/t_<t>.jpg`) |
 | `node core/render/video.mjs <demo> [--fps 24] [--workers 3] [--out <demo>/out/video.mp4]` | every frame to a video; up to 6 workers for a single render. Each parallel version needs its own `--out` |
 | `node core/render/events.mjs <demo> [--out <file>]` | export `{dur, ev}` to `<demo>/events.json` |
-| `node core/render/readcheck.mjs <demo> [--step 0.04] [--latin-cps 15] [--cjk-cps 4.5] [--pad 1.5] [--min 1.5]` | reading-time check (below) |
+| `node core/render/readcheck.mjs <demo> [--step 0.04] [--latin-cps 15] [--cjk-cps 4.5] [--pad 1.5] [--min 1.5] [--band 0]` | reading-time check (below); `--band N` also reports every text whose box reaches below y=N — the subtitle band |
 | `node core/render/drawcheck.mjs <film-folder> [<film-folder> ...]` | audit a film's drawing code (below) |
 | `sh core/render/review.sh <film-folder>` | the whole review loop in one command (below) |
 | `.venv/bin/python core/render/sheet.py out.jpg img… [--cols 4] [--w 480]` | contact sheet |
@@ -43,7 +43,7 @@ The viewport is 1920×1080 at device scale 1, or `--size WxH`. `--q 'k=v&…'` r
 
 All four page tools take `--size WxH` (default `1920x1080`, even numbers) and `--q 'k=v'`.
 
-**readcheck** asks the page for `window.TEXTS(t)` at every step. Each text must stay fully in frame, unchanged, for at least CJK characters ÷ 4.5 + other non-space characters ÷ 15 + 1.5 s, and never less than `--min`. A new `text` under the same `id` starts a new piece. Subtitles are checked by their `.srt`, not here.
+**readcheck** asks the page for `window.TEXTS(t)` at every step. Each text must stay fully in frame, unchanged, for at least CJK characters ÷ 4.5 + other non-space characters ÷ 15 + 1.5 s, and never less than `--min`. A new `text` under the same `id` starts a new piece. Subtitles are checked by their `.srt`, not here. With `--band N` it also reports every text whose box reaches below y=N: the subtitles are drawn at the bottom of the frame, so a caption down there is printed on top of the words. The subtitles themselves are drawn with a raw `fillText()` and are not registered, so they never appear in this list.
 
 **drawcheck** reads the film's own `src/*.js` and derives the calling convention from the film's own helper, because `rect` means `x0,y0,x1,y1` in some films and `x,y,w,h` in others. It reports a `rect()` with the wrong number of arguments, an inverted x corner (the helper mirrors it silently), a width or height of zero or less, a `cel()` with other than 3 arguments and a `path()` with none. Only calls whose arguments are plain numbers are compared, so nothing is reported that cannot be seen in the source. It never writes to the film.
 

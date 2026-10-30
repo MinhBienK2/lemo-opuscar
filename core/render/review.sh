@@ -24,7 +24,10 @@ run() {   # run a step, keep going when it fails
 }
 
 run drawcheck node "$HERE/core/render/drawcheck.mjs" "$FOLDER"
-run readcheck node "$HERE/core/render/readcheck.mjs" "$FOLDER"
+# a film's own film folder: the subtitles sit at the bottom, so nothing else may be down there
+BAND=""
+case "$FOLDER" in */films/*|films/*) BAND="--band 880";; esac
+run readcheck node "$HERE/core/render/readcheck.mjs" "$FOLDER" $BAND
 
 # the voice: every line has to transcribe back to the script. The run happens in a scratch folder, so the
 # film's own words.json is never rewritten by a check.

@@ -1,6 +1,8 @@
-// Reading-time self-check: node core/render/readcheck.mjs <demo> [--q 'k=v'] [--step 0.04] [--latin-cps 15] [--cjk-cps 4.5] [--pad 1.5] [--min 1.5] [--size 1920x1080]
+// Reading-time self-check: node core/render/readcheck.mjs <demo> [--q 'k=v'] [--step 0.04] [--latin-cps 15] [--cjk-cps 4.5] [--pad 1.5] [--min 1.5] [--band 0] [--size 1920x1080]
 // Page contract: window.TEXTS(t) → [{id, text, x0, y0, x1, y1}]: every piece of text visible on screen at t seconds and its screen box (pixels, viewport the same as --size, default 1920×1080).
 //   id identifies "this block of text" (a number or a string); if the text under the same id changes, it counts as a new piece and timing restarts. Don't report the subtitle bar: its hold is set by the .srt.
+// --band N: also report every text whose box reaches below y=N — the subtitle band. The subtitles themselves are drawn with a raw
+//   fillText() and are not registered, so they never appear in this list; anything else down there lands under the words.
 //   text must be the block's [complete text] from the first frame it appears: if a typewriter effect reports "the substring typed so far", every extra character is a new piece and the whole check fails —
 //   for typewriter text, always report the full text in TEXTS and leave "which characters are shown yet" to the picture itself.
 // Rule (same as DIRECTOR.md §7): from the moment a piece of text first fully enters the frame, the time it stays fully in frame continuously, and still in TEXTS, must be ≥
@@ -12,6 +14,7 @@ const args = process.argv.slice(2), { w: VW, h: VH } = takeSize(args), opt = (k,
 const dir = args[0]; requireDemo(dir);
 const Q = opt('--q', ''), STEP = +opt('--step', 0.04), LATIN = +opt('--latin-cps', 15), CJK = +opt('--cjk-cps', 4.5), PAD = +opt('--pad', 1.5), MIN = +opt('--min', 1.5);
 if (![STEP, LATIN, CJK, PAD, MIN].every(Number.isFinite) || STEP <= 0 || LATIN <= 0 || CJK <= 0) { console.error('bad option value (step and the cps values must be > 0)'); process.exit(2); }
+if (!Number.isFinite(+opt('--band', 0)) || +opt('--band', 0) < 0) { console.error('bad option value (--band must be a y coordinate)'); process.exit(2); }
 const { browser, page } = await openDemo(dir, { w: VW, h: VH, q: Q });
 const res = await page.evaluate(({ STEP }) => {
   if (typeof window.TEXTS !== 'function') return { noTexts: true };
@@ -23,9 +26,9 @@ const res = await page.evaluate(({ STEP }) => {
     for (const b of window.TEXTS(t) || []) {
       b.id = String(b.id);   // numeric ids are fine too
       const key = b.id + '\u0000' + b.text;   // text changed under the same id = a new piece
-      if (!(b.x0 >= 0 && b.y0 >= 0 && b.x1 <= W && b.y1 <= H)) { partial[key] ??= { id: b.id, text: b.text, t0: t }; continue; }
+      if (!(b.x0 >= 0 && b.y0 >= 0 && b.x1 <= W && b.y1 <= H)) { partial[key] ??= { id: b.id, text: b.text, t0: t, y1: b.y1 }; continue; }
       vis.add(key);
-      const s = seen[key] ??= { id: b.id, text: b.text, t0: t, run: 0, done: false };
+      const s = seen[key] ??= { id: b.id, text: b.text, t0: t, run: 0, done: false, y1: b.y1 };
       if (!s.done) s.run = Math.min(t + STEP, window.DUR) - s.t0;
     }
     for (const k in seen) if (!vis.has(k)) seen[k].done = true;   // only the first continuous on-screen stretch counts
@@ -48,4 +51,11 @@ for (const s of res.seen) {
   console.log(`${ok ? 'OK ' : 'BAD'} ${s.id.padEnd(18)} at ${s.t0.toFixed(2)}s  ${String([...s.text].filter(c => !/\s/.test(c)).length).padStart(3)} chars  need ${n.toFixed(2)}s  got ${s.run.toFixed(2)}s  ${JSON.stringify(s.text.slice(0, 24))}`);
 }
 for (const s of res.partial) { bad++; console.log(`BAD ${s.id.padEnd(18)} at ${s.t0.toFixed(2)}s  never fully visible (its box is outside the frame)  ${JSON.stringify(s.text.slice(0, 24))}`); }
+// the subtitle band: the words of the film sit at the bottom, and nothing else may be down there
+const BAND = +opt('--band', 0);
+if (BAND > 0) {
+  for (const s of [...res.seen, ...res.partial]) {
+    if (s.y1 > BAND) { bad++; console.log(`BAD ${s.id.padEnd(18)} at ${s.t0.toFixed(2)}s  overlaps the subtitle band (its box reaches y=${Math.round(s.y1)}, the band starts at ${BAND})  ${JSON.stringify(s.text.slice(0, 24))}`); }
+  }
+}
 process.exit(bad ? 1 : 0);

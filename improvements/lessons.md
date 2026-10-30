@@ -18,6 +18,9 @@ Distilled from the retro records in [`retro/`](retro/). Each line is a rule; eac
 - **A value that changes every frame must not be rendered as text** — a label that ticks is a new text piece every tick, and the reading check needs each piece to hold. — Guard: `core/render/review.sh` (readcheck) reports it; the rule is in `retro/2026-10-30-tap-02.md`.
 - **Every visible string goes through `text()`** — only `text()` registers the box the reading check measures, so a raw `fillText()` is a string no check can see. — Guard: `core/render/drawcheck.mjs` reports a raw `fillText()` in the shot file; `DIRECTOR.md` §11.
 - **A marker stroke goes behind the words it marks.** — Guard: none — the contact sheet shows it; recorded in `retro/2026-10-30-tap-02.md`.
+- **A blurred picture is a look; blurred letters are a mess** — a transition may smear the frame, but the words are drawn again, sharp, on top. — Guard: none (the picture shows it); `DIRECTOR.md` §10.
+- **The bottom of the frame belongs to the subtitles** — nothing else may be drawn there, and a caption under the words is the same sentence twice. — Guard: `core/render/readcheck.mjs --band 880`, wired into `core/render/review.sh`; `DIRECTOR.md` §11.
+- **The picture carries labels and numbers, not the voice** — the subtitle already says the sentence. — Guard: `DIRECTOR.md` §11 (a writing rule; no script can decide it).
 - **Measure the string against the box it lives in, not the box against the frame** — a clipped panel cuts a title in half without any error. — Guard: none — the contact sheet shows it; recorded in `retro/2026-10-30-tap-02.md`.
 - **A gate that cannot fail the build is decoration.** — Guard: `films/*/build.sh` exits with the review's status; `CODING_STANDARDS.md` R4.
 - **The rationale of a film belongs with the film.** — Guard: `.gitignore` keeps `films/*/TREATMENT.md` trackable.
