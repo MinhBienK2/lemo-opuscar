@@ -60,14 +60,18 @@ Trong `channels/nhan-vat/<tập>/`:
 
 ### 3b. Bảng nhân vật (cast sheet)
 
-`channels/nhan-vat/cast/index.html` là trang của kênh: nó **không phải phim**, không có lời, không có
+`channels/nhan-vat/demo/index.html` là trang của kênh: nó **không phải phim**, không có lời, không có
 nhạc, không có phụ đề. Nó là một trang tuân thủ hợp đồng trang (`window.READY`, `window.render(t)`,
 `window.DUR`, `window.TEXTS(t)`) nên các công cụ của thư viện vẫn chạy được với nó:
 
 ```sh
-node core/render/still.mjs channels/nhan-vat/cast 0.5 1.5 --out /tmp/castsheet
-node core/render/readcheck.mjs channels/nhan-vat/cast
+sh channels/nhan-vat/demo/build.sh                                 # dựng demo/test.mp4 (10 s), test.jpg, styleframe.jpg
+node core/render/still.mjs channels/nhan-vat/demo 0.5 1.5 --out /tmp/castsheet
+node core/render/readcheck.mjs channels/nhan-vat/demo
 ```
+
+Máy không có GPU thì backend WebGL phải là phần mềm: `build.sh` tự đặt `LEMO_ANGLE=swiftshader` nếu
+biến đó chưa có.
 
 Nếu thêm một nhân vật, thêm `cast/<tên>.json` và sửa trang để vẽ thêm một cặp khung.
 

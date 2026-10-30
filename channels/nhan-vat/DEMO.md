@@ -1,17 +1,13 @@
 # Nhân Vật — bảng nhân vật (bảng demo của kênh)
 
-Bảng demo của kênh này **không phải một phim**: nó là **bảng nhân vật** (`cast/index.html`) — một trang
-web vẽ **Bích** hai lần, bản 2D bên trái, bản 3D bên phảa, cùng một đặc tả `cast/bich.json`, cùng một
-tư thế ở mỗi giây. Không lời, không nhạc, không phụ đề, không thẻ cuối.
+Bảng demo của kênh này là **bảng nhân vật** (`demo/index.html`) — một trang web vẽ **Bích** hai lần,
+bản 2D bên trái, bản 3D bên phải, cùng một đặc tả `cast/bich.json`, cùng một tư thế ở mỗi giây. Không
+lời, không nhạc, không phụ đề, không thẻ cuối.
 
-Demo: *Bích — một đặc tả, hai hình hài* (10 s, vòng lặp) · `cast/index.html`
+Demo: *Bích — một đặc tả, hai hình hài* (10 s, vòng lặp) · `demo/index.html` → `demo/test.mp4`
 
-<!--
-Hướng dẫn điền (xoá sau khi viết):
-- Mọi thứ riêng của bảng demo này: câu chuyện của nó (ở đây là một đặc tả và hai bản dựng), bảng cảnh,
-- bảng màu thật của nhân vật, các bước dựng, và cái bẫy của chính bản demo này.
-- Số ở đây là ví dụ; luật đằng sau nó nằm ở STYLE.md.
--->
+`demo/build.sh` dựng nó: `sh channels/nhan-vat/demo/build.sh` → `test.mp4` (10 s), `test.jpg` (poster),
+`styleframe.jpg` (khung đã duyệt). Không có `mix.py`: bảng demo không có tiếng.
 
 ## Cấu trúc
 
@@ -90,24 +86,30 @@ Bảng demo này **không có thẻ cuối**: nó là một trang, vòng lặp v
 
 ## Ghi chú dựng
 
-Bảng demo không có `build.sh` và không có `mix.py`: nó không dựng video. Nó là một trang tuân thủ **hợp
-đồng trang** của thư viện, nên các công cụ vẫn chạy được với nó:
+Bảng demo là một trang tuân thủ **hợp đồng trang** của thư viện, nên các công cụ chạy được với nó:
 
 ```sh
-node core/render/still.mjs channels/nhan-vat/cast 0.5 1.5 --out /tmp/castsheet   # ảnh để soi
-node core/render/readcheck.mjs channels/nhan-vat/cast                            # chữ trên trang
+sh channels/nhan-vat/demo/build.sh                                # test.mp4 + test.jpg + styleframe.jpg
+node core/render/still.mjs channels/nhan-vat/demo 0.5 1.5 --out /tmp/castsheet   # ảnh để soi
+node core/render/readcheck.mjs channels/nhan-vat/demo                            # chữ trên trang
 ```
 
 Cấu trúc tệp:
 
 ```
-channels/nhan-vat/cast/
-├── bich.json      # đặc tả
-└── index.html     # trang bảng nhân vật: import map (three), hai canvas, window.render/DUR/TEXTS
+channels/nhan-vat/
+├── cast/bich.json      # đặc tả
+└── demo/
+    ├── index.html      # trang bảng nhân vật: import map (three), hai canvas, window.render/DUR/TEXTS
+    ├── build.sh        # dựng test.mp4, test.jpg, styleframe.jpg
+    ├── CREDITS
+    ├── test.mp4        # bản demo: 10 giây, vòng lặp, không có tiếng
+    ├── test.jpg
+    └── styleframe.jpg
 ```
 
-Trang tự nó làm ba việc: nạp đặc tả qua `loadSpec('bich.json')`, dựng hai adapter (`createView` +
-`createCharacter` cho cả hai), và mỗi khung hình đẩi **một** `poseAt(t)` vào cả hai.
+Trang tự nó làm ba việc: nạp đặc tả qua `loadSpec('../cast/bich.json')`, dựng hai adapter (`createView` +
+`createCharacter` cho cả hai), và mỗi khung hình đẩy **một** `poseAt(t)` vào cả hai.
 
 Trang **phải** có import map cho `three` (như `styles/backrooms/demo/index.html`), nếu không trang chết
 ở dòng import của adapter 3D.

@@ -121,7 +121,7 @@ poseAt(t);                          // the channel's rest pose at second t — a
 ```
 
 `poseAt(t)` is deterministic: the same second always gives the same pose, in every adapter, on every
-machine. It is the pose of the **cast sheet** (`channels/nhan-vat/cast/`), keyframed over a ten-second
+machine. It is the pose of the **cast sheet** (`channels/nhan-vat/demo/`), keyframed over a ten-second
 loop; a film of the channel may key its own.
 
 The face is a table of numbers (`EXPRESSIONS` in `cast.mjs`), not a drawing: the 2D adapter draws it, the
@@ -131,7 +131,7 @@ The face is a table of numbers (`EXPRESSIONS` in `cast.mjs`), not a drawing: the
 
 1. Write `channels/<channel>/cast/<name>.json` with the fields above.
 2. Add it to the cast sheet: fetch the new spec and give it a second pair of canvases (see
-   `channels/nhan-vat/cast/index.html`).
+   `channels/nhan-vat/demo/index.html`).
 3. Nothing else. The adapters read the spec; they are not changed per character.
 
 If the new character needs a **new hairstyle, eye shape or mouth shape**, that is not a spec change: add

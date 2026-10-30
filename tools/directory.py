@@ -124,6 +124,19 @@ EDITS = [
      'copied folder carries the previous episode\'s identity with it — its treatment, its research file, its title and\n'
      'its name — and `core/render/filmcheck.mjs` reports those.\n',
      ''),
+    # the layout contract is a file of the repository; this edition does not ship it
+    ('AGENTS.md',
+     '| Where a film, a channel or an episode lives, and what a tool may assume about it | [`docs/layout.md`](docs/layout.md) — the layout contract every tool is built against |\n',
+     ''),
+    ('AGENTS.md',
+     ' The whole contract is [`docs/layout.md`](docs/layout.md).',
+     ' The layout of this edition is the folder the user starts from.'),
+    ('TECHNIQUE.md',
+     '[`docs/layout.md`](docs/layout.md).\n',
+     'The layout of this edition is the folder the user starts from.\n'),
+    ('core/README.md',
+     'The rules it applies are in [`../docs/layout.md`](../docs/layout.md):',
+     'The rules it applies are:'),
 ]
 
 # fetch.sh runs its Python from a here-document, which the portal reads as "download and run": ship that Python as a file

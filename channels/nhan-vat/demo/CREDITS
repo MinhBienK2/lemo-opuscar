@@ -1,0 +1,14 @@
+The cast sheet of the channel "Nhân Vật" (Characters) — Bích, one character drawn in 2D and in 3D from one
+specification.
+
+Drawing: the cast module of the library (core/cast/cast.mjs — the specification, the geometry, the pose model)
+and its two adapters (core/cast/adapter-2d.mjs, core/cast/adapter-3d.mjs).
+
+Type: Lilita One and Fredoka (SIL Open Font License, core/fonts/OFL.md).
+
+3D: three.js (MIT), served from the library's node_modules.
+
+Everything on this page is drawn in code: no image and no video was generated, and no stock material is used.
+The character's colours come from the specification (channels/nhan-vat/cast/bich.json).
+
+The demo film is silent by design: it is a sheet, not a story.
