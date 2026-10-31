@@ -18,12 +18,16 @@ export function sheet(g, x, y, w, h, rot = 0, o = {}) {
 
 // ——— handwriting: the text is revealed from left to right, as the marker writes it ———
 export function handText(g, s, x, y, o = {}) {
+  if (o.p !== undefined && o.p <= 0) return 0;
   const size = o.size || 44, fam = o.fam || 'Patrick Hand', weight = o.weight || 400;
   g.save();
   g.font = font(weight, size, fam); g.textAlign = o.align || 'left'; g.textBaseline = o.base || 'alphabetic';
   const w = g.measureText(s).width;
   const x0 = o.align === 'center' ? x - w / 2 : o.align === 'right' ? x - w : x;
-  if (o.p !== undefined && o.p < 1) { g.beginPath(); g.rect(x0 - 12, y - size, w * o.p + 24, size * 2.4); g.clip(); }
+  if (o.p !== undefined && o.p < 1) {
+    const prog = Math.max(0, Math.min(1, o.p));
+    g.beginPath(); g.rect(x0 - 4, y - size * 1.2, w * prog + 6, size * 2.4); g.clip();
+  }
   text(g, s, x, y, { font: g.font, align: o.align || 'left', base: o.base || 'alphabetic', fill: o.col || INK });
   g.restore();
   return w;
