@@ -1,0 +1,72 @@
+[
+  {
+    "id": "hook",
+    "text": "Một giờ sáng. Mắt bạn đã cay xè, nhưng ngón tay vẫn không chịu rời khỏi màn hình.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+4%",
+    "pitch": "-6Hz"
+  },
+  {
+    "id": "know",
+    "text": "Bạn biết rõ ngày mai bảy giờ phải thức dậy. Nhưng kỳ lạ là, càng mệt, bạn lại càng không muốn đi ngủ.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+4%",
+    "pitch": "-6Hz"
+  },
+  {
+    "id": "intro",
+    "text": "Chào bạn, mình là Kẻ Nghĩ Nhiều. Hôm nay: nghịch lý thức khuya trả thù.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "term",
+    "text": "Cảm giác này trong tâm lý học có một cái tên rất đắt: Bedtime Procrastination, hay trì hoãn giờ ngủ.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+4%",
+    "pitch": "-6Hz"
+  },
+  {
+    "id": "daytime",
+    "text": "Nó thường xảy ra khi ban ngày của bạn bị chiếm trọn bởi công việc, học tập và kỳ vọng của người khác.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+4%",
+    "pitch": "-6Hz"
+  },
+  {
+    "id": "revenge",
+    "text": "Cả ngày không có lấy một giờ cho riêng mình, nên khi đêm xuống, bạn thức khuya như một cách đòi lại quyền tự do.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+4%",
+    "pitch": "-6Hz"
+  },
+  {
+    "id": "irony",
+    "text": "Nhưng trớ trêu thay: người duy nhất phải gánh chịu hậu quả của cuộc trả thù đó, lại là chính bạn vào sáng hôm sau.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+4%",
+    "pitch": "-6Hz"
+  },
+  {
+    "id": "roi",
+    "text": "Rối luôn nhắc mình: màn hình không mang lại tự do, nó chỉ đánh cắp nốt phần năng lượng còn lại.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+4%",
+    "pitch": "-6Hz"
+  },
+  {
+    "id": "action",
+    "text": "Tối nay, thay vì đòi lại thời gian từ giấc ngủ, hãy thử tự thưởng cho mình mười lăm phút tự do thật sự trước khi lên giường.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+4%",
+    "pitch": "-6Hz"
+  },
+  {
+    "id": "close",
+    "text": "Đừng để đêm muộn phải trả món nợ của ban ngày. Mình là Kẻ Nghĩ Nhiều. Ngủ ngon nhé.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+4%",
+    "pitch": "-7Hz"
+  }
+]

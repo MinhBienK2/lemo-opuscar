@@ -136,6 +136,31 @@ for (const arg of args) {
     if (extra.length) fail(name, `${extra.length} timeline entry(ies) have no line: ${extra.slice(0, 6).join(', ')}`);
     if (!missing.length && !extra.length && ids.length) ok(name, `${ids.length} lines and ${seq.length} timeline entries match`);
   }
+
+  // 4. sound events and voice check (prevents silent films with empty window.EV)
+  const eventsPath = path.join(folder, 'events.json');
+  const eventsRaw = read(eventsPath);
+  if (eventsRaw !== null) {
+    try {
+      const evData = JSON.parse(eventsRaw);
+      const evList = Array.isArray(evData.ev) ? evData.ev : [];
+      const voiceEvs = evList.filter(e => e.type === 'voice');
+      if (voiceEvs.length === 0) {
+        fail(name, 'events.json has 0 voice events — window.EV in src/film.js was left empty; the audio will have no speech!');
+      }
+    } catch {}
+  }
+
+  // 5. anti-robotic conversational script check (prevents slide-deck bullet scripts)
+  if (linesRaw !== null) {
+    try {
+      const parsed = JSON.parse(linesRaw);
+      const roboticLines = (Array.isArray(parsed) ? parsed : []).filter(l => /^(?:Một|Hai|Ba|Bốn|Năm|Sáu|Bảy|Tám|Chín|Mười|\d+)\s*[—–-]/i.test(l.text || ''));
+      if (roboticLines.length > 2) {
+        fail(name, `voice/lines.json has ${roboticLines.length} robotic numbered lines ("Một —", "Hai —"). Scripts must be conversational storytelling, not slide decks!`);
+      }
+    } catch {}
+  }
 }
 
 if (bad) { console.log(`filmcheck: FAILED (${bad} problem${bad > 1 ? 's' : ''})`); process.exit(1); }

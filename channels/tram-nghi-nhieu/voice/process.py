@@ -23,7 +23,7 @@ for L in lines:
     y = sosfilt(butter(2, 90, 'hp', fs=SR, output='sos'), y)
     y = peq(y, 3400, 2.0, .9); y = peq(y, 250, -1.5, 1.0)
     y = (y / (np.abs(y).max() + 1e-9) * .9).astype(np.float32)
-    sf.write(os.path.join(VOICE, 'proc', L['id'] + '.wav'), y, SR); dur[L['id']] = round(len(y) / sr, 3)
+    sf.write(os.path.join(VOICE, 'proc', L['id'] + '.wav'), y, SR); dur[L['id']] = round(len(y) / SR, 3)
     hop = SR // 24; win = int(.05 * SR)
     pad = np.pad(y, (win // 2, win)); n = len(y) // hop + 1   # windowed frames centred on each 1/24 s
     S = np.abs(np.fft.rfft(np.stack([pad[i * hop: i * hop + win] for i in range(n)]) * np.hanning(win), 4096)).T

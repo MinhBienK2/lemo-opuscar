@@ -284,8 +284,7 @@ fs.writeFileSync('$OUT/cues.json', JSON.stringify(T.cues.map(c => ({ t0: c.t0, t
 sh core/render/mux.sh "$OUT/video.mp4" "$OUT/mix.wav" "$OUT/$NAME.mp4" 24 0
 # the poster is a frame of this film, at 40% of its length — never a time copied from another film
 PS=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$OUT/$NAME.mp4" 2>/dev/null | cut -d, -f1)
-if [ -n "$PS" ]; then PS=$(awk -v d="$PS" 'BEGIN { printf "%.1f", d * 0.4 }'); else PS=1; fi
-ffmpeg -v error -y -ss "$PS" -i "$OUT/$NAME.mp4" -frames:v 1 -q:v 2 "$OUT/poster.jpg"
+if [ -n "$PS" ]; then PS=$(LC_ALL=C awk -v d="$PS" 'BEGIN { printf "%.1f", d * 0.4 }'); else PS=1; fi
 # the deliverables stay in the project folder, where they are committed and where the review finds them.
 # The captions are already burned into the picture: the .srt is the transcript for the platform, and it is not
 # named like the film so that a player does not load it on top of the captions that are in the picture.

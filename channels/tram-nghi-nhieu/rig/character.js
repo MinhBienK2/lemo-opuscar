@@ -16,6 +16,7 @@ export const PAL = {
   cyan: { f: '#67e8f9', s: '#22b8d6', h: '#b6f3ff', l: '#171a2b' },
   red: { f: '#f04462', s: '#c22a38', h: '#ff9aa0', l: '#171a2b' },
   green: { f: '#4ade80', s: '#2aa85a', h: '#a7f3c4', l: '#171a2b' },
+  accent: { f: '#f7bd27', s: '#d99516', h: '#ffd34f', l: '#171a2b' },
   yellow: '#f7bd27',
   bulb: '#ffd34f',
   mouth: '#a94345',

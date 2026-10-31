@@ -1,0 +1,86 @@
+[
+  {
+    "id": "hook",
+    "text": "Hôm nay mình mặc chiếc áo có hình con rùa kỳ quặc, bước vào quán cà phê quen.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "feel",
+    "text": "Và cả quán, dường như xoay lại nhìn mình.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "intro",
+    "text": "Chào bạn, mình là Kẻ Nghĩ Nhiều. Hôm nay mình kể một câu chuyện ở quán cà phê đó.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "term",
+    "text": "Cảm giác quen thuộc này có một cái tên: hiệu ứng ánh đèn sân khấu.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "study",
+    "text": "Năm hai nghìn, ở Cornell, ba nhà tâm lý học làm một thí nghiệm rất đơn giản.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "guess",
+    "text": "Người mặc áo đoán gần một nửa số người trong phòng sẽ để ý tới cái áo.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "real",
+    "text": "Nhưng khảo sát thật cho thấy chỉ khoảng hai mươi ba phần trăm người nhớ ra được hình trên áo.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "roi",
+    "text": "Rối chỉ vào con số: hai mươi ba phần trăm, tức là vẫn có người nhìn bạn, chỉ là ít hơn bạn tưởng nhiều.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "mech",
+    "text": "Sai lệch ấy không phải do bịa. Người ta neo vào cảm giác của chính mình rồi điều chỉnh, nhưng chưa điều chỉnh đủ.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "anchor",
+    "text": "Trong một thí nghiệm khác, hơn bảy phần mười số người được hỏi nói họ đã nghĩ tới một con số khác trước đó.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "nuance",
+    "text": "Hiệu ứng này to nhất lúc bạn đang bị người khác đánh giá.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "action",
+    "text": "Tối nay, trước khi rời quán, hãy nhìn xem người bên cạnh thật sự đang nhìn cái gì. Mình là Kẻ Nghĩ Nhiều.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  }
+]

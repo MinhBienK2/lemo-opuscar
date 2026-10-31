@@ -115,7 +115,7 @@ styles/*/demo/**/*.pdf
 **/TREATMENT.md
 # 例外：用户自己的片子的 treatment 是交付物（DIRECTOR.md §11），跟着片子进仓库
 !films/*/TREATMENT.md
-!channels/*/*/TREATMENT.md
+!channels/**/TREATMENT.md
 **/PRODUCTION_LOG*
 # The supervisor's working log: one entry per run, rewritten every fifteen minutes. The findings it
 # produces are promoted into improvements/retro/, which is the record that is kept.

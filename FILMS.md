@@ -8,6 +8,8 @@ Every film of the library, one row each. The one-shots live in `films/`; the epi
 |---|---|---|---|
 | Trạm Nghĩ Nhiều — tập 1: Tại sao càng rảnh, ta càng thấy mệt? | `channels/tram-nghi-nhieu/series/nghich-ly-doi-thuong/tap-01-cang-ranh-cang-met/` | 1:51 | `channels/tram-nghi-nhieu/series/nghich-ly-doi-thuong/tap-01-cang-ranh-cang-met/tram-nghi-nhieu-tap-01.mp4` |
 | Trạm Nghĩ Nhiều — tập 2: Tại sao ta hay trì hoãn? | `channels/tram-nghi-nhieu/series/tam-ly-hanh-vi/tap-01-tam-ly-tri-hoan/` | 1:42 | `channels/tram-nghi-nhieu/series/tam-ly-hanh-vi/tap-01-tam-ly-tri-hoan/tram-nghi-nhieu-tap-02.mp4` |
+| Trạm Nghĩ Nhiều — Thức khuya trả thù: Tại sao càng mệt ta càng không muốn ngủ? | `channels/tram-nghi-nhieu/series/tam-ly-hanh-vi/tap-02-thuc-khuya-tra-thu/` | 1:05 | `channels/tram-nghi-nhieu/series/tam-ly-hanh-vi/tap-02-thuc-khuya-tra-thu/tram-nghi-nhieu-series-tam-ly-hanh-vi-tap-02-thuc-khuya-tra-thu.mp4` |
+| Trạm Nghĩ Nhiều — Tập 03: Hiệu ứng ánh đèn sân khấu: Không ai để ý bạn nhiều như bạn nghĩ | `channels/tram-nghi-nhieu/series/tam-ly-hanh-vi/tap-03-hieu-ung-anh-den-san-khau/` | 1:10 | `channels/tram-nghi-nhieu/series/tam-ly-hanh-vi/tap-03-hieu-ung-anh-den-san-khau/tram-nghi-nhieu-series-tam-ly-hanh-vi-tap-03-hieu-ung-anh-den-san-khau.mp4` |
 | Trạm Nghĩ Nhiều — tập 3: Tại sao ta không tập trung được? | `channels/tram-nghi-nhieu/series/vet-bam-than-kinh/tap-01-khong-the-tap-trung/` | 19:55 | `channels/tram-nghi-nhieu/series/vet-bam-than-kinh/tap-01-khong-the-tap-trung/tram-nghi-nhieu-tap-03.mp4` |
 | Phi vụ triệu đô trong 2 phút — a Money Heist explainer in a talking-head toon | `films/host-toon-test/` | 2:12 | `films/host-toon-test/phi-vu-trieu-do-2-phut.mp4` |
 

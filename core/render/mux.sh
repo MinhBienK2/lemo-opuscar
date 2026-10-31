@@ -83,11 +83,38 @@ if [ "${LEMO_COLOR:-}" = "bt709" ]; then
 else
   VF="$VF,format=yuv420p"; CARGS=""
 fi
-# shellcheck disable=SC2086  (CARGS must split on spaces into several arguments; empty by default)
-ffmpeg -y -loglevel error -i "$V" -i "$A" \
-  -filter_complex "[0:v]$VF[v];[1:a]$LN,aresample=48000$PAD[a]" \
-  -map "[v]" -map "[a]" -c:v libx264 -preset slow -crf 19 -r "$FPS" $CARGS -c:a aac -b:a 256k -movflags +faststart -shortest "$O" \
-  || { rm -f "$O"; die "ffmpeg failed while writing '$O' (its message is above)"; }
+# Offload heavy x264 encode to remote host (e.g. VPS muse) when reachable
+REMOTE_HOST="${LEMO_REMOTE_FFMPEG:-muse}"
+USE_REMOTE=0
+if [ -n "$REMOTE_HOST" ] && ssh -o ConnectTimeout=3 -o BatchMode=yes "$REMOTE_HOST" "true" 2>/dev/null; then
+  USE_REMOTE=1
+fi
+
+if [ "$USE_REMOTE" = 1 ]; then
+  echo "mux.sh: offloading heavy x264 encode to remote VPS ($REMOTE_HOST)" >&2
+  RDIR="/tmp/lemo-mux-$$"
+  ssh "$REMOTE_HOST" "mkdir -p $RDIR" || USE_REMOTE=0
+fi
+
+if [ "$USE_REMOTE" = 1 ]; then
+  scp -q "$V" "$A" "$REMOTE_HOST:$RDIR/"
+  RV="$RDIR/$(basename "$V")"
+  RA="$RDIR/$(basename "$A")"
+  RO="$RDIR/$(basename "$O")"
+  # shellcheck disable=SC2086
+  ssh "$REMOTE_HOST" "ffmpeg -y -loglevel error -i \"$RV\" -i \"$RA\" \
+    -filter_complex \"[0:v]$VF[v];[1:a]$LN,aresample=48000$PAD[a]\" \
+    -map \"[v]\" -map \"[a]\" -c:v libx264 -preset slow -crf 19 -r \"$FPS\" $CARGS -c:a aac -b:a 256k -movflags +faststart -shortest \"$RO\"" \
+    || { ssh "$REMOTE_HOST" "rm -rf $RDIR" 2>/dev/null; rm -f "$O"; die "remote ffmpeg on $REMOTE_HOST failed"; }
+  scp -q "$REMOTE_HOST:$RO" "$O"
+  ssh "$REMOTE_HOST" "rm -rf $RDIR" 2>/dev/null
+else
+  # shellcheck disable=SC2086  (CARGS must split on spaces into several arguments; empty by default)
+  ffmpeg -y -loglevel error -i "$V" -i "$A" \
+    -filter_complex "[0:v]$VF[v];[1:a]$LN,aresample=48000$PAD[a]" \
+    -map "[v]" -map "[a]" -c:v libx264 -preset slow -crf 19 -r "$FPS" $CARGS -c:a aac -b:a 256k -movflags +faststart -shortest "$O" \
+    || { rm -f "$O"; die "ffmpeg failed while writing '$O' (its message is above)"; }
+fi
 [ -s "$O" ] || { rm -f "$O"; die "no output was written to '$O'"; }
 echo "$O"
 R=$(ffmpeg -hide_banner -nostats -i "$O" -af ebur128=peak=true -f null - 2>&1 | grep -E "^\s+(I|LRA|Peak):" | head -3)

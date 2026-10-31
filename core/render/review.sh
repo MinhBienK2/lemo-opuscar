@@ -44,7 +44,9 @@ run readcheck node "$HERE/core/render/readcheck.mjs" "$FOLDER" $BAND
 # The ASR script is the episode's own, or the channel's: the channel holds it once, the episode does not copy it.
 ASR="$FOLDER/voice/asr_vi.py"
 if [ ! -f "$ASR" ]; then
-  CHANNEL=$(cd "$FOLDER/.." && pwd)
+  # the channel is the folder above the episode that holds CHANNEL.md — the episode may sit in a series
+  # folder, so the search walks up instead of looking one level up
+  CHANNEL=$(cd "$FOLDER" && while [ ! -f CHANNEL.md ] && [ "$PWD" != / ]; do cd ..; done && pwd)
   [ -f "$CHANNEL/voice/asr_vi.py" ] && ASR="$CHANNEL/voice/asr_vi.py"
 fi
 if [ -f "$FOLDER/voice/lines.json" ] && { [ -f "$ASR" ] || [ -f "$HERE/core/tts/asr_check.py" ]; }; then
