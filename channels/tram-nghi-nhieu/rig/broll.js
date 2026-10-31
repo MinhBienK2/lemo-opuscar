@@ -62,6 +62,28 @@ export function text(g, s, x, y, o = {}) {
   g.fillStyle = o.fill || CREAM; g.fillText(s, x, y);
   return g.measureText(s).width;
 }
+
+// ——— progressive text reveal: reveals text from left to right as voice speaks ———
+// p <= 0: absolutely nothing drawn (bulletproof invariant against premature character leaks)
+// p >= 1: full text drawn normally with zero clipping overhead
+export function revealText(g, s, x, y, p, o = {}) {
+  if (p === undefined || p <= 0) return 0;
+  if (p >= 1) return text(g, s, x, y, o);
+  g.save();
+  g.font = o.font || font(800, 48);
+  g.textAlign = o.align || 'left';
+  g.textBaseline = o.base || 'alphabetic';
+  const w = g.measureText(s).width;
+  const px = parseFloat(/(\d+(\.\d+)?)px/.exec(g.font)?.[1] || 48);
+  const x0 = o.align === 'center' ? x - w / 2 : o.align === 'right' ? x - w : x;
+  const prog = Math.max(0, Math.min(1, p));
+  g.beginPath();
+  g.rect(x0 - 2, y - px * 1.1, w * prog + 4, px * 2.2);
+  g.clip();
+  text(g, s, x, y, o);
+  g.restore();
+  return w;
+}
 export function wrap(g, s, maxW) {
   const words = s.split(' '), out = []; let cur = '';
   for (const w of words) { const t = cur ? cur + ' ' + w : w; if (g.measureText(t).width > maxW && cur) { out.push(cur); cur = w; } else cur = t; }

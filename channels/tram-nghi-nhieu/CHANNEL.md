@@ -194,3 +194,6 @@ Mọi AI Agent khi nhận đề tài làm video cho kênh BẮT BUỘC phải tu
 4. **Bắt buộc mảng sự kiện âm thanh (`window.EV`)**:
    - Tuyệt đối CẤM để `window.EV = []` rỗng (sẽ làm mất toàn bộ tiếng nói).
    - Bắt buộc đăng ký đầy đủ các sự kiện `voice`, nhạc chuyển đoạn (`music: A, B, C, end`) và hiệu ứng foley (`whoosh`, `pop`, `paper`, `marker`, `ting`, `boing`).
+5. **Quy tắc xuất hiện chữ an toàn (Text Reveal Invariant)**:
+   - Bắt buộc dùng `revealText(g, s, x, y, p, o)` từ `rig/broll.js` cho mọi hiệu ứng chữ viết tay/chữ chạy từ trái sang phải.
+   - Tuyệt đối CẤM tự chế hàm cắt chữ (`clip()`) thủ công với các hằng số offset cộng thêm — điều này sẽ làm rò rỉ ký tự đầu (`C`, `2`, `n`) nằm trơ trọi trên màn hình trước khi giọng đọc nhắc tới.
