@@ -1,0 +1,24 @@
+# Credits & licences: Trạm Nghĩ Nhiều — Tập 03: Nghịch lý lựa chọn (episode `series/nghich-ly-doi-thuong/tap-03-nghich-ly-lua-chon`)
+
+Every third-party asset of the film, with its source and its licence. The shared code belongs to the
+channel and is used from there — it is never copied into this episode.
+
+| Asset | Source | Licence |
+|---|---|---|
+| All drawing, the shots and the animation (`src/`) | Canvas 2D code written for this episode | yours |
+| The character rig and the shared drawing helpers (`../../rig/`) | the channel's shared code — used from the channel, never copied here | yours / MIT |
+| The mix (`../../mix.py`) | the channel's shared mix: music, ambience and foley, all synthesized with numpy (no sample library) | yours / MIT |
+| The voice (`../../voice/`) | the channel's voice pipeline — a stock neural voice (Microsoft Edge `vi-VN-NamMinhNeural`), no cloning, no voice of any person | the voice service's terms of use |
+| The fonts (`../../fonts/`) | Be Vietnam Pro + Patrick Hand, shipped with the channel | SIL Open Font License 1.1 (see the OFL files in the channel's `fonts/`) |
+| Research | the papers listed in `research/FACTS.md` — no image, audio, logo, chart or dataset from any research group is used; every chart in the film is drawn in code from the published numbers | citations in `research/FACTS.md` |
+
+Notes for this episode:
+
+- The figures on screen (6 và 24 vị mứt; 30% và 3%; 50 thí nghiệm, 63 điều kiện, 5.036 người; hiệu ứng
+  trung bình 0,02 với khoảng tin −0,09…+0,12; 504 người ở bản lặp lại; 99 quan sát, 53 nghiên cứu,
+  7.202 người; b = 0,50) come from the papers cited in `research/FACTS.md`, and every one of them is
+  checked against that file by `tools/check_claims.py`.
+- The café counter, the two jam displays, the newsroom wall, the cork board and every chart are drawn
+  from scratch in code. No photograph, no stock image, no third-party artwork.
+- The sound of the episode is synthesized: the score, the room tones and the foley all come from the
+  channel's `mix.py` (numpy oscillators and filtered noise). No music library, no sample pack.

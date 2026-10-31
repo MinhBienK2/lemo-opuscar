@@ -1,0 +1,291 @@
+1
+00:00:01,600 --> 00:00:05,011
+Mình đang cầm thực đơn, và mình không chọn được món nào.
+
+2
+00:00:05,211 --> 00:00:07,971
+Không phải vì chưa biết mình muốn ăn gì.
+
+3
+00:00:07,971 --> 00:00:10,992
+Mà vì món nào trong thực đơn này cũng nghe ngon.
+
+4
+00:00:11,392 --> 00:00:13,432
+Mình là Kẻ Nghĩ Nhiều.
+
+5
+00:00:13,432 --> 00:00:17,720
+Hôm nay: nghịch lý lựa chọn, tại sao càng nhiều lựa chọn ta lại càng mệt?
+
+6
+00:00:18,070 --> 00:00:20,530
+Cách giải thích quen thuộc nhất: quá nhiều lựa chọn làm
+
+7
+00:00:20,530 --> 00:00:22,301
+não bạn tê liệp.
+
+8
+00:00:22,341 --> 00:00:26,041
+Nghe hợp lý quá. Nhưng câu này đã được kiểm tra rồi, và
+
+9
+00:00:26,041 --> 00:00:28,955
+kết quả không giống những gì người ta tưởng.
+
+10
+00:00:29,205 --> 00:00:31,925
+Năm hai nghìn, trong một siêu thị, người ta bày hai bàn
+
+11
+00:00:31,925 --> 00:00:36,072
+nếm mứt: sáu vị ở bên trái, hai mươi bốn vị ở bên phải.
+
+12
+00:00:36,172 --> 00:00:38,872
+Bảy mươi ba người dừng lại bên sáu vị, ba mươi phần trăm
+
+13
+00:00:38,872 --> 00:00:42,692
+trong số đó đã mua. Bên kia, một trăm bảy mươi sáu người
+
+14
+00:00:42,692 --> 00:00:46,369
+dừng lại bên hai mươi bốn vị, và chỉ ba phần trăm mua.
+
+15
+00:00:46,569 --> 00:00:49,109
+Câu chuyện này được kể lại khắp nơi như một bằng chứng:
+
+16
+00:00:49,109 --> 00:00:51,884
+càng nhiều lựa chọn, càng ít người chọn.
+
+17
+00:00:52,084 --> 00:00:53,724
+Rồi các nhà khoa học gom năm mươi thí nghiệm, năm nghìn
+
+18
+00:00:53,724 --> 00:00:57,970
+không trăm ba mươi sáu người, và làm lại phép tính.
+
+19
+00:00:58,120 --> 00:01:01,740
+Hiệu ứng trung bình: hai phần trăm. Khoảng tin chạm từ âm
+
+20
+00:01:01,740 --> 00:01:04,342
+chín phần trăm đến mười hai phần trăm.
+
+21
+00:01:04,542 --> 00:01:08,462
+Gần như không có gì. Và càng nhiều lựa chọn, hiệu ứng cũng
+
+22
+00:01:08,462 --> 00:01:10,130
+chẳng khá hơn.
+
+23
+00:01:10,170 --> 00:01:12,230
+Ngay cả thí nghiệm mứt cũng được làm lại ở Đức, với năm
+
+24
+00:01:12,230 --> 00:01:16,188
+trăm linh bốn người, và lần này không còn hiệu ứng nào.
+
+25
+00:01:17,988 --> 00:01:21,568
+Nghiên cứu càng mới thì càng ít tìm ra hiệu ứng. Có cả
+
+26
+00:01:21,568 --> 00:01:23,697
+chuyện thiên lệch xuất bản nữa.
+
+27
+00:01:24,047 --> 00:01:28,143
+Nên nghịch lý lựa chọn, đúng như một câu quảng cáo, là sai.
+
+28
+00:01:29,543 --> 00:01:33,043
+Nhưng cảm giác mệt khi có quá nhiều lựa chọn thì có thật.
+
+29
+00:01:33,043 --> 00:01:34,977
+Chỉ là nguyên nhân thì khác.
+
+30
+00:01:35,177 --> 00:01:38,997
+Thứ làm ta mệt không phải số lựa chọn. Mà là cái giá của
+
+31
+00:01:38,997 --> 00:01:41,131
+việc biết mình đã bỏ cái gì.
+
+32
+00:01:41,231 --> 00:01:45,271
+Càng nhiều lựa chọn, lựa chọn thứ hai càng hấp dẫn. Nó
+
+33
+00:01:45,271 --> 00:01:49,566
+không biến mất. Nó đứng ngay cạnh món bạn vừa chọn.
+
+34
+00:01:49,766 --> 00:01:53,312
+Rồi đầu ta tự so sánh: con đường nào mình đã không đi.
+
+35
+00:01:53,562 --> 00:01:57,302
+Người ta gọi cảm giác đó là hối tiếc. Nó không biến mất
+
+36
+00:01:57,302 --> 00:01:59,035
+khi bạn ăn xong.
+
+37
+00:01:59,075 --> 00:02:02,495
+Và còn một điều ít ai nói tới: tập lựa chọn càng lớn, kỳ
+
+38
+00:02:02,495 --> 00:02:04,295
+vọng của bạn càng cao.
+
+39
+00:02:04,492 --> 00:02:08,172
+Bạn kỳ vọng sẽ gặp đúng món mình muốn. Rồi món nào bạn
+
+40
+00:02:08,172 --> 00:02:10,344
+chọn, cũng thấy hụt một chút.
+
+41
+00:02:10,644 --> 00:02:14,464
+Vậy khi nào lựa chọn mới thực sự làm ta tê liệp? Một phân
+
+42
+00:02:14,464 --> 00:02:16,824
+tích tổng hợp mới hơn, năm mươi ba nghiên cứu, bảy nghìn
+
+43
+00:02:16,824 --> 00:02:20,648
+hai trăm hai người, trả lời bằng bốn yếu tố.
+
+44
+00:02:20,848 --> 00:02:22,568
+Tập lựa chọn có phức tạp không: nhiều món giống nhau,
+
+45
+00:02:22,568 --> 00:02:25,579
+nhiều tiêu chí để cân.
+
+46
+00:02:25,729 --> 00:02:29,069
+Nhiệm vụ có khó không: nhiều thuộc tính, ít thời gian, lại
+
+47
+00:02:29,069 --> 00:02:31,117
+phải giải trình lý do chọn.
+
+48
+00:02:31,267 --> 00:02:34,747
+Bạn có biết mình muốn gì không. Người chưa rõ ý mình thì
+
+49
+00:02:34,747 --> 00:02:36,597
+nhiều lựa chọn càng nguy.
+
+50
+00:02:36,797 --> 00:02:39,896
+Và bạn đang đi mua, hay chỉ đi dạo xem.
+
+51
+00:02:40,096 --> 00:02:42,716
+Người đã có tiêu chí rõ ràng thì nhiều lựa chọn lại tốt
+
+52
+00:02:42,716 --> 00:02:45,850
+hơn. Hiệu ứng đảo chiều hẳn.
+
+53
+00:02:46,100 --> 00:02:49,960
+Nên đừng nghĩ ai cũng cần ít lựa chọn. Người cần là người
+
+54
+00:02:49,960 --> 00:02:51,760
+chưa biết mình muốn gì.
+
+55
+00:02:52,051 --> 00:02:56,071
+Vậy cái cứu vãn không phải là bớt lựa chọn. Mà là có tiêu
+
+56
+00:02:56,071 --> 00:02:58,040
+chí trước khi mở thực đơn.
+
+57
+00:02:58,190 --> 00:03:01,270
+Nhà tâm lý học Herbert Simon gọi đó là satisficing: chọn
+
+58
+00:03:01,270 --> 00:03:03,983
+cái đầu tiên đủ tốt, rồi dừng lại.
+
+59
+00:03:04,183 --> 00:03:08,083
+Cách làm thì như lọc nước: loại từng tiêu chí. Món nào
+
+60
+00:03:08,083 --> 00:03:11,834
+trượt một tiêu chí thì bỏ luôn, khỏi cần so với món khác.
+
+61
+00:03:12,084 --> 00:03:15,004
+Cụ thể thế này: trước khi mở thực đơn, viết ba tiêu chí
+
+62
+00:03:15,004 --> 00:03:16,804
+quan trọng nhất với bạn.
+
+63
+00:03:17,904 --> 00:03:21,660
+Rồi quét một lượt, gạch bỏ món nào không đạt một tiêu chí.
+
+64
+00:03:22,060 --> 00:03:25,500
+Món đầu tiên đạt cả ba tiêu chí: gọi món đó.
+
+65
+00:03:25,500 --> 00:03:27,685
+Đừng so với món thứ hai.
+
+66
+00:03:27,985 --> 00:03:31,814
+Rối nói: một lựa chọn đủ tốt, đã là một lựa chọn.
+
+67
+00:03:32,064 --> 00:03:32,224
+Càng nhiều lựa chọn, ta càng mệt. Nhưng không phải vì có
+
+68
+00:03:32,224 --> 00:03:37,378
+nhiều lựa chọn.
+
+69
+00:03:37,578 --> 00:03:39,318
+Mà vì ta quên viết ra điều mình muốn,
+
+70
+00:03:39,318 --> 00:03:41,620
+trước khi bắt đầu lựa chọn.
+
+71
+00:03:42,020 --> 00:03:45,020
+Lần sau bạn mở một thực đơn, một ứng dụng, hay một sàn
+
+72
+00:03:45,020 --> 00:03:49,120
+thương mại: viết ba tiêu chí trước đã. Mình là Kẻ Nghĩ
+
+73
+00:03:49,120 --> 00:03:52,680
+Nhiều. Hẹn gặp lại ở trạm tiếp theo.

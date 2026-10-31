@@ -1,0 +1,272 @@
+[
+ {
+  "id": "hook",
+  "text": "Mình đang cầm thực đơn, và mình không chọn được món nào.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "hook2",
+  "text": "Không phải vì chưa biết mình muốn ăn gì. Mà vì món nào trong thực đơn này cũng nghe ngon.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "intro",
+  "text": "Mình là Kẻ Nghĩ Nhiều. Hôm nay: nghịch lý lựa chọn, tại sao càng nhiều lựa chọn ta lại càng mệt?",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "myth",
+  "text": "Cách giải thích quen thuộc nhất: quá nhiều lựa chọn làm não bạn tê liệp.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "myth2",
+  "text": "Nghe hợp lý quá. Nhưng câu này đã được kiểm tra rồi, và kết quả không giống những gì người ta tưởng.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "jam",
+  "text": "Năm hai nghìn, trong một siêu thị, người ta bày hai bàn nếm mứt: sáu vị ở bên trái, hai mươi bốn vị ở bên phải.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz",
+  "asr": "Năm 2000, trong một siêu thị, người ta bày hai bàn ném mứt, 6 vị ở bên trái, 24 vị ở bên phải."
+ },
+ {
+  "id": "jam2",
+  "text": "Bảy mươi ba người dừng lại bên sáu vị, ba mươi phần trăm trong số đó đã mua. Bên kia, một trăm bảy mươi sáu người dừng lại bên hai mươi bốn vị, và chỉ ba phần trăm mua.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz",
+  "asr": "73 người dừng lại bên 6 vị, 30 % trong số đó đã mua. Bên kia, 176 người dừng lại bên 24 vị và chỉ 3 phần trăm mua."
+ },
+ {
+  "id": "jam3",
+  "text": "Câu chuyện này được kể lại khắp nơi như một bằng chứng: càng nhiều lựa chọn, càng ít người chọn.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "meta",
+  "text": "Rồi các nhà khoa học gom năm mươi thí nghiệm, năm nghìn không trăm ba mươi sáu người, và làm lại phép tính.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz",
+  "asr": "Rồi các nhà khoa học gom 50 thí nghiệm, 5 .036 người và làm lại phép tính."
+ },
+ {
+  "id": "meta2",
+  "text": "Hiệu ứng trung bình: hai phần trăm. Khoảng tin chạm từ âm chín phần trăm đến mười hai phần trăm.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "meta3",
+  "text": "Gần như không có gì. Và càng nhiều lựa chọn, hiệu ứng cũng chẳng khá hơn.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "rep",
+  "text": "Ngay cả thí nghiệm mứt cũng được làm lại ở Đức, với năm trăm linh bốn người, và lần này không còn hiệu ứng nào.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "meta4",
+  "text": "Nghiên cứu càng mới thì càng ít tìm ra hiệu ứng. Có cả chuyện thiên lệch xuất bản nữa.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "turn",
+  "text": "Nên nghịch lý lựa chọn, đúng như một câu quảng cáo, là sai.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "turn2",
+  "text": "Nhưng cảm giác mệt khi có quá nhiều lựa chọn thì có thật. Chỉ là nguyên nhân thì khác.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "ghost",
+  "text": "Thứ làm ta mệt không phải số lựa chọn. Mà là cái giá của việc biết mình đã bỏ cái gì.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "ghost2",
+  "text": "Càng nhiều lựa chọn, lựa chọn thứ hai càng hấp dẫn. Nó không biến mất. Nó đứng ngay cạnh món bạn vừa chọn.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "ghost3",
+  "text": "Rồi đầu ta tự so sánh: con đường nào mình đã không đi.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "regret",
+  "text": "Người ta gọi cảm giác đó là hối tiếc. Nó không biến mất khi bạn ăn xong.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "bar",
+  "text": "Và còn một điều ít ai nói tới: tập lựa chọn càng lớn, kỳ vọng của bạn càng cao.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "bar2",
+  "text": "Bạn kỳ vọng sẽ gặp đúng món mình muốn. Rồi món nào bạn chọn, cũng thấy hụt một chút.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "four",
+  "text": "Vậy khi nào lựa chọn mới thực sự làm ta tê liệp? Một phân tích tổng hợp mới hơn, năm mươi ba nghiên cứu, bảy nghìn hai trăm hai người, trả lời bằng bốn yếu tố.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz",
+  "asr": "Vậy khi nào lựa chọn mới thực sự làm ta tê lịp? Một phân tích tổng hợp mới hơn 53 nghiên cứu 7 .202 người trả lời bằng 4 yếu tố."
+ },
+ {
+  "id": "f1",
+  "text": "Tập lựa chọn có phức tạp không: nhiều món giống nhau, nhiều tiêu chí để cân.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "f2",
+  "text": "Nhiệm vụ có khó không: nhiều thuộc tính, ít thời gian, lại phải giải trình lý do chọn.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "f3",
+  "text": "Bạn có biết mình muốn gì không. Người chưa rõ ý mình thì nhiều lựa chọn càng nguy.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "f4",
+  "text": "Và bạn đang đi mua, hay chỉ đi dạo xem.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "f5",
+  "text": "Người đã có tiêu chí rõ ràng thì nhiều lựa chọn lại tốt hơn. Hiệu ứng đảo chiều hẳn.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "f6",
+  "text": "Nên đừng nghĩ ai cũng cần ít lựa chọn. Người cần là người chưa biết mình muốn gì.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "model",
+  "text": "Vậy cái cứu vãn không phải là bớt lựa chọn. Mà là có tiêu chí trước khi mở thực đơn.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "model2",
+  "text": "Nhà tâm lý học Herbert Simon gọi đó là satisficing: chọn cái đầu tiên đủ tốt, rồi dừng lại.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "model3",
+  "text": "Cách làm thì như lọc nước: loại từng tiêu chí. Món nào trượt một tiêu chí thì bỏ luôn, khỏi cần so với món khác.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "action",
+  "text": "Cụ thể thế này: trước khi mở thực đơn, viết ba tiêu chí quan trọng nhất với bạn.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "action2",
+  "text": "Rồi quét một lượt, gạch bỏ món nào không đạt một tiêu chí.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "action3",
+  "text": "Món đầu tiên đạt cả ba tiêu chí: gọi món đó. Đừng so với món thứ hai.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "roi",
+  "text": "Rối nói: một lựa chọn đủ tốt, đã là một lựa chọn.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "close",
+  "text": "Càng nhiều lựa chọn, ta càng mệt. Nhưng không phải vì có nhiều lựa chọn.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "close2",
+  "text": "Mà vì ta quên viết ra điều mình muốn, trước khi bắt đầu lựa chọn.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+3%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "next",
+  "text": "Lần sau bạn mở một thực đơn, một ứng dụng, hay một sàn thương mại: viết ba tiêu chí trước đã. Mình là Kẻ Nghĩ Nhiều. Hẹn gặp lại ở trạm tiếp theo.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+3%",
+  "pitch": "-8Hz"
+ }
+]
