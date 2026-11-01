@@ -86,9 +86,14 @@ fi
 # Offload heavy x264 encode to remote host (e.g. VPS muse) when reachable
 REMOTE_HOST="${LEMO_REMOTE_FFMPEG:-muse}"
 USE_REMOTE=0
-if [ -n "$REMOTE_HOST" ] && ssh -o ConnectTimeout=3 -o BatchMode=yes "$REMOTE_HOST" "true" 2>/dev/null; then
-  USE_REMOTE=1
-fi
+case "$REMOTE_HOST" in
+  ''|none|local) ;;
+  *)
+    if ssh -o ConnectTimeout=3 -o BatchMode=yes "$REMOTE_HOST" "true" 2>/dev/null; then
+      USE_REMOTE=1
+    fi
+    ;;
+esac
 
 if [ "$USE_REMOTE" = 1 ]; then
   echo "mux.sh: offloading heavy x264 encode to remote VPS ($REMOTE_HOST)" >&2
