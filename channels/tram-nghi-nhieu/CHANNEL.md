@@ -1,6 +1,6 @@
 # Trạm Nghĩ Nhiều — kênh và quy trình sản xuất
 
-Kênh tâm lý học bằng hoạt hình 2D tối giản. Mỗi tập là **một câu hỏi đời thường có sức nặng**, được trả lời bằng dữ kiện khoa học có nguồn, mổ xẻ kiến trúc nhận thức (xem [`STRATEGY.md`](STRATEGY.md)), và kết thúc bằng **một mô hình tư duy / hành động cụ thể** người xem áp dụng được ngay.
+Kênh tâm lý học bằng hoạt hình 2D tối giản. Mỗi tập là **một câu hỏi đời thường có sức nặng**, được trả lời bằng dữ kiện khoa học có nguồn, mổ xẻ kiến trúc nhận thức (xem [`STRATEGY.md`](STRATEGY.md) và kỹ năng đạo diễn chuẩn mực [`.agents/skills/tram-nghi-nhieu/SKILL.md`](../../.agents/skills/tram-nghi-nhieu/SKILL.md)), và kết thúc bằng **một mô hình tư duy / hành động cụ thể** người xem áp dụng được ngay.
 
 Kênh nằm ở `channels/tram-nghi-nhieu/`. Nó giữ **danh tính** (tên, nhân vật, bộ nhận diện, ngôn ngữ hình ảnh) và **code dùng chung** (rig, mix, fonts, voice). Mỗi tập là một thư mục riêng `channels/tram-nghi-nhieu/<tập>/` và chỉ giữ phần **của riêng nó**: treatment, research, tên phim, bảng cảnh và giọng đọc. Không có bản sao nào của code kênh nằm trong một tập.
 

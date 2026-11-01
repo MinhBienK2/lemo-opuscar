@@ -372,15 +372,18 @@ Premise: {item['premise']}
 Target Runtime: {item['runtime_target']} ({item['type']})
 {feedback_notes}
 
-### REQUIREMENTS:
-1. NO STATIC CARDS / BORING TEMPLATES: Every scene must have a vivid physical visual metaphor.
-2. TWO-COLUMN STORYBOARD: Each line must specify:
-   - `subject_action`: physical action of the host or subject.
-   - `metaphor_prop`: physical prop (e.g., giant ticking bomb clock, amygdala pulsing beacon, smoke puff thoughts).
-   - `camera_move`: zoom, pan, tilt, track.
-   - `transition_out`: seamless transition to next scene.
-3. LINES: 10 to 16 lines in Vietnamese with phonetic numbers.
-
+### CINEMATIC DIRECTING REQUIREMENTS (From .agents/skills/tram-nghi-nhieu/SKILL.md & host-toon-test):
+1. NO STATIC CARDS / BORING TEMPLATES: Strictly forbidden to draw a box and put voice text inside. Convert every concept into a tangible physical object or mechanical action.
+2. FOUR-FRAMING GRAMMAR (A, B, C, D):
+   - Mode A (Desk): Only for opening hook & thesis (10-15s).
+   - Mode B (Pop-in circle PiP): Character pops into corner circle (pip) for 2-3s over full-screen dynamic B-roll.
+   - Mode C (In the scene - MOST IMPORTANT): Character in full body steps into the actual physical setting (office cubicle, snowstorm car, supermarket, crime scene, stage).
+   - Mode D (Reaction Close-up): Hard cut punch-in with focus lines on major twists.
+   Host only appears when needed: >= 50% of the film must be story action (C) or dynamic B-roll!
+3. MICRO-BEAT VISUAL MAPPING ("Kể đến đâu, hình hóa đến đó"):
+   Every spoken noun and verb in the script must trigger an immediate physical reaction on screen.
+4. TOPIC WORLDBUILDING: Build a unique physical world tailored to this topic (not the same dark desk for every video).
+5. LINES: 12 to 18 lines in Vietnamese with phonetic numbers.
 Output ONLY valid JSON. Do not call any tools. Do not output any markdown before or after the JSON.
 JSON Format:
 {{
@@ -428,13 +431,22 @@ Storyboard:
 // kineticCamera(g, t, {{ zoom=1, ox=0, oy=0, drift=true, target=[960,540] }})
 // irisTransition(g, cx, cy, progress, fill='#12131A')
 // occlusionWipe(g, progress, dir='leftToRight', fill='#12131A')
+// setupSceneStyle(g, t, 'dossier'|'midcentury'|'swiss'|'mindlab')
+// drawHalftoneField(g, {{ cx, cy, w, h, color, densityFn }})
+// drawDossierHeader(g, title, caseNo, label)
+// drawStampSlam(g, str, x, y, p, {{ color, px, rot }})
+// drawEvidenceTag(g, x, y, tagText, subText)
+// drawSunburst(g, cx, cy, rot)
+// drawSparkle(g, x, y, size, color)
+// drawSwissMetric(g, x, y, numStr, unitStr, labelStr, p)
+// applyPaperTexture(g, opacity=0.20, darkBlend=true)
+// renderGrainFx(g, t, count=220)
 // figure(g, {{ s=1.0, E: expr('worried'|'happy'|'tired'|'shocked'|'smile'), talk, lean=0, shrug=0 }})
 // cel(g, pathOrPolyOrRect, {{ f, s, so:[dx,dy], l, lw }})
 // rect(x0, y0, x1, y1)  (IMPORTANT: x0 < x1 and y0 < y1)
 // ellP(cx, cy, rx, ry), line(g, pts, stroke, lw)
 // ground(g, col='#12131A'), text(g, str, x, y, {{ font: font(800, 44), fill='#FAF8F5', stroke, sw, align='center'|'left'|'right' }})
 // ease.out(p), ease.inOut(p), ease.back(p), seg(t, a, b), clamp01(t)
-
 ### WORKING SKELETON TO FOLLOW:
 const cv = document.getElementById('c'), G = cv.getContext('2d');
 let TL, READY = false;
@@ -534,8 +546,11 @@ def reconcile_imports(film_code):
 
     broll_symbols = ["ground", "text", "font", "reg", "REG", "INK", "CREAM", "ease", "seg", "clamp01"]
     needed_broll = [s for s in broll_symbols if s not in defined_symbols]
+    styles_symbols = ["applyPaperTexture", "renderGrainFx", "drawHalftoneField", "drawDossierHeader", "drawStampSlam", "drawEvidenceTag", "drawSunburst", "drawSparkle", "drawSwissMetric", "setupSceneStyle", "drawHalftoneWipe"]
+    needed_styles = [s for s in styles_symbols if s not in defined_symbols]
 
     imports = []
+    if needed_styles: imports.append("import { " + ", ".join(needed_styles) + " } from '../../../../rig/styles.js';")
     if needed_motion: imports.append("import { " + ", ".join(needed_motion) + " } from '../../../../rig/motion.js';")
     if needed_char: imports.append("import { " + ", ".join(needed_char) + " } from '../../../../rig/character.js';")
     if needed_cel: imports.append("import { " + ", ".join(needed_cel) + " } from '../../../../rig/cel.js';")
