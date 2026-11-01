@@ -20,10 +20,15 @@ The bar for every film: **A human story in a believable world, not a PowerPoint 
 2. **Character & Context Staging (Real World Anchor)**:
    - Every shot MUST be staged in a believable human environment: a wooden desk with a warm lamp (`desk()`, `S.roomBack`, `S.roomFront`), a quiet night sofa (`S.sofa`), or an early morning street.
    - **STRICTLY FORBIDDEN**: Floating text boxes on abstract dark voids. That is a presentation slide, not an animated film.
-3. **Steady Camera (Camera Holds Still Inside a Beat)**:
-   - **STRICTLY FORBIDDEN**: Aimless zooming in/out, Ken Burns pan jitter, or drifting ("phóng to di ảnh").
-   - Camera stays rock-solid inside each beat. Motion MUST come from the character (head roll, hand gestures `ak()`, blinks `blink()`, eye gaze) and tactile props (phone screen glowing, clock bells vibrating).
-   - Camera movement happens ONLY at scene transitions: **Whip pan** with motion blur (`smear()`) or **Iris wipe** with a clean circular frame.
+3. **Steady Camera & Scene-Block Grammar (Anti-Cut Churn)**:
+   - **One Scene Block = One Complete Concept (20–50s, 4–10 lines)**: STRICTLY FORBIDDEN to whip-pan or cut on every single spoken line. When sentences continue in the same room or topic, the camera holds steady.
+   - **Motion comes from In-Scene Evolution**: Character pose shifts `ak()`, facial expressions `ek()`, blinking `blink()`, props sliding/revealing in-place (`alpha`, `slide`, `reveal`), not camera jitter.
+   - **Rich Transition Toolkit**:
+     - *Direct Cut*: Change angle (Wide → Close-up, Top-down desk view) on the musical beat or realization. Clean, crisp, no motion blur.
+     - *Iris Wipe*: Classic circle mask in/out for intros, endings, or memory dives.
+     - *Prop Wipe*: Person walking past, door swinging shut, page turning over camera.
+     - *Light Switch Cut*: Lamp clicks off into darkness → Spotlight snaps onto stage.
+     - *Whip Pan*: ONLY for major jumps in physical location or time periods (day office → night bedroom; present → 1978). Max 4–6 whip pans per 10-minute film!
 4. **Conversational Spoken Script (Spine-First)**:
    - The voiceover is the spine; visuals illustrate the line being spoken in real-time.
    - **STRICTLY FORBIDDEN**: Numbered outline bullets (*"Một —", "Hai —", "1.", "2."*).
@@ -32,7 +37,14 @@ The bar for every film: **A human story in a believable world, not a PowerPoint 
    - Every visible physical action has a tactile sound: paper slide (`paper`), item pop (`pop`), marker highlight (`marker`), clock ting (`ting`), spring boing (`boing`), whip whoosh (`whoosh`).
    - Every shot registers its events in `window.EV`. Empty `window.EV` fails `filmcheck`.
    - Mastered to **-14.0 LUFS** with automatic ducking: music drops **-8 dB to -10 dB** during voice narration and swells back during pauses.
-
+6. **Visual Physicalization (Never Animate PowerPoint Cards)**:
+   - **STRICTLY FORBIDDEN**: Drawing text boxes or speech bubbles that simply restate voiceover words ("THƯỚC ĐO TỰ TĂNG", "MAY MẮN", "20 LẦN TỐT"). That is a slide deck, not an animated film.
+   - **MANDATORY**: Convert abstract psychological concepts into **tangible physical props, mechanical contraptions, or tactile actions**:
+     - *Moving goalpost* → High-jump crossbar that an overhead robotic arm cranks higher just as the character leaps over.
+     - *Discounting success* → A gleaming gold trophy that the character frantically covers with a cloth or kicks into the wastebasket.
+     - *Spotlight effect & memory bias* → 20 dusty framed certificates vs a single scorched note scorched under an intense spotlight.
+     - *Impostor cycle* → Character sprinting on a runaway treadmill while clutching a cracking paper mask.
+     - *Evidence ledger* → Thick leather notebook on desk, character's hand writing with wet ink, Rối stamping a bold red wax seal.
 ---
 
 ## 2. The 6-Step Production Workflow

@@ -184,20 +184,37 @@ Mọi AI Agent khi nhận đề tài làm video cho kênh BẮT BUỘC phải tu
 1. **Bối cảnh sống thực tế (Real Staging)**:
    - Tuyệt đối CẤM vẽ các khối hộp chữ nhật trôi nổi và nhét chữ vào giữa như slide PowerPoint.
    - Mọi phân cảnh bắt buộc phải neo vào không gian sống thực của nhân vật Kẻ Nghĩ Nhiều: căn phòng ngủ ban đêm (`S.sofa`, giường ngủ, rèm trăng), bàn làm việc gỗ có đèn bàn vàng (`desk()`), góc ban công hoặc đường phố bình minh.
-2. **Khóa Camera tĩnh (Camera holds steady inside a beat)**:
-   - Tuyệt đối CẤM hiệu ứng zoom-in, zoom-out, pan lắc vô nghĩa ("phóng to di ảnh").
-   - Chuyển động phải đến từ nhân vật (vẫy tay, thở dài, gãi đầu, chớp mắt `blink()`) và đạo cụ (chiếc điện thoại xanh hắt sáng, chiếc đồng hồ rung chuông), KHÔNG đến từ việc rung lắc camera.
-   - Chuyển cảnh chỉ dùng: Lia máy nhanh (**Whip pan** có motion blur `smear()`) hoặc Mở vòng tròn bo góc (**Iris wipe**).
-3. **Văn phong tâm sự người bạn (Conversational Tone)**:
+2. **Khóa Camera & Cấm Giật Cảnh (Scene-Block Invariant & Transition Rules)**:
+   - **Một Phân Cảnh (Scene Block) = Một Khối Ý Trọn Vẹn**: Một phân cảnh phải kéo dài **20 – 50 giây** (bao gồm 4 – 10 câu thoại liên tiếp).
+   - **TUYỆT ĐỐI CẤM**: Cứ xong 1 câu thoại là quất 1 cú whip pan giật màn hình kèm tiếng whoosh! Khi hai câu liên tiếp cùng diễn ra trong một không gian (cùng phòng ngủ, cùng hành lang, cùng bàn làm việc), camera bắt buộc phải GIỮ TĨNH hoặc đẩy nhẹ (`camera push`).
+   - **Chuyển động nội cảnh (In-scene Evolution)**: Khi câu nói tiếp theo mở rộng ý câu trước, nội dung thay đổi bằng cách:
+     - Đổi tư thế nhân vật (`ak()`), biểu cảm mặt (`ek()`), mắt chớp (`blink()`), quay đầu nhìn đồ vật.
+     - Thay thế đạo cụ tại chỗ (Clear / Reveal): Đạo cụ cũ trượt xuống hoặc mờ dần (`alpha`, `slide`), đạo cụ mới trượt vào hoặc nhân vật đặt ra bàn, kèm âm thanh foley xúc giác (`pop`, `paper`, `marker`, `ting`).
+   - **Đa dạng hóa ngữ pháp chuyển cảnh (Transition Grammar)**:
+     - `cut` (Cắt thẳng): Đổi góc máy tức thì (Toàn sang Cận, Nhìn thẳng sang Bàn làm việc) theo nhịp nhạc hoặc bước ngoặt logic.
+     - `iris` (Iris wipe): Mở/đóng ống kính tròn tập trung vào mắt nhân vật hoặc chiếc đèn bàn.
+     - `prop` (Đạo cụ che máy): Một bóng người lướt qua che khung hình, cánh cửa khép lại, trang sách lật phủ màn hình.
+     - `light` (Bật/tắt đèn): Tắt đèn bàn phụt tối đen → Bật sáng đèn spotlight giữa sân khấu.
+     - `whip` (Lia nhanh có blur): CHỈ DÙNG khi **đổi không gian lớn hoặc nhảy mốc thời gian** (Văn phòng ban ngày → Phòng ngủ 1h sáng; Hiện tại → Năm 1978). Video 10 phút tối đa 4–6 cú whip pan! CẤM dùng whip pan khi nhân vật vẫn đang ở bàn làm việc!
+3. **Quy tắc Hiện Thực Hóa Thị Giác & Diệt Trừ Bệnh Thẻ Chữ (Visual Physicalization & Anti-Card Invariant)**:
+   - Hoạt hình 2D là **nghệ thuật của sự vật, hành động và ẩn dụ**, TUYỆT ĐỐI CẤM biến video thành bài thuyết trình PowerPoint bằng cách vẽ các khung chữ nhật rồi nhét nguyên câu thoại vào giữa!
+   - BẮT BUỘC biến mọi khái niệm tâm lý / trừu tượng thành **ĐẠO CỤ HỮU HÌNH HOẶC HIỆN TƯỢNG VẬT LÝ**:
+     - *Thước đo tự tăng* → Thanh xà nhảy cao tự động kéo cao lên 2m ngay khi nhân vật vừa nhảy qua 1m.
+     - *Quy công may mắn* → Chiếc cúp vàng trên bàn bị nhân vật trùm khăn che lại hoặc lén lút đẩy rơi vào sọt rác gầm bàn.
+     - *Định kiến chỉ nhớ lần vấp* → 20 khung khen phủ bụi mờ; 1 mẩu giấy note cháy xém bị rọi đèn pin chói lòa.
+     - *Nỗi sợ bị vạch trần* → Bộ vest lịch sự bỗng hóa thành giấy xé rách bay tứ tung theo gió.
+     - *Vòng xoáy giả mạo* → Máy chạy bộ quay tít mù, mặt nạ giấy bong tróc.
+     - *Sổ bằng chứng* → Cuốn sổ da thật, bàn tay cầm bút mực viết nét ướt, đóng con dấu sáp đỏ chót.
+     - *Tâm lý đám đông* → Vòng tròn spotlight hắt xuống, đám đông xung quanh quay lưng bấm điện thoại chẳng ai nhìn.
+4. **Văn phong tâm sự người bạn (Conversational Tone)**:
    - Tuyệt đối CẤM đánh số thứ tự đầu câu ("Một —", "Hai —", "1.", "2.").
    - Lời thoại phải là sự thủ thỉ, tự sự đồng cảm của Kẻ Nghĩ Nhiều lúc nửa đêm.
-4. **Bắt buộc mảng sự kiện âm thanh (`window.EV`)**:
+5. **Bắt buộc mảng sự kiện âm thanh (`window.EV`)**:
    - Tuyệt đối CẤM để `window.EV = []` rỗng (sẽ làm mất toàn bộ tiếng nói).
    - Bắt buộc đăng ký đầy đủ các sự kiện `voice`, nhạc chuyển đoạn (`music: A, B, C, end`) và hiệu ứng foley (`whoosh`, `pop`, `paper`, `marker`, `ting`, `boing`).
-5. **Quy tắc xuất hiện chữ an toàn (Text Reveal Invariant)**:
+6. **Quy tắc xuất hiện chữ an toàn (Text Reveal Invariant)**:
    - Bắt buộc dùng `revealText(g, s, x, y, p, o)` từ `rig/broll.js` cho mọi hiệu ứng chữ viết tay/chữ chạy từ trái sang phải.
    - Tuyệt đối CẤM tự chế hàm cắt chữ (`clip()`) thủ công với các hằng số offset cộng thêm — điều này sẽ làm rò rỉ ký tự đầu (`C`, `2`, `n`) nằm trơ trọi trên màn hình trước khi giọng đọc nhắc tới.
-
 ## 8. Quy chuẩn đặc tả cảnh chi tiết 5 trường (The 5-Field Shot Specification)
 
 Khi viết `TREATMENT.md`, AI Agent **bắt buộc phải mô tả từng shot bằng 5 trường định lượng chi tiết**, tuyệt đối cấm tóm tắt sơ sài 1 dòng:
@@ -231,12 +248,12 @@ Khi viết `TREATMENT.md`, AI Agent **bắt buộc phải mô tả từng shot b
 
 Người dùng chỉ cần đưa ra **chủ đề và thời lượng mong muốn** (hoặc không nêu thì mặc định 3–5 phút). AI Agent **tuyệt đối không được hỏi lại về số lượng câu thoại hay kịch bản**, mà BẮT BUỘC phải tự động áp dụng công thức chuẩn của kênh:
 
-| Thời lượng người dùng yêu cầu | Số câu thoại chuẩn trong `lines.json` | Số phân cảnh trong `film.js` | Cơ chế Timeline |
-|---|---|---|---|
-| **Shorts (60–90 giây)** | **16 – 22 câu** | 8 – 12 cảnh | Gõ tay hoặc sinh timeline |
-| **Tiểu luận 3 – 5 phút** | **35 – 50 câu** | 20 – 35 cảnh | Sinh bằng `mk_timeline.py` |
-| **Bản dài chuyên sâu 8 – 10 phút** | **80 – 110 câu** | 50 – 70 cảnh (hoặc beat library) | Sinh bằng `mk_timeline.py` |
-| **Đặc biệt 15 – 20 phút** | **150 – 200 câu** | Beat library (`BEATS.md`) | Sinh bằng `mk_timeline.py` |
+| Thời lượng người dùng yêu cầu | Số câu thoại chuẩn trong `lines.json` | Số phân cảnh khối (Scene Blocks) | Chuyển cảnh lớn tối đa | Cơ chế Timeline |
+|---|---|---|---|---|
+| **Shorts (60–90 giây)** | **16 – 22 câu** | **2 – 4 khối cảnh** (mỗi khối 20–30s) | 1 – 3 lần (iris / whip / cut) | Gõ tay hoặc sinh timeline |
+| **Tiểu luận 3 – 5 phút** | **35 – 50 câu** | **6 – 10 khối cảnh** (mỗi khối 25–40s) | 3 – 5 lần (cut / whip / prop) | Sinh bằng `mk_timeline.py` |
+| **Bản dài chuyên sâu 8 – 10 phút** | **80 – 110 câu** | **12 – 16 khối cảnh** (mỗi khối 30–50s) | 4 – 6 lần (whip / iris / light) | Sinh bằng `mk_timeline.py` |
+| **Đặc biệt 15 – 20 phút** | **150 – 200 câu** | **20 – 30 khối cảnh** (mỗi khối 30–60s) | 8 – 12 lần | Sinh bằng `mk_timeline.py` |
 
 **Luật cấm**: Cấm tuyệt đối việc nhận đề bài 5–10 phút mà chỉ viết kịch bản 15–20 câu rồi kéo dài khoảng lặng chết để câu giờ. Thời lượng phải đến từ lượng kiến thức và chiều sâu phân tích thực tế.
 

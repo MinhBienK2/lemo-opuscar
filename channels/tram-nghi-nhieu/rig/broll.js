@@ -232,3 +232,26 @@ export function batteryBig(g, x, y, w, level, t) {
     g.globalAlpha = 1;
   }
 }
+
+// ——— transitions toolkit ———
+export function irisWipe(g, p, cx = W / 2, cy = H / 2, col = PAL.bg) {
+  if (p >= 1) return;
+  const maxR = Math.hypot(W, H) * 0.55;
+  const r = maxR * clamp01(p);
+  g.save();
+  g.fillStyle = col;
+  g.beginPath();
+  g.rect(0, 0, W, H);
+  g.arc(cx, cy, r, 0, TAU, true);
+  g.fill();
+  g.restore();
+}
+
+export function fadeWipe(g, p, col = '#000') {
+  if (p <= 0) return;
+  g.save();
+  g.fillStyle = col;
+  g.globalAlpha = clamp01(p);
+  g.fillRect(0, 0, W, H);
+  g.restore();
+}
