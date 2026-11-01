@@ -1,0 +1,164 @@
+[
+  {
+    "id": "hook",
+    "file": "hook.mp3",
+    "text": "Mình đang cầm thực đơn, và mình không chọn được món nào.",
+    "dur": 3.864
+  },
+  {
+    "id": "hook2",
+    "file": "hook2.mp3",
+    "text": "Không phải vì chưa biết mình muốn ăn gì. Mà vì món nào trong thực đơn này cũng nghe ngon.",
+    "dur": 6.216
+  },
+  {
+    "id": "intro",
+    "file": "intro.mp3",
+    "text": "Mình là Kẻ Nghĩ Nhiều. Hôm nay: nghịch lý lựa chọn.",
+    "dur": 4.992
+  },
+  {
+    "id": "myth",
+    "file": "myth.mp3",
+    "text": "Cách giải thích quen thuộc nhất: quá nhiều lựa chọn làm não bạn tê liệp.",
+    "dur": 4.416
+  },
+  {
+    "id": "myth2",
+    "file": "myth2.mp3",
+    "text": "Nghe hợp lý quá. Nhưng câu này đã được kiểm tra rồi.",
+    "dur": 4.656
+  },
+  {
+    "id": "jam",
+    "file": "jam.mp3",
+    "text": "Năm hai nghìn, trong một siêu thị, người ta bày hai bàn nếm mứt: sáu vị ở bên trái, hai mươi bốn vị ở bên phải.",
+    "dur": 7.368
+  },
+  {
+    "id": "jam2",
+    "file": "jam2.mp3",
+    "text": "Bảy mươi ba người dừng lại bên sáu vị, ba mươi phần trăm trong số đó đã mua. Bên kia, một trăm bảy mươi sáu người dừng lại bên hai mươi bốn vị, và chỉ ba phần trăm mua.",
+    "dur": 10.536
+  },
+  {
+    "id": "jam3",
+    "file": "jam3.mp3",
+    "text": "Câu chuyện này được kể lại khắp nơi như một bằng chứng: càng nhiều lựa chọn, càng ít người chọn.",
+    "dur": 5.616
+  },
+  {
+    "id": "meta",
+    "file": "meta.mp3",
+    "text": "Rồi các nhà khoa học gom năm mươi thí nghiệm, năm nghìn không trăm ba mươi sáu người, và làm lại phép tính.",
+    "dur": 6.216
+  },
+  {
+    "id": "meta23",
+    "file": "meta23.mp3",
+    "text": "Hiệu ứng trung bình: hai phần trăm. Gần như không có gì.",
+    "dur": 4.872
+  },
+  {
+    "id": "rep",
+    "file": "rep.mp3",
+    "text": "Ngay cả thí nghiệm mứt cũng được làm lại ở Đức, với năm trăm linh bốn người, và lần này không còn hiệu ứng nào.",
+    "dur": 6.36
+  },
+  {
+    "id": "turn",
+    "file": "turn.mp3",
+    "text": "Nên nghịch lý lựa chọn, đúng như một câu quảng cáo, là sai.",
+    "dur": 4.56
+  },
+  {
+    "id": "turn2",
+    "file": "turn2.mp3",
+    "text": "Nhưng cảm giác mệt khi có quá nhiều lựa chọn thì có thật. Chỉ là nguyên nhân thì khác.",
+    "dur": 5.856
+  },
+  {
+    "id": "ghost",
+    "file": "ghost.mp3",
+    "text": "Thứ làm ta mệt không phải số lựa chọn. Mà là cái giá của việc biết mình đã bỏ cái gì.",
+    "dur": 6.264
+  },
+  {
+    "id": "ghost2r",
+    "file": "ghost2r.mp3",
+    "text": "Lựa chọn thứ hai không biến mất, nó đứng ngay cạnh món bạn vừa chọn. Người ta gọi cảm giác đó là hối tiếc.",
+    "dur": 7.296
+  },
+  {
+    "id": "bar2",
+    "file": "bar2.mp3",
+    "text": "Tập lựa chọn càng lớn, kỳ vọng của bạn càng cao. Rồi món nào bạn chọn, cũng thấy hụt một chút.",
+    "dur": 7.128
+  },
+  {
+    "id": "four",
+    "file": "four.mp3",
+    "text": "Một phân tích tổng hợp mới hơn: năm mươi ba nghiên cứu, bảy nghìn hai trăm hai người, trả lời bằng bốn yếu tố.",
+    "dur": 6.84
+  },
+  {
+    "id": "fAB",
+    "file": "fAB.mp3",
+    "text": "Tập lựa chọn có phức tạp không, nhiệm vụ có khó không, bạn có biết mình muốn gì không, và bạn đang đi mua hay chỉ đi dạo xem.",
+    "dur": 7.416
+  },
+  {
+    "id": "f56",
+    "file": "f56.mp3",
+    "text": "Người đã có tiêu chí rõ ràng thì nhiều lựa chọn lại tốt hơn. Người cần ít lựa chọn là người chưa biết mình muốn gì.",
+    "dur": 7.512
+  },
+  {
+    "id": "model",
+    "file": "model.mp3",
+    "text": "Vậy cái cứu vãn không phải là bớt lựa chọn. Mà là có tiêu chí trước khi mở thực đơn.",
+    "dur": 6.384
+  },
+  {
+    "id": "model2",
+    "file": "model2.mp3",
+    "text": "Nhà tâm lý học Herbert Simon gọi đó là satisficing: chọn cái đầu tiên đủ tốt, rồi dừng lại.",
+    "dur": 6.144
+  },
+  {
+    "id": "model3",
+    "file": "model3.mp3",
+    "text": "Cách làm thì như lọc nước: loại từng tiêu chí. Món nào trượt một tiêu chí thì bỏ luôn.",
+    "dur": 6.576
+  },
+  {
+    "id": "actionAll",
+    "file": "actionAll.mp3",
+    "text": "Trước khi mở thực đơn, viết ba tiêu chí quan trọng nhất. Rồi quét một lượt, gạch bỏ món nào không đạt. Món đầu tiên đạt cả ba: gọi món đó.",
+    "dur": 10.68
+  },
+  {
+    "id": "roi",
+    "file": "roi.mp3",
+    "text": "Rối nói: một lựa chọn đủ tốt, đã là một lựa chọn.",
+    "dur": 4.176
+  },
+  {
+    "id": "close",
+    "file": "close.mp3",
+    "text": "Càng nhiều lựa chọn, ta càng mệt. Nhưng không phải vì có nhiều lựa chọn.",
+    "dur": 5.664
+  },
+  {
+    "id": "close2",
+    "file": "close2.mp3",
+    "text": "Mà vì ta quên viết ra điều mình muốn, trước khi bắt đầu lựa chọn.",
+    "dur": 4.44
+  },
+  {
+    "id": "next",
+    "file": "next.mp3",
+    "text": "Lần sau bạn mở một thực đơn hay một ứng dụng: viết ba tiêu chí trước đã. Mình là Kẻ Nghĩ Nhiều. Hẹn gặp lại ở trạm tiếp theo.",
+    "dur": 9.576
+  }
+]

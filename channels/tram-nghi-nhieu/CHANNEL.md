@@ -90,6 +90,8 @@ channels/tram-nghi-nhieu/
 ├── mix.py              # âm thanh dùng chung: nhạc + ambience + foley + lùi dB + nén
 ├── fonts/              # Be Vietnam Pro + Patrick Hand (OFL) + fonts.css
 ├── voice/              # tts_vi.py, asr_vi.py, process.py (dùng chung)
+├── kits/               # bộ tập phim dùng chung giữa nhiều engine (facts + lời thoại + giọng)
+│   └── tap-03-nghich-ly-lua-chon/   # BRIEF.md + FACTS.md + script.json + voice/ (mp3, không commit)
 └── series/             # MỤC SERIES CHÍNH (chứa các chủ đề chuyên biệt)
     ├── nghich-ly-doi-thuong/   # Chủ đề Nghịch lý đời thường (Cột 1)
     │   └── tap-01-cang-ranh-cang-met/
@@ -121,6 +123,25 @@ FILM="$HERE" "$LIB/.venv/bin/python" "$CHANNEL/mix.py"
 ```
 
 Một bản sao của code chung trong một tập là một **lỗi**, không phải một cách làm tiện: hai bản sẽ lệch nhau.
+
+## 4a. Bộ kit tập phim dùng chung giữa nhiều engine (kits/)
+
+Một số tập được dựng **cùng một lần** trên nhiều engine để so sánh chất lượng diễn hình:
+Canvas 2D (`channels/tram-nghi-nhieu/series/…`), Remotion (`~/Documents/remotion-explainer`) và
+HyperFrames (`~/Documents/hyperframes-explainer`). Với những tập đó, **lời thoại, số liệu và giọng
+đọc là cố định** — chỉ phần diễn hình là của từng engine.
+
+```
+channels/tram-nghi-nhieu/kits/<slug>/
+├── BRIEF.md        # hợp đồng của tập: thời lượng, tám nhịp, luật hình ảnh, nghiệm thu
+├── FACTS.md        # nguồn nghiên cứu + ranh giới ("được nói" / "không được nói")
+├── script.json     # các dòng lời (id + text), dùng chung cho mọi engine
+└── voice/          # mp3 + durations.json + manifest.json (giọng đã thu; mp3 không commit)
+```
+
+Mỗi engine giữ **một bản sao** của kit (vì nó nằm trong repo riêng), nhưng bản gốc là `kits/` ở đây:
+đổi lời thoại hay số liệu thì sửa ở đây trước, rồi copy sang các engine. Lời thoại đã thu sẵn nên
+hai bản render có **cùng giọng, cùng nhịp** — khác biệt nằm ở hình ảnh.
 
 ## 4b. Tập dài (hai mươi phút) — khác tập ngắn ở đâu
 
