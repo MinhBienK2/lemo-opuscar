@@ -74,6 +74,12 @@ export function build(dur, words, lips) {
       cues.push({ id, text: p.text, t0: +t0.toFixed(3), t1: +t1.toFixed(3) });
     });
   });
+  // Enforce strict non-overlapping subtitle invariant
+  for (let i = 0; i < cues.length - 1; i++) {
+    if (cues[i].t1 > cues[i + 1].t0 - 0.04) {
+      cues[i].t1 = Math.max(cues[i].t0 + 0.2, +(cues[i + 1].t0 - 0.04).toFixed(3));
+    }
+  }
 
   const talk = t => {
     for (const id of ids) {

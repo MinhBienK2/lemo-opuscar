@@ -156,8 +156,8 @@ function sheetStudy(g, w, h, T, t0) {
   }
   P.handText(g, 'người mặc áo', x0 + (x1 - x0) * .1, h * .66, { size: Math.max(24, 30 * k), align: 'center', p: seg(T, t0 + 1.2, t0 + 1.8) });
   P.handText(g, 'người quan sát', x1 - (x1 - x0) * .16, h * .66, { size: Math.max(24, 30 * k), align: 'center', p: seg(T, t0 + 1.4, t0 + 2.0) });
-  P.handText(g, 'Cornell', x0 + 4 * k, h * .12, { size: Math.max(26, 32 * k), p: seg(T, t0 + .1, t0 + .7) });
-  P.handNumber(g, '2000', x0 + 116 * k, h * .12, { size: Math.max(26, 32 * k), p: seg(T, t0 + .3, t0 + .9) });
+  P.handText(g, 'Cornell', x1 - 220 * k, h * .12, { size: Math.max(26, 32 * k), p: seg(T, t0 + .1, t0 + .7) });
+  P.handNumber(g, '2000', x1 - 100 * k, h * .12, { size: Math.max(26, 32 * k), p: seg(T, t0 + .3, t0 + .9) });
 }
 
 function sheetGuess(g, w, h, T, t0) {
@@ -440,7 +440,8 @@ window.render = T => {
     text(g, 'hẹn gặp bạn ở tập sau', W / 2, 606, { font: font(400, 46, 'Patrick Hand'), align: 'center', fill: PAL.muted });
     g.restore();
   }
-  for (const c of TL.cues) if (T >= c.t0 && T < c.t1) subtitle(g, c.text);
+  const activeCue = TL.cues.findLast(c => T >= c.t0 && T < c.t1);
+  if (activeCue) subtitle(g, activeCue.text);
 };
 
 window.TEXTS = T => { REG.list = []; window.render(T); const l = REG.list; REG.list = null; return l; };

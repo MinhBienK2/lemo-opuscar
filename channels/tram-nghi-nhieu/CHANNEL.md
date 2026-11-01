@@ -1,6 +1,6 @@
 # Trạm Nghĩ Nhiều — kênh và quy trình sản xuất
 
-Kênh tâm lý học bằng hoạt hình 2D tối giản. Mỗi tập là **một câu hỏi đời thường**, được trả lời bằng dữ kiện có nguồn, và kết thúc bằng **một hành động cụ thể** người xem làm được ngay.
+Kênh tâm lý học bằng hoạt hình 2D tối giản. Mỗi tập là **một câu hỏi đời thường có sức nặng**, được trả lời bằng dữ kiện khoa học có nguồn, mổ xẻ kiến trúc nhận thức (xem [`STRATEGY.md`](STRATEGY.md)), và kết thúc bằng **một mô hình tư duy / hành động cụ thể** người xem áp dụng được ngay.
 
 Kênh nằm ở `channels/tram-nghi-nhieu/`. Nó giữ **danh tính** (tên, nhân vật, bộ nhận diện, ngôn ngữ hình ảnh) và **code dùng chung** (rig, mix, fonts, voice). Mỗi tập là một thư mục riêng `channels/tram-nghi-nhieu/<tập>/` và chỉ giữ phần **của riêng nó**: treatment, research, tên phim, bảng cảnh và giọng đọc. Không có bản sao nào của code kênh nằm trong một tập.
 
@@ -42,7 +42,7 @@ sh core/render/new_episode.sh tram-nghi-nhieu series/nghich-ly-doi-thuong/tap-02
 Trong thư mục tập, `$CHANNEL` là thư mục kênh (`channels/tram-nghi-nhieu`) và `$LIB` là thư mục gốc của thư viện:
 
 1. **Chủ đề + nguồn** → `research/FACTS.md` (của tập): mọi con số kèm trích dẫn (DOI/link), và đánh dấu rõ điều gì **không** được nói quá.
-2. **Kịch bản** → `voice/lines.json` (của tập): 16–20 câu, mỗi câu một ý, viết số thành chữ ("bốn mươi bảy phần trăm") cho giọng đọc đúng; giữ `rate`/`pitch` cho giọng nhân vật.
+2. **Kịch bản** → `voice/lines.json` (của tập): Viết số thành chữ ("bốn mươi bảy phần trăm") cho giọng đọc đúng; giữ `rate`/`pitch` cho giọng nhân vật. **Quy mô kịch bản bắt buộc tính theo thời lượng yêu cầu** (xem mục 4c bên dưới).
 3. **Giọng đọc** — script nằm ở kênh (`$CHANNEL/voice/`), đường dẫn của tập là đối số; chạy từ thư mục tập:
    ```sh
    $LIB/.venv/bin/python "$CHANNEL/voice/tts_vi.py" voice/lines.json voice/          # edge-tts, có tự thử lại khi câu bị "không có âm"
@@ -197,3 +197,56 @@ Mọi AI Agent khi nhận đề tài làm video cho kênh BẮT BUỘC phải tu
 5. **Quy tắc xuất hiện chữ an toàn (Text Reveal Invariant)**:
    - Bắt buộc dùng `revealText(g, s, x, y, p, o)` từ `rig/broll.js` cho mọi hiệu ứng chữ viết tay/chữ chạy từ trái sang phải.
    - Tuyệt đối CẤM tự chế hàm cắt chữ (`clip()`) thủ công với các hằng số offset cộng thêm — điều này sẽ làm rò rỉ ký tự đầu (`C`, `2`, `n`) nằm trơ trọi trên màn hình trước khi giọng đọc nhắc tới.
+
+## 8. Quy chuẩn đặc tả cảnh chi tiết 5 trường (The 5-Field Shot Specification)
+
+Khi viết `TREATMENT.md`, AI Agent **bắt buộc phải mô tả từng shot bằng 5 trường định lượng chi tiết**, tuyệt đối cấm tóm tắt sơ sài 1 dòng:
+
+1. **`visualAnchor` (Trọng tâm thị giác & Tỉ lệ phủ màn hình)**:
+   - Vật thể hoặc sơ đồ chính là gì? Chiếm tối thiểu bao nhiêu % khung hình?
+   - **Quy tắc độ phủ (`Canvas Fill Invariant`)**: Vùng nội dung có chủ đích phải chiếm tối thiểu **50%–70% diện tích màn hình**. Cấm để mặt bàn hoặc khoảng trống đen chiếm > 60% màn hình trong khi hình vẽ bị co cụm ở giữa.
+2. **`typography` (Hệ thống chữ & Con số)**:
+   - Chỉ số thống kê (Stats): Font size $\ge 72\text{px}$, độ đậm Black 900.
+   - Tiêu đề phụ (Headers): Font size $\ge 44\text{px}$, Bold 800.
+   - Chú thích phụ (Secondary/Handwriting): Font size $\ge 28\text{px}$ (đảm bảo đọc được trên điện thoại).
+   - Dải highlight (`hilite`): Màu nhấn cụ thể (Vàng nghệ `#FFB703`, Cyan `#67E8F9`, Đỏ `#E63946`).
+3. **`propsAndStaging` (Đạo cụ & Môi trường thực)**:
+   - Đạo cụ tương tác xúc giác: Cốc cà phê bốc khói, thước kẻ, kính lúp, cuốn sổ ghim, bút lông, con dấu đỏ.
+   - Nguồn sáng: Luồng sáng đèn bàn vàng hoặc đèn spotlight có quầng sáng mềm.
+4. **`characterActing` (Diễn xuất & Vi chuyển động)**:
+   - Nhân vật nhìn về đâu, tay làm gì (lật trang, chỉ tay, gãi đầu, cầm bút).
+   - Cảm xúc mắt (`blink()`, `headYaw`, `headPitch`) và trạng thái sợi tóc đèn LED (bừng sáng / chập chờn / tắt).
+5. **`soundSync` (Đồng bộ âm thanh)**:
+   - Mỗi chuyển động nét vẽ hay chữ xuất hiện phải có foley chính xác ở mốc giây (`marker`, `paper`, `stamp`, `pop`, `ting`, `boing`).
+
+## 9. Bộ luật thị giác chống nhạt (Visual Invariants / Impeccable Rules)
+
+1. **Cấm lặp lại góc máy bàn liên tiếp quá 2 cảnh**: Bắt buộc luân chuyển nhịp: *Toàn cảnh phòng / quán $\to$ Cận cảnh bàn $\to$ Trung cảnh đối thoại với Rối $\to$ Sơ đồ trực quan $\to$ Trở lại bàn*.
+2. **Độ dày nét vẽ (`Visual Weight / Bolder`)**: Mọi đường nét sơ đồ, khung viền, mũi tên cơ chế phải có `lineWidth >= 5px` (không dùng nét mảnh $1.5\text{px}$ như phác thảo bút chì yếu ớt).
+3. **Bất biến không va chạm phụ đề (`Subtitle Collision-Free Invariant`)**:
+   - $t_1$ của mảnh phụ đề trước bắt buộc phải $\le t_0 - 0.04\text{s}$ của mảnh phụ đề sau.
+   - Khi render, chỉ vẽ mảnh phụ đề tích cực nhất (`TL.cues.findLast(...)`), tuyệt đối không dùng vòng lặp vẽ chồng tất cả các cue trùng thời gian.
+
+## 10. Luật tự động quy đổi thời lượng (Duration-to-Scale Invariant)
+
+Người dùng chỉ cần đưa ra **chủ đề và thời lượng mong muốn** (hoặc không nêu thì mặc định 3–5 phút). AI Agent **tuyệt đối không được hỏi lại về số lượng câu thoại hay kịch bản**, mà BẮT BUỘC phải tự động áp dụng công thức chuẩn của kênh:
+
+| Thời lượng người dùng yêu cầu | Số câu thoại chuẩn trong `lines.json` | Số phân cảnh trong `film.js` | Cơ chế Timeline |
+|---|---|---|---|
+| **Shorts (60–90 giây)** | **16 – 22 câu** | 8 – 12 cảnh | Gõ tay hoặc sinh timeline |
+| **Tiểu luận 3 – 5 phút** | **35 – 50 câu** | 20 – 35 cảnh | Sinh bằng `mk_timeline.py` |
+| **Bản dài chuyên sâu 8 – 10 phút** | **80 – 110 câu** | 50 – 70 cảnh (hoặc beat library) | Sinh bằng `mk_timeline.py` |
+| **Đặc biệt 15 – 20 phút** | **150 – 200 câu** | Beat library (`BEATS.md`) | Sinh bằng `mk_timeline.py` |
+
+**Luật cấm**: Cấm tuyệt đối việc nhận đề bài 5–10 phút mà chỉ viết kịch bản 15–20 câu rồi kéo dài khoảng lặng chết để câu giờ. Thời lượng phải đến từ lượng kiến thức và chiều sâu phân tích thực tế.
+
+## 11. Luật tự chủ quy trình (Autonomous Pipeline Invariant)
+
+Khi nhận một prompt ngắn gọn từ người dùng (ví dụ: *"Làm video 10 phút về chủ đề X cho kênh Trạm Nghĩ Nhiều"*), AI Agent **bắt buộc phải tự động kích hoạt và chạy xuyên suốt toàn bộ chuỗi sản xuất từ A đến Z** mà không dừng lại xin phép ở từng bước:
+1. Tự chạy `new_episode.sh` scaffold thư mục tập.
+2. Tự web search tìm paper khoa học gốc (PubMed / ScienceDirect / JCR) và viết `research/FACTS.md` có nguồn số liệu chuẩn xác.
+3. Tự viết toàn bộ `voice/lines.json` theo đúng số lượng câu của bảng thời lượng.
+4. Tự chạy chuỗi âm thanh: `tts_vi.py` $\to$ `asr_vi.py` (với `HF_HOME=/home/minhbien/hf-cache`) $\to$ `process.py`.
+5. Tự viết `TREATMENT.md` tuân thủ đủ 5 trường đặc tả cảnh (`visualAnchor`, `typography`, `propsAndStaging`, `characterActing`, `soundSync`).
+6. Tự sinh `src/timeline.js` (đảm bảo không va chạm phụ đề) và viết `src/film.js` vẽ Canvas dày dặn, đậm nét.
+7. Tự chạy `build.sh` render video Full HD và chạy `review.sh` đạt PASS 100%.
