@@ -215,6 +215,12 @@ Mọi AI Agent khi nhận đề tài làm video cho kênh BẮT BUỘC phải tu
 6. **Quy tắc xuất hiện chữ an toàn (Text Reveal Invariant)**:
    - Bắt buộc dùng `revealText(g, s, x, y, p, o)` từ `rig/broll.js` cho mọi hiệu ứng chữ viết tay/chữ chạy từ trái sang phải.
    - Tuyệt đối CẤM tự chế hàm cắt chữ (`clip()`) thủ công với các hằng số offset cộng thêm — điều này sẽ làm rò rỉ ký tự đầu (`C`, `2`, `n`) nằm trơ trọi trên màn hình trước khi giọng đọc nhắc tới.
+7. **Dòng Chảy Thị Giác & Diệt Trừ Khung Hình Chết (Continuous Visual Flow & Zero Dead Frames)**:
+   - **TUYỆT ĐỐI CẤM ĐỨNG HÌNH (Zero Dead Frames)**: Cấm để một hình vẽ hay đạo cụ đứng im quá 1.2 giây mà không có biến đổi thị giác. Không được làm kiểu "vẽ xong 0.5s ở đầu câu rồi đứng hình suốt 4 giây chờ keyword tiếp theo".
+   - **Quy tắc Ba Chiếc Đồng Hồ (The Rule of Three Clocks)**:
+     - *Đồng hồ 1 (Nhịp thở sinh học & Môi trường)*: Nhân vật luôn có nhịp thở phập phồng, mắt liếc nhẹ tự nhiên, sợi tóc đèn LED đung đưa theo quán tính; không gian bàn làm việc có luồng sáng đèn bàn dao động êm và các hạt bụi vàng `ambientMotes()` trôi lơ lửng.
+     - *Đồng hồ 2 (Diễn hoạt theo từng vế câu — Phrase-Synced Micro-Beats)*: Mọi câu thoại $\ge 3$ giây BẮT BUỘC phải chia thành 2–3 vi hành động bám theo từng vế câu trong `words.json`. Cứ mỗi khi giọng nói phát âm đến một danh từ/động từ/trạng từ quan trọng, màn hình lập tức có phản hồi thị giác tương ứng (nhân vật đổi thế tay, giọt mồ hôi rơi, mũi tên chỉ hướng, đạo cụ phản ứng).
+     - *Đồng hồ 3 (Biến hình dòng ý thức — Metamorphic Flow)*: Trong cùng một cảnh, các vật thể biến đổi hình học mượt mà từ trạng thái A sang B theo dòng suy nghĩ của nhân vật.
 ## 8. Quy chuẩn đặc tả cảnh chi tiết 5 trường (The 5-Field Shot Specification)
 
 Khi viết `TREATMENT.md`, AI Agent **bắt buộc phải mô tả từng shot bằng 5 trường định lượng chi tiết**, tuyệt đối cấm tóm tắt sơ sài 1 dòng:

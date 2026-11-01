@@ -122,8 +122,9 @@ export function figure(g, o = {}) {
 
   // Character origin is (0,0) at neck/chest center (SVG 390, 204)
   // Gentle breathing and floating motion
-  const breathe = Math.sin(t * 1.55) * 2;
-  const sway = Math.sin(t * 0.8) * 0.015;
+  // Gentle breathing and floating motion (organic life loop)
+  const breathe = Math.sin(t * 2.2) * 3.2;
+  const sway = (o.sway || 0) + Math.sin(t * 0.8) * 0.018;
   g.rotate(sway);
   g.translate(0, breathe);
   g.translate(-390, -204);
@@ -299,9 +300,9 @@ export function figure(g, o = {}) {
   // Glowing lightbulb on top of head
   g.save();
   g.shadowColor = PAL.bulb;
-  g.shadowBlur = E.glow === undefined ? 12 : 12 * E.glow;
+  const bulbPulse = Math.sin(t * 3.2) * 2.5;
+  g.shadowBlur = Math.max(4, (E.glow === undefined ? 12 : 12 * E.glow) + bulbPulse);
   g.strokeStyle = PAL.bulb;
-  g.lineWidth = 5;
   g.stroke(PATHS.bulb);
   g.beginPath();
   g.moveTo(397, 84); g.lineTo(411, 84);
@@ -346,9 +347,11 @@ export function figure(g, o = {}) {
   } else {
     g.fillStyle = PAL.ink;
     const eyeRy = (faceType === 'surprised' || E.open > 1.1) ? 14 : 9;
-    const lookX = (E.lookX || 0) * 4;
-    const lookY = (E.lookY || 0) * 3;
-    g.beginPath();
+    // Micro eye saccades and cognitive drift
+    const eyeDriftX = Math.sin(t * 0.85) * 1.6 + Math.sin(t * 2.1) * 0.8;
+    const eyeDriftY = Math.cos(t * 1.15) * 0.9;
+    const lookX = ((E.lookX || 0) * 4) + eyeDriftX;
+    const lookY = ((E.lookY || 0) * 3) + eyeDriftY;
     g.ellipse(366 + lookX, 160 + lookY, 8, eyeRy, 0, 0, TAU);
     g.ellipse(425 + lookX, 160 + lookY, 8, eyeRy, 0, 0, TAU);
     g.fill();

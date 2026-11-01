@@ -255,3 +255,20 @@ export function fadeWipe(g, p, col = '#000') {
   g.fillRect(0, 0, W, H);
   g.restore();
 }
+
+// ——— floating ambient dust particles (eliminates dead static holds) ———
+export function ambientMotes(g, t = 0, count = 14, bounds = { x0: 0, y0: 0, x1: W, y1: H }) {
+  g.save();
+  for (let i = 0; i < count; i++) {
+    const seed = i * 137.5;
+    const x = bounds.x0 + ((Math.sin(seed + t * 0.12) * 0.5 + 0.5) * (bounds.x1 - bounds.x0));
+    const y = bounds.y0 + ((Math.cos(seed * 1.3 + t * 0.18) * 0.5 + 0.5) * (bounds.y1 - bounds.y0));
+    const r = 1.4 + (Math.sin(seed * 2.1 + t * 0.8) * 0.5 + 0.5) * 2.2;
+    const a = 0.08 + (Math.sin(seed + t * 0.5) * 0.5 + 0.5) * 0.18;
+    g.fillStyle = `rgba(255, 217, 118, ${a})`;
+    g.beginPath();
+    g.arc(x, y, r, 0, TAU);
+    g.fill();
+  }
+  g.restore();
+}

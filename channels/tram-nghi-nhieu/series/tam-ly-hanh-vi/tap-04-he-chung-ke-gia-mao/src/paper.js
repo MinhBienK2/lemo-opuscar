@@ -3,7 +3,7 @@
 // film live here, never in floating boxes.
 import { cel, path, poly, ellP, line, mix, rgba, TAU, rect } from '../../../../rig/cel.js';
 import { PAL } from '../../../../rig/character.js';
-import { text, revealText, font, ease, seg } from '../../../../rig/broll.js';
+import { text, revealText, font, ease, seg, ambientMotes } from '../../../../rig/broll.js';
 
 export const INK = '#2A2F42';
 export const PAPER = '#F2EEE4';
@@ -18,9 +18,11 @@ export function deskScene(g, T, o = {}) {
   // the lamp: the shade at the top, the warm pool on the wood
   cel(g, poly([[40, -40], [420, -40], [352, 70], [108, 70]]), { f: '#33394E', s: '#222736', so: [-6, -6], l: PAL.ink, lw: 2.6 });
   cel(g, poly([[66, 56], [394, 56], [378, 86], [82, 86]]), { f: 'rgba(255,217,118,.8)', l: PAL.ink, lw: 2 });
+  const lampPulse = Math.sin(T * 1.8) * 0.025;
   const grd = g.createRadialGradient(820, 430, 40, 820, 430, 1150);
-  grd.addColorStop(0, 'rgba(255,183,3,.20)'); grd.addColorStop(1, 'rgba(255,183,3,0)');
+  grd.addColorStop(0, `rgba(255,183,3,${0.20 + lampPulse})`); grd.addColorStop(1, 'rgba(255,183,3,0)');
   g.fillStyle = grd; g.fillRect(0, 0, 1920, 1080);
+  ambientMotes(g, T, 12, { x0: 240, y0: 120, x1: 1680, y1: 840 });
   // the marker and the coffee ring on the wood
   if (o.marker !== false) markerPen(g, 1700, 880, -.22, 1.25);
   g.strokeStyle = 'rgba(120,78,40,.26)'; g.lineWidth = 6; g.beginPath(); g.ellipse(120, 900, 54, 18, .25, 0, TAU); g.stroke();

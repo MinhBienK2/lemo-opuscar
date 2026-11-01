@@ -234,51 +234,86 @@ function shots() {
       });
     }, ev: () => [[L('c1_8').t0 + .4, 'marker'], [L('c1_9').t0 + 1.2, 'marker'], [L('c1_13').t0 + .4, 'stamp']] },
 
-    // [Khối 8: ~3:05 - ~4:15] Bánh răng 1: Thước đo tự tăng & Đạo cụ CỘT XÀ NHẢY CAO (c2_2 đến c2_6)
-    // Ẩn dụ vật lý: Cột xà nhảy cao tự động nâng cao hơn mỗi khi nhảy qua
+    // [Khối 8: 134s - 180s] Bánh răng 1: Thước đo tự tăng (c2_2 đến c2_8)
+    // Hoạt ảnh liên tục từng vế câu, không có khoảng chết
     { n: 'gear1_highjump', t: at('c2_2', -.1), tr: 'whip', f(g, lt, T) {
       const t0 = L('c2_2').t0;
       page(g, T, t0, (gg) => {
-        P.pTitle(gg, 'BÁNH RĂNG 1: THƯỚC ĐO TỰ TĂNG', 90, 140, { size: 58, p: rv(T, 'c2_2', .3, 1.3) });
+        P.pTitle(gg, 'BÁNH RĂNG 1: THƯỚC ĐO TỰ TĂNG', 90, 130, { size: 56, p: rv(T, 'c2_2', .2, 1.2) });
 
-        // Đạo cụ Cột xà nhảy cao (High Jump) ở trung tâm
-        const raiseProgress = rv(T, 'c2_4', .5, 2.5);
-        P.pHighJump(gg, 420, 480, 1.4, { p: rv(T, 'c2_2', .6, 1.5), raise: raiseProgress });
+        // Pha 1 (c2_2): Khái niệm & Cột xà ở mức 1m
+        const pJump1 = rv(T, 'c2_2', .5, 1.5);
+        // Pha 2 (c2_3 - c2_4): Khi nhảy qua mức cũ, xà tự động kéo cao lên mức 2m
+        const raiseProgress = rv(T, 'c2_4', .3, 2.2);
+        P.pHighJump(gg, 380, 480, 1.4, { p: pJump1, raise: raiseProgress });
 
-        P.pHand(gg, 'vừa nhảy qua mức cũ', 700, 340, { size: 48, p: rv(T, 'c2_2', 1.2, 2.2) });
-        P.pHand(gg, 'xà tự động nâng lên gấp đôi', 700, 420, { size: 48, col: PAL.red.s, p: rv(T, 'c2_4', .8, 1.8) });
+        P.pHand(gg, 'vừa nhảy qua mức cũ', 640, 310, { size: 44, p: rv(T, 'c2_2', 1.0, 2.0) });
 
-        // c2_6: Locke & Latham 35 năm nghiên cứu
+        // Pha 3 (c2_4): Xà nâng lên gấp đôi
+        const pRaise = rv(T, 'c2_4', .5, 1.5);
+        if (pRaise > 0) {
+          P.pHand(gg, 'xà tự động nâng lên gấp đôi', 640, 380, { size: 46, col: PAL.red.s, p: pRaise });
+        }
+
+        // Pha 4 (c2_5): Khoảng cách không bao giờ hẹp lại
+        const pGap = rv(T, 'c2_5', .3, 1.5);
+        if (pGap > 0) {
+          gg.globalAlpha = pGap;
+          P.pArrow(gg, 600, 490, 600, 340, { w: 6, col: PAL.red.f, p: pGap });
+          P.pHand(gg, 'khoảng cách an tâm: luôn xa vời', 640, 460, { size: 42, col: PAL.red.s, p: pGap });
+        }
+
+        // Pha 5 (c2_6): Nghiên cứu Locke & Latham 35 năm
         const pLocke = rv(T, 'c2_6', .3, 1.4);
         if (pLocke > 0) {
-          P.pNum(gg, '35 năm', 700, 560, { size: 100, p: pLocke });
-          P.pNote(gg, 'Locke & Latham, 2002: Mục tiêu tự đặt luôn đẩy xa hơn', 700, 620, { size: 32, p: pLocke });
+          P.pNum(gg, '35 năm', 640, 580, { size: 84, p: pLocke });
+          P.pNote(gg, 'Locke & Latham, 2002: Mục tiêu tự đặt luôn đẩy xa hơn', 640, 640, { size: 30, p: pLocke });
+        }
+
+        // Pha 6 (c2_7 - c2_8): Cái bẫy tâm lý
+        const pTrap = rv(T, 'c2_7', .5, 1.6);
+        if (pTrap > 0) {
+          P.pHand(gg, 'mục tiêu tự đặt → hiệu suất cao hơn, nhưng hóa thành cái bẫy', 90, 710, { size: 40, col: '#6E6A5E', p: pTrap });
         }
       });
-    }, ev: () => [[at('c2_2', -.1), 'music', { cue: 'D' }], [at('c2_2', -.1), 'whoosh'], [L('c2_2').t0 + .4, 'marker'], [L('c2_4').t0 + .8, 'ting']] },
+    }, ev: () => [[at('c2_2', -.1), 'music', { cue: 'D' }], [at('c2_2', -.1), 'whoosh'], [L('c2_2').t0 + .4, 'marker'], [L('c2_4').t0 + .6, 'ting'], [L('c2_5').t0 + .5, 'boing'], [L('c2_6').t0 + .4, 'marker']] },
 
-    // [Khối 9: ~4:15 - ~5:10] Bánh răng 2: Quy công ra ngoài & Đạo cụ CÚP VÀNG TRÙM KHĂN (c2_9 đến c2_34)
-    // Ẩn dụ vật lý: Cúp vàng thành tích bị trùm khăn giấu đi vì cho rằng do may mắn
+    // [Khối 9: 180s - 224s] Bánh răng 2: Quy công ra ngoài (c2_9 đến c2_34)
     { n: 'gear2_trophy', t: at('c2_9', -.1), tr: 'cut', f(g, lt, T) {
       const t0 = L('c2_9').t0;
       page(g, T, t0, (gg) => {
-        P.pTitle(gg, 'BÁNH RĂNG 2: QUY CÔNG RA NGOÀI', 90, 140, { size: 58, p: rv(T, 'c2_9', .3, 1.3) });
+        P.pTitle(gg, 'BÁNH RĂNG 2: QUY CÔNG RA NGOÀI', 90, 130, { size: 56, p: rv(T, 'c2_9', .2, 1.2) });
 
-        // Đạo cụ Chiếc cúp vàng với khăn che
-        const clothCover = rv(T, 'c2_10', .3, 2.0);
-        P.pTrophy(gg, 400, 430, 1.5, { p: rv(T, 'c2_9', .6, 1.5), cloth: clothCover });
+        // Pha 1 (c2_9): Chiếc cúp vàng thành tích xuất hiện sáng loáng
+        // Pha 2 (c2_10): Khăn trùm kín cúp khi nhắc đến "may mắn"
+        const clothCover = rv(T, 'c2_10', .2, 1.8);
+        P.pTrophy(gg, 360, 420, 1.5, { p: rv(T, 'c2_9', .4, 1.4), cloth: clothCover });
 
-        P.pHand(gg, 'Thành công → Trùm khăn, coi do may mắn', 680, 360, { size: 46, col: PAL.green.s, p: rv(T, 'c2_10', .4, 1.5) });
-        P.pHand(gg, 'Thất bại → Nhận hết về mình, tự dằn vặt', 680, 450, { size: 46, col: PAL.red.s, p: rv(T, 'c2_11', .4, 1.5) });
+        // Pha 3 (c2_10): Thành công → may mắn, thời điểm
+        P.pHand(gg, 'Thành công → Trùm khăn che, coi do may mắn', 620, 310, { size: 44, col: PAL.green.s, p: rv(T, 'c2_10', .3, 1.4) });
 
-        // c2_33: Thí nghiệm 2023 trên 170 người
+        // Pha 4 (c2_11): Thất bại → Nhận hết về mình
+        const pFail = rv(T, 'c2_11', .3, 1.4);
+        if (pFail > 0) {
+          P.pHand(gg, 'Thất bại → Nhận hết về mình, tự dằn vặt', 620, 390, { size: 44, col: PAL.red.s, p: pFail });
+          P.pArrow(gg, 1360, 400, 1480, 400, { w: 6, col: PAL.red.f, p: pFail });
+        }
+
+        // Pha 5 (c2_12): Thuật ngữ Attributional Bias
+        const pBias = rv(T, 'c2_12', .3, 1.4);
+        if (pBias > 0) {
+          P.pHand(gg, 'Tâm lý học: Thiên lệch quy kết không tự phục vụ', 620, 480, { size: 42, col: PAL.violet.s, p: pBias });
+        }
+
+        // Pha 6 (c2_33 - c2_34): Thí nghiệm 2023 trên 170 người
         const pIbr = rv(T, 'c2_33', .3, 1.4);
         if (pIbr > 0) {
-          P.pNum(gg, '170 người', 680, 580, { size: 90, p: pIbr });
-          P.pNote(gg, 'Ibrahim et al., 2023: Thiên lệch không tự phục vụ (non-self-serving bias)', 680, 640, { size: 30, p: pIbr });
+          P.pNum(gg, '170 người', 620, 590, { size: 84, p: pIbr });
+          P.pNote(gg, 'Ibrahim, Göddertz & Herzberg (2023): Đo đạc thực nghiệm', 620, 650, { size: 30, p: pIbr });
+          P.pMark(gg, 1140, 580, { s: 36, col: PAL.green.f, kind: 'check', p: rv(T, 'c2_34', .2, 1.2) });
         }
       });
-    }, ev: () => [[L('c2_9').t0 + .4, 'marker'], [L('c2_10').t0 + .8, 'paper'], [L('c2_33').t0 + .5, 'marker']] },
+    }, ev: () => [[L('c2_9').t0 + .4, 'marker'], [L('c2_10').t0 + .6, 'paper'], [L('c2_11').t0 + .5, 'marker'], [L('c2_33').t0 + .4, 'marker']] },
 
     // [Khối 10: ~5:10 - ~6:10] Bánh răng 3: Chỉ nhớ lần vấp & Đèn Spotlight rọi áo xấu hổ (c2_15 đến c2_37)
     { n: 'gear3_spotlight', t: at('c2_15', -.1), tr: 'cut', f(g, lt, T) {
