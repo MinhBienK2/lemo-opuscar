@@ -1,0 +1,215 @@
+[
+  {
+    "id": "intro1",
+    "text": "Tháng Tư năm một nghìn chín trăm sáu mươi tám, tại Đại học Columbia, một sinh viên tên Tuấn bước vào phòng thí nghiệm.",
+    "asr": "Tháng 4-1968 tại Đại học Columbia, một sinh viên tên Tuấn bước vào phòng thí nghiệm.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+4%",
+    "pitch": "-6Hz"
+  },
+  {
+    "id": "intro2",
+    "text": "Người ta đưa cho cậu một tờ phiếu khảo sát và bảo: làm xong trong mười lăm phút nhé. Nhưng đó là một lời nói dối.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+4%",
+    "pitch": "-6Hz"
+  },
+  {
+    "id": "intro3",
+    "text": "Hai nhà tâm lý học Bibb Latané và John Darley không hề quan tâm Tuấn điền gì vào tờ giấy đó.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+4%",
+    "pitch": "-6Hz"
+  },
+  {
+    "id": "intro4",
+    "text": "Thứ họ đang chuẩn bị kích hoạt nằm ngay dưới chân tường.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+4%",
+    "pitch": "-6Hz"
+  },
+  {
+    "id": "smoke1",
+    "text": "Bốn phút trôi qua. Từ chiếc lưới thông gió sắt, một làn khói trắng bắt đầu xì ra.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+4%",
+    "pitch": "-6Hz"
+  },
+  {
+    "id": "smoke2",
+    "text": "Khói không độc, nhưng Tuấn không hề biết điều đó. Mùi khét lẹt xộc vào mũi, khói bò lổm ngổm trên mặt sàn gỗ.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+4%",
+    "pitch": "-6Hz"
+  },
+  {
+    "id": "smoke3",
+    "text": "Trong đầu cậu chỉ có đúng một ý nghĩ: tòa nhà này đang cháy thật rồi.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+4%",
+    "pitch": "-6Hz"
+  },
+  {
+    "id": "alone1",
+    "text": "Trong lượt thử nghiệm đầu tiên, Tuấn ngồi một mình trong phòng.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+4%",
+    "pitch": "-6Hz"
+  },
+  {
+    "id": "alone2",
+    "text": "Cậu ngước mắt lên, buông bút, đứng bật dậy và đẩy cửa chạy vội ra ngoài hành lang báo cho ban quản lý.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+4%",
+    "pitch": "-6Hz"
+  },
+  {
+    "id": "alone3",
+    "text": "Bảy mươi lăm phần trăm người tham gia khi ở một mình hành động y hệt như Tuấn: họ chạy ra báo ngay trong vòng chưa đầy hai phút.",
+    "asr": "75% người tham gia khi ở một mình hành động y hệt như Tuấn: họ chạy ra báo ngay trong vòng chưa đầy 2 phút.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+4%",
+    "pitch": "-6Hz"
+  },
+  {
+    "id": "group1",
+    "text": "Nhưng bây giờ, hãy nhìn sang căn phòng thứ hai.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+4%",
+    "pitch": "-6Hz"
+  },
+  {
+    "id": "group2",
+    "text": "Cũng là Tuấn, cũng căn phòng đó, nhưng ngồi cùng bàn với cậu là hai người lạ khác.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+4%",
+    "pitch": "-6Hz"
+  },
+  {
+    "id": "group3",
+    "text": "Tuấn không biết rằng hai người này thực ra là diễn viên được cài vào, với một nhiệm vụ duy nhất: tuyệt đối làm lơ.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+4%",
+    "pitch": "-6Hz"
+  },
+  {
+    "id": "group4",
+    "text": "Khói lại bắt đầu xì ra, đặc quánh đến mức che mờ cả bóng đèn trên trần.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+4%",
+    "pitch": "-6Hz"
+  },
+  {
+    "id": "group5",
+    "text": "Tuấn ho sặc sụa, dụi mắt, rồi hoang mang liếc nhìn sang hai người bên cạnh.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+4%",
+    "pitch": "-6Hz"
+  },
+  {
+    "id": "group6",
+    "text": "Hai người kia chỉ thản nhiên lật trang giấy, tiếp tục làm bài như thể đang ngồi trong một buổi sáng chủ nhật bình yên.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+4%",
+    "pitch": "-6Hz"
+  },
+  {
+    "id": "hesitate1",
+    "text": "Và điều kỳ lạ nhất bắt đầu xảy ra.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+4%",
+    "pitch": "-6Hz"
+  },
+  {
+    "id": "hesitate2",
+    "text": "Tuấn chần chừ. Cậu hơi nhổm người dậy, rồi lại ngập ngừng ngồi xuống ghế.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+4%",
+    "pitch": "-6Hz"
+  },
+  {
+    "id": "hesitate3",
+    "text": "Cậu nhìn cửa thoát hiểm, lấy tay phẩy làn khói đang bốc lên tận cằm, rồi lại cúi đầu cắm cúi viết tiếp.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+4%",
+    "pitch": "-6Hz"
+  },
+  {
+    "id": "mech1",
+    "text": "Tâm lý học gọi đây là Hiểu lầm tập thể, hay Pluralistic Ignorance.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+4%",
+    "pitch": "-6Hz"
+  },
+  {
+    "id": "mech2",
+    "text": "Khi đối mặt với một tình huống mơ hồ, não bộ chúng ta có phản xạ tự nhiên: nhìn sang người khác để xem họ phản ứng thế nào.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+4%",
+    "pitch": "-6Hz"
+  },
+  {
+    "id": "mech3",
+    "text": "Nhưng bi kịch là ai cũng sợ bị coi là kẻ hoảng loạn ngớ ngẩn, nên ai cũng cố giữ khuôn mặt bình thản.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+4%",
+    "pitch": "-6Hz"
+  },
+  {
+    "id": "mech4",
+    "text": "Và thế là mọi người cùng nhìn vào sự bình thản giả tạo của nhau, rồi rút ra kết luận: chắc không có gì nguy hiểm đâu.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+4%",
+    "pitch": "-6Hz"
+  },
+  {
+    "id": "stats1",
+    "text": "Kết quả con số năm một nghìn chín trăm sáu mươi tám khiến cả giới khoa học bàng hoàng.",
+    "asr": "Kết quả con số năm 1968 khiến cả giới khoa học bàng hoàng.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+4%",
+    "pitch": "-6Hz"
+  },
+  {
+    "id": "stats2",
+    "text": "Khi có hai người thụ động ngồi cạnh, chỉ có đúng mười phần trăm người dám đứng dậy đi báo cháy.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+4%",
+    "pitch": "-6Hz"
+  },
+  {
+    "id": "stats3",
+    "text": "Chín mươi phần trăm còn lại chọn cách ngồi yên hít khói suốt sáu phút đồng hồ, cho đến khi các nhà nghiên cứu phải tự mở cửa dừng thí nghiệm.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+4%",
+    "pitch": "-6Hz"
+  },
+  {
+    "id": "action1",
+    "text": "Đám đông không làm chúng ta an toàn hơn. Ngược lại, đám đông thường làm tê liệt trách nhiệm của từng cá nhân.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+4%",
+    "pitch": "-6Hz"
+  },
+  {
+    "id": "action2",
+    "text": "Nếu ai cũng chờ người khác lên tiếng trước, thì sẽ không có ai lên tiếng cả.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+4%",
+    "pitch": "-6Hz"
+  },
+  {
+    "id": "action3",
+    "text": "Lần tới, nếu bạn thấy điều gì đó bất thường hoặc có ai đó cần giúp đỡ, đừng nhìn quanh xem người khác đang làm gì.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+4%",
+    "pitch": "-6Hz"
+  },
+  {
+    "id": "action4",
+    "text": "Hãy là người đầu tiên đứng dậy. Mình là Kẻ Nghĩ Nhiều. Hẹn gặp bạn ở tập sau.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+4%",
+    "pitch": "-6Hz"
+  }
+]
