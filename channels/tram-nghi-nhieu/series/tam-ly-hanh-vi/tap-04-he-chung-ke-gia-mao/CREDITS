@@ -1,0 +1,25 @@
+# Credits & licences: Hội chứng Kẻ Giả Mạo (Trạm Nghĩ Nhiều, episode `series/tam-ly-hanh-vi/tap-04-he-chung-ke-gia-mao`)
+
+Every third-party asset of the film, with its source and its licence. The shared code belongs to
+the channel and is used from there — it is never copied into this episode.
+
+| Asset | Source | Licence |
+|---|---|---|
+| All drawing, the shots and the animation (`src/`) | Canvas 2D code written for this episode | yours |
+| The character rig and the shared drawing helpers (`../../../../rig/`) | the channel's shared code — used from the channel, never copied here | yours |
+| The mix (`../../../../mix.py`) | the channel's shared mix: music, ambience, foley | yours / MIT |
+| The voice (`../../../../voice/`) | the channel's voice pipeline — a stock neural voice (vi-VN-NamMinhNeural), no cloning | the voice service's terms |
+| The fonts (`../../../../fonts/`) | the channel's fonts (Be Vietnam Pro, Patrick Hand) | SIL Open Font License 1.1 (see the OFL files in the channel's `fonts/`) |
+| Sources of the research | listed in `research/FACTS.md` — no image, audio, logo or dataset from any research group is used in the film; every chart is drawn in code | — |
+
+## Papers the film quotes
+
+- Clance, P. R., & Imes, S. A. (1978). *The imposter phenomenon in high achieving women*. Psychotherapy: Theory, Research and Practice, 15(3), 241–247.
+- Bravata, D. M., et al. (2020). *Prevalence, Predictors, and Treatment of Impostor Syndrome: a Systematic Review*. Journal of General Internal Medicine, 35(4), 1252–1275.
+- Locke, E. A., & Latham, G. P. (2002). *Building a practically useful theory of goal setting and task motivation*. American Psychologist, 57(9), 705–717.
+- Ibrahim, F., Göddertz, D., & Herzberg, P. Y. (2023). *An experimental study of the non-self-serving attributional bias within the impostor phenomenon*. Current Psychology, 42, 26440–26449.
+- Kruger, J., & Dunning, D. (1999). *Unskilled and unaware of it*. Journal of Personality and Social Psychology, 77(6), 1121–1134.
+- Gilovich, T., Medvec, V. H., & Savitsky, K. (2000). *The spotlight effect in social judgment*. Journal of Personality and Social Psychology, 78(2), 211–222.
+- Para, E., Dubreuil, P., Miquelon, P., & Martin-Krumm, C. (2024). *Interventions addressing the impostor phenomenon: a scoping review*. Frontiers in Psychology, 15, 1360540.
+
+Full citations, the numbers that go on screen and the limits of each source: `research/FACTS.md`.

@@ -1,0 +1,906 @@
+[
+  {
+    "id": "hook",
+    "text": "Mình vừa trình bày xong phần cuối, và cả phòng họp gật đầu.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "hook2",
+    "text": "Sếp mình nói: phần này làm tốt lắm, cảm ơn cậu.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "hook3",
+    "text": "Mình cảm ơn, mình cười, mình bắt tay cả mọi người.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "hook4",
+    "text": "Rồi mình đi ra hành lang, một mình.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "hook5",
+    "text": "Và trong đầu, một câu nói cứ chạy ngay sau tiếng vỗ tay: lỡ họ biết mình thật ra không đủ thì sao?",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "hook6",
+    "text": "Mình làm đúng phần việc của mình. Nhưng cảm giác đó không đi.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "intro",
+    "text": "Chào bạn, mình là Kẻ Nghĩ Nhiều. Cảm giác vừa rồi có một cái tên riêng.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "intro2",
+    "text": "Hôm nay mình sẽ mổ xẻ nó. Vì nó không phải tính cách của bạn.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "intro3",
+    "text": "Nó là một cỗ máy, và cỗ máy này có mấy bánh răng.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c1_1",
+    "text": "Năm một nghìn chín trăm bảy mươi tám, hai nhà tâm lý học làm một việc khá lạ.",
+    "asr": "năm 1978, Hai nhà tâm lý học là một việc khá lạ.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c1_2",
+    "text": "Họ làm việc với hơn một trăm năm mươi người phụ nữ thành công, phần lớn có bằng tiến sĩ.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c1_3",
+    "text": "Những người giỏi, được tuyển, xuất sắc, và vẫn tin rằng mình là kẻ lừa đả.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c1_4",
+    "text": "Họ đặt tên cho nó: hiện tượng kẻ giả mạo.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c1_5",
+    "text": "Định nghĩa thì rất gọn: thành công có thật, nhưng bạn không dám nhận là của mình.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c1_6",
+    "text": "Và bạn sợ đến ngày bị vạch trần.",
+    "asr": "và bạn sợ đến ngày bị vặt trưng.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c1_7",
+    "text": "Gần đây, một nhóm tác giả đã rà lại toàn bộ tài liệu công bố về chủ đề này.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c1_8",
+    "text": "Sáu mươi hai nghiên cứu, mười bốn nghìn một trăm sáu mươi mốt người tham gia.",
+    "asr": "62.14.161 người tham gia.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c1_9",
+    "text": "Tỉ lệ có cảm giác kẻ giả mạo chạy từ chín phần trăm đến tám mươi hai phần trăm.",
+    "asr": "Tỷ lệ có cảm giác kẻ giả mạo chạy từ 9% đến 82%.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c1_10",
+    "text": "Chênh nhau tới chín lần, chỉ vì mỗi nhóm dùng một cách đo khác nhau.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c1_11",
+    "text": "Nói cách khác: đây không phải chuyện thiếu hiếm. Nó là chuyện phổ biến.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c1_16",
+    "text": "Và con số đó không nói ai dễ bị hơn ai.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c1_12",
+    "text": "Nó không chỉ ở phụ nữ, không chỉ ở người mới, và không chỉ ở một ngành.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c1_17",
+    "text": "Nó xuất hiện ở cả nam lẫn nữ, ở học sinh, bác sĩ, giảng viên, và cả ở người mới vào nghề.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c1_13",
+    "text": "Và nó không phải một bệnh lý: nó không có trong sách phân loại bệnh tâm thần.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c1_14",
+    "text": "Đến giờ chưa có nghiên cứu nào đánh giá được cách chữa nó.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c1_18",
+    "text": "Và còn một điều ít người nói tới: cảm giác này không phải bạn đang lừa ai.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c1_19",
+    "text": "Bạn không giả vờ giỏi. Bạn thật sự giỏi, nhưng bạn không tin vào điều đó.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c2_1",
+    "text": "Vậy thì cỗ máy gồm những gì? Mình tách nó ra ba bánh răng.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c2_2",
+    "text": "Bánh đầu tiên: thước đo của bạn tự tăng lên mỗi lần bạn nỗ lực.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c2_3",
+    "text": "Bạn làm tốt, bạn tự đặt mục tiêu mới cao hơn, rồi lại so với mục tiêu mới.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c2_4",
+    "text": "Khoảng cách không bao giờ hẹp lại. Nó chỉ đổi chỗ.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c2_5",
+    "text": "Bạn không so với người khác. Bạn so với phiên bản tốt nhất của chính mình.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c2_30",
+    "text": "Và đây là chỗ khó chịu nhất: thước đo đó không ai nhìn thấy, nhưng nó luôn ở đó.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c2_6",
+    "text": "Nghiên cứu về đặt mục tiêu đã lặp lại điều này suốt ba mươi lăm năm.",
+    "asr": "Nghiên cứu về đặc mục tiêu đã lập lại điều này suốt 35 năm.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c2_7",
+    "text": "Mục tiêu tự đặt, cụ thể và khó, thường đẩy người ta đi xa hơn mục tiêu người khác đặt.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c2_8",
+    "text": "Nó giúp bạn giỏi hơn. Nó cũng làm thước đo của bạn khó chịu hơn.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c2_31",
+    "text": "Nên càng giỏi, bạn càng có nhiều việc để so, và càng ít thời gian để so.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c2_9",
+    "text": "Bánh thứ hai: bạn quy công cho kẻ khác.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c2_10",
+    "text": "Thành công thì do may, do thời điểm, do may mắn được hỏi đúng câu.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c2_11",
+    "text": "Thất bại thì do bản thân, do thiếu năng lực, do không đủ giỏi.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c2_12",
+    "text": "Tâm lý học gọi đây là thiên lệch tự phục vụ.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c2_13",
+    "text": "Nghe qua thì có vẻ khiêm tốn. Nhưng cơ chế này không cho bạn lớn lên.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c2_32",
+    "text": "Người khác nghe kể thì thấy bạn khiêm tốn. Bạn nghe kể thì thấy mình đang lừa dối.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c2_33",
+    "text": "Một thí nghiệm năm hai nghìn không trăm hai mươi ba, với một trăm bảy mươi người, đã đo được đúng cái này.",
+    "asr": "Một thí nghiệm năm 2020-23 với 170 người đã đo được đúng cái này.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c2_34",
+    "text": "Khi được khen, họ quy công ra ngoài. Khi bị chê, họ quy công vào trong.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c2_14",
+    "text": "Vì cái tệ là: mỗi lần thắng, bạn không học được rằng bạn giỏi.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c2_15",
+    "text": "Bánh thứ ba: bạn chỉ ghi nhớ những lần bị nhìn thấy.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c2_16",
+    "text": "Hai mươi lần tốt, bạn quên. Một lần vấp, bạn nhớ cả năm.",
+    "asr": "20 lần tốt, bạn quên. 1 lần vấp, bạn nhớ cả năm.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c2_17",
+    "text": "Hệ quả là bạn không có dữ liệu về bản thân, chỉ có dữ liệu về những lần mình thiếu sót.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c2_35",
+    "text": "Đó là lý do bạn hay chuẩn bị quá mức, và hay trì hoãn lúc cần bắt đầu.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c2_18",
+    "text": "Tệ hơn: bạn tưởng cả phòng đang nhìn mình, trong khi thật ra rất ít người để ý.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c2_19",
+    "text": "Có một thí nghiệm nổi tiếng về đúng cái cảm giác này.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c2_20",
+    "text": "Người tham gia đoán xem có bao nhiêu người nhận ra chiếc áo của mình.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c2_21",
+    "text": "Họ đoán gần một nửa số người sẽ nhớ. Thực tế, chỉ khoảng hai mươi ba phần trăm.",
+    "asr": "Họ đoán gần một nửa số người sẽ nhớ. Thực tế, chỉ khoảng 23%.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c2_22",
+    "text": "Sự chú ý của người khác nhỏ hơn bạn tưởng rất nhiều. Nhưng nỗi sợ của bạn thì không nhỏ.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c2_36",
+    "text": "Và còn một cơ chế nữa, cơ chế âm thầm nhất.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c2_37",
+    "text": "Bạn đi tìm bằng chứng chống lại mình: lướt tin, hỏi lại, soi xem có ai thấy mình sai không.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c2_38",
+    "text": "Đó là cách bạn tự kiểm chứng lại điều bạn đã tin.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c3_1",
+    "text": "Giờ đến câu hỏi của đề bài: tại sao càng nỗ lực, càng sợ bị vạch trần?",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c3_2",
+    "text": "Câu trả lời thứ nhất nằm ở bánh đầu tiên, nhưng khó hơn nhiều.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c3_3",
+    "text": "Mỗi lần bạn học thêm, bạn thấy rõ hơn mình còn thiếu bao nhiêu.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c3_4",
+    "text": "Kiến thức không chỉ thêm công cụ. Nó cũng làm lộ chỗ trống.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c3_5",
+    "text": "Người mới vào nghề chỉ thấy đích. Người đi nửa đường thấy cả đoạn đường còn lại.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c3_19",
+    "text": "Nên càng đi sâu, bạn càng thấy công việc này lớn hơn việc bạn tưởng.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c3_6",
+    "text": "Câu trả lời thứ hai: thất bại đau hơn thành công vui.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c3_7",
+    "text": "Trong kinh tế học hành vi, một khoản lỗ luôn nặng hơn một khoản lãi cùng cỡ.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c3_8",
+    "text": "Nên khi giá trị của việc bạn làm càng lớn, cái giá của việc bị phát hiện càng lớn.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c3_9",
+    "text": "Bạn không sợ sai. Bạn sợ bị nhìn thấy là sai.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c3_20",
+    "text": "Càng làm việc càng lớn, càng nhiều người theo dõi, càng dễ sợ.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c3_10",
+    "text": "Câu trả lời thứ ba: công sức bạn bỏ ra không cho phép bạn thua dễ dàng.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c3_11",
+    "text": "Ta coi trọng thứ mình tự làm hơn thứ có sẵn.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c3_12",
+    "text": "Nên thừa nhận mình chưa đủ, cũng là thừa nhận mình đã bỏ công vô ích.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c3_13",
+    "text": "Vòng xoáy là: càng làm, càng sợ; càng sợ, càng làm.",
+    "asr": "Vòng sối là, càng làm, càng sở, càng sở, càng làm.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c3_21",
+    "text": "Năm 1978, họ đã vẽ vòng xoáy này ra: lo lắng, chăm chỉ, đạt kết quả, được khen, rồi lại lo.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c3_22",
+    "text": "Và họ viết rằng: nhiều lần thành công lặp lại, một mình, không đủ để phá vỡ vòng xoáy này.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c3_14",
+    "text": "Và mình muốn bác bỏ một câu nói đẹp: người giỏi luôn tự hạ thấp mình.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c3_15",
+    "text": "Nghiên cứu kinh điển năm chín trăm chín mươi chín không nói vậy.",
+    "asr": "Nghiên cứu kinh điển 1999 không nói vậy.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c3_16",
+    "text": "Nó nói: nhóm kém nhất thì phóng đại năng lực của chính mình.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c3_17",
+    "text": "Điểm thật của họ ở thứ hạng mười hai, còn họ tự đánh giá là ở thứ hạng sáu mươi hai.",
+    "asr": "Điểm thật của họ ở thứ hàng 12, còn họ từ đánh giá là ở thứ hàng 62.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c3_18",
+    "text": "Và nghiên cứu đó nói về nhóm cuối bảng xếp hạng, không nói về người có cảm giác kẻ giả mạo.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c4_1",
+    "text": "Cái giá thì không nhẹ.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c4_2",
+    "text": "Bảng tổng hợp đó ghi nhận hội chứng này đi cùng trầm cảm và lo âu.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c4_8",
+    "text": "Có nghiên cứu năm hai nghìn không trăm bốn ước tính nó dự báo tới mười lăm phần trăm mức khó chịu tâm lý mà người ta tự báo.",
+    "asr": "Có nghiên cứu năm 2004 ước tính nói dự báo tới 15% mức khó chịu tâm lý mà người ta tự báo.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c4_3",
+    "text": "Cùng giảm sự hài lòng trong công việc, và cùng kiệt sức.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c4_9",
+    "text": "Người ta còn thấy nó đi cùng kiệt sức cảm xúc, và với thói quen làm việc quá nhiều giờ.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c4_4",
+    "text": "Một nghịch lý nữa: người có cảm giác kẻ giả mạo thường né việc được giao.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c4_5",
+    "text": "Không phải vì họ thiếu năng lực, mà vì thành công cũng là một lần vạch trần nữa.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c4_10",
+    "text": "Nó còn chặn đường tiến của người ta: nhiều người không nhận vai trò dẫn dắt, dù đã đủ khả năng.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c4_11",
+    "text": "Họ không thiếu khả năng. Họ thiếu lý do để bước lên.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c4_6",
+    "text": "Họ tự giới hạn mình, rồi gọi đó là khiêm tốn.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c4_7",
+    "text": "Và mình cũng từng tự làm thế, trước khi hiểu rằng cái giá của việc giấu mình là lớn hơn nhiều.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c5_1",
+    "text": "Vậy làm sao? Mình không định khuyên bạn uống thuốc hay đi khám.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c5_2",
+    "text": "Bởi vì chưa có nghiên cứu nào đánh giá được cách chữa cái này.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c5_19",
+    "text": "Nhưng người ta đã bắt đầu thử.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c5_20",
+    "text": "Một rà soát năm hai nghìn không trăm hai mươi bốn tổng hợp ba mươi mốt nghiên cứu can thiệp.",
+    "asr": "Một trà xoát năm 2024 tổng hợp 31 nghiên cứu can thiệp.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c5_21",
+    "text": "Hai hướng nổi lên: đào tạo để nhận ra hiện tượng, và coaching, tức là tư vấn bằng quá trình.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c5_22",
+    "text": "Một thử nghiệm ngẫu nhiên trên hơn một nghìn người: coaching nhóm trực tuyến làm giảm rõ rệt cả hội chứng kẻ giả mạo lẫn kiệt sức.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c5_23",
+    "text": "Một thử nghiệm khác trên hai trăm hai mươi bảy người: bốn buổi luyện tự thương, mỗi buổi bốn mươi lăm phút.",
+    "asr": "Một thử nghiệm khác trên 227 người, 4 buổi luyện từ thương, mỗi buổi 45 phút.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c5_24",
+    "text": "Kết quả: cả hội chứng kẻ giả mạo lẫn xu hướng hoàn hảo không lành đều giảm.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c5_25",
+    "text": "Nhưng phần lớn các nghiên cứu chỉ đo trước và sau. Bằng chứng còn mỏng.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c5_3",
+    "text": "Cái mình đưa cho bạn là một công cụ tư duy, dùng được ngay tối nay.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c5_26",
+    "text": "Nên mình không hứa bạn sẽ hết. Mình đưa cho bạn công cụ để bạn tự làm.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c5_4",
+    "text": "Tên của nó là: sổ bằng chứng bất đối xứng.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c5_5",
+    "text": "Bạn cần một cuốn sổ, và ba quy tắc.",
+    "asr": "Bạn cần 1 cuốn số và 3 quy tắc.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c5_6",
+    "text": "Quy tắc một: mỗi dòng ghi vào phải có việc, có ngày, và có một người đã xác nhận.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c5_7",
+    "text": "Không ghi mình giỏi. Ghi ai đã thấy mình làm việc gì.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c5_8",
+    "text": "Vì lời khen trong đầu bạn không phải bằng chứng. Lời khen của người khác mới là.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c5_27",
+    "text": "Đó là cách bạn lấy lại dữ liệu về bản thân, thay vì chờ ai đó kể lại.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c5_9",
+    "text": "Quy tắc hai: bất đối xứng nghĩa là cân bằng.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c5_10",
+    "text": "Mỗi lần bạn ghi một lần bị vạch trần, bạn phải ghi một lần được công nhận.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c5_11",
+    "text": "Không phải để tự khoe. Để mẫu số của bạn không bị bóp méo.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c5_12",
+    "text": "Quy tắc ba: đổi câu hỏi.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c5_13",
+    "text": "Đừng hỏi liệu họ có biết mình không đủ. Câu đó không có đáp án.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c5_14",
+    "text": "Hãy hỏi: ai đã thấy mình làm việc này? Câu đó có đáp án, và đáp án nằm trong sổ.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c5_28",
+    "text": "Và nhớ: nếu sổ còn trống, thì đó là dữ kiện về sổ, không phải về bạn.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c5_15",
+    "text": "Thêm một việc nữa: nói ra việc mình đã làm, với người đủ tư cách bình luận.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c5_16",
+    "text": "Đừng chờ cảm giác tự tin tới. Cảm giác đó là kết quả, không phải điều kiện.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c5_17",
+    "text": "Mình không hứa bạn sẽ tự tin hơn. Mình hứa bạn sẽ có bằng chứng.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c5_18",
+    "text": "Và sổ này không thay thế chuyên gia. Nó thay thế cái im lặng của việc không ai chứng kiến.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c6_1",
+    "text": "Tối nay, trước khi ngủ, mở cuốn sổ ra.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c6_2",
+    "text": "Viết ba dòng: việc mình đã làm, ai đã thấy, và một lần mình làm tốt hơn mình nghĩ.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c6_3",
+    "text": "Ba dòng đó. Không hơn.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c6_7",
+    "text": "Sổ của bạn không cần đẹp. Nó cần có người đọc được.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c6_4",
+    "text": "Vì mỗi lần bạn viết ra một dòng có tên và có ngày,",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c6_5",
+    "text": "bạn đang lấy lại một phần quyền đánh giá mình, mà bạn đã tự trao cho người khác.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c6_8",
+    "text": "Và nếu mai có ai khen, bạn sẽ có dòng đó trong sổ.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  },
+  {
+    "id": "c6_6",
+    "text": "Mình là Kẻ Nghĩ Nhiều. Hẹn gặp bạn ở tập sau.",
+    "voice": "vi-VN-NamMinhNeural",
+    "rate": "+5%",
+    "pitch": "-8Hz"
+  }
+]
