@@ -31,6 +31,24 @@ Nét viền `#1D202A` luôn dày ~3,4 px trên màn hình, bất kể tỉ lệ.
 | Cảnh báo (con dấu, pin) | `#F0525B` |
 
 Quy tắc: **một màu nhấn mỗi cảnh**. Vàng không bao giờ làm nền; tím chỉ thuộc về Rối; đỏ chỉ thuộc về cái đe dọa hoặc cái sai.
+Bảng màu thực tế trong code (`rig/character.js:PAL`): da kem `#fff0d8`, áo vàng nghệ `#f7bd27`, quần navy `#252d50`, tím Rối `#9a5be5`, đỏ cảnh báo `#f04462`, xanh dữ liệu `#67e8f9`.
+
+## 3b. Đạo diễn đa phong cách theo từng cảnh (Multi-Style Scene Direction)
+
+Để tránh sự đơn điệu và xóa bỏ cảm giác "vẽ phẳng bằng code thô", mỗi phân cảnh (Scene Block) trong kịch bản được quyền áp dụng một phong cách hình ảnh chuyên biệt mượn từ các style tinh hoa trong thư viện repo (`rig/styles.js`):
+
+1. **`dossier` (Hồ sơ điều tra tâm lý — từ `halftone-dossier`)**:
+   - Dành cho các phân cảnh mổ xẻ nghiên cứu, bóc trần ngụy biện, kiểm chứng sự thật.
+   - Hiệu ứng: Hạt trame bán sắc Ben-Day (`drawHalftoneField`), tiêu đề hồ sơ lưu trữ (`drawDossierHeader`), con dấu đập nảy mạnh vỡ mực (`drawStampSlam`), thẻ tang vật ghim chỉ đỏ (`drawEvidenceTag`).
+2. **`midcentury` (Hoạt hình 50s nảy vui — từ `midcentury-toon`)**:
+   - Dành cho các phân cảnh kể tình huống đời thường, cảm xúc nhân vật và sự hài hước.
+   - Hiệu ứng: Tia sáng sunburst tỏa góc (`drawSunburst`), ngôi sao lấp lánh nguyên tử (`drawSparkle`), chuyển động lò xo nảy giật nhịp (`spring`, `squash`).
+3. **`swiss` (Đồ họa dữ liệu chính xác — từ `swiss-motion`)**:
+   - Dành cho các phân cảnh cơ chế khoa học não bộ, các mốc phần trăm và định luật tâm lý.
+   - Hiệu ứng: Lưới đồ họa Thụy Sĩ tương phản cao, con số kích thước khổng lồ kèm thước đo vi lượng (`drawSwissMetric`).
+4. **`tactile paper & grain` (Xúc giác giấy & phim nhựa)**:
+   - Mọi cảnh đều được phủ lớp giấy có nếp gấp và bụi phim (`applyPaperTexture`, `renderGrainFx`), khử hoàn toàn bề mặt trơn nhẵn vô hồn.
+
 
 ## 4. Bố cục và camera
 

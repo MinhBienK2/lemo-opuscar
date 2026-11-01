@@ -1,0 +1,15 @@
+{
+  "slug": "tram-nghi-nhieu",
+  "en": "The Overthinker Station",
+  "cn": "Trạm Nghĩ Nhiều",
+  "based_on": "cel-anime-80s",
+  "borrows": [
+    "halftone-dossier",
+    "midcentury-toon",
+    "swiss-motion"
+  ],
+  "library_version": "cb6f12c",
+  "created": "2026-10-30",
+  "line": "Minimalist 2D psychological explainer with multi-style scene direction (Dossier, Mid-century, Swiss).",
+  "line_cn": "Kênh giải phẫu tâm lý học 2D tối giản với đạo diễn đa phong cách theo cảnh (Hồ sơ bán sắc, Hoạt hình 50s, Đồ họa Thụy Sĩ)."
+}

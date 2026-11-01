@@ -86,7 +86,7 @@ channels/tram-nghi-nhieu/
 ├── STYLE.md            # ngôn ngữ hình ảnh của kênh
 ├── DEMO.md             # demo của kênh
 ├── cast-sheet.jpg      # bảng đặc tả nhân vật The Overthinker & Rối
-├── rig/                # code vẽ dùng chung (character.js, cel.js, hands.js, sets.js, broll.js)
+├── rig/                # code vẽ dùng chung (character.js, cel.js, hands.js, sets.js, broll.js, styles.js, motion.js)
 ├── mix.py              # âm thanh dùng chung: nhạc + ambience + foley + lùi dB + nén
 ├── fonts/              # Be Vietnam Pro + Patrick Hand (OFL) + fonts.css
 ├── voice/              # tts_vi.py, asr_vi.py, process.py (dùng chung)
@@ -221,6 +221,13 @@ Mọi AI Agent khi nhận đề tài làm video cho kênh BẮT BUỘC phải tu
      - *Đồng hồ 1 (Nhịp thở sinh học & Môi trường)*: Nhân vật luôn có nhịp thở phập phồng, mắt liếc nhẹ tự nhiên, sợi tóc đèn LED đung đưa theo quán tính; không gian bàn làm việc có luồng sáng đèn bàn dao động êm và các hạt bụi vàng `ambientMotes()` trôi lơ lửng.
      - *Đồng hồ 2 (Diễn hoạt theo từng vế câu — Phrase-Synced Micro-Beats)*: Mọi câu thoại $\ge 3$ giây BẮT BUỘC phải chia thành 2–3 vi hành động bám theo từng vế câu trong `words.json`. Cứ mỗi khi giọng nói phát âm đến một danh từ/động từ/trạng từ quan trọng, màn hình lập tức có phản hồi thị giác tương ứng (nhân vật đổi thế tay, giọt mồ hôi rơi, mũi tên chỉ hướng, đạo cụ phản ứng).
      - *Đồng hồ 3 (Biến hình dòng ý thức — Metamorphic Flow)*: Trong cùng một cảnh, các vật thể biến đổi hình học mượt mà từ trạng thái A sang B theo dòng suy nghĩ của nhân vật.
+8. **Đạo diễn đa phong cách theo phân cảnh (Multi-Style Scene Director Engine)**:
+   - BẮT BUỘC đọc và tuân thủ `STYLE.md` của kênh trước khi vẽ.
+   - BẮT BUỘC ứng dụng bộ công cụ từ `rig/styles.js`:
+     - Phủ lớp xúc giác giấy & phim nhựa (`applyPaperTexture(G)` và `renderGrainFx(G, t)`): xóa bỏ hoàn toàn cảm giác vector phẳng thô, đem lại chiều sâu điện ảnh.
+     - Phân cảnh nghiên cứu / bóc trần ngụy biện: dùng phong cách **Dossier** (`drawHalftoneField`, `drawDossierHeader`, `drawStampSlam`, `drawEvidenceTag`).
+     - Phân cảnh tình huống / tâm sự đời thường: dùng phong cách **Mid-century** (`drawSunburst`, `drawSparkle`, động tác nảy lò xo).
+     - Phân cảnh dữ liệu / cơ chế thần kinh: dùng phong cách **Swiss** (`drawSwissMetric`, lưới đồ họa Thụy Sĩ).
 ## 8. Quy chuẩn đặc tả cảnh chi tiết 5 trường (The 5-Field Shot Specification)
 
 Khi viết `TREATMENT.md`, AI Agent **bắt buộc phải mô tả từng shot bằng 5 trường định lượng chi tiết**, tuyệt đối cấm tóm tắt sơ sài 1 dòng:
