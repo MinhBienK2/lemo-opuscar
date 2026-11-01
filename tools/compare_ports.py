@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """So sánh cùng một tập phim được dựng bằng nhiều engine.
 
-    python3 tools/compare_ports.py --label "Remotion" ~/Documents/remotion-explainer/out/tap-03-nghich-ly-lua-chon.mp4 \
-                                   --label "HyperFrames" ~/Documents/hyperframes-explainer/out/tap-03-nghich-ly-lua-chon.mp4 \
+    python3 tools/compare_ports.py "Remotion=~/Documents/remotion-explainer/out/tap-03-nghich-ly-lua-chon.mp4" \
+                                   "HyperFrames=~/Documents/hyperframes-explainer/out/tap-03-nghich-ly-lua-chon.mp4" \
                                    --sheet out/compare
 
 Báo cáo cho mỗi bản: thời lượng, độ phân giải, fps, codec, âm lượng tích hợp (LUFS), số khung
@@ -98,15 +98,18 @@ def contact_sheet(path, out_png, frames=12, cols=4, width=640):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--label", action="append", default=[], help="nhãn của bản (lặp lại theo thứ tự)")
-    ap.add_argument("videos", nargs="+")
+    ap.add_argument("videos", nargs="+",
+                    help="mỗi bản là 'nhãn=đường/dẫn/video.mp4' (nhãn tuỳ chọn)")
     ap.add_argument("--sheet", help="ghi contact sheet vào thư mục này")
     ap.add_argument("--json", help="ghi bản tóm tắt JSON vào đây")
     args = ap.parse_args()
 
     rows = []
-    for i, v in enumerate(args.videos):
-        label = args.label[i] if i < len(args.label) else os.path.basename(os.path.dirname(v))
+    for v in args.videos:
+        if "=" in v and not os.path.exists(v):
+            label, v = v.split("=", 1)
+        else:
+            label = os.path.basename(os.path.dirname(v))
         s = summarise(v)
         s["label"] = label
         rows.append(s)
