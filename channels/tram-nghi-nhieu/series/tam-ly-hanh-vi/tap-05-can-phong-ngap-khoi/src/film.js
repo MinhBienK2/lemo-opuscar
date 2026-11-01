@@ -1,6 +1,7 @@
 // "Căn phòng ngập khói 1968 — Tại sao càng đông người, ta càng bất động?" — Tập 05 của Trạm Nghĩ Nhiều.
-// Hoàn toàn không có slide trắng; bối cảnh phòng kín 1968 có khói xì thực tế; nhân vật Tuấn và 2 diễn viên phụ;
-// Kẻ Nghĩ Nhiều & Rối đóng vai trò người quan sát thứ ba đồng hành giải mã tâm lý.
+// Đạo diễn chuẩn điện ảnh: Chuyển góc máy liên tục mỗi 3–6 giây (Macro ngòi bút, Cận mặt kính Tuấn, Macro lỗ thông gió,
+// Cận mặt người lạ vô cảm, Đồng hồ bấm giờ vintage 1968, Cửa sổ đón nắng).
+// Người dẫn chuyện Kẻ Nghĩ Nhiều đóng vai trò Voiceover thuần túy, hoàn toàn không che chắn khung hình của câu chuyện.
 import { figure, expr, blendE, PAL, roi } from '../../../../rig/character.js';
 import { cel, path, poly, ellP, line, canvas, W, H, TAU, rect } from '../../../../rig/cel.js';
 import { ground, panel, hilite, stamp, bubble, subtitle, tag, text, sharpText, font, ease, seg, clamp01, INK, CREAM, ACCENT, REG, ambientMotes } from '../../../../rig/broll.js';
@@ -17,22 +18,7 @@ function ek(T, keys, bl = 0.14) {
   const cur = E(keys[i][1]); if (i === 0) return cur;
   const u = seg(T, keys[i][0], keys[i][0] + bl); return u >= 1 ? cur : blendE(E(keys[i - 1][1]), cur, ease.inOut(u));
 }
-const lerp = (a, b, u) => a + (b - a) * u;
-function ak(T, keys, d = 0.34) {
-  let i = keys.length - 1; while (i > 0 && T < keys[i][0]) i--;
-  const c = keys[i][1]; if (i === 0) return c;
-  const p = keys[i - 1][1], u = ease.back(seg(T, keys[i][0], keys[i][0] + d)), v = ease.inOut(seg(T, keys[i][0], keys[i][0] + d * 0.7));
-  return {
-    ...(v < 0.5 ? p : c),
-    at: [lerp(p.at[0], c.at[0], u), lerp(p.at[1], c.at[1], u)],
-    rot: lerp(p.rot || 0, c.rot || 0, v),
-    gest: v < 0.5 ? (p.gest || 'relaxed') : (c.gest || 'relaxed')
-  };
-}
-
-const BLINKS = []; { let s = 31, t = 1.0; const r = () => (s = (s * 16807) % 2147483647) / 2147483647; while (t < 250) { BLINKS.push(t); if (r() < 0.2) BLINKS.push(t + 0.28); t += 2 + r() * 3; } }
-function blink(T) { for (const b of BLINKS) { const d = T - b; if (d >= 0 && d < 0.16) return Math.sin(d / 0.16 * Math.PI); } return 0; }
-function kng(g, x, y, o, T) { g.save(); g.translate(x, y); figure(g, { t: T, blink: blink(T), linePx: 3.4, ...o }); g.restore(); }
+function kng(g, x, y, o, T) { g.save(); g.translate(x, y); figure(g, { t: T, linePx: 3.4, ...o }); g.restore(); }
 const L = id => TL.L[id];
 const talkAt = T => TL.talk(T);
 const sway = T => Math.sin(T * 0.55) * 0.035;
@@ -42,181 +28,269 @@ function shots() {
   const rv = (T, id, a = .3, b = 1.2) => seg(T, at(id, a), at(id, b));
 
   return [
-    // [Cảnh 1: 0:00 - ~26s] Căn phòng Đại học Columbia 1968 (intro1 đến intro4)
-    // Toàn bộ căn phòng thật; Tuấn ngồi cắm cúi viết; Kẻ Nghĩ Nhiều & Rối ở ngưỡng cửa kể chuyện
-    { n: 'room_intro', t: 0, tr: 'iris', f(g, lt, T) {
-      const t1 = L('intro1').t0, t2 = L('intro2').t0, t4 = L('intro4').t0;
+    // [Góc 1: 0s - ~5.8s] CẬN CẢNH ĐẶC TẢ (Extreme Close-Up): Ngòi bút chấm mực cào sột soạt trên giấy thi 1968
+    { n: 'macro_pen', t: 0, tr: 'iris', f(g, lt, T) {
+      ST.macroPen(g, T);
+      tag(g, 'ĐẠI HỌC COLUMBIA · 1968', 260, 100, seg(T, 0.4, 1.0), { col: PAL.cyan, px: 32 });
+    }, ev: () => [[.2, 'music', { cue: 'A' }], [.4, 'amb', { kind: 'room', t1: at('smoke1', .4) }], [.3, 'pop']] },
+
+    // [Góc 2: ~5.8s - ~12.8s] CẬN CẢNH MẶT TUẤN (Medium Close-Up): Tuấn đeo kính tròn, ngước mắt nhìn lên đồng hồ
+    { n: 'tuan_face_intro', t: at('intro2', -.1), tr: 'cut', f(g, lt, T) {
+      ST.tuanFaceCloseUp(g, T, { emotion: 'neutral', lookUp: true });
+    }, ev: () => [[L('intro2').t0 + .3, 'ting']] },
+
+    // [Góc 3: ~12.8s - ~17.8s] GÓC TOÀN TỪ TRÊN CAO (High-Angle Wide): Căn phòng gạch trống trải, Tuấn lọt thỏm ở giữa bàn
+    { n: 'room_high_angle', t: at('intro3', -.1), tr: 'cut', f(g, lt, T) {
       ST.columbiaRoom(g, T);
-      // Nhân vật chính Tuấn ở giữa bàn
       ST.tuanStudent(g, 960, 610, { emotion: 'neutral', action: 'write' }, T);
       ST.testingDesk(g, T, { confederates: false });
+      ambientMotes(g, T, 12, { x0: 200, y0: 200, x1: 1720, y1: 850 });
+    }, ev: () => [[L('intro3').t0 + .4, 'paper']] },
 
-      // Người dẫn chuyện thứ ba: Kẻ Nghĩ Nhiều & Rối ở góc trái cửa phòng
-      kng(g, 280, 680, { s: 0.95, talk: talkAt(T), E: ek(T, [[0, 'determined'], [t2, 'smile']]), headYaw: 0.12 + sway(T) }, T);
-      roi(g, 180, 520, 1.1, { t: T });
-
-      // Nhãn bối cảnh ở góc
-      tag(g, 'ĐẠI HỌC COLUMBIA · 1968', 260, 110, seg(T, 0.4, 1.0), { col: PAL.cyan, px: 32 });
-
-      // intro4: Đèn rọi vào lỗ thông gió chân tường
-      const pVent = rv(T, 'intro4', 0.2, 1.2);
-      if (pVent > 0) {
-        g.save();
-        g.strokeStyle = PAL.red.f; g.lineWidth = 5; g.setLineDash([12, 10]);
-        g.beginPath(); g.ellipse(1730, 665, 140, 75, 0, 0, TAU); g.stroke();
-        g.setLineDash([]);
-        g.restore();
+    // [Góc 4: ~17.8s - ~21.5s] CẬN CẢNH KHE THÔNG GIÓ CHÂN TƯỜNG (Vent Macro): Lưới sắt rỉ sét, điềm báo nguy hiểm
+    { n: 'vent_macro_still', t: at('intro4', -.1), tr: 'cut', f(g, lt, T) {
+      ST.ventMacro(g, T, 0);
+      const pAlert = rv(T, 'intro4', 0.2, 1.0);
+      if (pAlert > 0) {
+        g.save(); g.strokeStyle = PAL.red.f; g.lineWidth = 6; g.setLineDash([14, 12]);
+        g.beginPath(); g.ellipse(960, 530, 640, 280, 0, 0, TAU); g.stroke();
+        g.setLineDash([]); g.restore();
       }
-      ambientMotes(g, T, 10, { x0: 200, y0: 200, x1: 1720, y1: 850 });
-    }, ev: () => [[.2, 'music', { cue: 'A' }], [.4, 'amb', { kind: 'room', t1: at('smoke1', .4) }], [.3, 'pop'], [L('intro4').t0 + .4, 'ting']] },
+    }, ev: () => [[L('intro4').t0 + .3, 'ting']] },
 
-    // [Cảnh 2: ~26s - ~50s] Khói trắng bắt đầu xì ra từ lưới thông gió (smoke1 đến smoke3)
-    // Cận cảnh lỗ thông gió phì khói cuồn cuộn, Tuấn giật mình hoang mang
-    { n: 'smoke_vent', t: at('smoke1', -.1), tr: 'cut', f(g, lt, T) {
-      const t1 = L('smoke1').t0, t2 = L('smoke2').t0, t3 = L('smoke3').t0;
+    // [Góc 5: ~21.5s - ~27.0s] ACTION MACRO: Khói trắng xì ra phì phì từ lưới thông gió
+    { n: 'vent_smoke_burst', t: at('smoke1', -.1), tr: 'cut', f(g, lt, T) {
+      const t1 = L('smoke1').t0;
+      const intensity = seg(T, t1, t1 + 4.5) * 1.1;
+      ST.ventMacro(g, T, intensity);
+    }, ev: () => [[at('smoke1', -.1), 'music', { cue: 'B' }], [L('smoke1').t0 + .3, 'whoosh']] },
+
+    // [Góc 6: ~27.0s - ~34.5s] PHẢN ỨNG CẬN CẢNH: Tuấn ngửi thấy mùi khét, giật mình hoang mang
+    { n: 'tuan_smell_smoke', t: at('smoke2', -.1), tr: 'cut', f(g, lt, T) {
+      ST.tuanFaceCloseUp(g, T, { emotion: 'worried', lookRight: true, action: 'cough' });
+    }, ev: () => [[L('smoke2').t0 + .6, 'pop']] },
+
+    // [Góc 7: ~34.5s - ~38.5s] KHÓI BÒ TRÊN SÀN & SUY NGHĨ: Tòa nhà cháy thật rồi!
+    { n: 'smoke_floor_thought', t: at('smoke3', -.1), tr: 'cut', f(g, lt, T) {
       ST.columbiaRoom(g, T);
-
-      // Mức độ khói tăng dần từ 0.2 lên 0.75
-      const smokeDensity = seg(T, t1, t3 + 3.0) * 0.85;
-      ST.dynamicSmoke(g, T, smokeDensity);
-
-      // Tuấn ngừng viết, ngẩng đầu ngửi ngửi, mắt chớp lo lắng
-      const isSmelling = T > t1 + 1.5;
-      ST.tuanStudent(g, 960, 610, { emotion: isSmelling ? 'worried' : 'neutral', action: 'hesitate', headPitch: isSmelling ? -6 : 0, lookRight: true }, T);
+      ST.dynamicSmoke(g, T, 0.75);
+      ST.tuanStudent(g, 960, 610, { emotion: 'worried', action: 'hesitate', lookRight: true }, T);
       ST.testingDesk(g, T, { confederates: false });
-
-      // Kẻ Nghĩ Nhiều ở tiền cảnh góc trái
-      kng(g, 260, 700, { s: 0.9, talk: talkAt(T), E: ek(T, [[0, 'thinking'], [t2, 'worried']]), headYaw: 0.16 }, T);
-      roi(g, 170, 540, 1.0, { t: T });
-
-      // smoke3: Dòng suy nghĩ của Tuấn xuất hiện
-      const pThought = rv(T, 'smoke3', 0.4, 1.4);
+      const pThought = rv(T, 'smoke3', 0.3, 1.2);
       if (pThought > 0) {
         g.save(); g.globalAlpha = Math.min(1, pThought * 1.8);
-        bubble(g, 1020, 360, 800, 190, (gg) => {
+        bubble(g, 980, 360, 800, 190, (gg) => {
           text(gg, 'Tòa nhà đang cháy thật rồi!', 0, 0, { font: font(800, 42), align: 'center', base: 'middle', fill: PAL.red.s });
         }, { tail: 'left' });
         g.restore();
       }
-    }, ev: () => [[at('smoke1', -.1), 'music', { cue: 'B' }], [L('smoke1').t0 + .4, 'whoosh'], [L('smoke3').t0 + .4, 'pop']] },
+    }, ev: () => [[L('smoke3').t0 + .3, 'pop']] },
 
-    // [Cảnh 3: ~50s - ~75s] Thí nghiệm A: Khi Tuấn ở một mình (alone1 đến alone3)
-    // Phản xạ tự nhiên: đứng bật dậy chạy ra cửa báo cháy (75% trong 2 phút)
-    { n: 'alone_escape', t: at('alone1', -.1), tr: 'cut', f(g, lt, T) {
-      const t1 = L('alone1').t0, t2 = L('alone2').t0, t3 = L('alone3').t0;
+    // [Góc 8: ~38.5s - ~41.8s] TOÀN CẢNH TUẤN MỘT MÌNH TRONG PHÒNG KHÓI
+    { n: 'alone_room_view', t: at('alone1', -.1), tr: 'cut', f(g, lt, T) {
       ST.columbiaRoom(g, T);
       ST.dynamicSmoke(g, T, 0.65);
-
-      // Tuấn đứng dậy và chạy về phía cửa (từ x: 960 -> 320)
-      const isRun = T >= t2 + 0.8;
-      const escapeX = isRun ? Math.max(300, 960 - (T - (t2 + 0.8)) * 380) : 960;
-      const escapeY = isRun ? 560 : 610;
-      ST.tuanStudent(g, escapeX, escapeY, { emotion: 'worried', action: isRun ? 'escape' : 'hesitate', headPitch: -4 }, T);
-
+      ST.tuanStudent(g, 960, 610, { emotion: 'worried', action: 'hesitate' }, T);
       ST.testingDesk(g, T, { confederates: false });
+    }, ev: () => [[L('alone1').t0 + .3, 'paper']] },
 
-      // alone3: Kẻ Nghĩ Nhiều giơ chiếc đồng hồ đo giây: 75% trong 2 phút
-      kng(g, 1560, 680, { s: 1.0, talk: talkAt(T), E: ek(T, [[0, 'determined'], [t3, 'smile']]), headYaw: -0.14 }, T);
-      const pStat = rv(T, 'alone3', 0.4, 1.4);
-      if (pStat > 0) {
-        g.save(); g.globalAlpha = Math.min(1, pStat * 1.8);
-        cel(g, rect(1120, 220, 1720, 430), { f: '#1E2333', s: '#151824', so: [0, 8], l: PAL.ink, lw: 3.5 });
-        text(g, '75%', 1420, 310, { font: font(900, 88), align: 'center', base: 'middle', fill: PAL.green.f });
-        text(g, 'báo cháy trong < 2 phút', 1420, 380, { font: font(700, 36), align: 'center', base: 'middle', fill: CREAM });
-        g.restore();
-      }
-    }, ev: () => [[L('alone2').t0 + .8, 'step'], [L('alone3').t0 + .5, 'stamp']] },
-
-    // [Cảnh 4: ~75s - ~112s] Thí nghiệm B: Hai người lạ ngồi cạnh làm lơ (group1 đến hesitate3)
-    // Xung đột kịch tính: Tuấn ho sặc sụa, nhìn 2 người làm lơ, ngập ngừng ngồi thụp xuống
-    { n: 'group_conflict', t: at('group1', -.1), tr: 'whip', f(g, lt, T) {
-      const t1 = L('group1').t0, t4 = L('group4').t0, t5 = L('group5').t0, h2 = L('hesitate2').t0;
+    // [Góc 9: ~41.8s - ~47.2s] HÀNH ĐỘNG THOÁT HIỂM: Tuấn đẩy ghế, chạy vội ra cửa thoát hiểm
+    { n: 'tuan_run_escape', t: at('alone2', -.1), tr: 'cut', f(g, lt, T) {
+      const t2 = L('alone2').t0;
       ST.columbiaRoom(g, T);
+      ST.dynamicSmoke(g, T, 0.7);
+      const runProg = seg(T, t2 + 0.5, t2 + 2.8);
+      const posX = 960 - runProg * 660; // chạy từ 960 sang cánh cửa ở 300
+      ST.tuanStudent(g, posX, 580, { emotion: 'worried', action: 'escape', headPitch: -6 }, T);
+      ST.testingDesk(g, T, { confederates: false });
+    }, ev: () => [[L('alone2').t0 + .6, 'step'], [L('alone2').t0 + 1.4, 'step']] },
 
-      // Khói ngập dày đặc khắp phòng
-      const smokeD = seg(T, t1, at('hesitate3', 2.0)) * 0.95;
-      ST.dynamicSmoke(g, T, smokeD);
+    // [Góc 10: ~47.2s - ~54.5s] MACRO ĐỒNG HỒ BẤM GIỜ: 75% chạy ra báo < 2 phút
+    { n: 'stopwatch_alone_stat', t: at('alone3', -.1), tr: 'cut', f(g, lt, T) {
+      const t3 = L('alone3').t0;
+      const elapsed = Math.min(120, seg(T, t3, t3 + 3.0) * 120);
+      ST.stopwatchMacro(g, T, elapsed, {
+        label: '75% THOÁT HIỂM',
+        labelColor: '#4ADE80',
+        sub: 'chạy ra báo cháy trong vòng < 2 phút'
+      });
+    }, ev: () => [[L('alone3').t0 + .4, 'stamp']] },
 
-      // Hai người lạ (Confederates) ngồi bên cạnh bình thản lật giấy
+    // [Góc 11: ~54.5s - ~62.0s] CẮT CỨNG SANG CĂN PHÒNG THỨ HAI: Có hai người lạ ngồi cạnh
+    { n: 'room_two_strangers', t: at('group1', -.1), tr: 'whip', f(g, lt, T) {
+      ST.columbiaRoom(g, T);
       ST.passiveActor(g, 620, 620, { s: 0.95 }, T);
       ST.passiveActor(g, 1300, 620, { s: 0.95 }, T);
-
-      // Tuấn ở giữa: ban đầu viết -> ho sặc sụa (t5) -> ngập ngừng nhổm dậy rồi ngồi thụp xuống (h2)
-      let action = 'write';
-      if (T >= h2) action = 'hesitate';
-      else if (T >= t5) action = 'cough';
-      ST.tuanStudent(g, 960, 610, { emotion: 'worried', action, headYaw: Math.sin(T * 3.5) * 0.25, lookRight: true }, T);
-
+      ST.tuanStudent(g, 960, 610, { emotion: 'neutral', action: 'write' }, T);
       ST.testingDesk(g, T, { confederates: true });
+    }, ev: () => [[at('group1', -.1), 'music', { cue: 'B' }], [at('group1', -.1), 'whoosh'], [L('group2').t0 + .4, 'pop']] },
 
-      // Kẻ Nghĩ Nhiều & Rối ở tiền cảnh quan sát bi kịch
-      kng(g, 240, 720, { s: 0.88, talk: talkAt(T), E: ek(T, [[0, 'thinking'], [t5, 'worried'], [h2, 'sad']]), headYaw: 0.16 }, T);
-      roi(g, 150, 560, 1.1, { t: T });
-    }, ev: () => [[at('group1', -.1), 'music', { cue: 'B' }], [at('group1', -.1), 'whoosh'], [L('group5').t0 + .4, 'pop'], [L('hesitate2').t0 + .5, 'boing']] },
+    // [Góc 12: ~62.0s - ~67.8s] CẬN MẶT NGƯỜI LẠ (Stranger Face): Lạnh tanh như tượng đá, tuyệt đối làm lơ
+    { n: 'actor_stone_cold', t: at('group3', -.1), tr: 'cut', f(g, lt, T) {
+      ST.strangerFace(g, T);
+      tag(g, 'DIỄN VIÊN ĐƯỢC CÀI VÀO: LÀM LƠ 100%', 960, 180, seg(T, L('group3').t0 + 0.3, L('group3').t0 + 1.2), { col: PAL.red, px: 34 });
+    }, ev: () => [[L('group3').t0 + .4, 'marker']] },
 
-    // [Cảnh 5: ~112s - ~142s] Cơ chế tâm lý & Con số gây sốc (mech1 đến stats3)
-    // Hiểu lầm tập thể (Pluralistic Ignorance) & Bảng số liệu: 10% vs 90%
-    { n: 'stats_mechanism', t: at('mech1', -.1), tr: 'cut', f(g, lt, T) {
-      const m1 = L('mech1').t0, s1 = L('stats1').t0, s2 = L('stats2').t0;
+    // [Góc 13: ~67.8s - ~72.0s] KHÓI CHE MỜ ĐÈN TRẦN: Không khí căng thẳng nghẹt thở
+    { n: 'smoke_heavy_ceiling', t: at('group4', -.1), tr: 'cut', f(g, lt, T) {
       ST.columbiaRoom(g, T);
-      ST.dynamicSmoke(g, T, 0.92);
+      ST.dynamicSmoke(g, T, 0.95);
+      ST.passiveActor(g, 620, 620, { s: 0.95 }, T);
+      ST.passiveActor(g, 1300, 620, { s: 0.95 }, T);
+      ST.tuanStudent(g, 960, 610, { emotion: 'worried', action: 'cough' }, T);
+      ST.testingDesk(g, T, { confederates: true });
+    }, ev: () => [[L('group4').t0 + .3, 'whoosh']] },
 
-      // Căn phòng ngập khói, 3 người ngồi bất động trong sương mù
+    // [Góc 14: ~72.0s - ~76.5s] CẬN TUẤN: Ho sặc sụa, mắt trợn trừng liếc nhìn hai bên
+    { n: 'tuan_cough_look_around', t: at('group5', -.1), tr: 'cut', f(g, lt, T) {
+      ST.tuanFaceCloseUp(g, T, { emotion: 'worried', action: 'cough', lookRight: true });
+    }, ev: () => [[L('group5').t0 + .4, 'pop']] },
+
+    // [Góc 15: ~76.5s - ~83.0s] CẬN NGÓN TAY LẬT GIẤY: Người lạ thản nhiên lật trang giấy xoạt
+    { n: 'stranger_turn_page', t: at('group6', -.1), tr: 'cut', f(g, lt, T) {
+      ST.strangerFace(g, T);
+    }, ev: () => [[L('group6').t0 + .6, 'paper']] },
+
+    // [Góc 16: ~83.0s - ~85.5s] GÓC NGHIÊNG CĂNG THẲNG (Dutch Angle / Tense Mid-Shot)
+    { n: 'dutch_angle_tension', t: at('hesitate1', -.1), tr: 'cut', f(g, lt, T) {
+      g.save(); g.translate(960, 540); g.rotate(-0.04); g.translate(-960, -540);
+      ST.columbiaRoom(g, T);
+      ST.dynamicSmoke(g, T, 0.88);
+      ST.tuanStudent(g, 960, 610, { emotion: 'worried', action: 'hesitate' }, T);
+      ST.testingDesk(g, T, { confederates: true });
+      g.restore();
+    }, ev: () => [[L('hesitate1').t0 + .3, 'ting']] },
+
+    // [Góc 17: ~85.5s - ~90.5s] HÀNH ĐỘNG TUẤN NHỔM DẬY RỒI NGỒI XUỐNG
+    { n: 'tuan_half_stand', t: at('hesitate2', -.1), tr: 'cut', f(g, lt, T) {
+      const h2 = L('hesitate2').t0;
+      ST.columbiaRoom(g, T);
+      ST.dynamicSmoke(g, T, 0.9);
+      ST.passiveActor(g, 620, 620, { s: 0.95 }, T);
+      ST.passiveActor(g, 1300, 620, { s: 0.95 }, T);
+      // Nhổm dậy ở giây 1, ngồi thụp xuống ở giây 2.5
+      const standLift = Math.sin(clamp01((T - h2) / 3.0) * Math.PI) * 45;
+      ST.tuanStudent(g, 960, 610 - standLift, { emotion: 'worried', action: 'hesitate' }, T);
+      ST.testingDesk(g, T, { confederates: true });
+    }, ev: () => [[L('hesitate2').t0 + .6, 'boing']] },
+
+    // [Góc 18: ~90.5s - ~96.5s] CẬN TUẤN PHẨY KHÓI RỒI GỤC ĐẦU VIẾT TIẾP
+    { n: 'tuan_wave_smoke_give_up', t: at('hesitate3', -.1), tr: 'cut', f(g, lt, T) {
+      ST.tuanFaceCloseUp(g, T, { emotion: 'worried', action: 'cough', lookRight: false });
+    }, ev: () => [[L('hesitate3').t0 + .5, 'paper']] },
+
+    // [Góc 19: ~96.5s - ~101.5s] ẨN DỤ ĐIỆN ẢNH: Hiểu lầm tập thể (Pluralistic Ignorance)
+    { n: 'pluralistic_concept', t: at('mech1', -.1), tr: 'cut', f(g, lt, T) {
+      ground(g, '#10131E');
+      tag(g, 'HIỂU LẦM TẬP THỂ (PLURALISTIC IGNORANCE)', 960, 320, 1, { col: PAL.violet, px: 46 });
+      const pChain = rv(T, 'mech1', 0.5, 1.8);
+      if (pChain > 0) {
+        g.save(); g.globalAlpha = pChain;
+        // 3 bóng người bị xích ràng buộc
+        for (let i = 0; i < 3; i++) {
+          const x = 560 + i * 400, y = 620;
+          cel(g, ellP(x, y - 90, 45, 50), { f: '#353D50', s: '#252B3A', l: INK, lw: 3 });
+          cel(g, rect(x - 50, y - 40, x + 50, y + 110), { f: '#252B3A', l: INK, lw: 3 });
+        }
+        line(g, [[560, 620], [1360, 620]], PAL.red.f, 8);
+        g.restore();
+      }
+    }, ev: () => [[L('mech1').t0 + .4, 'marker']] },
+
+    // [Góc 20: ~101.5s - ~108.0s] LƯỚI ÁNH NHÌN CHÉO: Nhìn sang người khác tìm tín hiệu
+    { n: 'cross_eyelines', t: at('mech2', -.1), tr: 'cut', f(g, lt, T) {
+      ground(g, '#121624');
+      const cx = 960, cy = 540;
+      // 3 cặp mắt tam giác nhìn nhau
+      for (let i = 0; i < 3; i++) {
+        const a = i / 3 * TAU - Math.PI / 2;
+        const x = cx + Math.cos(a) * 320, y = cy + Math.sin(a) * 240;
+        cel(g, ellP(x, y, 70, 70), { f: '#FAF8F5', s: '#DCD6C8', so: [0, 8], l: INK, lw: 3.5 });
+        cel(g, ellP(x, y, 22, 22), { f: INK, l: INK, lw: 2 });
+      }
+      // Các mũi tên nhìn vòng tròn
+      P_drawLoopArrows(g, cx, cy, 320, 240, T);
+    }, ev: () => [[L('mech2').t0 + .5, 'ting']] },
+
+    // [Góc 21: ~108.0s - ~114.0s] MẶT NẠ BÌNH THẢN (Mask of Calmness)
+    { n: 'calm_mask_dilemma', t: at('mech3', -.1), tr: 'cut', f(g, lt, T) {
+      ground(g, '#141726');
+      const cx = 960, cy = 480;
+      // Chiếc mặt nạ mỉm cười giả tạo
+      cel(g, ellP(cx, cy, 180, 220), { f: '#F0ECE1', s: '#D4CEBF', so: [0, 12], l: INK, lw: 4 });
+      line(g, [[cx - 70, cy - 30], [cx - 20, cy - 34]], INK, 6);
+      line(g, [[cx + 20, cy - 34], [cx + 70, cy - 30]], INK, 6);
+      line(g, [[cx - 60, cy + 80], [cx, cy + 100], [cx + 60, cy + 80]], INK, 6);
+      tag(g, 'SỢ BỊ COI LÀ HOẢNG LOẠN NGỚ NGẨN', cx, 840, 1, { col: PAL.red, px: 38 });
+    }, ev: () => [[L('mech3').t0 + .4, 'stamp']] },
+
+    // [Góc 22: ~114.0s - ~120.5s] VÒNG LẶP GƯƠNG MÙ: Kết luận sai lầm rằng không sao
+    { n: 'false_conclusion', t: at('mech4', -.1), tr: 'cut', f(g, lt, T) {
+      ST.columbiaRoom(g, T);
+      ST.dynamicSmoke(g, T, 0.95);
       ST.passiveActor(g, 620, 620, { s: 0.95 }, T);
       ST.passiveActor(g, 1300, 620, { s: 0.95 }, T);
       ST.tuanStudent(g, 960, 610, { emotion: 'worried', action: 'hesitate' }, T);
       ST.testingDesk(g, T, { confederates: true });
+    }, ev: () => [[L('mech4').t0 + .4, 'paper']] },
 
-      // Kẻ Nghĩ Nhiều ở trung tâm giải thích cơ chế
-      kng(g, 420, 670, { s: 1.05, talk: talkAt(T), E: ek(T, [[0, 'determined'], [s2, 'shocked']]), headYaw: -0.1 }, T);
-      roi(g, 310, 520, 1.2, { t: T });
+    // [Góc 23: ~120.5s - ~125.0s] ĐỒNG HỒ CÁN MỐC 6 PHÚT (Minute 6 Cutoff)
+    { n: 'minute_six_cutoff', t: at('stats1', -.1), tr: 'cut', f(g, lt, T) {
+      ST.stopwatchMacro(g, T, 360, {
+        label: '6 PHÚT HÍT KHÓI',
+        labelColor: '#F04462',
+        sub: 'phòng mịt mù, thí nghiệm phải dừng cưỡng chế'
+      });
+    }, ev: () => [[L('stats1').t0 + .4, 'ting']] },
 
-      // Mech badge
-      tag(g, 'HIỂU LẦM TẬP THỂ (PLURALISTIC IGNORANCE)', 960, 180, seg(T, m1 + 0.3, m1 + 1.0), { col: PAL.violet, px: 36 });
+    // [Góc 24: ~125.0s - ~138.0s] BẢNG ĐỐI KHÁNG CHẤN ĐỘNG: 10% THOÁT HIỂM VS 90% NGỒI YÊN
+    { n: 'shocking_contrast_stat', t: at('stats2', -.1), tr: 'cut', f(g, lt, T) {
+      ground(g, '#0E111C');
+      const cx = 960;
+      tag(g, 'KHI CÓ 2 NGƯỜI LẠ NGỒI CẠNH', cx, 180, 1, { col: PAL.cyan, px: 42 });
 
-      // stats2 & stats3: Bảng đối chiếu chấn động 10% vs 90%
-      const pStats = rv(T, 'stats2', 0.3, 1.3);
-      if (pStats > 0) {
-        g.save(); g.globalAlpha = Math.min(1, pStats * 1.8);
-        cel(g, rect(1100, 260, 1780, 520), { f: '#1B1F2E', s: '#12141D', so: [0, 10], l: PAL.ink, lw: 4 });
-        text(g, 'CÓ 2 NGƯỜI LẠ NGỒI CẠNH', 1440, 310, { font: font(800, 32), align: 'center', base: 'middle', fill: PAL.muted });
-        // 10% dám đứng dậy
-        text(g, '10%', 1260, 390, { font: font(900, 72), align: 'center', base: 'middle', fill: PAL.green.f });
-        text(g, 'dám báo cháy', 1260, 450, { font: font(700, 30), align: 'center', base: 'middle', fill: CREAM });
-        // 90% ngồi yên hít khói
-        text(g, '90%', 1620, 390, { font: font(900, 72), align: 'center', base: 'middle', fill: PAL.red.f });
-        text(g, 'ngồi yên 6 phút', 1620, 450, { font: font(700, 30), align: 'center', base: 'middle', fill: CREAM });
-        g.restore();
-      }
-    }, ev: () => [[L('mech1').t0 + .4, 'marker'], [L('stats2').t0 + .4, 'stamp'], [L('stats3').t0 + .6, 'ting']] },
+      // Cột 1: 10% dám đứng dậy
+      cel(g, rect(220, 300, 880, 820), { f: '#18241D', s: '#101813', so: [0, 12], l: '#22C55E', lw: 4 });
+      text(g, '10%', 550, 480, { font: font(900, 120), align: 'center', fill: '#4ADE80' });
+      text(g, 'dám đứng dậy đi báo cháy', 550, 620, { font: font(700, 40), align: 'center', fill: CREAM });
 
-    // [Cảnh 6: ~142s - ~166s] Mở toang cửa sổ: Bài học thức tỉnh & Tạm biệt (action1 đến action4)
-    // Ánh nắng ùa vào, khói tan dần, Kẻ Nghĩ Nhiều kéo Tuấn đứng dậy
-    { n: 'resolution', t: at('action1', -.1), tr: 'cut', f(g, lt, T) {
-      const a1 = L('action1').t0, a4 = L('action4').t0;
+      // Cột 2: 90% ngồi yên hít khói
+      cel(g, rect(1040, 300, 1700, 820), { f: '#2B161A', s: '#1C0D10', so: [0, 12], l: '#EF4444', lw: 4 });
+      text(g, '90%', 1370, 480, { font: font(900, 120), align: 'center', fill: '#F87171' });
+      text(g, 'ngồi yên suốt 6 phút', 1370, 620, { font: font(700, 40), align: 'center', fill: CREAM });
+    }, ev: () => [[L('stats2').t0 + .4, 'stamp'], [L('stats3').t0 + .6, 'ting']] },
+
+    // [Góc 25: ~138.0s - ~149.0s] ĐÁM ĐÔNG LÀM TÊ LIỆT TRÁCH NHIỆM
+    { n: 'diffusion_paralysis', t: at('action1', -.1), tr: 'cut', f(g, lt, T) {
       ground(g, '#101422');
+      tag(g, 'ĐÁM ĐÔNG LÀM TÊ LIỆT TRÁCH NHIỆM', 960, 240, 1, { col: PAL.red, px: 42 });
+      // Hình vẽ chiếc loa bị bỏ rơi
+      const lx = 960, ly = 580;
+      cel(g, poly([[lx - 120, ly - 60], [lx + 100, ly - 140], [lx + 100, ly + 140], [lx - 120, ly + 60]]), { f: '#E2E8F0', s: '#94A3B8', so: [0, 8], l: INK, lw: 4 });
+      cel(g, ellP(lx + 100, ly, 28, 140), { f: '#F04462', l: INK, lw: 3 });
+      cel(g, rect(lx - 190, ly - 50, lx - 120, ly + 50), { f: '#475569', l: INK, lw: 3 });
+    }, ev: () => [[at('action1', -.1), 'music', { cue: 'C' }], [L('action1').t0 + .4, 'whoosh']] },
 
-      // Khung cửa sổ mở toang đón ánh nắng bầu trời xanh
-      const wx = 620, wy = 140, ww = 680, wh = 520;
-      cel(g, rect(wx, wy, wx + ww, wy + wh), { f: '#87CEEB', s: '#5FA8C8', so: [0, 8], l: PAL.ink, lw: 4 });
-      // Ánh nắng vàng rọi vào phòng
-      const sunGrd = g.createRadialGradient(wx + 340, wy + 180, 50, wx + 340, wy + 260, 700);
-      sunGrd.addColorStop(0, 'rgba(255, 236, 179, 0.45)');
-      sunGrd.addColorStop(1, 'rgba(255, 236, 179, 0)');
-      g.fillStyle = sunGrd; g.fillRect(0, 0, 1920, 1080);
-
-      // Cánh cửa sổ mở hai bên
-      cel(g, rect(wx - 120, wy, wx, wy + wh), { f: '#3E2A1C', s: '#2A1C12', l: PAL.ink, lw: 3 });
-      cel(g, rect(wx + ww, wy, wx + ww + 120, wy + wh), { f: '#3E2A1C', s: '#2A1C12', l: PAL.ink, lw: 3 });
-
-      // Kẻ Nghĩ Nhiều và Rối đứng giữa luồng sáng
+    // [Góc 26: ~149.0s - 166.3s] CỬA SỔ MỞ TOANG ĐÓN NẮNG VÀNG — Kẻ Nghĩ Nhiều & Rối chào kết
+    { n: 'sunlight_resolution', t: at('action3', -.1), tr: 'cut', f(g, lt, T) {
+      const a4 = L('action4').t0;
+      ST.sunlightWindow(g, T);
+      // Kẻ Nghĩ Nhiều và Rối đứng giữa luồng nắng trong 6 giây cuối
       kng(g, 960, 680, { s: 1.15, talk: talkAt(T), E: ek(T, [[0, 'determined'], [a4, 'smile']]), headYaw: sway(T) }, T);
       roi(g, 1180, 520, 1.3, { t: T });
-
-      // Lời kêu gọi hành động
-      tag(g, 'HÃY LÀ NGƯỜI ĐẦU TIÊN ĐỨNG DẬY', 960, 780, seg(T, a1 + 0.4, a1 + 1.2), { col: PAL.hoodie, px: 36 });
-    }, ev: () => [[at('action1', -.1), 'music', { cue: 'C' }], [L('action1').t0 + .4, 'whoosh'], [L('action4').t1 + .1, 'music', { cue: 'end' }]] }
+      tag(g, 'HÃY LÀ NGƯỜI ĐẦU TIÊN ĐỨNG DẬY', 960, 820, 1, { col: PAL.hoodie, px: 38 });
+    }, ev: () => [[L('action3').t0 + .4, 'whoosh'], [L('action4').t1 + .1, 'music', { cue: 'end' }]] }
   ];
+}
+
+function P_drawLoopArrows(g, cx, cy, rx, ry, T) {
+  g.save();
+  g.strokeStyle = '#E63946'; g.lineWidth = 5; g.setLineDash([16, 12]);
+  g.beginPath();
+  g.ellipse(cx, cy, rx * 0.85, ry * 0.85, 0, 0, TAU);
+  g.stroke();
+  g.setLineDash([]);
+  g.restore();
 }
 
 // ——— transitions engine ———
@@ -237,13 +311,9 @@ function iris(g, p, cx = W / 2, cy = H / 2, col = '#12141F') {
   if (p >= 1) return;
   const maxR = Math.hypot(W, H) * 0.55;
   const r = maxR * Math.max(0, p);
-  g.save();
-  g.fillStyle = col;
-  g.beginPath();
-  g.rect(0, 0, W, H);
-  g.arc(cx, cy, r, 0, TAU, true);
-  g.fill();
-  g.restore();
+  g.save(); g.fillStyle = col; g.beginPath();
+  g.rect(0, 0, W, H); g.arc(cx, cy, r, 0, TAU, true);
+  g.fill(); g.restore();
 }
 
 window.render = T => {
@@ -253,7 +323,7 @@ window.render = T => {
 
   drawShot(g, i, T);
 
-  // Transitions between scene blocks
+  // Chuyển cảnh điện ảnh
   if (sh.tr === 'whip' && T - sh.t < WH) {
     g.fillStyle = '#000'; g.fillRect(0, 0, W, H);
     smear(g, i, T, (1 - ease.out((T - sh.t) / WH)) * W * 0.5);
@@ -266,12 +336,12 @@ window.render = T => {
     iris(g, 1 - ease.in((nx.t - T) / IR));
   }
 
-  // fade in / fade out at start and end
+  // fade in / fade out ở đầu và cuối
   const fo = Math.max(1 - T / 0.25, seg(T, TL.end - 0.6, TL.end));
   if (fo > 0) { g.fillStyle = `rgba(0,0,0,${fo})`; g.fillRect(0, 0, W, H); }
 
-  // end card of the channel
-  const cp = seg(T, TL.end - 4.0, TL.end - 3.4);
+  // end card kênh
+  const cp = seg(T, TL.end - 3.8, TL.end - 3.2);
   if (cp > 0) {
     g.fillStyle = `rgba(18,19,26,${cp})`; g.fillRect(0, 0, W, H);
     g.save(); g.globalAlpha = cp;
