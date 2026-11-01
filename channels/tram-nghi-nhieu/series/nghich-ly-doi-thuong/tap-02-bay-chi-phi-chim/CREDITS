@@ -1,0 +1,13 @@
+# Credits & licences: Trạm Nghĩ Nhiều — Tập 02: Bẫy Chi Phí Chìm: Tại sao bạn không thể buông tay? (tram-nghi-nhieu, episode `series/nghich-ly-doi-thuong/tap-02-bay-chi-phi-chim`)
+
+Every third-party asset of the film, with its source and its licence. The shared code belongs to
+the channel and is used from there — it is never copied into this episode.
+
+| Asset | Source | Licence |
+|---|---|---|
+| All drawing, the shots and the animation (`src/`) | Canvas 2D code written for this episode | yours |
+| The character rig and the shared drawing helpers (`../../rig/`) | the channel's shared code — used from the channel, never copied here | yours |
+| The mix (`../../mix.py`) | the channel's shared mix: music, ambience, foley | yours / MIT |
+| The voice (`../../voice/`) | the channel's voice pipeline — a stock neural voice, no cloning | the voice service's terms |
+| The fonts (`../../fonts/`) | the channel's fonts | SIL Open Font License 1.1 (see the OFL files in the channel's `fonts/`) |
+| Sources of the research | listed in `research/FACTS.md` — no image, audio, logo or dataset from any research group is used in the film; every chart is drawn in code | — |

@@ -252,8 +252,8 @@ key = (env > .02).astype(np.float32)
 a, r = np.exp(-1 / (.03 * SR)), np.exp(-1 / (.35 * SR))
 att = lfilter([1 - a], [1, -a], key); rel = lfilter([1 - r], [1, -r], key); sm = np.maximum(att, rel)
 duck = (10 ** (-8 / 20)) ** np.clip(sm * 1.4, 0, 1)
-mixd = music * .45 * duck[:, None] + amb * (.6 + .4 * duck[:, None]) + fx + voice
-for c in range(2): mixd[:, c] = sfx.limit(sfx.compress(mixd[:, c], thr=.35, ratio=2.5), .95)
+mixd = music * .42 * duck[:, None] + amb * (.5 + .4 * duck[:, None]) + fx * .75 + voice
+for c in range(2): mixd[:, c] = sfx.limit(sfx.compress(mixd[:, c], thr=.30, ratio=3.0), .82)
 mixd = mixd[:int(DUR * SR)]
 os.makedirs(OUT, exist_ok=True)
 sf.write(os.path.join(OUT, 'mix.wav'), mixd.astype(np.float32), SR, subtype='PCM_16')
