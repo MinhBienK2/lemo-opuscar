@@ -190,3 +190,85 @@ export function clockFace(g, cx, cy, r, hour, o = {}) {
   g.fillStyle = col; g.beginPath(); g.arc(cx, cy, 7, 0, TAU); g.fill();
   g.restore();
 }
+
+// ——— tactile physical metaphors ———
+export function pTrophy(g, cx, cy, s = 1, o = {}) {
+  const p = o.p === undefined ? 1 : o.p;
+  if (p <= 0) return;
+  g.save(); g.translate(cx, cy); g.scale(s * p, s * p);
+  // base
+  cel(g, rect(-44, 70, 44, 94), { f: '#2A1E14', s: '#1A120B', so: [0, 4], l: '#140E08', lw: 2.6 });
+  cel(g, rect(-32, 54, 32, 70), { f: '#3E2E1E', s: '#2A1E14', l: '#140E08', lw: 2 });
+  // stem
+  cel(g, rect(-10, 20, 10, 54), { f: '#FFD700', s: '#D4AF37', l: INK, lw: 2.4 });
+  // cup body
+  cel(g, poly([[-36, -34], [36, -34], [28, 20], [-28, 20]]), { f: '#FFD700', s: '#E5C100', so: [3, 3], l: INK, lw: 2.8 });
+  // cup rim
+  cel(g, ellP(0, -34, 38, 10), { f: '#FFE853', s: '#D4AF37', l: INK, lw: 2.4 });
+  // handles
+  g.strokeStyle = INK; g.lineWidth = 4;
+  g.beginPath(); g.arc(-36, -10, 18, -Math.PI / 2, Math.PI / 2, true); g.stroke();
+  g.beginPath(); g.arc(36, -10, 18, -Math.PI / 2, Math.PI / 2, false); g.stroke();
+  // optional cloth covering
+  if (o.cloth > 0) {
+    const cp = ease.inOut(Math.min(1, o.cloth));
+    g.save(); g.globalAlpha = cp;
+    cel(g, poly([[-55, -45], [55, -45], [45, 60], [-45, 60]]), { f: '#4A4260', s: '#352F47', l: INK, lw: 3 });
+    g.restore();
+  }
+  g.restore();
+}
+
+export function pHighJump(g, cx, cy, s = 1, o = {}) {
+  const p = o.p === undefined ? 1 : o.p;
+  if (p <= 0) return;
+  g.save(); g.translate(cx, cy); g.scale(s * p, s * p);
+  // two vertical posts
+  line(g, [[-160, 100], [-160, -120]], INK, 6);
+  line(g, [[160, 100], [160, -120]], INK, 6);
+  line(g, [[-190, 100], [-130, 100]], INK, 5);
+  line(g, [[130, 100], [190, 100]], INK, 5);
+  for (let y = -100; y <= 80; y += 30) {
+    line(g, [[-160, y], [-146, y]], '#6E6A5E', 2.4);
+    line(g, [[146, y], [160, y]], '#6E6A5E', 2.4);
+  }
+  const barY = 40 - (o.raise || 0) * 110;
+  cel(g, rect(-164, barY - 6, 164, barY + 6), { f: PAL.red.f, s: PAL.red.s, l: INK, lw: 2.6 });
+  if ((o.raise || 0) > 0) {
+    line(g, [[0, -160], [0, barY - 6]], '#8B5CF6', 4);
+    cel(g, ellP(0, barY - 10, 12, 8), { f: '#A78BFA', l: INK, lw: 2 });
+  }
+  g.restore();
+}
+
+export function pTreadmill(g, cx, cy, s = 1, o = {}) {
+  const p = o.p === undefined ? 1 : o.p;
+  if (p <= 0) return;
+  g.save(); g.translate(cx, cy); g.scale(s * p, s * p);
+  cel(g, poly([[-180, 80], [160, 60], [180, 88], [-160, 108]]), { f: '#252A3C', s: '#1A1E2C', l: INK, lw: 3 });
+  cel(g, ellP(-160, 94, 20, 14), { f: '#3E4665', l: INK, lw: 2 });
+  cel(g, ellP(160, 74, 20, 14), { f: '#3E4665', l: INK, lw: 2 });
+  line(g, [[140, 70], [140, -40], [100, -40]], INK, 5);
+  const t = o.t || 0;
+  const leg = Math.sin(t * 12) * 26;
+  line(g, [[-20, 30], [-20 + leg, 76]], INK, 5);
+  line(g, [[-20, 30], [-20 - leg, 76]], INK, 5);
+  line(g, [[-20, 30], [-10, -20]], INK, 6);
+  cel(g, ellP(-8, -44, 22, 22), { f: PAL.skin.f, l: INK, lw: 2.6 });
+  cel(g, poly([[-2, -56], [16, -50], [14, -30], [-4, -32]]), { f: '#FFFFFF', s: '#DCD6C8', l: INK, lw: 2 });
+  if (o.crack > 0) {
+    line(g, [[2, -50], [8, -42], [4, -34]], PAL.red.f, 2.4);
+  }
+  g.restore();
+}
+
+export function pWaxSeal(g, cx, cy, s = 1, o = {}) {
+  const p = o.p === undefined ? 1 : o.p;
+  if (p <= 0) return;
+  const k = ease.back(Math.min(1, p));
+  g.save(); g.translate(cx, cy); g.scale(s * k, s * k);
+  cel(g, ellP(0, 0, 48, 44), { f: '#DC2626', s: '#991B1B', so: [2, 4], l: '#7F1D1D', lw: 3 });
+  cel(g, ellP(0, 0, 36, 32), { f: '#B91C1C', l: '#7F1D1D', lw: 2 });
+  text(g, 'ĐÚNG', 0, 8, { font: font(900, 22), fill: '#FEE2E2', align: 'center', base: 'middle' });
+  g.restore();
+}

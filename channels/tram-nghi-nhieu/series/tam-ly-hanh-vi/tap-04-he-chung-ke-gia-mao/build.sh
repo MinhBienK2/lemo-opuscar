@@ -45,7 +45,7 @@ if [ ! -f "$HERE/voice/proc/dur.json" ]; then
   exit 1
 fi
 FILM=$HERE "$LIB/.venv/bin/python" "$CHANNEL/mix.py"
-node core/render/video.mjs "$HERE" --workers 4 --out "$OUT/video.mp4"
+node core/render/video.mjs "$HERE" --workers 6 --out "$OUT/video.mp4"
 node --input-type=module -e "
 import fs from 'fs'; const { build } = await import('$HERE/src/timeline.js');
 const r = p => JSON.parse(fs.readFileSync('$HERE/' + p)); const T = build(r('voice/proc/dur.json'), r('voice/words.json'), r('voice/lips.json'));
