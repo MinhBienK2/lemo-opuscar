@@ -62,8 +62,15 @@ MOVIE="$NAME.mp4"
 TITLE_JSON=$(printf '%s' "$TITLE" | sed 's/\\/\\\\/g; s/"/\\"/g')
 TITLE_HTML=$(printf '%s' "$TITLE" | sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g')
 
-mkdir -p "$DIR/research" "$DIR/src" "$DIR/voice" "$DIR/out"
+# Calculate relative path from DIR back to CHANNEL_DIR (handles arbitrary nested series depth)
+REL_TO_CHANNEL=$(python3 -c "import os.path, sys; print(os.path.relpath(sys.argv[1], sys.argv[2]))" "$CHANNEL_DIR" "$DIR")
+if grep -qiE 'Tiếng Việt|defaultLanguage.*vi|tts_vi\.py' "$CHANNEL_DIR/CHANNEL.md" 2>/dev/null; then
+  HTML_LANG="vi"
+else
+  HTML_LANG="en"
+fi
 
+mkdir -p "$DIR/research" "$DIR/src" "$DIR/voice" "$DIR/out"
 # ---------------------------------------------------------------------------------------------
 # TREATMENT.md — the headings DIRECTOR.md §4 asks for, in its order
 # ---------------------------------------------------------------------------------------------
@@ -148,10 +155,12 @@ the channel and is used from there — it is never copied into this episode.
 | Asset | Source | Licence |
 |---|---|---|
 | All drawing, the shots and the animation (`src/`) | Canvas 2D code written for this episode | yours |
-| The character rig and the shared drawing helpers (`../../rig/`) | the channel's shared code — used from the channel, never copied here | yours |
-| The mix (`../../mix.py`) | the channel's shared mix: music, ambience, foley | yours / MIT |
-| The voice (`../../voice/`) | the channel's voice pipeline — a stock neural voice, no cloning | the voice service's terms |
-| The fonts (`../../fonts/`) | the channel's fonts | SIL Open Font License 1.1 (see the OFL files in the channel's `fonts/`) |
+EOF
+  printf "| The character rig and the shared drawing helpers (\`%s/rig/\`) | the channel's shared code — used from the channel, never copied here | yours |\n" "$REL_TO_CHANNEL"
+  printf "| The mix (\`%s/mix.py\`) | the channel's shared mix: music, ambience, foley | yours / MIT |\n" "$REL_TO_CHANNEL"
+  printf "| The voice (\`%s/voice/\`) | the channel's voice pipeline — a stock neural voice, no cloning | the voice service's terms |\n" "$REL_TO_CHANNEL"
+  printf "| The fonts (\`%s/fonts/\`) | the channel's fonts | SIL Open Font License 1.1 (see the OFL files in the channel's \`fonts/\`) |\n" "$REL_TO_CHANNEL"
+  cat <<'EOF'
 | Sources of the research | listed in `research/FACTS.md` — no image, audio, logo or dataset from any research group is used in the film; every chart is drawn in code | — |
 EOF
 } > "$DIR/CREDITS"
@@ -207,9 +216,9 @@ printf '{\n  "title": "%s",\n  "movie": "%s",\n  "runtime": ""\n}\n' "$TITLE_JSO
 # ---------------------------------------------------------------------------------------------
 {
   printf '<!doctype html>\n'
-  printf '<html lang="en"><head><meta charset="utf-8"><title>%s</title>\n' "$TITLE_HTML"
+  printf '<html lang="%s"><head><meta charset="utf-8"><title>%s</title>\n' "$HTML_LANG" "$TITLE_HTML"
+  printf '<link rel="stylesheet" href="%s/fonts/fonts.css">\n' "$REL_TO_CHANNEL"
   cat <<'EOF'
-<link rel="stylesheet" href="../fonts/fonts.css">
 <style>html,body{margin:0;background:#12131A;overflow:hidden}canvas{display:block}</style>
 </head><body><canvas id="c" width="1920" height="1080"></canvas>
 <!-- The page contract (core/README.md): this page must expose window.READY = true once the fonts
@@ -285,6 +294,7 @@ sh core/render/mux.sh "$OUT/video.mp4" "$OUT/mix.wav" "$OUT/$NAME.mp4" 24 0
 # the poster is a frame of this film, at 40% of its length — never a time copied from another film
 PS=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$OUT/$NAME.mp4" 2>/dev/null | cut -d, -f1)
 if [ -n "$PS" ]; then PS=$(LC_ALL=C awk -v d="$PS" 'BEGIN { printf "%.1f", d * 0.4 }'); else PS=1; fi
+ffmpeg -y -ss "$PS" -i "$OUT/$NAME.mp4" -vframes 1 -q:v 2 "$OUT/poster.jpg" >/dev/null 2>&1 || true
 # the deliverables stay in the project folder, where they are committed and where the review finds them.
 # The captions are already burned into the picture: the .srt is the transcript for the platform, and it is not
 # named like the film so that a player does not load it on top of the captions that are in the picture.

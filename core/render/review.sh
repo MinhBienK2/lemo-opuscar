@@ -32,6 +32,7 @@ run drawcheck node "$HERE/core/render/drawcheck.mjs" "$FOLDER"
 if [ -f "$FOLDER/research/FACTS.md" ]; then
   run claims python3 "$HERE/tools/check_claims.py" "$FOLDER"
   run facts python3 "$HERE/tools/check_facts.py" "$FOLDER/research/FACTS.md"
+  run citations python3 "$HERE/tools/check_citations.py" "$FOLDER/research/FACTS.md"
 fi
 # a film's own film folder: the subtitles sit at the bottom, so nothing else may be down there.
 # The band is matched on the path, so it must match the one-shots under films/ and the episodes under channels/.
@@ -114,12 +115,37 @@ for f in "$FOLDER"/*.mp4 "$FOLDER"/out/*.mp4; do
   if [ -z "$MP4" ] || [ "$f" -nt "$MP4" ]; then MP4=$f; fi
 done
 if [ -n "$MP4" ]; then
+  # artifact freshness: the movie must not be older than the sources it was built from
+  echo "--- freshness: $MP4"
+  STALE=0
+  for src in "$FOLDER"/src/*.js "$FOLDER"/voice/lines.json; do
+    if [ -f "$src" ] && [ "$src" -nt "$MP4" ]; then
+      echo "    FAILED: source file $src is newer than $MP4 — the delivered movie is stale; run build.sh again"
+      FAIL=$((FAIL + 1))
+      STALE=1
+      break
+    fi
+  done
+  if [ "$STALE" -eq 0 ]; then
+    echo "    ok: movie is up to date with source files"
+  fi
+
   # the filters print their summary at the info level, so -v error would hide it: the log is captured and the lines we need are picked out
   echo "--- loudness: $MP4"
-  if ffmpeg -hide_banner -nostats -i "$MP4" -af ebur128 -f null - 2>"$TMP/loud.txt"; then
-    I=$(grep -E '^ +I: ' "$TMP/loud.txt" | tail -1 | sed 's/^ *//')
-    LRA=$(grep -E '^ +LRA: ' "$TMP/loud.txt" | tail -1 | sed 's/^ *//')
-    echo "    ${I:-loudness unknown}${LRA:+, $LRA}"
+  if ffmpeg -hide_banner -nostats -i "$MP4" -af ebur128=peak=true -f null - 2>"$TMP/loud.txt"; then
+    I=$(grep -E '^\s+I:\s+' "$TMP/loud.txt" | tail -1 | sed 's/^ *//')
+    LRA=$(grep -E '^\s+LRA:\s+' "$TMP/loud.txt" | tail -1 | sed 's/^ *//')
+    PEAK=$(grep -E '^\s+Peak:\s+' "$TMP/loud.txt" | tail -1 | sed 's/^ *//')
+    echo "    ${I:-loudness unknown}${LRA:+, $LRA}${PEAK:+, $PEAK}"
+    IV=$(echo "$I" | awk '{print $2}')
+    PV=$(echo "$PEAK" | awk '{print $2}')
+    if [ -n "$IV" ] && [ -n "$PV" ]; then
+      BAD_LOUD=$(awk -v i="$IV" -v p="$PV" 'BEGIN { if (i + 0 < -20 || i + 0 > -11 || p + 0 > -0.8) print 1; else print 0 }')
+      if [ "$BAD_LOUD" = "1" ]; then
+        echo "    FAILED: loudness out of bounds (target -14 LUFS, true peak <= -1.0 dBFS; measured $IV LUFS, peak $PV dBFS)"
+        FAIL=$((FAIL + 1))
+      fi
+    fi
   else
     echo "    FAILED: ffmpeg could not read $MP4"; FAIL=$((FAIL + 1))
   fi

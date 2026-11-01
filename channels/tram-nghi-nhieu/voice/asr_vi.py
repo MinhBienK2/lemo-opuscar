@@ -35,6 +35,8 @@ def main():
         cands = [c for c in (L.get('asr'), L.get('say'), L['text']) if c]
         r, want = max((difflib.SequenceMatcher(None, norm(c), norm(got)).ratio(), c) for c in cands); ok = r >= a.threshold; bad += not ok
         print(('OK  ' if ok else 'DIFF'), f'{r:.2f}', L['id'], '|', want, '→', got)
+        if ok and L.get('asr') and want == L['asr'] and norm(L.get('text', '')) != norm(want):
+            print('      NOTE: matched via asr override (R8: check that alternate form is numbers/foreign names, not mispronunciations)')
     json.dump(words, open(os.path.join(a.dir, 'words.json'), 'w', encoding='utf-8'), ensure_ascii=False, indent=0)
     print('mismatches:', bad); sys.exit(1 if bad else 0)
 

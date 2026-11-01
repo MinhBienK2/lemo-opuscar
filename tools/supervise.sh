@@ -153,7 +153,7 @@ gate_step() {   # run one check, keep its output, remember whether it passed
   gate_step drawcheck "$NODE" "$LIB/core/render/drawcheck.mjs" "$FILM"
   if [ -f "$FILM/research/FACTS.md" ]; then
     gate_step citations "$PY" "$LIB/tools/check_citations.py" "$FILM/research/FACTS.md"
-trap 'rm -rf "$LOCK" "$GATE" "$TOOLS" "$RULES"' EXIT
+    gate_step claims "$PY" "$LIB/tools/check_claims.py" "$FILM"
     gate_step facts "$PY" "$LIB/tools/check_facts.py" "$FILM/research/FACTS.md"
   fi
   # the film's index row: a film that is not built yet is "not built yet", not a fault

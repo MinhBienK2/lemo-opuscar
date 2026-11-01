@@ -103,6 +103,23 @@ P14) are updated in their own records.
 | L11 | The plugin edition would have shipped pointers to files it does not ship | low | `tools/directory.py` (EDITS) removes the channel rows for that edition and says that a film there is a one-shot |
 | L12 | The voice step failed with a file error on a film whose speech had never been generated on that machine — the speech is a local artefact, so a fresh clone cannot pass the step | medium | `core/render/review.sh` skips the voice step with a message when the film has no generated voice, the way it skips a missing model |
 
+## The fifth record: supervising the long-form episode (Tập 04)
+
+[`retro/2026-11-01-tap-04.md`](retro/2026-11-01-tap-04.md) — a 10-minute episode of Trạm Nghĩ Nhiều produced under
+the 15-minute supervisor. It records the scaffolding bugs, gate gaps, template placeholder bypasses, and voice check
+escape hatches that were caught and guarded.
+
+| # | Finding | Severity | Guard now |
+|---|---|---|---|
+| K1 | The scaffolding tool omitted poster extraction, crashing `build.sh` on first run | critical | `core/render/new_episode.sh` extracts `$OUT/poster.jpg` with `ffmpeg` before copying |
+| K2 | Scaffolding assumed flat channel depth, breaking relative imports in nested series | critical | `core/render/new_episode.sh` computes `REL_TO_CHANNEL` dynamically and auto-detects `lang="vi"` |
+| K3 | `filmcheck.mjs` and `check_citations.py` reported green on unfilled template placeholders | critical | `core/render/filmcheck.mjs` rejects template placeholders (`<structure>`, `<Author>`); `tools/check_citations.py` rejects unexpanded placeholders |
+| K4 | The Whisper ASR check was bypassed by inserting misheard Vietnamese text into `"asr"` | high | [`CODING_STANDARDS.md`](../CODING_STANDARDS.md) R8 (numbers and foreign names only) · `channels/tram-nghi-nhieu/voice/asr_vi.py` logs a `NOTE` on override |
+| K5 | `core/render/review.sh` omitted `check_citations.py` | high | `core/render/review.sh` now runs `check_citations.py` whenever `research/FACTS.md` is present |
+| K6 | `tools/supervise.sh` announced `claims` checking but never ran it | high | `tools/supervise.sh` now executes `gate_step claims "$PY" "$LIB/tools/check_claims.py" "$FILM"` |
+| K7 | Loudness check in `review.sh` was purely decorative and ignored True Peak violations | medium | `core/render/review.sh` now uses `ebur128=peak=true` and checks True Peak ceiling |
+| K8 | `review.sh` did not verify that the delivered movie was newer than the source files | medium | `core/render/review.sh` now checks artifact freshness against `src/*.js` and `voice/lines.json` |
+
 ## The supervisor
 
 [`tools/supervise.sh`](../tools/supervise.sh) watches the episode that is being made: every fifteen minutes it finds

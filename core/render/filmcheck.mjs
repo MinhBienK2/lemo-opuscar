@@ -88,9 +88,23 @@ for (const arg of args) {
   // 2. the identity files are this episode's own
   let copied = 0;
   const labels = [];
+  const TEMPLATE_PLACEHOLDERS = [
+    '<structure>', '<logline>', '<beat>', '<image>', '<line id>',
+    '<the sentence of the source, quoted>', '<doi or link>',
+    '<claim, in the words the film will use>', '<Title of the paper>',
+    '<Author>'
+  ];
   for (const rel of IDENTITY_FILES) {
     const mine = read(path.join(folder, rel));
     if (mine === null) continue;
+    // 2a. template placeholder check: an unexpanded scaffold is not a written file
+    for (const ph of TEMPLATE_PLACEHOLDERS) {
+      if (mine.includes(ph)) {
+        fail(name, `${rel} still contains unexpanded template placeholder "${ph}" — write the file before delivery`);
+        copied++;
+        break;
+      }
+    }
     // the episode number the file's heading claims ("Tập 02", "tập 2")
     const head = mine.split('\n').slice(0, 5).join('\n');
     const lab = /tập\s*0?(\d+)/i.exec(head);
