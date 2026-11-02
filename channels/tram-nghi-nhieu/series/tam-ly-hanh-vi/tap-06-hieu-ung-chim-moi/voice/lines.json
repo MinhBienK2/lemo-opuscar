@@ -1,0 +1,268 @@
+[
+ {
+  "id": "hook",
+  "text": "Mình đứng ở quầy trà sữa lúc nửa đêm, và mình chỉ muốn một ly nhỏ thôi.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "hook2",
+  "text": "Ba ly trên quầy: ly nhỏ ba mươi lăm nghìn, ly lớn sáu mươi nghìn, và ly vừa sáu mươi lăm nghìn.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz",
+  "asr": "Ba ly trên quầy: ly nhỏ 35.000, ly lớn 60.000, và ly vừa 65.000."
+ },
+ {
+  "id": "hook3",
+  "text": "Cỡ vừa đắt hơn cỡ lớn mà ít hơn. Vô lý. Nhưng tay mình vẫn cầm ly lớn.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "intro",
+  "text": "Mình là Kẻ Nghĩ Nhiều. Hôm nay: hiệu ứng chim mồi — tại sao món tệ lại làm món khác hấp dẫn hơn?",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "myth",
+  "text": "Cách giải thích quen thuộc: người bán cắm mồi câu, còn não bạn thì bị lừa.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "myth2",
+  "text": "Rối nói: nghe hợp lý đấy. Nhưng câu này chưa từng được kiểm tra kỹ.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "lab1",
+  "text": "Năm một nghìn tám mươi hai, ba nhà nghiên cứu làm một thí nghiệm rất gọn về lựa chọn.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz",
+  "asr": "Năm 1982, ba nhà nghiên cứu làm một thí nghiệm rất gọn về lựa chọn."
+ },
+ {
+  "id": "lab2",
+  "text": "Họ cho một trăm năm mươi ba sinh viên chọn giữa những lựa chọn giả, rồi thêm vào một lựa chọn thứ ba bị áp đảo.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz",
+  "asr": "Họ cho 153 sinh viên chọn giữa những lựa chọn giả, rồi thêm vào một lựa chọn thứ ba bị áp đảo."
+ },
+ {
+  "id": "lab3",
+  "text": "Kết quả: món mục tiêu được chọn nhiều hơn, trung bình chín điểm hai phần trăm.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz",
+  "asr": "Kết quả: món mục tiêu được chọn nhiều hơn, trung bình 9,2%."
+ },
+ {
+  "id": "lab4",
+  "text": "Với nhóm ô tô, nó là bốn mươi bốn phần trăm, lên sáu mươi sáu phần trăm.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz",
+  "asr": "Với nhóm ô tô, nó là 44% lên 66%."
+ },
+ {
+  "id": "decoy1",
+  "text": "Nhưng món mồi câu thì sao? Chỉ khoảng hai phần trăm người chọn nó.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "decoy2",
+  "text": "Nó không bán được gì cả. Nó chỉ đẩy người ta sang món khác.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "turn",
+  "text": "Vậy nếu dừng ở đây, đây chỉ là một cái bẫy marketing.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "rat1",
+  "text": "Nhưng có một cách giải thích khác, và nó không cần bạn phải ngu.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "rat2",
+  "text": "Nghiên cứu năm chín mươi bảy đo được hiệu ứng thật là mười chín phẩm sáu điểm.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz",
+  "asr": "Nghiên cứu năm 1997 đo được hiệu ứng thật là 19,6 điểm."
+ },
+ {
+  "id": "rat3",
+  "text": "Mô hình chỉ dựa vào việc người ta tự suy luận từ bộ lựa chọn thì đoán được mười ba điểm, tức khoảng hai phần ba.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "rat4",
+  "text": "Nghĩa là: bảng giá tiết lộ món nào đáng, và người ta dùng chính thông tin đó.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "mech",
+  "text": "Còn một điều nữa ít ai nói: não so sánh bằng cách đặt mọi món cạnh nhau.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "rep1",
+  "text": "Và đây mới là chỗ đáng sợ.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "rep2",
+  "text": "Năm hai nghìn mười bốn, ba nhà nghiên cứu khác chạy ba mươi tám thí nghiệm.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz",
+  "asr": "Năm 2014, ba nhà nghiên cứu khác chạy 38 thí nghiệm."
+ },
+ {
+  "id": "rep3",
+  "text": "Mười chín thí nghiệm dùng sản phẩm thật: nếm, uống, xem ảnh. Không cái nào ra hiệu ứng.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "rep4",
+  "text": "Hiệu ứng chỉ hiện ra khi thuộc tính được viết thành con số: xác suất bằng số thì mười bốn phần trăm lên hai mươi tám.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz",
+  "asr": "Hiệu ứng chỉ hiện ra khi thuộc tính được viết thành con số: xác suất bằng số thì 14% lên 28%."
+ },
+ {
+  "id": "rep5",
+  "text": "Vẽ thành vòng xác suất thì hai mươi bốn và hai mươi sáu, không đổi.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz",
+  "asr": "Vẽ thành vòng xác suất thì 24% và 26%, không đổi."
+ },
+ {
+  "id": "rep6",
+  "text": "Với cái tivi, vẽ chất lượng hình bằng ảnh thật, món mục tiêu tụt từ năm mươi ba xuống ba mươi lăm.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz",
+  "asr": "Với cái tivi, vẽ chất lượng hình bằng ảnh thật, món mục tiêu tụt từ 53% xuống 35%."
+ },
+ {
+  "id": "rep7",
+  "text": "Một nhóm khác thử chín mươi mốt lần: chỉ mười một lần ra hiệu ứng đáng tin, dự báo gần ba mươi.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz",
+  "asr": "Một nhóm khác thử 91 lần, chỉ 11 lần ra hiệu ứng đáng tin, dự báo gần 30."
+ },
+ {
+  "id": "wild1",
+  "text": "Ngoài đời thật thì sao?",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz",
+  "asr": "Ngoài đời thật thì sao?"
+ },
+ {
+  "id": "wild2",
+  "text": "Trên ba triệu sáu trăm nghìn giao dịch rượu vang ở Anh, hiệu ứng chỉ khoảng một phần trăm.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz",
+  "asr": "Trên 3.600.000 giao dịch rượu vang ở Anh, hiệu ứng chỉ khoảng 1 phần trăm."
+ },
+ {
+  "id": "wild3",
+  "text": "Và ở người mua thường xuyên, hiệu ứng biến mất hẳn.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "wild4",
+  "text": "Một thử nghiệm trên trang đặt vé máy bay, hơn một trăm bốn mươi nghìn lượt tìm kiếm, không tìm ra hiệu ứng nào.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz",
+  "asr": "Một thử nghiệm trên trang đặt vé máy bay, hơn 140.000 lượt tìm kiếm, không tìm ra hiệu ứng nào."
+ },
+ {
+  "id": "model",
+  "text": "Vậy thì mồi câu là gì? Không phải cái bẫy. Nó là một câu nói: món này đáng.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "action1",
+  "text": "Nên làm gì? Trước khi tính tiền, hãy gạch món bị áp đảo khỏi bảng so sánh.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "action2",
+  "text": "Món nào tệ hơn món kia ở mọi tiêu chí thì không phải đối thủ của món nào cả.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "action3",
+  "text": "Và nếu bạn hay quay lại một quán, hãy nhớ giá món mình thường uống. Người quen thì miễn nhiễm.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "roi",
+  "text": "Rối nói: mồi câu không bán được gì. Nó chỉ làm bạn tin mình đang chọn vì lý do.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "close",
+  "text": "Hiệu ứng chim mồi không phải là bạn bị lừa. Nó là cách bảng giá nói với bạn điều gì đó, và bạn chọn nghe.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz"
+ },
+ {
+  "id": "next",
+  "text": "Lần sau ở quầy, gạch món ở giữa đi. Mình là Kẻ Nghĩ Nhiều.",
+  "voice": "vi-VN-NamMinhNeural",
+  "rate": "+4%",
+  "pitch": "-8Hz"
+ }
+]
