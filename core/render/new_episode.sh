@@ -250,6 +250,7 @@ LIB=${LIB:-$(cd "$HERE" && while [ ! -f core/render/review.sh ] && [ "$PWD" != /
 # the channel: the folder above the episode, the one that holds CHANNEL.md
 CHANNEL=${CHANNEL:-$(cd "$HERE" && while [ ! -f CHANNEL.md ] && [ "$PWD" != / ]; do cd ..; done && pwd)}
 OUT=${OUT:-$HERE/out}; mkdir -p "$OUT"; OUT=$(cd "$OUT" && pwd); export LIB OUT CHANNEL
+[ -d /home/minhbien/hf-cache ] && export HF_HOME=${HF_HOME:-/home/minhbien/hf-cache}
 EOF
   printf 'NAME=%s\n' "$NAME"
   cat <<'EOF'

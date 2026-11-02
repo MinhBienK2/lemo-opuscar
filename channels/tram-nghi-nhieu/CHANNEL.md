@@ -32,6 +32,7 @@ Mỗi tập thuộc đúng một cột; đổi cột là đổi bối cảnh (b�
 Mọi series và tập phim được gom gọn vào mục `series/`, bên trong phân chia theo chủ đề cụ thể:
 * `series/nghich-ly-doi-thuong/tap-01-cang-ranh-cang-met/` (Cột 1: Nghịch lý đời thường)
 * `series/tam-ly-hanh-vi/tap-01-tam-ly-tri-hoan/` (Cột 4: Tâm lý hành vi)
+* `series/tam-ly-hanh-vi/tap-07-luon-tuong-minh-dung/` (Cột 4: Tâm lý hành vi — "Tại sao ta luôn tưởng mình đúng?", bản 3 phút)
 * `series/vet-bam-than-kinh/tap-01-khong-the-tap-trung/` (Cột 2: Chuyên sâu thần kinh / bản dài)
 
 **Không nhân bản thư mục tập nào** — tạo tập mới bằng scaffold:
@@ -278,6 +279,13 @@ Khi viết `TREATMENT.md`, AI Agent **bắt buộc phải mô tả từng shot b
    - $t_1$ của mảnh phụ đề trước bắt buộc phải $\le t_0 - 0.04\text{s}$ của mảnh phụ đề sau.
    - Khi render, chỉ vẽ mảnh phụ đề tích cực nhất (`TL.cues.findLast(...)`), tuyệt đối không dùng vòng lặp vẽ chồng tất cả các cue trùng thời gian.
 
+4. **Bất biến Micro-Clock cho cảnh gộp câu (`Multi-Line Shot Micro-Clock`)**:
+   - Khi một cảnh gộp 2 câu thoại trở lên, cấm dùng một mốc `t0` duy nhất. Mọi vật thể hay biểu đồ phục vụ câu nào phải neo theo mốc thời gian riêng của câu đó: `L('câu_sau').t0`. Tuyệt đối không để khung hình đứng chết quá 3 giây.
+5. **Bất biến Cùng Đồng Hồ & Chống Tiết Lộ Trước (`Clock-Sharing & Anti-Spoiler`)**:
+   - Nhãn giá trị (con số, kết luận) chỉ được hiện ra khi thanh đo/hành động vật lý đạt tới giá trị đó ($p \ge 0.95$). Cấm vẽ kết luận trước khi giọng đọc nhắc tới.
+   - Nét gạch đỏ hoặc highlight phải vẽ ở layer phía sau chữ, cấm vẽ đè làm lem chữ.
+6. **Bất biến Ranh Giới Kịch Bản (`Script Scope Boundary`)**:
+   - Cấm dùng từ ngữ khẳng định tuyệt đối (`miễn nhiễm`, `không bao giờ`, `hoàn toàn`) cho các kết luận tương quan trong `FACTS.md`. Tiêu đề `film.json` phải đồng bộ với kịch bản `lines.json:intro`.
 ## 10. Luật tự động quy đổi thời lượng (Duration-to-Scale Invariant)
 
 Người dùng chỉ cần đưa ra **chủ đề và thời lượng mong muốn** (hoặc không nêu thì mặc định 3–5 phút). AI Agent **tuyệt đối không được hỏi lại về số lượng câu thoại hay kịch bản**, mà BẮT BUỘC phải tự động áp dụng công thức chuẩn của kênh:

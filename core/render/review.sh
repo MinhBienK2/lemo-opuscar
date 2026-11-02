@@ -33,6 +33,7 @@ if [ -f "$FOLDER/research/FACTS.md" ]; then
   run claims python3 "$HERE/tools/check_claims.py" "$FOLDER"
   run facts python3 "$HERE/tools/check_facts.py" "$FOLDER/research/FACTS.md"
   run citations python3 "$HERE/tools/check_citations.py" "$FOLDER/research/FACTS.md"
+  run timing python3 "$HERE/tools/check_timing.py" "$FOLDER"
 fi
 # a film's own film folder: the subtitles sit at the bottom, so nothing else may be down there.
 # The band is matched on the path, so it must match the one-shots under films/ and the episodes under channels/.

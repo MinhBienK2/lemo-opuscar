@@ -1,0 +1,295 @@
+1
+00:00:02,400 --> 00:00:05,100
+Hai giờ sáng, mình ngồi ở bàn đọc tin.
+
+2
+00:00:05,100 --> 00:00:07,674
+Và mình chỉ đọc những tin đồng ý với mình.
+
+3
+00:00:07,714 --> 00:00:10,203
+Mấy mẩu còn lại thì bị mình gạt vào ngăn kéo.
+
+4
+00:00:10,243 --> 00:00:11,283
+Rồi mình ngồi đó,
+
+5
+00:00:11,283 --> 00:00:14,036
+tự tin rằng mình là người lý trí nhất phòng.
+
+6
+00:00:14,636 --> 00:00:17,056
+Mình là Kẻ Nghĩ Nhiều. Hôm nay:
+
+7
+00:00:17,056 --> 00:00:19,147
+tại sao ta luôn tưởng mình đúng?
+
+8
+00:00:19,187 --> 00:00:21,627
+Câu trả lời không phải là bạn ngu.
+
+9
+00:00:21,627 --> 00:00:23,706
+Nó nằm ở một chỗ khác.
+
+10
+00:00:24,306 --> 00:00:26,706
+Cách giải thích quen thuộc: não bộ tự lọc,
+
+11
+00:00:26,706 --> 00:00:28,771
+chỉ nhận tin khớp với điều mình đã tin.
+
+12
+00:00:28,811 --> 00:00:30,951
+Tên khoa học của nó là thiên lệch xác nhận:
+
+13
+00:00:30,951 --> 00:00:33,071
+tìm và diễn giải bằng chứng theo hướng có lợi cho
+
+14
+00:00:33,071 --> 00:00:34,363
+niềm tin sẵn có.
+
+15
+00:00:34,403 --> 00:00:36,843
+Rối nói: nghe hợp lý.
+
+16
+00:00:36,843 --> 00:00:39,650
+Nhưng câu này chưa từng được kiểm tra kỹ.
+
+17
+00:00:40,250 --> 00:00:44,090
+Năm 1981, một nhà tâm lý học hỏi tài xế ở Mỹ tự đánh
+
+18
+00:00:44,090 --> 00:00:45,582
+giá thế nào so với nhau.
+
+19
+00:00:45,622 --> 00:00:47,982
+Chín mươi ba phần trăm nói mình lái xe giỏi hơn tài
+
+20
+00:00:47,982 --> 00:00:48,933
+xế trung vị.
+
+21
+00:00:48,973 --> 00:00:50,833
+Bản lặp lại năm 2023,
+
+22
+00:00:50,833 --> 00:00:52,733
+với hơn một nghìn hai trăm ba người,
+
+23
+00:00:52,733 --> 00:00:54,597
+vẫn ra con số tương tự.
+
+24
+00:00:54,637 --> 00:00:56,937
+Nhưng nghĩa là trung vị có một nửa số người lái xe
+
+25
+00:00:56,937 --> 00:00:58,737
+giỏi hơn bạn.
+
+26
+00:00:58,959 --> 00:01:01,595
+Vấn đề không chỉ ở chỗ tự đánh giá quá cao.
+
+27
+00:01:01,635 --> 00:01:05,255
+Năm 1979, ba nhà tâm lý học cho hai nhóm người cùng
+
+28
+00:01:05,255 --> 00:01:07,158
+đọc một bộ dữ kiện giống hệt nhau.
+
+29
+00:01:07,198 --> 00:01:09,318
+Nhóm ủng hộ thấy bằng chứng ủng hộ là mạnh,
+
+30
+00:01:09,318 --> 00:01:11,472
+và bằng chứng chống lại là yếu.
+
+31
+00:01:11,512 --> 00:01:15,132
+Nhóm phản đối thì ngược lại. Cùng dữ kiện,
+
+32
+00:01:15,132 --> 00:01:16,448
+hai kết luận ngược nhau.
+
+33
+00:01:16,488 --> 00:01:19,928
+Họ gọi đó là đồng hóa thiên lệch.
+
+34
+00:01:19,928 --> 00:01:20,408
+Một trăm năm mươi mốt sinh viên,
+
+35
+00:01:20,408 --> 00:01:22,702
+và không ai chịu đổi ý.
+
+36
+00:01:23,302 --> 00:01:25,602
+Rồi còn một câu chuyện được lặp đi lặp lại trong mọi
+
+37
+00:01:25,602 --> 00:01:26,829
+hướng dẫn đính chính.
+
+38
+00:01:26,869 --> 00:01:29,829
+Năm 2010, hai nhà nghiên cứu đo được hiệu ứng bật
+
+39
+00:01:29,829 --> 00:01:32,490
+ngược: người được đính chính lại tin mình hơn trước.
+
+40
+00:01:32,530 --> 00:01:34,090
+Trong bốn thí nghiệm của họ,
+
+41
+00:01:34,090 --> 00:01:35,925
+chỉ hai thí nghiệm ra hiệu ứng này.
+
+42
+00:01:35,965 --> 00:01:38,505
+Nhóm bảo thủ đồng ý rằng Iraq có vũ khí hủy diệt,
+
+43
+00:01:38,505 --> 00:01:41,422
+từ ba mươi hai phần trăm lên sáu mươi bốn phần trăm.
+
+44
+00:01:41,462 --> 00:01:43,262
+Nghe rất thuyết phục.
+
+45
+00:01:43,262 --> 00:01:45,842
+Nhưng chỗ này mới là chỗ đáng sợ.
+
+46
+00:01:46,642 --> 00:01:50,782
+Năm 2019, hai nhà nghiên cứu khác làm năm thí nghiệm mới.
+
+47
+00:01:50,822 --> 00:01:53,580
+Năm mươi hai vấn đề, hơn mười nghìn một trăm người.
+
+48
+00:01:53,620 --> 00:01:55,357
+Không một trường hợp nào bật ngược.
+
+49
+00:01:55,397 --> 00:01:58,097
+Và họ tìm ra lý do: câu hỏi cũ quá phức tạp,
+
+50
+00:01:58,097 --> 00:02:01,872
+nên người ta đọc câu hỏi, bỏ qua cả phần đính chính.
+
+51
+00:02:02,372 --> 00:02:04,912
+Nói cách khác: phần lớn việc bám niềm tin,
+
+52
+00:02:04,912 --> 00:02:07,533
+không phải vì ta cố ý, mà vì ta không đọc.
+
+53
+00:02:07,573 --> 00:02:10,613
+Một phân tích tổng hợp năm 2020 của các nghiên cứu
+
+54
+00:02:10,613 --> 00:02:11,533
+về đính chính:
+
+55
+00:02:11,533 --> 00:02:13,788
+được sửa tin vẫn hơn là không được sửa tin.
+
+56
+00:02:13,828 --> 00:02:15,208
+Cái bật ngược thì hiếm,
+
+57
+00:02:15,208 --> 00:02:17,956
+và có thể là do cách người ta đặt câu hỏi.
+
+58
+00:02:18,556 --> 00:02:22,342
+Vậy làm gì? Có hai việc, đều làm được ngay.
+
+59
+00:02:22,382 --> 00:02:26,562
+Một: xét ngược lại. Năm 1985,
+
+60
+00:02:26,562 --> 00:02:28,642
+ba nhà nghiên cứu chỉ ra rằng bắt người ta cân nhắc
+
+61
+00:02:28,642 --> 00:02:30,659
+chiều ngược lại thì cái thiên lệch giảm.
+
+62
+00:02:30,699 --> 00:02:33,439
+Hai: viết ra trước điều gì sẽ khiến mình đổi ý.
+
+63
+00:02:33,439 --> 00:02:35,806
+Đây là điều răn thứ năm của những người dự báo.
+
+64
+00:02:35,846 --> 00:02:38,346
+Mỗi lần đọc một tin mình thích, mở sổ ra,
+
+65
+00:02:38,346 --> 00:02:40,810
+viết một dòng: điều gì sẽ khiến mình đổi ý?
+
+66
+00:02:40,850 --> 00:02:43,874
+Rồi đi tìm phần đính chính, và đọc nó.
+
+67
+00:02:44,374 --> 00:02:46,174
+Và biết đâu được.
+
+68
+00:02:46,174 --> 00:02:48,774
+Nhóm dự báo nổi tiếng có hơn hai mươi nghìn người;
+
+69
+00:02:48,774 --> 00:02:50,434
+một buổi huấn luyện khoảng một tiếng nâng độ chính
+
+70
+00:02:50,434 --> 00:02:52,441
+xác lên khoảng mười phần trăm.
+
+71
+00:02:52,941 --> 00:02:57,193
+Rối nói: não bạn không ghét bạn. Nó chỉ không đọc.
+
+72
+00:02:57,233 --> 00:02:59,773
+Tin mình đúng không phải lỗi của bạn.
+
+73
+00:02:59,773 --> 00:03:02,193
+Nhưng đọc phần đính chính thì là việc của bạn.
+
+74
+00:03:02,233 --> 00:03:06,595
+Tối nay, mở sổ ra. Mình là Kẻ Nghĩ Nhiều.

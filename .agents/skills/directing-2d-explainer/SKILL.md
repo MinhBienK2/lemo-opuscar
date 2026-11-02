@@ -45,11 +45,20 @@ The bar for every film: **A human story in a believable world, not a PowerPoint 
      - *Spotlight effect & memory bias* → 20 dusty framed certificates vs a single scorched note scorched under an intense spotlight.
      - *Impostor cycle* → Character sprinting on a runaway treadmill while clutching a cracking paper mask.
      - *Evidence ledger* → Thick leather notebook on desk, character's hand writing with wet ink, Rối stamping a bold red wax seal.
-7. **Continuous Visual Flow & Zero Dead Frames (The Rule of Three Clocks)**:
-   - **STRICTLY FORBIDDEN**: Animating for 0.5s at line start and freezing completely for the next 4 seconds waiting for the next sentence!
-   - **Clock 1 (Base Organic Pulse)**: Character breathes continuously (`breathe`), eyes dart with cognitive micro-drift (`eyeDrift`), bulb pulses, ambient dust motes drift through the air (`ambientMotes`).
-   - **Clock 2 (Phrase-Synced Micro-Beats)**: Every line $\ge 3$s MUST be broken down into 2–3 micro-beats based on `words.json`. As key verbs, nouns, and emotions are spoken, the visual reacts immediately (hand gesture shifts `ak()`, expression morphs `ek()`, props transform).
-   - **Clock 3 (Metamorphic Flow)**: Props morph and evolve in-scene across the concept block instead of sitting as static still illustrations.
+7. **Continuous Visual Flow & Zero Dead Frames (The 3-Clock Timing Architecture)**:
+   - **STRICTLY FORBIDDEN**: Animating for 0.5s at line start and freezing completely for the next 4–8 seconds waiting for the next sentence!
+   - **Clock 1 (Structure Lead — advance 6–10 frames / ~0.3s)**:
+     - Context the eye must prepare before processing facts: axes, table surface, counter, coffee cup, room environment.
+     - Base organic pulse: Character breathes continuously (`breathe`), eyes dart with cognitive micro-drift (`eyeDrift`), ambient dust motes drift (`ambientMotes`).
+   - **Clock 2 (Fact Sync — locked to spoken word in `words.json`)**:
+     - Key facts: amounts, percentages, prices, ranks, hand grabbing, writing.
+     - Use `dynamicBar(g, { val, t, t0, dur })` from `rig/components.js`: label/percentage ONLY appears when the bar reaches $\ge 85\%$ height — NEVER sitting at empty baseline!
+   - **Clock 3 (Withheld Reveal / Gated — locked to punchline word)**:
+     - Punchlines, negations, withheld answers, red strike-throughs, stamp seals.
+     - MUST be gated with `gatedReveal(g, { t, tGate, renderFn })` or `if (T >= tGate)`. NEVER draw outcome text before the voice reveals it!
+   - **Multi-Line Compound Scenes**:
+     - When a scene block spans multiple lines (`line1`, `line2`, `line3`), NEVER collapse them onto `t0 = L('line1').t0`.
+     - Use `compoundClocks(TL, ['line1', 'line2', 'line3'])` or distinct `L('lineX').t0` so visuals evolve continuously without dead air.
 ---
 
 ## 2. The 6-Step Production Workflow

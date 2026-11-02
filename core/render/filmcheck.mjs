@@ -175,6 +175,27 @@ for (const arg of args) {
       }
     } catch {}
   }
+
+  // 6. manifest check and thesis consistency (film.json exists, title matches FACTS.md)
+  const filmJsonPath = path.join(folder, 'film.json');
+  const filmJsonRaw = read(filmJsonPath);
+  if (filmJsonRaw !== null) {
+    try {
+      const fj = JSON.parse(filmJsonRaw);
+      if (!fj.title) fail(name, 'film.json has no "title" property');
+      if (!fj.movie) fail(name, 'film.json has no "movie" property');
+      if (fj.title && /<[^>]+>/.test(fj.title)) {
+        fail(name, `film.json title contains unexpanded placeholder: "${fj.title}"`);
+      }
+      const factsText = read(path.join(folder, 'research/FACTS.md'));
+      if (factsText && fj.title) {
+        const headLine = factsText.split('\n')[0] || '';
+        if (fj.title.includes('lựa chọn tốt') && headLine.includes('lựa chọn khác')) {
+          fail(name, `film.json title specifies "lựa chọn tốt" but research/FACTS.md thesis argues "lựa chọn khác"`);
+        }
+      }
+    } catch { fail(name, 'film.json is not valid JSON'); }
+  }
 }
 
 if (bad) { console.log(`filmcheck: FAILED (${bad} problem${bad > 1 ? 's' : ''})`); process.exit(1); }
