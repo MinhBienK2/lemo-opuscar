@@ -26,7 +26,9 @@ Mọi tập phim (đặc biệt bản dài 3–5 phút) bắt buộc phải vư�
 1. **Trọng lượng thực tế (The High Stakes Test)**: Vấn đề này có gây ra những tổn thất hữu hình và đau đớn trong đời thực (mắc kẹt trong công việc độc hại, đầu tư sai lầm, kiệt quệ hiện sinh, tê liệt sự nghiệp) không?
 2. **Chiều sâu cơ chế (The Root Mechanism Test)**: Có chạm tới bản chất vận hành của não bộ (kinh tế học hành vi, khoa học thần kinh nhận thức, tâm lý học tiến hóa) thay vì chỉ mô tả triệu chứng bề ngoài không?
 3. **Mô hình tư duy (The Mental Model Test)**: Kết thúc phim có để lại một khung tư duy (Mental Framework) sắc bén mà người xem có thể đem theo vào phòng họp, bàn làm việc hay quyết định cuộc đời không?
-4. **Cú va đập nhận thức (The Paradigm Shift Test)**: Phim có lật ngược được một niềm tin sai lầm phổ biến mà số đông vẫn tưởng là đúng không?
+4. **Cú va đập nhận thức (The Paradigm Shift Test)**: Phim có lật ngược được một niềm tin sai lầm phổ biến mà số đông vẫn tưởng là đúng không? Cú lật phải **diễn ra thành một cảnh** (Rối nói cách hiểu phổ biến, cảnh tiếp theo cho thấy điều thật sự xảy ra), không phải một chuỗi trích dẫn nghiên cứu.
+
+> **Sức nặng học thuật nằm ở `FACTS.md`, không nằm ở số lượng con số đọc lên.** Một tập 3 phút đọc lên khoảng 6–9 con số là đủ, mỗi số là một vật trong cảnh. Tên tác giả, năm, cỡ mẫu để trong mô tả video.
 
 ---
 
@@ -59,6 +61,7 @@ Mọi tập phim (đặc biệt bản dài 3–5 phút) bắt buộc phải vư�
 Không lặp lại sự đơn điệu của các tập trước. Bổ sung các tầng giác quan phong phú:
 
 ### A. Hình ảnh & Bối cảnh (Rich Visual Sets)
+- **Nơi chốn trước tiên là nơi hiệu ứng xảy ra ngoài đời** (quầy, sân ga, phòng họp, bếp, phòng chờ...), mỗi tập tự dựng. Các đạo cụ dưới đây là kho gợi ý cho nơi "nhà" của kênh, không phải bối cảnh mặc định của mọi tập; một bảng ghim sơ đồ là một tường thẻ chữ đội lốt, dùng nhiều nhất một lần.
 - **Phòng giải phẫu tâm trí (Mind Laboratory)**:
   - Bảng ghim sơ đồ điều tra (`Investigation Board`) với sợi chỉ đỏ nối các mảnh chứng cứ tâm lý.
   - Bình thủy tinh chứa nơ-ron phát sáng, giá sách gỗ cổ điển với những chồng sách dày.

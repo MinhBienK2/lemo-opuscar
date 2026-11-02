@@ -1,0 +1,261 @@
+{
+ "question": "What evidence-based and practitioner-documented methods make narrated 2D animated explainer videos (a narrator speaks while the visuals stage the concrete scene, action, objects and phenomena being described) engaging and easy to understand, as opposed to slide-like videos of text cards, charts and a static talking character — and how can these methods be made executable by AI coding agents that direct and animate such videos in code (canvas/JS), especially for abstract psychology/behavioral-science topics? Cover five angles: (1) how top explainer studios (Kurzgesagt, TED-Ed animators, Vox, The School of Life, Sprouts, Oversimplified, 3Blue1Brown) go from script to visual ideas/storyboard/animatic, who decides the picture for each line, and how often the picture changes — only from primary sources (interviews, behind-the-scenes videos, studio blogs); (2) peer-reviewed evidence on matching narration and visuals: Mayer's multimedia principles (redundancy, temporal contiguity, signaling, coherence, embodiment/image principle), seductive details, concreteness, narrative vs statistical evidence, misconception/dialogue videos (Muller), with real effect sizes; (3) animation and film craft for 'aliveness' in character animation and staging (12 principles, acting beats, staging, environmental storytelling, cutting/rhythm per Murch, sound/foley synchresis per Chion), from books and practitioner sources; (4) AI/LLM agent systems that generate explainer videos, storyboards or films (Code2Video, TheoremExplainAgent, FilmAgent, MovieAgent, Anim-Director, VideoDirectorGPT, etc.) — what failure modes they report (text-heavy, generic, audio-visual misalignment) and which techniques measurably helped (planner/coder/critic roles, VLM critique of rendered frames, storyboard-first), plus research on LLM creative homogeneity/mode collapse and fixes (verbalized sampling); (5) story structure and retention for short and 3–10 minute YouTube explainers (hooks, curiosity gap per Loewenstein, but/therefore causality, character vignettes for psychology concepts), separating measured evidence from creator opinion. For every claim give the exact source URL, and flag any number that cannot be traced to a primary source.",
+ "summary": "The 23 verified claims cover only part of the question. They are strongest on two angles: how a few studios turn a script into pictures (angle 1), and AI agent pipelines for explainer video (angle 4). On angle 1, primary sources agree that the picture for each line is decided at or just after the script stage. Phil Edwards (ex-Vox) writes a two-column script with the planned visual beside each narration line and rough placeholder storyboards. Kurzgesagt chooses visual metaphors scene by scene in a sketching phase, then records the voiceover, which sets the timing for the animators. 3Blue1Brown builds each scene as its own code unit, re-renders it piece by piece and edits the clips together. On angle 4, agent papers report the same failures again and again: overlapping or occluded layout, redundant or verbose narration that just repeats the visuals, code that rarely runs first try, and narration-to-visual timing that nothing measures. What helped measurably was splitting the work into planner, coder and critic roles; error-driven code repair; laying out keyframes as bounding boxes before writing code; and multi-agent critique loops. Critiquing rendered still frames with a vision model helped only a little. Verbalized Sampling is a training-free prompt method that measurably raises the diversity of LLM ideas, which an agent could use to generate several distinct staging ideas per line (untested for video). On angle 2, only the seductive-details effect is covered: it is a real harm, driven by diversion. The other Mayer principles, concreteness, narrative evidence, Muller's misconception videos, the animation craft of angle 3, and the story and retention evidence of angle 5 did not survive verification and remain unanswered here.",
+ "findings": [
+  {
+   "claim": "In practitioner workflows, the picture for each narration line is decided early, at or right after the script, before animation. Phil Edwards (ex-Vox) writes a two-column script with narration on the left and the planned visual on the right, ideally as an actual image, or sometimes a plain shot list. He gets as close to a storyboard as he can cheaply, pasting in placeholder archive clips or old shots of himself. Kurzgesagt follows script, then a sketching phase where 'the best visual metaphors and ideas for each scene' are deliberated, then illustration and design, then voiceover and animation.",
+   "confidence": "medium",
+   "sources": [
+    "https://rosetta.to/u/digspaghetti/how-phil-edwards-handles-creative-compromise",
+    "https://kurzgesagt.org/youtube/"
+   ],
+   "evidence": "Edwards: 'two column script ... in the right column I'll have the visual which ideally will be manifested via some sort of picture'; 'as close as I can to a storyboard without too much time investment'. Kurzgesagt process page: 'After deliberating over the best visual metaphors and ideas for each scene in the sketching phase'. Both verified 3-0 against primary sources. Edwards describes his own, apparently solo, workflow after Vox, not how Vox's team divided the work. The Kurzgesagt page is a short self-description by the studio, so it gives no detail on who decides each shot or how often the picture changes.",
+   "vote": "3-0 (claims 1, 4, 5)"
+  },
+  {
+   "claim": "At Kurzgesagt the recorded voiceover sets the timing of the animation: the animators build the motion to the finished narration, not the other way round. For a code pipeline this means narration audio, or at least its word timings, should exist before the shots are timed.",
+   "confidence": "medium",
+   "sources": [
+    "https://kurzgesagt.org/youtube/"
+   ],
+   "evidence": "'His voiceover provides the timing for the animation team.' The listed order is Research, Script, Illustration, Voiceover and Animation, then Music and SFX. Single primary source (studio page, undated); a Gigazine write-up of the 1200-hours video agrees.",
+   "vote": "3-0 (claim 0)"
+  },
+  {
+   "claim": "3Blue1Brown builds explainers in code, one scene at a time. Each scene is a Python (Manim) class that is rendered separately and then cut together in Final Cut. Sanderson works in a tight loop: 'checkpoint paste' re-runs one section after restoring the scene to its state at the start of that section, like a Jupyter notebook. This is a direct practitioner model for agents: one scene per module, fast partial re-renders, and editing done afterwards.",
+   "confidence": "medium",
+   "sources": [
+    "https://rosetta.to/u/3blue1brown/how-i-animate-3blue1brown-a-manim-demo-with-ben-sparks"
+   ],
+   "evidence": "'all of the scenes that I edit together take the form of a class in Python ... This I would drop into Final Cut'; 'checkpoint paste ... revert to the state that the scene had at the start ... like a Jupyter notebook.' This is a transcript copy of Sanderson's 2024 video; checkpoint_paste is a real function in the 3b1b/manim codebase.",
+   "vote": "3-0 (claims 2, 3)"
+  },
+  {
+   "claim": "Seductive details (interesting but irrelevant pictures or anecdotes) measurably hurt recall. The mechanism is diversion: learners judge the details relevant and spend time on them. It is not disruption of integration. Telling learners the details are irrelevant brought recall back to the control level. For explainers this means decorative gags and side facts that are not part of the causal story cost the viewer's attention.",
+   "confidence": "medium",
+   "sources": [
+    "https://link.springer.com/content/pdf/10.1007/s11251-023-09632-w.pdf"
+   ],
+   "evidence": "Kienitz, Krebs & Eitel 2023, Instructional Science 51:595-616, N=247 online, lightning material from Harp & Mayer. Control vs no-prompt recall: F(1,112)=16.43, p<.001, ηp²=.074, which is medium by Cohen's benchmarks. Transfer was not significant (p=.142). The irrelevance prompt removed the effect (control vs prompt p=.901). Mediation ran from perceived relevance to processing time to recall. Caveats: text plus pictures, not narrated animation; processing time was self-reported; one study. The meta-analysis it cites (Sundararajan & Adesope 2020) reports small-to-moderate effects overall.",
+   "vote": "3-0 (claims 6, 7)"
+  },
+  {
+   "claim": "LLM agents that generate explainer videos fail in the same ways again and again. Elements overlap or are misaligned, and animations occlude text. Continuity breaks. The code rarely runs on the first try. Narration is redundant or verbose and restates what is on screen. Pixel video models (Veo3) produce blurry or corrupted text and drifting styles. These defects often show only after rendering, not in the code.",
+   "confidence": "high",
+   "sources": [
+    "https://arxiv.org/abs/2510.01174",
+    "https://web3.arxiv.org/abs/2502.19400",
+    "https://arxiv.org/pdf/2601.13453",
+    "https://huggingface.co/papers/2605.15585.md"
+   ],
+   "evidence": "Code2Video: 'Even strong LLMs rarely produce fully executable code in one pass'; Veo3 'blurry or corrupted text, inconsistent styles, and drifting visuals'. TheoremExplainAgent: 'most of the generated videos exhibit minor element layout issues, such as overlapping texts', even for the best configuration (o3-mini, 93.8% success, overall 0.77; its Element Layout score of 0.61 was its lowest dimension). PhysicsSolutionAgent: 'redundancy and verbosity (appearing 36 times)' was the top issue, ahead of visuals/graphics at 18. OmniManim: 'element overlap, misalignment, and broken animation continuity', apparent only after execution. Four independent papers (2025-2026), but all are self-evaluations on benchmarks the authors built; OmniManim gives no frequency for 'often'.",
+   "vote": "3-0 (claims 9, 12, 13, 21)"
+  },
+  {
+   "claim": "Separate planner and coder roles, plus error-driven repair, make long code-rendered explainers possible. TheoremExplainAgent's planner writes the story plan and narration; its coder writes Manim, reads errors and revises up to 5 times, with optional RAG over Manim docs and plugins. The authors say an agentless approach could not produce videos longer than about 20 seconds, while the agentic one produced videos over 5 minutes. Code2Video's Planner-Coder-Critic pipeline reports large gains over direct code generation.",
+   "confidence": "medium",
+   "sources": [
+    "https://web3.arxiv.org/abs/2502.19400",
+    "https://arxiv.org/abs/2510.01174"
+   ],
+   "evidence": "TheoremExplainAgent: 'a planner agent generates story plans and narrations, and a coding agent generates Python animation scripts'; 'an agentless approach fails to generate videos longer than 20 seconds'. The 20-second figure is a sentence in the text with no table or setup, and no ablation removes only the planner. Code2Video's TeachQuiz scores rise from 36.5-40.0 (direct code) to 80.0-86.0, e.g. Claude Opus 4.1 +46.0 points. FLAG: the abstract's '40% improvement' cannot be traced to any reproducible calculation in the paper. A claimed Code2Video ablation ranking (planner removal costing about 41 points) was REFUTED 0-3 and should not be cited.",
+   "vote": "3-0 (claims 8, 10, 11)"
+  },
+  {
+   "claim": "Planning the layout before writing code works better than critiquing still frames after rendering. In OmniManim, a Vision Agent predicts keyframe bounding boxes before coding. Removing it dropped the non-overlap score from 0.763 to 0.491 and layout quality from 0.931 to 0.614. By contrast, PhysicsSolutionAgent's vision-model critique of 3 still screenshots per scene, with one refinement pass, gave only modest gains, and stills cannot see audio-visual sync. Code2Video also found that a vision-model critic without structured anchors cannot say which direction or how far to move an element.",
+   "confidence": "medium",
+   "sources": [
+    "https://huggingface.co/papers/2605.15585.md",
+    "https://arxiv.org/pdf/2601.13453",
+    "https://arxiv.org/abs/2510.01174"
+   ],
+   "evidence": "OmniManim Table 4 (EduRequire-500): OV 0.763 to 0.491, LQ 0.931 to 0.614 without the Vision Agent. PhysicsSolutionAgent: scene-content alignment 3.31 to 3.53, layout 3.64 to 3.66, max visual quality 3.98 to 4.05 (LLM judge, 0-5 scale, no significance tests). Its limitations: 'Static screenshots miss temporal properties like animation smoothness and audio-visual synchronization'; 'The most persistent issue is redundancy in narration and visuals'. All are preprints with the authors' own metrics. 'Timing unmeasured' is an inference from the evaluation design; the paper does not state it.",
+   "vote": "3-0 (claims 9, 14, 15, 22)"
+  },
+  {
+   "claim": "Multi-agent crew roles with structured critique loops improve generated film scripts and staging. FilmAgent assigns director, screenwriter, actor and cinematographer agents, with the director settling conflicts. Its Critique-Correct-Verify loop (scriptwriting) and Debate-Judge loop (cinematography) cut hallucinations such as non-existent actions and raised human ratings well above single-agent and chain-of-thought baselines.",
+   "confidence": "medium",
+   "sources": [
+    "https://arxiv.org/pdf/2501.12909v1"
+   ],
+   "evidence": "Human evaluation (5-point): average 3.98 Group vs 3.04 Solo vs 2.63 CoT (GPT-4o); plot coherence 3.53 vs 1.87 vs 1.60. The 'standing suggest' to 'standing thinking' fix is tied to the Critique-Correct-Verify loop only. A CoT-with-o1 baseline (3.30) is omitted. The evaluation is small and self-reported, in a 3D virtual-set setting rather than 2D explainers. Single source.",
+   "vote": "3-0 (claims 16, 17, 18)"
+  },
+  {
+   "claim": "Verbalized Sampling is a training-free prompt method that counters LLM sameness: the model generates several candidates, each with a stated probability, instead of one answer. In creative writing it raised diversity 1.6-2.1x over direct prompting, with no loss of factual accuracy or safety. An agent directing an explainer could use it to propose several distinct visual metaphors or stagings per line before choosing one; that use is an untested extrapolation.",
+   "confidence": "medium",
+   "sources": [
+    "https://arxiv.org/abs/2510.01171"
+   ],
+   "evidence": "'VS prompts the model to verbalize a probability distribution over a set of responses'; 'in creative writing, VS increases diversity by 1.6-2.1x over direct prompting.' Preprint (v4 July 2026), measured with the authors' own embedding-based diversity metrics and not independently replicated. No evidence yet that it improves storyboard quality. The broader claim that RLHF causes mode collapse in agents directing videos was REFUTED 0-3 as stated.",
+   "vote": "3-0 (claims 19, 20)"
+  }
+ ],
+ "caveats": "Coverage is very uneven. No verified claims cover TED-Ed, The School of Life, Sprouts or Oversimplified, nor how often the picture changes per line at any studio. For angle 2, the redundancy, temporal contiguity, signaling, coherence, embodiment, concreteness and narrative-vs-statistical evidence findings, and Muller's misconception videos, all have no verified support here; only seductive details survived, from a single text-and-picture study rather than narrated animation. Angle 3 (12 principles, acting beats, Murch, Chion) and angle 5 (hooks, Loewenstein's curiosity gap, but/therefore, YouTube retention) have no verified claims at all, so nothing in this report separates measured retention evidence from creator opinion. Every AI-agent result is a self-evaluation on a benchmark the authors built, mostly scored by automated LLM or vision-model judges. Several are non-peer-reviewed preprints from 2025-2026, all in Manim/Python rather than canvas/JS. Specific number flags: Code2Video's '40%' cannot be traced to any calculation; TheoremExplainAgent's '20 seconds' is an unmeasured statement in the text; the 1.6-2.1x diversity figure has not been replicated. Practitioner sources are a studio's own marketing page and auto-generated transcripts on rosetta.to rather than the original videos. Two claims were refuted: the Code2Video ablation ranking and the general RLHF mode-collapse claim.",
+ "openQuestions": [
+  "What do the peer-reviewed effect sizes show for Mayer's redundancy, temporal contiguity, signaling and embodiment principles in narrated animation specifically? Meta-analyses such as Mayer & Fiorella 2021 or Alpizar et al. 2020 need to be fetched and verified directly.",
+  "Can narration-visual timing (each spoken noun or verb landing on its on-screen action) be checked automatically, for example word-level TTS timestamps compared against event logs like window.EV? Would that cut the 'redundancy in narration and visuals' failure that still-frame critique cannot see?",
+  "Is there measured evidence, as opposed to creator opinion, that hooks, curiosity gaps or but/therefore causality improve audience retention or learning in 3-10 minute explainers? What do TED-Ed, Sprouts and Kurzgesagt say in primary interviews about how often the picture changes?",
+  "Does generating several candidate stagings per line, with Verbalized Sampling and then a critic choosing one, actually produce explainer visuals that are less generic and less slide-like when rated by humans?"
+ ],
+ "refuted": [
+  {
+   "claim": "In the ablation (Table 4, arXiv HTML v1 §5.3), removing the Planner causes the largest collapse, about 41 points on both metrics. Removing the external asset database costs 10.9 and 30.0 points, removing visual anchors costs 9.8 and 26.8, and removing the VLM Critic costs 6.5 and 21.3 on Quiz and Aesthetics. The column order in the extracted table was ambiguous.",
+   "vote": "0-3",
+   "source": "https://arxiv.org/abs/2510.01174"
+  },
+  {
+   "claim": "Post-training alignment (RLHF-style preference tuning) reduces LLM output diversity, producing mode collapse, so agents directing videos tend to converge on the same few typical ideas.",
+   "vote": "0-3",
+   "source": "https://arxiv.org/abs/2510.01171"
+  }
+ ],
+ "unverified": [],
+ "sources": [
+  {
+   "url": "https://kurzgesagt.org/youtube/",
+   "quality": "primary",
+   "angle": "Studio process (primary sources)",
+   "claimCount": 5
+  },
+  {
+   "url": "https://www.voicetube.com/videos/123700",
+   "quality": "unreliable",
+   "angle": "Studio process (primary sources)",
+   "claimCount": 0
+  },
+  {
+   "url": "https://katemessner.com/the-making-of-a-ted-ed-video/",
+   "quality": "blog",
+   "angle": "Studio process (primary sources)",
+   "claimCount": 5
+  },
+  {
+   "url": "https://amara.org/mn/videos/hZinbdxeIMjc/info/making-a-ted-ed-lesson-synesthesia-and-playing-cards/",
+   "quality": "unreliable",
+   "angle": "Studio process (primary sources)",
+   "claimCount": 0
+  },
+  {
+   "url": "https://rosetta.to/u/3blue1brown/how-i-animate-3blue1brown-a-manim-demo-with-ben-sparks",
+   "quality": "primary",
+   "angle": "Studio process (primary sources)",
+   "claimCount": 5
+  },
+  {
+   "url": "https://rosetta.to/u/digspaghetti/how-phil-edwards-handles-creative-compromise",
+   "quality": "primary",
+   "angle": "Studio process (primary sources)",
+   "claimCount": 5
+  },
+  {
+   "url": "https://edtechbooks.org/docx/10349",
+   "quality": "unreliable",
+   "angle": "Multimedia learning evidence",
+   "claimCount": 0
+  },
+  {
+   "url": "https://link.springer.com/content/pdf/10.1007/s11251-023-09632-w.pdf",
+   "quality": "primary",
+   "angle": "Multimedia learning evidence",
+   "claimCount": 5
+  },
+  {
+   "url": "https://perticles.blogspot.com/2008/01/muller-sharma-reimann-jcal-2008.html",
+   "quality": "secondary",
+   "angle": "Multimedia learning evidence",
+   "claimCount": 4
+  },
+  {
+   "url": "https://www.filmsound.org/chion/sync.htm",
+   "quality": "secondary",
+   "angle": "Animation and film craft",
+   "claimCount": 4
+  },
+  {
+   "url": "https://nofilmschool.com/2016/11/6-rules-good-cutting-according-oscar-winning-editor-walter-murch",
+   "quality": "secondary",
+   "angle": "Animation and film craft",
+   "claimCount": 3
+  },
+  {
+   "url": "https://www.routledge.com/Acting-for-Animators/Hooks/p/book/9781032266473",
+   "quality": "secondary",
+   "angle": "Animation and film craft",
+   "claimCount": 5
+  },
+  {
+   "url": "https://arxiv.org/abs/2510.01174",
+   "quality": "primary",
+   "angle": "LLM agent video generation failure modes",
+   "claimCount": 5
+  },
+  {
+   "url": "https://web3.arxiv.org/abs/2502.19400",
+   "quality": "primary",
+   "angle": "LLM agent video generation failure modes",
+   "claimCount": 5
+  },
+  {
+   "url": "https://arxiv.org/pdf/2601.13453",
+   "quality": "primary",
+   "angle": "LLM agent video generation failure modes",
+   "claimCount": 5
+  },
+  {
+   "url": "https://arxiv.org/pdf/2501.12909v1",
+   "quality": "primary",
+   "angle": "LLM agent video generation failure modes",
+   "claimCount": 5
+  },
+  {
+   "url": "https://arxiv.org/abs/2510.01171",
+   "quality": "primary",
+   "angle": "LLM agent video generation failure modes",
+   "claimCount": 5
+  },
+  {
+   "url": "https://huggingface.co/papers/2605.15585.md",
+   "quality": "primary",
+   "angle": "LLM agent video generation failure modes",
+   "claimCount": 5
+  },
+  {
+   "url": "https://www.cmu.edu/dietrich/sds/docs/loewenstein/WickCandleLearning.pdf",
+   "quality": "primary",
+   "angle": "Story structure and retention",
+   "claimCount": 5
+  },
+  {
+   "url": "https://www.cmu.edu/dietrich/sds/docs/loewenstein/PsychofCuriosity.pdf",
+   "quality": "primary",
+   "angle": "Story structure and retention",
+   "claimCount": 5
+  },
+  {
+   "url": "https://pubmed.ncbi.nlm.nih.gov/24836931/",
+   "quality": "primary",
+   "angle": "Story structure and retention",
+   "claimCount": 4
+  },
+  {
+   "url": "https://up.csail.mit.edu/other-pubs/las2014-pguo-engagement.pdf",
+   "quality": "primary",
+   "angle": "Story structure and retention",
+   "claimCount": 5
+  }
+ ],
+ "stats": {
+  "angles": 5,
+  "sourcesFetched": 22,
+  "claimsExtracted": 90,
+  "claimsVerified": 25,
+  "confirmed": 23,
+  "killed": 2,
+  "unverified": 0,
+  "afterSynthesis": 9,
+  "urlDupes": 0,
+  "budgetDropped": 8,
+  "agentCalls": 104
+ }
+}

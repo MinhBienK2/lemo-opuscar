@@ -43,7 +43,8 @@ sh core/render/new_episode.sh tram-nghi-nhieu series/nghich-ly-doi-thuong/tap-02
 Trong thư mục tập, `$CHANNEL` là thư mục kênh (`channels/tram-nghi-nhieu`) và `$LIB` là thư mục gốc của thư viện:
 
 1. **Chủ đề + nguồn** → `research/FACTS.md` (của tập): mọi con số kèm trích dẫn (DOI/link), và đánh dấu rõ điều gì **không** được nói quá.
-2. **Kịch bản** → `voice/lines.json` (của tập): Viết số thành chữ ("bốn mươi bảy phần trăm") cho giọng đọc đúng; giữ `rate`/`pitch` cho giọng nhân vật. **Quy mô kịch bản bắt buộc tính theo thời lượng yêu cầu** (xem mục 4c bên dưới).
+1b. **Treatment trước lời** → `TREATMENT.md`: ba spine, bảng nhịp (ai · làm gì · ở đâu · vật đổi trạng thái), tìm hình cho các nhịp khó, kinh thánh nơi chốn, bố cục. Thứ tự và cách làm: [`SKILL.md`](../../.agents/skills/tram-nghi-nhieu/SKILL.md) §2. Lời được viết **từ** bảng nhịp.
+2. **Kịch bản** → `voice/lines.json` (của tập), viết theo bảng nhịp: Viết số thành chữ ("bốn mươi bảy phần trăm") cho giọng đọc đúng; giữ `rate`/`pitch` cho giọng nhân vật. **Quy mô kịch bản bắt buộc tính theo thời lượng yêu cầu** (xem mục 4c bên dưới).
 3. **Giọng đọc** — script nằm ở kênh (`$CHANNEL/voice/`), đường dẫn của tập là đối số; chạy từ thư mục tập:
    ```sh
    $LIB/.venv/bin/python "$CHANNEL/voice/tts_vi.py" voice/lines.json voice/          # edge-tts, có tự thử lại khi câu bị "không có âm"
@@ -205,7 +206,7 @@ Mọi AI Agent khi nhận đề tài làm video cho kênh BẮT BUỘC phải tu
 
 1. **Bối cảnh sống thực tế (Real Staging)**:
    - Tuyệt đối CẤM vẽ các khối hộp chữ nhật trôi nổi và nhét chữ vào giữa như slide PowerPoint.
-   - Mọi phân cảnh bắt buộc phải neo vào không gian sống thực của nhân vật Kẻ Nghĩ Nhiều: căn phòng ngủ ban đêm (`S.sofa`, giường ngủ, rèm trăng), bàn làm việc gỗ có đèn bàn vàng (`desk()`), góc ban công hoặc đường phố bình minh.
+   - Mọi phân cảnh bắt buộc phải neo vào một nơi chốn trong kinh thánh của tập: nơi hiệu ứng xảy ra ngoài đời (quầy hàng, sân ga, phòng thí nghiệm có người tham gia, phòng họp...), hoặc nơi "nhà" của Kẻ Nghĩ Nhiều để quay về. Mỗi nơi có nền và ánh sáng riêng; tập tự vẽ các nơi đó trong `src/sets.js`.
 2. **Khóa Camera & Cấm Giật Cảnh (Scene-Block Invariant & Transition Rules)**:
    - **Một Phân Cảnh (Scene Block) = Một Khối Ý Trọn Vẹn**: Một phân cảnh phải kéo dài **20 – 50 giây** (bao gồm 4 – 10 câu thoại liên tiếp).
    - **TUYỆT ĐỐI CẤM**: Cứ xong 1 câu thoại là quất 1 cú whip pan giật màn hình kèm tiếng whoosh! Khi hai câu liên tiếp cùng diễn ra trong một không gian (cùng phòng ngủ, cùng hành lang, cùng bàn làm việc), camera bắt buộc phải GIỮ TĨNH hoặc đẩy nhẹ (`camera push`).
@@ -230,7 +231,7 @@ Mọi AI Agent khi nhận đề tài làm video cho kênh BẮT BUỘC phải tu
      - *Tâm lý đám đông* → Vòng tròn spotlight hắt xuống, đám đông xung quanh quay lưng bấm điện thoại chẳng ai nhìn.
 4. **Văn phong tâm sự người bạn (Conversational Tone)**:
    - Tuyệt đối CẤM đánh số thứ tự đầu câu ("Một —", "Hai —", "1.", "2.").
-   - Lời thoại phải là sự thủ thỉ, tự sự đồng cảm của Kẻ Nghĩ Nhiều lúc nửa đêm.
+   - Lời thoại là giọng một người bạn kể chuyện, thuyết minh cho sự việc đang diễn ra trên hình; không tả lại cái hình đã cho thấy.
 5. **Bắt buộc mảng sự kiện âm thanh (`window.EV`)**:
    - Tuyệt đối CẤM để `window.EV = []` rỗng (sẽ làm mất toàn bộ tiếng nói).
    - Bắt buộc đăng ký đầy đủ các sự kiện `voice`, nhạc chuyển đoạn (`music: A, B, C, end`) và hiệu ứng foley (`whoosh`, `pop`, `paper`, `marker`, `ting`, `boing`).
@@ -249,7 +250,7 @@ Mọi AI Agent khi nhận đề tài làm video cho kênh BẮT BUỘC phải tu
      - Phủ lớp xúc giác giấy & phim nhựa (`applyPaperTexture(G)` và `renderGrainFx(G, t)`): xóa bỏ hoàn toàn cảm giác vector phẳng thô, đem lại chiều sâu điện ảnh.
      - Phân cảnh nghiên cứu / bóc trần ngụy biện: dùng phong cách **Dossier** (`drawHalftoneField`, `drawDossierHeader`, `drawStampSlam`, `drawEvidenceTag`).
      - Phân cảnh tình huống / tâm sự đời thường: dùng phong cách **Mid-century** (`drawSunburst`, `drawSparkle`, động tác nảy lò xo).
-     - Phân cảnh dữ liệu / cơ chế thần kinh: dùng phong cách **Swiss** (`drawSwissMetric`, lưới đồ họa Thụy Sĩ).
+     - Phân cảnh dữ liệu / cơ chế thần kinh: dùng phong cách **Swiss** (`drawSwissMetric`, lưới đồ họa Thụy Sĩ) — tiết chế: một con số lớn trên màn hình là một khung thẻ, `scenecheck` giới hạn các khung đó ở ≤ 25 %. Ưu tiên cho con số thành vật trong cảnh.
 ## 8. Quy chuẩn đặc tả cảnh chi tiết 5 trường (The 5-Field Shot Specification)
 
 Khi viết `TREATMENT.md`, AI Agent **bắt buộc phải mô tả từng shot bằng 5 trường định lượng chi tiết**, tuyệt đối cấm tóm tắt sơ sài 1 dòng:
@@ -304,8 +305,8 @@ Người dùng chỉ cần đưa ra **chủ đề và thời lượng mong muố
 Khi nhận một prompt ngắn gọn từ người dùng (ví dụ: *"Làm video 10 phút về chủ đề X cho kênh Trạm Nghĩ Nhiều"*), AI Agent **bắt buộc phải tự động kích hoạt và chạy xuyên suốt toàn bộ chuỗi sản xuất từ A đến Z** mà không dừng lại xin phép ở từng bước:
 1. Tự chạy `new_episode.sh` scaffold thư mục tập.
 2. Tự web search tìm paper khoa học gốc (PubMed / ScienceDirect / JCR) và viết `research/FACTS.md` có nguồn số liệu chuẩn xác.
-3. Tự viết toàn bộ `voice/lines.json` theo đúng số lượng câu của bảng thời lượng.
-4. Tự chạy chuỗi âm thanh: `tts_vi.py` $\to$ `asr_vi.py` (với `HF_HOME=/home/minhbien/hf-cache`) $\to$ `process.py`.
-5. Tự viết `TREATMENT.md` tuân thủ đủ 5 trường đặc tả cảnh (`visualAnchor`, `typography`, `propsAndStaging`, `characterActing`, `soundSync`).
+3. Tự viết `TREATMENT.md` **trước lời**: ba spine, bảng nhịp, tìm hình, kinh thánh, bố cục (SKILL.md §2), mỗi cảnh đủ 5 trường đặc tả (`visualAnchor`, `typography`, `propsAndStaging`, `characterActing`, `soundSync`).
+4. Tự viết toàn bộ `voice/lines.json` **từ bảng nhịp**, theo đúng số lượng câu của bảng thời lượng.
+5. Tự chạy chuỗi âm thanh: `tts_vi.py` $\to$ `asr_vi.py` (với `HF_HOME=/home/minhbien/hf-cache`) $\to$ `process.py`.
 6. Tự sinh `src/timeline.js` (đảm bảo không va chạm phụ đề) và viết `src/film.js` vẽ Canvas dày dặn, đậm nét.
-7. Tự chạy `build.sh` render video Full HD và chạy `review.sh` đạt PASS 100%.
+7. Tự chạy `build.sh` render video Full HD và chạy `review.sh` đạt PASS 100% (gồm `scenecheck`: khung thẻ chữ ≤ 25 %, ≥ 1 bức hình khác nhau mỗi 20 s, ≤ 2 con số đọc lên mỗi 20 s).

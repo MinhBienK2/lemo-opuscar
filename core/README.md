@@ -56,6 +56,7 @@ The viewport is 1920×1080 at device scale 1, or `--size WxH`. `--q 'k=v&…'` r
 | `node core/render/video.mjs <demo> [--fps 24] [--workers 3] [--out <demo>/out/video.mp4]` | every frame to a video; up to 6 workers for a single render. Each parallel version needs its own `--out` |
 | `node core/render/events.mjs <demo> [--out <file>]` | export `{dur, ev}` to `<demo>/events.json` |
 | `node core/render/readcheck.mjs <demo> [--step 0.04] [--latin-cps 15] [--cjk-cps 4.5] [--pad 1.5] [--min 1.5] [--band 0]` | reading-time check (below); `--band N` also reports every text whose box reaches below y=N — the subtitle band |
+| `node core/render/scenecheck.mjs <film> [--step 1] [--band 880] [--report] [--json f]` | does the picture stage the story? text-led frames (from `window.TEXTS`) ≤ 25 %, ≥ 1 different look per 20 s (colour histogram), ≤ 2 spoken numbers per 20 s (`voice/lines.json`), foley in `window.EV` on spoken words (`voice/words.json`); `--report` prints and exits 0. `review.sh` runs it on films and episodes |
 | `node core/render/drawcheck.mjs <film-folder> [<film-folder> ...]` | audit a film's drawing code (below) |
 | `sh core/render/review.sh <film-folder>` | the whole review loop in one command (below) |
 | `.venv/bin/python core/render/sheet.py out.jpg img… [--cols 4] [--w 480]` | contact sheet |

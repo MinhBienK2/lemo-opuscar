@@ -1,10 +1,10 @@
 # Trạm Nghĩ Nhiều · Style — kênh tâm lý học bằng hoạt hình 2D tối giản
 
-Một style riêng cho kênh: một nhân vật chủ, một đồng học, nền tối, chữ rõ. Mọi tập dùng chung ngôn ngữ hình ảnh này.
+Một style riêng cho kênh: một nhân vật chủ, một đồng học, nét cel dày, chữ rõ. Mọi tập dùng chung nhân vật, nét, chữ, giọng và nhạc; **nền, ánh sáng và nơi chốn thì mỗi tập tự dựng theo câu chuyện của nó** (cách làm: `.agents/skills/tram-nghi-nhieu/SKILL.md`).
 
 ## 1. Bản chất
 
-Một người dẫn chuyện giải thích tâm lý học bằng cách **chỉ ra cái giá của một trạng thái thường ngày**, rồi **bác bỏ một cách giải thích quen thuộc** bằng dữ kiện, rồi **đưa ra một hành động cụ thể**.
+Một người dẫn chuyện giải thích tâm lý học bằng cách **chỉ ra cái giá của một trạng thái thường ngày**, rồi **bác bỏ một cách giải thích quen thuộc** bằng một cảnh cho thấy điều thật sự xảy ra (dữ kiện nằm trong `FACTS.md`, được diễn ra chứ không đọc lên), rồi **đưa ra một hành động cụ thể**.
 Kênh nói về hành vi con người, không phải về kỹ thuật: mỗi tập bắt đầu từ một câu hỏi đời thường ("tại sao càng rảnh ta càng mệt?") và kết thúc bằng một việc người xem làm được ngay.
 
 **Không phải**: podcast có hình, slideshow, video tâm lý học giọng AI, meme 3 giây, hay bất cứ thứ gì kể một bí mật "bạn không biết".
@@ -21,7 +21,7 @@ Nét viền `#1D202A` luôn dày ~3,4 px trên màn hình, bất kể tỉ lệ.
 
 | Vai trò | Màu |
 |---|---|
-| Nền | `#12131A` (than xanh), lưới `#1E2333`, vignette 42 % |
+| Nền | **theo nơi chốn**: mỗi nơi trong kinh thánh của tập có màu nền và nguồn sáng riêng. `#12131A` (than xanh, vignette 42 %) chỉ là nền của nơi "nhà" ban đêm, không phải nền của cả tập |
 | Panel/bảng | `#232838`, viền `#2E3448` / `#5A6488` |
 | Kem (da, chữ chính) | `#FAF8F5` |
 | Nét | `#1D202A` |
@@ -52,14 +52,14 @@ Bảng màu thực tế trong code (`rig/character.js:PAL`): da kem `#fff0d8`, �
 
 ## 4. Bố cục và camera
 
-- Nền tối, nhân vật sáng: tương phản là chủ đạo. Không dùng hiệu ứng hào quang, bloom hay lens flare.
-- Bố cục: nhân vật chiếm một phần ba khung, phần còn lại cho **một** vật thể (một thẻ, một con số, một cái pin). Không bao giờ hai bảng cùng lúc.
+- Nhân vật luôn tách khỏi nền bằng tương phản, nền tối hay sáng tùy nơi chốn. Mỗi nơi có một nguồn sáng đọc được (đèn bàn, cửa sổ, màn hình, đèn đường) quyết định màu và bóng. Không dùng hào quang, bloom hay lens flare.
+- Bố cục: nhân vật (hoặc người trải qua hiệu ứng) **ở trong** nơi chốn, cạnh **một** vật đang đổi trạng thái. Một con số, nếu có, là một vật trong cảnh. Không bao giờ hai bảng cùng lúc, và thẻ chữ là ngoại lệ (≤ 25 % khung, `scenecheck` đo).
 - Máy: push-in chậm (2–4 %) cho ý tưởng; whip pan khi đổi chỗ; cắt cứng vào mặt cho cú đấm; iris wipe khi bước vào bối cảnh; giữ nguyên khung khi cần đọc số.
 - Không có camera quay vai. Bố cục luôn chính diện hoặc hơi từ trên xuống.
 
 ## 5. Đồ hoạ b-roll
 
-Mọi thứ được vẽ bằng mã, cùng ngôn ngữ nét với nhân vật:
+Mọi thứ được vẽ bằng mã, cùng ngôn ngữ nét với nhân vật. Những vật dưới đây là đồ dùng phụ, không phải xương sống của cảnh — xương sống là nơi chốn và hành động:
 - **Thẻ** (panel): nền tối `#232838`, bo góc 26 px, bóng đen lệch 10 px, có thể dán băng keo vàng hoặc ghim đỏ.
 - **Highlight**: một vệt màu mù mè quét sau từ/number quan trọng, chạy đúng nhịp từ đang nói.
 - **Con dấu**: khung đỏ `#F0525B`, mực nứt, dùng cho "CHÁN", "CÔNG VIỆC", "GIẢ" — luôn để phủ lên một câu đã nói.
@@ -90,13 +90,13 @@ Mọi thứ được vẽ bằng mã, cùng ngôn ngữ nét với nhân vật:
 
 ## 9. Quy trình mỗi tập
 
-1. `TREATMENT.md`: ba cấu trúc, chọn một, bảng cảnh, bảng nhạc, bảng âm thanh.
-2. `research/FACTS.md`: mọi con số kèm nguồn, trước khi viết lời.
-3. `voice/lines.json` → edge-tts → ASR (kiểm tra lời) → `voice/process.py` (điều khiển miệng).
+1. `research/FACTS.md`: mọi con số kèm nguồn.
+2. `TREATMENT.md`: ba spine, bảng nhịp (sự việc trước lời), tìm hình cho nhịp khó, kinh thánh nơi chốn, bố cục — **trước** khi viết lời (SKILL.md §2).
+3. `voice/lines.json` viết theo bảng nhịp → edge-tts → ASR (kiểm tra lời) → `voice/process.py` (điều khiển miệng).
 4. `src/timeline.js`: thứ tự câu, khoảng lặng, mảnh phụ đề theo từ.
 5. `src/film.js`: các cảnh, máy, hiệu ứng.
 6. `sh build.sh`: sự kiện → trộn âm → khuôn hình → phụ đề → dựng (−14 LUFS) → poster.
-7. Kiểm tra: xem thử 6–10 khung hình ở giữa mỗi cảnh; đo giọng nói và tiếng nền; đọc lại phụ đề.
+7. Kiểm tra: `review.sh` (gồm `scenecheck`); xem contact sheet và kể lại câu chuyện chỉ từ ảnh; đo giọng nói và tiếng nền; đọc lại phụ đề.
 
 ## 10. Bẫy
 

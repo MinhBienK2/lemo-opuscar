@@ -5,6 +5,7 @@
 #   3. claims    — the numbers on screen against the numbers the research file supports (tools/check_claims.py)
 #   4. facts     — the research file against itself: no duplicated bullet, no wrong cross-reference (tools/check_facts.py)
 #   5. readcheck — every text stays on screen long enough to be read (node core/render/readcheck.mjs)
+#      scenecheck — films and episodes only: the picture stages the story instead of reading it (node core/render/scenecheck.mjs)
 #   6. stills    — review frames every 2 s, from 0 to the film's length (core/render/still.mjs)
 #   7. sheet     — the frames on one contact sheet (core/render/sheet.py)
 #   8. the film  — measured loudness and black frames, when a finished .mp4 is in the folder
@@ -40,6 +41,8 @@ fi
 BAND=""
 case "$FOLDER" in */films/*|films/*|*/channels/*|channels/*) BAND="--band 880";; esac
 run readcheck node "$HERE/core/render/readcheck.mjs" "$FOLDER" $BAND
+# a narrated film must stage its story, not read it: text-led frames, different looks, spoken numbers, foley on words
+if [ -n "$BAND" ]; then run scenecheck node "$HERE/core/render/scenecheck.mjs" "$FOLDER" --band 880; fi
 
 # the voice: every line has to transcribe back to the script. The run happens in a scratch folder, so the
 # film's own words.json is never rewritten by a check.
