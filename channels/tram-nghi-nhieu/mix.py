@@ -25,6 +25,7 @@ LIB = os.environ.get('LIB') or _lib_root(HERE)
 OUT = os.environ.get('OUT') or os.path.join(FILM, 'out')
 sys.path.insert(0, os.path.join(LIB, 'core/audio'))
 import sfx   # noqa: E402
+import foley   # noqa: E402  — the material foley (core/audio/foley.py): every name in it is an EV type
 from sfx import SR, t_, env_exp, bp, lp, hp, noise, brown, norm, add   # noqa: E402
 
 if not os.path.isfile(os.path.join(FILM, 'events.json')):
@@ -208,7 +209,8 @@ def ambience(kind, d):
 AMB_G = {'room': .3, 'night': .4, 'scroll': .35, 'dawn': .45, 'low': .45}
 for e in EV:
     if e['type'] == 'amb':
-        d = e['t1'] - e['t'] + .3; x = fade(norm(ambience(e['kind'], d), .5), .25, .35)
+        d = e['t1'] - e['t'] + .3
+        x = foley.play_bed(e['kind'], d) if e['kind'] in foley.BEDS else fade(norm(ambience(e['kind'], d), .5), .25, .35)
         add(amb, x, e['t'], AMB_G.get(e['kind'], .3) * .5)
 
 # ——— foley ———
@@ -236,10 +238,22 @@ FX = {
     'stamp': lambda e: sfx.thump(.9, 60) + np.pad(sfx.click(.7, .4), (0, int(.35 * SR) - len(sfx.click()))),
     'whoosh': lambda e: sfx.whoosh(.32, .45), 'boing': lambda e: boing(.55), 'swish': lambda e: swish(.45),
     'drain': lambda e: drain(.5), 'rise': lambda e: rise(.3), 'step': lambda e: step(.4), 'tick': lambda e: sfx.click(1.3, .3),
+    'thump': lambda e: sfx.thump(.8, 70),
 }
+# an event type that makes no sound is a mistake, not a choice: the film would show a cause and stay silent
+NOSOUND = {'voice', 'music', 'amb', 'silence', 'duck', 'cut', 'mark', 'shot'}
+for e in EV:   # {type: 'foley', kind: <name>} is the same as {type: <name>}
+    if e['type'] == 'foley' and e.get('kind'): e['type'] = e['kind']
+unknown = sorted({e['type'] for e in EV if e['type'] not in FX and e['type'] not in foley.FOLEY and e['type'] not in NOSOUND})
+if unknown:
+    sys.exit(f"mix.py: EV types with no sound: {', '.join(unknown)}. Use a name from the channel's FX or from core/audio/foley.py "
+             f"(python core/audio/foley.py lists them).")
 for k, e in enumerate(EV):
     f = FX.get(e['type'])
-    if f: add(fx, f(e).astype(np.float32), e['t'], .7, float(np.sin(k * 2.3)) * .25)
+    if f: x = f(e).astype(np.float32)
+    elif e['type'] in foley.FOLEY: x = foley.play(e['type'], float(e.get('v', .6)), var=k, d=e.get('d'))
+    else: continue
+    add(fx, x, e['t'], .7, float(e['pan']) if 'pan' in e else float(np.sin(k * 2.3)) * .25)
 
 # ——— the voice, centred and dry ———
 for e in EV:

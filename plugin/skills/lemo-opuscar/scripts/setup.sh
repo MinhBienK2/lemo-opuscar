@@ -104,5 +104,8 @@ if command -v ffmpeg >/dev/null; then
 else miss="$miss ffmpeg"; fi
 command -v uv >/dev/null || find_py >/dev/null || miss="$miss python3.11+(or uv)"
 [ -n "$miss" ] && echo "! missing:$miss"
+# a film needs room: frames, stems and a speech model (whisper small is ~0.5 GB) — say so before the render, not during it
+free=$(df -Pk "$LIB" 2>/dev/null | awk 'NR==2 {print int($4 / 1048576)}')
+[ -n "$free" ] && [ "$free" -lt 3 ] && echo "! low disk: ${free} GB free where the library is (a film needs ~3 GB: frames, audio, the speech model)"
 node_ok && py_ok core || echo "! packages not installed yet: run 'sh setup.sh deps' (a few minutes) before the first render"
 echo "LIB=$LIB"

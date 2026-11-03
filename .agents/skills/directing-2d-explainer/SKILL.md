@@ -1,6 +1,6 @@
 ---
 name: directing-2d-explainer
-description: Direct and produce showreel-grade 2D animated explainer films rendered entirely from code on HTML5 Canvas. Enforces character-driven storytelling, room sets, steady camera, conversational scripts, tactile props, multi-layered foley sound design, and automated gate verification. Use whenever creating 2D animated explainers, psychology shorts, narrative educational videos, or character-based Canvas animations.
+description: Direct and produce showreel-grade 2D animated explainer films rendered entirely from code on HTML5 Canvas. Enforces character-driven storytelling, room sets, a new shot for every new idea, a camera that moves for a reason, conversational scripts, tactile props, sparse layered sound, and automated gate verification. Use whenever creating 2D animated explainers, psychology shorts, narrative educational videos, or character-based Canvas animations.
 version: 1.0.0
 ---
 
@@ -9,6 +9,8 @@ version: 1.0.0
 A complete, production-grade directing method for producing character-driven 2D animated explainer films on HTML5 Canvas. Synthesizes principles from world-class motion design showreels (`motion-graphics`), educational storyboarding (`explainer-video`, `storyboard`), and vector Canvas animation (`canvas-video`).
 
 The bar for every film: **A human story in a believable world, not a PowerPoint slide deck.**
+
+The directing process is `DIRECTOR.md` §2–§7 — benchmark, three structures, a shot list with a *why* for every shot, beat sheet, cue map, sound table. Do it first; this skill adds the craft of a narrated 2D explainer on top.
 
 ---
 
@@ -20,9 +22,9 @@ The bar for every film: **A human story in a believable world, not a PowerPoint 
 2. **Character & Context Staging (Real World Anchor)**:
    - Every shot MUST be staged in a believable human environment: a wooden desk with a warm lamp (`desk()`, `S.roomBack`, `S.roomFront`), a quiet night sofa (`S.sofa`), or an early morning street.
    - **STRICTLY FORBIDDEN**: Floating text boxes on abstract dark voids. That is a presentation slide, not an animated film.
-3. **Steady Camera & Scene-Block Grammar (Anti-Cut Churn)**:
-   - **One Scene Block = One Complete Concept (20–50s, 4–10 lines)**: STRICTLY FORBIDDEN to whip-pan or cut on every single spoken line. When sentences continue in the same room or topic, the camera holds steady.
-   - **Motion comes from In-Scene Evolution**: Character pose shifts `ak()`, facial expressions `ek()`, blinking `blink()`, props sliding/revealing in-place (`alpha`, `slide`, `reveal`), not camera jitter.
+3. **One Place, Many Shots (Cut on the Idea)**:
+   - **A new idea is a new shot of 3–8 s**: a place opens on a wide shot, then cuts to medium and to a close-up of the thing being talked about. Cut straight within a place; save the whip for a jump in place or time. (The film the bar is set by, `films/host-toon-test`, has 24 shots in 132 s.)
+   - **Motion comes from the character and the props**: pose shifts `ak()`, expressions `ek()`, blinking `blink()`, props sliding or revealing in place. The camera moves when the shot list gives it a reason: a slow push (2–4 %) into an idea, a track with someone walking.
    - **Rich Transition Toolkit**:
      - *Direct Cut*: Change angle (Wide → Close-up, Top-down desk view) on the musical beat or realization. Clean, crisp, no motion blur.
      - *Iris Wipe*: Classic circle mask in/out for intros, endings, or memory dives.
@@ -34,7 +36,7 @@ The bar for every film: **A human story in a believable world, not a PowerPoint 
    - **STRICTLY FORBIDDEN**: Numbered outline bullets (*"Một —", "Hai —", "1.", "2."*).
    - Write in warm, empathetic, spoken Vietnamese (as an intimate late-night conversation between two friends). Time lines at **~2.3 words/second** (140 wpm) with natural **0.4–0.6s breath pauses** between sentences.
 5. **Sound is Half the Film (Loudness & Foley on the Beat Grid)**:
-   - Every visible physical action has a tactile sound: paper slide (`paper`), item pop (`pop`), marker highlight (`marker`), clock ting (`ting`), spring boing (`boing`), whip whoosh (`whoosh`).
+   - **Sound marks what matters**: a room bed always; one or two motif sounds for the prop the story keeps returning to; accents at the cuts between places, the turn, the "aha", a term card, a joke. Most gestures play under the room tone alone — about 25 sound moments a minute, a quarter of the film with no sound effect at all, a real silence before the turn.
    - Every shot registers its events in `window.EV`. Empty `window.EV` fails `filmcheck`.
    - Mastered to **-14.0 LUFS** with automatic ducking: music drops **-8 dB to -10 dB** during voice narration and swells back during pauses.
 6. **Visual Physicalization (Never Animate PowerPoint Cards)**:
@@ -126,10 +128,10 @@ $LIB/.venv/bin/python "$CHANNEL/voice/process.py" voice/
 
 ## 3. Anti-Generic Checklist (Run before delivery)
 
-- [ ] Is the camera steady inside every shot (no aimless zooming/drifting)?
+- [ ] Does every camera move have a reason in the shot list (a push into an idea, a track with someone walking)?
 - [ ] Is Kẻ Nghĩ Nhiều anchored in a tangible room/sofa/desk set?
 - [ ] Are all robotic bullet points and section numbers removed from the script?
-- [ ] Does every shot return foley sound events in its `ev()` function?
+- [ ] Do the sounds mark what matters — a room bed, the story's motif, the turn — with rests between them?
 - [ ] Is `window.EV` populated with all voice lines and music cues?
 - [ ] Is the voiceover clearly audible at -14 LUFS with automatic music ducking?
 - [ ] Does the ending offer one concrete, comforting action?

@@ -3,6 +3,8 @@
 #   1. filmcheck — the film is its own episode: its own name, its own treatment, its own shots (node core/render/filmcheck.mjs)
 #   2. drawcheck — the drawing code's calling conventions (node core/render/drawcheck.mjs)
 #   3. claims    — the numbers on screen against the numbers the research file supports (tools/check_claims.py)
+#   3b. board   — the storyboard (board.json) against the script, the sounds and the code (tools/check_board.py)
+#       treatment — TREATMENT.md and LOOK.md of a channel that asks for a board (tools/check_treatment.py)
 #   4. facts     — the research file against itself: no duplicated bullet, no wrong cross-reference (tools/check_facts.py)
 #   5. readcheck — every text stays on screen long enough to be read (node core/render/readcheck.mjs)
 #      scenecheck — films and episodes only: the picture stages the story instead of reading it (node core/render/scenecheck.mjs)
@@ -35,6 +37,14 @@ if [ -f "$FOLDER/research/FACTS.md" ]; then
   run facts python3 "$HERE/tools/check_facts.py" "$FOLDER/research/FACTS.md"
   run citations python3 "$HERE/tools/check_citations.py" "$FOLDER/research/FACTS.md"
   run timing python3 "$HERE/tools/check_timing.py" "$FOLDER"
+fi
+# the storyboard as data: a film that has a board.json, or that belongs to a channel asking for one (board_rules.json),
+# is checked against it — beats on words, a signal for every line, a cause for every sound, a film built from the board
+BCH=$(cd "$FOLDER" && while [ ! -f CHANNEL.md ] && [ "$PWD" != / ]; do cd ..; done && pwd)
+if [ -f "$FOLDER/board.json" ] || [ -f "$BCH/board_rules.json" ]; then
+  run board "$PY" "$HERE/tools/check_board.py" "$FOLDER"
+  # …and directed before it was drawn: benchmark, three structures, cue map, sound, content review, the look rounds
+  run treatment python3 "$HERE/tools/check_treatment.py" "$FOLDER"
 fi
 # a film's own film folder: the subtitles sit at the bottom, so nothing else may be down there.
 # The band is matched on the path, so it must match the one-shots under films/ and the episodes under channels/.

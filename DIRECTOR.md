@@ -66,7 +66,7 @@ Render 6–9 key shots with the real drawing code, tiled into one sheet (`core/r
 
 ## 6. Sound is half the film
 
-- **Every visible action has a sound**: landings, page turns, cuts, drips, clicks, cloth. Match the material (paper, wood, metal, ink and glass all sound different).
+- **The actions that matter have a sound**: the landing that ends a move, the page that turns the story, the prop the story keeps returning to, the turn, the joke. Match the material (paper, wood, metal, ink and glass all sound different). Most gestures play under the room tone alone: a sound on every gesture is mickey-mousing, and the ear tires of it within a minute.
 - **Three layers**: ambience (room, wind, rain, city), foley (tied to actions) and music. Duck the music under dialogue and key foley.
 - **At least two real silences**, or near-silences, before the turn or the emotional peak. The first sound after the silence should be one of the most important sounds in the film.
 - **Use sound as a transition** at least twice: bring the next scene's sound in early (J-cut) or let the last scene's sound run over the cut (L-cut).

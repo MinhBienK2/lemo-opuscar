@@ -35,7 +35,7 @@ Mọi series và tập phim được gom gọn vào mục `series/`, bên trong 
 * `series/tam-ly-hanh-vi/tap-07-luon-tuong-minh-dung/` (Cột 4: Tâm lý hành vi — "Tại sao ta luôn tưởng mình đúng?", bản 3 phút)
 * `series/vet-bam-than-kinh/tap-01-khong-the-tap-trung/` (Cột 2: Chuyên sâu thần kinh / bản dài)
 
-**Không nhân bản thư mục tập nào** — tạo tập mới bằng scaffold:
+Tạo tập mới bằng scaffold (mỗi tập bắt đầu từ thư mục trống của nó):
 ```sh
 sh core/render/new_episode.sh tram-nghi-nhieu series/nghich-ly-doi-thuong/tap-02-cang-co-cang-met "Tiêu đề tập mới"
 ```
@@ -43,8 +43,9 @@ sh core/render/new_episode.sh tram-nghi-nhieu series/nghich-ly-doi-thuong/tap-02
 Trong thư mục tập, `$CHANNEL` là thư mục kênh (`channels/tram-nghi-nhieu`) và `$LIB` là thư mục gốc của thư viện:
 
 1. **Chủ đề + nguồn** → `research/FACTS.md` (của tập): mọi con số kèm trích dẫn (DOI/link), và đánh dấu rõ điều gì **không** được nói quá.
-1b. **Treatment trước lời** → `TREATMENT.md`: ba spine, bảng nhịp (ai · làm gì · ở đâu · vật đổi trạng thái), tìm hình cho các nhịp khó, kinh thánh nơi chốn, bố cục. Thứ tự và cách làm: [`SKILL.md`](../../.agents/skills/tram-nghi-nhieu/SKILL.md) §2. Lời được viết **từ** bảng nhịp.
-2. **Kịch bản** → `voice/lines.json` (của tập), viết theo bảng nhịp: Viết số thành chữ ("bốn mươi bảy phần trăm") cho giọng đọc đúng; giữ `rate`/`pitch` cho giọng nhân vật. **Quy mô kịch bản bắt buộc tính theo thời lượng yêu cầu** (xem mục 4c bên dưới).
+1b. **Treatment trước lời** → `TREATMENT.md`: ba spine, bảng nhịp (ai · làm gì · ở đâu · vật đổi trạng thái), tìm hình cho các nhịp khó, kinh thánh nơi chốn, bố cục. Các phần và thứ tự: [`SKILL.md`](../../.agents/skills/tram-nghi-nhieu/SKILL.md) §1, theo `DIRECTOR.md` §2–§7. Lời được viết **từ** bảng nhịp.
+1c. **Board** → `board.json`: storyboard dạng dữ liệu, mỗi nhịp neo vào một từ của lời (`"hook1@sạp"`), chia thành các shot (cỡ cảnh, người dẫn ở đâu, máy chuyển động thế nào, vì sao), có người diễn; chữ chỉ là thuật ngữ, tên, nơi, thời điểm, con số, tài liệu, con dấu; tiếng là ngân sách, không phải chỉ tiêu. `python3 $LIB/tools/check_board.py <thư mục tập>` phải PASS trước khi làm giọng (ước lượng thời gian) và sau khi có `words.json`. Luật riêng của kênh: `board_rules.json` (≥ 2 nhịp Rối, ≥ 1 nhịp `aha`). Lời và board được một agent khác chấm nội dung trước khi làm giọng (SKILL.md §1 bước 5).
+2. **Kịch bản** → `voice/lines.json` (của tập), viết theo bảng nhịp: Viết số thành chữ ("bốn mươi bảy phần trăm") cho giọng đọc đúng; giữ `rate`/`pitch` cho giọng nhân vật. Số câu theo thời lượng: SKILL.md §6.
 3. **Giọng đọc** — script nằm ở kênh (`$CHANNEL/voice/`), đường dẫn của tập là đối số; chạy từ thư mục tập:
    ```sh
    $LIB/.venv/bin/python "$CHANNEL/voice/tts_vi.py" voice/lines.json voice/          # edge-tts, có tự thử lại khi câu bị "không có âm"
@@ -63,11 +64,14 @@ Trong thư mục tập, `$CHANNEL` là thư mục kênh (`channels/tram-nghi-nhi
    import { cel, path, poly, ellP, line, taper, mix, rgba, canvas, W, H, TAU, rect } from '../../rig/cel.js';
    import { ground, panel, hilite, stamp, pip, bubble, subtitle, tag, text } from '../../rig/broll.js';
    import * as S from '../../rig/sets.js';
+   import { loadBoard } from '../../rig/board.js';      // board.json → shot, nhịp, chữ, biểu đồ, tiếng (SKILL.md §4)
+   import { extra, crowd } from '../../rig/extras.js';  // người phụ có mặt, tay, đồ phụ kiện
+   import { hostPip, reactClose } from '../../rig/host.js'; // người dẫn bình luận: vòng tròn ở góc, cận mặt
    import { clamp } from '/core/lib.js';          // thư viện
    ```
    Font của kênh: `<link rel="stylesheet" href="../fonts/fonts.css">` trong `index.html` của tập.
 6. **Dựng** → `sh build.sh` (của tập): `events.mjs` → `mix.py` (của kênh, chạy với `FILM=<thư mục tập>`) → `video.mjs` → `srt.py` → `mux.sh` (−14 LUFS) → poster.
-7. **Cổng kiểm tra** → `sh $LIB/core/render/review.sh <thư mục tập>`: drawcheck, readcheck, whisper từng câu, khung hình review + contact sheet, độ lớn tiếng, khung đen. **Nó phải exit 0** trước khi tập được coi là xong (tập 02 gọi nó ngay trong `build.sh` và để build fail theo kết quả).
+7. **Cổng kiểm tra** → `sh $LIB/core/render/review.sh <thư mục tập>`: treatment và LOOK.md (`tools/check_treatment.py`), board (`tools/check_board.py`), scenecheck, drawcheck, readcheck, whisper từng câu, khung hình review + contact sheet, độ lớn tiếng, khung đen. **Nó phải exit 0** trước khi tập được coi là xong (tập 02 gọi nó ngay trong `build.sh` và để build fail theo kết quả).
 8. **Kiểm tra bằng mắt**: xem 6–10 khung hình giữa mỗi cảnh; đọc phụ đề; xem lại `.srt` xem có câu nào rỗng (`t1 == t0`); đo mức giọng nói so với nền (`mix.py --stats`).
    Cổng ở bước 7 không thấy được: một nhãn nói sai trạng thái, một câu quay cận cảnh bị cắt, một chữ bị panel cắt cụt. Ba luật về nội dung nằm ở `DIRECTOR.md` §11 — đọc trước khi kể.
 
@@ -88,7 +92,8 @@ channels/tram-nghi-nhieu/
 ├── STYLE.md            # ngôn ngữ hình ảnh của kênh
 ├── DEMO.md             # demo của kênh
 ├── cast-sheet.jpg      # bảng đặc tả nhân vật The Overthinker & Rối
-├── rig/                # code vẽ dùng chung (character.js, cel.js, hands.js, sets.js, broll.js, styles.js, motion.js)
+├── rig/                # code vẽ dùng chung (character.js, extras.js, board.js, host.js, cel.js, hands.js, sets.js, broll.js, styles.js, motion.js)
+├── board_rules.json    # luật board riêng của kênh (check_board)
 ├── mix.py              # âm thanh dùng chung: nhạc + ambience + foley + lùi dB + nén
 ├── fonts/              # Be Vietnam Pro + Patrick Hand (OFL) + fonts.css
 ├── voice/              # tts_vi.py, asr_vi.py, process.py (dùng chung)
@@ -200,113 +205,6 @@ Thumbnail: lấy từ `out/poster.jpg` (khung hình đẹp nhất) và thêm ch�
 - Không chẩn đoán, không kêu thuốc, không khuyên người xem thay thế chuyên gia.
 - Mỗi tập kết bằng một hành động nhỏ, cụ thể, làm được ngay — đó là chất riêng của kênh.
 
-## 7. Quy chuẩn đạo diễn điện ảnh & Chống làm slide (Anti-Slide Directing Rules)
+## 7. Đạo diễn một tập
 
-Mọi AI Agent khi nhận đề tài làm video cho kênh BẮT BUỘC phải tuân thủ nghiêm ngặt các điều luật sau (vi phạm sẽ bị `filmcheck` đánh rớt ngay lập tức):
-
-1. **Bối cảnh sống thực tế (Real Staging)**:
-   - Tuyệt đối CẤM vẽ các khối hộp chữ nhật trôi nổi và nhét chữ vào giữa như slide PowerPoint.
-   - Mọi phân cảnh bắt buộc phải neo vào một nơi chốn trong kinh thánh của tập: nơi hiệu ứng xảy ra ngoài đời (quầy hàng, sân ga, phòng thí nghiệm có người tham gia, phòng họp...), hoặc nơi "nhà" của Kẻ Nghĩ Nhiều để quay về. Mỗi nơi có nền và ánh sáng riêng; tập tự vẽ các nơi đó trong `src/sets.js`.
-2. **Khóa Camera & Cấm Giật Cảnh (Scene-Block Invariant & Transition Rules)**:
-   - **Một Phân Cảnh (Scene Block) = Một Khối Ý Trọn Vẹn**: Một phân cảnh phải kéo dài **20 – 50 giây** (bao gồm 4 – 10 câu thoại liên tiếp).
-   - **TUYỆT ĐỐI CẤM**: Cứ xong 1 câu thoại là quất 1 cú whip pan giật màn hình kèm tiếng whoosh! Khi hai câu liên tiếp cùng diễn ra trong một không gian (cùng phòng ngủ, cùng hành lang, cùng bàn làm việc), camera bắt buộc phải GIỮ TĨNH hoặc đẩy nhẹ (`camera push`).
-   - **Chuyển động nội cảnh (In-scene Evolution)**: Khi câu nói tiếp theo mở rộng ý câu trước, nội dung thay đổi bằng cách:
-     - Đổi tư thế nhân vật (`ak()`), biểu cảm mặt (`ek()`), mắt chớp (`blink()`), quay đầu nhìn đồ vật.
-     - Thay thế đạo cụ tại chỗ (Clear / Reveal): Đạo cụ cũ trượt xuống hoặc mờ dần (`alpha`, `slide`), đạo cụ mới trượt vào hoặc nhân vật đặt ra bàn, kèm âm thanh foley xúc giác (`pop`, `paper`, `marker`, `ting`).
-   - **Đa dạng hóa ngữ pháp chuyển cảnh (Transition Grammar)**:
-     - `cut` (Cắt thẳng): Đổi góc máy tức thì (Toàn sang Cận, Nhìn thẳng sang Bàn làm việc) theo nhịp nhạc hoặc bước ngoặt logic.
-     - `iris` (Iris wipe): Mở/đóng ống kính tròn tập trung vào mắt nhân vật hoặc chiếc đèn bàn.
-     - `prop` (Đạo cụ che máy): Một bóng người lướt qua che khung hình, cánh cửa khép lại, trang sách lật phủ màn hình.
-     - `light` (Bật/tắt đèn): Tắt đèn bàn phụt tối đen → Bật sáng đèn spotlight giữa sân khấu.
-     - `whip` (Lia nhanh có blur): CHỈ DÙNG khi **đổi không gian lớn hoặc nhảy mốc thời gian** (Văn phòng ban ngày → Phòng ngủ 1h sáng; Hiện tại → Năm 1978). Video 10 phút tối đa 4–6 cú whip pan! CẤM dùng whip pan khi nhân vật vẫn đang ở bàn làm việc!
-3. **Quy tắc Hiện Thực Hóa Thị Giác & Diệt Trừ Bệnh Thẻ Chữ (Visual Physicalization & Anti-Card Invariant)**:
-   - Hoạt hình 2D là **nghệ thuật của sự vật, hành động và ẩn dụ**, TUYỆT ĐỐI CẤM biến video thành bài thuyết trình PowerPoint bằng cách vẽ các khung chữ nhật rồi nhét nguyên câu thoại vào giữa!
-   - BẮT BUỘC biến mọi khái niệm tâm lý / trừu tượng thành **ĐẠO CỤ HỮU HÌNH HOẶC HIỆN TƯỢNG VẬT LÝ**:
-     - *Thước đo tự tăng* → Thanh xà nhảy cao tự động kéo cao lên 2m ngay khi nhân vật vừa nhảy qua 1m.
-     - *Quy công may mắn* → Chiếc cúp vàng trên bàn bị nhân vật trùm khăn che lại hoặc lén lút đẩy rơi vào sọt rác gầm bàn.
-     - *Định kiến chỉ nhớ lần vấp* → 20 khung khen phủ bụi mờ; 1 mẩu giấy note cháy xém bị rọi đèn pin chói lòa.
-     - *Nỗi sợ bị vạch trần* → Bộ vest lịch sự bỗng hóa thành giấy xé rách bay tứ tung theo gió.
-     - *Vòng xoáy giả mạo* → Máy chạy bộ quay tít mù, mặt nạ giấy bong tróc.
-     - *Sổ bằng chứng* → Cuốn sổ da thật, bàn tay cầm bút mực viết nét ướt, đóng con dấu sáp đỏ chót.
-     - *Tâm lý đám đông* → Vòng tròn spotlight hắt xuống, đám đông xung quanh quay lưng bấm điện thoại chẳng ai nhìn.
-4. **Văn phong tâm sự người bạn (Conversational Tone)**:
-   - Tuyệt đối CẤM đánh số thứ tự đầu câu ("Một —", "Hai —", "1.", "2.").
-   - Lời thoại là giọng một người bạn kể chuyện, thuyết minh cho sự việc đang diễn ra trên hình; không tả lại cái hình đã cho thấy.
-5. **Bắt buộc mảng sự kiện âm thanh (`window.EV`)**:
-   - Tuyệt đối CẤM để `window.EV = []` rỗng (sẽ làm mất toàn bộ tiếng nói).
-   - Bắt buộc đăng ký đầy đủ các sự kiện `voice`, nhạc chuyển đoạn (`music: A, B, C, end`) và hiệu ứng foley (`whoosh`, `pop`, `paper`, `marker`, `ting`, `boing`).
-6. **Quy tắc xuất hiện chữ an toàn (Text Reveal Invariant)**:
-   - Bắt buộc dùng `revealText(g, s, x, y, p, o)` từ `rig/broll.js` cho mọi hiệu ứng chữ viết tay/chữ chạy từ trái sang phải.
-   - Tuyệt đối CẤM tự chế hàm cắt chữ (`clip()`) thủ công với các hằng số offset cộng thêm — điều này sẽ làm rò rỉ ký tự đầu (`C`, `2`, `n`) nằm trơ trọi trên màn hình trước khi giọng đọc nhắc tới.
-7. **Dòng Chảy Thị Giác & Diệt Trừ Khung Hình Chết (Continuous Visual Flow & Zero Dead Frames)**:
-   - **TUYỆT ĐỐI CẤM ĐỨNG HÌNH (Zero Dead Frames)**: Cấm để một hình vẽ hay đạo cụ đứng im quá 1.2 giây mà không có biến đổi thị giác. Không được làm kiểu "vẽ xong 0.5s ở đầu câu rồi đứng hình suốt 4 giây chờ keyword tiếp theo".
-   - **Quy tắc Ba Chiếc Đồng Hồ (The Rule of Three Clocks)**:
-     - *Đồng hồ 1 (Nhịp thở sinh học & Môi trường)*: Nhân vật luôn có nhịp thở phập phồng, mắt liếc nhẹ tự nhiên, sợi tóc đèn LED đung đưa theo quán tính; không gian bàn làm việc có luồng sáng đèn bàn dao động êm và các hạt bụi vàng `ambientMotes()` trôi lơ lửng.
-     - *Đồng hồ 2 (Diễn hoạt theo từng vế câu — Phrase-Synced Micro-Beats)*: Mọi câu thoại $\ge 3$ giây BẮT BUỘC phải chia thành 2–3 vi hành động bám theo từng vế câu trong `words.json`. Cứ mỗi khi giọng nói phát âm đến một danh từ/động từ/trạng từ quan trọng, màn hình lập tức có phản hồi thị giác tương ứng (nhân vật đổi thế tay, giọt mồ hôi rơi, mũi tên chỉ hướng, đạo cụ phản ứng).
-     - *Đồng hồ 3 (Biến hình dòng ý thức — Metamorphic Flow)*: Trong cùng một cảnh, các vật thể biến đổi hình học mượt mà từ trạng thái A sang B theo dòng suy nghĩ của nhân vật.
-8. **Đạo diễn đa phong cách theo phân cảnh (Multi-Style Scene Director Engine)**:
-   - BẮT BUỘC đọc và tuân thủ `STYLE.md` của kênh trước khi vẽ.
-   - BẮT BUỘC ứng dụng bộ công cụ từ `rig/styles.js`:
-     - Phủ lớp xúc giác giấy & phim nhựa (`applyPaperTexture(G)` và `renderGrainFx(G, t)`): xóa bỏ hoàn toàn cảm giác vector phẳng thô, đem lại chiều sâu điện ảnh.
-     - Phân cảnh nghiên cứu / bóc trần ngụy biện: dùng phong cách **Dossier** (`drawHalftoneField`, `drawDossierHeader`, `drawStampSlam`, `drawEvidenceTag`).
-     - Phân cảnh tình huống / tâm sự đời thường: dùng phong cách **Mid-century** (`drawSunburst`, `drawSparkle`, động tác nảy lò xo).
-     - Phân cảnh dữ liệu / cơ chế thần kinh: dùng phong cách **Swiss** (`drawSwissMetric`, lưới đồ họa Thụy Sĩ) — tiết chế: một con số lớn trên màn hình là một khung thẻ, `scenecheck` giới hạn các khung đó ở ≤ 25 %. Ưu tiên cho con số thành vật trong cảnh.
-## 8. Quy chuẩn đặc tả cảnh chi tiết 5 trường (The 5-Field Shot Specification)
-
-Khi viết `TREATMENT.md`, AI Agent **bắt buộc phải mô tả từng shot bằng 5 trường định lượng chi tiết**, tuyệt đối cấm tóm tắt sơ sài 1 dòng:
-
-1. **`visualAnchor` (Trọng tâm thị giác & Tỉ lệ phủ màn hình)**:
-   - Vật thể hoặc sơ đồ chính là gì? Chiếm tối thiểu bao nhiêu % khung hình?
-   - **Quy tắc độ phủ (`Canvas Fill Invariant`)**: Vùng nội dung có chủ đích phải chiếm tối thiểu **50%–70% diện tích màn hình**. Cấm để mặt bàn hoặc khoảng trống đen chiếm > 60% màn hình trong khi hình vẽ bị co cụm ở giữa.
-2. **`typography` (Hệ thống chữ & Con số)**:
-   - Chỉ số thống kê (Stats): Font size $\ge 72\text{px}$, độ đậm Black 900.
-   - Tiêu đề phụ (Headers): Font size $\ge 44\text{px}$, Bold 800.
-   - Chú thích phụ (Secondary/Handwriting): Font size $\ge 28\text{px}$ (đảm bảo đọc được trên điện thoại).
-   - Dải highlight (`hilite`): Màu nhấn cụ thể (Vàng nghệ `#FFB703`, Cyan `#67E8F9`, Đỏ `#E63946`).
-3. **`propsAndStaging` (Đạo cụ & Môi trường thực)**:
-   - Đạo cụ tương tác xúc giác: Cốc cà phê bốc khói, thước kẻ, kính lúp, cuốn sổ ghim, bút lông, con dấu đỏ.
-   - Nguồn sáng: Luồng sáng đèn bàn vàng hoặc đèn spotlight có quầng sáng mềm.
-4. **`characterActing` (Diễn xuất & Vi chuyển động)**:
-   - Nhân vật nhìn về đâu, tay làm gì (lật trang, chỉ tay, gãi đầu, cầm bút).
-   - Cảm xúc mắt (`blink()`, `headYaw`, `headPitch`) và trạng thái sợi tóc đèn LED (bừng sáng / chập chờn / tắt).
-5. **`soundSync` (Đồng bộ âm thanh)**:
-   - Mỗi chuyển động nét vẽ hay chữ xuất hiện phải có foley chính xác ở mốc giây (`marker`, `paper`, `stamp`, `pop`, `ting`, `boing`).
-
-## 9. Bộ luật thị giác chống nhạt (Visual Invariants / Impeccable Rules)
-
-1. **Cấm lặp lại góc máy bàn liên tiếp quá 2 cảnh**: Bắt buộc luân chuyển nhịp: *Toàn cảnh phòng / quán $\to$ Cận cảnh bàn $\to$ Trung cảnh đối thoại với Rối $\to$ Sơ đồ trực quan $\to$ Trở lại bàn*.
-2. **Độ dày nét vẽ (`Visual Weight / Bolder`)**: Mọi đường nét sơ đồ, khung viền, mũi tên cơ chế phải có `lineWidth >= 5px` (không dùng nét mảnh $1.5\text{px}$ như phác thảo bút chì yếu ớt).
-3. **Bất biến không va chạm phụ đề (`Subtitle Collision-Free Invariant`)**:
-   - $t_1$ của mảnh phụ đề trước bắt buộc phải $\le t_0 - 0.04\text{s}$ của mảnh phụ đề sau.
-   - Khi render, chỉ vẽ mảnh phụ đề tích cực nhất (`TL.cues.findLast(...)`), tuyệt đối không dùng vòng lặp vẽ chồng tất cả các cue trùng thời gian.
-
-4. **Bất biến Micro-Clock cho cảnh gộp câu (`Multi-Line Shot Micro-Clock`)**:
-   - Khi một cảnh gộp 2 câu thoại trở lên, cấm dùng một mốc `t0` duy nhất. Mọi vật thể hay biểu đồ phục vụ câu nào phải neo theo mốc thời gian riêng của câu đó: `L('câu_sau').t0`. Tuyệt đối không để khung hình đứng chết quá 3 giây.
-5. **Bất biến Cùng Đồng Hồ & Chống Tiết Lộ Trước (`Clock-Sharing & Anti-Spoiler`)**:
-   - Nhãn giá trị (con số, kết luận) chỉ được hiện ra khi thanh đo/hành động vật lý đạt tới giá trị đó ($p \ge 0.95$). Cấm vẽ kết luận trước khi giọng đọc nhắc tới.
-   - Nét gạch đỏ hoặc highlight phải vẽ ở layer phía sau chữ, cấm vẽ đè làm lem chữ.
-6. **Bất biến Ranh Giới Kịch Bản (`Script Scope Boundary`)**:
-   - Cấm dùng từ ngữ khẳng định tuyệt đối (`miễn nhiễm`, `không bao giờ`, `hoàn toàn`) cho các kết luận tương quan trong `FACTS.md`. Tiêu đề `film.json` phải đồng bộ với kịch bản `lines.json:intro`.
-## 10. Luật tự động quy đổi thời lượng (Duration-to-Scale Invariant)
-
-Người dùng chỉ cần đưa ra **chủ đề và thời lượng mong muốn** (hoặc không nêu thì mặc định 3–5 phút). AI Agent **tuyệt đối không được hỏi lại về số lượng câu thoại hay kịch bản**, mà BẮT BUỘC phải tự động áp dụng công thức chuẩn của kênh:
-
-| Thời lượng người dùng yêu cầu | Số câu thoại chuẩn trong `lines.json` | Số phân cảnh khối (Scene Blocks) | Chuyển cảnh lớn tối đa | Cơ chế Timeline |
-|---|---|---|---|---|
-| **Shorts (60–90 giây)** | **16 – 22 câu** | **2 – 4 khối cảnh** (mỗi khối 20–30s) | 1 – 3 lần (iris / whip / cut) | Gõ tay hoặc sinh timeline |
-| **Tiểu luận 3 – 5 phút** | **35 – 50 câu** | **6 – 10 khối cảnh** (mỗi khối 25–40s) | 3 – 5 lần (cut / whip / prop) | Sinh bằng `mk_timeline.py` |
-| **Bản dài chuyên sâu 8 – 10 phút** | **80 – 110 câu** | **12 – 16 khối cảnh** (mỗi khối 30–50s) | 4 – 6 lần (whip / iris / light) | Sinh bằng `mk_timeline.py` |
-| **Đặc biệt 15 – 20 phút** | **150 – 200 câu** | **20 – 30 khối cảnh** (mỗi khối 30–60s) | 8 – 12 lần | Sinh bằng `mk_timeline.py` |
-
-**Luật cấm**: Cấm tuyệt đối việc nhận đề bài 5–10 phút mà chỉ viết kịch bản 15–20 câu rồi kéo dài khoảng lặng chết để câu giờ. Thời lượng phải đến từ lượng kiến thức và chiều sâu phân tích thực tế.
-
-## 11. Luật tự chủ quy trình (Autonomous Pipeline Invariant)
-
-Khi nhận một prompt ngắn gọn từ người dùng (ví dụ: *"Làm video 10 phút về chủ đề X cho kênh Trạm Nghĩ Nhiều"*), AI Agent **bắt buộc phải tự động kích hoạt và chạy xuyên suốt toàn bộ chuỗi sản xuất từ A đến Z** mà không dừng lại xin phép ở từng bước:
-1. Tự chạy `new_episode.sh` scaffold thư mục tập.
-2. Tự web search tìm paper khoa học gốc (PubMed / ScienceDirect / JCR) và viết `research/FACTS.md` có nguồn số liệu chuẩn xác.
-3. Tự viết `TREATMENT.md` **trước lời**: ba spine, bảng nhịp, tìm hình, kinh thánh, bố cục (SKILL.md §2), mỗi cảnh đủ 5 trường đặc tả (`visualAnchor`, `typography`, `propsAndStaging`, `characterActing`, `soundSync`).
-4. Tự viết toàn bộ `voice/lines.json` **từ bảng nhịp**, theo đúng số lượng câu của bảng thời lượng.
-5. Tự chạy chuỗi âm thanh: `tts_vi.py` $\to$ `asr_vi.py` (với `HF_HOME=/home/minhbien/hf-cache`) $\to$ `process.py`.
-6. Tự sinh `src/timeline.js` (đảm bảo không va chạm phụ đề) và viết `src/film.js` vẽ Canvas dày dặn, đậm nét.
-7. Tự chạy `build.sh` render video Full HD và chạy `review.sh` đạt PASS 100% (gồm `scenecheck`: khung thẻ chữ ≤ 25 %, ≥ 1 bức hình khác nhau mỗi 20 s, ≤ 2 con số đọc lên mỗi 20 s).
+Cách đạo diễn, các luật của board và rig của kênh ở một nơi: [`SKILL.md`](../../.agents/skills/tram-nghi-nhieu/SKILL.md). Quy trình gốc mà skill đi theo là [`DIRECTOR.md`](../../DIRECTOR.md) §2–§7: phim mẫu, ba cấu trúc, shot list có cột *vì sao*, beat sheet, cue map, bảng âm thanh. Một prompt ngắn ("làm video 3 phút về X cho kênh") là đủ để chạy hết quy trình, từ scaffold tới `review.sh` exit 0, không dừng hỏi ở từng bước.

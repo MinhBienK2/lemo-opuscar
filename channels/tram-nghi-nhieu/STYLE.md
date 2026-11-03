@@ -91,7 +91,7 @@ Mọi thứ được vẽ bằng mã, cùng ngôn ngữ nét với nhân vật. 
 ## 9. Quy trình mỗi tập
 
 1. `research/FACTS.md`: mọi con số kèm nguồn.
-2. `TREATMENT.md`: ba spine, bảng nhịp (sự việc trước lời), tìm hình cho nhịp khó, kinh thánh nơi chốn, bố cục — **trước** khi viết lời (SKILL.md §2).
+2. `TREATMENT.md`: phim mẫu, ba cấu trúc, logline, beat sheet, cue map, âm thanh — **trước** khi viết lời (SKILL.md §1, theo `DIRECTOR.md` §2–§7); rồi `board.json` (shot list có cột vì sao) và `LOOK.md` (các vòng soi hình).
 3. `voice/lines.json` viết theo bảng nhịp → edge-tts → ASR (kiểm tra lời) → `voice/process.py` (điều khiển miệng).
 4. `src/timeline.js`: thứ tự câu, khoảng lặng, mảnh phụ đề theo từ.
 5. `src/film.js`: các cảnh, máy, hiệu ứng.
