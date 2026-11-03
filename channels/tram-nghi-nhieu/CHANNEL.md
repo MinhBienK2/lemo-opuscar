@@ -12,11 +12,11 @@ Kênh nằm ở `channels/tram-nghi-nhieu/`. Nó giữ **danh tính** (tên, nh�
 | Handle | `@Tramnghinhiu` (dự phòng `@Kenghaynghi`) |
 | Thể loại | Education / Entertainment |
 | Mô tả | *"Giải mã góc khuất tâm lý con người, hành vi ngớ ngẩn của não bộ và những câu hỏi oái oăm trong cuộc sống dưới lăng kính hoạt hình 2D."* |
-| Nhân vật | **Kẻ Nghĩ Nhiều** (chủ nhân) + **Rối** (đồng học) |
+| Nhân vật | **Kẻ Nghĩ Nhiều**, người dẫn duy nhất: một giọng kể cả phim. Người trong câu chuyện diễn bằng hành động, không nói thoại |
 | Ngôn ngữ | Tiếng Việt |
 | Nhịp đăng | 1 tập / tuần (Shorts 60–90 s) + 1 tập dài 3–5 phút / 2 tuần |
 
-**Ảnh đại diện & banner**: nền `#12131A`, đầu vuông-vò tròn `#FAF8F5` của Kẻ Nghĩ Nhiều ở góc phải, sợi tóc sợi đèn sáng, Rối tím ở góc trái, chữ "TRẠM NGHĨ NHIỀU" mù mè `#FFB703`. Cùng bộ nhận diện này dùng cho thumbnail mọi tập.
+**Ảnh đại diện & banner**: nền `#12131A`, đầu vuông-vò tròn `#FAF8F5` của Kẻ Nghĩ Nhiều ở góc phải, sợi tóc sợi đèn sáng, chữ "TRẠM NGHĨ NHIỀU" mù mè `#FFB703`. Cùng bộ nhận diện này dùng cho thumbnail mọi tập.
 
 ## 2. Các cột nội dung
 
@@ -44,7 +44,7 @@ Trong thư mục tập, `$CHANNEL` là thư mục kênh (`channels/tram-nghi-nhi
 
 1. **Chủ đề + nguồn** → `research/FACTS.md` (của tập): mọi con số kèm trích dẫn (DOI/link), và đánh dấu rõ điều gì **không** được nói quá.
 1b. **Treatment trước lời** → `TREATMENT.md`: ba spine, bảng nhịp (ai · làm gì · ở đâu · vật đổi trạng thái), tìm hình cho các nhịp khó, kinh thánh nơi chốn, bố cục. Các phần và thứ tự: [`SKILL.md`](../../.agents/skills/tram-nghi-nhieu/SKILL.md) §1, theo `DIRECTOR.md` §2–§7. Lời được viết **từ** bảng nhịp.
-1c. **Board** → `board.json`: storyboard dạng dữ liệu, mỗi nhịp neo vào một từ của lời (`"hook1@sạp"`), chia thành các shot (cỡ cảnh, người dẫn ở đâu, máy chuyển động thế nào, vì sao), có người diễn; chữ chỉ là thuật ngữ, tên, nơi, thời điểm, con số, tài liệu, con dấu; tiếng là ngân sách, không phải chỉ tiêu. `python3 $LIB/tools/check_board.py <thư mục tập>` phải PASS trước khi làm giọng (ước lượng thời gian) và sau khi có `words.json`. Luật riêng của kênh: `board_rules.json` (≥ 2 nhịp Rối, ≥ 1 nhịp `aha`). Lời và board được một agent khác chấm nội dung trước khi làm giọng (SKILL.md §1 bước 5).
+1c. **Board** → `board.json`: storyboard dạng dữ liệu, mỗi nhịp neo vào một từ của lời (`"hook1@sạp"`), chia thành các shot (cỡ cảnh, người dẫn ở đâu, máy chuyển động thế nào, vì sao), có người diễn; chữ chỉ là thuật ngữ, tên, nơi, thời điểm, con số, tài liệu, con dấu; tiếng là ngân sách, không phải chỉ tiêu. `python3 $LIB/tools/check_board.py <thư mục tập>` phải PASS trước khi làm giọng (ước lượng thời gian) và sau khi có `words.json`. Luật riêng của kênh: `board_rules.json` (≥ 1 nhịp `aha`, một giọng cho cả phim). Lời và board được một agent khác chấm nội dung trước khi làm giọng (SKILL.md §1 bước 5).
 2. **Kịch bản** → `voice/lines.json` (của tập), viết theo bảng nhịp: Viết số thành chữ ("bốn mươi bảy phần trăm") cho giọng đọc đúng; giữ `rate`/`pitch` cho giọng nhân vật. Số câu theo thời lượng: SKILL.md §6.
 3. **Giọng đọc** — script nằm ở kênh (`$CHANNEL/voice/`), đường dẫn của tập là đối số; chạy từ thư mục tập:
    ```sh
@@ -60,7 +60,7 @@ Trong thư mục tập, `$CHANNEL` là thư mục kênh (`channels/tram-nghi-nhi
 4. **Timeline** → `src/timeline.js` (của tập): `SEQ` (thứ tự câu + khoảng lặng), `SUBS` (mảnh phụ đề, chia theo từ đầu tiên của mảnh).
 5. **Hình ảnh** → `src/film.js` (của tập): danh sách cảnh, máy quay, hiệu ứng, sự kiện âm thanh. Tập **vẽ bằng rig của kênh**, import bằng đường dẫn tương đối (renderer phục vụ gốc thư viện):
    ```js
-   import { figure, expr, blendE, PAL, roi } from '../../rig/character.js';
+   import { figure, expr, blendE, PAL } from '../../rig/character.js';
    import { cel, path, poly, ellP, line, taper, mix, rgba, canvas, W, H, TAU, rect } from '../../rig/cel.js';
    import { ground, panel, hilite, stamp, pip, bubble, subtitle, tag, text } from '../../rig/broll.js';
    import * as S from '../../rig/sets.js';
@@ -91,7 +91,7 @@ channels/tram-nghi-nhieu/
 ├── CHANNEL.md          # file này: bản đồ của kênh (danh tính, quy trình, luật)
 ├── STYLE.md            # ngôn ngữ hình ảnh của kênh
 ├── DEMO.md             # demo của kênh
-├── cast-sheet.jpg      # bảng đặc tả nhân vật The Overthinker & Rối
+├── cast-sheet.jpg      # bảng đặc tả nhân vật (bản cũ, còn vẽ Rối — Rối đã bỏ khỏi kênh)
 ├── rig/                # code vẽ dùng chung (character.js, extras.js, board.js, host.js, cel.js, hands.js, sets.js, broll.js, styles.js, motion.js)
 ├── board_rules.json    # luật board riêng của kênh (check_board)
 ├── mix.py              # âm thanh dùng chung: nhạc + ambience + foley + lùi dB + nén

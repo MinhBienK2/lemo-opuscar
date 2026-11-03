@@ -15,7 +15,7 @@ Người xem **vừa nghe vừa nhìn mà hiểu ngay đang nói tới cái gì*
 
 Phim đó được làm bằng quy trình của **`DIRECTOR.md`**, và tập nào của kênh cũng đi đúng quy trình ấy. Skill này thêm phần riêng của kênh.
 
-- **Cố định** (`channels/tram-nghi-nhieu/STYLE.md`): Kẻ Nghĩ Nhiều và Rối, nét, chữ, giọng, nhạc, phụ đề.
+- **Cố định** (`channels/tram-nghi-nhieu/STYLE.md`): Kẻ Nghĩ Nhiều (người dẫn duy nhất, một giọng kể), nét, chữ, giọng, nhạc, phụ đề.
 - **Tự do**: nơi chốn, ánh sáng, người trong câu chuyện, đạo cụ, đồ họa.
 
 ---
@@ -33,13 +33,13 @@ Mỗi bước xong khi điều kiện ở cuối bước đúng. Ghi tiến đ�
    - Cơ chế, viết trong một câu.
    - Đơn vị gốc (xu, đô) ghi rõ; ví dụ đã Việt hóa thì ghi là đã Việt hóa.
 2. **TREATMENT** → `TREATMENT.md`, theo `DIRECTOR.md` §2–§7, mỗi phần một heading:
-   - `## Phim mẫu` — 1–2 tác phẩm đặt chuẩn cho *chủ đề này* (kênh giải thích như Zack D. Films, OverSimplified, Kurzgesagt, TED-Ed, hoặc một phim, một quảng cáo). Mỗi tác phẩm có một dòng `Học:` (bố cục, nhịp, ngữ pháp máy, cách người dẫn bình luận) và một dòng `Không lấy:` (nhân vật, thiết kế, câu đùa, shot cụ thể).
+   - `## Phim mẫu` — 1–2 tác phẩm *ngoài kênh* đặt chuẩn cho *chủ đề này* (kênh giải thích như Zack D. Films, OverSimplified, Kurzgesagt, TED-Ed, hoặc một phim, một quảng cáo). Mỗi tác phẩm có một dòng `Học:` (bố cục, nhịp, ngữ pháp máy, cách người dẫn bình luận) và một dòng `Không lấy:` (nhân vật, thiết kế, câu đùa, shot cụ thể).
    - `## Ba cấu trúc` — ba spine "<ai> muốn <X> ở <nơi>, nhưng <hiệu ứng> khiến <Y>, vì vậy <Z>", mỗi spine một gạch đầu dòng, rồi `Chọn: … vì …`.
    - `## Logline` — một câu, rồi mở → lật → kết. Nói rõ:
      - người của câu chuyện là ai;
      - nhà của người dẫn xuất hiện ở đâu;
      - nhịp "à" nằm ở đâu;
-     - Rối đoán sai điều gì.
+     - cách hiểu phổ biến nào sẽ bị lật lại.
    - `## Beat sheet` — theo từng giây. Với 3–5 nhịp khó, viết 4 phương án hình rồi loại phương án quen nhất.
    - `## Cue map` — nhạc đổi ở đâu, hai khoảng lặng ở đâu, hai chỗ tiếng làm chuyển cảnh (J-cut hoặc L-cut).
    - `## Âm thanh` — mỗi hồi: nền, mô-típ, tiếng nhấn.
@@ -49,7 +49,7 @@ Mỗi bước xong khi điều kiện ở cuối bước đúng. Ghi tiến đ�
 3. **LINES** → `voice/lines.json`.
    - Khoảng 2,3 từ mỗi giây, viết từ beat sheet.
    - Viết như kể cho bạn nghe: câu ngắn, một ý một câu, số viết thành chữ.
-   - Câu của Rối là dòng riêng, có `"pitch": "+20Hz"`, và Rối nói bằng giọng của mình.
+   - Cả phim một giọng: mọi câu do Kẻ Nghĩ Nhiều kể, cùng một giọng, không đổi `pitch`/`rate`. Người trong câu chuyện diễn bằng hành động, không nói thoại.
 4. **BOARD** → `board.json` (mục 3). Xong khi `python3 tools/check_board.py <tập>` PASS.
 5. **CHẤM LỜI** bằng một agent *khác* (subagent hoặc task, nếu được thì model khác). Chỉ đưa cho nó `FACTS.md`, `lines.json` và `board.json`. Nó chấm:
    - (a) câu nào sai hoặc nói quá so với FACTS, nhất là năm, tên tác giả, đơn vị tiền, con số;
@@ -151,7 +151,7 @@ Mỗi bước xong khi điều kiện ở cuối bước đúng. Ghi tiến đ�
     - Có một chỗ thở ra trước khi kết.
     - Nối các nhịp bằng "nhưng / vì vậy".
     - Cái kết vọng lại cảnh mở: cùng đạo cụ, nhưng đã đổi trạng thái.
-11. **Rối là người đoán sai.** Ít nhất hai câu Rối tự nói cách hiểu phổ biến, để cảnh sau lật lại.
+11. **Cách hiểu phổ biến, rồi lật lại.** Người dẫn tự nói cách hiểu mà ai cũng tin ("mình từng nghĩ…", "ai cũng bảo…"), và cảnh sau cho thấy điều thật sự xảy ra. Một cú `react` của người dẫn hợp với nhịp đó.
 
 ### Kỹ thuật của khung hình
 
@@ -208,24 +208,24 @@ Lớp phủ: `applyPaperTexture` và `renderGrainFx` (`rig/styles.js`) phủ lê
           "sfx": { "type": "plastic_click", "cause": "tua vít ăn vào gỗ" } },
         { "id": "b_dung", "at": "h2@đứng", "who": "extra:lan", "do": "chị Lan buông tay, cái kệ tự đứng",
           "change": "kệ nghiêng nhẹ sang trái", "sfx": { "type": "wood_set", "cause": "chân kệ chạm sàn" } },
-        { "id": "b_lac", "at": "h3@không", "who": "extra:lan", "do": "chị Lan lắc đầu, vòng tay ôm kệ" } ] },
+        { "id": "b_om", "at": "h3@không", "who": "extra:lan", "do": "chị Lan lắc đầu, vòng tay ôm kệ" } ] },
 
     { "id": "nha_host", "place": "góc đọc sách của Kẻ Nghĩ Nhiều, kệ sách và đèn bàn",
       "light": "đèn bàn vàng bên phải, nền tối ấm",
-      "cast": ["host", "roi"], "lines": ["k1", "k2", "r1"], "amb": "hum", "music": "B",
+      "cast": ["host"], "lines": ["k1", "k2", "k3"], "amb": "hum", "music": "B",
       "silence": { "at": "k1@start-0.6", "d": 0.8 },
       "shots": [
         { "id": "host_wide", "size": "wide", "host": "desk", "cam": "hold",
           "subject": "Kẻ Nghĩ Nhiều bên bàn, cầm ảnh cái kệ", "why": "về nhà để gọi tên điều vừa thấy" },
-        { "id": "roi_close", "at": "r1@start", "size": "close", "host": "none", "cam": "hold",
-          "subject": "Rối khoanh tay cãi lại", "why": "cách hiểu sai cần một khuôn mặt riêng" } ],
+        { "id": "host_react", "at": "k3@start", "size": "close", "host": "react", "cam": "hold",
+          "subject": "mặt Kẻ Nghĩ Nhiều nhăn lại, nghi ngờ", "why": "cách hiểu quen thuộc nghe xuôi tai, khuôn mặt báo nó sắp bị lật" } ],
       "beats": [
         { "id": "b_ten", "at": "k1@hiệu", "who": "host", "do": "Kẻ Nghĩ Nhiều ghim tấm thẻ lên bảng", "flags": ["aha"],
           "label": { "kind": "term", "text": "Hiệu ứng IKEA", "def": "quý thứ mình làm ra hơn giá trị thật", "xy": [80, 90] },
           "sfx": { "type": "paper_slide", "cause": "thẻ giấy ghim lên bảng" } },
         { "id": "b_chi", "at": "k2@giá", "who": "host", "do": "Kẻ Nghĩ Nhiều chỉ tay vào chữ giá trị" },
-        { "id": "b_roi", "at": "r1@thương", "who": "roi", "do": "Rối khoanh tay, hất mặt lên" },
-        { "id": "b_roi2", "at": "r1@end", "who": "roi", "do": "Rối nhún vai rồi quay đi" } ] }
+        { "id": "b_nhan", "at": "k3@thương", "who": "host", "do": "Kẻ Nghĩ Nhiều nheo một mắt, nhếch môi" },
+        { "id": "b_lac", "at": "k3@end", "who": "host", "do": "Kẻ Nghĩ Nhiều lắc đầu chậm rãi" } ] }
   ]
 }
 ```
@@ -263,7 +263,7 @@ Phần lớn nhịp chỉ có `who` và `do`: diễn xuất, không chữ, khôn
 - ≤ 3 tiếng trong một giây; ≤ 25 khoảnh khắc mỗi phút; ≥ 25 % cửa sổ 3 s yên.
 - Ít nhất một `silence`.
 
-**Kênh** (`board_rules.json`): ≥ 2 nhịp `who: "roi"`; ≥ 1 nhịp `flags: ["aha"]`.
+**Kênh** (`board_rules.json`): ≥ 1 nhịp `flags: ["aha"]`; một giọng cho cả phim (không câu nào đổi `voice`, `pitch`, `rate`).
 
 ---
 
@@ -289,6 +289,8 @@ BD.signals(g, T);                     // thẻ thuật ngữ, nhãn, biển, con
 ```
 
 - **Nơi chốn**: một nơi vẽ một lần trong `src/sets.js`. Các shot của nó là các khung khác nhau của cùng nơi đó: `g.translate/scale` vào vùng của vật, hoặc một hàm vẽ cận riêng cho vật.
+- **Shot cận vẽ trọn chủ thể của nó**: cả khuôn mặt, cả bàn tay với vật đang cầm, đặt giữa khung. Phóng to shot rộng thì sẽ được một thân người mất đầu hoặc một nửa khuôn mặt ở mép hình.
+- **Hình khớp với board**: người dẫn chỉ được vẽ trong shot có `host` khác `none`. `figure`, `hostPip` và `reactClose` tự ghi vào `window.SEEN`, và `scenecheck` so từng khung với board.
 - **Nhịp**: chuyển động neo vào thời điểm của chính nó. `BD.u('b_vit', T, .5)` chạy 0 → 1 trong 0,5 s kể từ từ "tua".
 - **check_board** kiểm rằng `film.js` gọi tên mọi cảnh, ≥ 85 % shot và ≥ 70 % nhịp có người diễn.
 
@@ -298,7 +300,7 @@ BD.signals(g, T);                     // thẻ thuật ngữ, nhãn, biển, con
 
 | File | Có gì |
 |---|---|
-| `rig/character.js` | `figure` (Kẻ Nghĩ Nhiều: `E`, `armL`/`armR`, `legs`, `talk`, `blink`, `battery`, `s`, `crop`), `roi`, `expr`/`EXPR`, `PAL` |
+| `rig/character.js` | `figure` (Kẻ Nghĩ Nhiều: `E`, `armL`/`armR`, `legs`, `talk`, `blink`, `battery`, `s`, `crop`), `expr`/`EXPR`, `PAL` |
 | `rig/host.js` | `hostPip(g, T, sh, {corner, r, E, talk})` (vòng tròn ở góc, bật vào lúc cắt), `reactClose(g, T, {E, talk, at})` (cận mặt toàn khung) |
 | `rig/extras.js` | `extra(g, {x, y, s, look, E, gaze, turn, armL, armR, at, talk, blink, sit, t})`: người của câu chuyện, có mặt và hai tay (`down point hold wave hip up chin cross reach open`); trả về vị trí tay để gắn đạo cụ. `LOOKS`: shopper, researcher, participant, seller, elder, student, office, doctor. `crowd(g, {n, cols, box, hot, dim})` |
 | `rig/board.js` | `loadBoard`, `BD.t/u/scene/shot/camera/signals/events` (mục 4); vẽ `term` (thẻ), `stamp` (dấu), `name/place/time/number/doc` (nhãn), biểu đồ |

@@ -46,7 +46,7 @@ The directing process is `DIRECTOR.md` §2–§7 — benchmark, three structures
      - *Discounting success* → A gleaming gold trophy that the character frantically covers with a cloth or kicks into the wastebasket.
      - *Spotlight effect & memory bias* → 20 dusty framed certificates vs a single scorched note scorched under an intense spotlight.
      - *Impostor cycle* → Character sprinting on a runaway treadmill while clutching a cracking paper mask.
-     - *Evidence ledger* → Thick leather notebook on desk, character's hand writing with wet ink, Rối stamping a bold red wax seal.
+     - *Evidence ledger* → Thick leather notebook on desk, character's hand writing with wet ink, then pressing a bold red wax seal.
 7. **Continuous Visual Flow & Zero Dead Frames (The 3-Clock Timing Architecture)**:
    - **STRICTLY FORBIDDEN**: Animating for 0.5s at line start and freezing completely for the next 4–8 seconds waiting for the next sentence!
    - **Clock 1 (Structure Lead — advance 6–10 frames / ~0.3s)**:
@@ -83,7 +83,7 @@ Workflow:
 Structure the 30–90s arc:
 - **Hook (~15%)**: Name the pain in immediate, vivid sensory words.
 - **Stakes (~20%)**: Show what it costs the viewer.
-- **Insight / Mechanism (~40%)**: The psychological or scientific revelation, explained simply with Rối.
+- **Insight / Mechanism (~40%)**: The psychological or scientific revelation, explained simply, staged as a scene.
 - **Payoff / Action (~25%)**: One tangible, doable action the viewer can do today.
 - Use `vi-VN-NamMinhNeural` (`rate: "+4%"` to `"+5%"`, `pitch: "-6Hz"` to `"-8Hz"`).
 
@@ -91,7 +91,7 @@ Structure the 30–90s arc:
 Render 4 critical still frames to inspect aesthetic composition:
 1. *The Hook Frame*: Character in their authentic night/day environment.
 2. *The Problem/Staging Frame*: The conflict or tactile prop.
-3. *The Insight/Reveal Frame*: Rối companion with an expressive speech bubble.
+3. *The Insight/Reveal Frame*: the moment the viewer sees the trick, on the story's own prop.
 4. *The End Lockup*: Peaceful resolution card with handwritten sign-off.
 If any frame looks like a PowerPoint slide, redesign the staging BEFORE coding full motion.
 

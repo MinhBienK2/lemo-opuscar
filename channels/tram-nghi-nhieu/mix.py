@@ -172,7 +172,7 @@ if ends:
     put(bass(mid('A2'), .8, 2.6), en, .9); put(celesta(mid('A6'), .4, 3.0), en + .4, .7, .3)
 # the silences: cut the music bus, tails included, with a 60 ms fade
 for s in sil:
-    a, b = int(s['t'] * SR), int(s['t1'] * SR); f = int(.06 * SR)
+    a, b = int(s['t'] * SR), int(s.get('t1', s['t'] + s.get('d', 1)) * SR); f = int(.06 * SR)
     if a - f >= 0: music[a - f:a] *= np.linspace(1, 0, f)[:, None]
     music[a:b] = 0
     if b + f <= len(music): music[b:b + f] *= np.linspace(0, 1, f)[:, None]

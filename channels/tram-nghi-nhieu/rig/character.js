@@ -106,6 +106,7 @@ const PATHS = {
 
 // Main character figure
 export function figure(g, o = {}) {
+  globalThis.SEEN?.add?.('host');   // what the frame drew, for scenecheck: the host is on screen
   const E = o.E ? expr(o.E) : expr('sleepy');
   const t = o.t || 0;
   const s = o.s === undefined ? 1 : o.s;

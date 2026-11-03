@@ -17,6 +17,7 @@ export function hostPip(g, T, sh, o = {}) {
   const t0 = o.at ?? sh.t0, t1 = o.out ?? sh.t1, r = o.r || 150;
   const p = Math.min(clamp01((T - t0) / .35), Number.isFinite(t1) ? clamp01((t1 - T) / .25) : 1);
   if (p <= 0) return;
+  globalThis.SEEN?.add?.('pip');
   const [cx, cy] = o.xy || CORNERS[o.corner || 'br'];
   pip(g, cx, cy, r, p, gg => {
     gg.fillStyle = o.bg || PAL.bg; gg.fillRect(-r, -r, 2 * r, 2 * r);
@@ -25,6 +26,7 @@ export function hostPip(g, T, sh, o = {}) {
 }
 
 export function reactClose(g, T, o = {}) {
+  globalThis.SEEN?.add?.('react');
   g.fillStyle = o.bg || PAL.bg; g.fillRect(0, 0, W, H);
   if (o.lines !== false) focusLines(g, W / 2, H * .42, T);
   const k = .97 + .03 * ease.out((T - (o.at ?? T)) / .2);   // a small settle on the cut in

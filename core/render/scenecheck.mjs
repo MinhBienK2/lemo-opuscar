@@ -27,7 +27,7 @@ const res = await page.evaluate(({ STEP, BAND }) => {
   const sm = document.createElement('canvas'); sm.width = 48; sm.height = 27; const sg = sm.getContext('2d', { willReadFrequently: true });
   const GX = 96, GY = 54, frames = [];
   for (let t = STEP / 2; t < window.DUR; t += STEP) {
-    window.render(t);
+    window.SEEN = new Set(); window.render(t); const seen = [...window.SEEN];
     // text cover: the union of the text boxes on a coarse grid, the subtitle band left out
     const grid = new Uint8Array(GX * GY); let boxes = 0;
     for (const b of (typeof window.TEXTS === 'function' && window.TEXTS(t)) || []) {
@@ -44,9 +44,9 @@ const res = await page.evaluate(({ STEP, BAND }) => {
       for (let i = 0; i < d.length; i += 4) hist[(d[i] >> 6) * 16 + (d[i + 1] >> 6) * 4 + (d[i + 2] >> 6)]++;
       const n = d.length / 4; for (let k = 0; k < 64; k++) hist[k] /= n;
     }
-    frames.push({ t, cover: cover / (GX * GY * BAND / H), boxes, hist });
+    frames.push({ t, cover: cover / (GX * GY * BAND / H), boxes, hist, seen });
   }
-  const ev = (window.EV || []).map(e => ({ t: e.t, type: e.type, id: e.id, shot: e.shot }));
+  const ev = (window.EV || []).map(e => ({ t: e.t, type: e.type, id: e.id, shot: e.shot, host: e.host }));
   // what moves when a sound plays: the picture just before against the picture just after (luma, thumbnail, subtitles cut off)
   const thumb = t => { window.render(Math.max(0, Math.min(window.DUR - .01, t))); sg.drawImage(cv, 0, 0, cv.width, cv.height * BAND / H, 0, 0, 48, 27);
     const d = sg.getImageData(0, 0, 48, 27).data, y = new Float32Array(48 * 27); for (let i = 0; i < y.length; i++) y[i] = .3 * d[4 * i] + .59 * d[4 * i + 1] + .11 * d[4 * i + 2]; return y; };
@@ -124,6 +124,12 @@ const meanShot = res.dur / Math.max(1, shots, segs.length);
 const marks = res.ev.filter(e => e.type === 'shot' && Number.isFinite(e.t)).sort((a, b) => a.t - b.t), hostT = {};
 marks.forEach((e, i) => { const m = e.host === true ? 'desk' : e.host || 'none'; hostT[m] = (hostT[m] || 0) + ((marks[i + 1]?.t ?? res.dur) - e.t); });
 
+// the host as drawn, not as declared: a rig that adds 'host' to window.SEEN when it draws the host ('pip', 'react' for those
+// modes) lets the check see the frames; a frame drawing the host in a shot declared "none" is a board the picture ignores
+const seenF = F.filter(f => f.seen && f.seen.length), mode = t => { let m = 'none'; for (const e of marks) if (e.t <= t + 1e-6) m = e.host === true ? 'desk' : e.host || 'none'; return m; };
+const inFrame = f => f.seen.includes('host') && !f.seen.includes('pip') && !f.seen.includes('react');
+const hostDrawn = F.length ? F.filter(f => f.seen && inFrame(f)).length / F.length : 0;
+const ignored = marks.length ? F.filter(f => f.seen && inFrame(f) && mode(f.t) === 'none').length / F.length : 0;
 const per20 = n => n / res.dur * 20;
 const out = {
   film: dir, dur: +res.dur.toFixed(1), frames: F.length,
@@ -141,6 +147,7 @@ const checks = [
   ['sound on motion', out.soundOnMotion != null && out.soundOnMotion >= 0.8, `${out.soundOnMotion == null ? 'no foley' : (out.soundOnMotion * 100).toFixed(0) + ' %'} of ${fol.length} sounds land on something that moves (≥ 80 %)` + (uncaused.length ? ` — silent picture under ${uncaused.slice(0, 6).map(e => e.type + '@' + e.t.toFixed(1)).join(', ')}` : '')],
   ['sound moments', out.momentsPerMin <= 30, `${out.momentsPerMin} sound moments a minute (≤ 30: sound marks what matters, not every gesture)`],
   ['quiet windows', out.quietWindows >= 0.15, `${(out.quietWindows * 100).toFixed(0)} % of 3 s windows carry no sound effect (≥ 15 %: the ear needs rests)`],
+  ...(seenF.length ? [['host on screen', hostDrawn <= .5 && ignored <= .1, `the host is drawn in ${(hostDrawn * 100).toFixed(0)} % of frames (≤ 50 %: the story plays full frame)` + (marks.length ? `; ${(ignored * 100).toFixed(0)} % of frames draw them in a shot the board marks "none" (≤ 10 %)` : '')]] : []),
   ['shots', out.meanShot <= 10, `mean shot ${out.meanShot} s (${Math.max(shots, segs.length)} shots; ≤ 10 s: a new idea, a new shot)`],
 ];
 if (!res.hasTexts) console.log('note: the page has no window.TEXTS — the card measure sees no text and is not meaningful');

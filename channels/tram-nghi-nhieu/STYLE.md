@@ -15,7 +15,7 @@ Kênh nói về hành vi con người, không phải về kỹ thuật: mỗi t�
 Áo hoodie mù mè `#FFB703` **rộng** (oversized), tay áo dài che tay, có **biểu tượng pin sạp** trên ngực trái — biểu tượng này là thiết bị mở đầu mỗi tập và là "đồng hồ" của nhân vật: pin cạn dần theo nhịp tập, và nạp lại ở tập sau.
 Nét viền `#1D202A` luôn dày ~3,4 px trên màn hình, bất kể tỉ lệ.
 
-**Rối** — một bóng sợi tím (`#8B5CF6`), vẽ bằng một đường cuộn dày và một đường mảnh, hai mắt tròn và một cái antenna nhỏ. Rối không giải thích: Rối **cảnh báo** và **đặt tên** cho thứ người xem đang cảm thấy. Rối xuất hiện ở khoảng một phần tư độ dài mỗi tập.
+Kẻ Nghĩ Nhiều là nhân vật cố định duy nhất của kênh, và giọng kể của nhân vật này là giọng duy nhất của phim. Cách hiểu phổ biến do chính người dẫn nói ra ("mình từng nghĩ…"), rồi câu chuyện lật lại. (Rối, bóng sợi tím của các tập đầu, đã được bỏ: hai giọng kể làm phim khó nghe.)
 
 ## 3. Màu
 
@@ -26,12 +26,12 @@ Nét viền `#1D202A` luôn dày ~3,4 px trên màn hình, bất kể tỉ lệ.
 | Kem (da, chữ chính) | `#FAF8F5` |
 | Nét | `#1D202A` |
 | Nhấn (hoodie, highlight) | `#FFB703` |
-| Tím (Rối, cảnh báo) | `#8B5CF6` |
+| Tím (chủ đề, cảnh báo) | `#8B5CF6` |
 | Lạnh (dữ liệu, màn hình) | `#67E8F9` |
 | Cảnh báo (con dấu, pin) | `#F0525B` |
 
-Quy tắc: **một màu nhấn mỗi cảnh**. Vàng không bao giờ làm nền; tím chỉ thuộc về Rối; đỏ chỉ thuộc về cái đe dọa hoặc cái sai.
-Bảng màu thực tế trong code (`rig/character.js:PAL`): da kem `#fff0d8`, áo vàng nghệ `#f7bd27`, quần navy `#252d50`, tím Rối `#9a5be5`, đỏ cảnh báo `#f04462`, xanh dữ liệu `#67e8f9`.
+Quy tắc: **một màu nhấn mỗi cảnh**. Vàng không bao giờ làm nền; tím thuộc về chủ đề của tập; đỏ chỉ thuộc về cái đe dọa hoặc cái sai.
+Bảng màu thực tế trong code (`rig/character.js:PAL`): da kem `#fff0d8`, áo vàng nghệ `#f7bd27`, quần navy `#252d50`, tím `#9a5be5`, đỏ cảnh báo `#f04462`, xanh dữ liệu `#67e8f9`.
 
 ## 3b. Đạo diễn đa phong cách theo từng cảnh (Multi-Style Scene Direction)
 

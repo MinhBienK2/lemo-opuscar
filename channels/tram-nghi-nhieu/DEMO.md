@@ -1,6 +1,6 @@
 # Trạm Nghĩ Nhiều — demo của kênh
 
-Một ví dụ trong nhiều. Đừng lấy lại câu chuyện, cung, bảng cảnh, đạo cụ hay nhịp của nó.
+Một ví dụ trong nhiều. Đừng lấy lại câu chuyện, cung, bảng cảnh, đạo cụ hay nhịp của nó. Demo này còn có Rối và giọng thứ hai; kênh đã bỏ Rối, nay chỉ một người dẫn, một giọng.
 
 Demo: *Tại sao càng rảnh, ta càng thấy mệt?* (1:51) · `tram-nghi-nhieu-tap-01.mp4` · nguồn ở [`tap-01/`](tap-01/)
 

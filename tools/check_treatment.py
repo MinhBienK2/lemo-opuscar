@@ -38,20 +38,25 @@ def find(secs, *keys):
         if any(k in h for k in keys): return '\n'.join(body)
     return None
 
-items = lambda body: [l for l in body.splitlines() if re.match(r'^\s*([-*]|\d+[.)])\s+\S', l)]
+# a candidate is a list item, a ### heading, or a paragraph that opens on a bold name (**A. …**)
+items = lambda body: [l for l in body.splitlines() if re.match(r'^\s*([-*]|\d+[.)])\s+\S|^###\s+\S|^\*\*(?!(chọn|chosen|choice))', l, re.I)]
 has = lambda body, *keys: any(re.search(k, body, re.I | re.U) for k in keys)
 
 secs = sections(open(TP, encoding='utf-8').read())
 b = find(secs, 'phim mẫu', 'benchmark')
 if b is None: BAD('TREATMENT.md has no "## Phim mẫu" (benchmark): 1–2 reference works that set the bar for this topic (DIRECTOR.md §2)')
 else:
-    if not has(b, r'học\s*:', r'learn\s*:'): BAD('"## Phim mẫu": say what to learn from each work ("Học: …")')
-    if not has(b, r'không lấy\s*:', r"(don't|do not|not) take\s*:"): BAD('"## Phim mẫu": say what not to take ("Không lấy: …")')
+    if not has(b, r'học\s*[:|]', r'learn\s*[:|]', r'\|\s*(học|learn)\s*\|'): BAD('"## Phim mẫu": say what to learn from each work ("Học: …")')
+    if not has(b, r'không lấy', r"(don't|do not|not) (take|learn)"): BAD('"## Phim mẫu": say what not to take ("Không lấy: …")')
+    # the bar is set from outside: the channel's own episodes and STYLE.md are what the film already knows
+    refs = [l for l in b.splitlines() if l.strip() and not re.match(r'^\s*\|?\s*[-:| ]+$', l) and not re.search(r'(học|learn)\s*\|', l, re.I)]
+    if refs and all(re.search(r'\btập\s*\d|tap-\d|STYLE\.md|series|kênh|channel', l, re.I) for l in refs):
+        BAD('"## Phim mẫu": every reference is the channel itself — name 1–2 works from outside it (a channel, a film, an ad) that set the bar for this topic')
 s = find(secs, 'ba cấu trúc', 'cấu trúc', 'structures')
 if s is None: BAD('TREATMENT.md has no "## Ba cấu trúc": three candidate structures and the one chosen (DIRECTOR.md §4)')
 else:
     if len(items(s)) < 3: BAD(f'"## Ba cấu trúc": {len(items(s))} candidates listed (≥ 3, one list item each)')
-    if not has(s, r'chọn\s*:', r'chose\s*:', r'choice\s*:'): BAD('"## Ba cấu trúc": say which one you chose and why ("Chọn: … vì …")')
+    if not has(s, r'chọn\**\s*:', r'chose(n)?\**\s*:', r'choice\**\s*:'): BAD('"## Ba cấu trúc": say which one you chose and why ("Chọn: … vì …")')
 for keys, name, why in [(('logline',), 'Logline', 'one sentence, then setup → turn → ending'),
                         (('beat sheet', 'bảng nhịp'), 'Beat sheet', 'what happens, second by second'),
                         (('cue map',), 'Cue map', 'where the music changes, where the silences fall'),

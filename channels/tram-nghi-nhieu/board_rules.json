@@ -1,1 +1,1 @@
-{"require_who": {"roi": 2}, "require_flags": ["aha"]}
+{"require_flags": ["aha"], "forbid_cast": ["roi"], "one_voice": true}

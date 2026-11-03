@@ -26,7 +26,7 @@ Mọi tập phim (đặc biệt bản dài 3–5 phút) bắt buộc phải vư�
 1. **Trọng lượng thực tế (The High Stakes Test)**: Vấn đề này có gây ra những tổn thất hữu hình và đau đớn trong đời thực (mắc kẹt trong công việc độc hại, đầu tư sai lầm, kiệt quệ hiện sinh, tê liệt sự nghiệp) không?
 2. **Chiều sâu cơ chế (The Root Mechanism Test)**: Có chạm tới bản chất vận hành của não bộ (kinh tế học hành vi, khoa học thần kinh nhận thức, tâm lý học tiến hóa) thay vì chỉ mô tả triệu chứng bề ngoài không?
 3. **Mô hình tư duy (The Mental Model Test)**: Kết thúc phim có để lại một khung tư duy (Mental Framework) sắc bén mà người xem có thể đem theo vào phòng họp, bàn làm việc hay quyết định cuộc đời không?
-4. **Cú va đập nhận thức (The Paradigm Shift Test)**: Phim có lật ngược được một niềm tin sai lầm phổ biến mà số đông vẫn tưởng là đúng không? Cú lật phải **diễn ra thành một cảnh** (Rối nói cách hiểu phổ biến, cảnh tiếp theo cho thấy điều thật sự xảy ra), không phải một chuỗi trích dẫn nghiên cứu.
+4. **Cú va đập nhận thức (The Paradigm Shift Test)**: Phim có lật ngược được một niềm tin sai lầm phổ biến mà số đông vẫn tưởng là đúng không? Cú lật phải **diễn ra thành một cảnh** (người dẫn nói cách hiểu phổ biến, cảnh tiếp theo cho thấy điều thật sự xảy ra), không phải một chuỗi trích dẫn nghiên cứu.
 
 > **Sức nặng học thuật nằm ở `FACTS.md`, không nằm ở số lượng con số đọc lên.** Một tập 3 phút đọc lên khoảng 6–9 con số là đủ, mỗi số là một vật trong cảnh. Tên tác giả, năm, cỡ mẫu để trong mô tả video.
 
@@ -69,9 +69,9 @@ Không lặp lại sự đơn điệu của các tập trước. Bổ sung các 
   - Họa tiết lưới tọa độ blueprint kết hợp vệt than chì vẽ tay (`sketch paper overlay`).
   - Đạo cụ tương tác: Cuốn sổ bìa da sờn, kính lúp giải phẫu nhận thức, con dấu mực nứt "MẮC KẸT" / "TỰ DO".
 
-### B. Nhân vật Kẻ Nghĩ Nhiều & Rối
+### B. Nhân vật Kẻ Nghĩ Nhiều
 - **Kẻ Nghĩ Nhiều**: Không chỉ ngồi ủ rũ, mà có hành động nghiên cứu chủ động: lật trang sổ tay ghi chép, đeo kính gọng tròn trí thức khi đối diện sự thật, ánh sáng sợi đèn bừng sáng khi tìm ra chìa khóa tư duy.
-- **Rối**: Biến hình sinh động theo trạng thái tâm lý: lúc là chiếc mỏ neo nặng trĩu đè lên vai (chi phí chìm), lúc biến thành đám mây bụi bao phủ mắt (ảo tưởng), lúc tách thành chiếc chìa khóa ánh sáng mở chiếc lồng tâm trí.
+- Trạng thái tâm lý thành đạo cụ trong cảnh: chiếc mỏ neo nặng trĩu đè lên vai (chi phí chìm), đám mây bụi che mắt (ảo tưởng), chiếc chìa khóa sáng mở chiếc lồng.
 
 ### C. Thiết kế Âm thanh & Nhạc nền (Binaural & Layered Sound Design)
 - **Âm nhạc**: Lo-fi ấm áp 84 BPM kết hợp các nhạc cụ mộc mang chiều sâu nội tâm: Cello trầm ấm (dày và trăn trở), Piano rải từng nốt đọng lại không gian, tiếng chổi gõ trống (brush) và lớp vinyl crackle mộc mạc.

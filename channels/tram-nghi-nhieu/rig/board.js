@@ -80,7 +80,7 @@ export function bindBoard(board, L, words) {
       if (s.in && s.in.sfx) ev.push({ t: Math.max(0, s.t0 - (s.in.pre ?? .05)), type: s.in.sfx, shot: sh0, cause: `scene ${s.in.tr || 'cut'}` });
       if (s.amb) ev.push({ t: s.t0, type: 'amb', kind: s.amb, t1: Number.isFinite(s.t1) ? s.t1 : s.t0 + 8, shot: sh0 });
       if (s.music) ev.push({ t: s.t0, type: 'music', cue: s.music, shot: sh0 });
-      if (s.silence) { const ts = resolveAnchor(s.silence.at, L, words); ev.push({ t: ts, type: 'silence', d: s.silence.d ?? 1, shot: shot(ts).id }); }
+      if (s.silence) { const ts = resolveAnchor(s.silence.at, L, words); const d = s.silence.d ?? 1; ev.push({ t: ts, t1: ts + d, type: 'silence', d, shot: shot(ts).id }); }
       for (const x of s.shots) ev.push({ t: +x.t0.toFixed(3), type: 'shot', shot: x.id, size: x.size, host: x.host, cam: x.cam });
       for (const b of s.beats) for (const x of [].concat(b.sfx || [])) {
         const tt = T[b.id] + (x.off || 0);

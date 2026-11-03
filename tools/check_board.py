@@ -19,8 +19,8 @@ it (rig/board.js). The check refuses a vague board — and a busy one: words and
              ≤ 25 sound moments a minute, ≥ 25 % of the 3 s windows with no sound effect, ≤ 3 sounds inside one second;
              at least one real silence (a scene's "silence") before the turn
   script     no line reads out who is speaking ("Rối nói: …") — a character speaks with their own voice
-  cast       the channel can ask for more (board_rules.json next to CHANNEL.md: {"require_who": {"roi": 2},
-             "require_flags": ["aha"]})
+  cast       the channel can ask for more (board_rules.json next to CHANNEL.md: {"require_who": {"host": 2},
+             "require_flags": ["aha"], "forbid_cast": ["roi"], "one_voice": true})
   code       src/film.js loads the board, draws its signals, plays its events, and names its scenes and its shots
 Exit 0 when everything passes, 1 when something fails, 2 when there is no board to check.
 """
@@ -262,6 +262,13 @@ for who, n in (rules.get('require_who') or {}).items():
     if who_count.get(who, 0) < n: BAD(f'the channel asks for ≥ {n} beats where "{who}" acts; the board has {who_count.get(who, 0)}')
 for f in rules.get('require_flags') or []:
     if f not in flags: BAD(f'the channel asks for a beat flagged "{f}" (see its SKILL); the board has none')
+for who in rules.get('forbid_cast') or []:
+    hit = [s.get('id') for s in scenes if who in (s.get('cast') or [])] + [k for k in who_count if k == who]
+    if hit: BAD(f'the channel no longer casts "{who}" (see its CHANNEL.md); the board still does in {sorted(set(map(str, hit)))}')
+if rules.get('one_voice'):
+    keys = ('voice', 'pitch', 'rate')
+    odd = [l['id'] for l in lines if any(l.get(k) not in (None, '', '+0Hz', '+0%') for k in keys)]
+    if odd: BAD(f'the channel speaks with one voice: lines {odd[:8]} change the voice, pitch or rate — the narrator says them in their own voice')
 
 # —— the code uses the board ——
 fp = os.path.join(FILM, 'src/film.js')
