@@ -86,6 +86,7 @@ channels/tram-nghi-nhieu/
 │   ├── ke-nghi-nhieu.md        # người dẫn: hình, màu, biểu cảm, cách xuất hiện, giọng
 │   └── ke-nghi-nhieu-sheet.jpg # bảng đặc tả
 ├── rig/                # code vẽ dùng chung (character.js, extras.js, keys.js, board.js, host.js, cel.js, hands.js, sets.js, broll.js, styles.js, motion.js)
+│   └── gallery/        # bảng tra cứu hình ảnh của rig: mở bằng `node rig/gallery/serve.mjs`
 ├── board_rules.json    # luật board riêng của kênh (check_board)
 ├── MOTION.md           # dựng chuyển động: mỗi nhịp là một move, sổ tay code cho từng kiểu
 ├── mix.py              # âm thanh dùng chung: nhạc + ambience + foley + lùi dB + nén

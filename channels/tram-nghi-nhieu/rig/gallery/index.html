@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trạm Nghĩ Nhiều — bảng tra cứu rig</title>
+<link rel="stylesheet" href="../../fonts/fonts.css">
+<style>
+  :root {
+    --bg: #0b0c11;
+    --surface: #141622;
+    --surface-2: #1b1e2d;
+    --border: #262a3c;
+    --fg: #f4f2ee;
+    --muted: #8b90a8;
+    --accent: #f7bd27;
+    --cyan: #67e8f9;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--fg);
+    font-family: "Be Vietnam Pro", system-ui, sans-serif; }
+  body { padding: 28px 32px 80px; }
+  header { position: sticky; top: 0; z-index: 20; background: rgba(11,12,17,.94);
+    backdrop-filter: blur(8px); padding: 18px 0 14px; border-bottom: 1px solid var(--border); }
+  h1 { margin: 0 0 4px; font-size: 24px; font-weight: 800; letter-spacing: .2px; }
+  h1 small { display: block; font-size: 13px; font-weight: 500; color: var(--muted); margin-top: 6px; }
+  .bar { display: flex; gap: 16px; align-items: center; margin-top: 14px; flex-wrap: wrap; }
+  .bar input[type=search] { background: var(--surface); border: 1px solid var(--border); color: var(--fg);
+    border-radius: 8px; padding: 8px 12px; font: inherit; font-size: 14px; min-width: 260px; }
+  .bar label { font-size: 13px; color: var(--muted); display: flex; gap: 8px; align-items: center; }
+  .bar input[type=range] { accent-color: var(--accent); width: 220px; }
+  .bar output { font-variant-numeric: tabular-nums; color: var(--accent); font-size: 13px; min-width: 44px; }
+  .count { font-size: 13px; color: var(--muted); margin-left: auto; }
+  section { margin: 34px 0 0; }
+  h2 { font-size: 17px; font-weight: 800; margin: 0 0 4px; display: flex; align-items: baseline; gap: 10px; }
+  h2 code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 14px; color: var(--accent); font-weight: 700; }
+  h2 .path { font-size: 12px; color: var(--muted); font-weight: 500; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 16px; margin-top: 14px; }
+  .tile { margin: 0; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .tile.hidden { display: none; }
+  .tile canvas { display: block; width: 100%; aspect-ratio: 16/9; background: #0f1119; cursor: zoom-in; }
+  .tile figcaption { padding: 10px 12px 12px; border-top: 1px solid var(--border); }
+  .tile b { display: block; font-size: 13.5px; font-weight: 800; font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+  .tile span { display: block; font-size: 12.5px; color: var(--muted); margin-top: 4px; line-height: 1.45; }
+  .tile .sig { color: var(--cyan); font-weight: 500; font-size: 11.5px; margin-top: 6px;
+    font-family: ui-monospace, "SF Mono", Menlo, monospace; word-break: break-word; }
+  dialog#zoom { border: 0; padding: 0; background: transparent; max-width: 96vw; max-height: 96vh; }
+  dialog#zoom::backdrop { background: rgba(0,0,0,.82); }
+  dialog#zoom canvas { display: block; width: min(92vw, 1500px); background: #0f1119; border-radius: 8px; }
+  dialog#zoom p { color: var(--muted); font-size: 13px; margin: 8px 2px 0; }
+  dialog#zoom p b { color: var(--fg); }
+  #boot { color: var(--muted); font-size: 14px; padding: 40px 0; }
+  #boot.err { color: #f04462; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Bảng tra cứu rig — Trạm Nghĩ Nhiều
+    <small>Mọi thứ rig vẽ được, dựng lại bằng chính code của rig (<code>rig/*.js</code>), không phải ảnh chụp. Bấm vào một ô để phóng to.</small>
+  </h1>
+  <div class="bar">
+    <input type="search" id="q" placeholder="Tìm theo tên hàm, ví dụ: figure, halo, hand…">
+    <label>thời gian <input type="range" id="t" min="0" max="4" step="0.05" value="1.2"> <output id="tv">1.20s</output></label>
+    <span class="count" id="count"></span>
+  </div>
+</header>
+<div id="boot">Đang tải rig…</div>
+<div id="root"></div>
+
+<dialog id="zoom">
+  <canvas id="zoomc" width="1920" height="1080"></canvas>
+  <p><b id="zoomt"></b> — <span id="zoomd"></span></p>
+</dialog>
+
+<script type="module" src="gallery.js"></script>
+</body>
+</html>
