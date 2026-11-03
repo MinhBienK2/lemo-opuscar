@@ -1,7 +1,7 @@
 ---
 name: tram-nghi-nhieu
-description: Phương pháp đạo diễn một tập phim hoạt hình 2D có lời dẫn cho kênh Trạm Nghĩ Nhiều — đạo diễn theo DIRECTOR.md (phim mẫu, ba cấu trúc, shot list có "vì sao", cue map) rồi dựng từ storyboard dữ liệu (board.json); câu chuyện có người của nó, chiếu toàn khung; người dẫn đóng khung ở nhà, bình luận từ góc hình hoặc cận mặt; mỗi ý mới một shot; chữ là thuật ngữ và tên; tiếng ở chỗ đáng nghe. Dùng khi làm bất kỳ tập nào của kênh.
-version: 7.0.0
+description: Phương pháp đạo diễn một tập phim hoạt hình 2D có lời dẫn cho kênh Trạm Nghĩ Nhiều — đạo diễn theo DIRECTOR.md (phim mẫu, ba cấu trúc, shot list có "vì sao", cue map) rồi dựng từ storyboard dữ liệu (board.json); câu chuyện có người của nó, chiếu toàn khung; người dẫn đóng khung ở nhà, bình luận từ góc hình hoặc cận mặt; mỗi ý mới một shot; mỗi nhịp là một chuyển động có đầu, có cuối; chữ là thuật ngữ và tên; tiếng ở chỗ đáng nghe. Dùng khi làm bất kỳ tập nào của kênh.
+version: 8.0.0
 ---
 
 # Đạo diễn một tập Trạm Nghĩ Nhiều
@@ -62,11 +62,12 @@ Mỗi bước xong khi điều kiện ở cuối bước đúng. Ghi tiến đ�
 7. **LOOK** → `src/sets.js` của tập.
    - Mỗi vòng render 4–6 still bằng code thật (`node core/render/still.mjs <tập> <t…>`): nơi chốn, người của câu chuyện, một shot cận, thẻ thuật ngữ, một khung pip hoặc react.
    - Ghép chúng bằng `core/render/sheet.py` rồi xem tấm ghép, không mở từng ảnh 1920 px. Tìm lỗi cụ thể: tay đọc như ống, đạo cụ trôi khỏi tay, chữ chạm phụ đề, nơi chốn trống.
+   - Mỗi nơi chốn có một vật sống của riêng nó, chạy theo `T` (`MOTION.md` §5). Shot cận có hàm vẽ riêng, chủ thể trọn trong khung (`MOTION.md` §4).
    - Ghi vào `LOOK.md` từng vòng (`## Vòng 1`…): still nào, `Thấy:`, `Sửa:`.
 
    Xong khi đã có ít nhất hai vòng và vòng cuối không còn lỗi.
-8. **ANIMATE** → `src/film.js`, dựng từ board (mục 4).
-9. **DỰNG + CỔNG**: `sh build.sh`, rồi `sh core/render/review.sh <tập>` phải exit 0. Cổng gồm treatment, board, scenecheck, readcheck, voice…
+8. **ANIMATE** → `src/film.js`, dựng từ board (mục 4). Đọc **`channels/tram-nghi-nhieu/MOTION.md`** trước dòng code đầu tiên: mỗi nhịp là một tiến độ `BD.p(id, T)` chạy suốt `d` giây của nó, và sổ tay 17 kiểu `move` có code cho từng kiểu. Xong khi `check_board` PASS cả phần code: nhịp được tính giờ theo id, không đạo cụ nào bật ra, không zoom quá 1,6×.
+9. **DỰNG + CỔNG**: `sh build.sh`, rồi `sh core/render/review.sh <tập>` phải exit 0. Cổng gồm treatment, board, scenecheck, readcheck, voice, và **motion** (`tools/check_motion.py`, đo trên `.mp4`: hình chuyển động ở ≥ 55 % số giây, không đứng hình quá 10 s, mỗi nhịp làm đổi vùng `xy` của nó). Motion FAIL thì đọc `MOTION.md` §7.
 10. **XEM + NGHE.** Mở contact sheet và nghe lại cả phim, hỏi:
     - mỗi chữ có phải tên hay thuật ngữ không;
     - người dẫn có nhường khung cho câu chuyện không;
@@ -203,12 +204,13 @@ Lớp phủ: `applyPaperTexture` và `renderGrainFx` (`rig/styles.js`) phủ lê
           "subject": "mặt chị Lan lắc đầu, ôm kệ", "why": "quyết định không bán nằm trên khuôn mặt" } ],
       "beats": [
         { "id": "b_gio", "at": "h1@chín", "who": "extra:lan", "do": "chị Lan cầm tờ hướng dẫn lên xem",
+          "move": "carry", "d": 0.8, "xy": [900, 560],
           "label": { "kind": "time", "text": "21:00", "xy": [1700, 90] } },
-        { "id": "b_vit", "at": "h1@tua+0.2", "who": "extra:lan", "do": "tay chị vặn tua vít vào lỗ ván",
+        { "id": "b_vit", "at": "h1@tua+0.2", "who": "extra:lan", "do": "tay chị vặn tua vít vào lỗ ván", "move": "work", "d": 1.6, "xy": [1100, 700],
           "sfx": { "type": "plastic_click", "cause": "tua vít ăn vào gỗ" } },
-        { "id": "b_dung", "at": "h2@đứng", "who": "extra:lan", "do": "chị Lan buông tay, cái kệ tự đứng",
+        { "id": "b_dung", "at": "h2@đứng", "who": "extra:lan", "do": "chị Lan buông tay, cái kệ tự đứng", "move": "fall", "d": 0.7, "xy": [1300, 600],
           "change": "kệ nghiêng nhẹ sang trái", "sfx": { "type": "wood_set", "cause": "chân kệ chạm sàn" } },
-        { "id": "b_om", "at": "h3@không", "who": "extra:lan", "do": "chị Lan lắc đầu, vòng tay ôm kệ" } ] },
+        { "id": "b_om", "at": "h3@không", "who": "extra:lan", "do": "chị Lan lắc đầu, vòng tay ôm kệ", "move": "act", "d": 1.2, "xy": [1200, 420] } ] },
 
     { "id": "nha_host", "place": "góc đọc sách của Kẻ Nghĩ Nhiều, kệ sách và đèn bàn",
       "light": "đèn bàn vàng bên phải, nền tối ấm",
@@ -221,16 +223,23 @@ Lớp phủ: `applyPaperTexture` và `renderGrainFx` (`rig/styles.js`) phủ lê
           "subject": "mặt Kẻ Nghĩ Nhiều nhăn lại, nghi ngờ", "why": "cách hiểu quen thuộc nghe xuôi tai, khuôn mặt báo nó sắp bị lật" } ],
       "beats": [
         { "id": "b_ten", "at": "k1@hiệu", "who": "host", "do": "Kẻ Nghĩ Nhiều ghim tấm thẻ lên bảng", "flags": ["aha"],
+          "move": "enter", "d": 0.5, "xy": [400, 300],
           "label": { "kind": "term", "text": "Hiệu ứng IKEA", "def": "quý thứ mình làm ra hơn giá trị thật", "xy": [80, 90] },
           "sfx": { "type": "paper_slide", "cause": "thẻ giấy ghim lên bảng" } },
-        { "id": "b_chi", "at": "k2@giá", "who": "host", "do": "Kẻ Nghĩ Nhiều chỉ tay vào chữ giá trị" },
-        { "id": "b_nhan", "at": "k3@thương", "who": "host", "do": "Kẻ Nghĩ Nhiều nheo một mắt, nhếch môi" },
-        { "id": "b_lac", "at": "k3@end", "who": "host", "do": "Kẻ Nghĩ Nhiều lắc đầu chậm rãi" } ] }
+        { "id": "b_chi", "at": "k2@giá", "who": "host", "do": "Kẻ Nghĩ Nhiều chỉ tay vào chữ giá trị", "move": "gesture", "d": 0.4, "xy": [700, 420] },
+        { "id": "b_anh", "at": "k3@thương", "who": "host", "do": "tấm ảnh cái kệ trượt từ tay lên bảng", "move": "travel", "d": 0.7, "xy": [500, 500] },
+        { "id": "b_lac", "at": "k3@end", "who": "host", "do": "Kẻ Nghĩ Nhiều lắc đầu chậm rãi", "move": "act", "d": 1.0, "xy": [1320, 360] } ] }
   ]
 }
 ```
 
-Phần lớn nhịp chỉ có `who` và `do`: diễn xuất, không chữ, không tiếng. Luật (check_board kiểm hết):
+Phần lớn nhịp chỉ có `who`, `do` và chuyển động của nó (`move`, `d`, `xy`): không chữ, không tiếng. Luật (check_board kiểm hết):
+
+**Chuyển động** (`MOTION.md`)
+- Nhịp có người diễn thì có `move` (một trong `enter exit walk carry travel grow count draw break transform swap open fall fill work gesture act`), `d` 0,2–8 s, `xy` là chỗ trên màn hình nơi vật đổi.
+- Mỗi cảnh ≥ 2 kiểu `move`; `gesture` và `act` ≤ 40 % số nhịp.
+- `film.js` tính giờ ≥ 70 % số nhịp bằng id (`BD.p('b1', T)`, `BD.u`, `BD.t`).
+- Không có đạo cụ nào vẽ sau `if (x > 0)` mà bỏ qua `x`; không có bộ ba zoom `[≥ 1.7, x, y]`.
 
 **Lời và neo**
 - Các `lines` của các cảnh nối lại đúng bằng `lines.json`, theo thứ tự.
@@ -288,10 +297,10 @@ else {
 BD.signals(g, T);                     // thẻ thuật ngữ, nhãn, biển, con dấu, biểu đồ của shot này; tự đăng ký TEXTS
 ```
 
-- **Nơi chốn**: một nơi vẽ một lần trong `src/sets.js`. Các shot của nó là các khung khác nhau của cùng nơi đó: `g.translate/scale` vào vùng của vật, hoặc một hàm vẽ cận riêng cho vật.
-- **Shot cận vẽ trọn chủ thể của nó**: cả khuôn mặt, cả bàn tay với vật đang cầm, đặt giữa khung. Phóng to shot rộng thì sẽ được một thân người mất đầu hoặc một nửa khuôn mặt ở mép hình.
+- **Nơi chốn**: một nơi vẽ một lần trong `src/sets.js`, có một vật sống chạy theo `T`. Shot rộng và vừa của nơi đó dùng chung hàm nền, máy phóng tối đa 1,6×.
+- **Shot cận là một hàm vẽ riêng**: vẽ lại chủ thể ở cỡ của nó (mặt người dẫn bằng `reactClose` hoặc `figure` với `s: 3`; người trong truyện bằng `extra` với `s` khoảng 2,2; bàn tay với vật vẽ to giữa khung), cả khuôn mặt hoặc cả bàn tay với vật, trọn trong khung (`MOTION.md` §4).
 - **Hình khớp với board**: người dẫn chỉ được vẽ trong shot có `host` khác `none`. `figure`, `hostPip` và `reactClose` tự ghi vào `window.SEEN`, và `scenecheck` so từng khung với board.
-- **Nhịp**: chuyển động neo vào thời điểm của chính nó. `BD.u('b_vit', T, .5)` chạy 0 → 1 trong 0,5 s kể từ từ "tua".
+- **Nhịp**: một chuyển động neo vào thời điểm của chính nó. `BD.p('b_vit', T)` chạy 0 → 1 trong `d` giây của nhịp, kể từ từ "tua" (`'back'` cho vật đáp xuống có vượt đà). Mọi thứ đổi trên hình là hàm của tiến độ đó, với các hàm trong `rig/keys.js`; sổ tay từng kiểu `move` ở `MOTION.md` §3.
 - **check_board** kiểm rằng `film.js` gọi tên mọi cảnh, ≥ 85 % shot và ≥ 70 % nhịp có người diễn.
 
 ---
@@ -300,10 +309,11 @@ BD.signals(g, T);                     // thẻ thuật ngữ, nhãn, biển, con
 
 | File | Có gì |
 |---|---|
-| `rig/character.js` | `figure` (Kẻ Nghĩ Nhiều: `E`, `armL`/`armR`, `legs`, `talk`, `blink`, `battery`, `s`, `crop`), `expr`/`EXPR`, `PAL` |
+| `rig/character.js` | `figure` (Kẻ Nghĩ Nhiều: `E`, `armL`/`armR` = `{at}` hoặc `{swing, prop}`, `legs` (`walk` với `ph`), `talk`, `blink`, `battery`, `s`, `crop`; trả về `handL`/`handR`), `expr`/`EXPR`, `PAL` |
+| `rig/keys.js` | chuyển động theo thời gian: `span`, `keys`, `poseKeys`, `faceKeys`, `enter`, `travel`, `walkTo`, `count`, `drawOn`, `shake`, `landing`, `whip` |
 | `rig/host.js` | `hostPip(g, T, sh, {corner, r, E, talk})` (vòng tròn ở góc, bật vào lúc cắt), `reactClose(g, T, {E, talk, at})` (cận mặt toàn khung) |
-| `rig/extras.js` | `extra(g, {x, y, s, look, E, gaze, turn, armL, armR, at, talk, blink, sit, t})`: người của câu chuyện, có mặt và hai tay (`down point hold wave hip up chin cross reach open`); trả về vị trí tay để gắn đạo cụ. `LOOKS`: shopper, researcher, participant, seller, elder, student, office, doctor. `crowd(g, {n, cols, box, hot, dim})` |
-| `rig/board.js` | `loadBoard`, `BD.t/u/scene/shot/camera/signals/events` (mục 4); vẽ `term` (thẻ), `stamp` (dấu), `name/place/time/number/doc` (nhãn), biểu đồ |
+| `rig/extras.js` | `extra(g, {x, y, s, look, E, gaze, turn, armL, armR, at, talk, blink, sit, walk, t})`: người của câu chuyện, có mặt và hai tay (`down point hold wave hip up chin cross reach open`, vòng lặp `knit type write stir clap`, chuyển giữa hai tư thế `{from, to, k}`, hoặc một điểm `[x, y]`), đi bộ bằng `walk: ph`; trả về vị trí tay để gắn đạo cụ. `LOOKS`: shopper, researcher, participant, seller, elder, student, office, doctor. `crowd(g, {n, cols, box, hot, dim})` |
+| `rig/board.js` | `loadBoard`, `BD.t/u/p/scene/shot/camera/signals/events` (mục 4); vẽ `term` (thẻ), `stamp` (dấu), `name/place/time/number/doc` (nhãn), biểu đồ |
 | `rig/hands.js` | `GEST`: tư thế tay của Kẻ Nghĩ Nhiều |
 | `rig/motion.js` | `spring`, `anticipate`, `squash`, `wiggle`, `particlePuff`, `irisTransition`, `occlusionWipe` |
 | `rig/broll.js` | `text` (đăng ký vào `TEXTS`), `revealText`, `stamp`, `bubble`, `focusLines`, `subtitle`, `tag`, `irisWipe`, `ambientMotes` |
@@ -324,7 +334,7 @@ Mỗi tập viết `src/sets.js` cho các nơi chốn của nó và các đạo 
 | 8–10 phút | 80–110 | 12–16 | 70–110 |
 | 15–20 phút | 150–200 | 20–30 | 130–200 |
 
-Thời lượng đến từ lượng kiến thức. Không có thời lượng thì mặc định 3–5 phút. Tập dài sinh `src/timeline.js` bằng `mk_timeline.py` (`CHANNEL.md` §4b).
+Thời lượng đến từ lượng kiến thức. Không có thời lượng thì mặc định 3–5 phút. `build.sh` sinh `src/timeline.js` từ `voice/lines.json` bằng `$CHANNEL/mk_timeline.py`; khoảng lặng trước một câu là trường `gap` của câu (`CHANNEL.md` §3 bước 4).
 
 ---
 

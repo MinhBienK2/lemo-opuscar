@@ -182,18 +182,18 @@ A film is a folder that can build a film; what sits above it decides what it is.
 | Shape | Where | Reference |
 |---|---|---|
 | a **one-shot** — a film that belongs to no channel | `films/<name>/` | `films/host-toon-test`, the vector-toon explainer |
-| an **episode** — a film of a channel | `channels/<channel>/<episode>/` | `channels/tram-nghi-nhieu/tap-01` (three episodes today) |
+| an **episode** — a film of a channel | `channels/<channel>/<episode>/` | `channels/tram-nghi-nhieu/series/<column>/<episode>/` (the channel restarts with no episodes yet) |
 
 The library has two channels, and each has its own map — the channel's process, where its voice model lives and
 which file holds which part of the pipeline. Read the map before you build the next episode of that channel:
 
-- `channels/tram-nghi-nhieu/CHANNEL.md` — the reference channel: a psychology explainer in a vector toon, in Vietnamese, with three episodes (`tap-01`, `tap-02`, `tap-03`).
+- `channels/tram-nghi-nhieu/CHANNEL.md` — the reference channel: everyday "why" questions from any field, in a vector toon, in Vietnamese; it restarted from scratch, and its episodes go in `series/<column>/`.
 - `channels/nhan-vat/CHANNEL.md` — the second one: a channel about characters, whose cast lives in 2D and in 3D (`channels/nhan-vat/cast/`).
 
 **Start an episode with the scaffold, never with a copy of the previous one:**
 
 ```sh
-sh core/render/new_episode.sh tram-nghi-nhieu tap-04 "Tại sao ta lại hoãn?"
+sh core/render/new_episode.sh tram-nghi-nhieu series/the-gioi/tap-01-mua-ket-xe "Vì sao trời mưa thì kẹt xe hơn?"
 ```
 
 It writes the episode's own folder — `TREATMENT.md`, `CREDITS`, `research/FACTS.md`, `film.json`, `index.html`,

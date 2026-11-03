@@ -250,7 +250,7 @@ LIB=${LIB:-$(cd "$HERE" && while [ ! -f core/render/review.sh ] && [ "$PWD" != /
 # the channel: the folder above the episode, the one that holds CHANNEL.md
 CHANNEL=${CHANNEL:-$(cd "$HERE" && while [ ! -f CHANNEL.md ] && [ "$PWD" != / ]; do cd ..; done && pwd)}
 OUT=${OUT:-$HERE/out}; mkdir -p "$OUT"; OUT=$(cd "$OUT" && pwd); export LIB OUT CHANNEL
-[ -d /home/minhbien/hf-cache ] && export HF_HOME=${HF_HOME:-/home/minhbien/hf-cache}
+[ -d "$HOME/hf-cache" ] && export HF_HOME=${HF_HOME:-$HOME/hf-cache}
 EOF
   printf 'NAME=%s\n' "$NAME"
   cat <<'EOF'
@@ -265,10 +265,12 @@ if [ ! -f "$HERE/src/film.js" ]; then
   exit 1
 fi
 cd "$LIB"
-# the timeline: an episode that generates it from the script has mk_timeline.py, one that writes it
-# by hand has none — the stage is the same either way
+# the timeline: generated from the script by the episode's own mk_timeline.py, or else by the channel's
+# (FILM=this folder), which only writes a timeline.js it wrote itself: one written by hand is left alone
 if [ -f "$HERE/mk_timeline.py" ]; then
   "$LIB/.venv/bin/python" "$HERE/mk_timeline.py"
+elif [ -f "$CHANNEL/mk_timeline.py" ] && { [ ! -f "$HERE/src/timeline.js" ] || head -1 "$HERE/src/timeline.js" | grep -q "mk_timeline.py của kênh"; }; then
+  FILM="$HERE" "$LIB/.venv/bin/python" "$CHANNEL/mk_timeline.py"
 fi
 if [ ! -f "$HERE/src/timeline.js" ]; then
   echo "this episode has no shots yet: $HERE/src/timeline.js is missing (the cues are timed from it)." >&2

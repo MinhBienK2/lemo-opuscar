@@ -20,11 +20,19 @@ it (rig/board.js). The check refuses a vague board — and a busy one: words and
              at least one real silence (a scene's "silence") before the turn
   script     no line reads out who is speaking ("Rối nói: …") — a character speaks with their own voice
   cast       the channel can ask for more (board_rules.json next to CHANNEL.md: {"require_who": {"host": 2},
-             "require_flags": ["aha"], "forbid_cast": ["roi"], "one_voice": true})
+             "require_flags": ["aha"], "forbid_cast": ["roi"], "one_voice": true, "require_move": true})
+  moves      with "require_move": every acting beat is a move — "move" (one of MOVES), "d" (0.2–8 s) and "xy" (where it
+             happens); each scene uses ≥ 2 kinds; ≤ 40 % of the beats only act in place (gesture, act); film.js times
+             ≥ 70 % of the beats by id (BD.u / BD.p / BD.t), draws no prop behind a bare "if (x > 0)" that ignores x,
+             and never zooms a wide frame past 1.6× (a close shot draws its subject at its own size)
   code       src/film.js loads the board, draws its signals, plays its events, and names its scenes and its shots
 Exit 0 when everything passes, 1 when something fails, 2 when there is no board to check.
 """
 import json, os, re, sys, unicodedata
+
+# the moves of a beat: what changes on screen, over time (rig/keys.js has a helper for each)
+MOVES = {'enter', 'exit', 'walk', 'carry', 'travel', 'grow', 'count', 'draw', 'break', 'transform', 'swap', 'open', 'fall', 'fill', 'work', 'gesture', 'act'}
+IN_PLACE = {'gesture', 'act'}
 
 args = sys.argv[1:]
 if not args or args[0].startswith('-'): print(__doc__); sys.exit(2)
@@ -178,7 +186,7 @@ def shot_at(t):
     return {}
 
 # —— beats ——
-who_count, flags, beat_ids_acting, all_sfx, words_on, terms = {}, set(), [], [], [], 0
+who_count, flags, beat_ids_acting, all_sfx, words_on, terms, moves = {}, set(), [], [], [], 0, []
 for s in scenes:
     sid, cast = s.get('id', '?'), set(s.get('cast') or [])
     sl = s.get('lines') or []
@@ -198,6 +206,12 @@ for s in scenes:
         do = str(b.get('do') or '')
         if len(do.split()) < 3: BAD(f'{where}: "do" must say who does what to what (≥ 3 words), got "{do}"')
         if who != 'none': beat_ids_acting.append(bid)
+        if rules.get('require_move') and who != 'none':
+            mv, d, xy = b.get('move'), b.get('d'), b.get('xy')
+            if mv not in MOVES: BAD(f'{where}: "move" must be one of {sorted(MOVES)} — what changes on screen, over time (got {mv!r})')
+            else: moves.append((sid, mv))
+            if not isinstance(d, (int, float)) or not .2 <= d <= 8: BAD(f'{where}: "d" is how long the move takes, 0.2–8 s (got {d!r})')
+            if not (isinstance(xy, list) and len(xy) == 2 and 0 <= xy[0] <= 1920 and 0 <= xy[1] <= 1080): BAD(f'{where}: "xy" is where on screen the move happens, [x, y] in 1920×1080 (got {xy!r})')
         loud_graphic = bool(b.get('chart'))
         spoken = [norm(x) for x in text_of.get(lid, '').split()]
         for L0 in ([b['label']] if isinstance(b.get('label'), dict) else b.get('label') or []):
@@ -258,6 +272,12 @@ wins = [any(a <= x < a + 3 for x in fts) for a in range(0, int(total) - 2, 3)]
 if wins and wins.count(False) / len(wins) < .25: BAD(f'only {wins.count(False) / len(wins):.0%} of the 3 s windows are free of sound effects (≥ 25 %): let the voice and the room carry')
 if not any(s.get('silence') for s in scenes): BAD('no scene has a "silence" — the turn needs a real pause before it')
 
+if rules.get('require_move') and moves:
+    for sid in dict.fromkeys(x for x, _ in moves):
+        kinds = {m for x, m in moves if x == sid}
+        if len(kinds) < 2: BAD(f'scene {sid}: every beat is "{next(iter(kinds))}" — a scene needs ≥ 2 kinds of move (something enters, travels, grows, breaks…)')
+    inplace = sum(1 for _, m in moves if m in IN_PLACE) / len(moves)
+    if inplace > .4: BAD(f'{inplace:.0%} of the beats only act in place (gesture, act; ≤ 40 %): things must travel, grow, break and change on screen')
 for who, n in (rules.get('require_who') or {}).items():
     if who_count.get(who, 0) < n: BAD(f'the channel asks for ≥ {n} beats where "{who}" acts; the board has {who_count.get(who, 0)}')
 for f in rules.get('require_flags') or []:
@@ -281,9 +301,20 @@ if os.path.isfile(fp):
     shot_ids = [x['id'] for s in scenes for x in s.get('shots') or [] if x.get('id') and x['id'] != s.get('id')]
     unnamed = [i for i in shot_ids if not re.search(r'[\'"`]' + re.escape(i) + r'[\'"`]|\b' + re.escape(i) + r'\s*:', code)]
     if shot_ids and len(unnamed) > .15 * len(shot_ids): BAD(f'src/film.js never draws the shots {unnamed[:8]} — each shot is its own frame (BD.shot(T))')
-    used = [b for b in beat_ids_acting if re.search(r'[\'"`]' + re.escape(b) + r'[\'"`]', code)]
-    if beat_ids_acting and len(used) / len(beat_ids_acting) < .7:
-        BAD(f'src/film.js animates {len(used)} of {len(beat_ids_acting)} acting beats by their id (≥ 70 %) — missing e.g. {[b for b in beat_ids_acting if b not in used][:8]}')
+    if rules.get('require_move'):
+        # each beat timed by its own id: BD.u('b1', T), BD.p('b1', T), BD.t('b1') — not a table of states switched on
+        used = [b for b in beat_ids_acting if re.search(r'\.(u|p|t|on)\(\s*[\'"`]' + re.escape(b) + r'[\'"`]', code)]
+        if beat_ids_acting and len(used) / len(beat_ids_acting) < .7:
+            BAD(f'src/film.js times {len(used)} of {len(beat_ids_acting)} acting beats by their id with BD.u / BD.p / BD.t (≥ 70 %) — missing e.g. {[b for b in beat_ids_acting if b not in used][:8]}')
+        src = code + ''.join(open(os.path.join(FILM, 'src', f), encoding='utf-8').read() for f in os.listdir(os.path.join(FILM, 'src')) if f.endswith('.js') and f != 'film.js')
+        pops = [m.group(0) for m in re.finditer(r'if\s*\(\s*([\w.]+)\s*>\s*0(?:\.5|\.\d+)?\s*\)\s*([\w.]+)\(([^;]*?)\)\s*;', src) if m.group(1) not in m.group(3)]
+        if pops: BAD(f'{len(pops)} prop(s) pop in: drawn behind "if (x > 0)" without using x, e.g. {pops[0][:90]!r} — pass the progress in and move the thing in (keys.js enter / travel / grow)')
+        zooms = [m.group(0) for m in re.finditer(r'\[\s*(1\.[7-9]\d*|[2-9](?:\.\d+)?)\s*,\s*\d{3,4}\s*,\s*\d{3,4}\s*\]', src)]
+        if zooms: BAD(f'{len(zooms)} camera zoom(s) past 1.6× on a wide frame, e.g. {zooms[0]} — a close shot draws its subject whole at its own size (a face with figure s≈3, a hand with its prop), not a crop of the wide')
+    else:
+        used = [b for b in beat_ids_acting if re.search(r'[\'"`]' + re.escape(b) + r'[\'"`]', code)]
+        if beat_ids_acting and len(used) / len(beat_ids_acting) < .7:
+            BAD(f'src/film.js animates {len(used)} of {len(beat_ids_acting)} acting beats by their id (≥ 70 %) — missing e.g. {[b for b in beat_ids_acting if b not in used][:8]}')
 else:
     print('note: no src/film.js yet — the code checks run once it exists')
 

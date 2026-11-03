@@ -3,7 +3,10 @@
 //   import { loadBoard } from '../../../../rig/board.js';
 //   const BD = await loadBoard('board.json', TL.L, words);   // TL.L: {lineId: {t0, t1}}, words: voice/words.json
 //   BD.t('b12')            the absolute time of beat b12 (its anchor word, plus its offset)
-//   BD.u('b12', T, .5)     0 → 1 over .5 s from that time (eased out), for the beat's motion
+//   BD.u('b12', T)         0 → 1 over the beat's "d" seconds from that time (eased out), for the beat's motion
+//   BD.p('b12', T, 'back') the same with another ease (inOut default; back for a thing that lands with an overshoot)
+//                          A beat is a move: "move" says which (enter, walk, carry…), "d" how long, "xy" where on screen;
+//                          rig/keys.js has the moves, tools/check_motion.py checks that the frame changes there
 //   BD.scene(T)            the scene on screen at T: {id, t0, t1, place, light, ...}
 //   BD.shot(T)             the shot on screen at T: {id, t0, t1, size: wide|medium|close|insert, host, cam, subject, scene}
 //                          host: desk | scene | pip | react | none (rig/host.js draws pip and react)
@@ -82,6 +85,8 @@ export function bindBoard(board, L, words) {
       if (s.music) ev.push({ t: s.t0, type: 'music', cue: s.music, shot: sh0 });
       if (s.silence) { const ts = resolveAnchor(s.silence.at, L, words); const d = s.silence.d ?? 1; ev.push({ t: ts, t1: ts + d, type: 'silence', d, shot: shot(ts).id }); }
       for (const x of s.shots) ev.push({ t: +x.t0.toFixed(3), type: 'shot', shot: x.id, size: x.size, host: x.host, cam: x.cam });
+      // a silent mark for every acting beat: where and how long it moves (tools/check_motion.py reads it)
+      for (const b of s.beats) if (b.who && b.who !== 'none') ev.push({ t: +T[b.id].toFixed(3), type: 'mark', kind: 'beat', beat: b.id, move: b.move, d: b.d, xy: b.xy, shot: shot(T[b.id]).id });
       for (const b of s.beats) for (const x of [].concat(b.sfx || [])) {
         const tt = T[b.id] + (x.off || 0);
         ev.push({ t: +tt.toFixed(3), type: x.type, v: x.v, d: x.d, shot: shot(tt).id, beat: b.id, cause: x.cause });
@@ -226,6 +231,7 @@ export function bindBoard(board, L, words) {
 
   return {
     board, scenes, beats, byId, palette: pal, color: col,
-    shots, t, u: (id, Tm, d = .4) => ease.out((Tm - t(id)) / d), on: (id, Tm) => Tm >= t(id), scene, shot, camera, events, signals,
+    shots, t, u: (id, Tm, d) => ease.out((Tm - t(id)) / (d ?? byId[id]?.d ?? .4)),
+    p: (id, Tm, e = 'inOut', d) => (ease[e] || ease.inOut)(clamp01((Tm - t(id)) / (d ?? byId[id]?.d ?? .6))), on: (id, Tm) => Tm >= t(id), scene, shot, camera, events, signals,
   };
 }

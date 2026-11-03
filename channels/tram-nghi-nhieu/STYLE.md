@@ -1,13 +1,13 @@
-# Trạm Nghĩ Nhiều · Style — kênh tâm lý học bằng hoạt hình 2D tối giản
+# Trạm Nghĩ Nhiều · Style — kênh "tại sao" bằng hoạt hình 2D tối giản
 
-Một style riêng cho kênh: một nhân vật chủ, một đồng học, nét cel dày, chữ rõ. Mọi tập dùng chung nhân vật, nét, chữ, giọng và nhạc; **nền, ánh sáng và nơi chốn thì mỗi tập tự dựng theo câu chuyện của nó** (cách làm: `.agents/skills/tram-nghi-nhieu/SKILL.md`).
+Một style riêng cho kênh: một người dẫn, nét cel dày, chữ rõ. Mọi tập dùng chung nhân vật, nét, chữ, giọng và nhạc; **nền, ánh sáng và nơi chốn thì mỗi tập tự dựng theo câu chuyện của nó** (cách làm: `.agents/skills/tram-nghi-nhieu/SKILL.md`).
 
 ## 1. Bản chất
 
-Một người dẫn chuyện giải thích tâm lý học bằng cách **chỉ ra cái giá của một trạng thái thường ngày**, rồi **bác bỏ một cách giải thích quen thuộc** bằng một cảnh cho thấy điều thật sự xảy ra (dữ kiện nằm trong `FACTS.md`, được diễn ra chứ không đọc lên), rồi **đưa ra một hành động cụ thể**.
-Kênh nói về hành vi con người, không phải về kỹ thuật: mỗi tập bắt đầu từ một câu hỏi đời thường ("tại sao càng rảnh ta càng mệt?") và kết thúc bằng một việc người xem làm được ngay.
+Một người dẫn chuyện trả lời một câu hỏi "tại sao" của đời thường bằng cách **đưa người xem tới nơi chuyện đó xảy ra**, rồi **cho thấy cơ chế thật** bằng người và vật đổi trạng thái ngay trong cảnh (dữ kiện nằm trong `FACTS.md`, được diễn ra chứ không đọc lên). Nếu có một cách hiểu phổ biến bị sai, cảnh cho thấy nó sai ở đâu.
+Kênh không giới hạn một ngành: cơ thể, đầu óc, tiền, đồ vật, thế giới quanh ta, ngày xưa (`STRATEGY.md`). Mỗi tập bắt đầu từ một trải nghiệm ai cũng có ("vì sao trời mưa thì kẹt xe hơn?") và kết thúc bằng điều người xem mang về.
 
-**Không phải**: podcast có hình, slideshow, video tâm lý học giọng AI, meme 3 giây, hay bất cứ thứ gì kể một bí mật "bạn không biết".
+**Không phải**: podcast có hình, slideshow, video giải thích giọng AI đọc trên ảnh tĩnh, meme 3 giây, hay bất cứ thứ gì kể một bí mật "bạn không biết".
 
 ## 2. Nhân vật
 
@@ -37,14 +37,14 @@ Bảng màu thực tế trong code (`rig/character.js:PAL`): da kem `#fff0d8`, �
 
 Để tránh sự đơn điệu và xóa bỏ cảm giác "vẽ phẳng bằng code thô", mỗi phân cảnh (Scene Block) trong kịch bản được quyền áp dụng một phong cách hình ảnh chuyên biệt mượn từ các style tinh hoa trong thư viện repo (`rig/styles.js`):
 
-1. **`dossier` (Hồ sơ điều tra tâm lý — từ `halftone-dossier`)**:
+1. **`dossier` (Hồ sơ điều tra — từ `halftone-dossier`)**:
    - Dành cho các phân cảnh mổ xẻ nghiên cứu, bóc trần ngụy biện, kiểm chứng sự thật.
    - Hiệu ứng: Hạt trame bán sắc Ben-Day (`drawHalftoneField`), tiêu đề hồ sơ lưu trữ (`drawDossierHeader`), con dấu đập nảy mạnh vỡ mực (`drawStampSlam`), thẻ tang vật ghim chỉ đỏ (`drawEvidenceTag`).
 2. **`midcentury` (Hoạt hình 50s nảy vui — từ `midcentury-toon`)**:
    - Dành cho các phân cảnh kể tình huống đời thường, cảm xúc nhân vật và sự hài hước.
    - Hiệu ứng: Tia sáng sunburst tỏa góc (`drawSunburst`), ngôi sao lấp lánh nguyên tử (`drawSparkle`), chuyển động lò xo nảy giật nhịp (`spring`, `squash`).
 3. **`swiss` (Đồ họa dữ liệu chính xác — từ `swiss-motion`)**:
-   - Dành cho các phân cảnh cơ chế khoa học não bộ, các mốc phần trăm và định luật tâm lý.
+   - Dành cho các phân cảnh cơ chế, các mốc phần trăm và các định luật.
    - Hiệu ứng: Lưới đồ họa Thụy Sĩ tương phản cao, con số kích thước khổng lồ kèm thước đo vi lượng (`drawSwissMetric`).
 4. **`tactile paper & grain` (Xúc giác giấy & phim nhựa)**:
    - Mọi cảnh đều được phủ lớp giấy có nếp gấp và bụi phim (`applyPaperTexture`, `renderGrainFx`), khử hoàn toàn bề mặt trơn nhẵn vô hồn.

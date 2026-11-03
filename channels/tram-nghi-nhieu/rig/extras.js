@@ -11,6 +11,10 @@
 // E      neutral | happy | surprised | worried | thinking | annoyed | sad | sly   (or {brow, mouth, eyes} numbers −1…1)
 // gaze   [−1…1, −1…1] where the eyes look; turn −1…1 turns the head that way
 // arms   down | point | hold | wave | hip | up | chin | cross | reach | open   (point/reach go toward `at` = [x, y] on screen)
+//        loops that run with t: knit | type | write | stir | clap
+//        or a move between two poses: { from: 'down', to: 'reach', k: BD.u('b_lay', T, .5) } — the hand travels, it never jumps
+//        or a point on screen: [x, y] (the hand goes there; animate the point to carry a thing along a path)
+// walk   the phase of a walk cycle (e.g. lt * 1.2): legs swing and the body bobs; animate x with it so the feet don't slide
 // talk   0…1 mouth opening (from the voice) · blink 0…1 · t the time (breathing, a small sway)
 // Returns { head: [x, y], handL: [x, y], handR: [x, y], top: y } in screen space.
 import { W, H, TAU } from './cel.js';
@@ -64,16 +68,19 @@ export function extra(g, o = {}) {
   g.save(); g.translate(o.x ?? W / 2, o.y ?? H - 200); g.scale(s, s);
   const toLocal = ([X, Y]) => { const inv = g.getTransform().inverse(); return [inv.a * X + inv.c * Y + inv.e, inv.b * X + inv.d * Y + inv.f]; };
   const toScreen = ([x, y]) => { const k = g.getTransform(); return [k.a * x + k.c * y + k.e, k.b * x + k.d * y + k.f]; };
-  const hipY = sit ? 0 : -230, shY = hipY - 170 + breath * .3, neckY = shY - 18, headY = neckY - 78, bx = sway;
+  const walk = o.walk != null && !sit, wph = walk ? o.walk * TAU : 0, bob = walk ? -Math.abs(Math.sin(wph)) * 10 : 0;
+  const hipY = (sit ? 0 : -230) + bob, shY = hipY - 170 + breath * .3, neckY = shY - 18, headY = neckY - 78, bx = sway;
   // legs
   g.lineCap = 'round';
   if (sit) {
     for (const k of [-1, 1]) { g.beginPath(); g.moveTo(bx + k * 34, hipY); g.lineTo(bx + k * 40 + 120, hipY + 6); g.lineTo(bx + k * 40 + 125, hipY + 150);
       g.strokeStyle = INK; g.lineWidth = 50; g.stroke(); g.strokeStyle = lk.bottom; g.lineWidth = 43; g.stroke(); }
   } else {
-    for (const k of [-1, 1]) { g.beginPath(); g.moveTo(bx + k * 34, hipY); g.lineTo(k * 40, -18);
+    for (const k of [-1, 1]) {
+      const fx = k * 40 + (walk ? k * Math.sin(wph) * 46 : 0), fy = -18 - (walk ? Math.max(0, k * Math.cos(wph)) * 22 : 0);
+      g.beginPath(); g.moveTo(bx + k * 34, hipY); g.lineTo(fx, fy);
       g.strokeStyle = INK; g.lineWidth = 50; g.stroke(); g.strokeStyle = lk.bottom; g.lineWidth = 43; g.stroke();
-      ell(g, k * 46, -12, 36, 16); fillStroke(g, '#2A2A30'); }
+      ell(g, fx + k * 6, fy + 6, 36, 16); fillStroke(g, '#2A2A30'); }
   }
   // body
   const coat = lk.acc === 'coat';
@@ -125,10 +132,22 @@ export function extra(g, o = {}) {
       case 'chin': return [hx + k * 16, hy + 60];
       case 'cross': return [bx - k * 30, sy + 80];
       case 'open': return [sx + k * 140, sy + 60];
+      // loops: two hands working in front of the body, out of phase
+      case 'knit': return [bx - k * 18 + Math.sin(t * 7 + (k > 0 ? 0 : Math.PI)) * 10, sy + 104 + Math.cos(t * 7 + (k > 0 ? 0 : Math.PI)) * 9];
+      case 'type': return [bx + k * 48, sy + 128 - Math.max(0, Math.sin(t * 11 + (k > 0 ? 0 : 1.9))) * 14];
+      case 'write': return k > 0 ? [bx + 40 + Math.sin(t * 6) * 22, sy + 132 + Math.sin(t * 12) * 5] : [bx - 40, sy + 136];
+      case 'stir': return [bx + k * 30 + Math.cos(t * 5) * 22 * k, sy + 120 + Math.sin(t * 5) * 10];
+      case 'clap': return [bx + k * (8 + Math.abs(Math.sin(t * 6)) * 46), sy + 70];
       default: return [sx + k * 12, sy + 210];
     }
   };
-  const tL = pose(o.armL || 'down', 'L'), tR = pose(o.armR || 'down', 'R');
+  const arm0 = (a, side) => {
+    if (Array.isArray(a)) return toLocal(a);
+    if (a && typeof a === 'object') { const A = pose(a.from || 'down', side), B = pose(a.to || 'down', side), k = Math.max(0, Math.min(1, a.k ?? 1));
+      return [lerp(A[0], B[0], k), lerp(A[1], B[1], k)]; }
+    return pose(a || 'down', side);
+  };
+  const tL = arm0(o.armL, 'L'), tR = arm0(o.armR, 'R');
   const sleeve = coat ? '#FFFFFF' : lk.top;
   const hL = arm(g, ...sL, ...tL, len, sleeve, lk.skin, -1, 30), hR = arm(g, ...sR, ...tR, len, sleeve, lk.skin, 1, 30);
   const out = { head: toScreen([hx, hy]), handL: toScreen(hL), handR: toScreen(hR), top: toScreen([hx, hy - 75])[1] };

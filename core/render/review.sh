@@ -11,6 +11,7 @@
 #   6. stills    — review frames every 2 s, from 0 to the film's length (core/render/still.mjs)
 #   7. sheet     — the frames on one contact sheet (core/render/sheet.py)
 #   8. the film  — measured loudness and black frames, when a finished .mp4 is in the folder
+#      motion   — a film with a board: the picture moves, and every beat changes its part of the frame (tools/check_motion.py)
 # Every step runs even when an earlier one fails; the line at the end says PASS or FAIL.
 # The library root comes from this script's own path, so it works from any folder.
 set -e
@@ -162,6 +163,10 @@ if [ -n "$MP4" ]; then
     fi
   else
     echo "    FAILED: ffmpeg could not read $MP4"; FAIL=$((FAIL + 1))
+  fi
+  # a film directed from a board must move: actions over time, not props switched on (calibrated on host-toon-test)
+  if [ -f "$FOLDER/board.json" ] || [ -f "$BCH/board_rules.json" ]; then
+    run motion "$PY" "$HERE/tools/check_motion.py" "$FOLDER" --mp4 "$MP4"
   fi
   echo "--- black frames: $MP4"
   if ffmpeg -hide_banner -nostats -i "$MP4" -vf blackdetect=d=0.5 -f null - 2>"$TMP/black.txt"; then

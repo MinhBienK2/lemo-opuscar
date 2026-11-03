@@ -195,15 +195,24 @@ export function figure(g, o = {}) {
 
   // 3. Arms
   // Check if custom arm positions are passed
-  const hasArmL = o.armL && o.armL.at;
-  const hasArmR = o.armR && o.armR.at;
+  // armL/armR: { at: [x, y] } toward a point (the arm turns half the angle), or { swing: rad } turned by exactly that much
+  // (swing > 0 turns the arm clockwise; animate it with keys() from keys.js: the arm travels, it never jumps);
+  // { prop: g => … } draws a thing in that hand,
+  // with the palm at (0, 0). figure() returns the hands in screen space, for a thing that leaves the hand.
+  const hasArmL = o.armL && (o.armL.at || o.armL.swing != null);
+  const hasArmR = o.armR && (o.armR.at || o.armR.swing != null);
+  const HANDS = {};
+  const inHand = (side, arm, x, y) => {
+    const m = g.getTransform(); HANDS[side] = [m.a * x + m.c * y + m.e, m.b * x + m.d * y + m.f];
+    if (arm && arm.prop) { g.save(); g.translate(x, y); arm.prop(g); g.restore(); }
+  };
 
   // Left arm
   g.save();
   if (hasArmL) {
     const at = o.armL.at;
-    const ang = Math.atan2(at[1] - 250, at[0] - 315) - Math.PI / 2;
-    g.translate(315, 235); g.rotate(ang * 0.5); g.translate(-315, -235);
+    const ang = o.armL.swing ?? (Math.atan2(at[1] - 250, at[0] - 315) - Math.PI / 2) * 0.5;
+    g.translate(315, 235); g.rotate(ang); g.translate(-315, -235);
   } else if (o.pose === 'explain' || (o.armL && o.armL.gest === 'open')) {
     g.translate(315, 235); g.rotate(-0.38); g.translate(-315, -235);
   } else if (o.pose === 'point' || (o.armL && o.armL.gest === 'point')) {
@@ -213,14 +222,15 @@ export function figure(g, o = {}) {
   g.fill(PATHS.armL); g.stroke(PATHS.armL);
   g.lineWidth = 7; g.fillStyle = PAL.cream;
   g.fill(PATHS.handL); g.stroke(PATHS.handL);
+  inHand('L', o.armL, 272, 347);
   g.restore();
 
   // Right arm
   g.save();
   if (hasArmR) {
     const at = o.armR.at;
-    const ang = Math.atan2(at[1] - 250, at[0] - 460) - Math.PI / 2;
-    g.translate(458, 236); g.rotate(ang * 0.5); g.translate(-458, -236);
+    const ang = o.armR.swing ?? (Math.atan2(at[1] - 250, at[0] - 460) - Math.PI / 2) * 0.5;
+    g.translate(458, 236); g.rotate(ang); g.translate(-458, -236);
   } else if (o.pose === 'explain') {
     g.translate(458, 236); g.rotate(0.42); g.translate(-458, -236);
   } else if (o.pose === 'point' || (o.armR && o.armR.gest === 'point')) {
@@ -230,6 +240,7 @@ export function figure(g, o = {}) {
   g.fill(PATHS.armR); g.stroke(PATHS.armR);
   g.lineWidth = 7; g.fillStyle = PAL.cream;
   g.fill(PATHS.handR); g.stroke(PATHS.handR);
+  inHand('R', o.armR, 503, 350);
   g.restore();
 
   // 4. Hoodie details: drawstrings & battery
@@ -404,7 +415,7 @@ export function figure(g, o = {}) {
 
   g.restore(); // Head transform
   g.restore(); // Main transform
-  return { fx: 0, fy: -100, hy: -100 };
+  return { fx: 0, fy: -100, hy: -100, handL: HANDS.L, handR: HANDS.R };
 }
 
 // Sidekick Rối: authentic purple scribble monster
