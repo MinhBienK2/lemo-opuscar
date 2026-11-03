@@ -12,7 +12,7 @@ finished .mp4 (the newest one in the film folder or out/), frame against frame, 
              without one) differs between just before the beat and the end of its move ("d", default 0.6 s)         ≥ 75 %
 
 The beats come from events.json: the marks {type: 'mark', kind: 'beat', beat, t, d, xy} that rig/board.js writes, or,
-in an older film, the sound events that carry a "beat". host-toon-test measures 62 %, 58 %, 9 s; a film built as a state
+in an older film, the sound events that carry a "beat". A film that reads as cinema measures about 60 %, 55 %, 9 s; a film built as a state
 table (props switched on, poses swapped) measures about 30 %, 18 %, 16 s.
 Exit 0 when everything passes, 1 when something fails, 2 when there is no film to measure.
 """

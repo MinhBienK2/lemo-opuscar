@@ -6,14 +6,14 @@ version: 8.0.0
 
 # Đạo diễn một tập Trạm Nghĩ Nhiều
 
-Người xem **vừa nghe vừa nhìn mà hiểu ngay đang nói tới cái gì**, và xem hết không mệt. Thước đo là `films/host-toon-test` (đo trong `docs/research/2026-11-03-chu-tieng-dung/REPORT.md`):
+Người xem **vừa nghe vừa nhìn mà hiểu ngay đang nói tới cái gì**, và xem hết không mệt. Muốn vậy:
 
-- 24 shot trong 132 s, gần như mỗi ý một shot;
-- người dẫn ở trong khung khoảng 1/3 thời lượng; còn lại là thế giới câu chuyện, có lúc người dẫn bình luận từ một vòng tròn ở góc hoặc một cú cận mặt;
-- chữ trên hình toàn là **tên**: người, nơi, thời điểm, con số của vật, và một tờ tài liệu đổi trạng thái;
-- 26 khoảnh khắc có tiếng mỗi phút; 1/5 thời gian chỉ có giọng và tiếng phòng.
+- mỗi ý mới là một shot mới, ở nơi ý đó xảy ra;
+- phần lớn phim là thế giới câu chuyện; người dẫn mở phim, nối các hồi và gọi tên điều vừa thấy, có lúc bình luận từ một vòng tròn ở góc hoặc một cú cận mặt;
+- chữ trên hình là **tên**: người, nơi, thời điểm, con số của vật, và một tờ tài liệu đổi trạng thái;
+- tiếng vang ở chỗ có vật làm ra nó, và có những quãng chỉ còn giọng với tiếng phòng.
 
-Phim đó được làm bằng quy trình của **`DIRECTOR.md`**, và tập nào của kênh cũng đi đúng quy trình ấy. Skill này thêm phần riêng của kênh.
+Quy trình là **`DIRECTOR.md`**, và tập nào của kênh cũng đi đúng quy trình ấy. Skill này thêm phần riêng của kênh.
 
 - **Cố định** (`channels/tram-nghi-nhieu/STYLE.md`): Kẻ Nghĩ Nhiều (người dẫn duy nhất, một giọng kể), nét, chữ, giọng, nhạc, phụ đề.
 - **Tự do**: nơi chốn, ánh sáng, người trong câu chuyện, đạo cụ, đồ họa.

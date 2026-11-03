@@ -3,7 +3,7 @@ This file lives in the channel; the film it mixes is named by $FILM (the episode
 Usage: FILM=<episode> LIB=<library> OUT=<folder> $LIB/.venv/bin/python mix.py  → $OUT/mix.wav (48 kHz stereo; mux.sh masters it to −14 LUFS)
 Score: 84 BPM in A minor, every section starting on its own downbeat at its shot (events "music"); the instruments are numpy:
 a felt electric piano (sine partials with a soft attack), a marimba, a Karplus-Strong pizzicato bass, a soft kick, a brushed snare,
-a vinyl crackle bed, a drone. The instrument code and the mix skeleton come from films/host-toon-test/mix.py (this repo).
+a vinyl crackle bed, a drone.
 """
 import os, sys, json, numpy as np, soundfile as sf
 from scipy.signal import butter, sosfilt, lfilter

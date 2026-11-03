@@ -164,7 +164,7 @@ if [ -n "$MP4" ]; then
   else
     echo "    FAILED: ffmpeg could not read $MP4"; FAIL=$((FAIL + 1))
   fi
-  # a film directed from a board must move: actions over time, not props switched on (calibrated on host-toon-test)
+  # a film directed from a board must move: actions over time, not props switched on
   if [ -f "$FOLDER/board.json" ] || [ -f "$BCH/board_rules.json" ]; then
     run motion "$PY" "$HERE/tools/check_motion.py" "$FOLDER" --mp4 "$MP4"
   fi

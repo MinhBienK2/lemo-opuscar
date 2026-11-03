@@ -15,7 +15,7 @@
 //   a channel is a folder that holds CHANNEL.md and no build.sh: it shares an identity, it does not build a film
 //   a film    is a folder that can build a film: it holds build.sh and src/
 //   TREATMENT.md is accepted as an alternative film marker for a film that has a treatment but no build yet;
-//   it is never required (films/host-toon-test/ has no TREATMENT.md, and it is a film)
+//   it is never required (a one-shot with build.sh and src/ but no TREATMENT.md is still a film)
 //
 // A folder that is a channel is never also a film: the channel's shared code is not an episode.
 //

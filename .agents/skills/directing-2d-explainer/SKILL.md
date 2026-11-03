@@ -23,7 +23,7 @@ The directing process is `DIRECTOR.md` §2–§7 — benchmark, three structures
    - Every shot MUST be staged in a believable human environment: a wooden desk with a warm lamp (`desk()`, `S.roomBack`, `S.roomFront`), a quiet night sofa (`S.sofa`), or an early morning street.
    - **STRICTLY FORBIDDEN**: Floating text boxes on abstract dark voids. That is a presentation slide, not an animated film.
 3. **One Place, Many Shots (Cut on the Idea)**:
-   - **A new idea is a new shot of 3–8 s**: a place opens on a wide shot, then cuts to medium and to a close-up of the thing being talked about. Cut straight within a place; save the whip for a jump in place or time. (The film the bar is set by, `films/host-toon-test`, has 24 shots in 132 s.)
+   - **A new idea is a new shot of 3–8 s**: a place opens on a wide shot, then cuts to medium and to a close-up of the thing being talked about. Cut straight within a place; save the whip for a jump in place or time.
    - **Motion comes from the character and the props**: pose shifts `ak()`, expressions `ek()`, blinking `blink()`, props sliding or revealing in place. The camera moves when the shot list gives it a reason: a slow push (2–4 %) into an idea, a track with someone walking.
    - **Rich Transition Toolkit**:
      - *Direct Cut*: Change angle (Wide → Close-up, Top-down desk view) on the musical beat or realization. Clean, crisp, no motion blur.

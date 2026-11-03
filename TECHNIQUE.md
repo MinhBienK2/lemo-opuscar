@@ -181,7 +181,7 @@ A film is a folder that can build a film; what sits above it decides what it is.
 
 | Shape | Where | Reference |
 |---|---|---|
-| a **one-shot** — a film that belongs to no channel | `films/<name>/` | `films/host-toon-test`, the vector-toon explainer |
+| a **one-shot** — a film that belongs to no channel | `films/<name>/` | the film holds its own drawing code |
 | an **episode** — a film of a channel | `channels/<channel>/<episode>/` | `channels/tram-nghi-nhieu/series/<column>/<episode>/` (the channel restarts with no episodes yet) |
 
 The library has two channels, and each has its own map — the channel's process, where its voice model lives and
@@ -229,9 +229,9 @@ implementation exists once, in the channel, and an episode that carries a copy h
 
 ### The one-shot, read as a map
 
-`films/host-toon-test` is a one-shot: it has no channel above it, so it holds its own drawing code. Read
-`style/STYLE.md` and `style/DEMO.md` first — the style's invariants, and what the demo did with them. Then use
-this table to find the file that holds the part of the pipeline you are about to read. The demo's story, shots and
+A one-shot has no channel above it, so it holds its own drawing code. A one-shot in a vector-toon style is usually
+laid out as below. Read `style/STYLE.md` and `style/DEMO.md` first — the style's invariants, and what the demo did
+with them. Then use this table to find the file that holds the part of the pipeline you are about to read. The demo's story, shots and
 props are not yours to reuse — copy the technique only.
 
 | File | What it holds | What to copy when you build your own film |

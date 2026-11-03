@@ -2,12 +2,12 @@
 
 Đọc hết file này trước khi viết dòng đầu tiên của `src/film.js`. Cổng `tools/check_motion.py` đo bản `.mp4`:
 
-| Đo | Ngưỡng | `host-toon-test` | Một tập dựng kiểu bảng trạng thái |
-|---|---|---|---|
-| Số giây có thứ chuyển động thấy được | ≥ 55 % | 62 % | 30 % |
-| Số khoảng 2 s có hành động lớn | ≥ 45 % | 58 % | 15 % |
-| Đoạn đứng hình dài nhất, ngoài các `silence` | ≤ 10 s | 9 s | 16 s |
-| Nhịp làm đổi vùng `xy` của nó | ≥ 75 % | — | 30/48 |
+| Đo | Ngưỡng | Một tập dựng kiểu bảng trạng thái |
+|---|---|---|
+| Số giây có thứ chuyển động thấy được | ≥ 55 % | 30 % |
+| Số khoảng 2 s có hành động lớn | ≥ 45 % | 15 % |
+| Đoạn đứng hình dài nhất, ngoài các `silence` | ≤ 10 s | 16 s |
+| Nhịp làm đổi vùng `xy` của nó | ≥ 75 % | 30/48 |
 
 ## 1. Một nhịp là một chuyển động
 

@@ -11,7 +11,7 @@
 //   sparse     sound moments (sounds closer than 0.6 s merged) ≤ 30 a minute, and ≥ 15 % of the 3 s windows with no sound
 //              effect at all: a sound on every gesture is Mickey-mousing, and it tires the ear
 //   shots      the mean shot, from the shots declared in window.EV (e.shot) or the picture changes, ≤ 10 s
-// Calibration: films/host-toon-test sits at 25 % text-led, 1.4 looks per 20 s, 26 sound moments a minute, 21 % quiet windows,
+// Calibration: a film that reads as cinema sits at about 25 % text-led, 1.4 looks per 20 s, 26 sound moments a minute, 21 % quiet windows,
 // 24 shots in 132 s; the channel's older episodes at 46–55 % and 0.5–0.9; the IKEA trial (skill v5) at 46 moments, 0 % quiet.
 // Exit code: 0 all pass; 1 some fail; 2 the check couldn't run. --report prints the numbers and always exits 0 (for comparing films).
 import fs from 'fs'; import path from 'path';
