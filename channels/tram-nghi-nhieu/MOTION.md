@@ -1,6 +1,10 @@
 # Chuyển động: dựng `src/film.js` sao cho hình sống
 
-Đọc hết file này trước khi viết dòng đầu tiên của `src/film.js`. Cổng `tools/check_motion.py` đo bản `.mp4`:
+Đọc hết file này trước khi viết dòng đầu tiên của `src/film.js`.
+
+**Chuyển động là của thế giới trong khung, không phải của máy.** Người đi, tay cầm, vật rơi, mực dâng, con số đếm. Máy đứng yên là mặc định; nó chỉ chạy để đi theo một thứ đang chạy, hoặc để lộ ra một thứ mới ở cuối cú máy. Lia qua một khung đứng yên trông như màn hình trôi, và người xem không biết phải nhìn vào đâu.
+
+Cổng `tools/check_motion.py` đo bản `.mp4` **sau khi trừ chuyển động máy** (lia, trượt, trôi), nên chỉ những gì đổi bên trong khung mới được tính:
 
 | Đo | Ngưỡng | Một tập dựng kiểu bảng trạng thái |
 |---|---|---|
@@ -8,6 +12,7 @@
 | Số khoảng 2 s có hành động lớn | ≥ 45 % | 15 % |
 | Đoạn đứng hình dài nhất, ngoài các `silence` | ≤ 10 s | 16 s |
 | Nhịp làm đổi vùng `xy` của nó | ≥ 75 % | 30/48 |
+| Số khung máy đang chạy | ≤ 30 % | (một tập lia máy mọi shot: ≈ 45 %) |
 
 ## 1. Một nhịp là một chuyển động
 
@@ -55,7 +60,7 @@ const SHOTS = {
 
 Trong `render(T)`, gọi `SHOTS[sh.id](g, T, sh)` bên trong `BD.camera` (`SKILL.md` §4).
 
-Mỗi shot có ít nhất một chuyển động chạy suốt shot, hoặc gần suốt: đi bộ, một vật lớn dần, máy theo người. Các nhịp nằm chồng lên chuyển động đó.
+Mỗi shot có ít nhất một chuyển động của người hoặc vật chạy suốt shot, hoặc gần suốt: đi bộ, một vật lớn dần, khói bốc, kim chạy, mực dâng. Các nhịp nằm chồng lên chuyển động đó. Máy chạy theo không thay cho chuyển động này.
 
 ## 3. Sổ tay 17 kiểu `move`
 
@@ -114,7 +119,8 @@ Tiếng `whoosh` đi cùng `whip`.
 
 ## 7. Khi `check_motion` FAIL
 
-- **`action` thấp**: shot nào cũng chỉ có người đứng nói. Thêm một chuyển động chạy suốt shot (mục 2).
+- **`action` thấp**: shot nào cũng chỉ có người đứng nói, hoặc chỉ có máy trượt qua hình đứng yên. Thêm một chuyển động của người hay vật chạy suốt shot (mục 2), không thêm cú lia.
+- **`camera` cao**: đổi phần lớn shot sang `hold` trong board, và để người, vật làm việc.
 - **`big` thấp**: thiếu `enter`, `walk`, `travel`, `transform`. Vật hiện ra bằng cách mờ dần hoặc bật lên thì không đủ lớn để đo.
 - **`dead` dài**: tìm khoảng giây đó trên contact sheet. Thường là một shot người dẫn ở bàn quá 8 s; cắt sang thế giới câu chuyện.
 - **Nhịp không đổi vùng `xy`**: `xy` trong board sai chỗ, hoặc hàm vẽ không dùng `BD.p(id, T)` của nhịp đó.

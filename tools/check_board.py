@@ -9,8 +9,8 @@ it (rig/board.js). The check refuses a vague board — and a busy one: words and
   anchors    every beat and every cut sits on a word its line actually says ("line@word+0.1", "line@start", "line@end")
   shots      every shot has a size, a subject, a host mode (desk, scene, pip, react, none), a camera (hold, push, pull,
              track, pan) and a why; no shot longer than 12 s, the mean ≤ 8 s; a new place opens on a wide shot; ≥ 20 % of
-             shots are close or insert (the camera goes to the thing being talked about); the host is in the frame (desk or
-             scene) 15–45 % of the time, and comments on the story at least once from a pip or a react; ≥ 3 camera moves
+             shots are close or insert (the camera goes to the thing being talked about); the host fills the frame (desk
+             or scene) ≤ 50 % of the time; the camera holds in ≥ 65 % of the film (pan, track, push, pull ≤ 35 %)
   words      every label says its kind: term (a new idea + a one-line "def"), name, place, time, number, doc, stamp; no
              label repeats words of the line being spoken (except a term or a name); no question marks; 1–4 term cards;
              ≤ 1 stamp a scene; on average ≤ 1 new word on screen every 6 s
@@ -175,11 +175,9 @@ if shots_all:
     near = sum(1 for _, _, x, _ in shots_all if x.get('size') in ('close', 'insert'))
     if near / len(shots_all) < .2: BAD(f'only {near} of {len(shots_all)} shots are close or insert (≥ 20 %): go to the thing being talked about instead of labelling it')
     host = sum(b - a for a, b, x, _ in shots_all if x.get('host') in ('desk', 'scene')) / max(1e-6, sum(durs))
-    if not .15 <= host <= .45: BAD(f'the host is in the frame (desk or scene) {host:.0%} of the time (15–45 %): the story world plays full frame, the host frames it')
-    if not any(x.get('host') in ('pip', 'react') for _, _, x, _ in shots_all):
-        BAD('the host never comments on the story: give at least one shot "host": "pip" (a ring in a corner) or "react" (a cut to their face)')
-    cams = {x.get('cam', 'hold') for _, _, x, _ in shots_all}
-    if len(cams) < 3: BAD(f'the camera only does {sorted(cams)}: use ≥ 3 of {sorted(CAMS)}, each for a reason (a push for an idea, a track with someone walking)')
+    if host > .5: BAD(f'the host fills the frame (desk or scene) {host:.0%} of the time (≤ 50 %): the picture explains, the host comes in when they add something')
+    moving = sum(b - a for a, b, x, _ in shots_all if x.get('cam', 'hold') != 'hold') / max(1e-6, sum(durs))
+    if moving > .35: BAD(f'the camera moves in {moving:.0%} of the film (≤ 35 %): hold is the default and people and props make the motion; move only to follow something that moves, or to reveal something new')
 def shot_at(t):
     for a, b, x, _ in shots_all:
         if a - 1e-6 <= t < b: return x

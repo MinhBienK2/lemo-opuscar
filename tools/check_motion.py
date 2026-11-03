@@ -3,16 +3,18 @@
 
 A film whose frames hold still while the voice talks reads as a slide deck, however good each frame is. This measures the
 finished .mp4 (the newest one in the film folder or out/), frame against frame, at 192×108 and 12 fps, the subtitle band
-(bottom 20 %) left out and the cuts skipped:
+(bottom 20 %) left out and the cuts skipped. Camera moves (pan, track, drift) are taken out first: only what changes
+inside the frame counts, so a film cannot pass by sliding still pictures across the screen:
 
   action     share of 1 s windows where something visibly moves (≥ 2 % of the picture changes between two frames)   ≥ 55 %
   big        share of 2 s windows with a big action (≥ 5 % of the picture: a walk, an entrance, a transformation)    ≥ 45 %
   dead       the longest run of seconds with no visible action, outside the board's silences                         ≤ 10 s
   beats      every acting beat changes its part of the frame: the box of 360 px around its "xy" (the whole frame
              without one) differs between just before the beat and the end of its move ("d", default 0.6 s)         ≥ 75 %
+  camera     share of frames where the whole picture shifts (pan, track, drift)                                       ≤ 30 %
 
 The beats come from events.json: the marks {type: 'mark', kind: 'beat', beat, t, d, xy} that rig/board.js writes, or,
-in an older film, the sound events that carry a "beat". A film that reads as cinema measures about 60 %, 55 %, 9 s; a film built as a state
+in an older film, the sound events that carry a "beat". A film that reads as cinema measures about 60 %, 55 %, 9 s, with the camera still most of the time; a film built as a state
 table (props switched on, poses swapped) measures about 30 %, 18 %, 16 s.
 Exit 0 when everything passes, 1 when something fails, 2 when there is no film to measure.
 """
@@ -33,13 +35,40 @@ raw = subprocess.run(['ffmpeg', '-v', 'error', '-i', MP4, '-vf', f'fps={FPS},sca
                      capture_output=True).stdout
 fr = np.frombuffer(raw, np.uint8).reshape(-1, H, W).astype(np.float32)[:, :int(H * BAND)]
 if len(fr) < FPS * 2: print(f'check_motion: {MP4} is too short to measure'); sys.exit(2)
-mov = (np.abs(np.diff(fr, axis=0)) > 6).mean(axis=(1, 2))   # mov[i]: share of pixels that change from frame i to i+1
+raw_mov = (np.abs(np.diff(fr, axis=0)) > 6).mean(axis=(1, 2))   # share of pixels that change from frame i to i+1
+
+# A camera that pans, tracks or drifts changes every pixel while nothing in the frame acts. Take the camera out: estimate
+# the global shift between two frames (phase correlation, sub-pixel), move the second frame back by it, and count only
+# what still changes — people, props, lines, numbers.
+M = 8   # margin dropped after the shift (wrap-around)
+HY, HX = fr.shape[1], fr.shape[2]
+FY, FX = np.meshgrid(np.fft.fftfreq(HY), np.fft.fftfreq(HX), indexing='ij')
+WIN = np.outer(np.hanning(HY), np.hanning(HX))
+def shift_of(a, b):
+    A, B = np.fft.fft2((a - a.mean()) * WIN), np.fft.fft2((b - b.mean()) * WIN)
+    R = A * np.conj(B); R /= np.abs(R) + 1e-9
+    c = np.fft.ifft2(R).real; y, x = np.unravel_index(np.argmax(c), c.shape)
+    def sub(v, n, ax):   # parabolic refinement of the peak
+        l, m, r = (c[(v - 1) % n, x], c[v, x], c[(v + 1) % n, x]) if ax == 0 else (c[y, (v - 1) % n], c[y, v], c[y, (v + 1) % n])
+        d = l - 2 * m + r; o = .5 * (l - r) / d if abs(d) > 1e-9 else 0
+        v = v + o; return v - n if v > n / 2 else v
+    return sub(y, HY, 0), sub(x, HX, 1)   # b moved by (-dy, -dx) relative to a
+def still_diff(a, b, thr):
+    dy, dx = shift_of(a, b)
+    if abs(dy) > HY / 4 or abs(dx) > HX / 4: dy = dx = 0   # not a camera move (a cut, a flash)
+    if abs(dy) < .15 and abs(dx) < .15: return (np.abs(b - a) > thr)[M:-M, M:-M].mean(), False
+    bb = np.fft.ifft2(np.fft.fft2(b) * np.exp(-2j * np.pi * (FY * dy + FX * dx))).real
+    # a pixel acts when it changes both ways: against the moved frame (the world under the camera) and against the frame
+    # as it is (what is pinned to the screen: a scene tag, a vignette, the paper texture)
+    return (np.minimum(np.abs(bb - a), np.abs(b - a)) > thr)[M:-M, M:-M].mean(), True
+mov = np.empty(len(fr) - 1); cam = np.zeros(len(fr) - 1, bool)
+for i in range(len(fr) - 1): mov[i], cam[i] = still_diff(fr[i], fr[i + 1], 6)
 
 ev = []
 EP = os.path.join(FILM, 'events.json')
 if os.path.isfile(EP):
     j = json.load(open(EP, encoding='utf-8')); ev = j.get('ev', j) if isinstance(j, dict) else j
-cut = mov > .35
+cut = raw_mov > .35
 for e in ev:   # the board's cuts, as well as the ones the picture shows
     if e.get('type') == 'shot' and isinstance(e.get('t'), (int, float)):
         i = int(round(e['t'] * FPS)) - 1
@@ -72,7 +101,10 @@ for i, p in enumerate(p1):
 bad = []
 BAD = bad.append
 print(f'motion: {os.path.basename(MP4)} {len(fr) / FPS:.0f} s')
+camshare = cam[~cut].mean() if (~cut).any() else 0
 print(f'  action {action * 100:.0f} % of seconds · big {big * 100:.0f} % of 2 s windows · longest still stretch {best} s (from {best_at} s)')
+print(f'  (camera moves taken out; the camera is moving in {camshare * 100:.0f} % of the frames)')
+if camshare > .3: BAD(f'the camera moves in {camshare * 100:.0f} % of the frames (≤ 30 %): it drifts instead of holding while people and props act — hold is the default, a move needs something to follow or reveal')
 if action < .55: BAD(f'something visibly moves in {action * 100:.0f} % of the seconds (≥ 55 %): the frames hold still while the voice talks — give every shot an action that runs over time (a walk, a prop that travels, a count, a line that draws)')
 if big < .45: BAD(f'a big action in {big * 100:.0f} % of the 2 s windows (≥ 45 %): entrances, walks, transformations are missing — props pop in or stand still')
 if best > 10: BAD(f'{best} s without a visible action from {best_at} s (≤ 10 s, outside the board silences)')
@@ -96,9 +128,12 @@ for bid, b in beats.items():
         x, y = b['xy']; cx, cy, r = int(x / 1920 * W), int(y / 1080 * H), int(180 / 1920 * W)
         sl = (slice(max(0, cy - r), min(fr.shape[1], cy + r)), slice(max(0, cx - r), min(W, cx + r)))
     else: sl = (slice(None), slice(None))
-    a, z = fr[i0][sl], fr[i1][sl]
+    dy, dx = shift_of(fr[i0], fr[i1])   # a pan across the box is not the beat: line the two frames up first
+    if abs(dy) > HY / 4 or abs(dx) > HX / 4: dy = dx = 0
+    zz = np.fft.ifft2(np.fft.fft2(fr[i1]) * np.exp(-2j * np.pi * (FY * dy + FX * dx))).real
+    a, z, z0 = fr[i0][sl], zz[sl], fr[i1][sl]
     if a.size == 0: continue
-    if (np.abs(z - a) > 10).mean() < .03: dead.append(f'{bid}@{t:.1f}')
+    if (np.minimum(np.abs(z - a), np.abs(z0 - a)) > 10).mean() < .03: dead.append(f'{bid}@{t:.1f}')
 if beats:
     n = len(beats); ok = 1 - len(dead) / n
     print(f'  beats {n - len(dead)}/{n} change their part of the frame')

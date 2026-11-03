@@ -1,15 +1,17 @@
 ---
 name: tram-nghi-nhieu
-description: Phương pháp đạo diễn một tập phim hoạt hình 2D có lời dẫn cho kênh Trạm Nghĩ Nhiều — đạo diễn theo DIRECTOR.md (phim mẫu, ba cấu trúc, shot list có "vì sao", cue map) rồi dựng từ storyboard dữ liệu (board.json); câu chuyện có người của nó, chiếu toàn khung; người dẫn đóng khung ở nhà, bình luận từ góc hình hoặc cận mặt; mỗi ý mới một shot; mỗi nhịp là một chuyển động có đầu, có cuối; chữ là thuật ngữ và tên; tiếng ở chỗ đáng nghe. Dùng khi làm bất kỳ tập nào của kênh.
-version: 8.0.0
+description: Phương pháp đạo diễn một tập phim hoạt hình 2D có lời dẫn cho kênh Trạm Nghĩ Nhiều — đạo diễn theo DIRECTOR.md (phim mẫu, ba cấu trúc, shot list có "vì sao", cue map) rồi dựng từ storyboard dữ liệu (board.json); hình tự kể được khi tắt tiếng; máy đứng, người và vật trong khung chuyển động; cơ chế vô hình thành một ẩn dụ vật lý; người diễn và người dẫn xuất hiện khi kịch bản cần; mỗi ý mới một shot; mỗi nhịp là một chuyển động có đầu, có cuối; chữ là thuật ngữ và tên; tiếng ở chỗ đáng nghe. Dùng khi làm bất kỳ tập nào của kênh.
+version: 9.0.0
 ---
 
 # Đạo diễn một tập Trạm Nghĩ Nhiều
 
 Người xem **vừa nghe vừa nhìn mà hiểu ngay đang nói tới cái gì**, và xem hết không mệt. Muốn vậy:
 
+- **hình tự kể được**: tắt tiếng, chỉ nhìn, người xem vẫn đoán đúng đang xảy ra chuyện gì;
 - mỗi ý mới là một shot mới, ở nơi ý đó xảy ra;
-- phần lớn phim là thế giới câu chuyện; người dẫn mở phim, nối các hồi và gọi tên điều vừa thấy, có lúc bình luận từ một vòng tròn ở góc hoặc một cú cận mặt;
+- **máy đứng, thế giới trong khung chuyển động**: người làm việc, vật đổi trạng thái; máy chỉ chạy khi có thứ để đi theo hoặc để lộ ra;
+- người dẫn và người diễn xuất hiện khi kịch bản cần họ, không theo định mức;
 - chữ trên hình là **tên**: người, nơi, thời điểm, con số của vật, và một tờ tài liệu đổi trạng thái;
 - tiếng vang ở chỗ có vật làm ra nó, và có những quãng chỉ còn giọng với tiếng phòng.
 
@@ -55,7 +57,9 @@ Mỗi bước xong khi điều kiện ở cuối bước đúng. Ghi tiến đ�
    - (a) câu nào sai hoặc nói quá so với FACTS, nhất là năm, tên tác giả, đơn vị tiền, con số;
    - (b) cơ chế được giải thích đúng chưa, người chưa biết có hiểu không;
    - (c) câu đọc lên có tự nhiên không: từ lạc nghĩa, câu lặp ý, tên gọi không nhất quán;
-   - (d) nhịp "à" có cho thấy cái mẹo không.
+   - (d) nhịp "à" có cho thấy cái mẹo không;
+   - (e) **chỉ đọc cột `subject`/`do` của board, không đọc lời**: mỗi cơ chế có hiện ra thành một hình cụ thể không (vật gì, đổi ra sao), hay chỉ là khối, chấm, vòng tròn mờ cần lời mới hiểu;
+   - (f) câu nào lặp lại ý đã nói, đoạn nào cắt được mà phim vẫn đủ.
 
    Sửa hết, rồi ghi lỗi và cách sửa vào `## Chấm lời`.
 6. **GIỌNG**: TTS → ASR → process (`CHANNEL.md` §3). Xong khi `check_board` PASS lại với `words.json` thật.
@@ -67,14 +71,18 @@ Mỗi bước xong khi điều kiện ở cuối bước đúng. Ghi tiến đ�
 
    Xong khi đã có ít nhất hai vòng và vòng cuối không còn lỗi.
 8. **ANIMATE** → `src/film.js`, dựng từ board (mục 4). Đọc **`channels/tram-nghi-nhieu/MOTION.md`** trước dòng code đầu tiên: mỗi nhịp là một tiến độ `BD.p(id, T)` chạy suốt `d` giây của nó, và sổ tay 17 kiểu `move` có code cho từng kiểu. Xong khi `check_board` PASS cả phần code: nhịp được tính giờ theo id, không đạo cụ nào bật ra, không zoom quá 1,6×.
-9. **DỰNG + CỔNG**: `sh build.sh`, rồi `sh core/render/review.sh <tập>` phải exit 0. Cổng gồm treatment, board, scenecheck, readcheck, voice, và **motion** (`tools/check_motion.py`, đo trên `.mp4`: hình chuyển động ở ≥ 55 % số giây, không đứng hình quá 10 s, mỗi nhịp làm đổi vùng `xy` của nó). Motion FAIL thì đọc `MOTION.md` §7.
-10. **XEM + NGHE.** Mở contact sheet và nghe lại cả phim, hỏi:
+9. **DỰNG + CỔNG**: `sh build.sh`, rồi `sh core/render/review.sh <tập>` phải exit 0. Cổng gồm treatment, board, scenecheck, readcheck, voice, và **motion** (`tools/check_motion.py`, đo trên `.mp4` sau khi **trừ chuyển động máy**: thứ trong khung chuyển động ở ≥ 55 % số giây, không đứng hình quá 10 s, mỗi nhịp làm đổi vùng `xy` của nó, máy chạy ≤ 30 % số khung). Lia máy không làm cổng này PASS được. Motion FAIL thì đọc `MOTION.md` §7.
+10. **XEM KHÔNG TIẾNG** bằng một agent *khác*. Đưa nó contact sheet của `.mp4` (một khung mỗi 2–3 s), không kèm lời, board hay FACTS, và bảo nó kể lại phim: ở đâu, ai làm gì, vật gì đổi, phim muốn nói gì. Chỗ nào nó kể sai hoặc nói "không rõ" là chỗ hình không tự kể được. Sửa hình chỗ đó (đổi ẩn dụ, phóng chủ thể, cho người diễn), không thêm chữ để chữa. Ghi kết quả vào `LOOK.md` (`## Xem không tiếng`).
+11. **XEM + NGHE.** Mở contact sheet và nghe lại cả phim, hỏi:
     - mỗi chữ có phải tên hay thuật ngữ không;
     - người dẫn có nhường khung cho câu chuyện không;
     - mỗi nơi chốn có ít nhất hai cỡ cảnh không;
     - mỗi tiếng có một vật trên hình làm ra nó không;
     - có lúc chỉ còn giọng và tiếng phòng không;
-    - vật nào được nhắc tới cũng có trong cảnh không.
+    - vật nào được nhắc tới cũng có trong cảnh không;
+    - 5 giây đầu có một việc xảy ra không (không phải một căn phòng đứng yên chờ lời);
+    - chủ thể có chiếm phần lớn khung không, hay lọt thỏm giữa nền tối;
+    - có shot nào máy trượt qua một hình đứng yên không.
 
     Sửa board hoặc code, dựng lại.
 
@@ -83,7 +91,7 @@ Mỗi bước xong khi điều kiện ở cuối bước đúng. Ghi tiến đ�
 ## 2. Nguyên tắc
 
 1. **Sự việc trước, lời sau.** Mỗi nhịp là *ai · làm gì · với vật gì · vật đổi ra sao*. Câu nào không gắn vào sự việc thì sửa câu.
-2. **Câu chuyện có người của nó.** Một nhân vật của câu chuyện (không phải người dẫn) có mong muốn, ở một nơi cụ thể, và vấp phải hiệu ứng: chị Lan lắp kệ, cậu sinh viên trong phòng thí nghiệm. Thí nghiệm được dựng thành cảnh có người thật làm việc thật: lắp, gấp, trả tiền, viết giá.
+2. **Người xuất hiện khi kịch bản cần.** Có ý cần một con người để hiểu (một trải nghiệm, một quyết định, một thí nghiệm), có ý chỉ cần vật, tay hay một mô phỏng. Đạo diễn tự chọn từng cảnh: người thật trong truyện, một người mô phỏng (đám đông, bóng người, bàn tay), hoặc không ai cả. Không bắt buộc một nhân vật xuyên suốt. Nhưng hễ có người trên hình thì họ phải **làm**: chạm, cầm, giật tay lại, nhăn mặt, quay sang. Một người đứng thẳng giơ tay chỉ vào khoảng không không phải là diễn.
 3. **Người dẫn có bốn cách ở trên hình** (`host` của mỗi shot):
 
    | `host` | Là gì | Dùng khi |
@@ -94,11 +102,11 @@ Mỗi bước xong khi điều kiện ở cuối bước đúng. Ghi tiến đ�
    | `react` | cắt vào cận mặt một nhịp rồi cắt ra (`reactClose`) | câu đùa, cái nhăn mặt, "khoan đã…" |
    | `none` | câu chuyện chiếu toàn khung, giọng người dẫn kể đè lên | phần lớn thế giới câu chuyện; cảnh trang nghiêm |
 
-   `desk` cộng `scene` chiếm 15–45 % thời lượng; mỗi tập có ít nhất một `pip` hoặc `react`.
+   Không có định mức: người dẫn vào khung khi họ thêm được điều gì (mở phim, gọi tên khái niệm, một lời bình, một cái nhăn mặt), và vắng mặt khi hình đã tự nói. Một gương mặt trong vòng tròn ở góc thường đủ, rẻ hơn một cảnh ở nhà. Trần duy nhất: `desk` cộng `scene` ≤ 50 % thời lượng. Ở nhà thì cũng phải diễn: ghim thẻ có chữ, cầm đạo cụ, vẽ lên bảng. Không đứng một tư thế cạnh một tấm bảng trống.
 4. **Mỗi ý mới một shot**, dài 3–8 s, cắt theo hành động.
    - Nơi chốn mới mở bằng shot rộng, có biển nơi chốn hoặc thời điểm.
    - Trong một nơi, đổi cỡ: rộng → trung → **cận vật đang được nói tới**. Muốn người xem nhìn vào cái gì thì cho máy tới gần cái đó; cận cảnh làm việc của một cái nhãn.
-5. **Máy chuyển động có lý do** (`cam` của mỗi shot, `BD.camera`):
+5. **Máy đứng là mặc định** (`cam` của mỗi shot, `BD.camera`). Chuyển động của phim đến từ người và vật trong khung. Máy chỉ chạy khi có thứ để đi theo (người đang đi, vật đang trượt) hoặc có thứ mới để lộ ra ở cuối cú máy. Lia ngang một khung không có gì đổi để "cho có chuyển động" là lỗi: người xem thấy màn hình trôi, không thấy chuyện. `hold` ≥ 65 % thời lượng phim (check_board), máy chạy ≤ 30 % số khung trên `.mp4` (check_motion).
 
    | `cam` | Lý do |
    |---|---|
@@ -108,7 +116,7 @@ Mỗi bước xong khi điều kiện ở cuối bước đúng. Ghi tiến đ�
    | `track` | đi theo người đang đi, đồ vật đang trượt |
    | `pan` | lia dọc một dãy (kệ hàng, bản đồ, dòng thời gian) |
 
-   Một tập dùng ít nhất ba kiểu, mỗi kiểu ghi rõ lý do trong `why`. Chuyển cảnh:
+   Mỗi cú máy ghi trong `why` nó đi theo cái gì hoặc lộ ra cái gì. Chuyển cảnh:
    - `cut` trong cùng nơi;
    - `iris` khi bước vào một nơi;
    - `prop` (bóng người, cánh cửa, trang sách che máy);
@@ -153,6 +161,9 @@ Mỗi bước xong khi điều kiện ở cuối bước đúng. Ghi tiến đ�
     - Nối các nhịp bằng "nhưng / vì vậy".
     - Cái kết vọng lại cảnh mở: cùng đạo cụ, nhưng đã đổi trạng thái.
 11. **Cách hiểu phổ biến, rồi lật lại.** Người dẫn tự nói cách hiểu mà ai cũng tin ("mình từng nghĩ…", "ai cũng bảo…"), và cảnh sau cho thấy điều thật sự xảy ra. Một cú `react` của người dẫn hợp với nhịp đó.
+12. **Cơ chế vô hình phải có một hình cụ thể.** Dòng điện, nhiệt, hormone, lãi suất không nhìn thấy được. Mỗi cơ chế như vậy cần một ẩn dụ vật lý mà người xem đã quen trong đời: đám đông chen qua hành lang hẹp, nước tràn khỏi bồn, dây chun bị kéo giãn. Ẩn dụ đó diễn đúng quan hệ nhân–quả, kể cả tỉ lệ (gấp đôi nguyên nhân thì kết quả trên hình cũng lớn đúng như số nói), và được dùng lại mỗi lần cơ chế quay lại. Khối chữ nhật, đường chấm, vòng tròn mờ không phải ẩn dụ; một sơ đồ mặt cắt chỉ dùng khi mọi bộ phận trong đó đều nhận ra được ngay, có tên trên vật.
+13. **Mở bằng một việc xảy ra.** Trong 5 giây đầu, một việc cụ thể xảy ra trên hình (tay giật lại vì nóng, ly nước đổ, đồng hồ reo) và gắn với câu hỏi. Không mở bằng một khung đứng yên chờ lời đọc tiêu đề.
+14. **Chủ thể to, khung sạch.** Vật đang được nói tới chiếm phần lớn khung; nền tối không được nuốt mất nó. Thiếu cỡ thì cắt sang cận cảnh, không phải đẩy máy chậm vào một vật bé.
 
 ### Kỹ thuật của khung hình
 
@@ -254,7 +265,7 @@ Phần lớn nhịp chỉ có `who`, `do` và chuyển động của nó (`move`
 - Mỗi shot ≤ 12 s, trung bình ≤ 8 s.
 - Cảnh mới mở bằng `wide`, trừ khi có `"same_place": true`.
 - ≥ 20 % shot là close hoặc insert.
-- `desk` cộng `scene` chiếm 15–45 % thời lượng; có ≥ 1 `pip` hoặc `react`; có ≥ 3 kiểu `cam`.
+- `desk` cộng `scene` ≤ 50 % thời lượng; `hold` ≥ 65 % thời lượng (máy chạy ≤ 35 %).
 
 **Chữ**
 - Mỗi nhãn có `kind`.
@@ -334,7 +345,7 @@ Mỗi tập viết `src/sets.js` cho các nơi chốn của nó và các đạo 
 | 8–10 phút | 80–110 | 12–16 | 70–110 |
 | 15–20 phút | 150–200 | 20–30 | 130–200 |
 
-Thời lượng đến từ lượng kiến thức. Không có thời lượng thì mặc định 3–5 phút. `build.sh` sinh `src/timeline.js` từ `voice/lines.json` bằng `$CHANNEL/mk_timeline.py`; khoảng lặng trước một câu là trường `gap` của câu (`CHANNEL.md` §3 bước 4).
+Thời lượng đến từ lượng kiến thức, không ngược lại. Câu hỏi chỉ có một cơ chế thường gói gọn trong 90 s–3 phút; đừng kéo dài bằng cách nói lại một ý bằng câu khác. Không có thời lượng thì chọn cỡ ngắn nhất đủ để trả lời trọn. `build.sh` sinh `src/timeline.js` từ `voice/lines.json` bằng `$CHANNEL/mk_timeline.py`; khoảng lặng trước một câu là trường `gap` của câu (`CHANNEL.md` §3 bước 4).
 
 ---
 
