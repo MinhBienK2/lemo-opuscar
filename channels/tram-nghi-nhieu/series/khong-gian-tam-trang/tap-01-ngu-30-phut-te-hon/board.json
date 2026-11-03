@@ -1,0 +1,2392 @@
+{
+ "ink": "#FAF8F5",
+ "palette": {
+  "term": {
+   "color": "#F2A541",
+   "name": "khái niệm mới"
+  },
+  "name": {
+   "color": "#F2A541",
+   "name": "tên của vật"
+  },
+  "place": {
+   "color": "#67E8F9",
+   "name": "nơi chốn"
+  },
+  "time": {
+   "color": "#67E8F9",
+   "name": "mốc thời gian"
+  },
+  "number": {
+   "color": "#F0525B",
+   "name": "con số của vật"
+  },
+  "doc": {
+   "color": "#F2A541",
+   "name": "tài liệu của câu chuyện"
+  },
+  "stamp": {
+   "color": "#F0525B",
+   "name": "dấu kết luận"
+  },
+  "calm": {
+   "color": "#67E8F9",
+   "name": "số đo trung tính"
+  },
+  "target": {
+   "color": "#F2A541",
+   "name": "có lợi"
+  },
+  "rival": {
+   "color": "#4F86C6",
+   "name": "xấu, mất lợi"
+  },
+  "deep": {
+   "color": "#8B5CF6",
+   "name": "giấc ngủ sâu"
+  },
+  "warn": {
+   "color": "#F0525B",
+   "name": "cảnh báo"
+  }
+ },
+ "scenes": [
+  {
+   "id": "vanphong",
+   "place": "văn phòng buổi chiều thứ Sáu, sofa da ở góc phải, cửa sổ kính lọc nắng, đồng hồ treo tường",
+   "light": "nắng chiều xiên qua cửa sổ, bóng dài trên sàn",
+   "cast": [
+    "host"
+   ],
+   "lines": [
+    "hook1",
+    "hook2",
+    "hook3"
+   ],
+   "shots": [
+    {
+     "id": "vanphong_van_wide",
+     "size": "wide",
+     "host": "scene",
+     "cam": "hold",
+     "subject": "văn phòng chiều thứ Sáu, Kẻ gục trên sofa da",
+     "why": "mở bằng nơi chốn thật để thấy chỗ Kẻ ngủ gục và cái đồng hồ hẹn giờ"
+    },
+    {
+     "id": "vanphong_van_phone",
+     "size": "insert",
+     "host": "none",
+     "cam": "push",
+     "subject": "điện thoại đếm ngược ba mươi phút trên bàn",
+     "why": "cái đồng hồ hẹn giờ là điều kiện của cả tập, nên phải thấy rõ con số",
+     "at": "hook1@hẹn"
+    },
+    {
+     "id": "vanphong_van_wake",
+     "size": "medium",
+     "host": "scene",
+     "cam": "push",
+     "subject": "Kẻ giật mình ngồi dậy, tóc rối, mí mắt nặng",
+     "why": "cảm giác nặng đầu chỉ hiện ra được trên khuôn mặt lúc vừa mở mắt",
+     "at": "hook2@dậy"
+    },
+    {
+     "id": "vanphong_van_clock",
+     "size": "insert",
+     "host": "none",
+     "cam": "pan",
+     "subject": "đồng hồ treo tường, kim chạy qua vạch đầu tiên",
+     "why": "đồng hồ đứng yên giữa lúc não còn mơ hồ, để thấy nửa tiếng trôi qua",
+     "at": "hook2@nặng"
+    },
+    {
+     "id": "vanphong_van_desk",
+     "size": "medium",
+     "host": "scene",
+     "cam": "pull",
+     "subject": "Kẻ nhún vai, tay hạ xuống bàn",
+     "why": "một cú nhún vai thay cho lời than: câu hỏi đang treo trong không khí",
+     "at": "hook3@Ngủ"
+    }
+   ],
+   "beats": [
+    {
+     "id": "vanphong_b01",
+     "at": "hook1@start",
+     "who": "host",
+     "do": "Kẻ Nghĩ Nhiều gục xuống sofa da, một tay đặt lên bụng",
+     "change": "ngực Kẻ phập phồng chậm"
+    },
+    {
+     "id": "vanphong_b02",
+     "at": "hook1@gục",
+     "who": "host",
+     "do": "Kẻ hít một hơi dài, vai trĩu xuống",
+     "change": "vai Kẻ chùa xuống"
+    },
+    {
+     "id": "vanphong_b03",
+     "at": "hook1@hẹn",
+     "who": "host",
+     "do": "Kẻ cầm điện thoại lên, ngón tay bấm giờ hẹn",
+     "change": "màn hình điện thoại sáng lên",
+     "sfx": {
+      "type": "button",
+      "cause": "ngón tay bấm nút hẹn giờ"
+     }
+    },
+    {
+     "id": "vanphong_b04",
+     "at": "hook1@end",
+     "who": "host",
+     "do": "Kẻ úp điện thoại lên ngực, mắt khép lại",
+     "change": "Kẻ ngả đầu sang đệm"
+    },
+    {
+     "id": "vanphong_b05",
+     "at": "hook2@dậy",
+     "who": "host",
+     "do": "Chuông báo thức reo, Kẻ giật mình ngồi dậy",
+     "change": "tóc Kẻ rối, mí mắt nặng trĩu",
+     "label": {
+      "kind": "number",
+      "text": "30 phút",
+      "xy": [
+       1180,
+       420
+      ],
+      "to": [
+       1330,
+       640
+      ],
+      "color": "#F0525B"
+     },
+     "sfx": {
+      "type": "phone_buzz",
+      "cause": "điện thoại rung trên ngực"
+     }
+    },
+    {
+     "id": "vanphong_b06",
+     "at": "hook2@laptop",
+     "who": "host",
+     "do": "Kẻ mở laptop lên đùi, hai tay gõ thử vài phím",
+     "change": "màn hình laptop sáng lên",
+     "sfx": {
+      "type": "plastic_click",
+      "cause": "bản lề laptop mở ra"
+     }
+    },
+    {
+     "id": "vanphong_b07",
+     "at": "hook2@nặng",
+     "who": "host",
+     "do": "Kẻ xoa thái dương, mí mắt nặng trĩu",
+     "change": "cọng tóc đèn trên đầu rũ xuống"
+    },
+    {
+     "id": "vanphong_b08",
+     "at": "hook2@Người",
+     "who": "host",
+     "do": "Kẻ dừng tay, ngẩng lên đọc dòng chữ trên màn hình",
+     "change": "con trỏ dừng giữa dòng"
+    },
+    {
+     "id": "vanphong_b09",
+     "at": "hook2@giác",
+     "who": "host",
+     "do": "Kẻ chạm ngón tay vào dòng chữ đang đọc",
+     "change": "thẻ thuật ngữ sleep inertia hiện ra",
+     "label": {
+      "kind": "term",
+      "text": "sleep inertia",
+      "xy": [
+       80,
+       110
+      ],
+      "def": "cảm giác lười nhác, lơ mơ lúc vừa mới dậy",
+      "stay": true,
+      "color": "#F2A541"
+     },
+     "sfx": {
+      "type": "label_in",
+      "cause": "thẻ thuật ngữ trượt vào khung"
+     }
+    },
+    {
+     "id": "vanphong_b10",
+     "at": "hook2@end",
+     "who": "host",
+     "do": "Kẻ nhìn xuống màn hình, con trỏ không đi đâu",
+     "change": "Kẻ chớp mắt, mặt nặng nề"
+    },
+    {
+     "id": "vanphong_b11",
+     "at": "hook3@Ngủ",
+     "who": "host",
+     "do": "Kẻ nhước lên nhìn đồng hồ treo tường, tay chỉ theo kim giây",
+     "change": "kim đồng hồ chạy qua vạch đầu tiên"
+    },
+    {
+     "id": "vanphong_b12",
+     "at": "hook3@end",
+     "who": "host",
+     "do": "Kẻ nhún vai, mặt đầy nghi hoặc",
+     "change": "Kẻ hạ tay xuống bàn"
+    }
+   ],
+   "amb": "office",
+   "music": "A",
+   "in": {
+    "tr": "iris",
+    "sfx": "iris_open"
+   }
+  },
+  {
+   "id": "nha_ke",
+   "place": "góc đọc sách của Kẻ Nghĩ Nhiều ở nhà, kệ sách, đèn bàn vàng, sổ tay mở trên bàn",
+   "light": "đèn bàn vàng ấm từ trên, cửa sổ đêm ngoài khung",
+   "cast": [
+    "host"
+   ],
+   "lines": [
+    "intro",
+    "hook4",
+    "roi1"
+   ],
+   "shots": [
+    {
+     "id": "nha_ke_ke_wide",
+     "size": "wide",
+     "host": "desk",
+     "cam": "hold",
+     "subject": "Kẻ Nghĩ Nhiều bước vào khung, tay giơ chào",
+     "why": "người dẫn bước vào thế giới câu chuyện của chính mình, một lần, để gọi tên chủ đề"
+    },
+    {
+     "id": "nha_ke_ke_note",
+     "size": "insert",
+     "host": "none",
+     "cam": "push",
+     "subject": "sổ tay mở ra, câu hỏi vừa viết xuống",
+     "why": "viết câu hỏi ra là cách biến chủ đề thành việc của người xem",
+     "at": "hook4@Mình"
+    },
+    {
+     "id": "nha_ke_ke_belief",
+     "size": "medium",
+     "host": "desk",
+     "cam": "hold",
+     "subject": "Kẻ tự nói ra cách hiểu phổ biến, tay chỉ vào dòng mình vừa viết",
+     "why": "cách hiểu quen thuộc phải do chính người dẫn nói ra, thì cảnh sau mới lật được",
+     "at": "roi1@start"
+    },
+    {
+     "id": "nha_ke_ke_close",
+     "size": "close",
+     "host": "react",
+     "cam": "hold",
+     "subject": "cận mặt Kẻ lúc nghe Rối đoán sai",
+     "why": "một cú liếc mắt đủ nói: lời Rối không đúng",
+     "at": "roi1@Ngủ#2"
+    }
+   ],
+   "beats": [
+    {
+     "id": "nha_ke_b01",
+     "at": "intro@Mình",
+     "who": "host",
+     "do": "Kẻ bước tới giữa khung, tay giơ chào",
+     "change": "Kẻ dừng giữa khung",
+     "label": {
+      "kind": "name",
+      "text": "Kẻ Nghĩ Nhiều",
+      "xy": [
+       960,
+       250
+      ],
+      "to": [
+       900,
+       430
+      ],
+      "color": "#F2A541"
+     }
+    },
+    {
+     "id": "nha_ke_b02",
+     "at": "intro@Hôm",
+     "who": "host",
+     "do": "Kẻ chỉ thẳng vào ống kính, giọng chắc lại",
+     "change": "sợi tóc đèn sáng lên"
+    },
+    {
+     "id": "nha_ke_b03",
+     "at": "intro@sao",
+     "who": "host",
+     "do": "Kẻ giơ tay lên đếm ngón, mắt nheo lại",
+     "change": "Kẻ đếm từng ngón trên tay"
+    },
+    {
+     "id": "nha_ke_b04",
+     "at": "intro@end",
+     "who": "host",
+     "do": "Kẻ hạ tay, mắt nhìn thẳng vào người xem",
+     "change": "Kẻ đứng yên, vai thẳng"
+    },
+    {
+     "id": "nha_ke_b05",
+     "at": "hook4@Mình",
+     "who": "host",
+     "do": "Kẻ mở sổ tay, viết câu hỏi xuống giấy",
+     "change": "nét chữ chạy trên trang sổ",
+     "label": {
+      "kind": "name",
+      "text": "sổ tay",
+      "xy": [
+       1320,
+       760
+      ],
+      "to": [
+       960,
+       660
+      ],
+      "color": "#F2A541"
+     },
+     "sfx": {
+      "type": "pen_scribble",
+      "cause": "bút viết câu hỏi vào sổ tay"
+     }
+    },
+    {
+     "id": "nha_ke_b06",
+     "at": "hook4@đúng",
+     "who": "host",
+     "do": "Kẻ gạch chân một dòng trong sổ rồi ngẩng lên",
+     "change": "nét gạch chân đè lên dòng vừa viết",
+     "sfx": {
+      "type": "pen_cross",
+      "cause": "bút gạch chân một dòng trong sổ tay"
+     }
+    },
+    {
+     "id": "nha_ke_b07",
+     "at": "roi1@start",
+     "who": "host",
+     "do": "Kẻ nói ra cách hiểu phổ biến: ngủ trưa hai mươi phút là chuẩn",
+     "change": "nét chữ trong sổ dừng lại"
+    },
+    {
+     "id": "nha_ke_b08",
+     "at": "roi1@trưa",
+     "who": "host",
+     "do": "Kẻ gõ bút xuống sổ, lắc đầu như thể đã nói đúng",
+     "change": "nét gạch chân mới chạy dọc dòng",
+     "sfx": {
+      "type": "pen_tick",
+      "cause": "bút gõ xuống sổ tay"
+     }
+    },
+    {
+     "id": "nha_ke_b09",
+     "at": "roi1@chuẩn",
+     "who": "host",
+     "do": "Kẻ chỉ ngón tay vào dòng \"hai mươi phút là chuẩn\" trong sổ",
+     "change": "ngón tay dừng trên dòng chữ"
+    },
+    {
+     "id": "nha_ke_b10",
+     "at": "roi1@Ngủ#2",
+     "who": "host",
+     "do": "Kẻ gật đầu, hai tay khoanh trước ngực, tin là đúng",
+     "change": "Kẻ khoanh tay, vai thẳng"
+    },
+    {
+     "id": "nha_ke_b11",
+     "at": "roi1@end",
+     "who": "host",
+     "do": "Kẻ gạch chân dòng mình vừa viết rồi nhún vai",
+     "change": "nét gạch chân đè lên dòng đã viết",
+     "sfx": {
+      "type": "pen_cross",
+      "cause": "bút gạch chân dòng đã viết"
+     }
+    }
+   ],
+   "amb": "room",
+   "music": "A",
+   "in": {
+    "tr": "cut"
+   }
+  },
+  {
+   "id": "phongthi",
+   "place": "phòng thí nghiệm giấc ngủ, ba giường có điện cực, màn hình đo bên phải, tủ thiết bị",
+   "light": "đèn trắng phòng thí nghiệm, ánh xanh từ màn hình đo",
+   "cast": [
+    "extra:nguoi_lab",
+    "extra:nguoi_tham_gia"
+   ],
+   "lines": [
+    "lab1",
+    "lab2",
+    "lab3",
+    "lab4",
+    "lab5"
+   ],
+   "shots": [
+    {
+     "id": "phongthi_lab_wide",
+     "size": "wide",
+     "host": "none",
+     "cam": "hold",
+     "subject": "phòng thí nghiệm: ba giường, màn hình đo, nhân viên đứng cạnh giường",
+     "why": "nơi chuyện xảy ra phải có người thật và thiết bị thật, không chỉ có đồ vật"
+    },
+    {
+     "id": "phongthi_lab_form",
+     "size": "insert",
+     "host": "none",
+     "cam": "push",
+     "subject": "tờ phiếu thí nghiệm trên tay, dòng số người và giờ ngủ",
+     "why": "phiếu là thứ định nghĩa thí nghiệm, người xem phải đọc được nó",
+     "at": "lab2@Họ"
+    },
+    {
+     "id": "phongthi_lab_beds",
+     "size": "medium",
+     "host": "none",
+     "cam": "pan",
+     "subject": "ba chiếc giường thí nghiệm được khoanh lần lượt",
+     "why": "ba chiếc giường là ba nhóm; thấy cùng lúc thì người xem mới đếm được",
+     "at": "lab3@Trước"
+    },
+    {
+     "id": "phongthi_lab_test",
+     "size": "medium",
+     "host": "none",
+     "cam": "push",
+     "subject": "giường thí nghiệm và bảng điểm đếm lỗi",
+     "why": "đo bằng cái đếm, không bằng cảm giác: đèn bật là làm bài ngay",
+     "at": "lab4@Rồi"
+    }
+   ],
+   "beats": [
+    {
+     "id": "phongthi_b01",
+     "at": "lab1@Mình",
+     "who": "none",
+     "do": "phòng thí nghiệm: đường sóng chạy trên màn hình đo",
+     "change": "màn hình đo sáng lên"
+    },
+    {
+     "id": "phongthi_b02",
+     "at": "lab1@nhóm",
+     "who": "extra:nguoi_lab",
+     "do": "nhân viên phòng thí nghiệm bước vào phòng, tay cầm tờ phiếu",
+     "change": "nhân viên dừng cạnh màn hình đo"
+    },
+    {
+     "id": "phongthi_b03",
+     "at": "lab1@người",
+     "who": "extra:nguoi_lab",
+     "do": "nhân viên chỉ vào màn hình đo bên phải",
+     "change": "đường sóng chạy trên màn hình",
+     "sfx": {
+      "type": "beep",
+      "cause": "máy đo báo một nhịp"
+     }
+    },
+    {
+     "id": "phongthi_b04",
+     "at": "lab1@giác",
+     "who": "extra:nguoi_lab",
+     "do": "nhân viên kiểm tra điện cực trên đầu người tham gia",
+     "change": "đèn đỏ trên tủ thiết bị nhấp nháy",
+     "sfx": {
+      "type": "metal_tap",
+      "cause": "nhân viên gõ vào tủ thiết bị"
+     }
+    },
+    {
+     "id": "phongthi_b05",
+     "at": "lab2@Họ",
+     "who": "extra:nguoi_lab",
+     "do": "nhân viên đưa một tờ phiếu thí nghiệm cho người tham gia",
+     "change": "tờ phiếu nằm trên tay người tham gia",
+     "label": {
+      "kind": "doc",
+      "text": "phiếu thí nghiệm",
+      "xy": [
+       820,
+       560
+      ],
+      "to": [
+       900,
+       640
+      ],
+      "color": "#F2A541"
+     },
+     "sfx": {
+      "type": "paper_flip",
+      "cause": "tờ phiếu được đưa qua"
+     }
+    },
+    {
+     "id": "phongthi_b06",
+     "at": "lab2@người",
+     "who": "extra:nguoi_tham_gia",
+     "do": "người tham gia đọc phiếu, ngón tay dõ theo dòng chữ",
+     "change": "ngón tay dừng ở dòng số người tham gia"
+    },
+    {
+     "id": "phongthi_b07",
+     "at": "lab2@tiếng",
+     "who": "extra:nguoi_tham_gia",
+     "do": "người tham gia dừng ngón tay ở ô giờ ngủ trên phiếu",
+     "change": "ô giờ ngủ được khoanh tròn",
+     "sfx": {
+      "type": "pen_circle",
+      "cause": "bút khoanh ô giờ ngủ trên phiếu"
+     }
+    },
+    {
+     "id": "phongthi_b08",
+     "at": "lab2@end",
+     "who": "extra:nguoi_tham_gia",
+     "do": "người tham gia gật đầu một cái, mắt vẫn dán vào phiếu",
+     "change": "tờ phiếu nằm nghiêng trên bàn"
+    },
+    {
+     "id": "phongthi_b09",
+     "at": "lab3@Trước",
+     "who": "extra:nguoi_lab",
+     "do": "ba chiếc giường thí nghiệm hiện ra dọc hành lang",
+     "change": "cả ba giường cùng sáng đèn",
+     "label": {
+      "kind": "number",
+      "text": "3 nhóm",
+      "xy": [
+       300,
+       470
+      ],
+      "to": [
+       470,
+       700
+      ],
+      "color": "#F0525B"
+     }
+    },
+    {
+     "id": "phongthi_b10",
+     "at": "lab3@ngủ#1",
+     "who": "extra:nguoi_lab",
+     "do": "nhân viên đưa tay chỉ vào chiếc giường thứ nhất",
+     "change": "chiếc giường thứ nhất được khoanh sáng",
+     "label": {
+      "kind": "number",
+      "text": "10 phút",
+      "xy": [
+       270,
+       500
+      ],
+      "to": [
+       270,
+       690
+      ],
+      "color": "#F2A541"
+     },
+     "sfx": {
+      "type": "wood_knock",
+      "cause": "tay gõ lên khung giường thứ nhất"
+     }
+    },
+    {
+     "id": "phongthi_b11",
+     "at": "lab3@ngủ#2",
+     "who": "extra:nguoi_lab",
+     "do": "nhân viên trượt tay sang chiếc giường thứ hai",
+     "change": "chiếc giường thứ hai được khoanh sáng",
+     "label": {
+      "kind": "number",
+      "text": "20 phút",
+      "xy": [
+       620,
+       500
+      ],
+      "to": [
+       620,
+       690
+      ],
+      "color": "#67E8F9"
+     }
+    },
+    {
+     "id": "phongthi_b12",
+     "at": "lab3@ngủ#3",
+     "who": "extra:nguoi_lab",
+     "do": "nhân viên dừng tay ở chiếc giường thứ ba",
+     "change": "chiếc giường thứ ba được khoanh sáng",
+     "label": {
+      "kind": "number",
+      "text": "30 phút",
+      "xy": [
+       970,
+       500
+      ],
+      "to": [
+       970,
+       690
+      ],
+      "color": "#F0525B"
+     }
+    },
+    {
+     "id": "phongthi_b13",
+     "at": "lab3@end",
+     "who": "extra:nguoi_lab",
+     "do": "nhân viên đứng giữa ba chiếc giường, mắt nhìn từng cái",
+     "change": "ba chiếc giường giữ nguyên vị trí"
+    },
+    {
+     "id": "phongthi_b14",
+     "at": "lab4@Rồi",
+     "who": "extra:nguoi_tham_gia",
+     "do": "đèn phòng bật, người tham gia nằm xuống giường thí nghiệm",
+     "change": "đèn trắng hắt lên màn hình đo",
+     "sfx": {
+      "type": "light_on",
+      "cause": "đèn phòng thí nghiệm bật lên"
+     }
+    },
+    {
+     "id": "phongthi_b15",
+     "at": "lab5@Hiệu",
+     "who": "extra:nguoi_lab",
+     "do": "bảng điểm đếm số lần trả lời sai mỗi giây sáng lên",
+     "change": "con số trên bảng điểm tăng dần",
+     "label": {
+      "kind": "doc",
+      "text": "bảng điểm",
+      "xy": [
+       1620,
+       300
+      ],
+      "to": [
+       1500,
+       380
+      ],
+      "color": "#F2A541"
+     },
+     "sfx": {
+      "type": "count_tick",
+      "cause": "bộ đếm nhảy thêm một lần sai"
+     }
+    }
+   ],
+   "amb": "lab",
+   "music": "B",
+   "in": {
+    "tr": "whip",
+    "sfx": "whoosh_soft"
+   }
+  },
+  {
+   "id": "banhanh",
+   "place": "phòng họp có bảng ghim giấy A3, thước kẻ treo ngang, ghim đỏ, đèn bàn hắt một vòng sáng lên bảng",
+   "light": "đèn bàn hắt một vòng sáng lên tờ giấy, nền tối",
+   "cast": [
+    "extra:nguoi_lab",
+    "host"
+   ],
+   "lines": [
+    "roi2",
+    "win1",
+    "win2",
+    "win3",
+    "win4",
+    "win5"
+   ],
+   "shots": [
+    {
+     "id": "banhanh_board_wide",
+     "size": "wide",
+     "host": "none",
+     "cam": "hold",
+     "subject": "tờ giấy A3 trên bảng ghim, một cột cao vẽ tay bên phải",
+     "why": "cảnh so sánh thuần: một tờ giấy, ba cột, và người xem phải tự so"
+    },
+    {
+     "id": "banhanh_board_r",
+     "size": "close",
+     "host": "none",
+     "cam": "push",
+     "subject": "cột cao nhất Rối vẽ bên phải tờ giấy",
+     "why": "lời đoán sai của Rối phải hiện ra bằng mắt trước khi bị lật",
+     "at": "win1@Nhóm",
+     "focus": [
+      1290,
+      460
+     ],
+     "amount": 0.4
+    },
+    {
+     "id": "banhanh_board_three",
+     "size": "medium",
+     "host": "none",
+     "cam": "hold",
+     "subject": "ba cột thật vẽ tay trên giấy",
+     "why": "ba cột là toàn bộ cái cần so, không thêm gì vào",
+     "at": "win2@Nhóm",
+     "focus": [
+      1290,
+      460
+     ],
+     "amount": 0.34
+    },
+    {
+     "id": "banhanh_board_clock",
+     "size": "insert",
+     "host": "none",
+     "cam": "push",
+     "subject": "chiếc đồng hồ nhỏ chạy trên trục thời gian",
+     "why": "đồng hồ nhỏ là thứ biến ba cột thành một câu chuyện có mốc thời gian",
+     "at": "win2@lạ",
+     "focus": [
+      1140,
+      560
+     ],
+     "amount": 0.42
+    },
+    {
+     "id": "banhanh_board_cross",
+     "size": "medium",
+     "host": "none",
+     "cam": "hold",
+     "subject": "cột ba mươi phút tụt xuống dưới vạch gốc",
+     "why": "đường cong lao xuống phải thấy ngay trên cả bảng, không cần con số",
+     "at": "win3@Còn"
+    },
+    {
+     "id": "banhanh_board_strike",
+     "size": "medium",
+     "host": "none",
+     "cam": "pull",
+     "subject": "người vẽ đứng trước bảng, ba cột và đồng hồ nhỏ",
+     "why": "người vẽ phải bước lùi ra để ba cột nói thay",
+     "at": "win4@Nói"
+    },
+    {
+     "id": "banhanh_board_aha",
+     "size": "medium",
+     "host": "none",
+     "cam": "hold",
+     "subject": "ngón tay đặt vào cột hai mươi phút đang rỗng",
+     "why": "khoảng trống phải được chạm vào thì người xem mới thấy nó",
+     "at": "win5@Nó"
+    },
+    {
+     "id": "banhanh_board_gap",
+     "size": "close",
+     "host": "none",
+     "cam": "push",
+     "subject": "vòng tròn đỏ khoanh khoảng trống giữa hai cột",
+     "why": "khoảng trống phải được khoanh thành một vật thể, người xem mới nhớ mãi",
+     "at": "win5@nằm",
+     "focus": [
+      1290,
+      500
+     ],
+     "amount": 0.46
+    }
+   ],
+   "beats": [
+    {
+     "id": "banhanh_b01",
+     "at": "roi2@Chắc",
+     "who": "host",
+     "do": "người dẫn nói ra cách hiểu phổ biến: ngủ lâu nhất thì tỉnh nhất",
+     "change": "khoảng giấy bên phải trống"
+    },
+    {
+     "id": "banhanh_b02",
+     "at": "roi2@lâu",
+     "who": "host",
+     "do": "trên tờ giấy, một cột cao vẽ tay mọc lên bên phải — cách hiểu của người dẫn",
+     "change": "một cột tím cao mọc lên bên phải",
+     "sfx": {
+      "type": "pen_scribble",
+      "cause": "bút vẽ cột cao lên tờ giấy"
+     }
+    },
+    {
+     "id": "banhanh_b03",
+     "at": "roi2@nhất",
+     "who": "host",
+     "do": "người dẫn vẽ cột đó cao hơn nữa, như đang tự thuyết phục mình",
+     "change": "cột tím vươn lên đỉnh bảng",
+     "sfx": {
+      "type": "whoosh_soft",
+      "cause": "cột vừa vẽ bị đẩy lên cao hơn"
+     }
+    },
+    {
+     "id": "banhanh_b04",
+     "at": "roi2@Ai",
+     "who": "host",
+     "do": "người dẫn nói tiếp: ai cũng vậy mà",
+     "change": "cột tím vẫn đứng cao nhất bảng"
+    },
+    {
+     "id": "banhanh_b05",
+     "at": "roi2@chứ",
+     "who": "host",
+     "do": "người dẫn dừng lại, chờ xem có ai bác lại không",
+     "change": "cột tím đứng lại ở mép bảng"
+    },
+    {
+     "id": "banhanh_b06",
+     "at": "win1@Nhóm",
+     "who": "extra:nguoi_lab",
+     "do": "nhân viên vẽ ba cột thật lên bảng, cạnh cột Rối vừa vẽ",
+     "change": "ba cột mới hiện ra trên tờ giấy",
+     "sfx": {
+      "type": "pen_scribble",
+      "cause": "bút vẽ ba cột lên tờ giấy"
+     }
+    },
+    {
+     "id": "banhanh_b07",
+     "at": "win1@tỉnh",
+     "who": "extra:nguoi_lab",
+     "do": "nhân viên gõ đầu ngón tay vào cột mười phút",
+     "change": "cột mười phút được tô sáng"
+    },
+    {
+     "id": "banhanh_b08",
+     "at": "win1@cảm",
+     "who": "extra:nguoi_lab",
+     "do": "nhân viên vẽ mũi tên từ cột mười phút sang vạch đầu tiên",
+     "change": "mũi tên chạm vạch đầu tiên"
+    },
+    {
+     "id": "banhanh_b09",
+     "at": "win1@hiệu",
+     "who": "extra:nguoi_lab",
+     "do": "nhân viên gõ nhẹ vào cột mười phút một cái, gật đầu",
+     "change": "cột mười phút sáng đậm",
+     "sfx": {
+      "type": "pen_tick",
+      "cause": "ngón tay gõ lên cột mười phút"
+     }
+    },
+    {
+     "id": "banhanh_b10",
+     "at": "win2@Nhóm",
+     "who": "extra:nguoi_lab",
+     "do": "nhân viên chuyển tay sang cột hai mươi phút đang rỗng",
+     "change": "tay nhân viên dừng ở cột hai mươi phút"
+    },
+    {
+     "id": "banhanh_b11",
+     "at": "win2@lạ",
+     "who": "extra:nguoi_lab",
+     "do": "nhân viên vẽ một chiếc đồng hồ nhỏ cạnh trục thời gian",
+     "change": "chiếc đồng hồ nhỏ hiện ra trên giấy"
+    },
+    {
+     "id": "banhanh_b12",
+     "at": "win2@trống",
+     "who": "extra:nguoi_lab",
+     "do": "kim đồng hồ nhỏ chạy qua vùng trống trên trục",
+     "change": "vùng trống trên trục được tô",
+     "sfx": {
+      "type": "timer_tick",
+      "cause": "kim đồng hồ nhỏ chạy dọc trục"
+     }
+    },
+    {
+     "id": "banhanh_b13",
+     "at": "win2@một",
+     "who": "extra:nguoi_lab",
+     "do": "kim đồng hồ nhỏ dừng ở mốc ba mươi lăm phút",
+     "change": "mốc ba mươi lăm phút được khoanh trên trục"
+    },
+    {
+     "id": "banhanh_b14",
+     "at": "win2@end",
+     "who": "extra:nguoi_lab",
+     "do": "nhân viên gõ vào cột hai mươi phút một cái rồi rút tay về",
+     "change": "cột hai mươi phút được tô nhạt"
+    },
+    {
+     "id": "banhanh_b15",
+     "at": "win3@Còn",
+     "who": "extra:nguoi_lab",
+     "do": "nhân viên gõ vào cột ba mươi phút, cột tụt xuống",
+     "change": "cột ba mươi phút rơi xuống dưới vạch gốc",
+     "sfx": {
+      "type": "impact_soft",
+      "cause": "đường cong chạm đáy"
+     }
+    },
+    {
+     "id": "banhanh_b16",
+     "at": "win3@tệ",
+     "who": "extra:nguoi_lab",
+     "do": "nhân viên vẽ đường cong lao xuống từ đỉnh cột ba mươi phút",
+     "change": "đường cong lao xuống dưới vạch gốc"
+    },
+    {
+     "id": "banhanh_b17",
+     "at": "win4@Nói",
+     "who": "extra:nguoi_lab",
+     "do": "nhân viên gạch chân lên nhánh hai mươi phút dưới cột rỗng",
+     "change": "nét gạch chân đè lên nhánh hai mươi phút",
+     "sfx": {
+      "type": "pen_cross",
+      "cause": "bút gạch chân lên nhánh hai mươi phút"
+     }
+    },
+    {
+     "id": "banhanh_b18",
+     "at": "win4@phải",
+     "who": "extra:nguoi_lab",
+     "do": "nhân viên viết thêm lên bảng, tay trái đè góc tờ giấy",
+     "change": "dòng chữ mới xuất hiện trên bảng",
+     "sfx": {
+      "type": "marker",
+      "cause": "bút viết dòng chữ lên bảng"
+     }
+    },
+    {
+     "id": "banhanh_b19",
+     "at": "win4@không",
+     "who": "extra:nguoi_lab",
+     "do": "nhân viên bước lùi ra, ngắm cả ba cột",
+     "change": "nhân viên đứng lùi, ba cột hiện rõ"
+    },
+    {
+     "id": "banhanh_b20",
+     "at": "win5@Lợi",
+     "who": "extra:nguoi_lab",
+     "do": "nhân viên đưa tay về chiếc đồng hồ nhỏ ở mốc ba mươi lăm phút",
+     "change": "kim đồng hồ đứng yên ở mốc"
+    },
+    {
+     "id": "banhanh_b21",
+     "at": "win5@Nó",
+     "who": "extra:nguoi_lab",
+     "do": "nhân viên đặt ngón tay vào cột hai mươi phút đang rỗng",
+     "change": "ngón tay chạm đúng khoảng trống"
+    },
+    {
+     "id": "banhanh_b22",
+     "at": "win5@nằm",
+     "who": "extra:nguoi_lab",
+     "do": "nhân viên vẽ vòng tròn quanh cột rỗng, tay vẫn chưa rời",
+     "change": "vòng tròn khoanh khoảng trống giữa hai cột",
+     "label": {
+      "kind": "stamp",
+      "text": "khoảng trống",
+      "xy": [
+       1400,
+       430
+      ],
+      "color": "#F0525B"
+     },
+     "sfx": {
+      "type": "pen_circle",
+      "cause": "bút vẽ vòng tròn quanh khoảng trống"
+     },
+     "flags": [
+      "aha"
+     ]
+    },
+    {
+     "id": "banhanh_b23",
+     "at": "win5@mở",
+     "who": "extra:nguoi_lab",
+     "do": "nhân viên chỉ vào vạch đầu tiên trên trục thời gian",
+     "change": "vạch đầu tiên được khoanh"
+    },
+    {
+     "id": "banhanh_b24",
+     "at": "win5@chưa",
+     "who": "extra:nguoi_lab",
+     "do": "nhân viên rút tay về, nhìn cột rỗng đã khoanh",
+     "change": "khoảng trống vẫn trống giữa hai cột"
+    },
+    {
+     "id": "banhanh_b25",
+     "at": "win5@tê",
+     "who": "extra:nguoi_lab",
+     "do": "nhân viên gõ ngón tay xuống cột rỗng một cái",
+     "change": "ngón tay gõ xuống khoảng trống"
+    },
+    {
+     "id": "banhanh_b26",
+     "at": "win5@end",
+     "who": "extra:nguoi_lab",
+     "do": "nhân viên đứng yên trước bảng, ba cột và khoảng trống",
+     "change": "khoảng trống vẫn được khoanh tròn"
+    }
+   ],
+   "amb": "hum",
+   "music": "C",
+   "in": {
+    "tr": "cut"
+   },
+   "silence": {
+    "at": "win5@Nó-1",
+    "d": 1.2
+   }
+  },
+  {
+   "id": "giacsau",
+   "place": "buồng đo đường sóng não, màn hình EEG lớn, bảng điện tử bên phải, giường có điện cực",
+   "light": "xanh màn hình hắt lên mặt người nằm, đèn ngủ vàng ở đầu giường",
+   "cast": [
+    "extra:nguoi_lab",
+    "extra:nguoi_tham_gia"
+   ],
+   "lines": [
+    "mech1",
+    "mech2",
+    "mech3",
+    "mech4",
+    "mech5"
+   ],
+   "shots": [
+    {
+     "id": "giacsau_eeg_wide",
+     "size": "wide",
+     "host": "none",
+     "cam": "hold",
+     "subject": "buồng đo với màn hình EEG bên trái và bảng điện tử bên phải",
+     "why": "cơ chế phải thấy được bằng mắt: đường sóng lao xuống vùng sâu trước lúc chuông reo"
+    },
+    {
+     "id": "giacsau_eeg_trace",
+     "size": "insert",
+     "host": "none",
+     "cam": "push",
+     "subject": "đường sóng lao xuống đáy vùng giấc ngủ sâu rồi bò lên",
+     "why": "vùng sâu là nơi mọi thứ bị kẹt, nên phải nhìn thấy đường sóng đi vào và đi ra",
+     "at": "mech1@đủ"
+    },
+    {
+     "id": "giacsau_eeg_bars",
+     "size": "medium",
+     "host": "none",
+     "cam": "hold",
+     "subject": "hai thanh đo phút ngủ sâu trên bảng điện tử",
+     "why": "hai con số đặt cạnh nhau tự nói sự chênh lệch, không cần lời giải thích",
+     "at": "mech2@Nhóm"
+    },
+    {
+     "id": "giacsau_eeg_dots",
+     "size": "medium",
+     "host": "none",
+     "cam": "hold",
+     "subject": "mười chấm người, tám chấm được tô đậm",
+     "why": "tỉ lệ tám trên mười đọc thành hình, thành đám đông, không thành lời",
+     "at": "mech3@người"
+    },
+    {
+     "id": "giacsau_eeg_shallow",
+     "size": "insert",
+     "host": "none",
+     "cam": "hold",
+     "subject": "vùng giấc ngủ nông mở ra bên trái bảng",
+     "why": "hai vùng đặt cạnh nhau để người xem tự so với nhau",
+     "at": "mech4@lớn"
+    },
+    {
+     "id": "giacsau_eeg_stamp",
+     "size": "close",
+     "host": "none",
+     "cam": "hold",
+     "subject": "con dấu đỏ đập lên vùng giấc ngủ sâu",
+     "why": "kết luận phải có dấu ấn, người xem mới tin",
+     "at": "mech5@nằm"
+    }
+   ],
+   "beats": [
+    {
+     "id": "giacsau_b01",
+     "at": "mech1@Vì",
+     "who": "extra:nguoi_lab",
+     "do": "đường sóng trên màn hình bắt đầu lao xuống",
+     "change": "vùng giấc ngủ sâu hiện ra trên màn hình"
+    },
+    {
+     "id": "giacsau_b02",
+     "at": "mech1@đủ",
+     "who": "extra:nguoi_lab",
+     "do": "nhân viên chỉ vào đáy vùng sâu trên màn hình",
+     "change": "vùng sâu được tô đậm trên màn hình",
+     "label": {
+      "kind": "term",
+      "text": "giấc ngủ sâu",
+      "xy": [
+       80,
+       110
+      ],
+      "def": "giấc ngủ chậm, não hồi phục chậm nhất",
+      "stay": true,
+      "color": "#8B5CF6"
+     }
+    },
+    {
+     "id": "giacsau_b03",
+     "at": "mech1@sâu",
+     "who": "extra:nguoi_lab",
+     "do": "một vạch nhỏ chỉ vào đáy vùng sâu",
+     "change": "vạch chỉ đáy vùng sâu hiện ra",
+     "sfx": {
+      "type": "pen_tick",
+      "cause": "bút vẽ vạch chỉ đáy vùng sâu"
+     }
+    },
+    {
+     "id": "giacsau_b04",
+     "at": "mech1@chưa#2",
+     "who": "extra:nguoi_lab",
+     "do": "một vạch ngang đánh dấu đáy vùng sâu",
+     "change": "vạch ngang nằm ngang đáy vùng sâu"
+    },
+    {
+     "id": "giacsau_b05",
+     "at": "mech1@end",
+     "who": "extra:nguoi_lab",
+     "do": "đường sóng đi lại phía trên, vùng sâu vẫn tô đậm",
+     "change": "vùng sâu giữ nguyên màu"
+    },
+    {
+     "id": "giacsau_b06",
+     "at": "mech2@Nhóm",
+     "who": "extra:nguoi_lab",
+     "do": "hai thanh đo thời gian ngủ sâu mọc lên trên bảng điện tử",
+     "change": "hai thanh đo dài ngắn đứng cạnh nhau",
+     "sfx": {
+      "type": "blip_up",
+      "cause": "bảng điện tử báo hai thanh đo"
+     }
+    },
+    {
+     "id": "giacsau_b07",
+     "at": "mech2@phút",
+     "who": "extra:nguoi_lab",
+     "do": "con trỏ lướt từ thanh dài sang thanh ngắn",
+     "change": "con trỏ dừng ở thanh ngắn"
+    },
+    {
+     "id": "giacsau_b08",
+     "at": "mech2@phút#2",
+     "who": "extra:nguoi_lab",
+     "do": "vạch đo của thanh ngắn gần như bằng không",
+     "change": "vạch đo của thanh ngắn gần bằng không"
+    },
+    {
+     "id": "giacsau_b09",
+     "at": "mech2@end",
+     "who": "extra:nguoi_lab",
+     "do": "hai thanh đo đứng yên trên bảng",
+     "change": "bảng điện tử giữ nguyên hai thanh"
+    },
+    {
+     "id": "giacsau_b10",
+     "at": "mech3@người",
+     "who": "extra:nguoi_lab",
+     "do": "mười chấm người hiện ra trên bảng, tám chấm được tô đậm",
+     "change": "tám chấm trong số mười chấm sáng lên",
+     "sfx": {
+      "type": "blip_up",
+      "cause": "mười chấm người hiện ra trên bảng"
+     }
+    },
+    {
+     "id": "giacsau_b11",
+     "at": "mech3@lâu",
+     "who": "extra:nguoi_lab",
+     "do": "một vạch nhỏ chỉ vào nhóm chấm được tô",
+     "change": "vạch chỉ nhóm tám chấm hiện ra"
+    },
+    {
+     "id": "giacsau_b12",
+     "at": "mech3@đúng",
+     "who": "extra:nguoi_lab",
+     "do": "tám chấm được tô vẫn sáng trên bảng",
+     "change": "bảng giữ nguyên mười chấm"
+    },
+    {
+     "id": "giacsau_b13",
+     "at": "mech4@Còn",
+     "who": "extra:nguoi_lab",
+     "do": "mười chấm thứ hai vẽ sang vùng ngủ nông",
+     "change": "vùng ngủ nông mở ra bên trái bảng"
+    },
+    {
+     "id": "giacsau_b14",
+     "at": "mech4@lớn",
+     "who": "extra:nguoi_lab",
+     "do": "vùng ngủ nông được khoanh trên bảng",
+     "change": "khung vùng ngủ nông hiện ra",
+     "sfx": {
+      "type": "blip_up",
+      "cause": "nhóm chấm thứ hai hiện ra ở vùng nông"
+     }
+    },
+    {
+     "id": "giacsau_b15",
+     "at": "mech5@Vì",
+     "who": "extra:nguoi_lab",
+     "do": "con trỏ dừng ở đáy vùng ngủ sâu",
+     "change": "đáy vùng ngủ sâu được khoanh đậm"
+    },
+    {
+     "id": "giacsau_b16",
+     "at": "mech5@nằm",
+     "who": "extra:nguoi_lab",
+     "do": "một mũi tên vẽ từ đáy vùng sâu bò lên trên",
+     "change": "mũi tên nối đáy vùng sâu với đỉnh"
+    },
+    {
+     "id": "giacsau_b17",
+     "at": "mech5@não",
+     "who": "extra:nguoi_lab",
+     "do": "con dấu đỏ đập xuống vùng ngủ sâu",
+     "change": "vùng ngủ sâu mang dấu đỏ",
+     "sfx": {
+      "type": "stamp",
+      "cause": "con dấu đỏ đập xuống bảng"
+     }
+    },
+    {
+     "id": "giacsau_b18",
+     "at": "mech5@được",
+     "who": "extra:nguoi_lab",
+     "do": "vùng sâu giữ nguyên dấu đỏ",
+     "change": "dấu đỏ nằm yên trên vùng sâu"
+    },
+    {
+     "id": "giacsau_b19",
+     "at": "mech5@end",
+     "who": "extra:nguoi_lab",
+     "do": "màn hình EEG vẫn chạy, vùng sâu đã được đóng dấu",
+     "change": "đường sóng vẫn chạy trên màn hình"
+    }
+   ],
+   "amb": "lab",
+   "music": "D",
+   "in": {
+    "tr": "cut"
+   }
+  },
+  {
+   "id": "tudanhgia",
+   "place": "bàn đo của phòng thí nghiệm, ba phiếu tự đánh giá, bảng đo lớn, cốc nước",
+   "light": "đèn bàn trắng lạnh, bóng đèn dài trên mặt bàn gỗ",
+   "cast": [
+    "extra:nguoi_tham_gia"
+   ],
+   "lines": [
+    "self1",
+    "self2",
+    "self3",
+    "self4"
+   ],
+   "shots": [
+    {
+     "id": "tudanhgia_desk_wide",
+     "size": "wide",
+     "host": "none",
+     "cam": "hold",
+     "subject": "bàn đo với ba tờ phiếu bên trái và bảng đo lớn bên phải",
+     "why": "cú lật của tập phải đặt hai vật cạnh nhau trong một khung: cảm giác và đồng hồ"
+    },
+    {
+     "id": "tudanhgia_desk_sheets",
+     "size": "insert",
+     "host": "none",
+     "cam": "hold",
+     "subject": "ba tờ phiếu tự đánh giá, cả ba mang dấu tốt",
+     "why": "cảm giác của cả ba nhóm đều tốt — đó mới là nghịch lý",
+     "at": "self2@Nhưng"
+    },
+    {
+     "id": "tudanhgia_desk_clock",
+     "size": "close",
+     "host": "none",
+     "cam": "push",
+     "subject": "chiếc đồng hồ đo tụt xuống dưới vạch gốc",
+     "why": "đồng hồ đo nói ngược lại với cảm giác, và nói thẳng bằng hai thanh",
+     "at": "self3@Tức"
+    },
+    {
+     "id": "tudanhgia_desk_strip",
+     "size": "insert",
+     "host": "none",
+     "cam": "pan",
+     "subject": "dải thang tự chấm vẫn thẳng tắp",
+     "why": "cái dải phẳng là hình ảnh của việc không ai biết mình đang tệ",
+     "at": "self4@Cảm"
+    }
+   ],
+   "beats": [
+    {
+     "id": "tudanhgia_b01",
+     "at": "self1@Chuyện",
+     "who": "extra:nguoi_tham_gia",
+     "do": "tờ phiếu tự đánh giá đầu tiên mở ra trên bàn",
+     "change": "phiếu nằm nghiêng trên bàn"
+    },
+    {
+     "id": "tudanhgia_b02",
+     "at": "self1@Trong",
+     "who": "extra:nguoi_tham_gia",
+     "do": "ba tờ phiếu tự đánh giá xếp thành hàng",
+     "change": "ba phiếu nằm cạnh nhau",
+     "label": {
+      "kind": "doc",
+      "text": "phiếu tự đánh giá",
+      "xy": [
+       420,
+       500
+      ],
+      "to": [
+       430,
+       600
+      ],
+      "color": "#F2A541"
+     }
+    },
+    {
+     "id": "tudanhgia_b03",
+     "at": "self1@ngủ",
+     "who": "extra:nguoi_tham_gia",
+     "do": "một tờ phiếu bị úp xuống, úp sát cạnh bàn",
+     "change": "tờ phiếu úp nằm sát mép bàn",
+     "sfx": {
+      "type": "paper_flip",
+      "cause": "tờ phiếu úp xuống úp sát mép bàn"
+     }
+    },
+    {
+     "id": "tudanhgia_b04",
+     "at": "self1@chấm",
+     "who": "extra:nguoi_tham_gia",
+     "do": "ngón tay lần theo cả ba dấu tốt trên phiếu",
+     "change": "ngón tay dừng ở dấu tốt thứ ba"
+    },
+    {
+     "id": "tudanhgia_b05",
+     "at": "self1@tốt",
+     "who": "extra:nguoi_tham_gia",
+     "do": "cả ba phiếu cùng mang dấu tốt",
+     "change": "ba dấu tốt sáng cùng lúc"
+    },
+    {
+     "id": "tudanhgia_b06",
+     "at": "self1@end",
+     "who": "extra:nguoi_tham_gia",
+     "do": "tờ phiếu úp nằm yên, không ai đụng tới",
+     "change": "khung hình đứng yên trên phiếu úp"
+    },
+    {
+     "id": "tudanhgia_b07",
+     "at": "self2@Nhưng",
+     "who": "extra:nguoi_tham_gia",
+     "do": "chiếc bảng đo bên phải sáng lên",
+     "change": "màn hình bảng đo sáng lên",
+     "sfx": {
+      "type": "beep",
+      "cause": "bảng đo báo một nhịp"
+     }
+    },
+    {
+     "id": "tudanhgia_b08",
+     "at": "self2@ngược",
+     "who": "extra:nguoi_tham_gia",
+     "do": "kim đồng hồ tụt xuống dưới vạch gốc",
+     "change": "kim nằm dưới vạch gốc",
+     "label": {
+      "kind": "number",
+      "text": "4,3 lần/s",
+      "xy": [
+       1620,
+       300
+      ],
+      "to": [
+       1560,
+       380
+      ],
+      "color": "#67E8F9"
+     },
+     "sfx": {
+      "type": "blip_down",
+      "cause": "kim đồng hồ trượt xuống dưới vạch gốc"
+     }
+    },
+    {
+     "id": "tudanhgia_b09",
+     "at": "self2@ở",
+     "who": "extra:nguoi_tham_gia",
+     "do": "các mốc đo đầu tiên sau khi dậy được đánh dấu",
+     "change": "ba vạch dọc đồng hồ hiện ra",
+     "sfx": {
+      "type": "pen_tick",
+      "cause": "bút đánh dấu các mốc đo"
+     }
+    },
+    {
+     "id": "tudanhgia_b10",
+     "at": "self2@ngủ",
+     "who": "extra:nguoi_tham_gia",
+     "do": "con trỏ dừng ở nhóm ngủ lâu trên đồng hồ",
+     "change": "nhóm ngủ lâu được khoanh"
+    },
+    {
+     "id": "tudanhgia_b11",
+     "at": "self2@sai",
+     "who": "extra:nguoi_tham_gia",
+     "do": "con trỏ gõ vào thanh thấp hơn, mặt nghiêm lại",
+     "change": "thanh sau khi dậy thấp hơn thanh trước khi ngủ"
+    },
+    {
+     "id": "tudanhgia_b12",
+     "at": "self2@end",
+     "who": "extra:nguoi_tham_gia",
+     "do": "hai thanh đo đứng cạnh nhau trên màn hình",
+     "change": "hai thanh đo hiện rõ"
+    },
+    {
+     "id": "tudanhgia_b13",
+     "at": "self3@Tức",
+     "who": "extra:nguoi_tham_gia",
+     "do": "dải thang tự chấm vẫn thẳng tắp từ đầu đến cuối",
+     "change": "dải thang tự chấm không đổi",
+     "label": {
+      "kind": "term",
+      "text": "cảm giác tỉnh",
+      "xy": [
+       80,
+       110
+      ],
+      "def": "tự đánh giá là cảm nhận, không phải đo",
+      "stay": true,
+      "color": "#67E8F9"
+     }
+    },
+    {
+     "id": "tudanhgia_b14",
+     "at": "self3@biết",
+     "who": "extra:nguoi_tham_gia",
+     "do": "không một biểu đồ nào nói cho ai biết",
+     "change": "khung hình vẫn im lặng"
+    },
+    {
+     "id": "tudanhgia_b15",
+     "at": "self3@không#2",
+     "who": "extra:nguoi_tham_gia",
+     "do": "chiếc đồng hồ đo trên bàn nhảy một nhịp",
+     "change": "đồng hồ nhảy nhịp rồi đứng yên",
+     "sfx": {
+      "type": "tick",
+      "cause": "đồng hồ đo nhảy một nhịp"
+     }
+    },
+    {
+     "id": "tudanhgia_b16",
+     "at": "self3@end",
+     "who": "extra:nguoi_tham_gia",
+     "do": "một tờ giấy nằm dài trên bàn, không ai nhặt",
+     "change": "tờ giấy nằm nguyên trên bàn"
+    },
+    {
+     "id": "tudanhgia_b17",
+     "at": "self4@Cảm",
+     "who": "extra:nguoi_tham_gia",
+     "do": "tờ phiếu tự đánh giá bị đẩy sang một bên bàn",
+     "change": "tờ phiếu nằm sát mép bàn",
+     "sfx": {
+      "type": "paper_slide",
+      "cause": "tờ phiếu bị đẩy sang mép bàn"
+     }
+    },
+    {
+     "id": "tudanhgia_b18",
+     "at": "self4@không",
+     "who": "extra:nguoi_tham_gia",
+     "do": "một tờ giấy in kết quả được đặt sang phía bên kia",
+     "change": "tờ giấy in nằm bên kia tờ phiếu"
+    }
+   ],
+   "amb": "room",
+   "music": "E",
+   "in": {
+    "tr": "light",
+    "sfx": "light_on"
+   }
+  },
+  {
+   "id": "quantcafe",
+   "place": "quầy cà phê nhỏ ven đường, máy pha, kệ tách, bàn gỗ sát cửa sổ",
+   "light": "đèn vàng quầy bar, nắng chiều lọt qua cửa kính",
+   "cast": [
+    "extra:nhan_vien_quan",
+    "host"
+   ],
+   "lines": [
+    "roi3",
+    "cafe1",
+    "cafe2",
+    "cafe3",
+    "cafe4"
+   ],
+   "shots": [
+    {
+     "id": "quantcafe_cafe_wide",
+     "size": "wide",
+     "host": "none",
+     "cam": "hold",
+     "subject": "quầy cà phê ven đường với máy pha, kệ tách và bàn gỗ",
+     "why": "câu hỏi đời thường phải ở quán cà phê, không ở phòng thí nghiệm"
+    },
+    {
+     "id": "quantcafe_cafe_cup",
+     "size": "insert",
+     "host": "none",
+     "cam": "push",
+     "subject": "tách cà phê đặt cạnh chiếc gối trên bàn gỗ",
+     "why": "vị trí của tách nói hết: uống trước khi nằm",
+     "at": "cafe2@Nhưng"
+    },
+    {
+     "id": "quantcafe_cafe_bar",
+     "size": "medium",
+     "host": "none",
+     "cam": "hold",
+     "subject": "thanh ba mươi phút đầu vẽ trên mặt quầy",
+     "why": "cà phê sau khi dậy đến trễ, phải thấy đoạn trễ",
+     "at": "cafe3@Nói"
+    },
+    {
+     "id": "quantcafe_cafe_back",
+     "size": "close",
+     "host": "none",
+     "cam": "hold",
+     "subject": "tách cà phê quay lại cạnh chiếc gối",
+     "why": "quyết định nằm ở chỗ tách đặt, nên khung này phải thấy rõ vị trí",
+     "at": "cafe4@Và"
+    }
+   ],
+   "beats": [
+    {
+     "id": "quantcafe_b01",
+     "at": "roi3@Vậy",
+     "who": "host",
+     "do": "người dẫn nói ra cách hiểu phổ biến: cứ uống cà phê ngay sau khi dậy là tỉnh ngay",
+     "change": "ly cà phê đặt trên mặt quầy"
+    },
+    {
+     "id": "quantcafe_b02",
+     "at": "roi3@đá",
+     "who": "extra:nhan_vien_quan",
+     "do": "nhân viên quán chỉ vào đá trong ly, mắt tròn xoe",
+     "change": "ngón tay chĩa vào đá trong ly"
+    },
+    {
+     "id": "quantcafe_b03",
+     "at": "roi3@chứ",
+     "who": "extra:nhan_vien_quan",
+     "do": "nhân viên quán chống tay lên quầy, nghiêng đầu",
+     "change": "nhân viên quán đứng tựa quầy"
+    },
+    {
+     "id": "quantcafe_b04",
+     "at": "cafe1@Cà",
+     "who": "extra:nhan_vien_quan",
+     "do": "nhân viên quán đặt tách cà phê xuống bàn gỗ cạnh chiếc gối",
+     "change": "tách cà phê nằm cạnh gối",
+     "label": {
+      "kind": "name",
+      "text": "tách cà phê",
+      "xy": [
+       1420,
+       600
+      ],
+      "to": [
+       1360,
+       690
+      ],
+      "color": "#67E8F9"
+     },
+     "sfx": {
+      "type": "cup_set",
+      "cause": "tách cà phê đặt xuống bàn"
+     }
+    },
+    {
+     "id": "quantcafe_b05",
+     "at": "cafe1@Người",
+     "who": "extra:nhan_vien_quan",
+     "do": "một vòng xanh nhạt lan quanh tách cà phê",
+     "change": "vòng xanh lan rộng quanh tách"
+    },
+    {
+     "id": "quantcafe_b06",
+     "at": "cafe1@trước",
+     "who": "extra:nhan_vien_quan",
+     "do": "vòng xanh lan tới tận chiếc gối",
+     "change": "vòng xanh chạm tới mép gối",
+     "sfx": {
+      "type": "ting",
+      "cause": "vòng xanh chạm tới mép gối"
+     }
+    },
+    {
+     "id": "quantcafe_b07",
+     "at": "cafe1@giảm",
+     "who": "extra:nhan_vien_quan",
+     "do": "vòng xanh đậm lại quanh tách",
+     "change": "vòng xanh đứng yên"
+    },
+    {
+     "id": "quantcafe_b08",
+     "at": "cafe1@rõ",
+     "who": "extra:nhan_vien_quan",
+     "do": "tách cà phê vẫn nằm cạnh gối",
+     "change": "tách cà phê yên vị trí cũ"
+    },
+    {
+     "id": "quantcafe_b09",
+     "at": "cafe2@Nhưng",
+     "who": "extra:nhan_vien_quan",
+     "do": "nhân viên quán đẩy tách sang bàn phía sau, xa khỏi gối",
+     "change": "tách cà phê nằm xa gối",
+     "label": {
+      "kind": "place",
+      "text": "bàn phía sau",
+      "xy": [
+       700,
+       620
+      ],
+      "to": [
+       560,
+       690
+      ],
+      "color": "#67E8F9"
+     },
+     "sfx": {
+      "type": "wood_set",
+      "cause": "tách cà phê bị đẩy trên mặt quầy"
+     }
+    },
+    {
+     "id": "quantcafe_b10",
+     "at": "cafe2@đến",
+     "who": "extra:nhan_vien_quan",
+     "do": "một thanh thời gian ba mươi phút đầu được vẽ ra",
+     "change": "thanh thời gian mọc lên trên quầy"
+    },
+    {
+     "id": "quantcafe_b11",
+     "at": "cafe2@Đoạn",
+     "who": "extra:nhan_vien_quan",
+     "do": "đoạn đầu của thanh thời gian được tô đậm",
+     "change": "đoạn đầu tô đậm thành vùng tối",
+     "label": {
+      "kind": "term",
+      "text": "đoạn tệ nhất",
+      "xy": [
+       80,
+       110
+      ],
+      "def": "phần đầu sau khi dậy, lúc não còn mơ hồ",
+      "stay": true,
+      "color": "#F0525B"
+     },
+     "sfx": {
+      "type": "pen_cross",
+      "cause": "bút tô đậm đoạn đầu của thanh thời gian"
+     }
+    },
+    {
+     "id": "quantcafe_b12",
+     "at": "cafe2@cứu",
+     "who": "extra:nhan_vien_quan",
+     "do": "tách cà phê nằm ngoài vùng tối trên thanh thời gian",
+     "change": "tách cà phê nằm ngoài vùng tô đậm"
+    },
+    {
+     "id": "quantcafe_b13",
+     "at": "cafe2@end",
+     "who": "extra:nhan_vien_quan",
+     "do": "nhân viên quán đẩy tách đi xa hơn nữa",
+     "change": "tách cà phê trượt xa hơn"
+    },
+    {
+     "id": "quantcafe_b14",
+     "at": "cafe3@Nói",
+     "who": "extra:nhan_vien_quan",
+     "do": "nhân viên quán đặt lại tách lên bàn cạnh gối",
+     "change": "tách cà phê quay lại cạnh gối",
+     "sfx": {
+      "type": "cup_set",
+      "cause": "tách cà phê đặt lại cạnh gối"
+     }
+    },
+    {
+     "id": "quantcafe_b15",
+     "at": "cafe3@xuống",
+     "who": "extra:nhan_vien_quan",
+     "do": "một chiếc gối nhỏ được vẽ lên cạnh tách",
+     "change": "chiếc gối nhỏ hiện ra",
+     "sfx": {
+      "type": "pen_circle",
+      "cause": "bút vẽ chiếc gối nhỏ cạnh tách"
+     }
+    },
+    {
+     "id": "quantcafe_b16",
+     "at": "cafe3@đừng",
+     "who": "extra:nhan_vien_quan",
+     "do": "vị trí tách ở bàn phía sau bị gạch chân",
+     "change": "nét gạch chân đè lên vị trí cũ",
+     "sfx": {
+      "type": "pen_cross",
+      "cause": "bút gạch chân vị trí tách cà phê"
+     }
+    },
+    {
+     "id": "quantcafe_b17",
+     "at": "cafe4@Và",
+     "who": "extra:nhan_vien_quan",
+     "do": "đồng hồ đếm ngược trên tường chạy về gần không",
+     "change": "kim đồng hồ về sát mốc không",
+     "label": {
+      "kind": "time",
+      "text": "đồng hồ đếm ngược",
+      "xy": [
+       1080,
+       180
+      ],
+      "to": [
+       1080,
+       260
+      ],
+      "color": "#67E8F9"
+     },
+     "sfx": {
+      "type": "timer_tick",
+      "cause": "kim đồng hồ đếm ngược chạy về không"
+     }
+    },
+    {
+     "id": "quantcafe_b18",
+     "at": "cafe4@cà",
+     "who": "extra:nhan_vien_quan",
+     "do": "con trỏ dừng ở chiếc đồng hồ đếm ngược",
+     "change": "con trỏ chỉ chiếc đồng hồ"
+    },
+    {
+     "id": "quantcafe_b19",
+     "at": "cafe4@end",
+     "who": "extra:nhan_vien_quan",
+     "do": "chiếc đồng hồ vẫn treo, kim đứng yên",
+     "change": "khung hình quay lại bàn"
+    }
+   ],
+   "amb": "cafe",
+   "music": "F",
+   "in": {
+    "tr": "whip",
+    "sfx": "whoosh_soft"
+   }
+  },
+  {
+   "id": "chiphi",
+   "place": "bàn làm việc tối, hồ sơ giấy bọc bìa cứng, lịch ngủ mười bốn ô đêm, con dấu đỏ",
+   "light": "đèn bàn vàng tập trung, nền tối, hạt phim rõ",
+   "cast": [
+    "extra:nguoi_luu_tru",
+    "host"
+   ],
+   "lines": [
+    "roi4",
+    "cost1",
+    "cost2",
+    "cost3"
+   ],
+   "shots": [
+    {
+     "id": "chiphi_file_wide",
+     "size": "wide",
+     "host": "none",
+     "cam": "hold",
+     "subject": "bàn làm việc tối với bìa hồ sơ giấy và Rối đứng giữa khung",
+     "why": "cảnh này nặng hơn các cảnh trước: dùng ngôn ngữ hồ sơ"
+    },
+    {
+     "id": "chiphi_file_open",
+     "size": "medium",
+     "host": "none",
+     "cam": "push",
+     "subject": "bìa hồ sơ thiếu ngủ mở ra trên bàn",
+     "why": "hồ sơ mở ra là bằng chứng, không phải lời kể",
+     "at": "cost1@nặng"
+    },
+    {
+     "id": "chiphi_file_grid",
+     "size": "insert",
+     "host": "none",
+     "cam": "pan",
+     "subject": "mười bốn ô đêm trong lịch ngủ",
+     "why": "mười bốn đêm phải thấy đếm được, không chỉ nghe",
+     "at": "cost1@ngủ#2"
+    },
+    {
+     "id": "chiphi_file_stamp",
+     "size": "close",
+     "host": "none",
+     "cam": "hold",
+     "subject": "con dấu đỏ đập giữa hồ sơ",
+     "why": "dấu kết luận đến đúng lúc người ta không nhận ra mình mệt",
+     "at": "cost3@Và"
+    }
+   ],
+   "beats": [
+    {
+     "id": "chiphi_b01",
+     "at": "roi4@Thì",
+     "who": "host",
+     "do": "người dẫn nói ra cách hiểu phổ biến: thì cứ đừng ngủ trưa, giữ mình tỉnh là hơn",
+     "change": "bàn trống dưới đèn vàng"
+    },
+    {
+     "id": "chiphi_b02",
+     "at": "roi4@giữ",
+     "who": "host",
+     "do": "người dẫn chỉ vào phía cửa sổ, như đang tìm một cách nữa",
+     "change": "ánh sáng đèn bàn hắc ra mép bàn"
+    },
+    {
+     "id": "chiphi_b03",
+     "at": "roi4@chứ",
+     "who": "extra:nguoi_luu_tru",
+     "do": "người lưu trữ bước tới, đặt bìa hồ sơ xuống bàn",
+     "change": "bìa hồ sơ nằm giữa bàn",
+     "sfx": {
+      "type": "paper_flip",
+      "cause": "bìa hồ sơ giấy đặt xuống bàn"
+     }
+    },
+    {
+     "id": "chiphi_b04",
+     "at": "cost1@Còn",
+     "who": "extra:nguoi_luu_tru",
+     "do": "người lưu trữ mở bìa hồ sơ thiếu ngủ trên bàn",
+     "change": "hồ sơ mở, ghim đỏ ở góc",
+     "sfx": {
+      "type": "paper_flip",
+      "cause": "bìa hồ sơ giấy mở ra"
+     }
+    },
+    {
+     "id": "chiphi_b05",
+     "at": "cost1@nặng",
+     "who": "extra:nguoi_luu_tru",
+     "do": "trang lịch ngủ mười bốn ô đêm lật ra",
+     "change": "dãy ô đêm hiện ra trên trang",
+     "sfx": {
+      "type": "page_turn",
+      "cause": "trang lịch ngủ lật sang"
+     }
+    },
+    {
+     "id": "chiphi_b06",
+     "at": "cost1@ngủ#2",
+     "who": "extra:nguoi_luu_tru",
+     "do": "ngón tay gõ vào ô thứ tư của dãy ô đêm",
+     "change": "ô thứ tư được tô sáng",
+     "sfx": {
+      "type": "hand_tap",
+      "cause": "ngón tay gõ lên ô thứ tư"
+     }
+    },
+    {
+     "id": "chiphi_b07",
+     "at": "cost1@tích",
+     "who": "extra:nguoi_luu_tru",
+     "do": "một mũi tên được vẽ từ ô thứ tư sang ô cuối",
+     "change": "mũi tên nối ô thứ tư với ô cuối"
+    },
+    {
+     "id": "chiphi_b08",
+     "at": "cost1@thiếu",
+     "who": "extra:nguoi_luu_tru",
+     "do": "người lưu trữ gõ ngón tay dọc theo dãy ô đêm",
+     "change": "dãy ô đêm được gõ từng ô"
+    },
+    {
+     "id": "chiphi_b09",
+     "at": "cost1@end",
+     "who": "extra:nguoi_luu_tru",
+     "do": "cả dãy ô đêm nằm nghiêng trên trang hồ sơ",
+     "change": "dãy ô đêm giữ nguyên"
+    },
+    {
+     "id": "chiphi_b10",
+     "at": "cost2@giờ",
+     "who": "extra:nguoi_luu_tru",
+     "do": "con trỏ dừng ở ô sáu giờ",
+     "change": "ô sáu giờ được khoanh sáng",
+     "label": {
+      "kind": "number",
+      "text": "6 giờ",
+      "xy": [
+       860,
+       480
+      ],
+      "to": [
+       900,
+       560
+      ],
+      "color": "#F0525B"
+     }
+    },
+    {
+     "id": "chiphi_b11",
+     "at": "cost2@tương",
+     "who": "extra:nguoi_luu_tru",
+     "do": "hai đêm tối được khoanh tròn trên dãy ô",
+     "change": "vòng tròn tím quanh hai ô cuối",
+     "label": {
+      "kind": "number",
+      "text": "2 đêm",
+      "xy": [
+       1640,
+       640
+      ],
+      "to": [
+       1560,
+       660
+      ],
+      "color": "#4F86C6"
+     },
+     "sfx": {
+      "type": "pen_circle",
+      "cause": "bút khoanh tròn hai đêm tối"
+     }
+    },
+    {
+     "id": "chiphi_b12",
+     "at": "cost2@end",
+     "who": "extra:nguoi_luu_tru",
+     "do": "con trỏ rời khỏi dãy ô, hai vòng tròn vẫn còn",
+     "change": "hai đêm tối vẫn được khoanh"
+    },
+    {
+     "id": "chiphi_b13",
+     "at": "cost3@Và",
+     "who": "extra:nguoi_luu_tru",
+     "do": "dải thang tự chấm vẫn thẳng dọc mép bảng, con dấu đỏ đập xuống giữa hồ sơ",
+     "change": "dải thang phẳng lì, con dấu đỏ nằm trên bìa hồ sơ",
+     "sfx": {
+      "type": "stamp",
+      "cause": "con dấu đỏ đập xuống bìa hồ sơ"
+     }
+    },
+    {
+     "id": "chiphi_b14",
+     "at": "cost3@ra",
+     "who": "extra:nguoi_luu_tru",
+     "do": "con dấu đỏ nằm im trên bìa hồ sơ",
+     "change": "con dấu đỏ nằm trên bìa hồ sơ"
+    },
+    {
+     "id": "chiphi_b15",
+     "at": "cost3@end",
+     "who": "extra:nguoi_luu_tru",
+     "do": "hồ sơ nằm yên dưới con dấu đỏ",
+     "change": "khung hình đứng yên"
+    }
+   ],
+   "amb": "room",
+   "music": "G",
+   "in": {
+    "tr": "cut"
+   }
+  },
+  {
+   "id": "hanhdong",
+   "place": "bàn làm việc buổi tối của Kẻ Nghĩ Nhiều ở nhà, đèn bàn vàng, cửa sổ đêm, điện thoại, tách cà phê, sổ tay, giường ở góc",
+   "light": "đèn bàn vàng ấm, cửa sổ ngoài trời tối đen",
+   "cast": [
+    "host"
+   ],
+   "lines": [
+    "act1",
+    "act2",
+    "act3",
+    "act4",
+    "close1",
+    "close2",
+    "close3"
+   ],
+   "shots": [
+    {
+     "id": "hanhdong_desk_wide",
+     "size": "wide",
+     "host": "desk",
+     "cam": "hold",
+     "subject": "bàn làm việc tối với đèn bàn vàng và chiếc điện thoại",
+     "why": "hành động phải được làm trong cảnh, không nói mới"
+    },
+    {
+     "id": "hanhdong_desk_alarm",
+     "size": "insert",
+     "host": "desk",
+     "cam": "push",
+     "subject": "ô phút trên điện thoại đổi từ ba mươi sang mười",
+     "why": "gõ lại con số là thay đổi thật, không phải lời khuyên",
+     "at": "act2@Muốn"
+    },
+    {
+     "id": "hanhdong_desk_cup",
+     "size": "insert",
+     "host": "desk",
+     "cam": "hold",
+     "subject": "tách cà phê đặt cạnh chiếc gối giường",
+     "why": "thứ tự tách cà phê và giấc ngủ là thứ người xem chép lại được",
+     "at": "act3@Uống"
+    },
+    {
+     "id": "hanhdong_desk_note",
+     "size": "medium",
+     "host": "desk",
+     "cam": "hold",
+     "subject": "sổ tay ghi chú và tờ bảng điểm trên bàn",
+     "why": "lời khuyên phải nằm trên giấy trước khi trở thành thói quen",
+     "at": "act4@Muốn"
+    },
+    {
+     "id": "hanhdong_desk_cards",
+     "size": "medium",
+     "host": "desk",
+     "cam": "hold",
+     "subject": "ba thẻ số xếp cạnh nhau trên bàn",
+     "why": "ba thẻ là cách người xem tự chọn con số của mình",
+     "at": "close1@Ngủ"
+    },
+    {
+     "id": "hanhdong_desk_end",
+     "size": "close",
+     "host": "desk",
+     "cam": "push",
+     "subject": "Kẻ nằm xuống, đèn ngủ nhỏ cạnh gối",
+     "why": "kết bằng hành động nhỏ, không bằng lời dặn",
+     "at": "close2@nghị",
+     "focus": [
+      960,
+      720
+     ],
+     "amount": 0.14
+    },
+    {
+     "id": "hanhdong_desk_title",
+     "size": "medium",
+     "host": "desk",
+     "cam": "hold",
+     "subject": "thẻ tiêu đề của kênh trượt vào giữa khung tối",
+     "why": "khung hình tối dần để lời chào tạm biệt làm chốt tập",
+     "at": "close3@Trạm"
+    }
+   ],
+   "beats": [
+    {
+     "id": "hanhdong_b01",
+     "at": "act1@Nên",
+     "who": "host",
+     "do": "Kẻ mở ứng dụng báo thức trên điện thoại, hai ngón gõ",
+     "change": "màn hình điện thoại sáng lên",
+     "sfx": {
+      "type": "button",
+      "cause": "ngón tay bấm ứng dụng báo thức"
+     }
+    },
+    {
+     "id": "hanhdong_b02",
+     "at": "act1@Giữ",
+     "who": "host",
+     "do": "Kẻ gõ số ba mươi vào ô phút rồi bấm lưu",
+     "change": "ô phút hiện ba mươi"
+    },
+    {
+     "id": "hanhdong_b03",
+     "at": "act1@phút",
+     "who": "host",
+     "do": "ngón tay dừng trên ô phút, đếm lại một lần",
+     "change": "ngón tay giữ nguyên trên ô phút"
+    },
+    {
+     "id": "hanhdong_b04",
+     "at": "act1@nguy",
+     "who": "host",
+     "do": "Kẻ úp màn hình xuống, đẩy chiếc máy tính bảng sang xa",
+     "change": "máy tính bảng trượt sang xa",
+     "sfx": {
+      "type": "plastic_click",
+      "cause": "nắp điện thoại úp xuống mặt bàn"
+     }
+    },
+    {
+     "id": "hanhdong_b05",
+     "at": "act1@end",
+     "who": "host",
+     "do": "Kẻ đặt điện thoại úp xuống, quay lại bàn",
+     "change": "điện thoại nằm úp trên bàn"
+    },
+    {
+     "id": "hanhdong_b06",
+     "at": "act2@Muốn",
+     "who": "host",
+     "do": "Kẻ mở lại báo thức, gõ số mười vào ô phút",
+     "change": "ô phút đổi từ ba mươi sang mười",
+     "sfx": {
+      "type": "button",
+      "cause": "ngón tay bấm lại ứng dụng báo thức"
+     }
+    },
+    {
+     "id": "hanhdong_b07",
+     "at": "act2@thay",
+     "who": "host",
+     "do": "Kẻ bấm lưu, bộ đếm bắt đầu chạy",
+     "change": "bộ đếm trên điện thoại chạy từ mười"
+    },
+    {
+     "id": "hanhdong_b08",
+     "at": "act2@end",
+     "who": "host",
+     "do": "Kẻ gõ vào ô mười một lần rồi đứng dậy",
+     "change": "Kẻ đứng lên khỏi ghế"
+    },
+    {
+     "id": "hanhdong_b09",
+     "at": "act3@Uống",
+     "who": "host",
+     "do": "Kẻ đặt tách cà phê lên bàn cạnh chiếc gối giường",
+     "change": "tách cà phê nằm cạnh gối",
+     "label": {
+      "kind": "name",
+      "text": "tách cà phê",
+      "xy": [
+       1640,
+       560
+      ],
+      "to": [
+       1560,
+       640
+      ],
+      "color": "#67E8F9"
+     },
+     "sfx": {
+      "type": "cup_set",
+      "cause": "tách cà phê đặt xuống bàn"
+     }
+    },
+    {
+     "id": "hanhdong_b10",
+     "at": "act3@nó",
+     "who": "host",
+     "do": "ánh sáng nhẹ nhấp nháy quanh tách cà phê",
+     "change": "quầng sáng nhấp nháy quanh tách"
+    },
+    {
+     "id": "hanhdong_b11",
+     "at": "act3@để",
+     "who": "host",
+     "do": "Kẻ với lấy sổ tay, ngồi xuống mép giường",
+     "change": "Kẻ ngồi xuống mép giường",
+     "sfx": {
+      "type": "page_turn",
+      "cause": "Kẻ lật trang sổ tay"
+     }
+    },
+    {
+     "id": "hanhdong_b12",
+     "at": "act4@Muốn",
+     "who": "host",
+     "do": "Kẻ kéo tờ bảng điểm vào giữa bàn",
+     "change": "tờ bảng điểm nằm giữa bàn",
+     "sfx": {
+      "type": "paper_flip",
+      "cause": "tờ bảng điểm được kéo vào giữa bàn"
+     }
+    },
+    {
+     "id": "hanhdong_b13",
+     "at": "act4@bạn",
+     "who": "host",
+     "do": "Kẻ ghi một dòng vào sổ tay, bút dừng lại",
+     "change": "nét chữ mới trong sổ tay",
+     "sfx": {
+      "type": "pen_scribble",
+      "cause": "bút ghi một dòng vào sổ tay"
+     }
+    },
+    {
+     "id": "hanhdong_b14",
+     "at": "act4@không",
+     "who": "host",
+     "do": "Kẻ gạch chân dòng vừa ghi, rồi gập sổ lại",
+     "change": "nét gạch chân đè lên dòng vừa ghi",
+     "sfx": {
+      "type": "pen_cross",
+      "cause": "bút gạch chân dòng vừa ghi"
+     }
+    },
+    {
+     "id": "hanhdong_b15",
+     "at": "act4@end",
+     "who": "host",
+     "do": "Kẻ nhìn xuống tờ bảng điểm một lần nữa",
+     "change": "tờ bảng điểm nằm yên giữa bàn"
+    },
+    {
+     "id": "hanhdong_b16",
+     "at": "close1@Ngủ",
+     "who": "host",
+     "do": "Kẻ đặt thẻ ba mươi phút xuống bàn",
+     "change": "thẻ ba mươi phút nằm trên bàn",
+     "sfx": {
+      "type": "card_set",
+      "cause": "thẻ số đầu tiên đặt xuống bàn"
+     }
+    },
+    {
+     "id": "hanhdong_b17",
+     "at": "close1@trưa",
+     "who": "host",
+     "do": "Kẻ đẩy thẻ ba mươi phút ra rìa bàn",
+     "change": "thẻ ba mươi phút trượt ra rìa bàn",
+     "sfx": {
+      "type": "card_set",
+      "cause": "thẻ ba mươi phút trượt ra rìa bàn"
+     }
+    },
+    {
+     "id": "hanhdong_b18",
+     "at": "close1@thôi",
+     "who": "host",
+     "do": "Kẻ đặt thẻ mười phút vào giữa, ngón gõ hai lần",
+     "change": "thẻ mười phút nằm giữa bàn",
+     "sfx": {
+      "type": "card_set",
+      "cause": "thẻ mười phút đặt xuống giữa bàn"
+     }
+    },
+    {
+     "id": "hanhdong_b19",
+     "at": "close1@cà",
+     "who": "host",
+     "do": "Kẻ xếp thẻ cà phê cạnh thẻ mười phút",
+     "change": "thẻ cà phê nằm cạnh thẻ mười phút"
+    },
+    {
+     "id": "hanhdong_b20",
+     "at": "close1@end",
+     "who": "host",
+     "do": "Kẻ nhìn ba thẻ, gật đầu một cái",
+     "change": "ba thẻ nằm thành hàng"
+    },
+    {
+     "id": "hanhdong_b21",
+     "at": "close2@nghị",
+     "who": "host",
+     "do": "Kẻ với công tắc đèn bàn, ánh sáng tắt dần",
+     "change": "ánh sáng trong phòng tắt dần",
+     "sfx": {
+      "type": "switch",
+      "cause": "công tắc đèn bàn bật xuống"
+     }
+    },
+    {
+     "id": "hanhdong_b22",
+     "at": "close2@nghị",
+     "who": "host",
+     "do": "Kẻ chỉ vào con số ba mươi phút trên thẻ, gật đầu",
+     "change": "ngón tay dừng trên thẻ ba mươi phút"
+    },
+    {
+     "id": "hanhdong_b23",
+     "at": "close2@Nhưng",
+     "who": "host",
+     "do": "Kẻ lắc đầu, tay vẫn đặt trên nắp đèn",
+     "change": "Kẻ lắc đầu ngay dưới ánh đèn mờ"
+    },
+    {
+     "id": "hanhdong_b24",
+     "at": "close2@ngủ",
+     "who": "host",
+     "do": "Kẻ nằm xuống, chỉ còn đèn ngủ nhỏ",
+     "change": "Kẻ nằm trên giường",
+     "sfx": {
+      "type": "light_off",
+      "cause": "đèn ngủ nhỏ thắp lại trên bàn"
+     }
+    },
+    {
+     "id": "hanhdong_b25",
+     "at": "close2@đừng",
+     "who": "host",
+     "do": "Kẻ kéo chăn lên vai, mắt nhắm",
+     "change": "chăn phủ lên vai Kẻ",
+     "sfx": {
+      "type": "cloth_rustle",
+      "cause": "chăn kéo lên vai"
+     }
+    },
+    {
+     "id": "hanhdong_b26",
+     "at": "close2@end",
+     "who": "host",
+     "do": "Kẻ nằm im, sợi tóc đèn nằm ngang trên gối",
+     "change": "phòng tối, chỉ còn hơi thở"
+    },
+    {
+     "id": "hanhdong_b27",
+     "at": "close3@Trạm",
+     "who": "none",
+     "do": "thẻ tiêu đề của kênh trượt vào giữa khung",
+     "change": "thẻ tiêu đề hiện ra giữa khung",
+     "sfx": {
+      "type": "paper_slide",
+      "cause": "thẻ tiêu đề trượt vào giữa khung"
+     }
+    },
+    {
+     "id": "hanhdong_b28",
+     "at": "close3@hẹn",
+     "who": "none",
+     "do": "khung hình chìm dần vào bóng tối",
+     "change": "khung hình tối dần"
+    },
+    {
+     "id": "hanhdong_b29",
+     "at": "close3@kỳ",
+     "who": "none",
+     "do": "cả khung hình tối lặng, chỉ còn hơi thở đều",
+     "change": "khung hình tối hẳn"
+    }
+   ],
+   "amb": "night",
+   "music": "G",
+   "in": {
+    "tr": "cut"
+   }
+  }
+ ]
+}

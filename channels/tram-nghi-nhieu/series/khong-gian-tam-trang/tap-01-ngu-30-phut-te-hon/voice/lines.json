@@ -1,0 +1,186 @@
+[
+ {
+  "id": "hook1",
+  "text": "Chiều thứ Sáu, mình ngủ gục ở văn phòng. Đồng hồ hẹn ba mươi phút.",
+  "asr": "Chiều thứ Sáu, mình ngủ gục ở văn phòng. Đồng hồ hẹn 30 phút."
+ },
+ {
+  "id": "hook2",
+  "text": "Chuông reo, mình ngồi dậy, mở laptop, và thấy đầu mình nặng hơn lúc vừa nằm xuống. Người ta gọi cảm giác lười nhác, lơ mơ, đầu không minh đó là sleep inertia, và nó thường kéo dài chừng nửa tiếng.",
+  "asr": "Chuông reo, mình ngồi dậy, mở laptop, và thấy đầu mình nặng hơn lúc vừa nằm xuống. Người ta gọi cảm giác lười nhác, lơ mơ, đầu không minh đó là sleep inertia, và nó thường kéo dài chừng nửa tiếng."
+ },
+ {
+  "id": "hook3",
+  "text": "Càng ngủ lâu, càng tệ hả?"
+ },
+ {
+  "id": "intro",
+  "text": "Mình là Kẻ Nghĩ Nhiều. Hôm nay: tại sao ngủ ba mươi phút lại tệ hơn không ngủ?",
+  "asr": "Mình là Kẻ Nghĩ Nhiều. Hôm nay: tại sao ngủ 30 phút lại tệ hơn không ngủ?"
+ },
+ {
+  "id": "hook4",
+  "text": "Mình tìm hiểu xem lời giải thích này có đúng không."
+ },
+ {
+  "id": "roi1",
+  "text": "Ngủ trưa hai mươi phút là chuẩn rồi. Ngủ đủ vậy thì chắc chắn tỉnh.",
+  "asr": "Ngủ trưa 20 phút là chuẩn rồi. Ngủ đủ vậy thì chắc chắn tỉnh."
+ },
+ {
+  "id": "lab1",
+  "text": "Mình tìm được một nhóm người đã làm thí nghiệm ngủ trưa có đo đạc, để đo chính xác cái cảm giác này."
+ },
+ {
+  "id": "lab2",
+  "text": "Họ mời hai mươi bốn người; đêm trước chỉ ngủ được khoảng năm tiếng, rồi buổi chiều đưa vào phòng.",
+  "asr": "Họ mời 24 người; đêm trước chỉ ngủ được khoảng 5 tiếng, rồi buổi chiều đưa vào phòng."
+ },
+ {
+  "id": "lab3",
+  "text": "Trước hết, ba nhóm: ngủ mười phút, ngủ hai mươi phút, và nhóm ngủ ba mươi phút.",
+  "asr": "Trước hết, ba nhóm: ngủ 10 phút, ngủ 20 phút, và nhóm ngủ 30 phút."
+ },
+ {
+  "id": "lab4",
+  "text": "Rồi đèn bật, và họ phải làm bài ngay lập tức, không có thời gian để tỉnh."
+ },
+ {
+  "id": "lab5",
+  "text": "Hiệu năng thì đo bằng đồng hồ: đếm số lần trả lời sai mỗi giây."
+ },
+ {
+  "id": "roi2",
+  "text": "Chắc nhóm ngủ lâu nhất thì tỉnh nhất chứ gì. Ai cũng vậy mà."
+ },
+ {
+  "id": "win1",
+  "text": "Nhóm ngủ mười phút thì tỉnh ngay, và cảm nhận được hiệu quả ngay sau khi dậy.",
+  "asr": "Nhóm ngủ 10 phút thì tỉnh ngay, và cảm nhận được hiệu quả ngay sau khi dậy."
+ },
+ {
+  "id": "win2",
+  "text": "Nhóm ngủ hai mươi phút thì lạ: lúc vừa mở mắt, cột của họ vẫn trống — hiệu quả chưa tới một lần nào.",
+  "asr": "Nhóm ngủ 20 phút thì lạ: lúc vừa mở mắt, cột của họ vẫn trống — hiệu quả chưa tới 1 lần nào."
+ },
+ {
+  "id": "win3",
+  "text": "Còn nhóm ngủ ba mươi phút thì tệ nhất lúc mới dậy, phải chờ thêm mới hồi lại được.",
+  "asr": "Còn nhóm ngủ 30 phút thì tệ nhất lúc mới dậy, phải chờ thêm mới hồi lại được."
+ },
+ {
+  "id": "win4",
+  "text": "Nói cách khác, con số của nhóm vừa rồi không phải là con số chuẩn của một giấc ngủ trưa."
+ },
+ {
+  "id": "win5",
+  "text": "Lợi ích của nhóm ấy chỉ xuất hiện sau ba mươi lăm phút. Nó nằm giữa: lúc vừa mở mắt, chưa được lợi ích gì cả, mà cũng chưa rơi vào giấc ngủ sâu để bị tê.",
+  "asr": "Lợi ích của nhóm ấy chỉ xuất hiện sau 35 phút. Nó nằm giữa: lúc vừa mở mắt, chưa được lợi ích gì cả, mà cũng chưa rơi vào giấc ngủ sâu để bị tê."
+ },
+ {
+  "id": "mech1",
+  "text": "Có một thí nghiệm khác, vào ca đêm, với ba mươi mốt người sau một đêm không ngủ. Vì sao nhóm ngủ lâu lại tệ hơn? Vì nhóm đó đủ lâu để rơi vào giấc ngủ sâu, còn nhóm ngủ ngắn thì chưa. Không phải ai đi thẳng vào giấc ngủ sâu được: chưa vào thì chưa có lợi ích, mà cũng chưa sâu đến mức bị tê.",
+  "asr": "Có một thí nghiệm khác, vào ca đêm, với 31 người sau một đêm không ngủ. Vì sao nhóm ngủ lâu lại tệ hơn? Vì nhóm đó đủ lâu để rơi vào giấc ngủ sâu, còn nhóm ngủ ngắn thì chưa. Không phải ai đi thẳng vào giấc ngủ sâu được: chưa vào thì chưa có lợi ích, mà cũng chưa sâu đến mức bị tê."
+ },
+ {
+  "id": "mech2",
+  "text": "Nhóm ngủ lâu có mười bốn phút bảy ngủ sâu; nhóm ngủ ngắn thì chỉ không phẩy tám phút.",
+  "asr": "Nhóm ngủ lâu có 14 phút 7 ngủ sâu; nhóm ngủ ngắn thì chỉ không phẩy 8 phút."
+ },
+ {
+  "id": "mech3",
+  "text": "Tám mươi phần trăm người ngủ lâu tỉnh dậy đúng lúc đang ngủ sâu.",
+  "asr": "80% người ngủ lâu tỉnh dậy đúng lúc đang ngủ sâu."
+ },
+ {
+  "id": "mech4",
+  "text": "Còn nhóm ngủ ngắn thì phần lớn tỉnh dậy ở giấc ngủ nông."
+ },
+ {
+  "id": "mech5",
+  "text": "Vì lúc đó ta còn đang nằm trong giấc ngủ sâu, nên phải chờ não tỉnh dần mới hồi lại được."
+ },
+ {
+  "id": "self1",
+  "text": "Chuyện khó chịu nhất nằm ở đây. Trong thí nghiệm ca đêm đó, các nhóm đều tự chấm là mình làm tốt hơn trước khi ngủ."
+ },
+ {
+  "id": "self2",
+  "text": "Nhưng đồng hồ đo thì nói ngược lại: ở những mốc đo đầu tiên sau khi dậy, nhóm ngủ lâu làm sai nhiều hơn cả nhóm không ngủ."
+ },
+ {
+  "id": "self3",
+  "text": "Tức là bạn không hề biết mình đang tệ. Không ai báo cho bạn cả."
+ },
+ {
+  "id": "self4",
+  "text": "Cảm giác tỉnh của bạn không phải là bằng chứng."
+ },
+ {
+  "id": "roi3",
+  "text": "Vậy thì cứ uống cà phê ngay sau khi dậy là tỉnh ngay chứ gì."
+ },
+ {
+  "id": "cafe1",
+  "text": "Cà phê thì sao? Người ta đã thử uống cà phê trước giấc ngủ trưa, và các triệu chứng mờ đầu, lười nhác sau khi dậy giảm rõ rệt."
+ },
+ {
+  "id": "cafe2",
+  "text": "Nhưng uống sau khi đã dậy thì tác dụng đến trễ. Đoạn tệ nhất vừa mở mắt, cà phê không cứu được."
+ },
+ {
+  "id": "cafe3",
+  "text": "Nói cách khác, muốn cà phê thì uống trước khi nằm xuống, đừng uống sau khi ngồi dậy."
+ },
+ {
+  "id": "cafe4",
+  "text": "Và cà phê không thay thế được giấc ngủ."
+ },
+ {
+  "id": "roi4",
+  "text": "Thì cứ đừng ngủ trưa, giữ mình tỉnh là hơn chứ gì."
+ },
+ {
+  "id": "cost1",
+  "text": "Còn một thứ nữa nữa, và nó nặng hơn nhiều: không ngủ trưa cũng chưa phải là cách, vì thiếu ngủ không ghi đè lên bạn, nó tích lũy."
+ },
+ {
+  "id": "cost2",
+  "text": "Sáu giờ mừng đêm suốt mười bốn ngày liên tiếp, hiệu năng nhận thức tệ đến mức tương đương tới hai đêm không ngủ trắng.",
+  "asr": "Sáu giờ mừng đêm suốt 14 ngày liên tiếp, hiệu năng nhận thức tệ đến mức tương đương tới 2 đêm không ngủ trắng."
+ },
+ {
+  "id": "cost3",
+  "text": "Và người trong cuộc phần lớn không nhận ra mình đang mệt."
+ },
+ {
+  "id": "act1",
+  "text": "Nên làm gì? Giữ giấc ngủ trưa dưới ba mươi phút, và đừng làm việc nguy hiểm ngay lúc vừa dậy.",
+  "asr": "Nên làm gì? Giữ giấc ngủ trưa dưới 30 phút, và đừng làm việc nguy hiểm ngay lúc vừa dậy."
+ },
+ {
+  "id": "act2",
+  "text": "Muốn ngủ trưa thì đặt báo thức mười phút, thay vì để mình nằm tới khi tự tỉnh.",
+  "asr": "Muốn ngủ trưa thì đặt báo thức 10 phút, thay vì để mình nằm tới khi tự tỉnh."
+ },
+ {
+  "id": "act3",
+  "text": "Uống cà phê thì uống trước khi nằm, để nó còn kịp tác dụng lúc bạn vừa dậy."
+ },
+ {
+  "id": "act4",
+  "text": "Và đừng tin cảm giác của bạn. Muốn biết mình có ổn không thì phải nhìn kết quả."
+ },
+ {
+  "id": "close1",
+  "text": "Ngủ trưa thì giữ ngắn thôi; cà phê thì uống trước khi nằm."
+ },
+ {
+  "id": "close2",
+  "text": "Khuyến nghị này đến từ các bài tổng quan, và bằng chứng cho nó chưa được rà soát kỹ. Nhưng vẫn phải ngủ đủ ban đêm, đừng có cắt ngủ."
+ },
+ {
+  "id": "close3",
+  "text": "Trạm Nghĩ Nhiều — tức là Kẻ Nghĩ Nhiều đây — hẹn gặp lại bạn ở kỳ sau."
+ }
+]

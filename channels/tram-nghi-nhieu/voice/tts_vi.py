@@ -54,7 +54,8 @@ def main():
     os.makedirs(os.path.join(out, '.cache'), exist_ok=True)
     dur = {}
     for L in lines:
-        voice, rate, pitch, say = L.get('voice', 'vi-VN-HoaiMyNeural'), L.get('rate', '+0%'), L.get('pitch', '+0Hz'), L.get('say', L['text'])
+        # giọng kể của kênh (STYLE.md §6): một giọng nam trẻ cho cả phim — tập không đổi voice/pitch/rate
+        voice, rate, pitch, say = L.get('voice', 'vi-VN-NamMinhNeural'), L.get('rate', '+5%'), L.get('pitch', '-8Hz'), L.get('say', L['text'])
         key = hashlib.sha1(json.dumps([voice, rate, pitch, say], ensure_ascii=False).encode('utf-8')).hexdigest()[:16]
         mp3 = os.path.join(out, '.cache', key + '.mp3')
         decoded = to_wav(mp3) if os.path.exists(mp3) else None

@@ -31,6 +31,7 @@ Mỗi tập thuộc đúng một cột; đổi cột là đổi bối cảnh (b�
 
 Mọi series và tập phim được gom gọn vào mục `series/`, bên trong phân chia theo chủ đề cụ thể:
 * `series/nghich-ly-doi-thuong/tap-01-cang-ranh-cang-met/` (Cột 1: Nghịch lý đời thường)
+* `series/khong-gian-tam-trang/tap-01-ngu-30-phut-te-hon/` (Cột 3: Không gian và tâm trạng — "Tại sao ngủ 30 phút lại tệ hơn không ngủ?", bản 3 phút)
 * `series/tam-ly-hanh-vi/tap-01-tam-ly-tri-hoan/` (Cột 4: Tâm lý hành vi)
 * `series/tam-ly-hanh-vi/tap-07-luon-tuong-minh-dung/` (Cột 4: Tâm lý hành vi — "Tại sao ta luôn tưởng mình đúng?", bản 3 phút)
 * `series/vet-bam-than-kinh/tap-01-khong-the-tap-trung/` (Cột 2: Chuyên sâu thần kinh / bản dài)

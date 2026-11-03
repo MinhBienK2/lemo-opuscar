@@ -6,6 +6,7 @@ Every film of the library, one row each. The one-shots live in `films/`; the epi
 
 | Film | Folder | Runtime | Movie |
 |---|---|---|---|
+| Tại sao ngủ 30 phút lại tệ hơn không ngủ? | `channels/tram-nghi-nhieu/series/khong-gian-tam-trang/tap-01-ngu-30-phut-te-hon/` | 3:50 | `channels/tram-nghi-nhieu/series/khong-gian-tam-trang/tap-01-ngu-30-phut-te-hon/tram-nghi-nhieu-series-khong-gian-tam-trang-tap-01-ngu-30-phut-te-hon.mp4` |
 | Trạm Nghĩ Nhiều — tập 1: Tại sao càng rảnh, ta càng thấy mệt? | `channels/tram-nghi-nhieu/series/nghich-ly-doi-thuong/tap-01-cang-ranh-cang-met/` | 1:51 | `channels/tram-nghi-nhieu/series/nghich-ly-doi-thuong/tap-01-cang-ranh-cang-met/tram-nghi-nhieu-tap-01.mp4` |
 | Trạm Nghĩ Nhiều — Tập 02: Bẫy Chi Phí Chìm: Tại sao bạn không thể buông tay? | `channels/tram-nghi-nhieu/series/nghich-ly-doi-thuong/tap-02-bay-chi-phi-chim/` | 4:38 | `channels/tram-nghi-nhieu/series/nghich-ly-doi-thuong/tap-02-bay-chi-phi-chim/tram-nghi-nhieu-series-nghich-ly-doi-thuong-tap-02-bay-chi-phi-chim.mp4` |
 | Trạm Nghĩ Nhiều — Tập 03: Nghịch lý lựa chọn — Tại sao càng nhiều lựa chọn ta lại càng mệt? | `channels/tram-nghi-nhieu/series/nghich-ly-doi-thuong/tap-03-nghich-ly-lua-chon/` | 3:58 | `channels/tram-nghi-nhieu/series/nghich-ly-doi-thuong/tap-03-nghich-ly-lua-chon/tram-nghi-nhieu-series-nghich-ly-doi-thuong-tap-03-nghich-ly-lua-chon.mp4` |
