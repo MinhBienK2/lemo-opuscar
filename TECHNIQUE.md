@@ -184,11 +184,10 @@ A film is a folder that can build a film; what sits above it decides what it is.
 | a **one-shot** — a film that belongs to no channel | `films/<name>/` | the film holds its own drawing code |
 | an **episode** — a film of a channel | `channels/<channel>/<episode>/` | `channels/tram-nghi-nhieu/series/<column>/<episode>/` (the channel restarts with no episodes yet) |
 
-The library has two channels, and each has its own map — the channel's process, where its voice model lives and
-which file holds which part of the pipeline. Read the map before you build the next episode of that channel:
+The library has one channel, and it has its own map — the channel's process, where its voice model lives and
+which file holds which part of the pipeline. Read the map before you build the next episode of the channel:
 
 - `channels/tram-nghi-nhieu/CHANNEL.md` — the reference channel: everyday "why" questions from any field, in a vector toon, in Vietnamese; it restarted from scratch, and its episodes go in `series/<column>/`.
-- `channels/nhan-vat/CHANNEL.md` — the second one: a channel about characters, whose cast lives in 2D and in 3D (`channels/nhan-vat/cast/`).
 
 **Start an episode with the scaffold, never with a copy of the previous one:**
 

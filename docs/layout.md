@@ -13,6 +13,7 @@ about them. This file is the contract the tools are built against; the glossary 
 │       ├── CHANNEL.md              # the channel map: identity, process, file map
 │       ├── STYLE.md                # the channel's visual language
 │       ├── DEMO.md                 # what the channel's first episode showed (the library's shape)
+│       ├── character/              # the channel's characters: one bible per character (<name>.md + its sheet)
 │       ├── cast/                   # the cast specs (optional; the 2D/3D character channel)
 │       ├── rig/                    # the shared drawing implementation
 │       ├── mix.py                  # the shared mix
@@ -170,7 +171,7 @@ treatment, research file or build name cannot happen.
 
 ## The cast
 
-A channel whose characters must live in 2D and in 3D keeps one cast spec per character:
+A channel's characters belong to the whole channel and live in its own `character/`: one bible per character (`character/<name>.md`, beside its sheet). A channel whose characters must also live in 3D keeps, in addition, one cast spec per character:
 
 ```
 channels/<ch>/cast/<name>.json
@@ -178,8 +179,8 @@ channels/<ch>/cast/<name>.json
 
 ```json
 {
-  "name": "Kẻ Nghĩ Nhiều",
-  "palette": { "skin": "#F2C9A0", "hair": "#2B2B33", "hoodie": "#3B4A6B" },
+  "name": "Bích",
+  "palette": { "skin": "#F2C9A0", "hair": "#2B2333", "hoodie": "#C25E4A" },
   "proportions": { "head": 1.0, "body": 2.6, "limb": 1.0 },
   "hair": { "style": "bob", "length": 0.6 },
   "face": { "eyes": "round", "mouth": "small" }

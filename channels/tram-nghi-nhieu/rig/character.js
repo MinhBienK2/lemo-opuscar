@@ -1,5 +1,5 @@
-// "Kẻ Nghĩ Nhiều" (The Overthinker) and his sidekick "Rối" — 2D Character Rig
-// Faithfully matching the authentic vector cartoon aesthetic from the_overthinker_2d_character_rig.html
+// "Kẻ Nghĩ Nhiều" (The Overthinker) — the channel host's 2D rig. Who they are, how they look and act: character/ke-nghi-nhieu.md.
+// roi() is the retired sidekick, kept only so old code still loads.
 import { cel, path, poly, ellP, line, taper, ribbon, limb, ik, mix, rgba, LWK, TAU, rect } from './cel.js';
 
 export const PAL = {

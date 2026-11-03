@@ -11,11 +11,7 @@ Kênh không giới hạn một ngành: cơ thể, đầu óc, tiền, đồ v�
 
 ## 2. Nhân vật
 
-**Kẻ Nghĩ Nhiều** — đầu hình vuông-vò tròn (squircle) màu kem `#FAF8F5`, mũi xanh rối `#232A44` với vài lọn tóc lệch, một sợi tóc hình **sợi đèn** (filament) với bóng đèn ở đầu sợi tóc — sợi tóc là **đồng hồ cảm xúc**: dựng lên khi hào hứng, rũ xuống khi buồn, nằm ngang khi mệt, sáng lên khi có ý tưởng.
-Áo hoodie mù mè `#FFB703` **rộng** (oversized), tay áo dài che tay, có **biểu tượng pin sạp** trên ngực trái — biểu tượng này là thiết bị mở đầu mỗi tập và là "đồng hồ" của nhân vật: pin cạn dần theo nhịp tập, và nạp lại ở tập sau.
-Nét viền `#1D202A` luôn dày ~3,4 px trên màn hình, bất kể tỉ lệ.
-
-Kẻ Nghĩ Nhiều là nhân vật cố định duy nhất của kênh, và giọng kể của nhân vật này là giọng duy nhất của phim. Cách hiểu phổ biến do chính người dẫn nói ra ("mình từng nghĩ…"), rồi câu chuyện lật lại. (Rối, bóng sợi tím của các tập đầu, đã được bỏ: hai giọng kể làm phim khó nghe.)
+**Kẻ Nghĩ Nhiều**, người dẫn duy nhất và giọng kể duy nhất của kênh. Hình dáng, màu, biểu cảm, bốn cách xuất hiện và giọng: [`character/ke-nghi-nhieu.md`](character/ke-nghi-nhieu.md). Người trong câu chuyện mỗi tập tự dựng (`rig/extras.js`).
 
 ## 3. Màu
 

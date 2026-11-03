@@ -12,5 +12,4 @@ Every film of the library, one row each. The one-shots live in `films/`; the epi
 
 | Channel | Folder | Map |
 |---|---|---|
-| Nhân Vật | `channels/nhan-vat/` | [`CHANNEL.md`](channels/nhan-vat/CHANNEL.md) |
 | Trạm Nghĩ Nhiều | `channels/tram-nghi-nhieu/` | [`CHANNEL.md`](channels/tram-nghi-nhieu/CHANNEL.md) |

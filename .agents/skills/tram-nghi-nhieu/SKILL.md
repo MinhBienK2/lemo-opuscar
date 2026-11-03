@@ -15,7 +15,7 @@ Người xem **vừa nghe vừa nhìn mà hiểu ngay đang nói tới cái gì*
 
 Quy trình là **`DIRECTOR.md`**, và tập nào của kênh cũng đi đúng quy trình ấy. Skill này thêm phần riêng của kênh.
 
-- **Cố định** (`channels/tram-nghi-nhieu/STYLE.md`): Kẻ Nghĩ Nhiều (người dẫn duy nhất, một giọng kể), nét, chữ, giọng, nhạc, phụ đề.
+- **Cố định** (`channels/tram-nghi-nhieu/STYLE.md`): nét, chữ, nhạc, phụ đề; và Kẻ Nghĩ Nhiều, người dẫn duy nhất, một giọng kể (`channels/tram-nghi-nhieu/character/ke-nghi-nhieu.md`).
 - **Tự do**: nơi chốn, ánh sáng, người trong câu chuyện, đạo cụ, đồ họa.
 
 ---

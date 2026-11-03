@@ -12,7 +12,7 @@ Kênh nằm ở `channels/tram-nghi-nhieu/`. Nó giữ **danh tính** (tên, nh�
 | Handle | `@Tramnghinhiu` (dự phòng `@Kenghaynghi`) |
 | Thể loại | Education / Entertainment |
 | Mô tả | *"Những câu hỏi tại sao của đời thường, mà ai cũng gặp nhưng ít ai hỏi tới cùng — trả lời bằng hoạt hình 2D."* |
-| Nhân vật | **Kẻ Nghĩ Nhiều**, người dẫn duy nhất: một giọng kể cả phim. Người trong câu chuyện diễn bằng hành động, không nói thoại |
+| Nhân vật | **Kẻ Nghĩ Nhiều** ([`character/ke-nghi-nhieu.md`](character/ke-nghi-nhieu.md)), người dẫn duy nhất: một giọng kể cả phim. Người trong câu chuyện diễn bằng hành động, không nói thoại |
 | Ngôn ngữ | Tiếng Việt |
 | Nhịp đăng | 1 tập / tuần (Shorts 60–90 s) + 1 tập dài 3–5 phút / 2 tuần |
 
@@ -82,7 +82,9 @@ channels/tram-nghi-nhieu/
 ├── CHANNEL.md          # file này: bản đồ của kênh (danh tính, quy trình, luật)
 ├── STYLE.md            # ngôn ngữ hình ảnh của kênh
 ├── DEMO.md             # demo của kênh
-├── cast-sheet.jpg      # bảng đặc tả nhân vật (bản cũ, còn vẽ Rối — Rối đã bỏ khỏi kênh)
+├── character/          # nhân vật của cả kênh, mỗi người một hồ sơ
+│   ├── ke-nghi-nhieu.md        # người dẫn: hình, màu, biểu cảm, cách xuất hiện, giọng
+│   └── ke-nghi-nhieu-sheet.jpg # bảng đặc tả
 ├── rig/                # code vẽ dùng chung (character.js, extras.js, keys.js, board.js, host.js, cel.js, hands.js, sets.js, broll.js, styles.js, motion.js)
 ├── board_rules.json    # luật board riêng của kênh (check_board)
 ├── MOTION.md           # dựng chuyển động: mỗi nhịp là một move, sổ tay code cho từng kiểu
