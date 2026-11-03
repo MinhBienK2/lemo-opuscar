@@ -1,0 +1,1657 @@
+[
+ {
+  "id": "adhesive-bandage",
+  "name": "Adhesive bandage",
+  "group": "Objects",
+  "keywords": [
+   "adhesive bandage",
+   "bandage"
+  ]
+ },
+ {
+  "id": "airplane",
+  "name": "Airplane",
+  "group": "Travel & Places",
+  "keywords": [
+   "aeroplane",
+   "airplane"
+  ]
+ },
+ {
+  "id": "alarm-clock",
+  "name": "Alarm clock",
+  "group": "Travel & Places",
+  "keywords": [
+   "alarm",
+   "clock"
+  ]
+ },
+ {
+  "id": "ambulance",
+  "name": "Ambulance",
+  "group": "Travel & Places",
+  "keywords": [
+   "ambulance",
+   "vehicle"
+  ]
+ },
+ {
+  "id": "anatomical-heart",
+  "name": "Anatomical heart",
+  "group": "People & Body",
+  "keywords": [
+   "anatomical",
+   "cardiology",
+   "heart",
+   "organ",
+   "pulse"
+  ]
+ },
+ {
+  "id": "automobile",
+  "name": "Automobile",
+  "group": "Travel & Places",
+  "keywords": [
+   "automobile",
+   "car"
+  ]
+ },
+ {
+  "id": "baby",
+  "name": "Baby",
+  "group": "People & Body",
+  "keywords": [
+   "baby",
+   "young"
+  ]
+ },
+ {
+  "id": "backpack",
+  "name": "Backpack",
+  "group": "Objects",
+  "keywords": [
+   "backpack",
+   "bag",
+   "rucksack",
+   "satchel",
+   "school"
+  ]
+ },
+ {
+  "id": "banana",
+  "name": "Banana",
+  "group": "Food & Drink",
+  "keywords": [
+   "banana",
+   "fruit"
+  ]
+ },
+ {
+  "id": "bar-chart",
+  "name": "Bar chart",
+  "group": "Objects",
+  "keywords": [
+   "bar",
+   "chart",
+   "graph"
+  ]
+ },
+ {
+  "id": "basket",
+  "name": "Basket",
+  "group": "Objects",
+  "keywords": [
+   "basket",
+   "farming",
+   "laundry",
+   "picnic"
+  ]
+ },
+ {
+  "id": "bathtub",
+  "name": "Bathtub",
+  "group": "Objects",
+  "keywords": [
+   "bath",
+   "bathtub"
+  ]
+ },
+ {
+  "id": "battery",
+  "name": "Battery",
+  "group": "Objects",
+  "keywords": [
+   "battery"
+  ]
+ },
+ {
+  "id": "bed",
+  "name": "Bed",
+  "group": "Objects",
+  "keywords": [
+   "bed",
+   "hotel",
+   "sleep"
+  ]
+ },
+ {
+  "id": "bell",
+  "name": "Bell",
+  "group": "Objects",
+  "keywords": [
+   "bell"
+  ]
+ },
+ {
+  "id": "bicycle",
+  "name": "Bicycle",
+  "group": "Travel & Places",
+  "keywords": [
+   "bicycle",
+   "bike"
+  ]
+ },
+ {
+  "id": "bomb",
+  "name": "Bomb",
+  "group": "Smileys & Emotion",
+  "keywords": [
+   "bomb",
+   "comic"
+  ]
+ },
+ {
+  "id": "bone",
+  "name": "Bone",
+  "group": "People & Body",
+  "keywords": [
+   "bone",
+   "skeleton"
+  ]
+ },
+ {
+  "id": "books",
+  "name": "Books",
+  "group": "Objects",
+  "keywords": [
+   "book",
+   "books"
+  ]
+ },
+ {
+  "id": "bottle-with-popping-cork",
+  "name": "Bottle with popping cork",
+  "group": "Food & Drink",
+  "keywords": [
+   "bar",
+   "bottle",
+   "bottle with popping cork",
+   "cork",
+   "drink",
+   "popping"
+  ]
+ },
+ {
+  "id": "brain",
+  "name": "Brain",
+  "group": "People & Body",
+  "keywords": [
+   "brain",
+   "intelligent"
+  ]
+ },
+ {
+  "id": "bread",
+  "name": "Bread",
+  "group": "Food & Drink",
+  "keywords": [
+   "bread",
+   "loaf"
+  ]
+ },
+ {
+  "id": "broom",
+  "name": "Broom",
+  "group": "Objects",
+  "keywords": [
+   "broom",
+   "cleaning",
+   "sweeping",
+   "witch"
+  ]
+ },
+ {
+  "id": "bubbles",
+  "name": "Bubbles",
+  "group": "Objects",
+  "keywords": [
+   "bubbles",
+   "burp",
+   "clean",
+   "soap",
+   "underwater"
+  ]
+ },
+ {
+  "id": "bucket",
+  "name": "Bucket",
+  "group": "Objects",
+  "keywords": [
+   "bucket",
+   "cask",
+   "pail",
+   "vat"
+  ]
+ },
+ {
+  "id": "bus",
+  "name": "Bus",
+  "group": "Travel & Places",
+  "keywords": [
+   "bus",
+   "vehicle"
+  ]
+ },
+ {
+  "id": "calendar",
+  "name": "Calendar",
+  "group": "Objects",
+  "keywords": [
+   "calendar",
+   "date"
+  ]
+ },
+ {
+  "id": "candy",
+  "name": "Candy",
+  "group": "Food & Drink",
+  "keywords": [
+   "candy",
+   "dessert",
+   "sweet"
+  ]
+ },
+ {
+  "id": "cat",
+  "name": "Cat",
+  "group": "Animals & Nature",
+  "keywords": [
+   "cat",
+   "pet"
+  ]
+ },
+ {
+  "id": "chair",
+  "name": "Chair",
+  "group": "Objects",
+  "keywords": [
+   "chair",
+   "seat",
+   "sit"
+  ]
+ },
+ {
+  "id": "chart-decreasing",
+  "name": "Chart decreasing",
+  "group": "Objects",
+  "keywords": [
+   "chart",
+   "chart decreasing",
+   "down",
+   "graph",
+   "trend"
+  ]
+ },
+ {
+  "id": "chart-increasing",
+  "name": "Chart increasing",
+  "group": "Objects",
+  "keywords": [
+   "chart",
+   "chart increasing",
+   "graph",
+   "growth",
+   "trend",
+   "upward"
+  ]
+ },
+ {
+  "id": "check-mark-button",
+  "name": "Check mark button",
+  "group": "Symbols",
+  "keywords": [
+   "✓",
+   "button",
+   "check",
+   "mark"
+  ]
+ },
+ {
+  "id": "child",
+  "name": "Child",
+  "group": "People & Body",
+  "keywords": [
+   "child",
+   "gender-neutral",
+   "unspecified gender",
+   "young"
+  ]
+ },
+ {
+  "id": "clipboard",
+  "name": "Clipboard",
+  "group": "Objects",
+  "keywords": [
+   "clipboard"
+  ]
+ },
+ {
+  "id": "cloud",
+  "name": "Cloud",
+  "group": "Travel & Places",
+  "keywords": [
+   "cloud",
+   "weather"
+  ]
+ },
+ {
+  "id": "cockroach",
+  "name": "Cockroach",
+  "group": "Animals & Nature",
+  "keywords": [
+   "cockroach",
+   "insect",
+   "pest",
+   "roach"
+  ]
+ },
+ {
+  "id": "coin",
+  "name": "Coin",
+  "group": "Objects",
+  "keywords": [
+   "coin",
+   "gold",
+   "metal",
+   "money",
+   "silver",
+   "treasure"
+  ]
+ },
+ {
+  "id": "collision",
+  "name": "Collision",
+  "group": "Smileys & Emotion",
+  "keywords": [
+   "boom",
+   "collision",
+   "comic"
+  ]
+ },
+ {
+  "id": "construction-worker",
+  "name": "Construction worker",
+  "group": "People & Body",
+  "keywords": [
+   "construction",
+   "hat",
+   "worker"
+  ]
+ },
+ {
+  "id": "cook",
+  "name": "Cook",
+  "group": "People & Body",
+  "keywords": [
+   "chef",
+   "cook"
+  ]
+ },
+ {
+  "id": "cooked-rice",
+  "name": "Cooked rice",
+  "group": "Food & Drink",
+  "keywords": [
+   "cooked",
+   "rice"
+  ]
+ },
+ {
+  "id": "cooking",
+  "name": "Cooking",
+  "group": "Food & Drink",
+  "keywords": [
+   "breakfast",
+   "cooking",
+   "egg",
+   "frying",
+   "pan"
+  ]
+ },
+ {
+  "id": "couch-and-lamp",
+  "name": "Couch and lamp",
+  "group": "Objects",
+  "keywords": [
+   "couch",
+   "couch and lamp",
+   "hotel",
+   "lamp"
+  ]
+ },
+ {
+  "id": "credit-card",
+  "name": "Credit card",
+  "group": "Objects",
+  "keywords": [
+   "card",
+   "credit",
+   "money"
+  ]
+ },
+ {
+  "id": "cross-mark",
+  "name": "Cross mark",
+  "group": "Symbols",
+  "keywords": [
+   "×",
+   "cancel",
+   "cross",
+   "mark",
+   "multiplication",
+   "multiply",
+   "x"
+  ]
+ },
+ {
+  "id": "cup-with-straw",
+  "name": "Cup with straw",
+  "group": "Food & Drink",
+  "keywords": [
+   "cup with straw",
+   "juice",
+   "soda"
+  ]
+ },
+ {
+  "id": "dashing-away",
+  "name": "Dashing away",
+  "group": "Smileys & Emotion",
+  "keywords": [
+   "comic",
+   "dash",
+   "dashing away",
+   "running"
+  ]
+ },
+ {
+  "id": "deciduous-tree",
+  "name": "Deciduous tree",
+  "group": "Animals & Nature",
+  "keywords": [
+   "deciduous",
+   "shedding",
+   "tree"
+  ]
+ },
+ {
+  "id": "dna",
+  "name": "Dna",
+  "group": "Objects",
+  "keywords": [
+   "biologist",
+   "dna",
+   "evolution",
+   "gene",
+   "genetics",
+   "life"
+  ]
+ },
+ {
+  "id": "dog",
+  "name": "Dog",
+  "group": "Animals & Nature",
+  "keywords": [
+   "dog",
+   "pet"
+  ]
+ },
+ {
+  "id": "dollar-banknote",
+  "name": "Dollar banknote",
+  "group": "Objects",
+  "keywords": [
+   "banknote",
+   "bill",
+   "currency",
+   "dollar",
+   "money",
+   "note"
+  ]
+ },
+ {
+  "id": "door",
+  "name": "Door",
+  "group": "Objects",
+  "keywords": [
+   "door"
+  ]
+ },
+ {
+  "id": "droplet",
+  "name": "Droplet",
+  "group": "Travel & Places",
+  "keywords": [
+   "cold",
+   "comic",
+   "drop",
+   "droplet",
+   "sweat"
+  ]
+ },
+ {
+  "id": "ear",
+  "name": "Ear",
+  "group": "People & Body",
+  "keywords": [
+   "body",
+   "ear"
+  ]
+ },
+ {
+  "id": "egg",
+  "name": "Egg",
+  "group": "Food & Drink",
+  "keywords": [
+   "breakfast",
+   "egg",
+   "food"
+  ]
+ },
+ {
+  "id": "electric-plug",
+  "name": "Electric plug",
+  "group": "Objects",
+  "keywords": [
+   "electric",
+   "electricity",
+   "plug"
+  ]
+ },
+ {
+  "id": "envelope",
+  "name": "Envelope",
+  "group": "Objects",
+  "keywords": [
+   "email",
+   "envelope",
+   "letter"
+  ]
+ },
+ {
+  "id": "eye",
+  "name": "Eye",
+  "group": "People & Body",
+  "keywords": [
+   "body",
+   "eye"
+  ]
+ },
+ {
+  "id": "factory",
+  "name": "Factory",
+  "group": "Travel & Places",
+  "keywords": [
+   "building",
+   "factory"
+  ]
+ },
+ {
+  "id": "factory-worker",
+  "name": "Factory worker",
+  "group": "People & Body",
+  "keywords": [
+   "assembly",
+   "factory",
+   "industrial",
+   "worker"
+  ]
+ },
+ {
+  "id": "farmer",
+  "name": "Farmer",
+  "group": "People & Body",
+  "keywords": [
+   "farmer",
+   "gardener",
+   "rancher"
+  ]
+ },
+ {
+  "id": "fire",
+  "name": "Fire",
+  "group": "Travel & Places",
+  "keywords": [
+   "fire",
+   "flame",
+   "tool"
+  ]
+ },
+ {
+  "id": "firefighter",
+  "name": "Firefighter",
+  "group": "People & Body",
+  "keywords": [
+   "firefighter",
+   "firetruck"
+  ]
+ },
+ {
+  "id": "flexed-biceps",
+  "name": "Flexed biceps",
+  "group": "People & Body",
+  "keywords": [
+   "biceps",
+   "comic",
+   "flex",
+   "flexed biceps",
+   "muscle"
+  ]
+ },
+ {
+  "id": "fly",
+  "name": "Fly",
+  "group": "Animals & Nature",
+  "keywords": [
+   "disease",
+   "fly",
+   "maggot",
+   "pest",
+   "rotting"
+  ]
+ },
+ {
+  "id": "fork-and-knife",
+  "name": "Fork and knife",
+  "group": "Food & Drink",
+  "keywords": [
+   "cooking",
+   "cutlery",
+   "fork",
+   "fork and knife",
+   "knife"
+  ]
+ },
+ {
+  "id": "gear",
+  "name": "Gear",
+  "group": "Objects",
+  "keywords": [
+   "cog",
+   "cogwheel",
+   "gear",
+   "tool"
+  ]
+ },
+ {
+  "id": "glass-of-milk",
+  "name": "Glass of milk",
+  "group": "Food & Drink",
+  "keywords": [
+   "drink",
+   "glass",
+   "glass of milk",
+   "milk"
+  ]
+ },
+ {
+  "id": "globe-showing-asia-australia",
+  "name": "Globe showing asia-australia",
+  "group": "Travel & Places",
+  "keywords": [
+   "Asia",
+   "Australia",
+   "earth",
+   "globe",
+   "globe showing Asia-Australia",
+   "world"
+  ]
+ },
+ {
+  "id": "hamburger",
+  "name": "Hamburger",
+  "group": "Food & Drink",
+  "keywords": [
+   "burger",
+   "hamburger"
+  ]
+ },
+ {
+  "id": "hammer",
+  "name": "Hammer",
+  "group": "Objects",
+  "keywords": [
+   "hammer",
+   "tool"
+  ]
+ },
+ {
+  "id": "headphone",
+  "name": "Headphone",
+  "group": "Objects",
+  "keywords": [
+   "earbud",
+   "headphone"
+  ]
+ },
+ {
+  "id": "health-worker",
+  "name": "Health worker",
+  "group": "People & Body",
+  "keywords": [
+   "doctor",
+   "health worker",
+   "healthcare",
+   "nurse",
+   "therapist"
+  ]
+ },
+ {
+  "id": "high-voltage",
+  "name": "High voltage",
+  "group": "Travel & Places",
+  "keywords": [
+   "danger",
+   "electric",
+   "high voltage",
+   "lightning",
+   "voltage",
+   "zap"
+  ]
+ },
+ {
+  "id": "hospital",
+  "name": "Hospital",
+  "group": "Travel & Places",
+  "keywords": [
+   "doctor",
+   "hospital",
+   "medicine"
+  ]
+ },
+ {
+  "id": "hot-beverage",
+  "name": "Hot beverage",
+  "group": "Food & Drink",
+  "keywords": [
+   "beverage",
+   "coffee",
+   "drink",
+   "hot",
+   "steaming",
+   "tea"
+  ]
+ },
+ {
+  "id": "hot-springs",
+  "name": "Hot springs",
+  "group": "Travel & Places",
+  "keywords": [
+   "hot",
+   "hotsprings",
+   "springs",
+   "steaming"
+  ]
+ },
+ {
+  "id": "hourglass-done",
+  "name": "Hourglass done",
+  "group": "Travel & Places",
+  "keywords": [
+   "hourglass done",
+   "sand",
+   "timer"
+  ]
+ },
+ {
+  "id": "hourglass-not-done",
+  "name": "Hourglass not done",
+  "group": "Travel & Places",
+  "keywords": [
+   "hourglass",
+   "hourglass not done",
+   "sand",
+   "timer"
+  ]
+ },
+ {
+  "id": "house",
+  "name": "House",
+  "group": "Travel & Places",
+  "keywords": [
+   "home",
+   "house"
+  ]
+ },
+ {
+  "id": "hundred-points",
+  "name": "Hundred points",
+  "group": "Smileys & Emotion",
+  "keywords": [
+   "100",
+   "full",
+   "hundred",
+   "hundred points",
+   "score"
+  ]
+ },
+ {
+  "id": "ice",
+  "name": "Ice",
+  "group": "Food & Drink",
+  "keywords": [
+   "cold",
+   "ice",
+   "ice cube",
+   "iceberg"
+  ]
+ },
+ {
+  "id": "judge",
+  "name": "Judge",
+  "group": "People & Body",
+  "keywords": [
+   "judge",
+   "justice",
+   "scales"
+  ]
+ },
+ {
+  "id": "key",
+  "name": "Key",
+  "group": "Objects",
+  "keywords": [
+   "key",
+   "lock",
+   "password"
+  ]
+ },
+ {
+  "id": "kitchen-knife",
+  "name": "Kitchen knife",
+  "group": "Food & Drink",
+  "keywords": [
+   "cooking",
+   "hocho",
+   "kitchen knife",
+   "knife",
+   "tool",
+   "weapon"
+  ]
+ },
+ {
+  "id": "laptop",
+  "name": "Laptop",
+  "group": "Objects",
+  "keywords": [
+   "computer",
+   "laptop",
+   "pc",
+   "personal"
+  ]
+ },
+ {
+  "id": "light-bulb",
+  "name": "Light bulb",
+  "group": "Objects",
+  "keywords": [
+   "bulb",
+   "comic",
+   "electric",
+   "idea",
+   "light"
+  ]
+ },
+ {
+  "id": "locked",
+  "name": "Locked",
+  "group": "Objects",
+  "keywords": [
+   "closed",
+   "locked"
+  ]
+ },
+ {
+  "id": "lollipop",
+  "name": "Lollipop",
+  "group": "Food & Drink",
+  "keywords": [
+   "candy",
+   "dessert",
+   "lollipop",
+   "sweet"
+  ]
+ },
+ {
+  "id": "low-battery",
+  "name": "Low battery",
+  "group": "Objects",
+  "keywords": [
+   "electronic",
+   "low battery",
+   "low energy"
+  ]
+ },
+ {
+  "id": "lungs",
+  "name": "Lungs",
+  "group": "People & Body",
+  "keywords": [
+   "breath",
+   "exhalation",
+   "inhalation",
+   "lungs",
+   "organ",
+   "respiration"
+  ]
+ },
+ {
+  "id": "magnet",
+  "name": "Magnet",
+  "group": "Objects",
+  "keywords": [
+   "attraction",
+   "horseshoe",
+   "magnet",
+   "magnetic"
+  ]
+ },
+ {
+  "id": "magnifying-glass-tilted-left",
+  "name": "Magnifying glass tilted left",
+  "group": "Objects",
+  "keywords": [
+   "glass",
+   "magnifying",
+   "magnifying glass tilted left",
+   "search",
+   "tool"
+  ]
+ },
+ {
+  "id": "mantelpiece-clock",
+  "name": "Mantelpiece clock",
+  "group": "Travel & Places",
+  "keywords": [
+   "clock",
+   "mantelpiece clock"
+  ]
+ },
+ {
+  "id": "map-of-japan",
+  "name": "Map of japan",
+  "group": "Travel & Places",
+  "keywords": [
+   "Japan",
+   "map",
+   "map of Japan"
+  ]
+ },
+ {
+  "id": "mechanic",
+  "name": "Mechanic",
+  "group": "People & Body",
+  "keywords": [
+   "electrician",
+   "mechanic",
+   "plumber",
+   "tradesperson"
+  ]
+ },
+ {
+  "id": "megaphone",
+  "name": "Megaphone",
+  "group": "Objects",
+  "keywords": [
+   "cheering",
+   "megaphone"
+  ]
+ },
+ {
+  "id": "microbe",
+  "name": "Microbe",
+  "group": "Animals & Nature",
+  "keywords": [
+   "amoeba",
+   "bacteria",
+   "microbe",
+   "virus"
+  ]
+ },
+ {
+  "id": "mobile-phone",
+  "name": "Mobile phone",
+  "group": "Objects",
+  "keywords": [
+   "cell",
+   "mobile",
+   "phone",
+   "telephone"
+  ]
+ },
+ {
+  "id": "mobile-phone-off",
+  "name": "Mobile phone off",
+  "group": "Symbols",
+  "keywords": [
+   "cell",
+   "mobile",
+   "off",
+   "phone",
+   "telephone"
+  ]
+ },
+ {
+  "id": "money-bag",
+  "name": "Money bag",
+  "group": "Objects",
+  "keywords": [
+   "bag",
+   "dollar",
+   "money",
+   "moneybag"
+  ]
+ },
+ {
+  "id": "mosquito",
+  "name": "Mosquito",
+  "group": "Animals & Nature",
+  "keywords": [
+   "disease",
+   "fever",
+   "malaria",
+   "mosquito",
+   "pest",
+   "virus"
+  ]
+ },
+ {
+  "id": "motor-scooter",
+  "name": "Motor scooter",
+  "group": "Travel & Places",
+  "keywords": [
+   "motor",
+   "scooter"
+  ]
+ },
+ {
+  "id": "nose",
+  "name": "Nose",
+  "group": "People & Body",
+  "keywords": [
+   "body",
+   "nose"
+  ]
+ },
+ {
+  "id": "office-worker",
+  "name": "Office worker",
+  "group": "People & Body",
+  "keywords": [
+   "architect",
+   "business",
+   "manager",
+   "office worker",
+   "white-collar"
+  ]
+ },
+ {
+  "id": "old-man",
+  "name": "Old man",
+  "group": "People & Body",
+  "keywords": [
+   "adult",
+   "man",
+   "old"
+  ]
+ },
+ {
+  "id": "old-woman",
+  "name": "Old woman",
+  "group": "People & Body",
+  "keywords": [
+   "adult",
+   "old",
+   "woman"
+  ]
+ },
+ {
+  "id": "package",
+  "name": "Package",
+  "group": "Objects",
+  "keywords": [
+   "box",
+   "package",
+   "parcel"
+  ]
+ },
+ {
+  "id": "pencil",
+  "name": "Pencil",
+  "group": "Objects",
+  "keywords": [
+   "pencil"
+  ]
+ },
+ {
+  "id": "person",
+  "name": "Person",
+  "group": "People & Body",
+  "keywords": [
+   "adult",
+   "gender-neutral",
+   "person",
+   "unspecified gender"
+  ]
+ },
+ {
+  "id": "person-in-bed",
+  "name": "Person in bed",
+  "group": "People & Body",
+  "keywords": [
+   "hotel",
+   "person in bed",
+   "sleep"
+  ]
+ },
+ {
+  "id": "person-taking-bath",
+  "name": "Person taking bath",
+  "group": "People & Body",
+  "keywords": [
+   "bath",
+   "bathtub",
+   "person taking bath"
+  ]
+ },
+ {
+  "id": "pill",
+  "name": "Pill",
+  "group": "Objects",
+  "keywords": [
+   "doctor",
+   "medicine",
+   "pill",
+   "sick"
+  ]
+ },
+ {
+  "id": "police-car",
+  "name": "Police car",
+  "group": "Travel & Places",
+  "keywords": [
+   "car",
+   "patrol",
+   "police"
+  ]
+ },
+ {
+  "id": "police-officer",
+  "name": "Police officer",
+  "group": "People & Body",
+  "keywords": [
+   "cop",
+   "officer",
+   "police"
+  ]
+ },
+ {
+  "id": "potted-plant",
+  "name": "Potted plant",
+  "group": "Animals & Nature",
+  "keywords": [
+   "boring",
+   "grow",
+   "house",
+   "nurturing",
+   "plant",
+   "potted plant",
+   "useless"
+  ]
+ },
+ {
+  "id": "rat",
+  "name": "Rat",
+  "group": "Animals & Nature",
+  "keywords": [
+   "rat"
+  ]
+ },
+ {
+  "id": "receipt",
+  "name": "Receipt",
+  "group": "Objects",
+  "keywords": [
+   "accounting",
+   "bookkeeping",
+   "evidence",
+   "proof",
+   "receipt"
+  ]
+ },
+ {
+  "id": "recycling-symbol",
+  "name": "Recycling symbol",
+  "group": "Symbols",
+  "keywords": [
+   "recycle",
+   "recycling symbol"
+  ]
+ },
+ {
+  "id": "red-apple",
+  "name": "Red apple",
+  "group": "Food & Drink",
+  "keywords": [
+   "apple",
+   "fruit",
+   "red"
+  ]
+ },
+ {
+  "id": "red-question-mark",
+  "name": "Red question mark",
+  "group": "Symbols",
+  "keywords": [
+   "?",
+   "mark",
+   "punctuation",
+   "question",
+   "red question mark"
+  ]
+ },
+ {
+  "id": "robot",
+  "name": "Robot",
+  "group": "Smileys & Emotion",
+  "keywords": [
+   "face",
+   "monster",
+   "robot"
+  ]
+ },
+ {
+  "id": "rocket",
+  "name": "Rocket",
+  "group": "Travel & Places",
+  "keywords": [
+   "rocket",
+   "space"
+  ]
+ },
+ {
+  "id": "satellite-antenna",
+  "name": "Satellite antenna",
+  "group": "Objects",
+  "keywords": [
+   "antenna",
+   "dish",
+   "satellite"
+  ]
+ },
+ {
+  "id": "school",
+  "name": "School",
+  "group": "Travel & Places",
+  "keywords": [
+   "building",
+   "school"
+  ]
+ },
+ {
+  "id": "scientist",
+  "name": "Scientist",
+  "group": "People & Body",
+  "keywords": [
+   "biologist",
+   "chemist",
+   "engineer",
+   "physicist",
+   "scientist"
+  ]
+ },
+ {
+  "id": "seedling",
+  "name": "Seedling",
+  "group": "Animals & Nature",
+  "keywords": [
+   "seedling",
+   "young"
+  ]
+ },
+ {
+  "id": "shopping-bags",
+  "name": "Shopping bags",
+  "group": "Objects",
+  "keywords": [
+   "bag",
+   "hotel",
+   "shopping",
+   "shopping bags"
+  ]
+ },
+ {
+  "id": "shopping-cart",
+  "name": "Shopping cart",
+  "group": "Objects",
+  "keywords": [
+   "cart",
+   "shopping",
+   "trolley"
+  ]
+ },
+ {
+  "id": "snowflake",
+  "name": "Snowflake",
+  "group": "Travel & Places",
+  "keywords": [
+   "cold",
+   "snow",
+   "snowflake"
+  ]
+ },
+ {
+  "id": "soap",
+  "name": "Soap",
+  "group": "Objects",
+  "keywords": [
+   "bar",
+   "bathing",
+   "cleaning",
+   "lather",
+   "soap",
+   "soapdish"
+  ]
+ },
+ {
+  "id": "speaker-high-volume",
+  "name": "Speaker high volume",
+  "group": "Objects",
+  "keywords": [
+   "loud",
+   "speaker high volume"
+  ]
+ },
+ {
+  "id": "speech-balloon",
+  "name": "Speech balloon",
+  "group": "Smileys & Emotion",
+  "keywords": [
+   "balloon",
+   "bubble",
+   "comic",
+   "dialog",
+   "speech"
+  ]
+ },
+ {
+  "id": "steaming-bowl",
+  "name": "Steaming bowl",
+  "group": "Food & Drink",
+  "keywords": [
+   "bowl",
+   "noodle",
+   "ramen",
+   "steaming"
+  ]
+ },
+ {
+  "id": "stethoscope",
+  "name": "Stethoscope",
+  "group": "Objects",
+  "keywords": [
+   "doctor",
+   "heart",
+   "medicine",
+   "stethoscope"
+  ]
+ },
+ {
+  "id": "stopwatch",
+  "name": "Stopwatch",
+  "group": "Travel & Places",
+  "keywords": [
+   "clock",
+   "stopwatch"
+  ]
+ },
+ {
+  "id": "student",
+  "name": "Student",
+  "group": "People & Body",
+  "keywords": [
+   "graduate",
+   "student"
+  ]
+ },
+ {
+  "id": "sun",
+  "name": "Sun",
+  "group": "Travel & Places",
+  "keywords": [
+   "bright",
+   "rays",
+   "sun",
+   "sunny"
+  ]
+ },
+ {
+  "id": "sun-behind-rain-cloud",
+  "name": "Sun behind rain cloud",
+  "group": "Travel & Places",
+  "keywords": [
+   "cloud",
+   "rain",
+   "sun",
+   "sun behind rain cloud"
+  ]
+ },
+ {
+  "id": "sweat-droplets",
+  "name": "Sweat droplets",
+  "group": "Smileys & Emotion",
+  "keywords": [
+   "comic",
+   "splashing",
+   "sweat",
+   "sweat droplets"
+  ]
+ },
+ {
+  "id": "syringe",
+  "name": "Syringe",
+  "group": "Objects",
+  "keywords": [
+   "medicine",
+   "needle",
+   "shot",
+   "sick",
+   "syringe"
+  ]
+ },
+ {
+  "id": "teacher",
+  "name": "Teacher",
+  "group": "People & Body",
+  "keywords": [
+   "instructor",
+   "professor",
+   "teacher"
+  ]
+ },
+ {
+  "id": "telephone",
+  "name": "Telephone",
+  "group": "Objects",
+  "keywords": [
+   "phone",
+   "telephone"
+  ]
+ },
+ {
+  "id": "television",
+  "name": "Television",
+  "group": "Objects",
+  "keywords": [
+   "television",
+   "tv",
+   "video"
+  ]
+ },
+ {
+  "id": "test-tube",
+  "name": "Test tube",
+  "group": "Objects",
+  "keywords": [
+   "chemist",
+   "chemistry",
+   "experiment",
+   "lab",
+   "science",
+   "test tube"
+  ]
+ },
+ {
+  "id": "thermometer",
+  "name": "Thermometer",
+  "group": "Travel & Places",
+  "keywords": [
+   "thermometer",
+   "weather"
+  ]
+ },
+ {
+  "id": "thought-balloon",
+  "name": "Thought balloon",
+  "group": "Smileys & Emotion",
+  "keywords": [
+   "balloon",
+   "bubble",
+   "comic",
+   "thought"
+  ]
+ },
+ {
+  "id": "toilet",
+  "name": "Toilet",
+  "group": "Objects",
+  "keywords": [
+   "toilet"
+  ]
+ },
+ {
+  "id": "toolbox",
+  "name": "Toolbox",
+  "group": "Objects",
+  "keywords": [
+   "chest",
+   "mechanic",
+   "tool",
+   "toolbox"
+  ]
+ },
+ {
+  "id": "tooth",
+  "name": "Tooth",
+  "group": "People & Body",
+  "keywords": [
+   "dentist",
+   "tooth"
+  ]
+ },
+ {
+  "id": "toothbrush",
+  "name": "Toothbrush",
+  "group": "Objects",
+  "keywords": [
+   "bathroom",
+   "brush",
+   "clean",
+   "dental",
+   "hygiene",
+   "teeth",
+   "toothbrush"
+  ]
+ },
+ {
+  "id": "umbrella-with-rain-drops",
+  "name": "Umbrella with rain drops",
+  "group": "Travel & Places",
+  "keywords": [
+   "clothing",
+   "drop",
+   "rain",
+   "umbrella",
+   "umbrella with rain drops"
+  ]
+ },
+ {
+  "id": "video-game",
+  "name": "Video game",
+  "group": "Activities",
+  "keywords": [
+   "controller",
+   "game",
+   "video game"
+  ]
+ },
+ {
+  "id": "warning",
+  "name": "Warning",
+  "group": "Symbols",
+  "keywords": [
+   "warning"
+  ]
+ },
+ {
+  "id": "wastebasket",
+  "name": "Wastebasket",
+  "group": "Objects",
+  "keywords": [
+   "wastebasket"
+  ]
+ },
+ {
+  "id": "window",
+  "name": "Window",
+  "group": "Objects",
+  "keywords": [
+   "frame",
+   "fresh air",
+   "opening",
+   "transparent",
+   "view",
+   "window"
+  ]
+ },
+ {
+  "id": "wrench",
+  "name": "Wrench",
+  "group": "Objects",
+  "keywords": [
+   "spanner",
+   "tool",
+   "wrench"
+  ]
+ },
+ {
+  "id": "zzz",
+  "name": "Zzz",
+  "group": "Smileys & Emotion",
+  "keywords": [
+   "comic",
+   "sleep",
+   "zzz"
+  ]
+ }
+]

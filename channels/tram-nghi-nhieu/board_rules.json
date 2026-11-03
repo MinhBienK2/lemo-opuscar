@@ -1,1 +1,1 @@
-{"require_flags": ["aha"], "forbid_cast": ["roi"], "one_voice": true, "require_move": true}
+{"require_flags": ["aha"], "forbid_cast": ["roi"], "one_voice": true, "require_move": true, "require_frame": true}

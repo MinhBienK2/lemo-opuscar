@@ -58,6 +58,8 @@ Trong thư mục tập, `$CHANNEL` là thư mục kênh (`channels/tram-nghi-nhi
    import { loadBoard } from '../../../../rig/board.js';      // board.json → shot, nhịp, chữ, biểu đồ, tiếng (SKILL.md §4)
    import { extra, crowd } from '../../../../rig/extras.js';  // người phụ có mặt, tay, đồ phụ kiện
    import { hostPip, reactClose } from '../../../../rig/host.js'; // người dẫn bình luận: vòng tròn ở góc, cận mặt
+   import { prop, cable, M } from '../../../../rig/props.js';    // vật đời thường: rig/catalog/CATALOG.md
+   import { loadAssets, asset, badge } from '../../../../rig/assets.js'; // hình có sẵn: loadAssets([...]) trước READY
    import { clamp } from '/core/lib.js';          // thư viện
    ```
    Font của kênh: `<link rel="stylesheet" href="../../../fonts/fonts.css">` trong `index.html` của tập.
@@ -85,8 +87,12 @@ channels/tram-nghi-nhieu/
 ├── character/          # nhân vật của cả kênh, mỗi người một hồ sơ
 │   ├── ke-nghi-nhieu.md        # người dẫn: hình, màu, biểu cảm, cách xuất hiện, giọng
 │   └── ke-nghi-nhieu-sheet.jpg # bảng đặc tả
-├── rig/                # code vẽ dùng chung (character.js, extras.js, keys.js, board.js, host.js, cel.js, hands.js, sets.js, broll.js, styles.js, motion.js)
-│   └── gallery/        # bảng tra cứu hình ảnh của rig: mở bằng `node rig/gallery/serve.mjs`
+├── rig/                # code vẽ dùng chung (character.js, extras.js, props.js, assets.js, keys.js, board.js, host.js, cel.js, hands.js, sets.js, broll.js, styles.js, motion.js)
+│   ├── props.js        # vật đời thường theo tỉ lệ thật, có trạng thái và điểm neo: prop(g, id, {...})
+│   ├── assets.js       # hình có sẵn (Fluent Emoji Flat, MIT) vẽ với viền mực của kênh: asset(g, id, {...}), badge()
+│   ├── assets/         # fluent/*.svg + LICENSE + index.json; fetch.py search | add để lấy thêm hình
+│   ├── catalog/        # danh mục cho agent: CATALOG.md + ảnh props-*, people-*, assets-*.jpg; dựng lại bằng build.sh
+│   └── gallery/        # bảng tra cứu hình ảnh của rig cho người: mở bằng `node rig/gallery/serve.mjs`
 ├── board_rules.json    # luật board riêng của kênh (check_board)
 ├── MOTION.md           # dựng chuyển động: mỗi nhịp là một move, sổ tay code cho từng kiểu
 ├── mix.py              # âm thanh dùng chung: nhạc + ambience + foley + lùi dB + nén

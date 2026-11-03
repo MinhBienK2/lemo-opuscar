@@ -21,6 +21,9 @@ it (rig/board.js). The check refuses a vague board — and a busy one: words and
   script     no line reads out who is speaking ("Rối nói: …") — a character speaks with their own voice
   cast       the channel can ask for more (board_rules.json next to CHANNEL.md: {"require_who": {"host": 2},
              "require_flags": ["aha"], "forbid_cast": ["roi"], "one_voice": true, "require_move": true})
+  picture    with "require_frame": "props" (each recurring thing: look ≥ 12 words, its states, where it is drawn from),
+             every scene a "set" (layers back to front, the thing that lives), every shot but a react a "frame" (layout
+             with a place and a share of the frame, layers, focus, light, start ≠ end; no two shots of a scene alike)
   moves      with "require_move": every acting beat is a move — "move" (one of MOVES), "d" (0.2–8 s) and "xy" (where it
              happens); each scene uses ≥ 2 kinds; ≤ 40 % of the beats only act in place (gesture, act); film.js times
              ≥ 70 % of the beats by id (BD.u / BD.p / BD.t), draws no prop behind a bare "if (x > 0)" that ignores x,
@@ -276,6 +279,62 @@ if rules.get('require_move') and moves:
         if len(kinds) < 2: BAD(f'scene {sid}: every beat is "{next(iter(kinds))}" — a scene needs ≥ 2 kinds of move (something enters, travels, grows, breaks…)')
     inplace = sum(1 for _, m in moves if m in IN_PLACE) / len(moves)
     if inplace > .4: BAD(f'{inplace:.0%} of the beats only act in place (gesture, act; ≤ 40 %): things must travel, grow, break and change on screen')
+# —— the picture, described before it is drawn (rules "require_frame") ——
+# A board that only names things ("a phone, a charger") leaves the agent to invent the picture while it types
+# coordinates. With "require_frame" every prop has a look and its states, every scene its layers, every shot a frame:
+# where things sit, what overlaps what, where the eye goes, the light, and how the frame differs at its end.
+WHERE = re.compile(r'(trái|phải|giữa|trên|dưới|góc|chính giữa|left|right|cent|top|bottom|corner)', re.I | re.U)
+SHARE = re.compile(r'(\d+\s*%|\d\s*/\s*\d|nửa|một phần|cả khung|toàn khung|half|third|full frame)', re.I | re.U)
+def words_n(x): return len(str(x or '').split())
+if rules.get('require_frame'):
+    RIG_PROPS = None   # the names rig/props.js draws, read by node; None when node or the file is missing
+    pj = os.path.abspath(os.path.join(chan, "rig/props.js"))
+    if os.path.isfile(pj):
+        import subprocess
+        try:
+            out = subprocess.run(['node', '--input-type=module', '-e', f'const m = await import({json.dumps("file://" + pj)}); console.log(Object.keys(m.PROPS).join(" "))'],
+                                 capture_output=True, text=True, timeout=20)
+            if out.returncode == 0: RIG_PROPS = set(out.stdout.split())
+        except Exception: pass
+    props = board.get('props') or {}
+    if not props: BAD('the board has no "props": describe once how every recurring thing looks and the states it goes through')
+    for pid, P in props.items():
+        w = f'prop {pid}'
+        if words_n(P.get('look')) < 12: BAD(f'{w}: "look" must describe the thing so anyone draws the same one (≥ 12 words: shape, proportions, the details that make it recognisable, colours)')
+        st = P.get('states') or {}
+        if not st: BAD(f'{w}: no "states" — name each state the story puts it in, and how it looks ("nguoi": "màn hình tắt", "nong": "quầng đỏ cam quanh thân")')
+        for k, v in st.items():
+            if words_n(v) < 3: BAD(f'{w}: state "{k}" must say how it looks (≥ 3 words)')
+        if not P.get('draw'): BAD(f'{w}: no "draw" — where it is drawn from: "rig:<name>" (rig/props.js), "asset:<set>/<name>" (rig/assets), or "src:<function>" (the episode\'s src/sets.js)')
+        else:
+            d = str(P['draw'])
+            if d.startswith('rig:') and RIG_PROPS is not None and d[4:] not in RIG_PROPS:
+                BAD(f'{w}: "draw": "{d}" — rig/props.js has no "{d[4:]}" (see rig/catalog/CATALOG.md); draw it there, in the same mould, or use "src:<function>"')
+            elif d.startswith('asset:') and not os.path.isfile(os.path.join(chan, 'rig/assets', d[6:] + '.svg')):
+                BAD(f'{w}: "draw": "{d}" — no rig/assets/{d[6:]}.svg; fetch it with rig/assets/fetch.py add "<Name>" or draw it')
+            elif not re.match(r'(rig|asset|src):\S', d):
+                BAD(f'{w}: "draw" must be "rig:<name>", "asset:<set>/<name>" or "src:<function>", got "{d}"')
+    used = {b.get('who')[5:] for s0 in scenes for b in s0.get('beats') or [] if str(b.get('who') or '').startswith('prop:')}
+    miss = sorted(x for x in used if x not in props)
+    if miss: BAD(f'beats act with props {miss} that "props" does not describe')
+    for s0 in scenes:
+        sid = s0.get('id', '?'); S0 = s0.get('set') or {}
+        if words_n(S0.get('layers')) < 12: BAD(f'scene {sid}: "set.layers" must lay the place out back to front (≥ 12 words: wall, furniture, the props, what stands in front)')
+        if words_n(S0.get('alive')) < 3: BAD(f'scene {sid}: "set.alive" — the one thing of this place that moves on its own (a clock hand, a fan, rain on the window)')
+        layouts = {}
+        for x in s0.get('shots') or []:
+            w = f'scene {sid} shot {x.get("id")}'
+            if x.get('host') == 'react': continue   # the rig draws the host's face
+            F = x.get('frame') or {}
+            if not F: BAD(f'{w}: no "frame" — describe the picture before it is drawn (layout, layers, focus, light, start, end)'); continue
+            lay = str(F.get('layout') or '')
+            if words_n(lay) < 8 or not WHERE.search(lay) or not SHARE.search(lay):
+                BAD(f'{w}: "frame.layout" must place the subject: where in the frame and how much of it ("gối chiếm 60 % khung, lệch trái"), got "{lay[:60]}"')
+            for k, n in (('layers', 8), ('focus', 5), ('light', 4), ('start', 4), ('end', 4)):
+                if words_n(F.get(k)) < n: BAD(f'{w}: "frame.{k}" must be concrete (≥ {n} words)')
+            if F.get('start') and norm(F.get('start')) == norm(F.get('end')): BAD(f'{w}: "frame.start" and "frame.end" are the same — what changes in this shot?')
+            if lay and norm(lay) in layouts: BAD(f'{w}: same layout as shot {layouts[norm(lay)]} — a new shot is a new picture, not the same drawing seen from a little further along')
+            layouts[norm(lay)] = x.get('id')
 for who, n in (rules.get('require_who') or {}).items():
     if who_count.get(who, 0) < n: BAD(f'the channel asks for ≥ {n} beats where "{who}" acts; the board has {who_count.get(who, 0)}')
 for f in rules.get('require_flags') or []:

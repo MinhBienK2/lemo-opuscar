@@ -64,6 +64,8 @@ Mỗi shot có ít nhất một chuyển động của người hoặc vật ch�
 
 ## 3. Sổ tay 17 kiểu `move`
 
+Vật của `rig/props.js` đã có sẵn trạng thái, nên `open`, `fill`, `transform` của một vật thường chỉ là một dòng: `prop(g, 'phone', { x, y, s, from: 'charging', state: 'hot', k: BD.p('b_nong', T) })` (vật đi từ trạng thái này sang trạng thái kia theo tiến độ của nhịp), và tay người cầm vật bằng điểm neo nó trả về (`const P = prop(…); extra(g, { …, armR: P.top })`). Người của `rig/extras.js` đổi tư thế cũng vậy: `armR: { from: 'reach', to: 'recoil', k: BD.p('b_giat', T, 'back') }`.
+
 | `move` | Khi nào | Code |
 |---|---|---|
 | `enter` | vật hoặc người vào khung: tờ thư rơi xuống bàn, thẻ trượt vào | `const e = enter(T, BD.t(id), { from: [0, -300], rot: .2 }); g.translate(x + e.x, y + e.y); g.rotate(e.rot); g.globalAlpha = e.a;` |

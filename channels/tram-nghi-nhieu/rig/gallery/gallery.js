@@ -15,6 +15,8 @@ import {
 import { PAL, EXPR, blendE, figure, roi, battery, squircle, animeHead } from '../character.js';
 import { hand, GEST, blendGest } from '../hands.js';
 import { extra, crowd, LOOKS } from '../extras.js';
+import { PROPS, prop } from '../props.js';
+import { assetIndex, loadAssets, asset, badge } from '../assets.js';
 import * as SETS from '../sets.js';
 import * as STYLE from '../styles.js';
 import { dynamicBar, gatedReveal, strikeBehind } from '../components.js';
@@ -462,42 +464,56 @@ section('sets.js', 'rig/sets.js', 'Bối cảnh và đạo cụ. roomBack và so
 // —— extras.js: người phụ ——
 section('extras.js', 'rig/extras.js', 'Người trong truyện. extra() trả về vị trí đầu và hai bàn tay, để gắn đồ vào tay.', [
   {
-    name: 'LOOKS — 8 kiểu người', sig: 'LOOKS = { shopper, researcher, participant, seller, elder, student, office, doctor }',
-    desc: 'Mỗi người có da, tóc, áo, quần, phụ kiện riêng. acc: glasses | coat | apron | lanyard. Mũ là hair: "cap", không phải acc.',
+    name: `LOOKS — ${Object.keys(LOOKS).length} kiểu người`, sig: `LOOKS = { ${Object.keys(LOOKS).join(', ')} }`,
+    desc: 'Da, tóc, áo, quần, phụ kiện (acc: glasses | coat | apron | lanyard | scarf | vest | stetho | badge | tie, một hay nhiều) và mũ (hat: police | nurse | chef | hard | nonla | helmet | cap). Nghề: doctor, nurse, police, teacher, chef, worker, farmer, pupil, shipper, businessman.',
     draw(g) {
       ground(g);
-      g.fillStyle = '#1a1e2e'; g.fillRect(0, 900, W, H - 900);
-      const names = Object.keys(LOOKS);
+      const names = Object.keys(LOOKS), per = Math.ceil(names.length / 2);
       names.forEach((n, i) => {
-        const x = 220 + i * 210;
-        extra(g, { x, y: 900, s: .55, look: n, E: 'neutral', t: 1.2 });
-        lab(g, n, x, 960, { px: 20, align: 'center' });
+        const r = Math.floor(i / per), x = 140 + (i % per) * (1640 / (per - 1)), y = 500 + r * 500;
+        extra(g, { x, y, s: .42, look: n, E: 'neutral', t: 1.2 });
+        lab(g, n, x, y + 40, { px: 20, align: 'center' });
       });
     },
   },
   {
-    name: 'extra() — biểu cảm', sig: "extra(g, { look, E }) — E: neutral|happy|surprised|worried|thinking|annoyed|sad|sly",
-    desc: 'Cùng một người, tám biểu cảm. Ngoài ra có thể truyền { brow, mouth, eyes } (-1…1) để tự chỉnh.',
+    name: 'extra() — biểu cảm', sig: "extra(g, { look, E }) — E: neutral|happy|surprised|worried|thinking|annoyed|sad|sly|pain|shocked|sleepy",
+    desc: 'Cùng một người, mười một biểu cảm. Ngoài ra có thể truyền { brow, mouth, eyes } (-1…1) để tự chỉnh.',
     draw(g) {
       ground(g);
-      const es = ['neutral', 'happy', 'surprised', 'worried', 'thinking', 'annoyed', 'sad', 'sly'];
+      const es = ['neutral', 'happy', 'surprised', 'worried', 'thinking', 'annoyed', 'sad', 'sly', 'pain', 'shocked', 'sleepy'];
       es.forEach((E, i) => {
-        const x = 240 + i * 210;
-        extra(g, { x, y: 960, s: .58, look: 'researcher', E, t: 1.2, talk: E === 'surprised' ? .5 : 0 });
+        const x = 130 + i * 166;
+        extra(g, { x, y: 960, s: .5, look: 'researcher', E, t: 1.2, talk: E === 'surprised' ? .5 : 0 });
         lab(g, E, x, 1010, { px: 20, align: 'center' });
       });
     },
   },
   {
-    name: 'extra() — tay', sig: "armL / armR: down|point|hold|wave|hip|up|chin|cross|reach|open|knit|type|write|stir|clap",
-    desc: 'Tay nghỉ, tay vẫy, tay giơ, tay khoanh… Tay chuyển động theo t.',
-    draw(g) {
+    name: 'extra() — tay', sig: "armL / armR: down|point|hold|wave|hip|up|chin|cross|reach|open|recoil|head|cover|ear|drink|shrug|hug|hold2|knit|type|write|stir|clap|fan|wipe|shiver",
+    desc: 'Tay nghỉ, chỉ, cầm, giật lại vì nóng, ôm đầu, che miệng, áp điện thoại, uống, nhún vai, ôm… Vòng lặp (knit, type, fan, wipe, shiver…) chạy theo t.',
+    live: true,
+    draw(g, T) {
       ground(g);
-      const poses = ['down', 'hold', 'wave', 'up', 'chin', 'open'];
+      const poses = ['down', 'hold', 'wave', 'up', 'chin', 'open', 'recoil', 'head', 'cover', 'ear', 'drink', 'shrug', 'hug', 'fan', 'wipe', 'shiver'];
       poses.forEach((p, i) => {
-        const x = 300 + i * 270;
-        extra(g, { x, y: 950, s: .8, look: 'office', E: 'neutral', armR: p, armL: p === 'up' ? 'up' : 'down', t: 1.6 });
-        lab(g, p, x, 1020, { px: 26, align: 'center' });
+        const r = Math.floor(i / 8), x = 150 + (i % 8) * 232, y = 520 + r * 500;
+        extra(g, { x, y, s: .42, look: 'office', E: 'neutral', armR: p, armL: ['up', 'hug', 'shiver'].includes(p) ? p : 'down', t: T });
+        lab(g, p, x, y + 40, { px: 22, align: 'center' });
+      });
+    },
+  },
+  {
+    name: 'extra() — dáng', sig: 'extra(g, { sit, walk, lean, sweat, rot })',
+    desc: 'Ngồi (y là mặt ghế), đi (walk là pha bước), nghiêng người về/ra xa một vật (lean −1…1, xoay quanh hông), mồ hôi (sweat 0…1), nằm (rot: −π/2, đầu sang trái).',
+    live: true,
+    draw(g, T) {
+      ground(g);
+      const L = [['sit', { sit: true, y: 700 }], ['walk', { walk: T * 1.2 }], ['lean: 1', { lean: 1 }], ['lean: −1', { lean: -1 }], ['sweat', { sweat: 1, E: 'worried', armR: 'wipe' }], ['rot: −π/2', { rot: -Math.PI / 2, E: 'sleepy', y: 860, x: 1840 }]];
+      L.forEach(([n, o], i) => {
+        const x = 170 + i * 290;
+        extra(g, { x, y: 900, s: .6, look: 'shopper', E: 'neutral', t: T, ...o });
+        lab(g, n, x, 1000, { px: 24, align: 'center' });
       });
     },
   },
@@ -508,6 +524,58 @@ section('extras.js', 'rig/extras.js', 'Người trong truyện. extra() trả v�
     draw(g, T) {
       ground(g);
       crowd(g, { n: 12, cols: 6, box: [200, 260, 1500, 620], t: T, hot: [4, 9], dim: true });
+    },
+  },
+]);
+
+// —— props.js: vật đời thường, mỗi vật mọi trạng thái ——
+section('props.js', 'rig/props.js', 'Vật đời thường theo tỉ lệ thật (M = 306 px một mét, gốc ở giữa đáy). prop() trả về các điểm neo theo toạ độ màn hình. Bảng đầy đủ: rig/catalog/CATALOG.md.',
+  Object.entries(PROPS).map(([id, D]) => ({
+    name: `${id} — ${D.name}`, sig: `prop(g, '${id}', { x, y, s, state: ${Object.keys(D.states || {}).map(k => `'${k}'`).join(' | ') || "''"}${Object.keys(D.params || {}).map(k => `, ${k}`).join('')} })`,
+    desc: `${D.look || ''} Neo: ${D.anchors || '—'}.`,
+    live: true,
+    draw(g, T) {
+      ground(g);
+      const st = Object.keys(D.states || { normal: {} }), [w, h] = D.size, n = st.length;
+      const s = Math.min(1700 / (w * n * 1.2), 760 / h, 6);
+      g.fillStyle = '#1a1e2e'; g.fillRect(0, 900, W, H - 900);
+      st.forEach((name, j) => {
+        const x = W / 2 + (j - (n - 1) / 2) * w * s * 1.2;
+        prop(g, id, { x, y: 900, s, state: name, t: T * 3 + j });
+        if (n > 1) lab(g, name, x, 970, { px: 28, align: 'center' });
+      });
+    },
+  })));
+
+// —— assets.js: hình có sẵn (Fluent Emoji Flat, MIT) ——
+const AIDX = await assetIndex();
+await loadAssets(AIDX.map(e => e.id));
+const AGROUPS = {};
+for (const e of AIDX) (AGROUPS[e.group || 'Khác'] ||= []).push(e);
+section('assets.js', 'rig/assets.js', `${AIDX.length} hình Fluent Emoji Flat (MIT) vẽ với viền mực của kênh. await loadAssets([...]) trước READY, rồi asset(g, id, { x, y, h }). Người trong bộ này chỉ là tượng bán thân: làm biểu tượng, không diễn. Thêm hình: rig/assets/fetch.py add "<Name>".`, [
+  ...Object.entries(AGROUPS).map(([gname, es]) => ({
+    name: `${gname} — ${es.length} hình`, sig: `asset(g, id, { x, y, h, rot, flip, outline, mute })`,
+    desc: es.map(e => e.id).join(', '),
+    draw(g) {
+      ground(g);
+      const cols = Math.min(10, Math.ceil(Math.sqrt(es.length * 1.8))), rows = Math.ceil(es.length / cols);
+      const cw = (W - 80) / cols, ch = (H - 80) / rows, hh = Math.min(cw, ch) - 46;
+      es.forEach((e, i) => {
+        const x = 40 + (i % cols + .5) * cw, y = 40 + Math.floor(i / cols) * ch + hh + 6;
+        asset(g, e.id, { x, y, h: hh });
+        lab(g, e.id, x, y + 30, { px: Math.min(20, cw / 9), align: 'center' });
+      });
+    },
+  })),
+  {
+    name: 'badge() — hình trong vòng tròn', sig: 'badge(g, id, { x, y, r, bg, ring })',
+    desc: 'Một khuôn mặt hay một biểu tượng nghề trong vòng tròn: người dẫn ló ra một lúc, một vai được gọi tên.',
+    draw(g) {
+      ground(g);
+      ['health-worker', 'police-officer', 'teacher', 'farmer', 'microbe', 'brain'].forEach((id, i) => {
+        badge(g, id, { x: 230 + i * 290, y: 520, r: 120 });
+        lab(g, id, 230 + i * 290, 700, { px: 24, align: 'center' });
+      });
     },
   },
 ]);
