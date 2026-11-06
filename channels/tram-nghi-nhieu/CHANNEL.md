@@ -22,6 +22,7 @@ channels/tram-nghi-nhieu/
 ├── review.sh       # một phiên model mới chấm: --script chấm lời trước khi làm giọng; không cờ chấm cảnh/cả phim chỉ từ hình và lời → <tập>/review/, exit 0 = PASS
 ├── CRITIC.md       # thang chấm hình và mẫu báo cáo
 ├── SCRIPT-CRITIC.md # thang chấm lời kể (dữ kiện, dựng được bằng vật thật, nhân quả, tiếng Việt nói)
+├── propcheck.mjs   # mỗi vật trong src/props.js của tập, đứng riêng, ba phía → review.sh --props cho người xem không biết tên gọi tên
 ├── gate.py         # con dấu PASS của người chấm; mix.py không dựng tập chưa PASS hay đã đổi sau PASS
 ├── mix.py          # nhạc, ambience, foley, lùi dB, master
 ├── fonts/          # Be Vietnam Pro, Patrick Hand (OFL)

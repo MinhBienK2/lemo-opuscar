@@ -5,6 +5,9 @@
 #   sh channels/tram-nghi-nhieu/review.sh <episode> --script
 #     --lines a-b  judge only these lines (a scene just built); default: every line
 #     --video      also judge the finished film: four frames from the mp4 across each line
+#     --props      judge every object of src/props.js alone (propcheck.mjs, three sides): a first session that is
+#                  not told the names says what each object is, a second compares with the intended name; writes
+#                  <episode>/review/PROPS-REVIEW.md. An object nobody can name is a stand-in, and the scenes would fail.
 #     --script     judge the words alone (voice/lines.json against research/FACTS.md) with SCRIPT-CRITIC.md, before any
 #                  voice or picture is made; writes <episode>/review/SCRIPT-REVIEW.md (and SCRIPT-REVIEW-<n>.md)
 # Writes <episode>/review/REVIEW.md (and REVIEW-<n>.md, the history), prints it, exits 0 on PASS and 1 on FAIL.
@@ -18,8 +21,8 @@ set -e
 HERE=$(cd "$(dirname "$0")" && pwd); LIB=$(cd "$HERE/../.." && pwd)
 EP=$1; [ -n "$EP" ] && [ -d "$EP" ] || { echo "usage: review.sh <episode> [--lines a-b] [--video]" >&2; exit 2; }
 EP=$(cd "$EP" && pwd); shift
-LINES=""; VIDEO=0; SCRIPT=0
-while [ $# -gt 0 ]; do case "$1" in --lines) LINES=$2; shift 2 ;; --video) VIDEO=1; shift ;; --script) SCRIPT=1; shift ;; *) echo "unknown: $1" >&2; exit 2 ;; esac; done
+LINES=""; VIDEO=0; SCRIPT=0; PROPS=0
+while [ $# -gt 0 ]; do case "$1" in --lines) LINES=$2; shift 2 ;; --video) VIDEO=1; shift ;; --script) SCRIPT=1; shift ;; --props) PROPS=1; shift ;; *) echo "unknown: $1" >&2; exit 2 ;; esac; done
 
 W=$(mktemp -d "${TMPDIR:-/tmp}/lemo-review-XXXXXX")   # outside the repository: the reviewer cannot wander into the code
 trap 'cd /; rm -rf "$W"' EXIT
@@ -30,6 +33,39 @@ critic() {   # $1 = the prompt; runs in $W, leaves the reviewer's answer in $W/o
   elif command -v omp >/dev/null; then omp -p ${LEMO_CRITIC_MODEL:+--model "$LEMO_CRITIC_MODEL"} --cwd "$W" "$1" < /dev/null > out.txt 2>&1 || true
   else claude -p "$1" < /dev/null > out.txt 2>&1 || true; fi
 }
+
+if [ "$PROPS" = 1 ]; then
+  echo "review --props: three views of every object…" >&2
+  (cd "$LIB" && node channels/tram-nghi-nhieu/propcheck.mjs "$EP" --out "$W/p" >/dev/null) || exit 2
+  mkdir -p "$W/blind"; cp "$W"/p/p_*.jpg "$W/blind/"
+  N=$(ls "$W"/blind | wc -l)
+  # 1. blind: this session never sees the names
+  cd "$W/blind"
+  W0=$W; W="$W/blind"
+  critic "Trong thư mục này có $N ảnh p_01.jpg … Mỗi ảnh là MỘT vật dựng 3D kiểu hoạt hình, nhìn từ ba phía (chéo, ngang, trên xuống), đặt trên nền trơn. Mở từng ảnh. Với mỗi ảnh, nói nó là vật gì như một người xem bình thường sẽ gọi: một cụm danh từ tiếng Việt cụ thể (\"quả chuối chín\", \"con chip máy tính\", \"cục pin điện thoại bị cắt đôi\"), cả trạng thái nếu thấy (xanh/chín, nguyên/cắt đôi). Đừng đoán theo một câu chuyện nào. Nếu không chắc, viết KHÔNG RÕ và nói nó giống những gì. Viết BLIND.md ở đây, mỗi ảnh một dòng:
+#n TÊN: <tên> | CHẮC: cao|vừa|thấp | THẤY: <những chi tiết làm bạn gọi tên như vậy; chi tiết nào lạ>
+rồi in lại nó."
+  [ -s BLIND.md ] || cp out.txt BLIND.md
+  W=$W0; cd "$W"; cp blind/BLIND.md .
+  python3 -c "
+import json; P=json.load(open('p/props.json'))
+open('NAMES.md','w').write('\n'.join(f\"#{x['n']} {x['name']}  (p/p_{x['n']:02d}.jpg)\" for x in P)+'\n')"
+  # 2. judge: the blind names against the intended ones
+  critic "Bạn kiểm tra vật dựng cho kênh Trạm Nghĩ Nhiều, nơi mọi vật có thật phải dựng đúng là nó, nhìn một giây là biết (trực thăng ra trực thăng có cánh quạt, đuôi, càng; không bao giờ là một cái hộp thay cho nó). Một người xem khác, không biết vật định dựng là gì, đã gọi tên từng vật trong BLIND.md. NAMES.md là tên người làm định dựng. Ảnh ở p/.
+Với từng vật: so tên mù với tên định dựng. KHỚP khi danh từ chính trong tên mù là đúng vật đó (từ đồng nghĩa được), trạng thái đúng (xanh/chín, nguyên/cắt đôi, chất liệu như thuỷ tinh/nhựa/kim loại), và độ chắc cao hoặc vừa. HỎNG khi: gọi thành một vật gần giống (bát thành đĩa, thuỷ tinh thành nhựa, chuối lốm đốm thành chuối chín), vật định dựng chỉ là một phần trong tên của vật khác (\"ống vàng có găng tay\" cho một bàn tay), KHÔNG RÕ, hay chắc thấp. Đừng nương tay: người xem phim chỉ có một giây. Mở ảnh của vật hỏng, chỉ ra vì sao nó bị gọi sai (thiếu bộ phận đặc trưng nào, tỉ lệ sai, màu hay chất liệu sai, trông như vật nào khác), và cách sửa bằng hình: thêm bộ phận gì, đổi hình dáng gì, chất liệu gì. Cả vật khớp cũng ghi chỗ còn thô (khối trơn, thiếu chi tiết bề mặt) nếu có.
+Viết PROPS-REVIEW.md ở thư mục này theo mẫu:
+VERDICT: PASS | FAIL      (PASS chỉ khi mọi vật KHỚP)
+#n <tên định dựng> — KHỚP|HỎNG — người xem gọi: <tên mù>
+  → SỬA: <cách sửa bằng hình>
+rồi in lại nó."
+  [ -s PROPS-REVIEW.md ] || cp out.txt PROPS-REVIEW.md
+  mkdir -p "$EP/review"; n=$(ls "$EP/review" | grep -c '^PROPS-REVIEW-' || true); n=$((n + 1))
+  { cat PROPS-REVIEW.md; printf '\n## Người xem không biết tên đã gọi\n'; cat BLIND.md; } > "$EP/review/PROPS-REVIEW-$n.md"
+  cp "$EP/review/PROPS-REVIEW-$n.md" "$EP/review/PROPS-REVIEW.md"; mkdir -p "$EP/review/props"; cp p/p_*.jpg "$EP/review/props/"
+  cat "$EP/review/PROPS-REVIEW.md"
+  if grep -q '^VERDICT: *PASS' PROPS-REVIEW.md; then echo "review --props: PASS"; exit 0; fi
+  echo "review --props: FAIL (sửa src/props.js theo $EP/review/PROPS-REVIEW.md, ảnh ở $EP/review/props/, rồi chạy lại)"; exit 1
+fi
 
 if [ "$SCRIPT" = 1 ]; then
   [ -f "$EP/voice/lines.json" ] || { echo "review --script: $EP/voice/lines.json not written yet" >&2; exit 2; }

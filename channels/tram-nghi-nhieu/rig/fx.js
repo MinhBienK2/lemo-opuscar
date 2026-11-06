@@ -120,31 +120,57 @@ export function flow(from, to, { color = '#a8e9ff', size, lift, n = 90, rate = .
   return g;
 }
 
-// ── toy hand (cream skin, mustard sleeve), fingers along +x, palm facing -y ──
-export function buildHand() {
-  const skin = toon(PAL.cream), sleeve = toon(PAL.mustard), cuff = toon('#d99516');
-  const g = new THREE.Group();
-  mesh(rbox(.17, .065, .16, .03), skin, [0, 0, 0], { parent: g });
-  const sl = mesh(new THREE.CylinderGeometry(.085, .095, .7, 24), sleeve, [-.42, 0, 0], { rot: [0, 0, Math.PI / 2], parent: g });
-  mesh(new THREE.TorusGeometry(.088, .022, 10, 28), cuff, [-.1, 0, 0], { rot: [0, Math.PI / 2, 0], parent: g });
-  mesh(new THREE.CylinderGeometry(.06, .07, .08, 20), skin, [-.07, 0, 0], { rot: [0, 0, Math.PI / 2], parent: g }); // wrist
-  const fingers = [];
-  const zs = [-.06, -.02, .02, .06], ls = [.05, .058, .055, .045];
-  zs.forEach((z, i) => {
-    const a = new THREE.Group(); a.position.set(.085, 0, z); g.add(a);
-    const L = ls[i];
-    mesh(new THREE.CapsuleGeometry(.021, L, 4, 10), skin, [L / 2 + .01, 0, 0], { rot: [0, 0, Math.PI / 2], parent: a });
-    const b = new THREE.Group(); b.position.set(L + .02, 0, 0); a.add(b);
-    mesh(new THREE.CapsuleGeometry(.02, L * .8, 4, 10), skin, [L * .4 + .01, 0, 0], { rot: [0, 0, Math.PI / 2], parent: b });
-    fingers.push([a, b]);
-  });
-  const th = new THREE.Group(); th.position.set(.02, -.01, .08); th.rotation.set(0, -.7, 0); g.add(th);
-  mesh(new THREE.CapsuleGeometry(.024, .05, 4, 10), skin, [.04, 0, 0], { rot: [0, 0, Math.PI / 2], parent: th });
-  g.scale.setScalar(.85);
-  g.pose = (curl, spread = 0) => {
-    fingers.forEach(([a, b], i) => { a.rotation.set(0, (i - 1.5) * .08 * spread, -curl * 1.1); b.rotation.z = -curl * 1.2; });
-    th.rotation.set(curl * .6, -.7 + curl * .5, -curl * .4);
+// ── a human hand (skin, knuckles, nails, a shirt cuff), fingers along +x, palm facing -y, wrist at the origin ──
+// Life size against the rig's fruit (apple R .115 ≈ 8 cm): about .55 long. buildHand({ skin, sleeve, size }).
+// hand.pose(curl 0..1, spread 0..1): fingers bend at all three joints, the thumb folds across the palm.
+export function buildHand({ skin = '#e3a983', sleeve = '#56688f', size = 1 } = {}) {
+  const S = toon(skin), N = toon('#f3d2c0'), SL = toon(sleeve), CU = toon('#eef0f4');
+  const g = new THREE.Group(), seg = (r0, r1, L, mat, parent) => {   // a tapered rounded segment along +x, base at the origin
+    const geo = new THREE.CylinderGeometry(r1, r0, L, 18, 1); geo.rotateZ(-Math.PI / 2); geo.translate(L / 2, 0, 0);
+    mesh(geo, mat, [0, 0, 0], { parent });
+    mesh(new THREE.SphereGeometry(r0, 16, 12), mat, [0, 0, 0], { parent });   // the knuckle at its base
+    return L;
   };
+  // palm: a flattened rounded block, wider at the knuckles, a soft heel
+  const palm = new THREE.SphereGeometry(1, 28, 18); palm.scale(.11, .042, .1);
+  const P = palm.attributes.position;
+  for (let i = 0; i < P.count; i++) { const x = P.getX(i); P.setZ(i, P.getZ(i) * (1 + .18 * (x / .11))); }
+  palm.computeVertexNormals(); mesh(palm, S, [.11, 0, 0], { parent: g });
+  // wrist, forearm in a sleeve, a shirt cuff
+  const wr = new THREE.Group(); wr.position.x = -.09; g.add(wr); seg(.052, .058, .1, S, wr);
+  const arm = new THREE.CylinderGeometry(.075, .085, .55, 24); arm.rotateZ(Math.PI / 2);
+  mesh(arm, SL, [-.38, 0, 0], { parent: g });
+  mesh(new THREE.TorusGeometry(.074, .014, 10, 32), CU, [-.11, 0, 0], { rot: [0, Math.PI / 2, 0], parent: g });
+  const fingers = [];
+  const zs = [-.072, -.025, .022, .066], Ls = [[.055, .035, .028], [.062, .04, .03], [.058, .037, .028], [.045, .028, .024]];
+  const rs = [.019, .02, .019, .016];
+  zs.forEach((z, i) => {
+    const joints = []; let parent = g, r = rs[i];
+    const root = new THREE.Group(); root.position.set(.205 - Math.abs(i - 1.3) * .012, .004, z); g.add(root); parent = root;
+    Ls[i].forEach((L, k) => {
+      const j = k ? new THREE.Group() : root; if (k) { j.position.set(Ls[i][k - 1], 0, 0); parent.add(j); }
+      seg(r, r * .9, L, S, j); r *= .9;
+      if (k === 2) mesh(new THREE.SphereGeometry(1, 12, 8).scale(.012, .004, .011), N, [L * .62, r * .82, 0], { parent: j });   // nail on the back
+      joints.push(j); parent = j;
+    });
+    mesh(new THREE.SphereGeometry(r, 12, 10), S, [Ls[i][2], 0, 0], { parent: joints[2] });   // fingertip
+    fingers.push(joints);
+  });
+  // thumb: from the heel of the palm, out to the side and forward
+  const th = new THREE.Group(); th.position.set(.06, -.004, .085); g.add(th);
+  seg(.026, .023, .05, S, th);
+  const t2 = new THREE.Group(); t2.position.set(.05, 0, 0); th.add(t2); seg(.022, .02, .035, S, t2);
+  const t3 = new THREE.Group(); t3.position.set(.035, 0, 0); t2.add(t3); seg(.02, .018, .028, S, t3);
+  mesh(new THREE.SphereGeometry(.018, 12, 10), S, [.028, 0, 0], { parent: t3 });
+  mesh(new THREE.SphereGeometry(1, 12, 8).scale(.013, .004, .012), N, [.018, .016, 0], { parent: t3 });
+  g.scale.setScalar(size);
+  g.pose = (curl, spread = 0) => {
+    fingers.forEach(([a, b, c], i) => {
+      a.rotation.set(0, (i - 1.5) * .12 * spread, -curl * 1.0); b.rotation.z = -curl * 1.3; c.rotation.z = -curl * .9;
+    });
+    th.rotation.set(-.2 + curl * .6, -.8 + curl * .45, .05 - curl * .35); t2.rotation.z = -.05 - curl * .5; t3.rotation.z = -.05 - curl * .5;
+  };
+  g.pose(.15, .3);
   g.traverse(o => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } });
   return g;
 }

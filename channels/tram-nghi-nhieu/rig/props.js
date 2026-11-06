@@ -23,18 +23,18 @@ const rProfile = s => {
 };
 
 // one banana: a tube with five soft ridges; attribute aS (0 stem → 1 tip) and a per-vertex speckle seed
-export function bananaGeo({ len = .42, rad = .04, bend = 1.15, nu = 72, nv = 30 } = {}) {
+export function bananaGeo({ len = .42, rad = .04, bend = 1.15, nu = 72, nv = 30, cut = 1 } = {}) {
   const c = bananaCurve(len, bend), pos = [], sAt = [], spk = [], idx = [];
   const T = new THREE.Vector3(), N = new THREE.Vector3(), B = new THREE.Vector3(0, 0, 1), p = new THREE.Vector3();
   for (let i = 0; i <= nu; i++) {
-    const s = i / nu, o = c(s);
+    const s = i / nu * cut, o = c(s);
     T.subVectors(c(Math.min(s + .01, 1)), c(Math.max(s - .01, 0))).normalize();
     N.crossVectors(B, T).normalize();
     const r = rad * rProfile(s);
     for (let j = 0; j <= nv; j++) {
       const th = j / nv * Math.PI * 2, rr = r * (1 + .13 * Math.pow(Math.abs(Math.cos(2.5 * th)), .6) * clamp((s - .2) / .1) * clamp((.95 - s) / .1) - .065);   // five flat faces with soft edges
       p.copy(o).addScaledVector(N, Math.cos(th) * rr).addScaledVector(B, Math.sin(th) * rr);
-      if (i === nu) p.copy(o).addScaledVector(T, rad * .12);   // close the tip
+      if (i === nu && cut >= 1) p.copy(o).addScaledVector(T, rad * .12);   // close the tip (a cut banana is closed by its section)
       if (i === 0) p.copy(o).addScaledVector(T, -rad * .1);    // close the stem end
       pos.push(p.x, p.y, p.z); sAt.push(s); spk.push(hash(i * 31.7 + j * 7.13) * .6 + hash(Math.floor(i / 3) * 3.1 + Math.floor(j / 2) * 9.7) * .4);
     }
@@ -47,8 +47,33 @@ export function bananaGeo({ len = .42, rad = .04, bend = 1.15, nu = 72, nv = 30 
   g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
   g.setAttribute('color', new THREE.Float32BufferAttribute(new Float32Array(pos.length), 3));
   g.setIndex(idx); g.computeVertexNormals();
-  g.userData = { sAt, spk, len, rad, curve: c };
+  g.userData = { sAt, spk, len, rad, curve: c, cut, ring: pos.slice(nu * (nv + 1) * 3), nv };
   return g;
+}
+
+// The face of a banana cut across: cream flesh, a paler ring under the skin, and the core: three soft lobes meeting at
+// the centre, lined with tiny dark seeds — what a real banana shows when it is sliced.
+let _secTex = null;
+export function bananaSectionTex() {
+  return _secTex ??= canvasTex(512, 512, (g, w) => {
+    const c = w / 2;
+    g.fillStyle = '#f4ead0'; g.fillRect(0, 0, w, w);
+    const rg = g.createRadialGradient(c, c, w * .08, c, c, w * .5);
+    rg.addColorStop(0, '#efe0b4'); rg.addColorStop(.62, '#f6eed6'); rg.addColorStop(.86, '#fbf6e6'); rg.addColorStop(1, '#e9dcae');
+    g.fillStyle = rg; g.beginPath(); g.arc(c, c, w * .5, 0, 7); g.fill();
+    g.strokeStyle = 'rgba(190,165,105,.35)'; g.lineWidth = 3;
+    for (let k = 0; k < 3; k++) {   // the three placental lobes
+      const a = k * 2.094 - 1.57;
+      g.beginPath(); g.moveTo(c, c); g.quadraticCurveTo(c + Math.cos(a - .5) * w * .13, c + Math.sin(a - .5) * w * .13, c + Math.cos(a) * w * .19, c + Math.sin(a) * w * .19);
+      g.quadraticCurveTo(c + Math.cos(a + .5) * w * .13, c + Math.sin(a + .5) * w * .13, c, c); g.stroke();
+      g.fillStyle = 'rgba(214,190,128,.45)'; g.fill();
+      g.fillStyle = '#3b2a1a';
+      for (let i = 0; i < 4; i++) { const r = w * (.05 + i * .035); g.beginPath(); g.arc(c + Math.cos(a) * r, c + Math.sin(a) * r, w * .009, 0, 7); g.fill(); }
+    }
+    g.fillStyle = '#d8c48c'; g.beginPath(); g.arc(c, c, w * .02, 0, 7); g.fill();
+    g.strokeStyle = 'rgba(160,140,80,.12)'; g.lineWidth = 1.5;   // faint radial fibres
+    for (let k = 0; k < 60; k++) { const a = k / 60 * 6.283; g.beginPath(); g.moveTo(c + Math.cos(a) * w * .22, c + Math.sin(a) * w * .22); g.lineTo(c + Math.cos(a) * w * .47, c + Math.sin(a) * w * .47); g.stroke(); }
+  });
 }
 
 // skin colour for ripeness r (0 green, 1 ripe yellow, 1.5 speckled)
@@ -56,7 +81,7 @@ const _c = new THREE.Color();
 export function skinColor(r, s, spk, out) {
   if (r < .5) out.copy(C_GREEN).lerp(C_LIME, ss(r / .5));
   else out.copy(C_LIME).lerp(C_YEL, ss((r - .5) / .45));
-  if (r > 1.02 && spk > 1.48 - (r - 1) * .9) out.lerp(C_BROWN, .85);
+  if (r > 1.02 && spk > .97 - (r - 1) * .8) out.lerp(C_BROWN, .85);   // spk is 0..1: at 1.5 about a third of the skin is speckled
   if (s < .12) out.lerp(C_STEM, .75 * (1 - s / .12)).lerp(C_BROWN, .3 * clamp(r - .9));
   if (s > .988) out.copy(C_TIP); else if (s > .96) out.lerp(C_TIP, .45);
   return out;
@@ -87,6 +112,21 @@ export function banana(opts = {}) {
     Cc.needsUpdate = true;
   };
   m.ripen(0, 0);
+  if (geo.userData.cut < 1) {   // the section: a cap over the last ring, the flesh texture mapped across it
+    const { ring, nv, curve, cut, rad } = geo.userData, o = curve(cut), cp = [o.x, o.y, o.z], uv = [.5, .5], id = [];
+    const T = new THREE.Vector3().subVectors(curve(cut), curve(cut - .01)).normalize(), B = new THREE.Vector3(0, 0, 1), N = new THREE.Vector3().crossVectors(B, T);
+    const v = new THREE.Vector3(), R = rad * rProfile(cut) * 1.08;
+    for (let j = 0; j <= nv; j++) {
+      v.set(ring[j * 3], ring[j * 3 + 1], ring[j * 3 + 2]); cp.push(v.x, v.y, v.z); v.sub(o);
+      uv.push(.5 + v.dot(N) / R / 2, .5 + v.dot(B) / R / 2);
+      if (j < nv) id.push(0, j + 1, j + 2);
+    }
+    const cg = new THREE.BufferGeometry();
+    cg.setAttribute('position', new THREE.Float32BufferAttribute(cp, 3)); cg.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
+    cg.setIndex(id); cg.computeVertexNormals();
+    const cap = new THREE.Mesh(cg, toon('#d6c9a6', { map: bananaSectionTex(), side: THREE.DoubleSide }));
+    cap.castShadow = cap.receiveShadow = true; m.add(cap); m.section = { center: o.clone(), normal: T.clone(), R };
+  }
   return m;
 }
 
@@ -140,9 +180,11 @@ export function apple({ R = .115, seed = 4, color = 'red' } = {}) {
 // a shallow bowl (lathe) with a rim band; put fruit at y ≈ .06
 export function bowl({ R = .42, color = '#f4ede0', band = PAL.red } = {}) {
   const g = new THREE.Group();
-  const p = [[0, 0], [R * .45, 0], [R * .5, .01], [R * .85, .08], [R, .16], [R * .97, .165], [R * .82, .09], [R * .45, .025], [0, .025]].map(([x, y]) => new THREE.Vector2(x, y));
+  const H = R * .55, t = R * .05;   // a deep bowl on a foot ring: the depth is what tells it from a plate
+  const p = [[0, .012], [R * .36, .012], [R * .38, 0], [R * .44, 0], [R * .45, .03], [R * .7, H * .25], [R * .92, H * .65], [R, H], [R - t * .6, H + t * .3],
+    [R - t, H - t * .2], [R * .87, H * .6], [R * .65, H * .22], [R * .38, t + .03], [0, t + .03]].map(([x, y]) => new THREE.Vector2(x, y));
   g.add(mesh(new THREE.LatheGeometry(p, 48), toon(color, { side: THREE.DoubleSide }), [0, 0, 0]));
-  g.add(mesh(new THREE.TorusGeometry(R * .985, .012, 8, 64), toon(band), [0, .162, 0], { rot: [Math.PI / 2, 0, 0] }));
+  g.add(mesh(new THREE.TorusGeometry(R * .985, R * .022, 8, 64), toon(band), [0, H - R * .06, 0], { rot: [Math.PI / 2, 0, 0] }));
   return g;
 }
 // a flat plate with a printed rim

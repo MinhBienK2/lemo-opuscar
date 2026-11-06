@@ -182,3 +182,59 @@ export const PROFILES = {
   can: [[0, 0], [.3, 0], [.34, .06], [.34, 1.1], [.29, 1.2]],
   bulb: [[0, 0], [.12, 0], [.14, .3], [.42, .8], [.46, 1.1], [.36, 1.45], [.0, 1.62]],
 };
+
+// A real thing cut open, with the parts that make it recognisable and its own materials (not a green shell):
+//   preset('bottle' | 'can' | 'bulb' | 'glass', { scale, fill, liquid, cut }) → the vessel V, plus V.parts.
+// can: aluminium, a printed band, a recessed lid with a pull tab. bulb: clear glass, a threaded metal screw base
+// with a black contact, the glass stem, two support wires and a short coiled filament, dark when off
+// (V.parts.filament.material.color.set(...).multiplyScalar(k) to light it). bottle: green glass with a cap. glass: clear drinking glass.
+export function preset(kind, { scale = .25, fill = null, liquid = '#c98a2e', cut = 1.7 } = {}) {
+  const prof = PROFILES[kind].map(([r, y]) => [r * scale, y * scale]);
+  const glassMat = c => toon(c, { transparent: true, opacity: .35, depthWrite: false, side: THREE.DoubleSide });
+  const M = {
+    bottle: { shell: toon('#3f9a64', { transparent: true, opacity: .55, depthWrite: false, side: THREE.DoubleSide }), face: toon('#bfe3c9', { grad: GRAD3, transparent: true, opacity: .7 }), thick: .012 * scale / .25 },
+    can: { shell: toon('#c9cfd8'), face: toon('#e9edf2', { grad: GRAD3 }), thick: .004 * scale / .25 },
+    bulb: { shell: glassMat('#eaf6ff'), face: glassMat('#ffffff'), thick: .006 * scale / .25 },
+    glass: { shell: glassMat('#e6f4ff'), face: glassMat('#ffffff'), thick: .01 * scale / .25 },
+  }[kind];
+  const V = vessel(prof, { ...M, fill, liquid, cut });
+  const g = V.group, top = prof[prof.length - 1][1], R = Math.max(...prof.map(p => p[0])), parts = {};
+  if (M.shell.transparent) g.traverse(o => { if (o.isMesh) fxLayer(o); });
+  const a0 = cut / 2, a1 = Math.PI * 2 - cut;
+  if (kind === 'can') {
+    const band = new THREE.CylinderGeometry(R * 1.004, R * 1.004, top * .5, 96, 1, true, a0, a1);
+    g.add(mesh(band, toon('#d23a3a', { side: THREE.DoubleSide }), [0, top * .45, 0]));
+    g.add(mesh(new THREE.CylinderGeometry(R * 1.006, R * 1.006, top * .05, 96, 1, true, a0, a1), toon('#f4f4f4', { side: THREE.DoubleSide }), [0, top * .45, 0]));
+    const lid = new THREE.CylinderGeometry(R * .86, R * .86, R * .04, 64, 1, false, a0, a1);
+    g.add(mesh(lid, toon('#b8bec8'), [0, top - R * .08, 0]));
+    g.add(mesh(new THREE.TorusGeometry(R * .9, R * .045, 8, 64, a1), toon('#d7dce4'), [0, top - R * .03, 0], { rot: [Math.PI / 2, 0, a0 + a1 - Math.PI / 2 + Math.PI] }));
+    const tab = new THREE.Group(); tab.position.set(-R * .3, top - R * .05, -R * .1); g.add(tab);
+    mesh(new THREE.TorusGeometry(R * .14, R * .035, 6, 20), toon('#aab1bb'), [0, 0, 0], { rot: [Math.PI / 2, 0, 0], parent: tab });
+    mesh(new THREE.BoxGeometry(R * .32, R * .03, R * .16), toon('#aab1bb'), [R * .2, 0, 0], { parent: tab });
+    parts.tab = tab;
+  }
+  if (kind === 'bulb') {
+    const metal = toon('#c7b27a'), r0 = prof[0][0] || prof[1][0], h = R * .55;
+    const base = new THREE.Group(); base.position.y = -h; g.add(base);
+    mesh(new THREE.CylinderGeometry(r0 * 1.05, r0 * 1.0, h, 40), metal, [0, h / 2, 0], { parent: base });
+    for (let i = 0; i < 4; i++) mesh(new THREE.TorusGeometry(r0 * 1.07, r0 * .1, 8, 40), metal, [0, h * (.18 + i * .2), 0], { rot: [Math.PI / 2, 0, 0], parent: base });
+    mesh(new THREE.CylinderGeometry(r0 * .6, r0 * .9, h * .15, 32), toon('#1e1e22'), [0, -h * .06, 0], { parent: base });
+    mesh(new THREE.SphereGeometry(r0 * .32, 16, 10), metal, [0, -h * .15, 0], { parent: base });
+    const stemH = top * .45, stem = new THREE.Mesh(new THREE.CylinderGeometry(r0 * .25, r0 * .7, stemH, 20), glassMat('#ffffff'));
+    stem.position.y = stemH / 2; fxLayer(stem); g.add(stem);
+    const wire = toon('#6b6b70'), fy = top * .56, fw = R * .16;   // a short tight coil between two support wires
+    for (const sx of [-1, 1]) {
+      const c = new THREE.LineCurve3(new THREE.Vector3(sx * r0 * .15, stemH * .8, 0), new THREE.Vector3(sx * fw, fy, 0));
+      g.add(mesh(new THREE.TubeGeometry(c, 4, R * .012, 6), wire, [0, 0, 0], { cast: false }));
+    }
+    const pts = []; for (let i = 0; i <= 120; i++) { const u = i / 120, a = u * Math.PI * 2 * 14; pts.push(new THREE.Vector3(lerp(-fw, fw, u), fy + Math.sin(a) * R * .018, Math.cos(a) * R * .018)); }
+    const fil = new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 360, R * .005, 6), glowMat('#5a4a3a', 1));
+    fxLayer(fil); g.add(fil); parts.filament = fil; parts.base = base;
+  }
+  if (kind === 'bottle') {
+    const capR = prof[prof.length - 1][0] * 1.12;
+    g.add(mesh(new THREE.CylinderGeometry(capR, capR, top * .05, 32, 1, false, a0, a1), toon('#d8b04a'), [0, top + top * .02, 0]));
+  }
+  V.parts = parts;
+  return V;
+}

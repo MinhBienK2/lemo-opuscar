@@ -54,6 +54,10 @@ const G = flow(nguồn, T.gatePos(2), { size: .025 });            // khí đi v�
 ```
 **Cắt theo tiết diện của chính vật đó**, không cắt thành hộp: `tissue({ section: 5, rad: .1, d: .16, gates: 3 })` là một khoanh chuối (ngũ giác bo góc), `section: 32` là khoanh tròn (táo, cà rốt, cuống, ống), `section: 6` là bút chì. Vỏ, tế bào, cửa và các hàm đều giữ nguyên. Đặt vật nguyên vẹn ngay cạnh khoanh trong cùng khung, để người xem thấy khoanh được cắt ra từ chính nó (`demo/stills/inside_banana.jpg`, `?inside=banana`). Một khối hộp chỉ dùng khi vật thật cũng là khối hộp (bánh mì, cục pin).
 
+**Điểm yếu đã biết**: `tissue()` đứng riêng vẫn bị người xem không biết tên gọi là "khối vuông", kể cả khi đặt cạnh quả chuối. Chỉ dùng nó sau một khung đã cho thấy chính vật bị cắt, và chạy `review.sh --props` với cả hai.
+
+**Thứ tự vào trong**: trước hết là chính vật thật bị cắt (người xem thấy vỏ, hình dáng và mặt cắt thật của nó: `banana({ cut })` bên dưới; vật khác thì cắt bằng `vessel()` hay dựng mặt cắt thật của nó), rồi mới tới tầng tế bào (`tissue`). `tissue` là cảnh cận đã phóng to: khung trước nó phải cho thấy nó nằm ở đâu trong vật thật. Chạy `review.sh --props` cho cả hai: người xem không biết tên phải gọi ra được vật.
+
 Dùng nó cho mọi câu "bên trong": thấy được vỏ, mặt cắt và căn phòng phía sau trong cùng một khung. Mỗi câu một bước khác nhau (cửa mở → tế bào đầu tiên đổi → lan ra → vỏ đổi màu), không giữ một khung cho nhiều câu.
 
 ## fx.js
@@ -68,7 +72,7 @@ Dùng nó cho mọi câu "bên trong": thấy được vỏ, mặt cắt và că
 - `glowDots(n, r, color, k)`, `halos(n, color, k, TEX.radial())`, `sparks(n, color, k)` là InstancedMesh; đặt bằng `setDot`, `setHalo(…, cam.quaternion)`, `setStreak(…, vel, len, w)`; nhớ đặt `.count` và `instanceMatrix.needsUpdate`.
 - `squiggle(color, color2)`: gợn nhiệt; uniform `uHead uLen uCeil uAmp uFreq uPhase uWidth uAlpha`; vượt `uCeil` thì gập xuống.
 - `speedTable(length, V)`: → `{total, sAt(age), tAt(s)}`; vật chạy trên đường với tốc độ theo vị trí (đám đông qua cửa hẹp, xe dồn ở nút cổ chai).
-- `buildHand()`: tay đồ chơi; `hand.pose(curl, spread)`.
+- `buildHand({skin, sleeve, size})`: bàn tay người cỡ thật so với trái cây của rig (dài ≈ .55), ngón ba đốt có khớp và móng, cổ tay áo; ngón dọc +x, lòng bàn tay hướng −y, cổ tay ở gốc. `hand.pose(curl, spread)`.
 - `heatColor(h)`: cyan → cam → đỏ.
 
 ## sets.js — bối cảnh dựng sẵn
@@ -91,6 +95,7 @@ const cam = keys([[0, S.cams.wide], [V.w('n2', 'táo'), S.cams.medium], [V.w('n3
 
 Để câu nói về một thay đổi có hình của chính thay đổi đó.
 - `banana(opts)` → mesh có `ripen(base, t)`: vỏ xanh → vàng → lốm đốm nâu theo `base` (0, 1, 1.5); thêm `m.spots.push({ p, t0, speed, max })` để vỏ chín lan ra từ một điểm (chỗ khí chạm vào).
+- `banana({ cut: .72 })`: quả chuối bị cắt ngang ở 72% chiều dài (cắt ngắn hơn thì khúc còn lại tròn như quả bầu), có mặt cắt thật (ruột kem, vòng dưới vỏ, lõi ba thuỳ có hạt li ti); `m.section = { center, normal, R }` để đặt máy hay cho khí chạm vào mặt cắt.
 - `bunch({ n })` → `{ group, fruits, crown }`: một nải. `apple({ R, color: 'red' | 'green' })`: có `.R`, đặt ở `y = R * .92`. `bowl({ R })`, `plate({ R })`.
 
 ## cutaway.js — bên trong một vật
@@ -98,6 +103,7 @@ const cam = keys([[0, S.cams.wide], [V.w('n2', 'táo'), S.cams.medium], [V.w('n3
 Máy đứng **ngoài** vật và nhìn vào chỗ bị cắt, vật lớn như một món đồ trên bàn. Đừng đưa máy vào trong vật để thấy hạt trôi trong khoảng không. Mẫu: `demo/cutaway/main.js`, ảnh `demo/stills/cutaway_*.jpg`.
 
 - `vessel(profile, {thick, cut, shell, face, fill, liquid})` → `{group, rIn(y), rOut(y), mouth, bottom, level, cut}`: một vật tiện tròn (chai, cốc, lon, bóng đèn, ống) bị khoét một nêm `cut` rad về phía +z, có mặt cắt, chất lỏng trong và vệt bóng thuỷ tinh. Xoay `group` để nêm hướng về máy. `PROFILES.bottle/glass/can/bulb` là hình mẫu.
+- `preset('bottle' | 'can' | 'bulb' | 'glass', { scale, fill, liquid, cut })`: vật thật bổ đôi, có chất liệu và bộ phận nhận ra được (chai thuỷ tinh có nắp; lon nhôm có nhãn, nắp lõm, khoen; bóng đèn kính trong có đuôi xoáy, trụ kính, dây đỡ, dây tóc `V.parts.filament`; cốc thuỷ tinh). Dùng nó thay `vessel()` trần, vì `vessel()` một màu xanh bị người xem gọi là ống nhựa hay chiếc lá.
 - `dissolved(V, {amount: t => 0..1})`: chất đang tan, những chấm nhỏ trong chất lỏng.
 - `fizz(V, {rate: t => 0..1})`: bọt sinh ra trên thành, bám lại và lớn lên, rồi bứt ra, nổi lên và vỡ ở mặt chất lỏng.
 - `foam(V, {height: t => h})`: cột bọt leo lên cổ; quá miệng thì phồng thành vòm rồi tràn xuống mặt ngoài.

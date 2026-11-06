@@ -1,7 +1,7 @@
 ---
 name: tram-nghi-nhieu
 description: Đạo diễn và dựng một tập của kênh Trạm Nghĩ Nhiều — câu hỏi "tại sao" đời thường, trả lời bằng diorama 3D toon (three.js) có ánh sáng thật, viền mực vẽ tay, máy quay đi vào bên trong vật, mọi vật dựng đúng là nó, chỉ thứ vô hình mới thành hình minh hoạ; một giọng kể tiếng Việt. Dùng khi làm bất kỳ tập nào của kênh.
-version: 13.3.0
+version: 13.4.0
 ---
 
 # Một tập Trạm Nghĩ Nhiều
@@ -44,26 +44,27 @@ Thứ tự này là lý do phim mẫu đẹp. Đừng đảo.
    - mỗi bề mặt lớn một texture canvas có seed (`canvasTex`); đồ mềm nặn bằng `cushionGeo` hoặc `surface`, không để là hộp;
    - đồ đạc đủ dày để nơi đó có người sống: đồ nhỏ trên bàn, tranh, cây, thứ gì đó ngoài cửa sổ;
    - một vật sống: rèm lay, lá lay đổ bóng, LED thở, hơi nước.
-3. **Vòng still**: `LEMO_ANGLE=vulkan node core/render/still.mjs <tập> <t…> --out <scratch>`, rồi **mở ảnh ra xem**. Mỗi vòng ghi vào `LOOK.md`: thấy gì, vì sao, sửa gì. Chẩn đoán bằng cờ, đừng đoán:
+3. **Vật trước cảnh**: mọi vật có thật sẽ lên hình (của rig hay tự dựng) nằm trong `src/props.js` của tập: `export const PROPS = { 'tên vật như lời gọi, kèm trạng thái': () => THREE.Object3D }`, và `film.js` lấy vật từ đó. Trước khi dựng cảnh đầu tiên, chạy `LEMO_ANGLE=vulkan sh channels/tram-nghi-nhieu/review.sh <tập> --props`: mỗi vật đứng riêng, nhìn từ ba phía; một phiên không biết tên gọi tên nó, phiên thứ hai so với tên bạn định. Vật bị gọi sai hay "không rõ" là vật thay thế: sửa theo dòng `SỬA:` (thêm bộ phận đặc trưng, đúng tỉ lệ, đúng chất liệu), xem lại ảnh ở `review/props/`, chạy lại tới khi PASS. Vật thêm sau cũng phải qua bước này. Vật dựng tốt mà dùng lại được thì đưa vào `rig/props.js`.
+4. **Vòng still**: `LEMO_ANGLE=vulkan node core/render/still.mjs <tập> <t…> --out <scratch>`, rồi **mở ảnh ra xem**. Mỗi vòng ghi vào `LOOK.md`: thấy gì, vì sao, sửa gì. Chẩn đoán bằng cờ, đừng đoán:
    - mảng sáng mất hoặc bóng lạ → `?lightcam=1` nhìn từ đèn, `?nocast=<tag>` tắt từng vật đổ bóng (phim mẫu tìm ra chăn DoubleSide tự đổ bóng lên chính nó theo cách này);
    - cháy trắng → giảm cường độ đèn điểm (decay 2), chỉ vật `glowMat` k > 1 mới được loé;
    - vật đọc sai hình → đổi trục máy trước khi đổi vật.
    Ít nhất 3 vòng cho mỗi khung hero, trước khi làm chuyển động.
-4. **Cơ chế** (khung hero 2): dựng thành vật thể có tham số (`speedTable`, `sparks`, `squiggle`, hạt trên `CatmullRomCurve3`, `rig/cutaway.js`).
+5. **Cơ chế** (khung hero 2): dựng thành vật thể có tham số (`speedTable`, `sparks`, `squiggle`, hạt trên `CatmullRomCurve3`, `rig/cutaway.js`).
    - Bên trong một vật: dùng `tissue()` của `rig/inside.js`, cắt theo tiết diện của chính vật (`section: 5` chuối, `section: 32` vật tròn), vật nguyên đặt cạnh khoanh trong cùng khung (vỏ có cửa mở được, mặt cắt có tế bào đổi trạng thái, đặt ngay trên bàn của bối cảnh, có đèn riêng), hoặc mặt cắt của `rig/cutaway.js` cho bình, ống. Máy đứng ngoài nhìn vào. Vật vẫn nằm trong bối cảnh có sàn, đèn và đồ xung quanh, như `demo/stills/cutaway_*.jpg`. Không đưa máy vào trong để quay một khoảng không chỉ có hạt.
    - Trước khi thêm chữ, khung phải có **một sự kiện nhân quả lớn trên màn hình**: một tác động (nắp bật, dòng điện vào) gây ra một thay đổi thấy được ngay trong vòng 1–2 giây (bọt trào, tia lửa, đổi màu). Tắt nhãn đi mà vẫn hiểu thì mới đạt.
    - Không vòng tròn đồng tâm, không mũi tên, không công thức.
-5. **Chuyển động và máy quay**: keyframe bằng `keys()`. Đặt mốc theo **chữ** trong lời bằng `V.w(id, 'từ')`, không theo số giây. Vật được nhắc phải hiện lên đúng lúc từ đó được nói, và cơ chế không được chạy trước khi lời nói tới nguyên nhân của nó. Lấy đà, vượt đà (`back`), chuyển động phụ. Chuyển cảnh bằng `flash` màu cảnh sau, hoặc máy đi xuyên vật.
-6. **Chữ**: `label()` cho thuật ngữ (tối đa một thẻ một lúc), mũi thẻ chỉ vào đúng vật được nhắc. Từ khoá của câu trả lời (tên của nguyên nhân) có thẻ ngay lần đầu được nói, chữ trên thẻ giống hệt chữ trong lời. Mỗi sự thật chỉ một thẻ: không để cùng một con số hay một tên hiện hai chỗ trong một khung. `subtitle()` cho phụ đề. Khai báo trong `TEXTS`.
-7. **Vòng beat**: chạy `LEMO_ANGLE=vulkan node channels/tram-nghi-nhieu/beatsheet.mjs <tập> --out <scratch>`. Lệnh này ra mỗi câu một khung, chụp lúc câu đang được nói, có in câu bên dưới. **Mở từng tờ ra xem.** Với mỗi câu, hỏi: nếu không nghe, khung này có cho thấy điều câu nói không?
+6. **Chuyển động và máy quay**: keyframe bằng `keys()`. Đặt mốc theo **chữ** trong lời bằng `V.w(id, 'từ')`, không theo số giây. Vật được nhắc phải hiện lên đúng lúc từ đó được nói, và cơ chế không được chạy trước khi lời nói tới nguyên nhân của nó. Lấy đà, vượt đà (`back`), chuyển động phụ. Chuyển cảnh bằng `flash` màu cảnh sau, hoặc máy đi xuyên vật.
+7. **Chữ**: `label()` cho thuật ngữ (tối đa một thẻ một lúc), mũi thẻ chỉ vào đúng vật được nhắc. Từ khoá của câu trả lời (tên của nguyên nhân) có thẻ ngay lần đầu được nói, chữ trên thẻ giống hệt chữ trong lời. Mỗi sự thật chỉ một thẻ: không để cùng một con số hay một tên hiện hai chỗ trong một khung. `subtitle()` cho phụ đề. Khai báo trong `TEXTS`.
+8. **Vòng beat**: chạy `LEMO_ANGLE=vulkan node channels/tram-nghi-nhieu/beatsheet.mjs <tập> --out <scratch>`. Lệnh này ra mỗi câu một khung, chụp lúc câu đang được nói, có in câu bên dưới. **Mở từng tờ ra xem.** Với mỗi câu, hỏi: nếu không nghe, khung này có cho thấy điều câu nói không?
    - vật được nhắc có trong khung, ở chỗ sáng nhất và đậm màu nhất (nền tối và dịu hơn nó), chiếm đủ chỗ (không nằm ở mép khung, không bị cắt), và đang làm việc câu nói;
    - thẻ chữ nằm trong khung, chỉ đúng vật;
    - con số trên hình trùng với con số trong lời;
    - nhiều câu liền nhau trên cùng một khung đứng yên là dấu hiệu thiếu hình.
    Lệnh cũng tự đo từng khung và in nhãn đỏ: `DARK` (vật chính nằm trong bóng: đưa đèn chính hoặc `pool` vào nó) và `SAME` (gần y hệt khung câu trước: câu này chưa có hình riêng; máy trôi nhẹ hay hạt bay không làm thành hình mới) và `NUM` (câu nói một con số mà trên màn hình không có số nào lúc đó: thêm đồng hồ, lịch, thẻ số) và `RUN` (câu thứ tư liền nhau vẫn quay cùng những vật ấy, đo bằng các tia bắn qua khung: phim đã ngừng cho thấy điều mới; cho câu đó hình riêng: một nơi khác, cắt vào bên trong, so sánh hai bên, một khung rộng cho biết đang ở đâu, một vật mới; một bố cục giữ tối đa ba câu). Sửa hết các nhãn. Chỉ giữ `SAME` khi cố ý, và ghi lý do vào `LOOK.md`.
    Ghi vào `LOOK.md` những câu lệch, vì sao lệch, đã sửa gì. Khi cảnh hết cờ, gọi người chấm cho cảnh đó (§3) rồi mới sang cảnh sau.
-8. **Tiếng**: `window.EV` = sự kiện giọng (`V.ev`) + nhạc + ambience + foley ở đúng chỗ có vật làm ra tiếng (định dạng: `rig/README.md` § voice.js).
-9. Dựng (chỉ sau khi `review.sh` cả phim PASS, §3): `LEMO_ANGLE=vulkan sh build.sh`; cổng: `LEMO_ANGLE=vulkan sh core/render/review.sh <tập>` phải exit 0.
+9. **Tiếng**: `window.EV` = sự kiện giọng (`V.ev`) + nhạc + ambience + foley ở đúng chỗ có vật làm ra tiếng (định dạng: `rig/README.md` § voice.js).
+10. Dựng (chỉ sau khi `review.sh` cả phim PASS, §3): `LEMO_ANGLE=vulkan sh build.sh`; cổng: `LEMO_ANGLE=vulkan sh core/render/review.sh <tập>` phải exit 0.
 
 Muốn thêm một bộ phận dùng lại được (bối cảnh, đạo cụ, hiệu ứng) thì đưa vào `channels/tram-nghi-nhieu/rig/` và ghi một dòng vào `rig/README.md`. Không sửa `render.js` cho riêng một tập.
 
