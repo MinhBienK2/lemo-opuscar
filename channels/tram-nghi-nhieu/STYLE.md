@@ -1,6 +1,6 @@
 # Trạm Nghĩ Nhiều — hình
 
-Đồ chơi 3D toon trong một diorama có ánh sáng thật, viền mực vẽ tay, in trên giấy. Ấm và có chất liệu, không lạnh kiểu render sản phẩm. Khung tham chiếu: `demo/stills/`.
+Đồ chơi 3D toon trong một diorama có ánh sáng thật, viền mực vẽ tay, in trên giấy. Ấm và có chất liệu, không lạnh kiểu render sản phẩm. Khung tham chiếu cho tay nghề (ánh sáng, chất liệu, chiều sâu), không phải nội dung để chép: `demo/stills/`.
 
 ## Bất biến
 
@@ -10,7 +10,8 @@
 - **Ánh sáng**: một đèn chính có hướng, đổ bóng, đi qua một khe có hình (cửa sổ, rèm, lá, song sắt, khe cửa) để bóng tự kể nơi chốn; fill hemi navy; viền tím; fog. Một nguồn ấm duy nhất ở điểm nhìn.
 - **Sáng tối**: vùng sáng nhất khung là điểm nhìn. Không mảng trắng cháy ngoài vật tự phát sáng. Không mảng bão hoà lớn chiếm nửa khung.
 - **Chiều sâu**: ≥ 3 lớp có che lấp (tiền cảnh đồ vật cắt mép khung, trung cảnh hành động, hậu cảnh có nguồn sáng hoặc cửa sổ).
-- **Cơ chế vô hình thành vật thể có vật lý**: dòng hạt, đám đông qua cửa hẹp, tia lửa có trọng lực, gợn nhiệt bị trần chặn. Có tham số và có nhân quả, không phải sơ đồ, vòng tròn đồng tâm hay mũi tên.
+- **Thật, nhìn là biết**: vật, máy, bộ phận, nơi chốn và bên trong của một vật được dựng đúng là chúng: hình dáng, bộ phận đặc trưng, tỉ lệ, chất liệu đủ để nhận ra trong một giây, kể cả vật người xem chưa thấy bao giờ. Nét là đồ chơi toon, nhưng không có vật thay thế: không hộp thay máy, không khối thay con chip, không biểu tượng thay nơi chốn, không khoảng không trừu tượng.
+- **Cơ chế vô hình thành vật thể có vật lý** (chỉ thứ mắt không thấy: khí, nhiệt, tín hiệu, dòng điện, lực): dòng hạt, đám đông qua cửa hẹp, tia lửa có trọng lực, gợn nhiệt bị trần chặn. Có tham số và có nhân quả, không phải sơ đồ, vòng tròn đồng tâm hay mũi tên.
 - **Máy quay** đi xuyên không gian khi câu chuyện đi (theo dây, chui vào vật, lùi ra), giữ yên khi cần nhìn. Chuyển cảnh bằng loé sáng màu của cảnh sau hoặc bằng đi xuyên.
 - **Chuyển động**: có lấy đà và vượt đà (`back()`), chuyển động phụ (rèm, lá, bụi trong vệt sáng, LED thở). Không khung nào đứng hình hoàn toàn.
 - **Chữ trên hình**: chỉ thuật ngữ (`label()`, Be Vietnam Pro 900, thẻ kem viền mực, chữ đỏ) và phụ đề (`subtitle()`). Không công thức, không gạch đầu dòng.

@@ -1,7 +1,7 @@
 ---
 name: tram-nghi-nhieu
-description: Đạo diễn và dựng một tập của kênh Trạm Nghĩ Nhiều — câu hỏi "tại sao" đời thường, trả lời bằng diorama 3D toon (three.js) có ánh sáng thật, viền mực vẽ tay, máy quay đi vào bên trong vật, cơ chế vô hình thành ẩn dụ vật lý; một giọng kể tiếng Việt. Dùng khi làm bất kỳ tập nào của kênh.
-version: 13.0.0
+description: Đạo diễn và dựng một tập của kênh Trạm Nghĩ Nhiều — câu hỏi "tại sao" đời thường, trả lời bằng diorama 3D toon (three.js) có ánh sáng thật, viền mực vẽ tay, máy quay đi vào bên trong vật, mọi vật dựng đúng là nó, chỉ thứ vô hình mới thành hình minh hoạ; một giọng kể tiếng Việt. Dùng khi làm bất kỳ tập nào của kênh.
+version: 13.2.0
 ---
 
 # Một tập Trạm Nghĩ Nhiều
@@ -17,7 +17,8 @@ Mục tiêu: người xem tắt tiếng vẫn đoán đúng chuyện gì đang x
 3. `TREATMENT.md`, một trang:
    - câu hỏi, rồi **tách nó ra**: vật nào thay đổi (chủ thể), thay đổi thế nào, so với cái gì, vì cái gì. Ví dụ "Vì sao X để cạnh Y lại Z?" thì chủ thể là X, nguyên nhân nằm ở Y. Câu trả lời một câu phải lấy đúng chủ thể đó làm chủ ngữ. Đọc lại FACTS xem nguyên nhân có đúng chiều không (cái gì tác động lên cái gì);
    - câu mở đầu và khung đầu tiên cho thấy **chính điều câu hỏi nói**, ở nơi người xem gặp nó (nải chuối trên bàn bếp, chứ không phải một nhà máy). Chuyện lạ hay con số lớn để sau, khi người xem đã hiểu cơ chế;
-   - **ẩn dụ vật lý** của cơ chế: vật gì chạy, bị chặn ở đâu, đổi trạng thái ra sao (ví dụ: electron chen qua cửa hẹp, bắn tia lửa, pin đổi màu);
+   - **thật, nhìn là biết**: thứ có thật (vật, máy, bộ phận, nơi chốn, bên trong một vật) dựng đúng là nó, đủ hình dáng, bộ phận đặc trưng, tỉ lệ và chất liệu để người xem nhận ra trong một giây, kể cả vật họ chưa thấy bao giờ (trực thăng ra trực thăng có cánh quạt, đuôi, càng; con chip ra đế, chân, lõi, các lớp mạch). Không bao giờ thay một vật có thật bằng hộp, khối, biểu tượng. Liệt kê ở đây mọi vật sẽ lên hình, mỗi vật kèm những bộ phận làm nó nhận ra được;
+   - **hình cho thứ vô hình**, và chỉ cho thứ vô hình (khí, nhiệt, tín hiệu, dòng điện, lực): vật gì chạy, bị chặn ở đâu, đổi trạng thái ra sao (electron chen qua chỗ hẹp, bắn tia lửa). Hình đó mọc ra từ vật thật và chạm vào vật thật;
    - **các nơi chốn** (2–4 với tập dài, 1–2 với Shorts) và đường máy đi giữa chúng (đi theo dây, chui vào vật, lùi ra);
    - **3 khung hero**: khung lập cảnh, khung cơ chế, khung "à ra thế". Tả mỗi khung: điểm nhìn, nguồn sáng, ba lớp sâu, màu nhấn;
    - **bảng ý → hình**: mỗi ý của câu trả lời một dòng, gồm ý đó, trên màn hình thấy gì, và vật nào làm gì để người xem thấy ý đó. Che cột ý đi, chỉ đọc cột hình vẫn phải ra câu chuyện. Ý nào không có hình thì bỏ ý, hoặc nghĩ ra hình cho nó. Khi lập bảng:
@@ -29,14 +30,16 @@ Mục tiêu: người xem tắt tiếng vẫn đoán đúng chuyện gì đang x
      - mỗi dòng một **cách dựng** khác dòng trước (góc máy, cỡ cảnh hoặc vật chính). Không quá 2 câu liền nhau cùng một cách dựng;
      - có quay lại thời điểm trước (tua ngược, "lần nữa") thì phải có dấu hiệu nhìn thấy được: đồng hồ quay ngược, ánh sáng đổi, lật trang;
    - shot list gom từ bảng đó: thời điểm · cảnh · máy làm gì · vì sao.
-4. Lời: `voice/lines.json`, viết **từ** bảng ý → hình. Mỗi câu thuộc một dòng của bảng, số viết thành chữ. Muốn thêm hay bớt câu thì sửa bảng và hình trước. Giọng: `voice/tts_vi.py` → `asr_vi.py` → `process.py` → `mk_timeline.py` (lệnh trong `build.sh` của tập).
+4. Lời: `voice/lines.json`, viết **từ** bảng ý → hình. Mỗi câu thuộc một dòng của bảng, số viết thành chữ. Muốn thêm hay bớt câu thì sửa bảng và hình trước.
+5. **Chấm lời trước khi làm giọng**: `sh channels/tram-nghi-nhieu/review.sh <tập> --script`. Một phiên model mới chỉ đọc `lines.json`, `FACTS.md` và `STRATEGY.md`, chấm theo `SCRIPT-CRITIC.md`: dữ kiện và thuật ngữ đúng, mỗi câu dựng được bằng vật thật, nhân quả không thiếu mắt xích, mở và kết, tiếng Việt nói. Kết quả ở `<tập>/review/SCRIPT-REVIEW.md`, exit 0 là PASS. FAIL thì sửa `lines.json` (và `FACTS.md`, bảng ý → hình nếu lỗi nằm ở đó) theo các dòng `VIẾT LẠI:`, rồi chạy lại; tối đa 3 lượt, còn FAIL thì ghi lý do vào `LOOK.md`. Chỉ khi PASS mới làm giọng và dựng cảnh.
+6. Giọng: `voice/tts_vi.py` → `asr_vi.py` → `process.py` → `mk_timeline.py` (lệnh trong `build.sh` của tập).
 
 ## 2. Dựng hình: làm như phim mẫu đã làm
 
 Thứ tự này là lý do phim mẫu đẹp. Đừng đảo.
 
 1. **Trang trước, nội dung sau.** `index.html` của scaffold: thêm importmap của three (`rig/README.md`); `film()` vẽ vào `canvas#c` có sẵn. `src/film.js`: `film()`, `loadVoice(build)` (giờ của từng câu, phụ đề, sự kiện giọng), rồi đặt `window.render/DUR/EV/TEXTS/READY`.
-2. **Dựng bối cảnh của khung hero 1 trước tiên**, chưa làm chuyển động. **Bắt đầu từ một bối cảnh có sẵn** trong `rig/sets.js` (`kitchen`, `desk`, `bathroom`; xem `demo/stills/set_*.jpg`). Nó đã có tường, cửa sổ, đèn chiếu đúng chỗ, đồ đạc và vật sống. Đặt vật chính ở `S.focus`, lấy góc máy từ `S.cams`, chọn `time` khớp với lời ("buổi sáng" thì `morning`, không để trăng). Đạo cụ đổi trạng thái có sẵn trong `rig/props.js`. Chỉ tự dựng nơi chốn khi không bộ nào hợp, và khi đó phải đạt các điều dưới đây:
+2. **Dựng bối cảnh của khung hero 1 trước tiên**, chưa làm chuyển động. **Bối cảnh là nơi lời nói tới**, không phải nơi có sẵn. Nếu nơi đó là một trong các bối cảnh của `rig/sets.js` (`kitchen`, `desk`, `bathroom`; xem `demo/stills/set_*.jpg`) thì bắt đầu từ nó: đã có tường, cửa sổ, đèn chiếu đúng chỗ, đồ đạc và vật sống. Nơi khác (xưởng, bầu trời, nhà máy, trong máy) thì tự dựng, đừng bê căn bếp vào. Ảnh trong `demo/stills/` là mức tay nghề cần đạt (ánh sáng, chất liệu, chiều sâu), không phải nội dung để chép. Đặt vật chính ở `S.focus`, lấy góc máy từ `S.cams`, chọn `time` khớp với lời ("buổi sáng" thì `morning`, không để trăng). Đạo cụ đổi trạng thái có sẵn trong `rig/props.js`. Chỉ tự dựng nơi chốn khi không bộ nào hợp, và khi đó phải đạt các điều dưới đây:
    - tường có lỗ (`wallWithHole`) hoặc vật chắn có hình để đèn chính in bóng kể nơi chốn; `beam` và bụi nếu có vệt sáng;
    - mỗi bề mặt lớn một texture canvas có seed (`canvasTex`); đồ mềm nặn bằng `cushionGeo` hoặc `surface`, không để là hộp;
    - đồ đạc đủ dày để nơi đó có người sống: đồ nhỏ trên bàn, tranh, cây, thứ gì đó ngoài cửa sổ;

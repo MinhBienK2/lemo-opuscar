@@ -19,8 +19,9 @@ channels/tram-nghi-nhieu/
 ├── voice/          # tts_vi.py, asr_vi.py, process.py
 ├── mk_timeline.py  # lines.json + words.json → src/timeline.js của tập
 ├── beatsheet.mjs   # mỗi câu một khung lúc đang nói, kèm chữ → out/beats/sheet_*.jpg
-├── review.sh       # một phiên model mới chấm cảnh/cả phim chỉ từ hình và lời → <tập>/review/REVIEW.md, exit 0 = PASS
-├── CRITIC.md       # thang chấm và mẫu báo cáo của người chấm
+├── review.sh       # một phiên model mới chấm: --script chấm lời trước khi làm giọng; không cờ chấm cảnh/cả phim chỉ từ hình và lời → <tập>/review/, exit 0 = PASS
+├── CRITIC.md       # thang chấm hình và mẫu báo cáo
+├── SCRIPT-CRITIC.md # thang chấm lời kể (dữ kiện, dựng được bằng vật thật, nhân quả, tiếng Việt nói)
 ├── mix.py          # nhạc, ambience, foley, lùi dB, master
 ├── fonts/          # Be Vietnam Pro, Patrick Hand (OFL)
 └── series/<cột>/<tập>/
