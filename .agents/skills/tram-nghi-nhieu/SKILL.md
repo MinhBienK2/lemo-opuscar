@@ -1,7 +1,7 @@
 ---
 name: tram-nghi-nhieu
 description: Đạo diễn và dựng một tập của kênh Trạm Nghĩ Nhiều — câu hỏi "tại sao" đời thường, trả lời bằng diorama 3D toon (three.js) có ánh sáng thật, viền mực vẽ tay, máy quay đi vào bên trong vật, mọi vật dựng đúng là nó, chỉ thứ vô hình mới thành hình minh hoạ; một giọng kể tiếng Việt. Dùng khi làm bất kỳ tập nào của kênh.
-version: 13.2.0
+version: 13.3.0
 ---
 
 # Một tập Trạm Nghĩ Nhiều
@@ -83,7 +83,8 @@ Vòng làm việc, không bỏ bước:
 2. FAIL: sửa đúng các câu FAIL theo dòng `SỬA:` của nó, rồi chạy lại. Không cãi người chấm, không sửa cờ hay dữ liệu kiểm để qua cổng. Sau 3 lượt một cảnh vẫn FAIL thì ghi vào `LOOK.md` câu nào, vì sao, rồi sang cảnh sau.
 3. Đủ cảnh: chạy `review.sh` cho cả phim. Chỉ khi PASS (OVERALL ≥ 9) mới dựng tiếng và render 24 fps. Render toàn phim là việc chậm nhất: làm một lần, sau khi hình đã đạt.
 4. Render xong: `review.sh --video` một lần, để bắt chuyển động không diễn ra, khung đen, lỗi chỉ có ở bản render.
-5. Ghi điểm từng lượt vào `LOOK.md`. Bàn giao kèm `review/REVIEW.md` cuối cùng, nguyên văn.
+5. **Cổng máy**: lần PASS của `--script` và của `review.sh` cả phim (không `--lines`, không `--video`) ghi con dấu vào `review/SCRIPT.pass`, `review/PICTURE.pass`: mã băm của lời và của `src/*.js`, `index.html` lúc được chấm. `build.sh` (qua `mix.py`) dừng nếu thiếu con dấu hay code đã đổi sau lần PASS. Sửa gì sau khi PASS thì chấm lại cả phim rồi mới dựng. Không viết tay con dấu, không sửa REVIEW.md.
+6. Ghi điểm từng lượt vào `LOOK.md`. Bàn giao kèm `review/REVIEW.md` cuối cùng, nguyên văn.
 
 ## 4. Bàn giao
 

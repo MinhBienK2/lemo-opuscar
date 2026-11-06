@@ -28,6 +28,10 @@ import sfx   # noqa: E402
 import foley   # noqa: E402  — the material foley (core/audio/foley.py): every name in it is an EV type
 from sfx import SR, t_, env_exp, bp, lp, hp, noise, brown, norm, add   # noqa: E402
 
+sys.path.insert(0, HERE)
+import gate   # noqa: E402  — the episode is built only from what the independent reviewer passed
+_g = gate.check(os.path.abspath(FILM))
+if _g: sys.exit('mix.py: cổng chấm: ' + _g)
 if not os.path.isfile(os.path.join(FILM, 'events.json')):
     sys.exit(f"mix.py: no events.json in FILM={FILM}; set FILM to the episode folder")
 E = json.load(open(os.path.join(FILM, 'events.json'))); DUR = E['dur']; EV = E['ev']

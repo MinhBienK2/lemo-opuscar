@@ -8,6 +8,8 @@
 #     --script     judge the words alone (voice/lines.json against research/FACTS.md) with SCRIPT-CRITIC.md, before any
 #                  voice or picture is made; writes <episode>/review/SCRIPT-REVIEW.md (and SCRIPT-REVIEW-<n>.md)
 # Writes <episode>/review/REVIEW.md (and REVIEW-<n>.md, the history), prints it, exits 0 on PASS and 1 on FAIL.
+# A PASS of --script, or of the whole film without --lines/--video, stamps what was judged (gate.py); mix.py builds only
+# an episode whose stamps still match.
 # A line with a machine flag (DARK SAME RUN NUM) fails even if the reviewer passed it.
 # The reviewer: $LEMO_CRITIC if set (a command; the prompt is appended as its last argument, it runs in the review
 # folder), else `omp -p` (with --model $LEMO_CRITIC_MODEL if set), else `claude -p`. Use your own model: a new session
@@ -60,7 +62,7 @@ Thư mục làm việc của bạn: $W. Đọc lines.json, FACTS.md, STRATEGY.md
   { cat SCRIPT-REVIEW.md; [ -n "$FLAGGED" ] && printf '\n## Cờ máy chưa sửa (tự động FAIL)\n%s\n' "$FLAGGED"; } > "$EP/review/SCRIPT-REVIEW-$n.md"
   cp "$EP/review/SCRIPT-REVIEW-$n.md" "$EP/review/SCRIPT-REVIEW.md"
   cat "$EP/review/SCRIPT-REVIEW.md"
-  if grep -q '^VERDICT: *PASS' "$EP/review/SCRIPT-REVIEW.md" && [ -z "$FLAGGED" ]; then echo "review --script: PASS"; exit 0; fi
+  if grep -q '^VERDICT: *PASS' "$EP/review/SCRIPT-REVIEW.md" && [ -z "$FLAGGED" ]; then python3 "$HERE/gate.py" stamp "$EP" script; echo "review --script: PASS"; exit 0; fi
   echo "review --script: FAIL (sửa lines.json theo $EP/review/SCRIPT-REVIEW.md, rồi chạy lại)"; exit 1
 fi
 
@@ -115,5 +117,9 @@ mkdir -p "$EP/review"; n=$(ls "$EP/review" | grep -c '^REVIEW-' || true); n=$((n
 { cat REVIEW.md; [ -n "$FLAGGED" ] && printf '\n## Cờ máy chưa sửa (tự động FAIL)\n%s\n' "$FLAGGED"; } > "$EP/review/REVIEW-$n.md"
 cp "$EP/review/REVIEW-$n.md" "$EP/review/REVIEW.md"
 cat "$EP/review/REVIEW.md"
-if grep -q '^VERDICT: *PASS' "$EP/review/REVIEW.md" && [ -z "$FLAGGED" ]; then echo "review: PASS"; exit 0; fi
+if grep -q '^VERDICT: *PASS' "$EP/review/REVIEW.md" && [ -z "$FLAGGED" ]; then
+  # the stamp the build asks for: only a review of the whole film, before the render, opens the gate
+  [ -z "$LINES" ] && [ "$VIDEO" = 0 ] && python3 "$HERE/gate.py" stamp "$EP" picture
+  echo "review: PASS"; exit 0
+fi
 echo "review: FAIL (sửa theo $EP/review/REVIEW.md, rồi chạy lại)"; exit 1
