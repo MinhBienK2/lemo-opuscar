@@ -106,7 +106,7 @@ EDITS = [
      'The library has one channel, and it has its own map — the channel\'s process, where its voice model lives and\n'
      'which file holds which part of the pipeline. Read the map before you build the next episode of the channel:\n'
      '\n'
-     '- `channels/tram-nghi-nhieu/CHANNEL.md` — the reference channel: everyday "why" questions from any field, in a vector toon, in Vietnamese; it restarted from scratch, and its episodes go in `series/<column>/`.\n',
+     '- `channels/tram-nghi-nhieu/CHANNEL.md` — the reference channel: everyday "why" questions from any field, as a 3D toon diorama (three.js), in Vietnamese; it restarted from scratch, and its episodes go in `series/<column>/`.\n',
      'This edition ships no channels: the library\'s channels and their episodes live in the repository, not in the plugin. '
      'A film you make here is a one-shot, in your own folder.\n'),
     ('TECHNIQUE.md',

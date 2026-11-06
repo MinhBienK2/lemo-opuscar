@@ -122,7 +122,7 @@ Write an original score from the cue map, in the instruments of the style's soun
 ## 6. Sound effects and mix
 
 - `core/audio/sfx.py` synthesises foley procedurally (click, whoosh, thump, ding, paper, noise beds…) with filters, envelopes and `add(buffer, sound, at, gain, pan)`. Drive it from `window.EV`, so every sound sits exactly on its frame.
-- **Master**: `sh core/render/mux.sh video.mp4 mix.wav out.mp4 24 [grain]` muxes, runs a two-pass loudnorm to −14 LUFS with a true-peak limit, adds grain in ffmpeg and prints the measured loudness; it exits non-zero on any failure. On light backgrounds use less grain; for pixel and vector styles, none.
+- **Master**: `sh core/render/mux.sh video.mp4 mix.wav out.mp4 24 [grain]` muxes, runs a two-pass loudnorm to −14 LUFS with a true-peak limit, adds grain in ffmpeg and prints the measured loudness; it exits non-zero on any failure. The x264 encode goes to the first free host in `LEMO_REMOTE_FFMPEG` (space-separated ssh hosts, default `muse muse2`; one job per host at a time, claimed with `~/lemo-mux.lock` there), and runs here when every host is busy or unreachable, or when it is set to `local`. On light backgrounds use less grain; for pixel and vector styles, none.
 - Films with grain baked into the picture compress badly; re-encode with `-tune grain` and a higher CRF.
 
 ## 7. Subtitles
@@ -187,7 +187,7 @@ A film is a folder that can build a film; what sits above it decides what it is.
 The library has one channel, and it has its own map — the channel's process, where its voice model lives and
 which file holds which part of the pipeline. Read the map before you build the next episode of the channel:
 
-- `channels/tram-nghi-nhieu/CHANNEL.md` — the reference channel: everyday "why" questions from any field, in a vector toon, in Vietnamese; it restarted from scratch, and its episodes go in `series/<column>/`.
+- `channels/tram-nghi-nhieu/CHANNEL.md` — the reference channel: everyday "why" questions from any field, as a 3D toon diorama (three.js), in Vietnamese; it restarted from scratch, and its episodes go in `series/<column>/`.
 
 **Start an episode with the scaffold, never with a copy of the previous one:**
 
@@ -208,7 +208,7 @@ its name — and `core/render/filmcheck.mjs` reports those.
 |---|---|
 | `CHANNEL.md` | the channel map: identity, process, file map |
 | `STYLE.md`, `DEMO.md` | the channel's visual language, and what its first episode showed |
-| `rig/` | the shared drawing implementation: `cel.js` (the primitives), `character.js` (the rig), `sets.js` (the sets), `broll.js` (the b-roll props) |
+| `rig/` | the shared drawing implementation (for Trạm Nghĩ Nhiều: `render.js`, the picture pipeline; `kit.js`, materials and geometry; `lights.js`; `fx.js`) |
 | `mix.py` | the shared mix: music, ambience, foley, ducking, master |
 | `fonts/` | the shared fonts (`fonts.css` and the files it names) |
 | `voice/` | the shared voice pipeline: `tts_vi.py`, `asr_vi.py`, `process.py` |

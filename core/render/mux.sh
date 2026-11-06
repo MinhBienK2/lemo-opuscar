@@ -83,36 +83,43 @@ if [ "${LEMO_COLOR:-}" = "bt709" ]; then
 else
   VF="$VF,format=yuv420p"; CARGS=""
 fi
-# Offload heavy x264 encode to remote host (e.g. VPS muse) when reachable
-REMOTE_HOST="${LEMO_REMOTE_FFMPEG:-muse}"
-USE_REMOTE=0
-case "$REMOTE_HOST" in
-  ''|none|local) ;;
-  *)
-    if ssh -o ConnectTimeout=3 -o BatchMode=yes "$REMOTE_HOST" "true" 2>/dev/null; then
-      USE_REMOTE=1
-    fi
-    ;;
-esac
+# Offload the heavy x264 encode to a remote host. LEMO_REMOTE_FFMPEG is a space-separated list tried in order
+# (default "muse muse2"); the first one that answers and is not already encoding takes the job. A host is claimed with
+# an atomic mkdir of ~/lemo-mux.lock (a lock older than 3 hours is treated as stale). When every host is busy or down,
+# or the list is "local"/"none", the encode runs on this machine.
+HOSTS="${LEMO_REMOTE_FFMPEG:-muse muse2}"
+USE_REMOTE=0; REMOTE_HOST=""
+case "$HOSTS" in ''|none|local) HOSTS="" ;; esac
+for h in $HOSTS; do
+  if ssh -o ConnectTimeout=3 -o BatchMode=yes "$h" \
+      'find ~/lemo-mux.lock -maxdepth 0 -mmin +180 -exec rm -rf {} + 2>/dev/null; mkdir ~/lemo-mux.lock' 2>/dev/null; then
+    REMOTE_HOST=$h; USE_REMOTE=1; break
+  fi
+  echo "mux.sh: $h is down or busy" >&2
+done
+release() { [ -n "$REMOTE_HOST" ] && ssh -o ConnectTimeout=5 "$REMOTE_HOST" 'rm -rf ~/lemo-mux.lock' 2>/dev/null; REMOTE_HOST=""; }
+trap release EXIT INT TERM
+[ "$USE_REMOTE" = 1 ] || echo "mux.sh: encoding on this machine" >&2
 
 if [ "$USE_REMOTE" = 1 ]; then
   echo "mux.sh: offloading heavy x264 encode to remote VPS ($REMOTE_HOST)" >&2
-  RDIR="/tmp/lemo-mux-$$"
-  ssh "$REMOTE_HOST" "mkdir -p $RDIR" || USE_REMOTE=0
-fi
-
-if [ "$USE_REMOTE" = 1 ]; then
-  scp -q "$V" "$A" "$REMOTE_HOST:$RDIR/"
-  RV="$RDIR/$(basename "$V")"
-  RA="$RDIR/$(basename "$A")"
-  RO="$RDIR/$(basename "$O")"
+  # the remote home, not /tmp: a VPS /tmp is often a small tmpfs (512 MB) that a 1080p intermediate overflows
+  RDIR="lemo-mux-$$"
+  RV="$RDIR/$(basename "$V")"; RA="$RDIR/$(basename "$A")"; RO="$RDIR/$(basename "$O")"
+  # any failure on the remote side falls back to the local encode below instead of failing the film
   # shellcheck disable=SC2086
-  ssh "$REMOTE_HOST" "ffmpeg -y -loglevel error -i \"$RV\" -i \"$RA\" \
+  if ssh "$REMOTE_HOST" "mkdir -p $RDIR" && scp -q "$V" "$A" "$REMOTE_HOST:$RDIR/" \
+    && ssh "$REMOTE_HOST" "ffmpeg -y -loglevel error -i \"$RV\" -i \"$RA\" \
     -filter_complex \"[0:v]$VF[v];[1:a]$LN,aresample=48000$PAD[a]\" \
     -map \"[v]\" -map \"[a]\" -c:v libx264 -preset slow -crf 19 -r \"$FPS\" $CARGS -c:a aac -b:a 256k -movflags +faststart -shortest \"$RO\"" \
-    || { ssh "$REMOTE_HOST" "rm -rf $RDIR" 2>/dev/null; rm -f "$O"; die "remote ffmpeg on $REMOTE_HOST failed"; }
-  scp -q "$REMOTE_HOST:$RO" "$O"
+    && scp -q "$REMOTE_HOST:$RO" "$O" && [ -s "$O" ]; then :; else
+    echo "mux.sh: remote encode on $REMOTE_HOST failed; encoding locally" >&2; rm -f "$O"; USE_REMOTE=0
+  fi
   ssh "$REMOTE_HOST" "rm -rf $RDIR" 2>/dev/null
+  release
+fi
+
+if [ "$USE_REMOTE" = 1 ]; then :
 else
   # shellcheck disable=SC2086  (CARGS must split on spaces into several arguments; empty by default)
   ffmpeg -y -loglevel error -i "$V" -i "$A" \

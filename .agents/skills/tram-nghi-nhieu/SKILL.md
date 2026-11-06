@@ -1,396 +1,87 @@
 ---
 name: tram-nghi-nhieu
-description: Phương pháp đạo diễn một tập phim hoạt hình 2D có lời dẫn cho kênh Trạm Nghĩ Nhiều — đạo diễn theo DIRECTOR.md (phim mẫu, ba cấu trúc, shot list có "vì sao", cue map) rồi dựng từ storyboard dữ liệu (board.json); hình tự kể được khi tắt tiếng; máy đứng, người và vật trong khung chuyển động; cơ chế vô hình thành một ẩn dụ vật lý; người diễn và người dẫn xuất hiện khi kịch bản cần; mỗi ý mới một shot; mỗi nhịp là một chuyển động có đầu, có cuối; chữ là thuật ngữ và tên; tiếng ở chỗ đáng nghe. Dùng khi làm bất kỳ tập nào của kênh.
-version: 10.0.0
+description: Đạo diễn và dựng một tập của kênh Trạm Nghĩ Nhiều — câu hỏi "tại sao" đời thường, trả lời bằng diorama 3D toon (three.js) có ánh sáng thật, viền mực vẽ tay, máy quay đi vào bên trong vật, cơ chế vô hình thành ẩn dụ vật lý; một giọng kể tiếng Việt. Dùng khi làm bất kỳ tập nào của kênh.
+version: 13.0.0
 ---
 
-# Đạo diễn một tập Trạm Nghĩ Nhiều
+# Một tập Trạm Nghĩ Nhiều
 
-Người xem **vừa nghe vừa nhìn mà hiểu ngay đang nói tới cái gì**, và xem hết không mệt. Muốn vậy:
+Đọc trước: `channels/tram-nghi-nhieu/STRATEGY.md` (nội dung), `STYLE.md` (hình), `rig/README.md` (API), và mở `demo/stills/*.jpg` để thấy chuẩn hình. Đọc `demo/` khi cần học một kỹ thuật cụ thể.
 
-- **hình tự kể được**: tắt tiếng, chỉ nhìn, người xem vẫn đoán đúng đang xảy ra chuyện gì;
-- mỗi ý mới là một shot mới, ở nơi ý đó xảy ra;
-- **máy đứng, thế giới trong khung chuyển động**: người làm việc, vật đổi trạng thái; máy chỉ chạy khi có thứ để đi theo hoặc để lộ ra;
-- người dẫn và người diễn xuất hiện khi kịch bản cần họ, không theo định mức;
-- chữ trên hình là **tên**: người, nơi, thời điểm, con số của vật, và một tờ tài liệu đổi trạng thái;
-- tiếng vang ở chỗ có vật làm ra nó, và có những quãng chỉ còn giọng với tiếng phòng.
+Mục tiêu: người xem tắt tiếng vẫn đoán đúng chuyện gì đang xảy ra, và mỗi khung đủ đẹp để chụp làm thumbnail.
 
-Quy trình là **`DIRECTOR.md`**, và tập nào của kênh cũng đi đúng quy trình ấy. Skill này thêm phần riêng của kênh.
+## 1. Câu chuyện
 
-- **Cố định** (`channels/tram-nghi-nhieu/STYLE.md`): nét, chữ, nhạc, phụ đề; và Kẻ Nghĩ Nhiều, người dẫn duy nhất, một giọng kể (`channels/tram-nghi-nhieu/character/ke-nghi-nhieu.md`).
-- **Tự do**: nơi chốn, ánh sáng, người trong câu chuyện, đạo cụ, đồ họa.
+1. Scaffold: `sh core/render/new_episode.sh tram-nghi-nhieu series/<cột>/<tập> "Câu hỏi?"`.
+2. `research/FACTS.md`: chuỗi nguyên nhân, mỗi con số kèm nguồn.
+3. `TREATMENT.md`, một trang:
+   - câu hỏi, rồi **tách nó ra**: vật nào thay đổi (chủ thể), thay đổi thế nào, so với cái gì, vì cái gì. Ví dụ "Vì sao X để cạnh Y lại Z?" thì chủ thể là X, nguyên nhân nằm ở Y. Câu trả lời một câu phải lấy đúng chủ thể đó làm chủ ngữ. Đọc lại FACTS xem nguyên nhân có đúng chiều không (cái gì tác động lên cái gì);
+   - câu mở đầu và khung đầu tiên cho thấy **chính điều câu hỏi nói**, ở nơi người xem gặp nó (nải chuối trên bàn bếp, chứ không phải một nhà máy). Chuyện lạ hay con số lớn để sau, khi người xem đã hiểu cơ chế;
+   - **ẩn dụ vật lý** của cơ chế: vật gì chạy, bị chặn ở đâu, đổi trạng thái ra sao (ví dụ: electron chen qua cửa hẹp, bắn tia lửa, pin đổi màu);
+   - **các nơi chốn** (2–4 với tập dài, 1–2 với Shorts) và đường máy đi giữa chúng (đi theo dây, chui vào vật, lùi ra);
+   - **3 khung hero**: khung lập cảnh, khung cơ chế, khung "à ra thế". Tả mỗi khung: điểm nhìn, nguồn sáng, ba lớp sâu, màu nhấn;
+   - **bảng ý → hình**: mỗi ý của câu trả lời một dòng, gồm ý đó, trên màn hình thấy gì, và vật nào làm gì để người xem thấy ý đó. Che cột ý đi, chỉ đọc cột hình vẫn phải ra câu chuyện. Ý nào không có hình thì bỏ ý, hoặc nghĩ ra hình cho nó. Khi lập bảng:
+     - ý có **động từ biến đổi** (chín, phai, thở ra, lan, giục, nóng lên) phải có hình của chính quá trình đó trong khung: trước → sau ngay trước mắt, hoặc dòng đi từ đúng vật nguồn sang đúng vật nhận. Một khung chỉ cho thấy kết quả là chưa đủ. Tác nhân vô hình (khí, nhiệt, tín hiệu) dựng bằng `flow()` của `rig/fx.js`, không bằng chấm sáng (`glowDots` đọc như ánh phản chiếu). Nó phải là một **vật liền, đủ to để nhìn thấy ngay** (dải khói, dòng hạt dày lấp đầy khe giữa hai vật), không phải vài chấm. Nó phải **chạm tới** vật nhận, và chỗ chạm gây ra thay đổi thấy được ngay trong cùng cảnh (cửa mở, vỏ đổi màu);
+     - câu có **con số** (bốn ngày, một phần mười triệu) thì con số đó có hình trong khung lúc câu được nói: mặt đồng hồ, lịch lật, thước, một chấm giữa một khoảng không lớn. Số chỉ có trong tiếng là thiếu hình;
+     - câu nói về **hai bên so sánh** ("bên kia… đứng một mình") thì khung rộng có cả hai bên, tách bạch, mỗi bên một chỗ sáng;
+     - câu nhắc **nơi chốn** nào (kho, nhà máy, trong quả) thì khung của câu đó ở đúng nơi đó. Không dùng lại cảnh bếp cho câu nói về cái kho;
+     - câu hỏi có **so sánh** (nhanh hơn, khác, hơn) thì vật đối chứng phải ở trong khung, hoặc quay lại nó ít nhất mỗi 3 câu, để người xem tự thấy chỗ khác nhau;
+     - mỗi dòng một **cách dựng** khác dòng trước (góc máy, cỡ cảnh hoặc vật chính). Không quá 2 câu liền nhau cùng một cách dựng;
+     - có quay lại thời điểm trước (tua ngược, "lần nữa") thì phải có dấu hiệu nhìn thấy được: đồng hồ quay ngược, ánh sáng đổi, lật trang;
+   - shot list gom từ bảng đó: thời điểm · cảnh · máy làm gì · vì sao.
+4. Lời: `voice/lines.json`, viết **từ** bảng ý → hình. Mỗi câu thuộc một dòng của bảng, số viết thành chữ. Muốn thêm hay bớt câu thì sửa bảng và hình trước. Giọng: `voice/tts_vi.py` → `asr_vi.py` → `process.py` → `mk_timeline.py` (lệnh trong `build.sh` của tập).
 
----
+## 2. Dựng hình: làm như phim mẫu đã làm
 
-## 1. Quy trình
+Thứ tự này là lý do phim mẫu đẹp. Đừng đảo.
 
-Mỗi bước xong khi điều kiện ở cuối bước đúng. Ghi tiến độ vào `NOTES.md` của tập sau mỗi bước: đã xong gì, đang ở đâu, quyết định nào đã chốt. Ngữ cảnh có thể bị nén giữa chừng, và `NOTES.md` là chỗ để làm tiếp.
+1. **Trang trước, nội dung sau.** `index.html` của scaffold: thêm importmap của three (`rig/README.md`); `film()` vẽ vào `canvas#c` có sẵn. `src/film.js`: `film()`, `loadVoice(build)` (giờ của từng câu, phụ đề, sự kiện giọng), rồi đặt `window.render/DUR/EV/TEXTS/READY`.
+2. **Dựng bối cảnh của khung hero 1 trước tiên**, chưa làm chuyển động. **Bắt đầu từ một bối cảnh có sẵn** trong `rig/sets.js` (`kitchen`, `desk`, `bathroom`; xem `demo/stills/set_*.jpg`). Nó đã có tường, cửa sổ, đèn chiếu đúng chỗ, đồ đạc và vật sống. Đặt vật chính ở `S.focus`, lấy góc máy từ `S.cams`, chọn `time` khớp với lời ("buổi sáng" thì `morning`, không để trăng). Đạo cụ đổi trạng thái có sẵn trong `rig/props.js`. Chỉ tự dựng nơi chốn khi không bộ nào hợp, và khi đó phải đạt các điều dưới đây:
+   - tường có lỗ (`wallWithHole`) hoặc vật chắn có hình để đèn chính in bóng kể nơi chốn; `beam` và bụi nếu có vệt sáng;
+   - mỗi bề mặt lớn một texture canvas có seed (`canvasTex`); đồ mềm nặn bằng `cushionGeo` hoặc `surface`, không để là hộp;
+   - đồ đạc đủ dày để nơi đó có người sống: đồ nhỏ trên bàn, tranh, cây, thứ gì đó ngoài cửa sổ;
+   - một vật sống: rèm lay, lá lay đổ bóng, LED thở, hơi nước.
+3. **Vòng still**: `LEMO_ANGLE=vulkan node core/render/still.mjs <tập> <t…> --out <scratch>`, rồi **mở ảnh ra xem**. Mỗi vòng ghi vào `LOOK.md`: thấy gì, vì sao, sửa gì. Chẩn đoán bằng cờ, đừng đoán:
+   - mảng sáng mất hoặc bóng lạ → `?lightcam=1` nhìn từ đèn, `?nocast=<tag>` tắt từng vật đổ bóng (phim mẫu tìm ra chăn DoubleSide tự đổ bóng lên chính nó theo cách này);
+   - cháy trắng → giảm cường độ đèn điểm (decay 2), chỉ vật `glowMat` k > 1 mới được loé;
+   - vật đọc sai hình → đổi trục máy trước khi đổi vật.
+   Ít nhất 3 vòng cho mỗi khung hero, trước khi làm chuyển động.
+4. **Cơ chế** (khung hero 2): dựng thành vật thể có tham số (`speedTable`, `sparks`, `squiggle`, hạt trên `CatmullRomCurve3`, `rig/cutaway.js`).
+   - Bên trong một vật: dùng `tissue()` của `rig/inside.js`, cắt theo tiết diện của chính vật (`section: 5` chuối, `section: 32` vật tròn), vật nguyên đặt cạnh khoanh trong cùng khung (vỏ có cửa mở được, mặt cắt có tế bào đổi trạng thái, đặt ngay trên bàn của bối cảnh, có đèn riêng), hoặc mặt cắt của `rig/cutaway.js` cho bình, ống. Máy đứng ngoài nhìn vào. Vật vẫn nằm trong bối cảnh có sàn, đèn và đồ xung quanh, như `demo/stills/cutaway_*.jpg`. Không đưa máy vào trong để quay một khoảng không chỉ có hạt.
+   - Trước khi thêm chữ, khung phải có **một sự kiện nhân quả lớn trên màn hình**: một tác động (nắp bật, dòng điện vào) gây ra một thay đổi thấy được ngay trong vòng 1–2 giây (bọt trào, tia lửa, đổi màu). Tắt nhãn đi mà vẫn hiểu thì mới đạt.
+   - Không vòng tròn đồng tâm, không mũi tên, không công thức.
+5. **Chuyển động và máy quay**: keyframe bằng `keys()`. Đặt mốc theo **chữ** trong lời bằng `V.w(id, 'từ')`, không theo số giây. Vật được nhắc phải hiện lên đúng lúc từ đó được nói, và cơ chế không được chạy trước khi lời nói tới nguyên nhân của nó. Lấy đà, vượt đà (`back`), chuyển động phụ. Chuyển cảnh bằng `flash` màu cảnh sau, hoặc máy đi xuyên vật.
+6. **Chữ**: `label()` cho thuật ngữ (tối đa một thẻ một lúc), mũi thẻ chỉ vào đúng vật được nhắc. Từ khoá của câu trả lời (tên của nguyên nhân) có thẻ ngay lần đầu được nói, chữ trên thẻ giống hệt chữ trong lời. Mỗi sự thật chỉ một thẻ: không để cùng một con số hay một tên hiện hai chỗ trong một khung. `subtitle()` cho phụ đề. Khai báo trong `TEXTS`.
+7. **Vòng beat**: chạy `LEMO_ANGLE=vulkan node channels/tram-nghi-nhieu/beatsheet.mjs <tập> --out <scratch>`. Lệnh này ra mỗi câu một khung, chụp lúc câu đang được nói, có in câu bên dưới. **Mở từng tờ ra xem.** Với mỗi câu, hỏi: nếu không nghe, khung này có cho thấy điều câu nói không?
+   - vật được nhắc có trong khung, ở chỗ sáng nhất và đậm màu nhất (nền tối và dịu hơn nó), chiếm đủ chỗ (không nằm ở mép khung, không bị cắt), và đang làm việc câu nói;
+   - thẻ chữ nằm trong khung, chỉ đúng vật;
+   - con số trên hình trùng với con số trong lời;
+   - nhiều câu liền nhau trên cùng một khung đứng yên là dấu hiệu thiếu hình.
+   Lệnh cũng tự đo từng khung và in nhãn đỏ: `DARK` (vật chính nằm trong bóng: đưa đèn chính hoặc `pool` vào nó) và `SAME` (gần y hệt khung câu trước: câu này chưa có hình riêng; máy trôi nhẹ hay hạt bay không làm thành hình mới) và `NUM` (câu nói một con số mà trên màn hình không có số nào lúc đó: thêm đồng hồ, lịch, thẻ số) và `RUN` (câu thứ tư liền nhau vẫn quay cùng những vật ấy, đo bằng các tia bắn qua khung: phim đã ngừng cho thấy điều mới; cho câu đó hình riêng: một nơi khác, cắt vào bên trong, so sánh hai bên, một khung rộng cho biết đang ở đâu, một vật mới; một bố cục giữ tối đa ba câu). Sửa hết các nhãn. Chỉ giữ `SAME` khi cố ý, và ghi lý do vào `LOOK.md`.
+   Ghi vào `LOOK.md` những câu lệch, vì sao lệch, đã sửa gì. Khi cảnh hết cờ, gọi người chấm cho cảnh đó (§3) rồi mới sang cảnh sau.
+8. **Tiếng**: `window.EV` = sự kiện giọng (`V.ev`) + nhạc + ambience + foley ở đúng chỗ có vật làm ra tiếng (định dạng: `rig/README.md` § voice.js).
+9. Dựng (chỉ sau khi `review.sh` cả phim PASS, §3): `LEMO_ANGLE=vulkan sh build.sh`; cổng: `LEMO_ANGLE=vulkan sh core/render/review.sh <tập>` phải exit 0.
 
-0. **Thư mục.**
-   - Tạo bằng `sh core/render/new_episode.sh tram-nghi-nhieu series/<cột>/<tập> "<Tiêu đề>"`.
-   - Chạy `df -h .`; whisper `small` cần khoảng 0,5 GB.
-1. **FACTS** → `research/FACTS.md`.
-   - Mọi tuyên bố kèm nguồn: tác giả, **năm**, tạp chí, DOI hoặc link.
-   - Điều không được nói quá.
-   - Cơ chế, viết trong một câu.
-   - Đơn vị gốc (xu, đô) ghi rõ; ví dụ đã Việt hóa thì ghi là đã Việt hóa.
-2. **TREATMENT** → `TREATMENT.md`, theo `DIRECTOR.md` §2–§7, mỗi phần một heading:
-   - `## Phim mẫu` — 1–2 tác phẩm *ngoài kênh* đặt chuẩn cho *chủ đề này* (kênh giải thích như Zack D. Films, OverSimplified, Kurzgesagt, TED-Ed, hoặc một phim, một quảng cáo). Mỗi tác phẩm có một dòng `Học:` (bố cục, nhịp, ngữ pháp máy, cách người dẫn bình luận) và một dòng `Không lấy:` (nhân vật, thiết kế, câu đùa, shot cụ thể).
-   - `## Ba cấu trúc` — ba spine "<ai> muốn <X> ở <nơi>, nhưng <hiệu ứng> khiến <Y>, vì vậy <Z>", mỗi spine một gạch đầu dòng, rồi `Chọn: … vì …`.
-   - `## Logline` — một câu, rồi mở → lật → kết. Nói rõ:
-     - người của câu chuyện là ai;
-     - nhà của người dẫn xuất hiện ở đâu;
-     - nhịp "à" nằm ở đâu;
-     - cách hiểu phổ biến nào sẽ bị lật lại.
-   - `## Beat sheet` — theo từng giây. Với 3–5 nhịp khó, viết 4 phương án hình rồi loại phương án quen nhất.
-   - `## Cue map` — nhạc đổi ở đâu, hai khoảng lặng ở đâu, hai chỗ tiếng làm chuyển cảnh (J-cut hoặc L-cut).
-   - `## Âm thanh` — mỗi hồi: nền, mô-típ, tiếng nhấn.
-   - `## Chấm lời` — ghi ở bước 5.
+Muốn thêm một bộ phận dùng lại được (bối cảnh, đạo cụ, hiệu ứng) thì đưa vào `channels/tram-nghi-nhieu/rig/` và ghi một dòng vào `rig/README.md`. Không sửa `render.js` cho riêng một tập.
 
-   Shot list, với cột *vì sao*, chính là `board.json` (bước 4).
-3. **LINES** → `voice/lines.json`.
-   - Khoảng 2,3 từ mỗi giây, viết từ beat sheet.
-   - Viết như kể cho bạn nghe: câu ngắn, một ý một câu, số viết thành chữ.
-   - Cả phim một giọng: mọi câu do Kẻ Nghĩ Nhiều kể, cùng một giọng, không đổi `pitch`/`rate`. Người trong câu chuyện diễn bằng hành động, không nói thoại.
-4. **BOARD** → `board.json` (mục 3). Board là bản vẽ bằng lời của cả phim, đủ chi tiết để người khác vẽ ra đúng khung đó mà không phải tưởng tượng:
-   - Trước khi viết, mở danh mục rig (`channels/tram-nghi-nhieu/rig/catalog/CATALOG.md` và các ảnh `props-*.jpg`, `people-*.jpg`, `assets-*.jpg` cạnh nó) để biết vật, người, nghề, động tác, nét mặt nào đã vẽ sẵn.
-   - `props`: mỗi vật xuất hiện lại tả một lần — dáng, tỉ lệ, chi tiết nhận ra, màu (`look`), các trạng thái câu chuyện đưa nó qua (`states`), và vẽ từ đâu (`draw`: `rig:<id>`, `asset:fluent/<id>` hoặc `src:<hàm>`). Vật chưa có trong rig mà sẽ còn dùng ở tập khác thì thêm vào `rig/props.js` cùng khuôn rồi dựng lại danh mục (`sh channels/tram-nghi-nhieu/rig/catalog/build.sh`); chỉ vật riêng của tập mới vẽ trong `src/sets.js`.
-   - `set` của mỗi cảnh: các lớp từ sau ra trước (`layers`) và vật sống của nơi đó (`alive`).
-   - `frame` của mỗi shot (trừ `react`): chủ thể nằm đâu, chiếm bao nhiêu khung (`layout`), lớp nào đè lớp nào (`layers`), mắt nhìn vào đâu (`focus`), ánh sáng (`light`), khung lúc mở (`start`) và lúc đóng (`end`).
+## 3. Chấm hình: một phiên khác chấm, theo từng cảnh
 
-   Xong khi `python3 tools/check_board.py <tập>` PASS.
-5. **CHẤM LỜI** bằng một agent *khác* (subagent hoặc task, nếu được thì model khác). Chỉ đưa cho nó `FACTS.md`, `lines.json` và `board.json`. Nó chấm:
-   - (a) câu nào sai hoặc nói quá so với FACTS, nhất là năm, tên tác giả, đơn vị tiền, con số;
-   - (b) cơ chế được giải thích đúng chưa, người chưa biết có hiểu không;
-   - (c) câu đọc lên có tự nhiên không: từ lạc nghĩa, câu lặp ý, tên gọi không nhất quán;
-   - (d) nhịp "à" có cho thấy cái mẹo không;
-   - (e) **chỉ đọc cột `subject`/`do` của board, không đọc lời**: mỗi cơ chế có hiện ra thành một hình cụ thể không (vật gì, đổi ra sao), hay chỉ là khối, chấm, vòng tròn mờ cần lời mới hiểu;
-   - (f) câu nào lặp lại ý đã nói, đoạn nào cắt được mà phim vẫn đủ.
+Điểm tự chấm không đáng tin: người làm biết mình định vẽ gì nên nhìn ra điều đó cả khi nó không có trên hình. Việc chấm do `review.sh` làm: nó mở **một phiên mới** của model (mặc định chính model của bạn, qua `omp -p`; đặt `LEMO_CRITIC_MODEL` hay `LEMO_CRITIC` để chọn khác), trong một thư mục ngoài repo chỉ có khung hình, lời và `FACTS.md`. Người chấm không thấy code và ghi chú của bạn, chấm theo `channels/tram-nghi-nhieu/CRITIC.md`, và ghi cách sửa từng câu bằng hình cụ thể.
 
-   Sửa hết, rồi ghi lỗi và cách sửa vào `## Chấm lời`.
-6. **DUYỆT KHUNG** bằng một agent *khác*, trước dòng code đầu tiên. Chỉ đưa nó `props`, các `set` và các `frame` của board (không lời, không FACTS) cùng danh mục rig, và bảo nó:
-   - (a) vẽ phác từng `frame` bằng lời của chính nó: thấy gì ở đâu, to cỡ nào. Chỗ nó phải đoán là chỗ board còn mơ hồ;
-   - (b) kể lại câu chuyện chỉ từ chuỗi `start` → `end` của các shot. Chỗ đứt mạch là chỗ thiếu một hình;
-   - (c) chỉ ra shot nào chủ thể nhỏ hơn 1/3 khung, shot nào giống shot trước, cơ chế nào chỉ là khối, chấm, mũi tên;
-   - (d) vật nào board gọi `rig:`/`asset:` mà danh mục không có, hoặc có mà trông khác `look`.
-
-   Sửa board, ghi lỗi và cách sửa vào `LOOK.md` (`## Duyệt khung`).
-7. **GIỌNG**: TTS → ASR → process (`CHANNEL.md` §3). Xong khi `check_board` PASS lại với `words.json` thật.
-8. **LOOK** → `src/sets.js` của tập. Vật dùng `prop()` của `rig/props.js` và hình dùng `asset()` của `rig/assets.js` theo `draw` của board; chỉ vẽ tay những gì board ghi `src:`.
-   - Mỗi vòng render 4–6 still bằng code thật (`node core/render/still.mjs <tập> <t…>`): nơi chốn, người của câu chuyện, một shot cận, thẻ thuật ngữ, một khung pip hoặc react.
-   - Ghép chúng bằng `core/render/sheet.py` rồi xem tấm ghép, không mở từng ảnh 1920 px. **Đặt mỗi still cạnh `frame` của shot đó và đối từng dòng**: `layout` (chủ thể đúng chỗ, đúng cỡ chưa), `layers`, `focus`, `light`, và một still ở cuối shot cho `end`. Rồi tìm lỗi cụ thể: tay đọc như ống, đạo cụ trôi khỏi tay, chữ chạm phụ đề, nơi chốn trống.
-   - Mỗi nơi chốn có một vật sống của riêng nó, chạy theo `T` (`MOTION.md` §5). Shot cận có hàm vẽ riêng, chủ thể trọn trong khung (`MOTION.md` §4).
-   - Ghi vào `LOOK.md` từng vòng (`## Vòng 1`…): still nào, `Thấy:` (kể cả dòng nào của `frame` chưa khớp), `Sửa:`.
-
-   Xong khi đã có ít nhất hai vòng và vòng cuối không còn lỗi.
-9. **ANIMATE** → `src/film.js`, dựng từ board (mục 4). Đọc **`channels/tram-nghi-nhieu/MOTION.md`** trước dòng code đầu tiên: mỗi nhịp là một tiến độ `BD.p(id, T)` chạy suốt `d` giây của nó, và sổ tay 17 kiểu `move` có code cho từng kiểu. Xong khi `check_board` PASS cả phần code: nhịp được tính giờ theo id, không đạo cụ nào bật ra, không zoom quá 1,6×.
-10. **DỰNG + CỔNG**: `sh build.sh`, rồi `sh core/render/review.sh <tập>` phải exit 0. Cổng gồm treatment, board, scenecheck, readcheck, voice, và **motion** (`tools/check_motion.py`, đo trên `.mp4` sau khi **trừ chuyển động máy**: thứ trong khung chuyển động ở ≥ 55 % số giây, không đứng hình quá 10 s, mỗi nhịp làm đổi vùng `xy` của nó, máy chạy ≤ 30 % số khung). Lia máy không làm cổng này PASS được. Motion FAIL thì đọc `MOTION.md` §7.
-11. **XEM KHÔNG TIẾNG** bằng một agent *khác*. Đưa nó contact sheet của `.mp4` (một khung mỗi 2–3 s), không kèm lời, board hay FACTS, và bảo nó kể lại phim: ở đâu, ai làm gì, vật gì đổi, phim muốn nói gì. Chỗ nào nó kể sai hoặc nói "không rõ" là chỗ hình không tự kể được. Sửa hình chỗ đó (đổi ẩn dụ, phóng chủ thể, cho người diễn), không thêm chữ để chữa. Ghi kết quả vào `LOOK.md` (`## Xem không tiếng`).
-12. **XEM + NGHE.** Mở contact sheet và nghe lại cả phim, hỏi:
-    - mỗi chữ có phải tên hay thuật ngữ không;
-    - người dẫn có nhường khung cho câu chuyện không;
-    - mỗi nơi chốn có ít nhất hai cỡ cảnh không;
-    - mỗi tiếng có một vật trên hình làm ra nó không;
-    - có lúc chỉ còn giọng và tiếng phòng không;
-    - vật nào được nhắc tới cũng có trong cảnh không;
-    - 5 giây đầu có một việc xảy ra không (không phải một căn phòng đứng yên chờ lời);
-    - chủ thể có chiếm phần lớn khung không, hay lọt thỏm giữa nền tối;
-    - có shot nào máy trượt qua một hình đứng yên không.
-
-    Sửa board hoặc code, dựng lại.
-
----
-
-## 2. Nguyên tắc
-
-1. **Sự việc trước, lời sau.** Mỗi nhịp là *ai · làm gì · với vật gì · vật đổi ra sao*. Câu nào không gắn vào sự việc thì sửa câu.
-2. **Người xuất hiện khi kịch bản cần.** Có ý cần một con người để hiểu (một trải nghiệm, một quyết định, một thí nghiệm), có ý chỉ cần vật, tay hay một mô phỏng. Đạo diễn tự chọn từng cảnh: người thật trong truyện, một người mô phỏng (đám đông, bóng người, bàn tay), hoặc không ai cả. Không bắt buộc một nhân vật xuyên suốt. Nhưng hễ có người trên hình thì họ phải **làm**: chạm, cầm, giật tay lại, nhăn mặt, quay sang. Một người đứng thẳng giơ tay chỉ vào khoảng không không phải là diễn.
-3. **Người dẫn có bốn cách ở trên hình** (`host` của mỗi shot):
-
-   | `host` | Là gì | Dùng khi |
-   |---|---|---|
-   | `desk` | ở nhà, góc riêng của Kẻ Nghĩ Nhiều | mở phim, nối giữa các hồi, gọi tên khái niệm, kết |
-   | `scene` | bước vào thế giới câu chuyện, đổi trang phục hoặc cầm đạo cụ | một lần, như một nhịp có chủ đích |
-   | `pip` | vòng tròn ở góc, đè lên câu chuyện đang chiếu (`hostPip`) | một lời bình, một cái liếc, trong khi câu chuyện vẫn chạy |
-   | `react` | cắt vào cận mặt một nhịp rồi cắt ra (`reactClose`) | câu đùa, cái nhăn mặt, "khoan đã…" |
-   | `none` | câu chuyện chiếu toàn khung, giọng người dẫn kể đè lên | phần lớn thế giới câu chuyện; cảnh trang nghiêm |
-
-   Không có định mức: người dẫn vào khung khi họ thêm được điều gì (mở phim, gọi tên khái niệm, một lời bình, một cái nhăn mặt), và vắng mặt khi hình đã tự nói. Một gương mặt trong vòng tròn ở góc thường đủ, rẻ hơn một cảnh ở nhà. Trần duy nhất: `desk` cộng `scene` ≤ 50 % thời lượng. Ở nhà thì cũng phải diễn: ghim thẻ có chữ, cầm đạo cụ, vẽ lên bảng. Không đứng một tư thế cạnh một tấm bảng trống.
-4. **Mỗi ý mới một shot**, dài 3–8 s, cắt theo hành động.
-   - Nơi chốn mới mở bằng shot rộng, có biển nơi chốn hoặc thời điểm.
-   - Trong một nơi, đổi cỡ: rộng → trung → **cận vật đang được nói tới**. Muốn người xem nhìn vào cái gì thì cho máy tới gần cái đó; cận cảnh làm việc của một cái nhãn.
-5. **Máy đứng là mặc định** (`cam` của mỗi shot, `BD.camera`). Chuyển động của phim đến từ người và vật trong khung. Máy chỉ chạy khi có thứ để đi theo (người đang đi, vật đang trượt) hoặc có thứ mới để lộ ra ở cuối cú máy. Lia ngang một khung không có gì đổi để "cho có chuyển động" là lỗi: người xem thấy màn hình trôi, không thấy chuyện. `hold` ≥ 65 % thời lượng phim (check_board), máy chạy ≤ 30 % số khung trên `.mp4` (check_motion).
-
-   | `cam` | Lý do |
-   |---|---|
-   | `hold` | đọc số, đọc tài liệu |
-   | `push` | đẩy chậm 2–4 % vào một ý, một khuôn mặt sắp hiểu ra |
-   | `pull` | lùi ra để lộ quy mô ("và không chỉ mình chị") |
-   | `track` | đi theo người đang đi, đồ vật đang trượt |
-   | `pan` | lia dọc một dãy (kệ hàng, bản đồ, dòng thời gian) |
-
-   Mỗi cú máy ghi trong `why` nó đi theo cái gì hoặc lộ ra cái gì. Chuyển cảnh:
-   - `cut` trong cùng nơi;
-   - `iris` khi bước vào một nơi;
-   - `prop` (bóng người, cánh cửa, trang sách che máy);
-   - `light` (tắt đèn bàn, bật spotlight);
-   - `whip` khi nhảy nơi chốn lớn hoặc nhảy mốc thời gian.
-6. **Khoảnh khắc "à".** Ít nhất một nhịp (`"flags": ["aha"]`) cho người xem tự nhìn thấy cái mẹo: hai vật giống hệt mang hai giá khác nhau, một lựa chọn bị lộ là vô lý. Lời chỉ gọi tên điều người xem vừa thấy.
-7. **Chọn hình theo loại thông tin**:
-
-   | Thông tin là… | Hình đúng |
-   |---|---|
-   | một trải nghiệm, một quyết định | cảnh có người ở nơi chốn thật, cận vào tay hoặc mặt lúc quyết định |
-   | so sánh độ lớn | hai vật đặt cạnh nhau có số trên vật, hoặc biểu đồ cột mọc đúng lúc nói (`chart: bars`) |
-   | tỉ lệ | đám đông, một số người được tô sáng (`chart: people`) |
-   | quy trình, nguyên nhân → kết quả | chuỗi hành động qua nhiều shot |
-   | khái niệm | thẻ thuật ngữ ở nhà người dẫn, rồi một ẩn dụ vật lý: thước đo tự nâng lên khi vừa nhảy qua; chiếc cúp bị trùm khăn; 20 tấm bằng khen phủ bụi và một mẩu giấy cháy dưới đèn pin |
-   | danh sách | các vật hiện lần lượt trong cảnh, mỗi vật đúng lúc được gọi tên |
-
-8. **Chữ có bảy loại** (mỗi nhãn khai `kind`):
-
-   | `kind` | Là gì | Ví dụ |
-   |---|---|---|
-   | `term` | khái niệm mới + một dòng định nghĩa (`def` ≤ 10 chữ). 1–4 thẻ một tập, ở lại lâu, gọi lại được | HIỆU ỨNG IKEA — quý thứ mình làm ra hơn giá trị thật |
-   | `name` | tên người, vai, vật, chỉ vào vật (`to`) hoặc nằm trên vật (`on: true`) | "Nhóm tự lắp", "Giáo sư Norton" |
-   | `place` / `time` | biển nơi chốn, dấu thời điểm | "ĐẠI HỌC HARVARD · 2011", "3 TIẾNG SAU" |
-   | `number` | con số của một vật (giá trên phiếu) | "78¢" |
-   | `doc` | tài liệu xuyên suốt của câu chuyện, đổi trạng thái | tờ hướng dẫn lắp, bảng giá bị gạch |
-   | `stamp` | dấu kết luận ở cú lật, một lần mỗi cảnh | GẤP ĐÔI |
-
-   - Nhãn là danh từ: tên của thứ đang ở trên hình.
-   - Nhãn ở lại tới hết shot; cắt shot là khung sạch.
-   - Trung bình một chữ mới mỗi 6 s hoặc thưa hơn.
-9. **Tiếng có ba lớp, và phần lớn thời gian chỉ có lớp đầu.**
-   - **Nền** theo nơi chốn (`amb`: `cafe`, `office`, `lab`, `street`, `night_city`, `hum`…), luôn có và nhỏ.
-   - **Mô-típ**: 1–2 tiếng của vật xuyên suốt câu chuyện (tua vít lắp kệ, máy tính tiền), lặp lại mỗi lần vật đó làm việc của nó.
-   - **Nhấn**: chuyển nơi chốn, cú lật, nhịp "à", thẻ thuật ngữ, biểu đồ, câu đùa.
-
-   Nhãn tên, nơi, thời điểm hiện lên trong im lặng. Tiếng cơ thể (thở, gõ tay, sột soạt vải) thuộc về shot cận. Ngân sách: khoảng 25 khoảnh khắc mỗi phút, một phần tư số cửa sổ 3 s không có tiếng hiệu ứng, một khoảng lặng thật (`silence`) trước cú lật.
-10. **Đường cong.**
-    - Nhạc đổi theo hồi.
-    - Lặng trước cú lật.
-    - Có một chỗ thở ra trước khi kết.
-    - Nối các nhịp bằng "nhưng / vì vậy".
-    - Cái kết vọng lại cảnh mở: cùng đạo cụ, nhưng đã đổi trạng thái.
-11. **Cách hiểu phổ biến, rồi lật lại.** Người dẫn tự nói cách hiểu mà ai cũng tin ("mình từng nghĩ…", "ai cũng bảo…"), và cảnh sau cho thấy điều thật sự xảy ra. Một cú `react` của người dẫn hợp với nhịp đó.
-12. **Cơ chế vô hình phải có một hình cụ thể.** Dòng điện, nhiệt, hormone, lãi suất không nhìn thấy được. Mỗi cơ chế như vậy cần một ẩn dụ vật lý mà người xem đã quen trong đời: đám đông chen qua hành lang hẹp, nước tràn khỏi bồn, dây chun bị kéo giãn. Ẩn dụ đó diễn đúng quan hệ nhân–quả, kể cả tỉ lệ (gấp đôi nguyên nhân thì kết quả trên hình cũng lớn đúng như số nói), và được dùng lại mỗi lần cơ chế quay lại. Khối chữ nhật, đường chấm, vòng tròn mờ không phải ẩn dụ; một sơ đồ mặt cắt chỉ dùng khi mọi bộ phận trong đó đều nhận ra được ngay, có tên trên vật.
-13. **Mở bằng một việc xảy ra.** Trong 5 giây đầu, một việc cụ thể xảy ra trên hình (tay giật lại vì nóng, ly nước đổ, đồng hồ reo) và gắn với câu hỏi. Không mở bằng một khung đứng yên chờ lời đọc tiêu đề.
-14. **Chủ thể to, khung sạch.** Vật đang được nói tới chiếm phần lớn khung; nền tối không được nuốt mất nó. Thiếu cỡ thì cắt sang cận cảnh, không phải đẩy máy chậm vào một vật bé.
-
-### Kỹ thuật của khung hình
-
-Ba đồng hồ chuyển động:
-1. **Thở và không khí**: nhân vật thở, mắt liếc, `ambientMotes`, đèn dao động nhẹ.
-2. **Nhịp của câu**: ở mỗi từ quan trọng của câu, hình phản hồi bằng diễn xuất hoặc đạo cụ. Đó là các nhịp của board.
-3. **Biến hình**: trong một cảnh, vật đổi dạng mượt từ A sang B theo dòng ý.
-
-Chữ và nét:
-- Số liệu ≥ 72 px, đậm 900; tiêu đề phụ ≥ 44 px; chú thích ≥ 28 px.
-- Nét sơ đồ và mũi tên ≥ 5 px.
-- Nội dung có chủ đích phủ 50–70 % khung.
-- Chữ viết dần hiện bằng `revealText` (`rig/broll.js`), để ký tự hiện đúng lúc được đọc.
-
-Con số và kết luận:
-- Con số hiện khi thanh đo đã tới giá trị đó.
-- Kết luận hiện khi giọng đọc tới nó.
-- Gạch đỏ vẽ dưới lớp chữ.
-- Kết luận tương quan dùng từ mức độ ("thường", "dễ hơn"), đúng như FACTS.
-
-Phụ đề:
-- Mỗi lúc vẽ một mảnh phụ đề, mảnh đang tích cực nhất.
-- Mảnh trước kết thúc trước mảnh sau ít nhất 0,04 s.
-- Mỗi mảnh ≤ 58 ký tự.
-
-Lớp phủ: `applyPaperTexture` và `renderGrainFx` (`rig/styles.js`) phủ lên mọi khung.
-
----
-
-## 3. board.json — storyboard là dữ liệu
-
-```json
-{
-  "ink": "#1D202A",
-  "palette": { "term": { "color": "#F2A541", "name": "khái niệm" } },
-  "props": {
-    "ke": { "look": "kệ sách gỗ thông màu vàng nhạt ba tầng, cao ngang ngực người, hai vách bên mỏng, mặt sau để hở, ốc vít bạc lộ ở các góc",
-            "states": { "van": "năm tấm ván nằm chồng trên sàn", "nghieng": "đứng lệch năm độ sang trái, tầng giữa hở một khe" },
-            "draw": "src:ke" },
-    "tua_vit": { "look": "tua vít cán nhựa đỏ dài bằng bàn tay, thân thép sáng, đầu dẹt", "states": { "cam": "nằm trong tay phải, đầu chĩa xuống" },
-            "draw": "src:tuaVit" } },
-  "scenes": [
-    { "id": "nha_lan", "place": "phòng khách nhỏ của chị Lan, sàn gỗ, đèn trần vàng",
-      "light": "đèn vàng ấm từ trên, ngoài cửa sổ trời tối",
-      "cast": ["extra:lan"], "lines": ["h1", "h2", "h3"],
-      "set": { "layers": "tường kem có cửa sổ tối bên phải; sofa xám sát tường bên trái; sàn gỗ chiếm một phần ba dưới; ván kệ và hộp các-tông giữa sàn; chị Lan ngồi xếp bằng trước đống ván",
-               "alive": "rèm cửa sổ lay nhẹ, đèn trần chập chờn" },
-      "in": { "tr": "iris", "sfx": "iris_open" }, "amb": "night_city", "music": "A",
-      "shots": [
-        { "id": "lan_wide", "size": "wide", "host": "none", "cam": "push", "focus": [960, 640],
-          "subject": "chị Lan ngồi giữa đống ván gỗ", "why": "thiết lập nơi chốn và quy mô của việc lắp",
-          "frame": { "layout": "chị Lan ngồi giữa khung hơi lệch trái, cao nửa khung; đống ván chiếm một phần ba dưới bên phải",
-                     "layers": "tường và cửa sổ, sofa, đống ván, chị Lan ngồi trước đống ván, tờ hướng dẫn trên đùi",
-                     "focus": "tờ hướng dẫn trong tay chị Lan", "light": "đèn trần vàng từ trên, bóng ngắn dưới ván",
-                     "start": "ván còn nằm chồng, tay chị cầm tờ hướng dẫn", "end": "chị đặt tờ hướng dẫn xuống, cầm tua vít lên" } },
-        { "id": "lan_tay", "at": "h1@tua", "size": "insert", "host": "none", "cam": "hold",
-          "subject": "bàn tay vặn tua vít vào ván", "why": "công sức là thứ hiệu ứng đo, nên cho thấy bàn tay",
-          "frame": { "layout": "bàn tay và tua vít chiếm 60 % khung, chính giữa; mép ván chạy chéo từ góc dưới trái",
-                     "layers": "mặt ván gỗ làm nền, lỗ vít, đầu tua vít, bàn tay đè lên trên",
-                     "focus": "đầu tua vít trong lỗ vít", "light": "ánh vàng nghiêng từ trái, vân gỗ rõ",
-                     "start": "đầu vít mới chạm lỗ", "end": "vít chìm hẳn, tay buông tua vít" } },
-        { "id": "ke_xong", "at": "h2@cái", "size": "medium", "host": "pip", "cam": "hold",
-          "subject": "cái kệ nghiêng đứng cạnh chị Lan", "why": "máy đứng để thấy cái kệ tự nghiêng đi; người dẫn liếc từ góc" },
-        { "id": "lan_mat", "at": "h3@nếu", "size": "close", "host": "none", "cam": "push",
-          "subject": "mặt chị Lan lắc đầu, ôm kệ", "why": "quyết định không bán nằm trên khuôn mặt" } ],
-      "beats": [
-        { "id": "b_gio", "at": "h1@chín", "who": "extra:lan", "do": "chị Lan cầm tờ hướng dẫn lên xem",
-          "move": "carry", "d": 0.8, "xy": [900, 560],
-          "label": { "kind": "time", "text": "21:00", "xy": [1700, 90] } },
-        { "id": "b_vit", "at": "h1@tua+0.2", "who": "extra:lan", "do": "tay chị vặn tua vít vào lỗ ván", "move": "work", "d": 1.6, "xy": [1100, 700],
-          "sfx": { "type": "plastic_click", "cause": "tua vít ăn vào gỗ" } },
-        { "id": "b_dung", "at": "h2@đứng", "who": "extra:lan", "do": "chị Lan buông tay, cái kệ tự đứng", "move": "fall", "d": 0.7, "xy": [1300, 600],
-          "change": "kệ nghiêng nhẹ sang trái", "sfx": { "type": "wood_set", "cause": "chân kệ chạm sàn" } },
-        { "id": "b_om", "at": "h3@không", "who": "extra:lan", "do": "chị Lan lắc đầu, vòng tay ôm kệ", "move": "act", "d": 1.2, "xy": [1200, 420] } ] },
-
-    { "id": "nha_host", "place": "góc đọc sách của Kẻ Nghĩ Nhiều, kệ sách và đèn bàn",
-      "light": "đèn bàn vàng bên phải, nền tối ấm",
-      "cast": ["host"], "lines": ["k1", "k2", "k3"], "amb": "hum", "music": "B",
-      "silence": { "at": "k1@start-0.6", "d": 0.8 },
-      "shots": [
-        { "id": "host_wide", "size": "wide", "host": "desk", "cam": "hold",
-          "subject": "Kẻ Nghĩ Nhiều bên bàn, cầm ảnh cái kệ", "why": "về nhà để gọi tên điều vừa thấy" },
-        { "id": "host_react", "at": "k3@start", "size": "close", "host": "react", "cam": "hold",
-          "subject": "mặt Kẻ Nghĩ Nhiều nhăn lại, nghi ngờ", "why": "cách hiểu quen thuộc nghe xuôi tai, khuôn mặt báo nó sắp bị lật" } ],
-      "beats": [
-        { "id": "b_ten", "at": "k1@hiệu", "who": "host", "do": "Kẻ Nghĩ Nhiều ghim tấm thẻ lên bảng", "flags": ["aha"],
-          "move": "enter", "d": 0.5, "xy": [400, 300],
-          "label": { "kind": "term", "text": "Hiệu ứng IKEA", "def": "quý thứ mình làm ra hơn giá trị thật", "xy": [80, 90] },
-          "sfx": { "type": "paper_slide", "cause": "thẻ giấy ghim lên bảng" } },
-        { "id": "b_chi", "at": "k2@giá", "who": "host", "do": "Kẻ Nghĩ Nhiều chỉ tay vào chữ giá trị", "move": "gesture", "d": 0.4, "xy": [700, 420] },
-        { "id": "b_anh", "at": "k3@thương", "who": "host", "do": "tấm ảnh cái kệ trượt từ tay lên bảng", "move": "travel", "d": 0.7, "xy": [500, 500] },
-        { "id": "b_lac", "at": "k3@end", "who": "host", "do": "Kẻ Nghĩ Nhiều lắc đầu chậm rãi", "move": "act", "d": 1.0, "xy": [1320, 360] } ] }
-  ]
-}
 ```
-
-Ví dụ trên chỉ ghi `frame` cho hai shot đầu cho gọn; board thật ghi cho mọi shot trừ `react`.
-
-Phần lớn nhịp chỉ có `who`, `do` và chuyển động của nó (`move`, `d`, `xy`): không chữ, không tiếng. Luật (check_board kiểm hết):
-
-**Hình** (`require_frame`)
-- `props`: mỗi vật có `look` ≥ 12 chữ, `states` (mỗi trạng thái ≥ 3 chữ), `draw` là `rig:<id>` (có trong `rig/props.js`), `asset:fluent/<id>` (có trong `rig/assets/fluent/`) hoặc `src:<hàm>`. Nhịp `who: "prop:<id>"` phải có trong `props`.
-- Mỗi cảnh có `set.layers` ≥ 12 chữ và `set.alive` ≥ 3 chữ.
-- Mỗi shot trừ `react` có `frame`: `layout` ≥ 8 chữ, nói chỗ (trái, phải, giữa, trên, dưới, góc) và phần khung (60 %, 1/3, nửa, cả khung); `layers` ≥ 8 chữ, `focus` ≥ 5, `light` ≥ 4, `start` và `end` ≥ 4 và khác nhau. Hai shot trong một cảnh không cùng `layout`.
-
-**Chuyển động** (`MOTION.md`)
-- Nhịp có người diễn thì có `move` (một trong `enter exit walk carry travel grow count draw break transform swap open fall fill work gesture act`), `d` 0,2–8 s, `xy` là chỗ trên màn hình nơi vật đổi.
-- Mỗi cảnh ≥ 2 kiểu `move`; `gesture` và `act` ≤ 40 % số nhịp.
-- `film.js` tính giờ ≥ 70 % số nhịp bằng id (`BD.p('b1', T)`, `BD.u`, `BD.t`).
-- Không có đạo cụ nào vẽ sau `if (x > 0)` mà bỏ qua `x`; không có bộ ba zoom `[≥ 1.7, x, y]`.
-
-**Lời và neo**
-- Các `lines` của các cảnh nối lại đúng bằng `lines.json`, theo thứ tự.
-- `at` viết là `"<line>@<từ>"`, `"…@<từ>+0.2"`, `"…@<từ>#2"`, `"…@start"` hoặc `"…@end"`; từ phải có trong câu.
-- Shot đầu của cảnh mở cùng cảnh.
-
-**Shot**
-- `size` là `wide`, `medium`, `close` hoặc `insert`.
-- `host` là `desk`, `scene`, `pip`, `react` hoặc `none`.
-- `cam` là `hold`, `push`, `pull`, `track` hoặc `pan`; thêm `focus` hoặc `move` khi cần, và `amount` cho push/pull.
-- `subject` và `why`, mỗi cái ≥ 3 chữ.
-- Mỗi shot ≤ 12 s, trung bình ≤ 8 s.
-- Cảnh mới mở bằng `wide`, trừ khi có `"same_place": true`.
-- ≥ 20 % shot là close hoặc insert.
-- `desk` cộng `scene` ≤ 50 % thời lượng; `hold` ≥ 65 % thời lượng (máy chạy ≤ 35 %).
-
-**Chữ**
-- Mỗi nhãn có `kind`.
-- `term` có `def` ≤ 10 chữ; mỗi tập 1–4 thẻ `term`.
-- `name` có `to` hoặc `on`.
-- Nhãn mang từ của riêng nó, không lặp hai từ liền nhau của câu đang đọc (trừ term và name).
-- ≤ 5 chữ, không có dấu hỏi.
-- Nằm trên vạch phụ đề (y ≤ 860).
-- ≤ 1 `stamp` mỗi cảnh.
-
-**Tiếng**
-- Tên tiếng có trong `core/audio/foley.py` hoặc trong FX của `mix.py`, và có `cause`.
-- Tiếng đồ họa (`label_in`, `bar_grow`…) chỉ đi với term, doc, stamp hoặc biểu đồ.
-- Tiếng cơ thể chỉ trong shot cận.
-- ≤ 3 tiếng trong một giây; ≤ 25 khoảnh khắc mỗi phút; ≥ 25 % cửa sổ 3 s yên.
-- Ít nhất một `silence`.
-
-**Kênh** (`board_rules.json`): ≥ 1 nhịp `flags: ["aha"]`; một giọng cho cả phim (không câu nào đổi `voice`, `pitch`, `rate`).
-
----
-
-## 4. Dựng phim từ board
-
-```js
-import { loadBoard } from '../../../../rig/board.js';
-import { hostPip, reactClose } from '../../../../rig/host.js';
-import { extra, crowd } from '../../../../rig/extras.js';
-// trong setup(), sau khi có TL (timeline) và words:
-const BD = await loadBoard('board.json', TL.L, words);
-EV.push(...BD.events());              // tiếng của board + dấu {type:'shot'} ở mỗi lần cắt
-// trong render(T):
-const sh = BD.shot(T);                // {id, size, host, cam, subject, scene, t0, t1}
-if (sh.host === 'react') reactClose(g, T, { at: sh.t0, E: 'skeptical', talk: talkAt(T) });
-else {
-  g.save(); BD.camera(g, T);          // push / pull / track / pan của shot, êm ở hai đầu
-  SHOTS[sh.id](g, T, sh);             // mỗi shot một hàm vẽ khung của nó: nơi chốn + cỡ cảnh + người + đạo cụ
-  g.restore();
-  if (sh.host === 'pip') hostPip(g, T, sh, { corner: 'br', E: 'smug', talk: talkAt(T) });
-}
-BD.signals(g, T);                     // thẻ thuật ngữ, nhãn, biển, con dấu, biểu đồ của shot này; tự đăng ký TEXTS
+LEMO_ANGLE=vulkan sh channels/tram-nghi-nhieu/review.sh <tập> --lines 4-7     # một cảnh vừa dựng
+LEMO_ANGLE=vulkan sh channels/tram-nghi-nhieu/review.sh <tập>                 # cả phim, trước khi render
+LEMO_ANGLE=vulkan sh channels/tram-nghi-nhieu/review.sh <tập> --video         # sau khi render: thêm bốn khung mỗi câu từ mp4
 ```
+Kết quả ở `<tập>/review/REVIEW.md` (lịch sử: `REVIEW-<n>.md`); exit 0 là PASS. Câu nào còn cờ máy (`DARK SAME RUN NUM`) thì FAIL dù người chấm cho qua.
 
-- **Nơi chốn**: một nơi vẽ một lần trong `src/sets.js`, có một vật sống chạy theo `T`. Shot rộng và vừa của nơi đó dùng chung hàm nền, máy phóng tối đa 1,6×.
-- **Shot cận là một hàm vẽ riêng**: vẽ lại chủ thể ở cỡ của nó (mặt người dẫn bằng `reactClose` hoặc `figure` với `s: 3`; người trong truyện bằng `extra` với `s` khoảng 2,2; bàn tay với vật vẽ to giữa khung), cả khuôn mặt hoặc cả bàn tay với vật, trọn trong khung (`MOTION.md` §4).
-- **Hình khớp với board**: người dẫn chỉ được vẽ trong shot có `host` khác `none`. `figure`, `hostPip` và `reactClose` tự ghi vào `window.SEEN`, và `scenecheck` so từng khung với board.
-- **Nhịp**: một chuyển động neo vào thời điểm của chính nó. `BD.p('b_vit', T)` chạy 0 → 1 trong `d` giây của nhịp, kể từ từ "tua" (`'back'` cho vật đáp xuống có vượt đà). Mọi thứ đổi trên hình là hàm của tiến độ đó, với các hàm trong `rig/keys.js`; sổ tay từng kiểu `move` ở `MOTION.md` §3.
-- **check_board** kiểm rằng `film.js` gọi tên mọi cảnh, ≥ 85 % shot và ≥ 70 % nhịp có người diễn.
+Vòng làm việc, không bỏ bước:
+1. Chia lời thành cảnh 3–4 câu. Dựng xong một cảnh (hình, chữ, mốc theo chữ) thì chạy `review.sh --lines a-b` cho cảnh đó **trước khi** dựng cảnh sau.
+2. FAIL: sửa đúng các câu FAIL theo dòng `SỬA:` của nó, rồi chạy lại. Không cãi người chấm, không sửa cờ hay dữ liệu kiểm để qua cổng. Sau 3 lượt một cảnh vẫn FAIL thì ghi vào `LOOK.md` câu nào, vì sao, rồi sang cảnh sau.
+3. Đủ cảnh: chạy `review.sh` cho cả phim. Chỉ khi PASS (OVERALL ≥ 9) mới dựng tiếng và render 24 fps. Render toàn phim là việc chậm nhất: làm một lần, sau khi hình đã đạt.
+4. Render xong: `review.sh --video` một lần, để bắt chuyển động không diễn ra, khung đen, lỗi chỉ có ở bản render.
+5. Ghi điểm từng lượt vào `LOOK.md`. Bàn giao kèm `review/REVIEW.md` cuối cùng, nguyên văn.
 
----
+## 4. Bàn giao
 
-## 5. Rig của kênh
-
-| File | Có gì |
-|---|---|
-| `rig/character.js` | `figure` (Kẻ Nghĩ Nhiều: `E`, `armL`/`armR` = `{at}` hoặc `{swing, prop}`, `legs` (`walk` với `ph`), `talk`, `blink`, `battery`, `s`, `crop`; trả về `handL`/`handR`), `expr`/`EXPR`, `PAL` |
-| `rig/keys.js` | chuyển động theo thời gian: `span`, `keys`, `poseKeys`, `faceKeys`, `enter`, `travel`, `walkTo`, `count`, `drawOn`, `shake`, `landing`, `whip` |
-| `rig/host.js` | `hostPip(g, T, sh, {corner, r, E, talk})` (vòng tròn ở góc, bật vào lúc cắt), `reactClose(g, T, {E, talk, at})` (cận mặt toàn khung) |
-| `rig/catalog/` | **xem trước khi viết board**: `CATALOG.md` (bảng mọi vật, người, hình) và ảnh `props-*.jpg`, `people-*.jpg`, `assets-*.jpg`; dựng lại bằng `sh channels/tram-nghi-nhieu/rig/catalog/build.sh` sau khi thêm gì vào rig |
-| `rig/props.js` | `prop(g, id, {x, y, s, rot, flip, state, from, k, t, …})`: vật đời thường vẽ theo tỉ lệ thật (`M` = 306 px một mét, gốc ở giữa đáy), mỗi vật có trạng thái nội suy được (`from` → `state` theo `k`) và điểm neo trả về theo toạ độ màn hình. Điện thoại, củ sạc, ổ cắm, gối, giường, tủ, bàn, bàn học sinh, ghế, tủ quần áo, tủ lạnh, bếp, ấm, cốc, laptop, đèn, đồng hồ, sách, cặp, cửa sổ, cửa, quạt, xe máy, cây, chai, TV, nhiệt kế, thùng, tiền. `cable(g, A, B, {sag})` |
-| `rig/assets.js` | `await loadAssets([...])` rồi `asset(g, id, {x, y, h, rot, flip})`: 159 hình Fluent Emoji Flat (MIT) có viền mực của kênh: cơ thể (não, phổi, tim), vi khuẩn, xe cứu thương, tiền, thời tiết, đồ ăn, biểu tượng nghề. `badge(g, id, {x, y, r})`: một hình trong vòng tròn. Người trong bộ này chỉ là tượng bán thân, không diễn được. Thêm hình: `python3 channels/tram-nghi-nhieu/rig/assets/fetch.py search <từ>` / `add "<Name>"` |
-| `rig/extras.js` | `extra(g, {x, y, s, rot, look, E, gaze, turn, armL, armR, at, talk, blink, sit, walk, lean, sweat, t})`: người của câu chuyện, có mặt và hai tay (`down point hold wave hip up chin cross reach open recoil head cover ear drink shrug hug hold2`, vòng lặp `knit type write stir clap fan wipe shiver`, chuyển giữa hai tư thế `{from, to, k}`, hoặc một điểm `[x, y]`), đi bộ bằng `walk: ph`, nghiêng người `lean`, nằm bằng `rot`; trả về vị trí tay để gắn đạo cụ. `LOOKS` có 17 kiểu, gồm nghề: bác sĩ, y tá, công an, giáo viên, đầu bếp, công nhân, nông dân, học sinh khăn quàng đỏ, shipper, nhân viên văn phòng. `crowd(g, {n, cols, box, hot, dim})` |
-| `rig/board.js` | `loadBoard`, `BD.t/u/p/scene/shot/camera/signals/events` (mục 4); vẽ `term` (thẻ), `stamp` (dấu), `name/place/time/number/doc` (nhãn), biểu đồ |
-| `rig/hands.js` | `GEST`: tư thế tay của Kẻ Nghĩ Nhiều |
-| `rig/motion.js` | `spring`, `anticipate`, `squash`, `wiggle`, `particlePuff`, `irisTransition`, `occlusionWipe` |
-| `rig/broll.js` | `text` (đăng ký vào `TEXTS`), `revealText`, `stamp`, `bubble`, `focusLines`, `subtitle`, `tag`, `irisWipe`, `ambientMotes` |
-| `rig/sets.js` | vài bối cảnh mẫu (`roomBack`, `roomFront`, `sofa`, `street`, …), `person` |
-| `rig/cel.js`, `rig/styles.js` | hình học cel; giấy và hạt phim (`applyPaperTexture`, `renderGrainFx`) |
-| `core/audio/foley.py` | 78 tiếng theo chất liệu và cử chỉ + 10 nền không khí (`.venv/bin/python core/audio/foley.py` liệt kê) |
-
-Mỗi tập viết `src/sets.js` cho các nơi chốn của nó và các đạo cụ chỉ tập đó có, và import rig của kênh bằng đường dẫn tương đối. Vật dùng lại được ở tập khác thì vào `rig/props.js`, không nằm lại trong một tập.
-
----
-
-## 6. Quy mô theo thời lượng
-
-| Thời lượng | Số câu trong `lines.json` | Nơi chốn | Shot |
-|---|---|---|---|
-| Shorts 60–90 s | 16–22 | 2–4 | 12–20 |
-| 3–5 phút | 35–50 | 6–10 | 30–55 |
-| 8–10 phút | 80–110 | 12–16 | 70–110 |
-| 15–20 phút | 150–200 | 20–30 | 130–200 |
-
-Thời lượng đến từ lượng kiến thức, không ngược lại. Câu hỏi chỉ có một cơ chế thường gói gọn trong 90 s–3 phút; đừng kéo dài bằng cách nói lại một ý bằng câu khác. Không có thời lượng thì chọn cỡ ngắn nhất đủ để trả lời trọn. `build.sh` sinh `src/timeline.js` từ `voice/lines.json` bằng `$CHANNEL/mk_timeline.py`; khoảng lặng trước một câu là trường `gap` của câu (`CHANNEL.md` §3 bước 4).
-
----
-
-## 7. Bàn giao
-
-- `review.sh` exit 0, kèm `.mp4`, `poster.jpg` và `.transcript.srt`.
-- `TREATMENT.md` có đủ các phần, trong đó có `## Chấm lời`.
-- `LOOK.md` có các vòng soi hình; `NOTES.md` ghi tiến độ.
-- Phim kết bằng một hành động nhỏ người xem làm được ngay, **được diễn ra trong cảnh**.
+Báo người dùng: đường dẫn phim, 3 khung hero, tờ beat, kết quả chấm độc lập, và các điểm yếu còn lại, nói thật.

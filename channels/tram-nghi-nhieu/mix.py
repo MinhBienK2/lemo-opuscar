@@ -271,6 +271,24 @@ for c in range(2): mixd[:, c] = sfx.limit(sfx.compress(mixd[:, c], thr=.30, rati
 mixd = mixd[:int(DUR * SR)]
 os.makedirs(OUT, exist_ok=True)
 sf.write(os.path.join(OUT, 'mix.wav'), mixd.astype(np.float32), SR, subtype='PCM_16')
+
+
+# ——— peaks against loudness: mux.sh lifts the film to −14 LUFS with true peak ≤ −1.2 dB, which only works when the
+# peaks sit ≤ ~12.8 dB above the loudness; otherwise loudnorm misses one target. Measure, and limit the peaks down to it.
+def loudness(path):
+    import subprocess, re
+    r = subprocess.run(['ffmpeg', '-hide_banner', '-nostats', '-i', path, '-af', 'ebur128=peak=true', '-f', 'null', '-'],
+                       capture_output=True, text=True).stderr
+    i = re.findall(r'^\s+I:\s+(-?[\d.]+) LUFS', r, re.M); pk = re.findall(r'^\s+Peak:\s+(-?[\d.]+) dBFS', r, re.M)
+    return (float(i[-1]), float(pk[-1])) if i and pk else (None, None)
+
+
+for _ in range(3):
+    I, P = loudness(os.path.join(OUT, 'mix.wav'))
+    if I is None or P - I <= 12.3: break
+    ceil = 10 ** ((I + 11.8) / 20) / 1.12   # sample-peak ceiling, with room for the inter-sample (true) peak
+    for c in range(2): mixd[:, c] = sfx.limit(mixd[:, c], ceil, look=.003)
+    sf.write(os.path.join(OUT, 'mix.wav'), mixd.astype(np.float32), SR, subtype='PCM_16')
 print('mix', round(len(mixd) / SR, 2), 's, peak', round(float(np.abs(mixd).max()), 3))
 if '--stats' in sys.argv:
     v = np.abs(voice[:len(mixd), 0]) > .02; bed = (music * .45 * duck[:, None] + amb * (.6 + .4 * duck[:, None]) + fx)[:len(mixd), 0]

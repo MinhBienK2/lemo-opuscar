@@ -1,45 +1,37 @@
-# Trạm Nghĩ Nhiều — định hướng nội dung
+# Trạm Nghĩ Nhiều — nội dung
 
-**Mọi câu hỏi "tại sao" của đời thường, trả lời bằng một câu chuyện có hình.** Kẻ Nghĩ Nhiều là người hay nghĩ quá nhiều về những thứ ai cũng gặp mà ít ai hỏi tới cùng: vì sao trời mưa thì kẹt xe hơn, vì sao giá vàng lên, vì sao ngủ trưa dậy lại mệt, vì sao điện thoại nóng khi sạc, vì sao người Việt ăn Tết theo âm lịch.
+**Những câu hỏi "tại sao" của đời thường, trả lời bằng một thế giới thu nhỏ có thể nhìn vào bên trong.** Vì sao điện thoại nóng khi sạc, vì sao trời mưa thì kẹt xe hơn, vì sao ngủ trưa dậy lại mệt, vì sao giá vàng lên, vì sao Tết theo âm lịch. Không giới hạn ngành.
 
-Kênh không giới hạn một ngành. Tâm lý, cơ thể, tiền bạc, công nghệ, khoa học, lịch sử đều được, miễn câu hỏi qua được bộ lọc dưới đây.
+Thế mạnh của 3D là **đi vào bên trong**: chui vào dây sạc, cắt đôi cục pin, bay qua ngã tư từ trên cao, thu nhỏ vào mạch máu. Chọn đề tài mà câu trả lời nằm ở chỗ mắt thường không thấy.
 
-## 1. Bộ lọc đề tài
+## Bộ lọc đề tài
 
-Một đề tài được làm khi trả lời "có" cho cả bốn câu:
+Làm khi trả lời "có" cả bốn:
 
-1. **Người bình thường đã từng hỏi câu này chưa?** Câu hỏi bắt đầu từ một trải nghiệm có thật: một cảm giác, một hóa đơn, một cảnh trên đường. Không bắt đầu từ một thuật ngữ.
-2. **Có một cơ chế thật, có nguồn không?** Câu trả lời là một chuỗi nguyên nhân viết được trong `FACTS.md`, có nguồn đáng tin: bài báo khoa học, cơ quan thống kê, sách giáo khoa, tài liệu lịch sử. Không phải mẹo vặt, không phải "người ta nói".
-3. **Diễn ra được thành cảnh không?** Có một nơi, một người, và một vật đổi trạng thái để kể câu trả lời. Ví dụ: hai làn xe dồn lại thành một, tờ tiền đổi màu qua từng năm, cục pin nóng dần lên. Ý nào chỉ nói được bằng chữ thì chưa phải đề tài của kênh.
-4. **Người xem mang theo được gì?** Một việc làm được ngay, một cách nhìn mới về thứ quen thuộc, hoặc một điều đủ hay để kể lại cho bạn bè.
+1. **Người bình thường đã từng tự hỏi chưa?** Bắt đầu từ một trải nghiệm thật (một cảm giác, một hoá đơn, một cảnh trên đường), không từ thuật ngữ.
+2. **Có cơ chế thật, có nguồn?** Chuỗi nguyên nhân viết được trong `research/FACTS.md`, nguồn đáng tin.
+3. **Dựng được thành nơi chốn và vật thể?** Có một nơi ngoài đời, và cơ chế thành một ẩn dụ vật lý chạy được (hạt, dòng chảy, cửa hẹp, áp suất, nhiệt). Ý nào chỉ nói được bằng chữ thì chưa phải đề tài của kênh.
+4. **Người xem mang về được gì?** Một việc làm ngay, hoặc một cách nhìn mới về thứ quen thuộc.
 
-Nếu đề tài có một cách hiểu phổ biến bị sai, đó là cú lật mạnh nhất: người dẫn nói cách hiểu ấy, rồi cảnh tiếp theo cho thấy điều thật sự xảy ra. Nhưng không bắt buộc phải có cú lật. Một câu trả lời bất ngờ cho một câu hỏi quen cũng đủ.
+Cách hiểu phổ biến bị sai là cú lật mạnh nhất, nhưng không bắt buộc.
 
-## 2. Các cột
+## Cột
 
-Mỗi tập thuộc một cột. Cột chỉ để xếp kệ, không giới hạn chủ đề:
+Cột chỉ để xếp kệ: `series/<cột>/<tập>/`. Hiện có `co-the` (cơ thể), `dau-oc` (đầu óc), `tien` (tiền), `do-vat` (đồ vật và công nghệ), `the-gioi` (thế giới quanh ta), `ngay-xua` (ngày xưa). Câu hỏi không vừa cột nào thì mở cột mới.
 
-| Cột | Thư mục `series/` | Ví dụ câu hỏi |
-|---|---|---|
-| Cơ thể | `co-the` | Vì sao ngủ trưa dậy lại mệt? Vì sao ăn cay lại chảy nước mũi? |
-| Đầu óc | `dau-oc` | Vì sao việc làm dở cứ lởn vởn trong đầu? Vì sao càng nhiều lựa chọn càng khó chọn? |
-| Tiền | `tien` | Vì sao giá vàng lên? Vì sao siêu thị để sữa ở cuối cửa hàng? |
-| Đồ vật & công nghệ | `do-vat` | Vì sao điện thoại nóng khi sạc? Wi-Fi đi xuyên tường thế nào? |
-| Thế giới quanh ta | `the-gioi` | Vì sao trời mưa thì kẹt xe hơn? Vì sao biển mặn? |
-| Ngày xưa | `ngay-xua` | Vì sao một tuần có bảy ngày? Vì sao Tết theo âm lịch? |
+## Định dạng
 
-Câu hỏi không vừa cột nào thì mở cột mới: tạo thư mục mới trong `series/` và thêm một dòng vào bảng này.
+- **Shorts 60–90 s**, dọc hoặc ngang: một câu hỏi, một cơ chế, một khoảnh khắc "à ra thế".
+- **Tập dài 3–5 phút**: hai đến bốn nơi chốn, mỗi nơi một lớp của câu trả lời.
 
-## 3. Giọng kể
+## Giọng kể
 
-- Kẻ Nghĩ Nhiều nói như một người bạn tò mò, không giảng bài: "mình cứ thắc mắc…", "hóa ra…".
-- Cả phim một giọng kể. Người trong câu chuyện diễn bằng hành động.
-- Tối đa 6–9 con số cho 3 phút, và mỗi con số là một vật trong cảnh. Tên tác giả, năm, nguồn để trong mô tả video và trong `FACTS.md`.
-- Tránh than vãn, tránh dọa ("bạn đang hủy hoại…"), tránh hứa hẹn ("bí mật không ai nói").
+- Một giọng kể như một người bạn tò mò ("mình cứ thắc mắc…", "hoá ra…"), không giảng bài, không doạ, không hứa bí mật.
+- Hình kể trước, lời theo sau: tắt tiếng vẫn đoán được chuyện gì đang xảy ra.
+- Tối đa 6–9 con số cho 3 phút; mỗi con số là một vật trong cảnh. Nguồn để trong mô tả video.
 
-## 4. Hình và tiếng
+## Luật nội dung
 
-- **Nơi chốn là nơi câu chuyện xảy ra ngoài đời**: ngã tư, chợ, bếp, phòng ngủ, tiệm vàng, trạm sạc, tàu biển, cung đình xưa. Mỗi tập tự dựng các nơi của nó, mỗi nơi có một vật sống (`MOTION.md` §5).
-- **Nhà của Kẻ Nghĩ Nhiều** là góc làm việc ấm áp: bàn, đèn, giá sách, bảng ghim. Đó là nơi mở phim, nối các hồi và gọi tên điều vừa thấy, không phải bối cảnh chính.
-- Đề tài nào cũng được kể bằng đạo cụ chạm được, thay cho sơ đồ: nhiệt độ là cái ấm nước, lạm phát là ổ bánh mì nhỏ đi, sóng Wi-Fi là gợn nước.
-- Nhạc lo-fi ấm (khoảng 84 BPM) làm nền chung. Mỗi tập đổi nhạc cụ nhấn theo nơi chốn, và tiếng chỉ vang ở chỗ có vật làm ra nó.
+- Không tuyên bố hay con số nào thiếu nguồn trong `FACTS.md`; nói rõ khi bằng chứng còn tranh cãi.
+- Không chẩn đoán, không kê thuốc, không khuyên đầu tư cụ thể.
+- Không dùng hình, nhân vật, logo hay âm thanh của người khác.

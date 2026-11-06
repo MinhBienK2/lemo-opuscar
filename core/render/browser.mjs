@@ -1,11 +1,14 @@
 // Launch arguments for headless Chrome. Finding the browser itself is left to playwright, matched to its version (the chromium-headless-shell installed by npm run);
 // to use a different executable: PLAYWRIGHT_CHROME=/path/to/chrome-headless-shell
 // GPU: on macOS, Metal explicitly (on newer headless-shell, --use-angle=gl falls back to SwiftShader software rendering, ~6x slower);
+//      on Linux with an NVIDIA card (its Vulkan driver installed), Vulkan, which reaches the card: the default there is SwiftShader;
 //      other systems get no forced backend. LEMO_ANGLE=metal|gl|vulkan|swiftshader… overrides it; LEMO_ANGLE=default means don't pass --use-angle.
 //      On a Linux box without GPU drivers the default backend loses the WebGL context and a 3D page renders blank:
 //      render those with LEMO_ANGLE=swiftshader (software, slower). warnIfSoftwareGL says so when it happens.
+import { existsSync } from 'node:fs';
 export const EXE = process.env.PLAYWRIGHT_CHROME || undefined;   // undefined = let playwright find it
-const angle = process.env.LEMO_ANGLE || (process.platform === 'darwin' ? 'metal' : 'default');
+const nvidiaVulkan = () => existsSync('/dev/nvidia0') && ['/usr/share/vulkan/icd.d/nvidia_icd.json', '/etc/vulkan/icd.d/nvidia_icd.json'].some(existsSync);
+const angle = process.env.LEMO_ANGLE || (process.platform === 'darwin' ? 'metal' : process.platform === 'linux' && nvidiaVulkan() ? 'vulkan' : 'default');
 export const ARGS = [...(angle === 'default' ? [] : [`--use-angle=${angle}`]), '--enable-gpu', '--ignore-gpu-blocklist', '--font-render-hinting=none', '--force-color-profile=srgb'];
 
 // warn once if WebGL ended up on software rendering (2D-canvas demos are unaffected; never fails the render)

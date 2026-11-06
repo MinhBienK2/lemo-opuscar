@@ -31,7 +31,12 @@ run() {   # run a step, keep going when it fails
 }
 
 run filmcheck node "$HERE/core/render/filmcheck.mjs" "$FOLDER"
-run drawcheck node "$HERE/core/render/drawcheck.mjs" "$FOLDER"
+# drawcheck audits 2D canvas helpers (rect/path/cel); a three.js film has none, so it is not this check's business
+if grep -rqsE "from ['\"]three['\"]" "$FOLDER/src" "$FOLDER"/*.js 2>/dev/null; then
+  echo "--- drawcheck"; echo "    skipped: three.js film (no 2D drawing helpers to audit)"
+else
+  run drawcheck node "$HERE/core/render/drawcheck.mjs" "$FOLDER"
+fi
 # the numbers on screen against the numbers the research file supports
 if [ -f "$FOLDER/research/FACTS.md" ]; then
   run claims python3 "$HERE/tools/check_claims.py" "$FOLDER"
