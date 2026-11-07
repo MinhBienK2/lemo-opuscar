@@ -9,7 +9,7 @@ Kênh tiếng Việt giải thích các câu hỏi "tại sao" của đời thư
 | Nội dung, chọn đề tài, độ dài | [`STRATEGY.md`](STRATEGY.md) |
 | Hình (bất biến) | [`STYLE.md`](STYLE.md), khung tham chiếu `demo/stills/` |
 | Rig 3D (API) | [`rig/README.md`](rig/README.md) |
-| Ba người chấm: dàn ý, lời, hình | [`OUTLINE-CRITIC.md`](OUTLINE-CRITIC.md), [`SCRIPT-CRITIC.md`](SCRIPT-CRITIC.md), [`CRITIC.md`](CRITIC.md) |
+| Ba người chấm: dàn ý, lời, hình | Xem trực tiếp trong `.agents/skills/tram-nghi-nhieu/step*/PROMPT_CRITIC.md` |
 | Demo 18 s và cái học được từ nó | [`DEMO.md`](DEMO.md) |
 
 ## Thư mục
@@ -31,13 +31,13 @@ channels/tram-nghi-nhieu/
 │   └── voice.js      #   giờ của từng chữ, sự kiện giọng
 ├── templates/        # TREATMENT.tmpl.md (mẫu dàn ý của kênh), NEXT.txt: new_episode.sh dùng
 ├── demo/             # phim mẫu 18 s, cutaway/ 8 s, stills/ (khung tham chiếu)
-├── voice/            # tts_vi.py (--jobs N; chỉ chạy khi lời đã PASS), asr_vi.py, process.py
-├── mk_timeline.py    # lines.json + words.json → src/timeline.js của tập
-├── beatsheet.mjs     # mỗi câu một khung lúc đang nói, kèm chữ và cờ DARK SAME RUN NUM
-├── propcheck.mjs     # mỗi vật của src/props.js đứng riêng, ba phía (+ propcheck/: trang của nó)
-├── review.sh         # một phiên model mới chấm: --outline, --script, --props, cảnh, chương, cả phim, --video
-├── gate.py           # con dấu PASS; tts_vi.py, mix.py và core/render/video.mjs hỏi nó trước khi chạy
-├── mix.py            # nhạc, ambience, foley, lùi dB, master
+├── tools/            # các công cụ & script kiểm soát tự động của kênh
+│   ├── review.sh     #   chấm độc lập: --outline, --script, --props, cảnh, chương, cả phim
+│   ├── gate.py       #   con dấu PASS (cổng máy)
+│   ├── mix.py        #   nhạc, ambience, foley, master -14 LUFS
+│   ├── beatsheet.mjs #   kiểm tra nhịp điệu khung hình & cờ máy
+│   ├── propcheck.mjs #   xuất ảnh 3 phía kiểm tra linh kiện 3D
+│   └── mk_timeline.py#   tính timeline từ giọng đọc
 ├── fonts/            # Be Vietnam Pro, Patrick Hand (OFL)
 └── series/<cột>/<tập>/
 ```

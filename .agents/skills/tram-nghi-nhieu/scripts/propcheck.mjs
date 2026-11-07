@@ -1,0 +1,1 @@
+../../../../channels/tram-nghi-nhieu/tools/propcheck.mjs

@@ -1,5 +1,5 @@
 > Dàn ý của tập. Viết xong trước khi viết lời và trước khi dựng hình; `review.sh --outline` chấm nó theo
-> `OUTLINE-CRITIC.md`. Thay mọi chỗ `<viết: …>`. Xoá các dòng hướng dẫn bắt đầu bằng `>` khi xong.
+> tiêu chuẩn tại `.agents/skills/tram-nghi-nhieu/step1-outline/PROMPT_CRITIC.md`. Thay mọi chỗ `<viết: …>`. Xoá các dòng hướng dẫn bắt đầu bằng `>` khi xong.
 
 ## Độ dài (điền sau khi lập bảng ý → hình)
 
