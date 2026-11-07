@@ -57,8 +57,8 @@ Với từng câu, tự hỏi: dựng câu này thì trên hình là **vật gì
 
 ### F. Nhịp
 - Độ dài các câu có đổi nhịp không, hay đều đều?
-- Có chỗ nào quá dày con số (kênh cho tối đa 6–9 con số cho ba phút)?
-- Tổng thời lượng có hợp định dạng (Shorts 60–90 giây ≈ 150–230 chữ; tập dài 3–5 phút)?
+- Có chỗ nào quá dày con số (kênh cho tối đa 6–9 con số cho ba phút; tập dài đặc biệt: tối đa khoảng một con số cho mỗi phút)?
+- Tổng thời lượng có hợp định dạng (Shorts 60–90 giây ≈ 150–230 chữ; tập dài 3–5 phút; tập dài đặc biệt 15–25 phút, xem `STRATEGY.md`)? Khi đọc lướt, dùng tốc độ đọc thật của bản thu ghi trong `FACTS.md` ("Định dạng của tập"), đừng đoán bằng tốc độ đọc mặc định.
 
 ## Cờ của máy
 

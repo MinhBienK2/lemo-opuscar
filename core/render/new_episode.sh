@@ -220,6 +220,7 @@ printf '{\n  "title": "%s",\n  "movie": "%s",\n  "runtime": ""\n}\n' "$TITLE_JSO
   printf '<link rel="stylesheet" href="%s/fonts/fonts.css">\n' "$REL_TO_CHANNEL"
   cat <<'EOF'
 <style>html,body{margin:0;background:#12131A;overflow:hidden}canvas{display:block}</style>
+<script type="importmap">{"imports":{"three":"/node_modules/three/build/three.module.js","three/addons/":"/node_modules/three/examples/jsm/"}}</script>
 </head><body><canvas id="c" width="1920" height="1080"></canvas>
 <!-- The page contract (core/README.md): this page must expose window.READY = true once the fonts
      and the images are loaded, window.render(t) to draw the frame at second t, window.DUR for the

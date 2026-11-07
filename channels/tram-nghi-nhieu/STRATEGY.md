@@ -23,12 +23,13 @@ Cột chỉ để xếp kệ: `series/<cột>/<tập>/`. Hiện có `co-the` (c�
 
 - **Shorts 60–90 s**, dọc hoặc ngang: một câu hỏi, một cơ chế, một khoảnh khắc "à ra thế".
 - **Tập dài 3–5 phút**: hai đến bốn nơi chốn, mỗi nơi một lớp của câu trả lời.
+- **Tập dài đặc biệt 15–25 phút**: một câu hỏi lớn đáng đi sâu, bốn đến năm nơi chốn, đi từ hiện tượng đời thường vào tới tận cơ chế bên trong và quay lại bằng một việc người xem làm được. Dùng khi chủ đề không vừa một tập 3–5 phút.
 
 ## Giọng kể
 
 - Một giọng kể như một người bạn tò mò ("mình cứ thắc mắc…", "hoá ra…"), không giảng bài, không doạ, không hứa bí mật.
 - Hình kể trước, lời theo sau: tắt tiếng vẫn đoán được chuyện gì đang xảy ra.
-- Tối đa 6–9 con số cho 3 phút; mỗi con số là một vật trong cảnh. Nguồn để trong mô tả video.
+- Tối đa 6–9 con số cho 3 phút (tập dài đặc biệt: tối đa khoảng một con số cho mỗi phút); mỗi con số là một vật trong cảnh. Nguồn để trong mô tả video.
 
 ## Luật nội dung
 
