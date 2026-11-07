@@ -19,17 +19,21 @@ Cách hiểu phổ biến bị sai là cú lật mạnh nhất, nhưng không b�
 
 Cột chỉ để xếp kệ: `series/<cột>/<tập>/`. Hiện có `co-the` (cơ thể), `dau-oc` (đầu óc), `tien` (tiền), `do-vat` (đồ vật và công nghệ), `the-gioi` (thế giới quanh ta), `ngay-xua` (ngày xưa). Câu hỏi không vừa cột nào thì mở cột mới.
 
-## Định dạng
+## Độ dài: đi ra từ nội dung
 
-- **Shorts 60–90 s**, dọc hoặc ngang: một câu hỏi, một cơ chế, một khoảnh khắc "à ra thế".
-- **Tập dài 3–5 phút**: hai đến bốn nơi chốn, mỗi nơi một lớp của câu trả lời.
-- **Tập dài đặc biệt 15–25 phút**: một câu hỏi lớn đáng đi sâu, bốn đến năm nơi chốn, đi từ hiện tượng đời thường vào tới tận cơ chế bên trong và quay lại bằng một việc người xem làm được. Dùng khi chủ đề không vừa một tập 3–5 phút.
+Không có độ dài định trước. Người làm tập (không phải người dùng) hiểu chủ đề tới đâu thì biết câu trả lời cần bao nhiêu: nghiên cứu, viết đủ chuỗi nhân quả để trả lời **trọn** câu hỏi, rồi độ dài là tổng thời gian các ý ấy cần trên màn hình. Có câu hỏi trả lời trọn trong một phút, có câu hỏi cần hai mươi.
+
+- **Đủ:** không thiếu mắt xích nào mà người xem phải tự đoán; chỗ khoa học còn tranh cãi thì nói ra.
+- **Không độn:** mỗi ý một lần; không kéo dài bằng nhắc lại, ví von, hay chuyện bên lề không cần cho câu trả lời.
+- **Tầng của câu trả lời quyết định cấu trúc:** một tầng (một cơ chế) thì một hai nơi chốn; nhiều tầng thì mỗi tầng một nơi. Dàn ý dài cỡ tám phút trở lên thì chia chương, mỗi chương một tầng.
+- **Yêu cầu độ dài dài (15–20 phút):** Làm trọn vẹn toàn bộ câu trả lời trong đúng một tập duy nhất, đào sâu đến tận cùng cơ chế; tuyệt đối không chia thành nhiều tập nhỏ hay cắt xén nội dung.
+- Người dùng nêu rõ một độ dài ngắn hay nền tảng riêng (Shorts dọc dưới một phút…) thì theo đó: thu hẹp câu hỏi cho vừa, không nói vội cho kịp.
 
 ## Giọng kể
 
 - Một giọng kể như một người bạn tò mò ("mình cứ thắc mắc…", "hoá ra…"), không giảng bài, không doạ, không hứa bí mật.
 - Hình kể trước, lời theo sau: tắt tiếng vẫn đoán được chuyện gì đang xảy ra.
-- Tối đa 6–9 con số cho 3 phút (tập dài đặc biệt: tối đa khoảng một con số cho mỗi phút); mỗi con số là một vật trong cảnh. Nguồn để trong mô tả video.
+- Không quá khoảng hai con số mỗi phút (tập dài trên mười phút: khoảng một); mỗi con số là một vật trong cảnh. Nguồn để trong mô tả video.
 
 ## Luật nội dung
 
