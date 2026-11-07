@@ -23,7 +23,7 @@ channels/tram-nghi-nhieu/
 ├── CRITIC.md       # thang chấm hình và mẫu báo cáo
 ├── SCRIPT-CRITIC.md # thang chấm lời kể (dữ kiện, dựng được bằng vật thật, nhân quả, tiếng Việt nói)
 ├── propcheck.mjs   # mỗi vật trong src/props.js của tập, đứng riêng, ba phía → review.sh --props cho người xem không biết tên gọi tên
-├── gate.py         # con dấu PASS của người chấm; mix.py không dựng tập chưa PASS hay đã đổi sau PASS
+├── gate.py         # con dấu PASS (lời, vật, hình) của người chấm; mix.py không dựng tập chưa PASS hay đã đổi sau PASS
 ├── mix.py          # nhạc, ambience, foley, lùi dB, master
 ├── fonts/          # Be Vietnam Pro, Patrick Hand (OFL)
 └── series/<cột>/<tập>/

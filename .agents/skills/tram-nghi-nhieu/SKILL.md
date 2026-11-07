@@ -1,7 +1,7 @@
 ---
 name: tram-nghi-nhieu
 description: Đạo diễn và dựng một tập của kênh Trạm Nghĩ Nhiều — câu hỏi "tại sao" đời thường, trả lời bằng diorama 3D toon (three.js) có ánh sáng thật, viền mực vẽ tay, máy quay đi vào bên trong vật, mọi vật dựng đúng là nó, chỉ thứ vô hình mới thành hình minh hoạ; một giọng kể tiếng Việt. Dùng khi làm bất kỳ tập nào của kênh.
-version: 13.4.0
+version: 13.5.0
 ---
 
 # Một tập Trạm Nghĩ Nhiều
@@ -31,7 +31,7 @@ Mục tiêu: người xem tắt tiếng vẫn đoán đúng chuyện gì đang x
      - có quay lại thời điểm trước (tua ngược, "lần nữa") thì phải có dấu hiệu nhìn thấy được: đồng hồ quay ngược, ánh sáng đổi, lật trang;
    - shot list gom từ bảng đó: thời điểm · cảnh · máy làm gì · vì sao.
 4. Lời: `voice/lines.json`, viết **từ** bảng ý → hình. Mỗi câu thuộc một dòng của bảng, số viết thành chữ. Muốn thêm hay bớt câu thì sửa bảng và hình trước.
-5. **Chấm lời trước khi làm giọng**: `sh channels/tram-nghi-nhieu/review.sh <tập> --script`. Một phiên model mới chỉ đọc `lines.json`, `FACTS.md` và `STRATEGY.md`, chấm theo `SCRIPT-CRITIC.md`: dữ kiện và thuật ngữ đúng, mỗi câu dựng được bằng vật thật, nhân quả không thiếu mắt xích, mở và kết, tiếng Việt nói. Kết quả ở `<tập>/review/SCRIPT-REVIEW.md`, exit 0 là PASS. FAIL thì sửa `lines.json` (và `FACTS.md`, bảng ý → hình nếu lỗi nằm ở đó) theo các dòng `VIẾT LẠI:`, rồi chạy lại; tối đa 3 lượt, còn FAIL thì ghi lý do vào `LOOK.md`. Chỉ khi PASS mới làm giọng và dựng cảnh.
+5. **Chấm lời trước khi làm giọng**: `sh channels/tram-nghi-nhieu/review.sh <tập> --script`. Một phiên model mới chỉ đọc `lines.json`, `FACTS.md` và `STRATEGY.md`, chấm theo `SCRIPT-CRITIC.md`: dữ kiện và thuật ngữ đúng, mỗi câu dựng được bằng vật thật, nhân quả không thiếu mắt xích, mở và kết, tiếng Việt nói. Kết quả ở `<tập>/review/SCRIPT-REVIEW.md`, exit 0 là PASS. FAIL thì sửa `lines.json` (và `FACTS.md`, bảng ý → hình nếu lỗi nằm ở đó) theo các dòng `VIẾT LẠI:`, rồi chạy lại. Lần chấm sau nhận bản chấm trước: câu đã OK mà không đổi chữ thì giữ, câu bạn chép nguyên văn từ `VIẾT LẠI` thì không bị bắt lỗi diễn đạt mới, nên cứ chép đúng câu người chấm đưa trừ khi nó sai dữ kiện. Từ lần thứ tư chỉ lỗi CHẶN giữ lời lại; sau lần thứ sáu `review.sh` dừng: ghi các lỗi CHẶN còn lại vào `LOOK.md` và hỏi người dùng. Chỉ khi PASS mới làm giọng và dựng cảnh: không có PASS thì `build.sh` không dựng.
 6. Giọng: `voice/tts_vi.py` → `asr_vi.py` → `process.py` → `mk_timeline.py` (lệnh trong `build.sh` của tập).
 
 ## 2. Dựng hình: làm như phim mẫu đã làm
@@ -44,7 +44,7 @@ Thứ tự này là lý do phim mẫu đẹp. Đừng đảo.
    - mỗi bề mặt lớn một texture canvas có seed (`canvasTex`); đồ mềm nặn bằng `cushionGeo` hoặc `surface`, không để là hộp;
    - đồ đạc đủ dày để nơi đó có người sống: đồ nhỏ trên bàn, tranh, cây, thứ gì đó ngoài cửa sổ;
    - một vật sống: rèm lay, lá lay đổ bóng, LED thở, hơi nước.
-3. **Vật trước cảnh**: mọi vật có thật sẽ lên hình (của rig hay tự dựng) nằm trong `src/props.js` của tập: `export const PROPS = { 'tên vật như lời gọi, kèm trạng thái': () => THREE.Object3D }`, và `film.js` lấy vật từ đó. Trước khi dựng cảnh đầu tiên, chạy `LEMO_ANGLE=vulkan sh channels/tram-nghi-nhieu/review.sh <tập> --props`: mỗi vật đứng riêng, nhìn từ ba phía; một phiên không biết tên gọi tên nó, phiên thứ hai so với tên bạn định. Vật bị gọi sai hay "không rõ" là vật thay thế: sửa theo dòng `SỬA:` (thêm bộ phận đặc trưng, đúng tỉ lệ, đúng chất liệu), xem lại ảnh ở `review/props/`, chạy lại tới khi PASS. Vật thêm sau cũng phải qua bước này. Vật dựng tốt mà dùng lại được thì đưa vào `rig/props.js`.
+3. **Vật trước cảnh**: mọi vật có thật sẽ lên hình (của rig hay tự dựng) nằm trong `src/props.js` của tập: `export const PROPS = { 'tên vật như lời gọi, kèm trạng thái': () => THREE.Object3D }`, và `film.js` lấy vật từ đó. Trước khi dựng cảnh đầu tiên, chạy `LEMO_ANGLE=vulkan sh channels/tram-nghi-nhieu/review.sh <tập> --props`: mỗi vật đứng riêng, nhìn từ ba phía; một phiên không biết tên gọi tên nó, phiên thứ hai so với tên bạn định. Vật bị gọi sai hay "không rõ" là vật thay thế: sửa theo dòng `SỬA:` (thêm bộ phận đặc trưng, đúng tỉ lệ, đúng chất liệu), xem lại ảnh ở `review/props/`, chạy lại tới khi PASS. Vật thêm sau cũng phải qua bước này. PASS ghi con dấu `review/PROPS.pass`; tập không có `src/props.js` hay chưa có con dấu này thì `build.sh` không dựng. Vật dựng tốt mà dùng lại được thì đưa vào `rig/props.js`.
 4. **Vòng still**: `LEMO_ANGLE=vulkan node core/render/still.mjs <tập> <t…> --out <scratch>`, rồi **mở ảnh ra xem**. Mỗi vòng ghi vào `LOOK.md`: thấy gì, vì sao, sửa gì. Chẩn đoán bằng cờ, đừng đoán:
    - mảng sáng mất hoặc bóng lạ → `?lightcam=1` nhìn từ đèn, `?nocast=<tag>` tắt từng vật đổ bóng (phim mẫu tìm ra chăn DoubleSide tự đổ bóng lên chính nó theo cách này);
    - cháy trắng → giảm cường độ đèn điểm (decay 2), chỉ vật `glowMat` k > 1 mới được loé;
@@ -84,7 +84,7 @@ Vòng làm việc, không bỏ bước:
 2. FAIL: sửa đúng các câu FAIL theo dòng `SỬA:` của nó, rồi chạy lại. Không cãi người chấm, không sửa cờ hay dữ liệu kiểm để qua cổng. Sau 3 lượt một cảnh vẫn FAIL thì ghi vào `LOOK.md` câu nào, vì sao, rồi sang cảnh sau.
 3. Đủ cảnh: chạy `review.sh` cho cả phim. Chỉ khi PASS (OVERALL ≥ 9) mới dựng tiếng và render 24 fps. Render toàn phim là việc chậm nhất: làm một lần, sau khi hình đã đạt.
 4. Render xong: `review.sh --video` một lần, để bắt chuyển động không diễn ra, khung đen, lỗi chỉ có ở bản render.
-5. **Cổng máy**: lần PASS của `--script` và của `review.sh` cả phim (không `--lines`, không `--video`) ghi con dấu vào `review/SCRIPT.pass`, `review/PICTURE.pass`: mã băm của lời và của `src/*.js`, `index.html` lúc được chấm. `build.sh` (qua `mix.py`) dừng nếu thiếu con dấu hay code đã đổi sau lần PASS. Sửa gì sau khi PASS thì chấm lại cả phim rồi mới dựng. Không viết tay con dấu, không sửa REVIEW.md.
+5. **Cổng máy**: lần PASS của `--script`, `--props` và của `review.sh` cả phim (không `--lines`, không `--video`) ghi con dấu vào `review/SCRIPT.pass`, `review/PROPS.pass`, `review/PICTURE.pass`: mã băm của lời, của `src/props.js`, của `src/*.js` và `index.html` lúc được chấm, cùng mã băm của bản chấm đã PASS. `build.sh` (qua `mix.py`) dừng nếu thiếu con dấu, nếu thứ được chấm đã đổi sau lần PASS, hay nếu bản chấm bị sửa. Không có biến môi trường nào tắt cổng này, và `REVIEW=0` không mở nó. Sửa gì sau khi PASS thì chấm lại rồi mới dựng. Không viết tay con dấu, không sửa các file `*REVIEW*.md`. Hết lượt mà vẫn FAIL thì tập chưa xong: báo người dùng điểm và lỗi còn lại, đừng giao một phim chưa qua.
 6. Ghi điểm từng lượt vào `LOOK.md`. Bàn giao kèm `review/REVIEW.md` cuối cùng, nguyên văn.
 
 ## 4. Bàn giao

@@ -11,8 +11,11 @@
 #     --script     judge the words alone (voice/lines.json against research/FACTS.md) with SCRIPT-CRITIC.md, before any
 #                  voice or picture is made; writes <episode>/review/SCRIPT-REVIEW.md (and SCRIPT-REVIEW-<n>.md)
 # Writes <episode>/review/REVIEW.md (and REVIEW-<n>.md, the history), prints it, exits 0 on PASS and 1 on FAIL.
-# A PASS of --script, or of the whole film without --lines/--video, stamps what was judged (gate.py); mix.py builds only
-# an episode whose stamps still match.
+# A PASS of --script, of --props, or of the whole film without --lines/--video, stamps what was judged (gate.py); mix.py
+# builds only an episode whose three stamps still match.
+# --script converges: from the second run the reviewer gets its last review, keeps the lines it passed that did not
+# change, and checks its own rewrites instead of judging them anew; from the fourth run only a CHẶN holds the words back;
+# after the sixth it stops (the words need the user, not a seventh review).
 # A line with a machine flag (DARK SAME RUN NUM) fails even if the reviewer passed it.
 # The reviewer: $LEMO_CRITIC if set (a command; the prompt is appended as its last argument, it runs in the review
 # folder), else `omp -p` (with --model $LEMO_CRITIC_MODEL if set), else `claude -p`. Use your own model: a new session
@@ -63,17 +66,31 @@ rồi in lại nó."
   { cat PROPS-REVIEW.md; printf '\n## Người xem không biết tên đã gọi\n'; cat BLIND.md; } > "$EP/review/PROPS-REVIEW-$n.md"
   cp "$EP/review/PROPS-REVIEW-$n.md" "$EP/review/PROPS-REVIEW.md"; mkdir -p "$EP/review/props"; cp p/p_*.jpg "$EP/review/props/"
   cat "$EP/review/PROPS-REVIEW.md"
-  if grep -q '^VERDICT: *PASS' PROPS-REVIEW.md; then echo "review --props: PASS"; exit 0; fi
+  if grep -q '^VERDICT: *PASS' PROPS-REVIEW.md; then python3 "$HERE/gate.py" stamp "$EP" props "$EP/review/PROPS-REVIEW-$n.md"; echo "review --props: PASS"; exit 0; fi
   echo "review --props: FAIL (sửa src/props.js theo $EP/review/PROPS-REVIEW.md, ảnh ở $EP/review/props/, rồi chạy lại)"; exit 1
 fi
 
 if [ "$SCRIPT" = 1 ]; then
   [ -f "$EP/voice/lines.json" ] || { echo "review --script: $EP/voice/lines.json not written yet" >&2; exit 2; }
+  mkdir -p "$EP/review"; n=$(ls "$EP/review" | grep -c '^SCRIPT-REVIEW-[0-9]*\.md$' || true); n=$((n + 1))
+  if [ "$n" -gt 6 ]; then
+    echo "review --script: đã chấm 6 lần mà lời vẫn chưa PASS. Dừng: ghi vào LOOK.md những lỗi CHẶN còn lại của $EP/review/SCRIPT-REVIEW.md và hỏi người dùng (câu hỏi có đổi được không, dữ kiện nào cần nguồn). Đừng chấm lần thứ bảy." >&2; exit 1
+  fi
   cp "$EP/voice/lines.json" "$HERE/STRATEGY.md" "$W/"; [ -f "$EP/research/FACTS.md" ] && cp "$EP/research/FACTS.md" "$W/"
-  python3 - "$W" "$EP" <<'PY'
+  p=$((n - 1)); [ -f "$EP/review/SCRIPT-REVIEW-$p.md" ] && cp "$EP/review/SCRIPT-REVIEW-$p.md" "$W/PREVIOUS.md"
+  [ -f "$EP/review/script-lines-$p.json" ] && cp "$EP/review/script-lines-$p.json" "$W/PREVIOUS-lines.json"
+  cp "$EP/voice/lines.json" "$EP/review/script-lines-$n.json"
+  python3 - "$W" "$EP" "$n" <<'PY'
 import json, sys, os, re
-W, EP = sys.argv[1], sys.argv[2]
+W, EP, n = sys.argv[1], sys.argv[2], int(sys.argv[3])
 L = json.load(open(W + '/lines.json'))
+norm = lambda t: re.sub(r'[\s"“”]+', ' ', t).strip().lower()
+prev, rew = {}, set()   # text of a line the last review passed -> True; the rewrites it asked for
+if os.path.exists(W + '/PREVIOUS.md') and os.path.exists(W + '/PREVIOUS-lines.json'):
+    R = open(W + '/PREVIOUS.md').read(); PL = json.load(open(W + '/PREVIOUS-lines.json'))
+    ok = {int(m.group(1)): m.group(2) == 'OK' for m in re.finditer(r'^#(\d+)\s+(OK|FAIL)', R, re.M)}
+    prev = {norm(x['text']): ok.get(i, False) for i, x in enumerate(PL, 1)}
+    rew = {norm(q) for q in re.findall(r'VIẾT LẠI: *"([^"]+)"', R)} | {norm(q) for q in re.findall(r'THÊM SAU #\d+: *"([^"]+)"', R)}
 title = json.load(open(EP + '/film.json')).get('title', '') if os.path.exists(EP + '/film.json') else ''
 facts = os.path.exists(W + '/FACTS.md')
 T = [f"# Chấm kịch bản: {title or '(chưa có tên)'}", '', f"{len(L)} câu, {sum(len(x['text'].split()) for x in L)} chữ.", '']
@@ -82,8 +99,21 @@ fl = [] if facts else ['NOFACTS']
 for i, x in enumerate(L, 1):
     f = (['DIGIT'] if re.search(r'\d', x['text']) else []) + (['LONG'] if len(x['text'].split()) > 32 else [])
     if f: fl.append(f"#{i}:{'+'.join(f)}")
-    T.append(f"#{i}  cờ: {' '.join(f) or '—'}  lời: {x['text']}")
+    k = norm(x['text'])
+    st = '' if not prev else ('GIỮ' if prev.get(k) else 'THEO-BẠN' if k in rew else 'CHƯA-SỬA' if k in prev else 'MỚI')
+    T.append(f"#{i}  cờ: {' '.join(f) or '—'}{'  lần trước: ' + st if st else ''}  lời: {x['text']}")
 open(W + '/TASK.md', 'w').write('\n'.join(T) + '\n')
+if prev:
+    T += ['', f"## Đây là lần chấm thứ {n}", '',
+          "PREVIOUS.md là bản chấm lần trước của chính bạn. Người viết đã sửa theo nó. Mục đích của lần này là đưa lời tới PASS, không phải chấm một bài mới:",
+          "- Trước tiên, với từng lỗi trong PREVIOUS.md: đã sửa chưa, sửa đúng chưa.",
+          "- `GIỮ`: câu lần trước bạn cho OK và chữ không đổi. Ghi OK, đừng chấm lại; chỉ được đánh lỗi nếu nó sai dữ kiện (CHẶN nhóm A) hay câu bên cạnh mới đổi làm nó sai.",
+          "- `THEO-BẠN`: câu là nguyên văn câu VIẾT LẠI / THÊM SAU bạn đưa lần trước. Đừng đánh lỗi nhóm E, F mới cho nó: bạn đã chọn câu đó. Chỉ đánh lỗi nếu nó sai dữ kiện.",
+          "- `CHƯA-SỬA`: lần trước FAIL mà chữ không đổi. `MỚI`: câu mới hay sửa theo cách khác. Hai loại này chấm đầy đủ.",
+          "- Một lỗi mới chỉ là CHẶN khi đúng định nghĩa CHẶN. Đừng đổi ý về điều lần trước bạn đã chấp nhận, đừng viết lại câu theo một cách khác chỉ vì cách đó hay hơn."]
+    if n >= 4:
+        T += [f"- Từ lần thứ tư, chỉ lỗi CHẶN giữ lời lại: không còn CHẶN thì lời qua, các lỗi NẶNG, NHẸ còn lại người viết tự sửa theo ghi chú của bạn. Vì thế hãy dùng CHẶN đúng và đủ: dữ kiện sai hay không nguồn, nhân quả sai chiều, câu chỉ dựng được bằng ẩn dụ, thuật ngữ bịa, kết không trả lời câu hỏi."]
+    open(W + '/TASK.md', 'w').write('\n'.join(T) + '\n')
 open(W + '/flags.txt', 'w').write(' '.join(fl))
 PY
   echo "review --script: reviewer at work in $W…" >&2
@@ -91,14 +121,17 @@ PY
 
 $(cat "$W/TASK.md")
 
-Thư mục làm việc của bạn: $W. Đọc lines.json, FACTS.md, STRATEGY.md, rồi viết SCRIPT-REVIEW.md ở đó theo mẫu, và in lại nó."
+Thư mục làm việc của bạn: $W. Đọc lines.json, FACTS.md, STRATEGY.md (và PREVIOUS.md nếu có), rồi viết SCRIPT-REVIEW.md ở đó theo mẫu, và in lại nó."
   [ -s SCRIPT-REVIEW.md ] || cp out.txt SCRIPT-REVIEW.md
   FLAGGED=$(cat flags.txt)
-  mkdir -p "$EP/review"; n=$(ls "$EP/review" | grep -c '^SCRIPT-REVIEW-' || true); n=$((n + 1))
+  # from the fourth run only a CHẶN holds the words back
+  if [ "$n" -ge 4 ] && [ -z "$FLAGGED" ] && ! grep -q '^VERDICT: *PASS' SCRIPT-REVIEW.md && ! grep -q '\[CHẶN\]' SCRIPT-REVIEW.md && grep -q '^#[0-9]' SCRIPT-REVIEW.md; then
+    sed -i "s/^VERDICT:.*/VERDICT: PASS (lần chấm thứ $n, không còn lỗi CHẶN; sửa nốt các lỗi NẶNG bên dưới theo VIẾT LẠI rồi chạy --script thêm một lần để đóng dấu lời mới)/" SCRIPT-REVIEW.md
+  fi
   { cat SCRIPT-REVIEW.md; [ -n "$FLAGGED" ] && printf '\n## Cờ máy chưa sửa (tự động FAIL)\n%s\n' "$FLAGGED"; } > "$EP/review/SCRIPT-REVIEW-$n.md"
   cp "$EP/review/SCRIPT-REVIEW-$n.md" "$EP/review/SCRIPT-REVIEW.md"
   cat "$EP/review/SCRIPT-REVIEW.md"
-  if grep -q '^VERDICT: *PASS' "$EP/review/SCRIPT-REVIEW.md" && [ -z "$FLAGGED" ]; then python3 "$HERE/gate.py" stamp "$EP" script; echo "review --script: PASS"; exit 0; fi
+  if grep -q '^VERDICT: *PASS' "$EP/review/SCRIPT-REVIEW.md" && [ -z "$FLAGGED" ]; then python3 "$HERE/gate.py" stamp "$EP" script "$EP/review/SCRIPT-REVIEW-$n.md"; echo "review --script: PASS"; exit 0; fi
   echo "review --script: FAIL (sửa lines.json theo $EP/review/SCRIPT-REVIEW.md, rồi chạy lại)"; exit 1
 fi
 
@@ -155,7 +188,7 @@ cp "$EP/review/REVIEW-$n.md" "$EP/review/REVIEW.md"
 cat "$EP/review/REVIEW.md"
 if grep -q '^VERDICT: *PASS' "$EP/review/REVIEW.md" && [ -z "$FLAGGED" ]; then
   # the stamp the build asks for: only a review of the whole film, before the render, opens the gate
-  [ -z "$LINES" ] && [ "$VIDEO" = 0 ] && python3 "$HERE/gate.py" stamp "$EP" picture
+  [ -z "$LINES" ] && [ "$VIDEO" = 0 ] && python3 "$HERE/gate.py" stamp "$EP" picture "$EP/review/REVIEW-$n.md"
   echo "review: PASS"; exit 0
 fi
 echo "review: FAIL (sửa theo $EP/review/REVIEW.md, rồi chạy lại)"; exit 1
