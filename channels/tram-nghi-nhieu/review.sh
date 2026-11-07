@@ -1,9 +1,10 @@
 #!/bin/sh
 # Independent review: a fresh model session that sees only the pictures and the words of an episode (never its code,
 # never the maker's notes) judges it with CRITIC.md and writes what to fix, line by line.
-#   sh channels/tram-nghi-nhieu/review.sh <episode> [--lines 5-8] [--video]
+#   sh channels/tram-nghi-nhieu/review.sh <episode> [--lines 5-8] [--chapter 1] [--video]
 #   sh channels/tram-nghi-nhieu/review.sh <episode> --script
-#     --lines a-b  judge only these lines (a scene just built); default: every line
+#     --lines a-b   judge only these lines (a scene just built); default: every line
+#     --chapter n   judge chapter n (resolves line range from src/chapters.js)
 #     --video      also judge the finished film: four frames from the mp4 across each line
 #     --props      judge every object of src/props.js alone (propcheck.mjs, three sides): a first session that is
 #                  not told the names says what each object is, a second compares with the intended name; writes
@@ -24,9 +25,40 @@ set -e
 HERE=$(cd "$(dirname "$0")" && pwd); LIB=$(cd "$HERE/../.." && pwd)
 EP=$1; [ -n "$EP" ] && [ -d "$EP" ] || { echo "usage: review.sh <episode> [--lines a-b] [--video]" >&2; exit 2; }
 EP=$(cd "$EP" && pwd); shift
-LINES=""; VIDEO=0; SCRIPT=0; PROPS=0
-while [ $# -gt 0 ]; do case "$1" in --lines) LINES=$2; shift 2 ;; --video) VIDEO=1; shift ;; --script) SCRIPT=1; shift ;; --props) PROPS=1; shift ;; *) echo "unknown: $1" >&2; exit 2 ;; esac; done
-
+LINES=""; VIDEO=0; SCRIPT=0; PROPS=0; CHAPTER=""
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --lines) LINES=$2; shift 2 ;;
+    --chapter|--scene) CHAPTER=$2; shift 2 ;;
+    --video) VIDEO=1; shift ;;
+    --script) SCRIPT=1; shift ;;
+    --props) PROPS=1; shift ;;
+    *) echo "unknown: $1" >&2; exit 2 ;;
+  esac
+done
+if [ -n "$CHAPTER" ] && [ -z "$LINES" ]; then
+  LINES=$(python3 - "$EP" "$CHAPTER" <<'PY'
+import sys, os, re
+ep, ch = sys.argv[1], sys.argv[2]
+p = os.path.join(ep, 'src/chapters.js')
+if not os.path.isfile(p):
+    sys.exit(f"review.sh: {p} not found; use --lines a-b instead")
+txt = open(p, encoding='utf-8').read()
+m = re.search(rf"id:\s*['\"]ch{ch}['\"].*?lines:\s*\[\s*['\"]c?(\d+)['\"]\s*,\s*['\"]c?(\d+)['\"]", txt, re.S)
+if not m:
+    items = re.findall(r"lines:\s*\[\s*['\"]c?(\d+)['\"]\s*,\s*['\"]c?(\d+)['\"]", txt)
+    try:
+        idx = int(ch) - 1
+        if 0 <= idx < len(items):
+            print(f"{items[idx][0]}-{items[idx][1]}"); sys.exit(0)
+    except ValueError:
+        pass
+    sys.exit(f"review.sh: chapter {ch} not found in {p}")
+print(f"{m.group(1)}-{m.group(2)}")
+PY
+) || exit 2
+  echo "review: chapter $CHAPTER -> lines $LINES" >&2
+fi
 W=$(mktemp -d "${TMPDIR:-/tmp}/lemo-review-XXXXXX")   # outside the repository: the reviewer cannot wander into the code
 trap 'cd /; rm -rf "$W"' EXIT
 
@@ -80,6 +112,7 @@ if [ "$SCRIPT" = 1 ]; then
   p=$((n - 1)); [ -f "$EP/review/SCRIPT-REVIEW-$p.md" ] && cp "$EP/review/SCRIPT-REVIEW-$p.md" "$W/PREVIOUS.md"
   [ -f "$EP/review/script-lines-$p.json" ] && cp "$EP/review/script-lines-$p.json" "$W/PREVIOUS-lines.json"
   cp "$EP/voice/lines.json" "$EP/review/script-lines-$n.json"
+  python3 "$LIB/tools/check_script.py" "$EP" > "$W/SCRIPT-AUDIT.txt" 2>&1 || true
   python3 - "$W" "$EP" "$n" <<'PY'
 import json, sys, os, re
 W, EP, n = sys.argv[1], sys.argv[2], int(sys.argv[3])
@@ -94,6 +127,10 @@ if os.path.exists(W + '/PREVIOUS.md') and os.path.exists(W + '/PREVIOUS-lines.js
 title = json.load(open(EP + '/film.json')).get('title', '') if os.path.exists(EP + '/film.json') else ''
 facts = os.path.exists(W + '/FACTS.md')
 T = [f"# Chấm kịch bản: {title or '(chưa có tên)'}", '', f"{len(L)} câu, {sum(len(x['text'].split()) for x in L)} chữ.", '']
+if os.path.exists(W + '/SCRIPT-AUDIT.txt'):
+    audit = open(W + '/SCRIPT-AUDIT.txt').read()
+    if '[WARNINGS]' in audit or '[ERRORS]' in audit:
+        T += ['## Cảnh báo trùng lặp & nhịp điệu từ máy (tools/check_script.py):', audit[:1000], '']
 if not facts: T += ['Cờ cả tập: NOFACTS', '']
 fl = [] if facts else ['NOFACTS']
 for i, x in enumerate(L, 1):
@@ -138,7 +175,7 @@ fi
 mkdir -p "$W/beats" "$W/ref"
 echo "review: beat frames…" >&2
 REL=$(python3 -c "import os,sys; print(os.path.relpath(sys.argv[1], sys.argv[2]))" "$EP" "$LIB")   # the page server serves the library root
-(cd "$LIB" && node channels/tram-nghi-nhieu/beatsheet.mjs "$REL" --out "$W/beats" >/dev/null)
+(cd "$LIB" && node channels/tram-nghi-nhieu/beatsheet.mjs "$REL" --out "$W/beats" ${LINES:+--lines "$LINES"} >/dev/null)
 cp "$EP/voice/lines.json" "$W/"; [ -f "$EP/research/FACTS.md" ] && cp "$EP/research/FACTS.md" "$W/"
 cp "$W/beats/beats.json" "$W/"
 for f in set_kitchen inside_banana flow cutaway_3; do [ -f "$HERE/demo/stills/$f.jpg" ] && cp "$HERE/demo/stills/$f.jpg" "$W/ref/"; done

@@ -17,7 +17,13 @@ import { openDemo, closeServer, requireDemo } from '../../core/render/page.mjs';
 
 const args = process.argv.slice(2);
 const take = k => { const i = args.indexOf(k); return i >= 0 ? args.splice(i, 2)[1] : null; };
-const at = +(take('--at') ?? .6), q = take('--q') || '', dir = args[0];
+const at = +(take('--at') ?? .6), q = take('--q') || '', linesArg = take('--lines'), dir = args[0];
+let minLine = 1, maxLine = Infinity;
+if (linesArg) {
+  const [a, b] = linesArg.split('-').map(Number);
+  if (!isNaN(a)) minLine = a;
+  if (!isNaN(b)) maxLine = b;
+}
 requireDemo(dir);
 const out = take('--out') || path.join(dir, 'out', 'beats');
 fs.mkdirSync(out, { recursive: true });
@@ -29,7 +35,9 @@ const ev = await page.evaluate(() => (window.EV || []).filter(e => e.type === 'v
 const start = Object.fromEntries(ev.map(e => [e.id, e.t]));
 const beats = [];
 for (const [i, l] of lines.entries()) {
-  if (!(l.id in start)) { beats.push({ n: i + 1, id: l.id, text: l.text, missing: true }); continue; }
+  const lineNum = i + 1;
+  if (lineNum < minLine || lineNum > maxLine) { beats.push({ n: lineNum, id: l.id, text: l.text, skipped: true }); continue; }
+  if (!(l.id in start)) { beats.push({ n: lineNum, id: l.id, text: l.text, missing: true }); continue; }
   const t0 = start[l.id], d = dur[l.id] ?? 2, t = +(t0 + at * d).toFixed(2);
   // what text is on screen while the line is said (the subtitle band excluded), for the NUM check
   const shown = await page.evaluate(([a, b]) => {
@@ -65,7 +73,7 @@ B = json.load(open(out + '/beats.json')); F = ImageFont.truetype(font, 22); Fs =
 prev = None; run, pool = 0, set()
 for b in B:
     b['flags'] = []
-    if b.get('missing'): prev = None; run, pool = 0, set(); continue
+    if b.get('missing') or b.get('skipped'): prev = None; run, pool = 0, set(); continue
     im = Image.open(b['f']).convert('RGB')
     a = np.asarray(im.convert('L').resize((192, 108)), dtype=float) / 255
     c = a[16:92, 29:163]
@@ -91,8 +99,9 @@ json.dump(B, open(out + '/beats.json', 'w'), indent=1)
 for b in B:
     if b['flags']: print(f"#{b['n']} {b['id']}: {' '.join(b['flags'])}  — {b['text'][:70]}")
 W, H, TX, C, R = 640, 360, 96, 3, 4
-for s in range(0, len(B), C * R):
-    page = B[s:s + C * R]; S = Image.new('RGB', (C * W, ((len(page) + C - 1) // C) * (H + TX)), (16, 16, 22)); d = ImageDraw.Draw(S)
+B_draw = [b for b in B if not b.get('skipped')]
+for s in range(0, len(B_draw), C * R):
+    page = B_draw[s:s + C * R]; S = Image.new('RGB', (C * W, ((len(page) + C - 1) // C) * (H + TX)), (16, 16, 22)); d = ImageDraw.Draw(S)
     for k, b in enumerate(page):
         x, y = (k % C) * W, (k // C) * (H + TX)
         if b.get('missing'): d.text((x + 10, y + 10), f"#{b['n']} {b['id']}: NO VOICE EVENT", fill=(255, 90, 90), font=F)
