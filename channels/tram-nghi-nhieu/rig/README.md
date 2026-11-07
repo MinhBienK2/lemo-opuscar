@@ -114,6 +114,22 @@ Máy đứng **ngoài** vật và nhìn vào chỗ bị cắt, vật lớn như 
 - Tất cả có `update(t)` và tính từ `t`, nên tua đến đâu cũng đúng. Nối các tham số với nguyên nhân: nắp bật thì `rate` tăng, `amount` giảm, `height` dâng.
 - Ánh sáng: mặt cắt phải quay về phía đèn. Chiếu tiêu điểm bằng `pool` từ phía máy, chếch lên cao 30–60°. `keyLight` qua cửa sổ chỉ để tạo dáng cho căn phòng. Kiểm bằng `?lightcam=1`: từ đèn phải nhìn thấy mặt cắt.
 
+## brain.js — bên trong đầu
+
+Một bộ cho các câu hỏi về não và giấc ngủ, dựng bằng cùng bộ kit với phần còn lại của kênh.
+
+| | |
+|---|---|
+| `brainSpace(scene, {seed, w, d})` | Căn phòng tối có một `pool` ấm trên mô và viền tím: bên trong đầu, chiếu như một mặt bàn. |
+| `brainChunk({w, d, h, seed, cut, folds, amp})` | Một khối mô có nếp cuộn ở trên, mặt cắt quay về máy; `update()` cho nếp "thở" (sóng chậm của giấc ngủ sâu). |
+| `neuron({size, soma, dend, axon, dendrites, myelin})` | Tế bào thần kinh: thân có nhân, chùm nhánh, một sợi trục có myelin và các cúc tận cùng. |
+| `receptors({n, spacing, size, color})` | Hàng thụ thể trên màng phía bên kia khe synapse, mỗi cái có khấc để một phân tử ngồi vào. |
+| `molecules({n, color, size, k, seed})` | Phân tử (adenosine…) trong một thể tích, đổ đầy hay dọn sạch quanh một điểm. |
+| `capillary({len, R, seed, cells})` | Mạch máu bổ dọc, hồng cầu trôi bên trong. |
+| `brainSkinTex(seed)`, `brainCutTex(seed)` | Texture mặt ngoài và mặt cắt của mô. |
+
+Não ở trong đầu: cảnh mở vẫn là người và nơi chốn có thật, rồi máy đi vào (`STYLE.md`, "Máy quay").
+
 ## voice.js
 
 `loadVoice(build)` với `build` từ `src/timeline.js` của tập → `{ L, w, end, ev, sub }`: `L[id].t0/t1` là lúc câu bắt đầu/kết thúc, `w(id, 'từ')` là lúc một từ được nói (để đặt nhịp hình đúng chữ), `end` là độ dài phim, `ev` là các sự kiện giọng cho `window.EV`, `sub(t)` là phụ đề lúc `t`.

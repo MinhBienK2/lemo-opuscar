@@ -8,6 +8,17 @@ import fs from 'fs'; import path from 'path'; import { spawn, execFileSync } fro
 import { openDemo, closeServer, requireDemo, takeSize } from './page.mjs';
 const args = process.argv.slice(2), { w: W, h: H } = takeSize(args), opt = (k, d) => { const i = args.indexOf(k); return i >= 0 ? args[i + 1] : d; };
 const dir = args[0]; requireDemo(dir);
+// an episode of a channel that keeps a review gate (channels/<channel>/gate.py, docs/layout.md) renders only what the
+// channel's independent reviewer passed: the full render is the slowest step, and it is never spent on a film that failed
+for (let up = path.dirname(path.resolve(dir)); up !== path.dirname(up); up = path.dirname(up)) {
+  if (!fs.existsSync(path.join(up, 'CHANNEL.md'))) continue;
+  const gate = path.join(up, 'gate.py');
+  if (fs.existsSync(gate)) {
+    try { execFileSync('python3', [gate, 'check', path.resolve(dir), '--for', 'render'], { stdio: 'inherit' }); }
+    catch { console.error(`video: ${path.relative(process.cwd(), gate)} refuses to render this episode (the reason is above)`); process.exit(1); }
+  }
+  break;
+}
 const FPS = +opt('--fps', 24), WK = +opt('--workers', 3), Q = opt('--q', '');
 if (!(FPS > 0) || !Number.isInteger(WK) || WK < 1) { console.error('bad --fps / --workers: fps must be > 0, workers an integer ≥ 1'); process.exit(2); }
 const out = path.resolve(opt('--out', path.join(dir, 'out', 'video.mp4')));

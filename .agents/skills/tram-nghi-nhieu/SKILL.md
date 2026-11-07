@@ -1,93 +1,148 @@
 ---
 name: tram-nghi-nhieu
 description: Đạo diễn và dựng một tập của kênh Trạm Nghĩ Nhiều — câu hỏi "tại sao" đời thường, trả lời bằng diorama 3D toon (three.js) có ánh sáng thật, viền mực vẽ tay, máy quay đi vào bên trong vật, mọi vật dựng đúng là nó, chỉ thứ vô hình mới thành hình minh hoạ; một giọng kể tiếng Việt. Dùng khi làm bất kỳ tập nào của kênh.
-version: 13.7.0
+version: 14.0.0
 ---
 
 # Một tập Trạm Nghĩ Nhiều
 
-Đọc trước: `channels/tram-nghi-nhieu/STRATEGY.md` (nội dung), `STYLE.md` (hình), `rig/README.md` (API), và mở `demo/stills/*.jpg` để thấy chuẩn hình. Đọc `demo/` khi cần học một kỹ thuật cụ thể.
+Quy trình này thay cho bước 1–6 của `AGENTS.md` / `DIRECTOR.md` khi làm một tập của kênh. Đọc trước:
 
-Mục tiêu: người xem tắt tiếng vẫn đoán đúng chuyện gì đang xảy ra, và mỗi khung đủ đẹp để chụp làm thumbnail.
+- `channels/tram-nghi-nhieu/STRATEGY.md`: đề tài, độ dài, giọng kể, luật nội dung.
+- `STYLE.md`: luật hình. Luật quan trọng nhất là **thật, nhìn là biết**.
+- `rig/README.md`: API của rig.
+- `demo/stills/*.jpg`: mở ra xem để biết mức tay nghề (ánh sáng, chất liệu, chiều sâu). Đây không phải nội dung để chép.
+- `CRITIC.md`: người chấm sẽ soi đúng những điều trong file này. Tự soi trước theo các nhóm A–G của nó.
 
-## 1. Câu chuyện
+Mục tiêu: người xem tắt tiếng vẫn đoán đúng chuyện gì đang xảy ra, và mỗi khung đủ đẹp để làm thumbnail.
 
-1. Scaffold: `sh core/render/new_episode.sh tram-nghi-nhieu series/<cột>/<tập> "Câu hỏi?"`.
-2. `research/FACTS.md`: chuỗi nguyên nhân, mỗi con số kèm nguồn.
-3. `TREATMENT.md`, một trang:
-   - câu hỏi, rồi **tách nó ra**: vật nào thay đổi (chủ thể), thay đổi thế nào, so với cái gì, vì cái gì. Ví dụ "Vì sao X để cạnh Y lại Z?" thì chủ thể là X, nguyên nhân nằm ở Y. Câu trả lời một câu phải lấy đúng chủ thể đó làm chủ ngữ. Đọc lại FACTS xem nguyên nhân có đúng chiều không (cái gì tác động lên cái gì);
-   - câu mở đầu và khung đầu tiên cho thấy **chính điều câu hỏi nói**, ở nơi người xem gặp nó (nải chuối trên bàn bếp, chứ không phải một nhà máy). Chuyện lạ hay con số lớn để sau, khi người xem đã hiểu cơ chế;
-   - **thật, nhìn là biết**: thứ có thật (vật, máy, bộ phận, nơi chốn, bên trong một vật) dựng đúng là nó, đủ hình dáng, bộ phận đặc trưng, tỉ lệ và chất liệu để người xem nhận ra trong một giây, kể cả vật họ chưa thấy bao giờ (trực thăng ra trực thăng có cánh quạt, đuôi, càng; con chip ra đế, chân, lõi, các lớp mạch). Không bao giờ thay một vật có thật bằng hộp, khối, biểu tượng. Liệt kê ở đây mọi vật sẽ lên hình, mỗi vật kèm những bộ phận làm nó nhận ra được;
-   - **hình cho thứ vô hình**, và chỉ cho thứ vô hình (khí, nhiệt, tín hiệu, dòng điện, lực): vật gì chạy, bị chặn ở đâu, đổi trạng thái ra sao (electron chen qua chỗ hẹp, bắn tia lửa). Hình đó mọc ra từ vật thật và chạm vào vật thật;
-   - **các nơi chốn** (2–4 với tập dài, 1–2 với Shorts) và đường máy đi giữa chúng (đi theo dây, chui vào vật, lùi ra);
-   - **3 khung hero**: khung lập cảnh, khung cơ chế, khung "à ra thế". Tả mỗi khung: điểm nhìn, nguồn sáng, ba lớp sâu, màu nhấn;
-   - **bảng ý → hình**: mỗi ý của câu trả lời một dòng, gồm ý đó, trên màn hình thấy gì, và vật nào làm gì để người xem thấy ý đó. Che cột ý đi, chỉ đọc cột hình vẫn phải ra câu chuyện. Ý nào không có hình thì bỏ ý, hoặc nghĩ ra hình cho nó. Khi lập bảng:
-     - ý có **động từ biến đổi** (chín, phai, thở ra, lan, giục, nóng lên) phải có hình của chính quá trình đó trong khung: trước → sau ngay trước mắt, hoặc dòng đi từ đúng vật nguồn sang đúng vật nhận. Một khung chỉ cho thấy kết quả là chưa đủ. Tác nhân vô hình (khí, nhiệt, tín hiệu) dựng bằng `flow()` của `rig/fx.js`, không bằng chấm sáng (`glowDots` đọc như ánh phản chiếu). Nó phải là một **vật liền, đủ to để nhìn thấy ngay** (dải khói, dòng hạt dày lấp đầy khe giữa hai vật), không phải vài chấm. Nó phải **chạm tới** vật nhận, và chỗ chạm gây ra thay đổi thấy được ngay trong cùng cảnh (cửa mở, vỏ đổi màu);
-     - câu có **con số** (bốn ngày, một phần mười triệu) thì con số đó có hình trong khung lúc câu được nói: mặt đồng hồ, lịch lật, thước, một chấm giữa một khoảng không lớn. Số chỉ có trong tiếng là thiếu hình;
-     - câu nói về **hai bên so sánh** ("bên kia… đứng một mình") thì khung rộng có cả hai bên, tách bạch, mỗi bên một chỗ sáng;
-     - câu nhắc **nơi chốn** nào (kho, nhà máy, trong quả) thì khung của câu đó ở đúng nơi đó. Không dùng lại cảnh bếp cho câu nói về cái kho;
-     - câu hỏi có **so sánh** (nhanh hơn, khác, hơn) thì vật đối chứng phải ở trong khung, hoặc quay lại nó ít nhất mỗi 3 câu, để người xem tự thấy chỗ khác nhau;
-     - mỗi dòng một **cách dựng** khác dòng trước (góc máy, cỡ cảnh hoặc vật chính). Không quá 2 câu liền nhau cùng một cách dựng;
-     - có quay lại thời điểm trước (tua ngược, "lần nữa") thì phải có dấu hiệu nhìn thấy được: đồng hồ quay ngược, ánh sáng đổi, lật trang;
-   - shot list gom từ bảng đó: thời điểm · cảnh · máy làm gì · vì sao.
-4. Lời: `voice/lines.json`, viết **từ** bảng ý → hình. Mỗi câu thuộc một dòng của bảng, số viết thành chữ. Muốn thêm hay bớt câu thì sửa bảng và hình trước.
-5. **Chấm lời trước khi làm giọng**: `sh channels/tram-nghi-nhieu/review.sh <tập> --script`. Một phiên model mới chỉ đọc `lines.json`, `FACTS.md` và `STRATEGY.md`, chấm theo `SCRIPT-CRITIC.md`: dữ kiện và thuật ngữ đúng, mỗi câu dựng được bằng vật thật, nhân quả không thiếu mắt xích, mở và kết, tiếng Việt nói. Kết quả ở `<tập>/review/SCRIPT-REVIEW.md`, exit 0 là PASS. FAIL thì sửa `lines.json` (và `FACTS.md`, bảng ý → hình nếu lỗi nằm ở đó) theo các dòng `VIẾT LẠI:`, rồi chạy lại. Lần chấm sau nhận bản chấm trước: câu đã OK mà không đổi chữ thì giữ, câu bạn chép nguyên văn từ `VIẾT LẠI` thì không bị bắt lỗi diễn đạt mới, nên cứ chép đúng câu người chấm đưa trừ khi nó sai dữ kiện. Từ lần thứ tư chỉ lỗi CHẶN giữ lời lại; sau lần thứ sáu `review.sh` dừng: ghi các lỗi CHẶN còn lại vào `LOOK.md` và hỏi người dùng. Chỉ khi PASS mới làm giọng và dựng cảnh: không có PASS thì `build.sh` không dựng.
-6. Giọng: `voice/tts_vi.py` → `asr_vi.py` → `process.py` → `mk_timeline.py` (lệnh trong `build.sh` của tập).
+Mọi lệnh dưới đây chạy từ gốc thư viện. Trên máy này, mọi lệnh dựng hình (`still.mjs`, `beatsheet.mjs`, `review.sh`, `build.sh`) cần `LEMO_ANGLE=vulkan` ở đầu lệnh.
 
-## 2. Dựng hình: làm như phim mẫu đã làm
+## 0. Brief: hỏi một lần
+
+Chỉ hỏi khi yêu cầu chưa có chủ đề, hoặc chủ đề quá rộng để ra một câu hỏi "vì sao" cụ thể. Khi đó hỏi một lần, trong một tin nhắn: câu hỏi của tập, và có dữ kiện, tên, hình nào bắt buộc không. Rồi làm tiếp, không hỏi thêm.
+
+**Đừng hỏi người dùng muốn dài bao nhiêu.** Họ không biết câu trả lời cần bao nhiêu kiến thức; bạn biết, sau khi nghiên cứu. Độ dài đi ra từ dàn ý (`STRATEGY.md`, "Độ dài"). Chỉ khi chính người dùng đã nêu một độ dài hay một nền tảng (Shorts…) thì theo đó, thu hẹp câu hỏi cho vừa, và nói với họ nếu câu hỏi cần dài hơn để trả lời đúng.
+
+## 1. Dàn ý, rồi chấm dàn ý
+
+1. `sh core/render/new_episode.sh tram-nghi-nhieu series/<cột>/<tập> "Câu hỏi?"`. Lệnh này tạo `TREATMENT.md` theo mẫu của kênh (`templates/TREATMENT.tmpl.md`).
+2. `research/FACTS.md`: nghiên cứu cho tới khi viết được trọn chuỗi nguyên nhân, từ hiện tượng người xem gặp tới cơ chế cuối cùng; mỗi con số kèm nguồn. Ghi tốc độ đọc của giọng kể (chữ mỗi phút) để ước độ dài.
+3. `TREATMENT.md`: điền mọi mục của mẫu. Phần chính là **bảng ý → hình**, và luật lập bảng nằm ngay trong mẫu. Lập bảng trước, rồi mới ghi độ dài: số dòng × thời gian mỗi ý cần. Hai luật hay bị quên:
+   - mỗi ý chỉ có một dòng;
+   - khái niệm phải có hình trước hoặc ngay khi được dùng.
+4. `sh channels/tram-nghi-nhieu/review.sh <tập> --outline`. Người chấm dùng `OUTLINE-CRITIC.md` để bắt ý lặp, khái niệm dùng trước khi có hình, ý không dựng được, thiếu mắt xích, và độ dài bị độn hay bị ép. FAIL thì sửa dàn ý theo các dòng `SỬA:` rồi chạy lại.
+
+Chưa có dàn ý PASS thì không chấm được lời.
+
+## 2. Lời, rồi chấm lời, rồi giọng
+
+1. `voice/lines.json`: viết **từ** bảng ý → hình. Mỗi câu thuộc một dòng của bảng, số viết thành chữ. Muốn thêm hay bớt câu thì sửa bảng trước.
+2. `sh channels/tram-nghi-nhieu/review.sh <tập> --script` (tập có chương thì thêm `--chapter n`, xem §5). Người chấm dùng `SCRIPT-CRITIC.md`.
+   - FAIL thì sửa theo các dòng `VIẾT LẠI:`. Chép đúng câu người chấm đưa, trừ khi câu đó sai dữ kiện: lần chấm sau sẽ giữ những câu đã OK và câu chép nguyên văn.
+   - Lỗi lặp ý thì sửa bằng cách bỏ câu đó, không phải viết lại thành một câu lặp khác chữ. Nếu cùng một lỗi cấu trúc còn sau hai lượt, quay lại sửa dàn ý.
+3. Giọng: `$LIB/.venv/bin/python channels/tram-nghi-nhieu/voice/tts_vi.py <tập>/voice/lines.json <tập>/voice/ [--jobs 6]`, rồi `asr_vi.py`, `process.py`, `mk_timeline.py` (lệnh có trong `build.sh` của tập). `tts_vi.py` từ chối chạy khi lời chưa PASS.
+
+## 3. Dựng hình: làm như phim mẫu đã làm
 
 Thứ tự này là lý do phim mẫu đẹp. Đừng đảo.
 
-1. **Trang trước, nội dung sau.** `index.html` của scaffold: thêm importmap của three (`rig/README.md`); `film()` vẽ vào `canvas#c` có sẵn. `src/film.js`: `film()`, `loadVoice(build)` (giờ của từng câu, phụ đề, sự kiện giọng), rồi đặt `window.render/DUR/EV/TEXTS/READY`.
-2. **Dựng bối cảnh của khung hero 1 trước tiên**, chưa làm chuyển động. **Bối cảnh là nơi lời nói tới**, không phải nơi có sẵn. Nếu nơi đó là một trong các bối cảnh của `rig/sets.js` (`kitchen`, `desk`, `bathroom`; xem `demo/stills/set_*.jpg`) thì bắt đầu từ nó: đã có tường, cửa sổ, đèn chiếu đúng chỗ, đồ đạc và vật sống. Nơi khác (xưởng, bầu trời, nhà máy, trong máy) thì tự dựng, đừng bê căn bếp vào. Ảnh trong `demo/stills/` là mức tay nghề cần đạt (ánh sáng, chất liệu, chiều sâu), không phải nội dung để chép. Đặt vật chính ở `S.focus`, lấy góc máy từ `S.cams`, chọn `time` khớp với lời ("buổi sáng" thì `morning`, không để trăng). Đạo cụ đổi trạng thái có sẵn trong `rig/props.js`. Chỉ tự dựng nơi chốn khi không bộ nào hợp, và khi đó phải đạt các điều dưới đây:
-   - tường có lỗ (`wallWithHole`) hoặc vật chắn có hình để đèn chính in bóng kể nơi chốn; `beam` và bụi nếu có vệt sáng;
-   - mỗi bề mặt lớn một texture canvas có seed (`canvasTex`); đồ mềm nặn bằng `cushionGeo` hoặc `surface`, không để là hộp;
-   - đồ đạc đủ dày để nơi đó có người sống: đồ nhỏ trên bàn, tranh, cây, thứ gì đó ngoài cửa sổ;
-   - một vật sống: rèm lay, lá lay đổ bóng, LED thở, hơi nước.
-3. **Vật trước cảnh**: mọi vật có thật sẽ lên hình (của rig hay tự dựng) nằm trong `src/props.js` của tập: `export const PROPS = { 'tên vật như lời gọi, kèm trạng thái': () => THREE.Object3D }`, và `film.js` lấy vật từ đó. Trước khi dựng cảnh đầu tiên, chạy `LEMO_ANGLE=vulkan sh channels/tram-nghi-nhieu/review.sh <tập> --props`: mỗi vật đứng riêng, nhìn từ ba phía; một phiên không biết tên gọi tên nó, phiên thứ hai so với tên bạn định. Vật bị gọi sai hay "không rõ" là vật thay thế: sửa theo dòng `SỬA:` (thêm bộ phận đặc trưng, đúng tỉ lệ, đúng chất liệu), xem lại ảnh ở `review/props/`, chạy lại tới khi PASS. Vật nào lời kể gọi tên hay thẻ chữ chỉ vào đều phải có trong `src/props.js` (một cụm bộ phận thì đặt tên theo cụm), kể cả bộ phận bên trong máy: dựng chúng trong `film.js` mà không qua đây là vật thay thế. Ruột máy móc, đồ điện: dùng linh kiện của `rig/parts.js` (lò xo, nút bấm, nam châm, ốc, dây có phích, chip, bảng mạch, pin, bánh răng, tiếp điểm…) thay vì khối trụ, khối hộp. Vật thêm sau cũng phải qua bước này. PASS ghi con dấu `review/PROPS.pass`; tập không có `src/props.js` hay chưa có con dấu này thì `build.sh` không dựng. Vật dựng tốt mà dùng lại được thì đưa vào `rig/props.js`.
-4. **Vòng still**: `LEMO_ANGLE=vulkan node core/render/still.mjs <tập> <t…> --out <scratch>`, rồi **mở ảnh ra xem**. Mỗi vòng ghi vào `LOOK.md`: thấy gì, vì sao, sửa gì. Chẩn đoán bằng cờ, đừng đoán:
-   - mảng sáng mất hoặc bóng lạ → `?lightcam=1` nhìn từ đèn, `?nocast=<tag>` tắt từng vật đổ bóng (phim mẫu tìm ra chăn DoubleSide tự đổ bóng lên chính nó theo cách này);
-   - cháy trắng → giảm cường độ đèn điểm (decay 2), chỉ vật `glowMat` k > 1 mới được loé;
-   - vật đọc sai hình → đổi trục máy trước khi đổi vật.
-   Ít nhất 3 vòng cho mỗi khung hero, trước khi làm chuyển động.
-5. **Cơ chế** (khung hero 2): dựng thành vật thể có tham số (`speedTable`, `sparks`, `squiggle`, hạt trên `CatmullRomCurve3`, `rig/cutaway.js`).
-   - **Vật bị cắt là chính vật nguyên.** Máy móc, đồ gia dụng, quả, hộp, bất cứ vật nào cần mở ra: dựng nó **nguyên** trong `src/props.js` (có đủ bộ phận bên trong, vỏ có độ dày, ruột rỗng nếu thật nó rỗng), qua `--props` ở dạng nguyên, rồi cắt bằng `section(vật, { normal, at })` của `rig/section.js`: một mặt phẳng cưa qua mọi bộ phận, mặt cắt được tô kín. Không dựng riêng một "bản cắt" bằng tay: bản dựng tay luôn khác vật nguyên (màu, dáng, bộ phận), và người xem không biết mình đang nhìn vào cái gì. Cảnh mở: vật nguyên trước, rồi cùng góc máy chuyển sang bản cắt.
-   - Bên trong một vật: dùng `tissue()` của `rig/inside.js`, cắt theo tiết diện của chính vật (`section: 5` chuối, `section: 32` vật tròn), vật nguyên đặt cạnh khoanh trong cùng khung (vỏ có cửa mở được, mặt cắt có tế bào đổi trạng thái, đặt ngay trên bàn của bối cảnh, có đèn riêng), hoặc mặt cắt của `rig/cutaway.js` cho bình, ống. Máy đứng ngoài nhìn vào. Vật vẫn nằm trong bối cảnh có sàn, đèn và đồ xung quanh, như `demo/stills/cutaway_*.jpg`. Không đưa máy vào trong để quay một khoảng không chỉ có hạt.
-   - Trước khi thêm chữ, khung phải có **một sự kiện nhân quả lớn trên màn hình**: một tác động (nắp bật, dòng điện vào) gây ra một thay đổi thấy được ngay trong vòng 1–2 giây (bọt trào, tia lửa, đổi màu). Tắt nhãn đi mà vẫn hiểu thì mới đạt.
-   - Không vòng tròn đồng tâm, không mũi tên, không công thức.
-6. **Chuyển động và máy quay**: keyframe bằng `keys()`. Đặt mốc theo **chữ** trong lời bằng `V.w(id, 'từ')`, không theo số giây. Vật được nhắc phải hiện lên đúng lúc từ đó được nói, và cơ chế không được chạy trước khi lời nói tới nguyên nhân của nó. Lấy đà, vượt đà (`back`), chuyển động phụ. Chuyển cảnh bằng `flash` màu cảnh sau, hoặc máy đi xuyên vật.
-7. **Chữ**: `label()` cho thuật ngữ (tối đa một thẻ một lúc), mũi thẻ chỉ vào đúng vật được nhắc. Từ khoá của câu trả lời (tên của nguyên nhân) có thẻ ngay lần đầu được nói, chữ trên thẻ giống hệt chữ trong lời. Mỗi sự thật chỉ một thẻ: không để cùng một con số hay một tên hiện hai chỗ trong một khung. `subtitle()` cho phụ đề. Khai báo trong `TEXTS`.
-8. **Vòng beat**: chạy `LEMO_ANGLE=vulkan node channels/tram-nghi-nhieu/beatsheet.mjs <tập> --out <scratch>`. Lệnh này ra mỗi câu một khung, chụp lúc câu đang được nói, có in câu bên dưới. **Mở từng tờ ra xem.** Với mỗi câu, hỏi: nếu không nghe, khung này có cho thấy điều câu nói không?
-   - vật được nhắc có trong khung, ở chỗ sáng nhất và đậm màu nhất (nền tối và dịu hơn nó), chiếm đủ chỗ (không nằm ở mép khung, không bị cắt), và đang làm việc câu nói;
-   - thẻ chữ nằm trong khung, chỉ đúng vật;
-   - con số trên hình trùng với con số trong lời;
-   - nhiều câu liền nhau trên cùng một khung đứng yên là dấu hiệu thiếu hình.
-   Lệnh cũng tự đo từng khung và in nhãn đỏ: `DARK` (vật chính nằm trong bóng: đưa đèn chính hoặc `pool` vào nó) và `SAME` (gần y hệt khung câu trước: câu này chưa có hình riêng; máy trôi nhẹ hay hạt bay không làm thành hình mới) và `NUM` (câu nói một con số mà trên màn hình không có số nào lúc đó: thêm đồng hồ, lịch, thẻ số) và `RUN` (câu thứ tư liền nhau vẫn quay cùng những vật ấy, đo bằng các tia bắn qua khung: phim đã ngừng cho thấy điều mới; cho câu đó hình riêng: một nơi khác, cắt vào bên trong, so sánh hai bên, một khung rộng cho biết đang ở đâu, một vật mới; một bố cục giữ tối đa ba câu). Sửa hết các nhãn. Chỉ giữ `SAME` khi cố ý, và ghi lý do vào `LOOK.md`.
-   Ghi vào `LOOK.md` những câu lệch, vì sao lệch, đã sửa gì. Khi cảnh hết cờ, gọi người chấm cho cảnh đó (§3) rồi mới sang cảnh sau.
-9. **Tiếng**: `window.EV` = sự kiện giọng (`V.ev`) + nhạc + ambience + foley ở đúng chỗ có vật làm ra tiếng (định dạng: `rig/README.md` § voice.js).
-10. Dựng (chỉ sau khi `review.sh` cả phim PASS, §3): `LEMO_ANGLE=vulkan sh build.sh`; cổng: `LEMO_ANGLE=vulkan sh core/render/review.sh <tập>` phải exit 0.
+1. **Trang.** `index.html` của scaffold đã có importmap của three. Viết `src/film.js` gồm `film()` và `loadVoice(build)` (giờ của từng câu, phụ đề, sự kiện giọng), rồi đặt `window.render/DUR/EV/TEXTS/READY`.
+2. **Vật trước cảnh.** Mọi vật có thật sẽ lên hình nằm trong `src/props.js`: `export const PROPS = { 'tên như lời gọi, kèm trạng thái': () => THREE.Object3D }`. Vật nào lời kể gọi tên hay thẻ chữ chỉ vào đều phải có ở đây, kể cả bộ phận bên trong máy. Ruột máy dùng `rig/parts.js` (lò xo, chip, bảng mạch, pin, bánh răng…), không dùng khối trụ hay hộp. Chạy `review.sh <tập> --props`: một phiên không biết tên sẽ gọi tên từng vật. Vật bị gọi sai là vật thay thế: sửa theo `SỬA:` rồi chạy lại cho tới PASS. Vật thêm sau cũng phải chạy lại bước này. Vật tốt mà dùng lại được thì đưa vào `rig/props.js`.
+3. **Bối cảnh của khung hero 1, chưa có chuyển động.** Bối cảnh là nơi lời nói tới, không phải nơi có sẵn.
+   - Nơi đó là `kitchen`, `desk` hay `bathroom` của `rig/sets.js` (xem `demo/stills/set_*.jpg`): bắt đầu từ bộ đó, đặt vật chính ở `S.focus`, lấy góc máy từ `S.cams`, chọn `time` khớp lời.
+   - Nơi khác thì tự dựng, và phải có đủ những thứ sau:
+     - tường có lỗ (`wallWithHole`) để đèn chính in bóng;
+     - `canvasTex` có seed cho mỗi bề mặt lớn;
+     - đồ mềm nặn bằng `cushionGeo` hay `surface`;
+     - đồ đạc đủ dày;
+     - một vật sống: rèm lay, lá lay, LED thở hay hơi nước.
+4. **Vòng still.** Chạy `node core/render/still.mjs <tập> <t…> --out <scratch>`, rồi **mở ảnh ra xem**. Mỗi vòng ghi vào `LOOK.md`: thấy gì, vì sao, sửa gì. Mỗi khung hero ít nhất 3 vòng trước khi làm chuyển động. Chẩn đoán bằng cờ, đừng đoán:
+   - bóng lạ: `?lightcam=1`, `?nocast=<tag>`;
+   - cháy trắng: giảm đèn điểm, chỉ `glowMat` k > 1 được loé;
+   - vật đọc sai hình: đổi trục máy trước khi đổi vật.
+5. **Cơ chế** (khung hero 2), dựng thành vật thể có tham số (`speedTable`, `sparks`, `squiggle`, `flow()`, `rig/cutaway.js`):
+   - **Vật bị cắt là chính vật nguyên.** Dựng nguyên trong `src/props.js`, qua `--props`, rồi cắt bằng `section(vật, { normal, at })`. Cảnh mở: vật nguyên trước, rồi cùng góc máy chuyển sang bản cắt. Không dựng tay một "bản cắt" riêng.
+   - Bên trong vật: `tissue()` của `rig/inside.js` theo tiết diện của chính vật, vật nguyên đặt cạnh trong cùng bối cảnh (như `demo/stills/cutaway_*.jpg`). Không đưa máy vào một khoảng không chỉ có hạt.
+   - Thứ vô hình: dùng `flow()`, thành một vật liền, đủ to, mọc từ vật nguồn, **chạm** vật nhận, và gây thay đổi thấy được ngay. Không dùng `glowDots`, không vòng tròn đồng tâm, mũi tên hay công thức.
+   - Phải có một sự kiện nhân quả lớn trên màn hình (tác động → thay đổi trong 1–2 s). Tắt nhãn đi mà vẫn hiểu thì mới đạt.
+6. **Chuyển động và máy quay.**
+   - Keyframe bằng `keys()`, đặt mốc theo **chữ** bằng `V.w(id, 'từ')`: vật hiện đúng lúc được nói, cơ chế không chạy trước lời về nguyên nhân của nó.
+   - Có lấy đà, vượt đà (`back`) và chuyển động phụ.
+   - Máy chỉ đi khi có lý do. Chuyển cảnh bằng `flash` màu cảnh sau hoặc đi xuyên vật.
+7. **Chữ.**
+   - `label()` cho thuật ngữ, tối đa một thẻ một lúc, mũi thẻ chạm đúng vật.
+   - Từ khoá của câu trả lời có thẻ ngay lần đầu được nói, chữ giống hệt trong lời. Mỗi sự thật chỉ một thẻ.
+   - `subtitle()` cho phụ đề. Khai báo tất cả trong `TEXTS`.
+8. **Vòng beat.** Chạy `node channels/tram-nghi-nhieu/beatsheet.mjs <tập> --out <scratch> [--lines a-b]`, rồi **mở từng tờ**. Với mỗi câu, hỏi: không nghe thì khung có cho thấy điều câu nói không?
+   - Sửa hết các cờ máy:
+     - `DARK`: đưa đèn chính hay `pool` vào vật chính;
+     - `SAME`: câu chưa có hình riêng; máy trôi hay hạt bay không tính;
+     - `NUM`: thêm đồng hồ, lịch hay thẻ số;
+     - `RUN`: sang nơi khác, cắt vào trong, so hai bên, hay lùi ra khung rộng.
+   - Bạn không bác được cờ. Chỉ người chấm bác được (`CỜ SAI`), khi nhìn ảnh thấy cờ sai.
+9. **Tiếng.** `window.EV` gồm sự kiện giọng (`V.ev`), nhạc, ambience, và foley ở đúng chỗ có vật làm ra tiếng (định dạng ở `rig/README.md` § voice.js).
 
 Muốn thêm một bộ phận dùng lại được (bối cảnh, đạo cụ, hiệu ứng) thì đưa vào `channels/tram-nghi-nhieu/rig/` và ghi một dòng vào `rig/README.md`. Không sửa `render.js` cho riêng một tập.
 
-## 3. Chấm hình: một phiên khác chấm, theo từng cảnh
+## 4. Chấm hình: một phiên khác chấm, theo từng cảnh
 
-Điểm tự chấm không đáng tin: người làm biết mình định vẽ gì nên nhìn ra điều đó cả khi nó không có trên hình. Việc chấm do `review.sh` làm: nó mở **một phiên mới** của model (mặc định chính model của bạn, qua `omp -p`; đặt `LEMO_CRITIC_MODEL` hay `LEMO_CRITIC` để chọn khác), trong một thư mục ngoài repo chỉ có khung hình, lời và `FACTS.md`. Người chấm không thấy code và ghi chú của bạn, chấm theo `channels/tram-nghi-nhieu/CRITIC.md`, và ghi cách sửa từng câu bằng hình cụ thể.
+Điểm tự chấm không đáng tin: người làm biết mình định vẽ gì, nên nhìn ra điều đó cả khi nó không có trên hình. `review.sh` mở một phiên model mới:
+
+- Mặc định là `omp -p` với model mặc định của omp, nên đó có thể là một model khác bạn. Chọn khác bằng `LEMO_CRITIC_CLI=omp|claude` và `LEMO_CRITIC_MODEL`.
+- Phiên này chạy trong một thư mục ngoài repo, chỉ có khung hình, lời và `FACTS.md`, và chấm theo `CRITIC.md`.
+- Tên người chấm được ký dưới mỗi bản chấm.
 
 ```
-LEMO_ANGLE=vulkan sh channels/tram-nghi-nhieu/review.sh <tập> --lines 4-7     # một cảnh vừa dựng
-LEMO_ANGLE=vulkan sh channels/tram-nghi-nhieu/review.sh <tập>                 # cả phim, trước khi render
-LEMO_ANGLE=vulkan sh channels/tram-nghi-nhieu/review.sh <tập> --video         # sau khi render: thêm bốn khung mỗi câu từ mp4
+review.sh <tập> --lines 4-7          # một cảnh vừa dựng (3–4 câu)
+review.sh <tập>                      # cả phim, trước khi render (tập không chia chương)
+review.sh <tập> --chapter n          # một chương, trước khi render (tập dài, §5)
+review.sh <tập> --video [--chapter n]  # sau khi render: bốn khung mỗi câu từ mp4
 ```
-Kết quả ở `<tập>/review/REVIEW.md` (lịch sử: `REVIEW-<n>.md`); exit 0 là PASS. Câu nào còn cờ máy (`DARK SAME RUN NUM`) thì FAIL dù người chấm cho qua.
 
-Vòng làm việc, không bỏ bước:
-1. Chia lời thành cảnh 3–4 câu. Dựng xong một cảnh (hình, chữ, mốc theo chữ) thì chạy `review.sh --lines a-b` cho cảnh đó **trước khi** dựng cảnh sau.
-2. FAIL: sửa đúng các câu FAIL theo dòng `SỬA:` của nó, rồi chạy lại. Không cãi người chấm, không sửa cờ hay dữ liệu kiểm để qua cổng. Sau 3 lượt một cảnh vẫn FAIL thì ghi vào `LOOK.md` câu nào, vì sao, rồi sang cảnh sau.
-3. Đủ cảnh: chạy `review.sh` cho cả phim. Chỉ khi PASS (OVERALL ≥ 9) mới dựng tiếng và render 24 fps. Render toàn phim là việc chậm nhất: làm một lần, sau khi hình đã đạt.
-4. Render xong: `review.sh --video` một lần, để bắt chuyển động không diễn ra, khung đen, lỗi chỉ có ở bản render.
-5. **Cổng máy**: lần PASS của `--script`, `--props` và của `review.sh` cả phim (không `--lines`, không `--video`) ghi con dấu vào `review/SCRIPT.pass`, `review/PROPS.pass`, `review/PICTURE.pass`: mã băm của lời, của `src/props.js`, của `src/*.js` và `index.html` lúc được chấm, cùng mã băm của bản chấm đã PASS. `build.sh` (qua `mix.py`) dừng nếu thiếu con dấu, nếu thứ được chấm đã đổi sau lần PASS, hay nếu bản chấm bị sửa. Không có biến môi trường nào tắt cổng này, và `REVIEW=0` không mở nó. Sửa gì sau khi PASS thì chấm lại rồi mới dựng. Không viết tay con dấu, không sửa các file `*REVIEW*.md`. Hết lượt mà vẫn FAIL thì tập chưa xong: báo người dùng điểm và lỗi còn lại, đừng giao một phim chưa qua.
-6. Ghi điểm từng lượt vào `LOOK.md`. Bàn giao kèm `review/REVIEW.md` cuối cùng, nguyên văn.
+1. Dựng xong một cảnh thì chấm cảnh đó trước khi dựng cảnh sau. FAIL thì sửa đúng các câu FAIL theo dòng `SỬA:` rồi chạy lại. Không cãi người chấm.
+2. Đủ cảnh thì chấm cả phim (hay từng chương). PASS cần OVERALL ≥ 9 và không câu nào FAIL. Chỉ khi đó mới làm tiếng và render 24 fps. Render là việc chậm nhất, chỉ làm một lần.
+3. Render xong, chạy `--video` một lần để bắt chuyển động không diễn ra và lỗi chỉ có ở bản render.
+4. **Cổng máy.** Các lần PASS ghi con dấu vào `review/*.pass`: dàn ý, lời, vật, hình (cả phim hay từng chương). Mỗi con dấu là mã băm của thứ được chấm và của bản chấm.
+   - `tts_vi.py` cần dàn ý và lời. `mix.py` và `core/render/video.mjs` cần tất cả.
+   - Sửa gì sau khi PASS thì phải chấm lại.
+   - Không viết tay con dấu hay bản chấm, không gọi `gate.py stamp`, không sửa các file `*REVIEW*.md`. Làm vậy là gian lận, và tập đó coi như chưa chấm.
 
-## 4. Bàn giao
+## 5. Tập dài: chia chương
 
-Báo người dùng: đường dẫn phim, 3 khung hero, tờ beat, kết quả chấm độc lập, và các điểm yếu còn lại, nói thật.
+- Khi dàn ý ra cỡ tám phút trở lên, chia chương trong `TREATMENT.md` (mục Chương): mỗi chương là một tầng của câu trả lời, ở một nơi chính. Số chương theo số tầng, không theo một con số định trước.
+- Ghi chương vào `src/chapters.js`: `{ id: 'ch1', lines: ['c1', 'c19'], files: ['set_desk.js'], build }`. Các chương phải phủ mọi câu, liên tục.
+  - Chương sở hữu `src/<id>.js` và các file trong `files`.
+  - File không thuộc chương nào là file chung. Sửa file chung thì phải chấm lại mọi chương.
+- Lời: chấm từng chương, `review.sh <tập> --script --chapter n`. Người chấm vẫn đọc cả lời để bắt ý lặp giữa các chương.
+- Giọng: `tts_vi.py … --jobs 6`.
+- Hình: dựng và chấm xong chương này rồi mới sang chương sau, `review.sh <tập> --chapter n`. Cổng mở khi mọi chương PASS.
+- Có thể giao từng chương cho một subagent, mỗi subagent làm trọn một chương (props, cảnh, chấm). Không có file giữ chỗ: file nào trong `src/` còn chữ `placeholder` hay `giữ chỗ` thì không chấm được và không render được.
+- Render tập dài mất nhiều giờ: chạy nền và làm việc khác trong lúc chờ (`DIRECTOR.md`). Không thăm dò bằng `sleep`.
+
+## 6. Khi nào dừng, và bàn giao
+
+Mỗi vòng chấm có số lượt, và `review.sh` tự dừng khi hết:
+
+| Vòng chấm | Số lượt |
+|---|---|
+| Dàn ý | 4 |
+| Lời (cả bài, hay mỗi chương) | 6 |
+| Cảnh | 3 |
+| Chương hay cả phim | 5 |
+
+Luật dừng duy nhất:
+
+- **Còn lượt mà FAIL:** sửa theo bản chấm rồi chấm lại. Không dừng, không bàn giao, không hỏi người dùng.
+- **Một cảnh hết lượt:** ghi vào `LOOK.md` câu nào còn FAIL và vì sao, rồi sang cảnh sau. Lần chấm chương hay cả phim sẽ bắt lại cảnh đó.
+- **Dàn ý, lời, chương hay cả phim hết lượt:** dừng. Báo người dùng điểm và các lỗi còn lại, và hỏi hướng đi: thu hẹp câu hỏi, bỏ bớt một tầng, hay chấp nhận. Không gọi đó là phim đạt.
+
+Bàn giao khi mọi con dấu còn đúng và `sh core/render/review.sh <tập>` exit 0. Báo người dùng:
+
+- đường dẫn phim;
+- 3 khung hero;
+- tờ beat;
+- `review/REVIEW.md` cuối cùng, nguyên văn;
+- các điểm yếu còn lại, nói thật.
+
+Quy tắc vận hành: sửa file bằng công cụ sửa file, không dùng heredoc của shell (`CODING_STANDARDS.md` R1). Xoá still thử và `out/` cũ khi xong, vì ổ đĩa gần đầy.

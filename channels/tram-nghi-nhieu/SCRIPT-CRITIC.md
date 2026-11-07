@@ -57,18 +57,22 @@ Với từng câu, tự hỏi: dựng câu này thì trên hình là **vật gì
 
 ### F. Nhịp
 - Độ dài các câu có đổi nhịp không, hay đều đều?
-- Có chỗ nào quá dày con số (kênh cho tối đa 6–9 con số cho ba phút; tập dài đặc biệt: tối đa khoảng một con số cho mỗi phút)?
-- Tổng thời lượng có hợp định dạng (Shorts 60–90 giây ≈ 150–230 chữ; tập dài 3–5 phút; tập dài đặc biệt 15–25 phút, xem `STRATEGY.md`)? Khi đọc lướt, dùng tốc độ đọc thật của bản thu ghi trong `FACTS.md` ("Định dạng của tập"), đừng đoán bằng tốc độ đọc mặc định.
+- Có chỗ nào quá dày con số (không quá khoảng hai con số mỗi phút; tập trên mười phút: khoảng một)?
+- Độ dài không có khung định trước: nó đúng khi mọi câu cần cho câu trả lời đều có và không câu nào thừa (`STRATEGY.md`, "Độ dài"). Câu thừa thì → BỎ; mắt xích thiếu thì → THÊM SAU. Khi ước thời lượng, dùng tốc độ đọc ghi trong `FACTS.md`, đừng đoán.
 
 ## Cờ của máy
 
-`DIGIT` câu có chữ số (phải viết thành chữ) · `LONG` câu quá dài để đọc một hơi · `NOFACTS` tập chưa có `FACTS.md`. Câu có cờ là câu hỏng, trừ khi bạn thấy rõ cờ đó sai (ghi lý do).
+`DIGIT` câu có chữ số (phải viết thành chữ) · `LONG` câu quá dài để đọc một hơi · `NOFACTS` tập chưa có `FACTS.md`. Câu có cờ là câu hỏng. Bạn bác được cờ `LONG` khi thấy rõ nó sai (câu dài nhưng ngắt hơi tự nhiên, đọc to vẫn trôi): ghi trong khối của câu đó một dòng `CỜ SAI LONG: <lý do>`. Cờ không có dòng này thì câu vẫn FAIL. `DIGIT` và `NOFACTS` không bác được.
+
+## Khi chỉ chấm một chương
+
+`TASK.md` nói khi nào bạn chỉ chấm một khoảng câu (một chương của tập dài). Đọc cả `lines.json` để hiểu mạch và bắt ý lặp lại với chương khác (lặp với chương khác là lỗi của câu trong chương này), nhưng chỉ ghi `#n` và điểm cho các câu trong khoảng. Mục 7 (nhịp, độ dài) xét cho chương đó.
 
 ## Điểm (0–10 mỗi mục)
 
 1. Đúng dữ kiện  2. Dựng được bằng vật thật  3. Nhân quả liền mạch  4. Mở đầu  5. Kết  6. Tiếng Việt nói  7. Nhịp
 
-OVERALL là trung bình, nhưng: còn lỗi CHẶN thì OVERALL tối đa 6; còn câu FAIL thì tối đa 8.
+OVERALL là trung bình, nhưng: còn lỗi CHẶN thì OVERALL tối đa 6; còn câu FAIL thì tối đa 7.
 
 ## Viết `SCRIPT-REVIEW.md` theo đúng mẫu này
 
@@ -83,6 +87,7 @@ VERDICT: PASS | FAIL
 ## Từng câu
 #n OK|FAIL — Hình: <vật gì, ở đâu, làm gì; hoặc "không dựng được">
   [CHẶN|NẶNG|NHẸ] <nhóm>: <lỗi> → VIẾT LẠI: "<câu mới>"   (hoặc → BỎ, → THÊM SAU #n: "<câu mới>")
+  CỜ SAI <CỜ>: <lý do>      (chỉ khi bác cờ máy của câu này)
 
 ## Thiếu mắt xích
 <câu cần thêm, ở đâu, nguyên văn>
@@ -90,4 +95,4 @@ VERDICT: PASS | FAIL
 
 Mỗi `VIẾT LẠI` là một câu hoàn chỉnh đọc được ngay, đúng dữ kiện trong FACTS, số viết bằng chữ. Không viết lời khuyên chung ("nên rõ hơn").
 
-PASS chỉ khi: không còn lỗi CHẶN, không câu nào FAIL, không cờ máy nào chưa giải thích, và OVERALL ≥ 9.
+PASS chỉ khi: không còn lỗi CHẶN, không câu nào FAIL, không cờ máy nào chưa bác, OVERALL ≥ 8 và không mục nào dưới 7. Lỗi cấu trúc (một ý kể lại nhiều lần, khái niệm dùng trước khi có hình) đã được chấm ở dàn ý: ở đây bạn vẫn đánh lỗi cho câu lặp, nhưng cách sửa là BỎ câu đó hay gộp vào câu đã nói ý ấy, không viết lại thành một câu lặp khác chữ.

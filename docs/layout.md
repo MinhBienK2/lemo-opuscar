@@ -19,6 +19,8 @@ about them. This file is the contract the tools are built against; the glossary 
 │       ├── mix.py                  # the shared mix
 │       ├── fonts/                  # the shared fonts
 │       ├── voice/                  # the shared voice pipeline scripts
+│       ├── templates/              # optional: TREATMENT.tmpl.md (the channel's treatment template) and NEXT.txt
+│       ├── gate.py                 # optional: the channel's review gate (see "A channel's review gate")
 │       └── <episode>/              # an episode: one film of the channel
 │           ├── TREATMENT.md
 │           ├── CREDITS
@@ -156,13 +158,21 @@ E = json.load(open(os.path.join(FILM, 'events.json')))
 The voice scripts live in the channel's `voice/` and take the episode's paths as arguments:
 `python "$CHANNEL/voice/tts_vi.py" voice/lines.json voice/` run from the episode folder.
 
+### A channel's review gate
+
+A channel may keep `gate.py` next to its `CHANNEL.md`. `core/render/video.mjs` walks up from the film it is asked to
+render to the first folder that holds `CHANNEL.md`; when that folder holds `gate.py`, it runs
+`python3 gate.py check <film> --for render` first and refuses to render on a non-zero exit. What the gate asks for is the
+channel's business (its `CHANNEL.md` says); a film with nothing to gate (a channel demo, a rig test) must pass.
+
 ## The scaffold
 
 ```sh
 sh core/render/new_episode.sh <channel> <episode> [title]
 ```
 
-creates `channels/<channel>/<episode>/` with:
+creates `channels/<channel>/<episode>/` with (when the channel keeps `templates/TREATMENT.tmpl.md`, the treatment is that
+template, and `templates/NEXT.txt` replaces the generic next steps):
 
 - its own `TREATMENT.md`, `CREDITS`, `research/FACTS.md`, `film.json`, `index.html`, `build.sh`
   (`NAME` set to the episode's own movie name), `voice/lines.json` (a template with no lines) and

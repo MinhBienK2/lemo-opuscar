@@ -92,7 +92,7 @@ for (const arg of args) {
     '<structure>', '<logline>', '<beat>', '<image>', '<line id>',
     '<the sentence of the source, quoted>', '<doi or link>',
     '<claim, in the words the film will use>', '<Title of the paper>',
-    '<Author>'
+    '<Author>', '<viết:'
   ];
   for (const rel of IDENTITY_FILES) {
     const mine = read(path.join(folder, rel));

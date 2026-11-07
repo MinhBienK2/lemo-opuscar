@@ -212,6 +212,7 @@ its name — and `core/render/filmcheck.mjs` reports those.
 | `mix.py` | the shared mix: music, ambience, foley, ducking, master |
 | `fonts/` | the shared fonts (`fonts.css` and the files it names) |
 | `voice/` | the shared voice pipeline: `tts_vi.py`, `asr_vi.py`, `process.py` |
+| `templates/`, `gate.py` | optional: the channel's own treatment template, and its review gate (`docs/layout.md`) |
 
 | The episode holds (`channels/<channel>/<episode>/`) | It is |
 |---|---|

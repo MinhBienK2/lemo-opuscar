@@ -34,7 +34,9 @@ listChannels(); // [{ dir, slug, name, episodes: [film…] }]
 findFilm('tram-nghi-nhieu-tap-01');   // the film with that folder name or that movie name
 ```
 
-**`new_episode.sh`** creates `channels/<channel>/<episode>/` with the episode's own files — `TREATMENT.md`, `CREDITS`, `research/FACTS.md`, `film.json`, `index.html`, `build.sh` (with the episode's own movie name), `voice/lines.json` and an empty `src/` — and **attaches** the channel's shared code instead of copying it: the episode's `src/` imports the channel's `rig/` by relative path, and its `build.sh` calls the channel's `mix.py` (with `FILM=` the episode) and the channel's `voice/` scripts. It never copies the previous episode: an episode starts empty of identity. It refuses to run unless the channel exists and never overwrites an episode.
+**`new_episode.sh`** creates `channels/<channel>/<episode>/` with the episode's own files — `TREATMENT.md`, `CREDITS`, `research/FACTS.md`, `film.json`, `index.html`, `build.sh` (with the episode's own movie name), `voice/lines.json` and an empty `src/` — and **attaches** the channel's shared code instead of copying it: the episode's `src/` imports the channel's `rig/` by relative path, and its `build.sh` calls the channel's `mix.py` (with `FILM=` the episode) and the channel's `voice/` scripts. It never copies the previous episode: an episode starts empty of identity. It refuses to run unless the channel exists and never overwrites an episode. A channel that keeps `templates/TREATMENT.tmpl.md` (and `templates/NEXT.txt`) gets its own treatment template and next steps instead of the generic ones.
+
+**`video.mjs` asks a channel's gate.** Before it renders an episode of a channel that keeps `gate.py`, it runs `python3 gate.py check <episode> --for render` and stops on a refusal (`docs/layout.md`, "A channel's review gate").
 
 ## The page contract
 

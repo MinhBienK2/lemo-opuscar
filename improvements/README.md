@@ -132,8 +132,25 @@ sleep polling, and premature completion on review FAIL that were caught and guar
 | S2 | `tools/check_citations.py` rejected valid scientific citations without colons (`PMID 16676778`) | high | `tools/check_citations.py` allows optional colons in `IDENTIFIER` regex (`\bpmid\s*:?\s*\d+`); `FACTS.md` standardized |
 | S3 | `filmcheck.mjs` permitted unvalidated `runtime` format and title drift to escape to the index | high | `core/render/filmcheck.mjs` enforces `M:SS` runtime format and checks `film.json` title against `TREATMENT.md` |
 | S4 | Title discrepancy between manifest and production documents | medium | Harmonized across `film.json`, `CREDITS`, `index.html`, and `FILMS.md` |
-| S5 | 95 `sleep` polling calls burned ~8 hours of wall-clock time and locked the shell | high | `CODING_STANDARDS.md` R5 reinforced; documented in `channels/tram-nghi-nhieu/CHANNEL.md` |
-| S6 | Agent stopped and presented a "final handoff" when independent review had `VERDICT: FAIL` | high | `channels/tram-nghi-nhieu/CHANNEL.md` and `AGENTS.md` explicitly forbid delivery on review FAIL; require fixing until PASS |
+| S5 | 95 `sleep` polling calls burned ~8 hours of wall-clock time and locked the shell | high | `CODING_STANDARDS.md` R5 · `DIRECTOR.md` (long jobs in the background) · the channel skill §5 |
+| S6 | Agent stopped and presented a "final handoff" when independent review had `VERDICT: FAIL` | high | one stop rule, with the rounds counted by `channels/tram-nghi-nhieu/review.sh` (the channel skill §6; record [`2026-11-07-channel-guide.md`](retro/2026-11-07-channel-guide.md) C2) |
+
+## How the channel guides an agent
+
+[`retro/2026-11-07-channel-guide.md`](retro/2026-11-07-channel-guide.md) — a review of what an agent reads and runs for an
+episode of Trạm Nghĩ Nhiều.
+
+| # | Finding | Severity | Guard now |
+|---|---|---|---|
+| C1 | The scaffold and the skill asked for two different treatments | high | `channels/<ch>/templates/TREATMENT.tmpl.md` used by `core/render/new_episode.sh` · `filmcheck.mjs` reports `<viết:` |
+| C2 | Three stop rules contradicted each other | high | one rule in the skill §6; rounds counted by `review.sh` |
+| C3 | The gate came after the voice and the render | high | `voice/tts_vi.py` and `core/render/video.mjs` ask `gate.py` |
+| C4 | `LEMO_CRITIC` let any command pass a review | high | refused; the reviewer is `omp` or `claude`, signed into every stamp |
+| C5 | The 15–25 minute format had no process | high | chapters in `gate.py` and `review.sh --chapter`; placeholder files refused; skill §5 |
+| C6 | Structural faults reached the line-by-line review | medium | `review.sh --outline` (`OUTLINE-CRITIC.md`) before `--script` |
+| C7 | The machine flags contradicted the reviewer | medium | `CỜ SAI <FLAG>:` in the report, honoured by `review.sh` |
+| C8 | Maps out of date, rules repeated | low | `CHANNEL.md`, `rig/README.md`, the skill rewritten — no guard possible for staleness, recorded only |
+
 ## The supervisor
 
 [`tools/supervise.sh`](../tools/supervise.sh) watches the episode that is being made: every fifteen minutes it finds

@@ -24,7 +24,7 @@ Mở **từng ảnh** của các câu cần chấm (công cụ đọc file của
 
 ## Cờ của máy
 
-`DARK` vật chính trong bóng · `SAME` gần y hệt khung câu trước · `RUN` câu thứ tư liền nhau vẫn quay cùng những vật ấy · `NUM` câu nói một con số mà trên hình không có số. Một câu có cờ là câu hỏng, trừ khi bạn thấy rõ cờ đó sai (ghi lý do).
+`DARK` vật chính trong bóng · `SAME` gần y hệt khung câu trước · `RUN` câu thứ tư liền nhau vẫn quay cùng những vật ấy · `NUM` câu nói một con số mà trên hình không có số. Một câu có cờ là câu hỏng. Chỉ bạn bác được một cờ, khi nhìn ảnh thấy rõ nó sai hay có lý do trên hình (con số vẽ trong texture mà máy không đọc được; hai câu cùng một khung vì câu sau chỉ là nửa sau của một hành động đang diễn ra): ghi trong khối của câu đó một dòng `CỜ SAI <CỜ>: <thấy gì trên ảnh>`. Cờ không có dòng này thì câu vẫn FAIL, bất kể bạn kết luận gì.
 
 ## Cách chấm một câu: nhìn trước, đọc lời sau
 
@@ -127,6 +127,7 @@ VERDICT: PASS | FAIL
 #n FAIL — Thấy: <tả mù> | Lời: <điều lời nói mà ảnh thiếu/sai>
    - [CHẶN|NẶNG|NHẸ] <nhóm A–G>: <lỗi nhìn thấy> → SỬA: <hình cần có: vật nào, trông thế nào, làm gì, ở đâu trong khung, cỡ cảnh>
    - ...
+   - CỜ SAI <CỜ>: <thấy gì trên ảnh>      (chỉ khi bác cờ máy của câu này)
 
 ## 3 lỗi lớn nhất
 1. <triệu chứng nhìn thấy, ở những câu nào> → <cách sửa>
@@ -134,6 +135,6 @@ VERDICT: PASS | FAIL
 3. ...
 ```
 
-`VERDICT: PASS` chỉ khi: không còn lỗi CHẶN, không câu nào FAIL, không còn cờ chưa giải thích, và OVERALL ≥ 9 (khi chấm cả phim) hoặc mọi mục ≥ 4 (khi chấm một cảnh). Không chắc thì FAIL: chấm rộng tay làm hỏng phim, vì người làm sẽ dừng sửa.
+`VERDICT: PASS` chỉ khi: không còn lỗi CHẶN, không câu nào FAIL, không còn cờ chưa bác, và OVERALL ≥ 9 (khi chấm cả phim hay một chương) hoặc mọi mục ≥ 4 (khi chấm một cảnh). `TASK.md` ghi bạn đang chấm phạm vi nào. Khi chấm một chương, mục 7 (nhịp, liền mạch) xét trong chương đó. Không chắc thì FAIL: chấm rộng tay làm hỏng phim, vì người làm sẽ dừng sửa.
 
 Cách sửa phải là hình, không phải lời khuyên chung, và nằm trong phong cách của kênh: vật 3D có thật, ánh sáng, chuyển động, thẻ chữ; không mũi tên, sơ đồ, vòng tròn chỉ dẫn, chữ giải thích dài. Không viết "làm rõ hơn", "thêm chi tiết". Viết như: "[CHẶN] B: mặt cắt là một hộp chữ nhật, không ra quả chuối → SỬA: khoanh chuối có tiết diện năm cạnh bo tròn, vỏ xanh dày ở viền, ruột kem có thớ, đặt ngay cạnh đầu quả chuối vừa bị cắt, cận cảnh nhìn chéo vào mặt cắt".

@@ -1,4 +1,6 @@
-"""Vietnamese edge-tts with retries: python "$CHANNEL/voice/tts_vi.py" voice/lines.json voice/   (run from the episode folder)
+"""Vietnamese edge-tts with retries: python "$CHANNEL/voice/tts_vi.py" voice/lines.json voice/ [--jobs N]   (run from the episode folder)
+It refuses an episode whose outline and words have not passed the independent review (gate.py check --for voice).
+--jobs N makes N lines at once (4–6 for a long episode).
 Same inputs and outputs as $LIB/core/tts/tts_zh.py (<id>.wav, dur.json, .cache/), whose decoding and checks it reuses.
 The Vietnamese voices sometimes return no audio for an ordinary sentence ("Có một con mèo" fails, "có một con mèo" works),
 so a line that fails is tried again with small changes the listener can't hear: first letter lowercased, rate ±1 %, pitch ±1 Hz.
@@ -46,34 +48,63 @@ async def fetch(text, voice, rate, pitch, path):
         if os.path.exists(part): os.remove(part)
 
 
+class NoAudio(Exception): pass
+
+
+def one(L, out):
+    """make the voice of one line: (id, seconds)"""
+    # giọng kể của kênh (STYLE.md): một giọng nam trẻ cho cả phim — tập không đổi voice/pitch/rate
+    voice, rate, pitch, say = L.get('voice', 'vi-VN-NamMinhNeural'), L.get('rate', '+5%'), L.get('pitch', '-8Hz'), L.get('say', L['text'])
+    key = hashlib.sha1(json.dumps([voice, rate, pitch, say], ensure_ascii=False).encode('utf-8')).hexdigest()[:16]
+    mp3 = os.path.join(out, '.cache', key + '.mp3')
+    decoded = to_wav(mp3) if os.path.exists(mp3) else None
+    if not plausible(decoded):
+        decoded = None
+        for k, (s, r, p) in enumerate(variants(say, rate, pitch)):
+            if asyncio.run(fetch(s, voice, r, p, mp3)):
+                decoded = to_wav(mp3)
+                if plausible(decoded):
+                    if k: print(f"  {L['id']}: took variant {k} ({r}, {p}{', lowercased' if s != say else ''})", file=sys.stderr)
+                    break
+                os.remove(mp3); decoded = None
+        if decoded is None: raise NoAudio(f"tts_vi.py: no audio for line '{L['id']}' after every variant; reword it")
+    y, sr = decoded
+    nz = np.where(np.abs(y) > np.abs(y).max() * .02)[0]
+    y = y[max(0, nz[0] - int(.03 * sr)): nz[-1] + int(.10 * sr)]
+    sf.write(os.path.join(out, L['id'] + '.wav'), y, sr)
+    d = round(len(y) / sr, 3)
+    print(L['id'], d, L['text'])
+    return L['id'], d
+
+
+def gate_check(lines_path):
+    """the voice is made only for words the independent reviewer passed (gate.py, --for voice)"""
+    ep = os.path.dirname(os.path.dirname(os.path.abspath(lines_path)))
+    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    import gate
+    why = gate.check(ep, 'voice')
+    if why: sys.exit('tts_vi.py: cổng chấm: ' + why)
+
+
 def main():
-    if len(sys.argv) < 3:
-        sys.exit('usage: python tts_vi.py <lines.json> <out-dir>   (both paths are the episode\'s)')
-    lines_path, out = sys.argv[1], sys.argv[2]
+    a = sys.argv[1:]
+    jobs = 1
+    if '--jobs' in a:
+        i = a.index('--jobs'); jobs = max(1, int(a[i + 1])); del a[i:i + 2]
+    if len(a) < 2:
+        sys.exit('usage: python tts_vi.py <lines.json> <out-dir> [--jobs N]   (both paths are the episode\'s; '
+                 '--jobs 4–6 for a long episode)')
+    lines_path, out = a[0], a[1]
+    gate_check(lines_path)
     lines = json.load(open(lines_path, encoding='utf-8'))
     os.makedirs(os.path.join(out, '.cache'), exist_ok=True)
-    dur = {}
-    for L in lines:
-        # giọng kể của kênh (STYLE.md §6): một giọng nam trẻ cho cả phim — tập không đổi voice/pitch/rate
-        voice, rate, pitch, say = L.get('voice', 'vi-VN-NamMinhNeural'), L.get('rate', '+5%'), L.get('pitch', '-8Hz'), L.get('say', L['text'])
-        key = hashlib.sha1(json.dumps([voice, rate, pitch, say], ensure_ascii=False).encode('utf-8')).hexdigest()[:16]
-        mp3 = os.path.join(out, '.cache', key + '.mp3')
-        decoded = to_wav(mp3) if os.path.exists(mp3) else None
-        if not plausible(decoded):
-            decoded = None
-            for k, (s, r, p) in enumerate(variants(say, rate, pitch)):
-                if asyncio.run(fetch(s, voice, r, p, mp3)):
-                    decoded = to_wav(mp3)
-                    if plausible(decoded):
-                        if k: print(f"  {L['id']}: took variant {k} ({r}, {p}{', lowercased' if s != say else ''})", file=sys.stderr)
-                        break
-                    os.remove(mp3); decoded = None
-            if decoded is None: sys.exit(f"tts_vi.py: no audio for line '{L['id']}' after every variant; reword it")
-        y, sr = decoded
-        nz = np.where(np.abs(y) > np.abs(y).max() * .02)[0]
-        y = y[max(0, nz[0] - int(.03 * sr)): nz[-1] + int(.10 * sr)]
-        sf.write(os.path.join(out, L['id'] + '.wav'), y, sr); dur[L['id']] = round(len(y) / sr, 3)
-        print(L['id'], dur[L['id']], L['text'])
+    from concurrent.futures import ThreadPoolExecutor
+    try:
+        with ThreadPoolExecutor(max_workers=jobs) as ex:
+            got = dict(ex.map(lambda L: one(L, out), lines))
+    except NoAudio as e:
+        sys.exit(str(e))
+    dur = {L['id']: got[L['id']] for L in lines}
     json.dump(dur, open(os.path.join(out, 'dur.json'), 'w', encoding='utf-8'), indent=1)
 
 

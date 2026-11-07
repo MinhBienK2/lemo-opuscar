@@ -72,11 +72,17 @@ fi
 
 mkdir -p "$DIR/research" "$DIR/src" "$DIR/voice" "$DIR/out"
 # ---------------------------------------------------------------------------------------------
-# TREATMENT.md — the headings DIRECTOR.md §4 asks for, in its order
+# TREATMENT.md — the channel's own template, or else the headings DIRECTOR.md §4 asks for, in its order
 # ---------------------------------------------------------------------------------------------
 {
   printf '# TREATMENT — %s\n\n' "$TITLE"
   printf 'Kênh / channel: **%s** · Tập / episode: `%s` · Phim / movie: `%s`\n\n' "$CHANNEL" "$EPISODE" "$MOVIE"
+  # a channel with its own process keeps its own treatment template (channels/<channel>/templates/TREATMENT.tmpl.md, not named TREATMENT.md: a folder holding
+  # TREATMENT.md is a film to films.mjs);
+  # every other episode gets the headings DIRECTOR.md §4 asks for
+  if [ -f "$CHANNEL_DIR/templates/TREATMENT.tmpl.md" ]; then
+    cat "$CHANNEL_DIR/templates/TREATMENT.tmpl.md"
+  else
   cat <<'EOF'
 > Write this before drawing anything, and before opening the channel's previous episode or its demo
 > (`DIRECTOR.md` §4). Every heading below is one the director expects to find; the placeholders are
@@ -141,6 +147,7 @@ Tempo: <bpm> · Key: <key> · Meter: <n/n>
 - Subtitles: <size, position, colour, how many lines>
 - Titles: <the title card, how it is composed>
 EOF
+  fi
 } > "$DIR/TREATMENT.md"
 
 # ---------------------------------------------------------------------------------------------
@@ -154,9 +161,9 @@ the channel and is used from there — it is never copied into this episode.
 
 | Asset | Source | Licence |
 |---|---|---|
-| All drawing, the shots and the animation (`src/`) | Canvas 2D code written for this episode | yours |
+| All drawing, the shots and the animation (`src/`) | code written for this episode | yours |
 EOF
-  printf "| The character rig and the shared drawing helpers (\`%s/rig/\`) | the channel's shared code — used from the channel, never copied here | yours |\n" "$REL_TO_CHANNEL"
+  printf "| The channel's rig and shared drawing helpers (\`%s/rig/\`) | the channel's shared code — used from the channel, never copied here | yours |\n" "$REL_TO_CHANNEL"
   printf "| The mix (\`%s/mix.py\`) | the channel's shared mix: music, ambience, foley | yours / MIT |\n" "$REL_TO_CHANNEL"
   printf "| The voice (\`%s/voice/\`) | the channel's voice pipeline — a stock neural voice, no cloning | the voice service's terms |\n" "$REL_TO_CHANNEL"
   printf "| The fonts (\`%s/fonts/\`) | the channel's fonts | SIL Open Font License 1.1 (see the OFL files in the channel's \`fonts/\`) |\n" "$REL_TO_CHANNEL"
@@ -329,6 +336,10 @@ printf '[]\n' > "$DIR/voice/lines.json"
 # ---------------------------------------------------------------------------------------------
 printf 'new_episode: created the episode %s of the channel %s\n\n' "$EPISODE" "$CHANNEL"
 find "$DIR" | LC_ALL=C sort | sed "s|^$LIB/||"
+if [ -f "$CHANNEL_DIR/templates/NEXT.txt" ]; then
+  printf '\n'; cat "$CHANNEL_DIR/templates/NEXT.txt"
+  exit 0
+fi
 cat <<EOF
 
 Next:
