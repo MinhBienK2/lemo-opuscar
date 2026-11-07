@@ -20,8 +20,8 @@ export const PROPS = {
     const g = new THREE.Group(), T = tissue({ section: 5, rad: .1, d: .16, gates: 3, skin: '#d7cf4a', skinTo: '#f7c62f', faceLight: .9 });
     g.add(T.group); const b = banana({ len: .5, rad: .05 }); b.ripen(1, 0); b.position.set(-.45, 0, -.2); b.rotation.y = .5; g.add(b); return g;
   },
-  'chai thuỷ tinh bổ đôi': () => preset('bottle').group,
-  'lon nước ngọt bổ đôi': () => preset('can').group,
-  'bóng đèn sợi đốt bổ đôi': () => preset('bulb').group,
+  'chai thuỷ tinh xanh có nắp': () => preset('bottle').group,
+  'lon nước ngọt bị cắt hở một mảng, thấy bên trong': () => preset('can').group,
+  'bóng đèn sợi đốt (bóng tròn, thuỷ tinh trong)': () => preset('bulb').group,
   'cốc thuỷ tinh có nước': () => preset('glass', { fill: .15, liquid: '#c98a2e' }).group,
 };

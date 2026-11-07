@@ -23,7 +23,7 @@ export function vessel(profile, { thick = .05, cut = 1.7, shell = toon('#4fa37a'
   const wall = [...out, ...inn.slice().reverse(), new THREE.Vector2(0, y0 + thick)];
   const a0 = cut / 2, a1 = Math.PI * 2 - cut;
   group.add(mesh(new THREE.LatheGeometry(wall, 128, a0, a1), shell));
-  for (const phi of [a0, -a0]) group.add(cutFace(wall, phi, face));
+  if (cut > .05) for (const phi of [a0, -a0]) group.add(cutFace(wall, phi, face));
   if (shine) for (const [phi, w, k] of [[a0 + .45, .07, .55], [a0 + .62, .025, .45]]) {
     const strip = out.filter(p => p.y > y0 + .05 && p.y < mouth - .02).map(p => new THREE.Vector2(p.x + .004, p.y));
     if (strip.length < 2) strip.splice(0, strip.length, new THREE.Vector2(rOut(y0 + .1) + .004, y0 + .1), new THREE.Vector2(rOut(mouth - .05) + .004, mouth - .05));
@@ -36,7 +36,7 @@ export function vessel(profile, { thick = .05, cut = 1.7, shell = toon('#4fa37a'
     const liq = [new THREE.Vector2(0, y0 + thick + .001), ...lp, new THREE.Vector2(rIn(fill) - .002, fill), new THREE.Vector2(0, fill)];
     const m = toon(liquid, { transparent: true, opacity: liquidAlpha, depthWrite: false, side: THREE.DoubleSide });
     const body = new THREE.Mesh(new THREE.LatheGeometry(liq, 96, a0, a1), m); body.renderOrder = 3;
-    const faces = [a0, -a0].map(phi => { const f = cutFace(liq, phi, m); f.renderOrder = 3; return f; });
+    const faces = (cut > .05 ? [a0, -a0] : []).map(phi => { const f = cutFace(liq, phi, m); f.renderOrder = 3; return f; });
     // the liquid line on the cut faces: a bright meniscus so the level reads at a glance
     const line = new THREE.Group(); line.position.y = fill; line.rotation.y = a0 + a1 - Math.PI / 2;
     line.add(mesh(new THREE.TorusGeometry(rIn(fill) - .004, .006, 6, 96, a1), glowMat('#fff0d8', .9), [0, 0, 0], { rot: [Math.PI / 2, 0, 0], cast: false }));
@@ -176,11 +176,13 @@ export function foam(V, { n = 900, seed = 5, height = () => 0, color = '#eadccc'
 }
 
 // Profiles to start from (outer [r, y], bottom → mouth). Scale or edit them; they are only shapes.
+// glass is seen through, so it stays whole unless asked; an opaque can is cut open to show its inside
+export const CUT = { bottle: 0, glass: 0, bulb: 0, can: 1.7 };
 export const PROFILES = {
   bottle: [[0, 0], [.34, 0], [.38, .05], [.38, 1.15], [.33, 1.45], [.16, 1.85], [.14, 2.15], [.15, 2.2]],
   glass: [[0, 0], [.32, 0], [.34, .03], [.42, 1.1]],
   can: [[0, 0], [.3, 0], [.34, .06], [.34, 1.1], [.29, 1.2]],
-  bulb: [[0, 0], [.12, 0], [.14, .3], [.42, .8], [.46, 1.1], [.36, 1.45], [.0, 1.62]],
+  bulb: [[0, 0], [.12, 0], [.14, .3], [.42, .8], [.46, 1.1], [.36, 1.45], [.18, 1.6], [.0, 1.63]],
 };
 
 // A real thing cut open, with the parts that make it recognisable and its own materials (not a green shell):
@@ -188,20 +190,27 @@ export const PROFILES = {
 // can: aluminium, a printed band, a recessed lid with a pull tab. bulb: clear glass, a threaded metal screw base
 // with a black contact, the glass stem, two support wires and a short coiled filament, dark when off
 // (V.parts.filament.material.color.set(...).multiplyScalar(k) to light it). bottle: green glass with a cap. glass: clear drinking glass.
-export function preset(kind, { scale = .25, fill = null, liquid = '#c98a2e', cut = 1.7 } = {}) {
-  const prof = PROFILES[kind].map(([r, y]) => [r * scale, y * scale]);
-  const glassMat = c => toon(c, { transparent: true, opacity: .35, depthWrite: false, side: THREE.DoubleSide });
+export function preset(kind, { scale = .25, fill = null, liquid = '#c98a2e', cut = CUT[kind] } = {}) {
+  let prof = PROFILES[kind];
+  if (kind === 'bulb' || kind === 'bottle') {   // a smooth outline: a faceted glass reads as crumpled plastic
+    const c = new THREE.SplineCurve(prof.map(([r, y]) => new THREE.Vector2(r, y)));
+    prof = c.getSpacedPoints(48).map(p => [Math.max(p.x, 0), p.y]); prof[prof.length - 1] = PROFILES[kind].at(-1); prof[0] = PROFILES[kind][0];
+  }
+  prof = prof.map(([r, y]) => [r * scale, y * scale]);
+  const glassMat = c => toon(c, { transparent: true, opacity: .2, depthWrite: false, side: THREE.DoubleSide });
   const M = {
     bottle: { shell: toon('#3f9a64', { transparent: true, opacity: .55, depthWrite: false, side: THREE.DoubleSide }), face: toon('#bfe3c9', { grad: GRAD3, transparent: true, opacity: .7 }), thick: .012 * scale / .25 },
-    can: { shell: toon('#c9cfd8'), face: toon('#e9edf2', { grad: GRAD3 }), thick: .004 * scale / .25 },
-    bulb: { shell: glassMat('#eaf6ff'), face: glassMat('#ffffff'), thick: .006 * scale / .25 },
+    can: { shell: toon('#c9cfd8'), face: toon('#9aa2ad', { grad: GRAD3 }), thick: .004 * scale / .25 },
+    bulb: { shell: glassMat('#a9c4d2'), face: glassMat('#c4d8e2'), thick: .006 * scale / .25 },
     glass: { shell: glassMat('#e6f4ff'), face: glassMat('#ffffff'), thick: .01 * scale / .25 },
   }[kind];
   const V = vessel(prof, { ...M, fill, liquid, cut });
   const g = V.group, top = prof[prof.length - 1][1], R = Math.max(...prof.map(p => p[0])), parts = {};
   if (M.shell.transparent) g.traverse(o => { if (o.isMesh) fxLayer(o); });
   const a0 = cut / 2, a1 = Math.PI * 2 - cut;
-  if (kind === 'can') {
+  if (kind === 'can') {   // the inside of the can is darker than its outside, so the opening reads as an opening
+    const inn = prof.slice(1).map(([r, y]) => new THREE.Vector2(r - M.thick * 1.5, Math.max(y, M.thick * 1.5)));
+    g.add(mesh(new THREE.LatheGeometry(inn, 96, a0, a1), toon('#7b828d', { side: THREE.BackSide }), [0, 0, 0], { cast: false }));
     const band = new THREE.CylinderGeometry(R * 1.004, R * 1.004, top * .5, 96, 1, true, a0, a1);
     g.add(mesh(band, toon('#d23a3a', { side: THREE.DoubleSide }), [0, top * .45, 0]));
     g.add(mesh(new THREE.CylinderGeometry(R * 1.006, R * 1.006, top * .05, 96, 1, true, a0, a1), toon('#f4f4f4', { side: THREE.DoubleSide }), [0, top * .45, 0]));
@@ -214,13 +223,13 @@ export function preset(kind, { scale = .25, fill = null, liquid = '#c98a2e', cut
     parts.tab = tab;
   }
   if (kind === 'bulb') {
-    const metal = toon('#c7b27a'), r0 = prof[0][0] || prof[1][0], h = R * .55;
+    const metal = toon('#c7b27a'), r0 = PROFILES.bulb[1][0] * scale, h = R * .55;
     const base = new THREE.Group(); base.position.y = -h; g.add(base);
     mesh(new THREE.CylinderGeometry(r0 * 1.05, r0 * 1.0, h, 40), metal, [0, h / 2, 0], { parent: base });
     for (let i = 0; i < 4; i++) mesh(new THREE.TorusGeometry(r0 * 1.07, r0 * .1, 8, 40), metal, [0, h * (.18 + i * .2), 0], { rot: [Math.PI / 2, 0, 0], parent: base });
     mesh(new THREE.CylinderGeometry(r0 * .6, r0 * .9, h * .15, 32), toon('#1e1e22'), [0, -h * .06, 0], { parent: base });
     mesh(new THREE.SphereGeometry(r0 * .32, 16, 10), metal, [0, -h * .15, 0], { parent: base });
-    const stemH = top * .45, stem = new THREE.Mesh(new THREE.CylinderGeometry(r0 * .25, r0 * .7, stemH, 20), glassMat('#ffffff'));
+    const stemH = top * .45, stem = new THREE.Mesh(new THREE.CylinderGeometry(r0 * .25, r0 * .7, stemH, 20), glassMat('#c4d8e2'));
     stem.position.y = stemH / 2; fxLayer(stem); g.add(stem);
     const wire = toon('#6b6b70'), fy = top * .56, fw = R * .16;   // a short tight coil between two support wires
     for (const sx of [-1, 1]) {

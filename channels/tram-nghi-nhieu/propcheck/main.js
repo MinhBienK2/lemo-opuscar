@@ -21,18 +21,20 @@ function show(k) {
   if (obj) scene.remove(obj);
   obj = PROPS[names[k]](); scene.add(obj); obj.updateMatrixWorld(true);
   obj.traverse(o => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } });
-  box.setFromObject(obj);
+  box.setFromObject(obj);   // the long side across the front view
+  const sz = box.getSize(new THREE.Vector3());
+  if (sz.z > sz.x * 1.3) { obj.rotation.y += Math.PI / 2; obj.updateMatrixWorld(true); box.setFromObject(obj); }
   obj.position.y -= box.min.y; obj.position.x -= (box.min.x + box.max.x) / 2; obj.position.z -= (box.min.z + box.max.z) / 2;
   obj.updateMatrixWorld(true); box.setFromObject(obj); box.getCenter(ctr);
   R = box.getSize(new THREE.Vector3()).length() / 2;
   key.shadow.camera.left = key.shadow.camera.bottom = -R * 2; key.shadow.camera.right = key.shadow.camera.top = R * 2;
   key.shadow.camera.updateProjectionMatrix();
 }
-const VIEWS = [[.6, .45], [1.45, .08], [.3, 1.2]];   // [azimuth, elevation] rad
+const VIEWS = [[.6, .45], [0, .08], [.3, 1.2]];   // [azimuth, elevation] rad: three-quarter, front (across the long side), top
 window.PROPS = names; window.DUR = names.length * 3; window.EV = [];
 window.render = t => {
   const k = Math.min(names.length - 1, Math.floor(t / 3)), v = Math.floor(t) % 3; show(k);
-  const [az, el] = VIEWS[v], d = R / Math.sin(THREE.MathUtils.degToRad(15)) * .82;
+  const [az, el] = VIEWS[v], d = R / Math.sin(THREE.MathUtils.degToRad(15)) * 1.05;
   camera.position.set(ctr.x + d * Math.cos(el) * Math.sin(az), ctr.y + d * Math.sin(el), ctr.z + d * Math.cos(el) * Math.cos(az));
   camera.lookAt(ctr); camera.updateProjectionMatrix();
   F.frame(scene, { t, ref: d, key });
