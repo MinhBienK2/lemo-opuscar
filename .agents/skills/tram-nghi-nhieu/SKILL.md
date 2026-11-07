@@ -1,7 +1,7 @@
 ---
 name: tram-nghi-nhieu
 description: Đạo diễn và dựng một tập của kênh Trạm Nghĩ Nhiều — câu hỏi "tại sao" đời thường, trả lời bằng diorama 3D toon (three.js) có ánh sáng thật, viền mực vẽ tay, máy quay đi vào bên trong vật, mọi vật dựng đúng là nó, chỉ thứ vô hình mới thành hình minh hoạ; một giọng kể tiếng Việt. Dùng khi làm bất kỳ tập nào của kênh.
-version: 13.6.0
+version: 13.7.0
 ---
 
 # Một tập Trạm Nghĩ Nhiều
@@ -44,7 +44,7 @@ Thứ tự này là lý do phim mẫu đẹp. Đừng đảo.
    - mỗi bề mặt lớn một texture canvas có seed (`canvasTex`); đồ mềm nặn bằng `cushionGeo` hoặc `surface`, không để là hộp;
    - đồ đạc đủ dày để nơi đó có người sống: đồ nhỏ trên bàn, tranh, cây, thứ gì đó ngoài cửa sổ;
    - một vật sống: rèm lay, lá lay đổ bóng, LED thở, hơi nước.
-3. **Vật trước cảnh**: mọi vật có thật sẽ lên hình (của rig hay tự dựng) nằm trong `src/props.js` của tập: `export const PROPS = { 'tên vật như lời gọi, kèm trạng thái': () => THREE.Object3D }`, và `film.js` lấy vật từ đó. Trước khi dựng cảnh đầu tiên, chạy `LEMO_ANGLE=vulkan sh channels/tram-nghi-nhieu/review.sh <tập> --props`: mỗi vật đứng riêng, nhìn từ ba phía; một phiên không biết tên gọi tên nó, phiên thứ hai so với tên bạn định. Vật bị gọi sai hay "không rõ" là vật thay thế: sửa theo dòng `SỬA:` (thêm bộ phận đặc trưng, đúng tỉ lệ, đúng chất liệu), xem lại ảnh ở `review/props/`, chạy lại tới khi PASS. Vật thêm sau cũng phải qua bước này. PASS ghi con dấu `review/PROPS.pass`; tập không có `src/props.js` hay chưa có con dấu này thì `build.sh` không dựng. Vật dựng tốt mà dùng lại được thì đưa vào `rig/props.js`.
+3. **Vật trước cảnh**: mọi vật có thật sẽ lên hình (của rig hay tự dựng) nằm trong `src/props.js` của tập: `export const PROPS = { 'tên vật như lời gọi, kèm trạng thái': () => THREE.Object3D }`, và `film.js` lấy vật từ đó. Trước khi dựng cảnh đầu tiên, chạy `LEMO_ANGLE=vulkan sh channels/tram-nghi-nhieu/review.sh <tập> --props`: mỗi vật đứng riêng, nhìn từ ba phía; một phiên không biết tên gọi tên nó, phiên thứ hai so với tên bạn định. Vật bị gọi sai hay "không rõ" là vật thay thế: sửa theo dòng `SỬA:` (thêm bộ phận đặc trưng, đúng tỉ lệ, đúng chất liệu), xem lại ảnh ở `review/props/`, chạy lại tới khi PASS. Vật nào lời kể gọi tên hay thẻ chữ chỉ vào đều phải có trong `src/props.js` (một cụm bộ phận thì đặt tên theo cụm), kể cả bộ phận bên trong máy: dựng chúng trong `film.js` mà không qua đây là vật thay thế. Ruột máy móc, đồ điện: dùng linh kiện của `rig/parts.js` (lò xo, nút bấm, nam châm, ốc, dây có phích, chip, bảng mạch, pin, bánh răng, tiếp điểm…) thay vì khối trụ, khối hộp. Vật thêm sau cũng phải qua bước này. PASS ghi con dấu `review/PROPS.pass`; tập không có `src/props.js` hay chưa có con dấu này thì `build.sh` không dựng. Vật dựng tốt mà dùng lại được thì đưa vào `rig/props.js`.
 4. **Vòng still**: `LEMO_ANGLE=vulkan node core/render/still.mjs <tập> <t…> --out <scratch>`, rồi **mở ảnh ra xem**. Mỗi vòng ghi vào `LOOK.md`: thấy gì, vì sao, sửa gì. Chẩn đoán bằng cờ, đừng đoán:
    - mảng sáng mất hoặc bóng lạ → `?lightcam=1` nhìn từ đèn, `?nocast=<tag>` tắt từng vật đổ bóng (phim mẫu tìm ra chăn DoubleSide tự đổ bóng lên chính nó theo cách này);
    - cháy trắng → giảm cường độ đèn điểm (decay 2), chỉ vật `glowMat` k > 1 mới được loé;

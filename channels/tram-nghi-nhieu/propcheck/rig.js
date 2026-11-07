@@ -6,6 +6,7 @@ import { preset } from '../rig/cutaway.js';
 import { buildHand } from '../rig/fx.js';
 import { section } from '../rig/section.js';
 import { toon } from '../rig/kit.js';
+import * as P from '../rig/parts.js';
 const ripe = (r) => { const m = banana(); m.ripen(r, 0); return m; };
 export const PROPS = {
   'quả chuối xanh': () => ripe(0),
@@ -27,4 +28,16 @@ export const PROPS = {
   'lon nước ngọt bị cắt hở một mảng, thấy bên trong': () => preset('can').group,
   'bóng đèn sợi đốt (bóng tròn, thuỷ tinh trong)': () => preset('bulb').group,
   'cốc thuỷ tinh có nước': () => preset('glass', { fill: .15, liquid: '#c98a2e' }).group,
+  'lò xo xoắn bằng thép': () => P.spring(),
+  'nút bấm tròn màu đỏ': () => P.button(),
+  'nam châm hình móng ngựa': () => P.magnet(),
+  'thanh nam châm': () => P.magnet({ kind: 'bar' }),
+  'con ốc vít': () => P.screw(),
+  'dây điện có phích cắm': () => P.cable(),
+  'con chip điện tử': () => P.chip(),
+  'bảng mạch điện tử': () => P.pcb(),
+  'viên pin AA': () => P.battery(),
+  'viên pin điện thoại': () => P.battery({ kind: 'pouch' }),
+  'bánh răng': () => P.gear(),
+  'tiếp điểm điện (hai lá đồng nối dây)': () => { const c = P.contacts(); c.close(.4); return c; },
 };
