@@ -1,7 +1,7 @@
 ---
 name: tram-nghi-nhieu
 description: Đạo diễn và dựng một tập của kênh Trạm Nghĩ Nhiều — câu hỏi "tại sao" đời thường, trả lời bằng diorama 3D toon (three.js) có ánh sáng thật, viền mực vẽ tay, máy quay đi vào bên trong vật, mọi vật dựng đúng là nó, chỉ thứ vô hình mới thành hình minh hoạ; một giọng kể tiếng Việt. Dùng khi làm bất kỳ tập nào của kênh.
-version: 13.5.0
+version: 13.6.0
 ---
 
 # Một tập Trạm Nghĩ Nhiều
@@ -51,6 +51,7 @@ Thứ tự này là lý do phim mẫu đẹp. Đừng đảo.
    - vật đọc sai hình → đổi trục máy trước khi đổi vật.
    Ít nhất 3 vòng cho mỗi khung hero, trước khi làm chuyển động.
 5. **Cơ chế** (khung hero 2): dựng thành vật thể có tham số (`speedTable`, `sparks`, `squiggle`, hạt trên `CatmullRomCurve3`, `rig/cutaway.js`).
+   - **Vật bị cắt là chính vật nguyên.** Máy móc, đồ gia dụng, quả, hộp, bất cứ vật nào cần mở ra: dựng nó **nguyên** trong `src/props.js` (có đủ bộ phận bên trong, vỏ có độ dày, ruột rỗng nếu thật nó rỗng), qua `--props` ở dạng nguyên, rồi cắt bằng `section(vật, { normal, at })` của `rig/section.js`: một mặt phẳng cưa qua mọi bộ phận, mặt cắt được tô kín. Không dựng riêng một "bản cắt" bằng tay: bản dựng tay luôn khác vật nguyên (màu, dáng, bộ phận), và người xem không biết mình đang nhìn vào cái gì. Cảnh mở: vật nguyên trước, rồi cùng góc máy chuyển sang bản cắt.
    - Bên trong một vật: dùng `tissue()` của `rig/inside.js`, cắt theo tiết diện của chính vật (`section: 5` chuối, `section: 32` vật tròn), vật nguyên đặt cạnh khoanh trong cùng khung (vỏ có cửa mở được, mặt cắt có tế bào đổi trạng thái, đặt ngay trên bàn của bối cảnh, có đèn riêng), hoặc mặt cắt của `rig/cutaway.js` cho bình, ống. Máy đứng ngoài nhìn vào. Vật vẫn nằm trong bối cảnh có sàn, đèn và đồ xung quanh, như `demo/stills/cutaway_*.jpg`. Không đưa máy vào trong để quay một khoảng không chỉ có hạt.
    - Trước khi thêm chữ, khung phải có **một sự kiện nhân quả lớn trên màn hình**: một tác động (nắp bật, dòng điện vào) gây ra một thay đổi thấy được ngay trong vòng 1–2 giây (bọt trào, tia lửa, đổi màu). Tắt nhãn đi mà vẫn hiểu thì mới đạt.
    - Không vòng tròn đồng tâm, không mũi tên, không công thức.

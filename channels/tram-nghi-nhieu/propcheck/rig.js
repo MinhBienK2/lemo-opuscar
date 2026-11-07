@@ -4,6 +4,8 @@ import { banana, bunch, apple, plate, bowl } from '../rig/props.js';
 import { tissue } from '../rig/inside.js';
 import { preset } from '../rig/cutaway.js';
 import { buildHand } from '../rig/fx.js';
+import { section } from '../rig/section.js';
+import { toon } from '../rig/kit.js';
 const ripe = (r) => { const m = banana(); m.ripen(r, 0); return m; };
 export const PROPS = {
   'quả chuối xanh': () => ripe(0),
@@ -12,6 +14,7 @@ export const PROPS = {
   'nải chuối': () => { const B = bunch({ n: 5 }); B.fruits.forEach(f => f.ripen(.6, 0)); return B.group; },
   'quả táo đỏ': () => apple(),
   'quả táo xanh': () => apple({ color: 'green' }),
+  'quả táo đỏ bổ đôi, thấy ruột': () => section(apple(), { cap: () => toon('#f4e6c4') }).group,
   'cái đĩa': () => plate({ R: .3 }),
   'cái bát': () => bowl({ R: .3 }),
   'bàn tay người': () => buildHand(),
