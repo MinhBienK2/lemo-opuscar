@@ -19,4 +19,6 @@
 **/*.lock
 
 # Episodes stay on this machine (finished films run to hundreds of MB, past what GitHub takes)
-*/series/
+**/*.mp4
+*/series/_*/
+

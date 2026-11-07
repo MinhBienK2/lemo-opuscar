@@ -187,6 +187,17 @@ for (const arg of args) {
       if (fj.title && /<[^>]+>/.test(fj.title)) {
         fail(name, `film.json title contains unexpanded placeholder: "${fj.title}"`);
       }
+      if (fj.runtime && !/^\d+:[0-5]\d$/.test(fj.runtime)) {
+        fail(name, `film.json runtime "${fj.runtime}" is not M:SS format (e.g. 17:38)`);
+      }
+      const treatmentText = read(path.join(folder, 'TREATMENT.md'));
+      if (treatmentText && fj.title) {
+        const firstLine = treatmentText.split('\n')[0] || '';
+        const tm = /^#\s*(?:TREATMENT\s*[—–-]\s*)?(.*)/.exec(firstLine);
+        if (tm && tm[1].trim() && tm[1].trim() !== fj.title.trim()) {
+          fail(name, `film.json title "${fj.title}" does not match TREATMENT.md heading "${tm[1].trim()}"`);
+        }
+      }
       const factsText = read(path.join(folder, 'research/FACTS.md'));
       if (factsText && fj.title) {
         const headLine = factsText.split('\n')[0] || '';

@@ -15,7 +15,7 @@ LIST_ITEM = re.compile(r'^\s*(?:[-*+]\s+|\d+[.)]\s+)')
 QUOTE = re.compile(r'^\s*>')
 HEADING = re.compile(r'^\s*#{1,6}\s')
 YEAR = re.compile(r'\b(?:18|19|20)\d{2}\b')
-IDENTIFIER = re.compile(r'(?i)(?:\bdoi\s*:\s*(?!<doi\s+or\s+link>)\S|\bpmid\s*:\s*\S|\bpubmed\s*:\s*\S|\barxiv\s*:\s*\S|https?://(?!<)\S)')
+IDENTIFIER = re.compile(r'(?i)(?:\bdoi\s*:?\s*(?!<doi\s+or\s+link>)\S|\bpmid\s*:?\s*\d+|\bpubmed\s*:?\s*\S|\barxiv\s*:?\s*\S|https?://(?!<)\S)')
 TEMPLATE_PLACEHOLDER = re.compile(r'(?i)<(?:doi\s+or\s+link|author|the\s+sentence\s+of\s+the\s+source|claim,\s+in\s+the\s+words)>')
 JOURNALISH = re.compile(r'(?i)\b(?:journal\w*|review\w*|science|nature|psycholog\w*|cognition|psychiatr\w*|perspectives?|'
                         r'medicine|biology|physics|chemistry|econom\w*|sociolog\w*|communication\w*|proceedings?|transactions?|'

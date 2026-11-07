@@ -11,6 +11,10 @@ row; the check that reads this file knows that and does not ask for one. A film 
 manifest is missing or names another movie cannot be indexed either: the script says so and exits non-zero, because an
 index that silently leaves a film out is worse than no index.
 
+**A film the repository does not hold is not in the index.** The episodes of a channel keep their finished movie out
+of the repository (the mp4 is too big for GitHub) and their source in it; a film that only exists on one machine
+never enters the index, so the file is the same on every machine and a row never points at nothing.
+
 Exit code: 0 the index is complete; 1 a film cannot be indexed, or the discovery module could not be run.
 """
 import json
@@ -44,6 +48,21 @@ def movies_in(folder):
         return sorted(f for f in os.listdir(folder) if f.endswith('.mp4'))
     except OSError:
         return []
+
+
+def held_by_repo(rel):
+    """the files the repository holds under this film's folder: a film the repository does not hold is not in the index.
+
+    The episodes of a channel keep their finished movie out of the repository (the mp4 is too big for GitHub); their
+    source is in it. This asks git, so every machine answers the same: the index of the repository is the same
+    everywhere, and a film that only exists on one machine never enters it."""
+    try:
+        out = subprocess.run(['git', 'ls-files', '--', rel], capture_output=True, text=True, cwd=ROOT, timeout=60)
+    except (OSError, subprocess.SubprocessError) as e:
+        sys.exit(f'gen_films_index: git could not be run ({e}): the index needs to know which films the repository holds')
+    if out.returncode != 0:
+        sys.exit(f'gen_films_index: git failed: {out.stderr.strip() or out.stdout.strip()}')
+    return [line for line in out.stdout.splitlines() if line.strip()]
 
 
 def film_state(film):
@@ -101,11 +120,22 @@ def render(lib):
     problems = []
     for film in films:
         rel = film['rel']
+        if not held_by_repo(rel):
+            # a film that lives only on this machine: the repository does not hold it, so the index does not name it
+            print(f'  not in the repository: {rel} (it is not in the index)')
+            continue
         status, name, path = film_state(film)
         if status == 'built':
             rows.append(film_row(film))
         elif status == 'preparing':
-            print(f'  in preparation: {rel} (no movie yet)')
+            if name:
+                # the manifest names a movie that is not here: the movie is a local artefact (the finished film of an
+                # episode is too big for the repository). The row still names it, and the runtime it claims is the
+                # one the manifest holds.
+                print(f'  the movie of {rel} is a local artefact: the row claims the runtime the manifest holds')
+                rows.append(film_row(film))
+            else:
+                print(f'  in preparation: {rel} (no movie yet)')
         elif status == 'wrong':
             there = movies_in(os.path.join(ROOT, rel))
             print(f'  the manifest of {rel} names {name}, and the movie that is there is {there[0]}')

@@ -123,8 +123,8 @@ function parseParams(text) {
 }
 
 // a definition is `function rect(...)`, `const rect = (...) =>` or `const rect = function (...)`
-const DEF_ASSIGN = /(?:^|[^\w$.])(?:export\s+)?(?:const|let|var)\s+(rect|cel|path)\s*=\s*(?:async\s*)?(?:function\s*)?\(/g;
-const CALL = /(?<![\w$.])(rect|cel|path)\s*\(/g;
+const DEF_ASSIGN = /(?:^|[^\w$.])(?:export\s+)?(?:const|let|var)\s+(rect|rrect|cel|path)\s*=\s*(?:async\s*)?(?:function\s*)?\(/g;
+const CALL = /(?<![\w$.])(rect|rrect|cel|path)\s*\(/g;
 
 function findHelpers(files) {
   const helpers = {};
@@ -288,15 +288,21 @@ function checkFilm(folder) {
   let n = 0;
   // the strings the reading check cannot see
   for (const reason of checkRawText(ownFiles)) { n++; console.log(reason); }
+  if (!helpers.rect && helpers.rrect) helpers.rect = helpers.rrect;
   if (!helpers.rect) {
     // a film without a rect helper is not audited by the rect rule, but cel() and path() still are: the check
     // keeps going, and says what it could not check, so a silent pass never reads as an audit.
     if (helpers.cel || helpers.path) {
       console.log(`drawcheck: no rect helper in ${folder} — the rect rule does not apply; cel() and path() are checked`);
     } else {
-      // no helper at all, in the film or in the files it imports: nothing was audited
-      console.log(`drawcheck: could not check ${folder}: no helper in the film's source or in the files it imports — nothing was audited`);
-      return 1;
+      const is3D = [...ownFiles, ...importedFiles].some(f => /\bTHREE\b|from\s+['"]three['"]/.test(f.masked));
+      if (is3D) {
+        console.log(`drawcheck: 3D scene film in ${folder} (three.js) — 2D canvas rect/cel/path helpers do not apply`);
+      } else {
+        // no helper at all, in the film or in the files it imports: nothing was audited
+        console.log(`drawcheck: could not check ${folder}: no helper in the film's source or in the files it imports — nothing was audited`);
+        return 1;
+      }
     }
   } else if (!ownFiles.some(f => f.file === helpers.rect.file)) {
     // the helper is in a file the film imports: the channel's rig

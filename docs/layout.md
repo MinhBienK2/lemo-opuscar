@@ -120,6 +120,11 @@ The checker (`tools/check_films_index.py`) compares every manifest with the file
 `FILMS.md` with the manifests: the runtime with `ffprobe`, the movie with the file that is there,
 and every film that exists with a row that names it.
 
+A film the **repository does not hold** — one that lives only on the machine that made it — is not in the index:
+the episodes keep their finished movie out of the repository (the mp4 is too big for GitHub) and their source in it,
+so the index is the same file on every machine and a row never points at nothing. The runtime of a film whose movie
+is a local artefact is claimed by its manifest and not measured: the movie is not here to measure.
+
 ## How an episode reaches the channel's shared code
 
 Relative imports, because the renderer serves the repository root:

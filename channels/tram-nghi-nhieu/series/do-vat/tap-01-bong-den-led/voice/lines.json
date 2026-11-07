@@ -1,0 +1,278 @@
+[
+ {
+  "id": "m1",
+  "text": "Buổi tối, trên bàn này có hai cái bóng đèn treo cạnh nhau.",
+  "gap": 2.6
+ },
+ {
+  "id": "m2",
+  "text": "Cái bên trái là bóng sợi, loại bóng đèn cũ mình vẫn thấy ở mấy bà nội.",
+  "gap": 0.52
+ },
+ {
+  "id": "m3",
+  "text": "Cái bên phải là bóng LED, loại mình thấy ở khắp mọi nơi bây giờ.",
+  "gap": 0.52
+ },
+ {
+  "id": "m3b",
+  "text": "Nhìn từ xa thì hai cái bóng đó giống nhau.",
+  "gap": 0.55
+ },
+ {
+  "id": "m4",
+  "text": "Cả hai đều sáng. Nhưng khi mình đưa tay sờ vào...",
+  "gap": 0.67
+ },
+ {
+  "id": "m4b",
+  "text": "Mình từng tưởng chúng chỉ khác nhau ở cái vỏ.",
+  "gap": 0.5
+ },
+ {
+  "id": "m5",
+  "text": "...cái bóng sợi thì nóng ranh, phải rụt tay lại.",
+  "gap": 0.52
+ },
+ {
+  "id": "m6",
+  "text": "Còn bóng LED thì mát lạnh, sờ hoài cũng không sao.",
+  "gap": 0.67
+ },
+ {
+  "id": "m7",
+  "text": "Mình cứ thắc mắc: cùng là một cái bóng, sao một cái nóng, một cái mát?",
+  "gap": 0.72
+ },
+ {
+  "id": "m8",
+  "text": "Câu trả lời không nằm ở cái vỏ, mà nằm bên trong.",
+  "gap": 0.57
+ },
+ {
+  "id": "m9",
+  "text": "Để thấy, mình sẽ lao vào trong cái bóng sợi kia.",
+  "gap": 0.72
+ },
+ {
+  "id": "m10",
+  "text": "Đây là một cái bóng đèn thật, cỡ bàn tay, được cắt mở ra.",
+  "gap": 0.92
+ },
+ {
+  "id": "m11",
+  "text": "Ở giữa là một sợi dây mỏng, gọi là sợi đèn.",
+  "gap": 0.52
+ },
+ {
+  "id": "m12",
+  "text": "Bây giờ mình bật đèn.",
+  "gap": 0.67
+ },
+ {
+  "id": "m13",
+  "text": "Thấy không, sợi dây chuyển từ đỏ sẫm sang cam rực trong chưa đầy một giây.",
+  "gap": 0.82
+ },
+ {
+  "id": "m13b",
+  "text": "Sợi dây nóng đến mức nó tự nó phát ra ánh sáng.",
+  "gap": 0.5
+ },
+ {
+  "id": "m14",
+  "text": "Nhiệt độ của sợi dây lúc này khoảng hai nghìn tám trăm độ Kelvin.",
+  "gap": 0.52,
+  "asr": "Nhiệt độ của sợi dây lúc này khoảng 2800 độ keo viên."
+ },
+ {
+  "id": "m15",
+  "text": "Và đây là điều lạ: sợi dây đang bắn ra hàng nghìn thứ ánh sáng.",
+  "gap": 0.62
+ },
+ {
+  "id": "m16",
+  "text": "Mỗi một hạt bay ra khỏi sợi dây là một photon.",
+  "gap": 0.52,
+  "asr": "Mỗi 1 hạt bay ra khỏi sợi dây là 1 phô tưng."
+ },
+ {
+  "id": "m16b",
+  "text": "Chúng bay thẳng ra vỏ kính, và vỏ kính nuốt hết.",
+  "gap": 0.5
+ },
+ {
+  "id": "m17",
+  "text": "Nhưng mắt ta chỉ thấy được một phần rất nhỏ trong số đó.",
+  "gap": 0.57
+ },
+ {
+  "id": "m18",
+  "text": "Phần còn lại là hồng ngoại, dài hơn nhiều, mắt không thấy, nhưng da tay ta thấy.",
+  "gap": 0.57
+ },
+ {
+  "id": "m18b",
+  "text": "Phần bị nuốt ấy đọng lại thành nhiệt, quay lại làm bóng nóng.",
+  "gap": 0.5
+ },
+ {
+  "id": "m19",
+  "text": "Chính cái phần mắt không thấy đó chính là nhiệt.",
+  "gap": 0.67
+ },
+ {
+  "id": "m20",
+  "text": "Chín mươi phần trăm năng lượng bóng sợi thả ra thành nhiệt.",
+  "gap": 0.57,
+  "asr": "90 phần trăm năng lượng bóng sợi thả ra thành nhiêu."
+ },
+ {
+  "id": "m20b",
+  "text": "Chỉ mười phần trăm là ánh sáng.",
+  "gap": 0.52,
+  "asr": "Chỉ 10% là ánh sáng."
+ },
+ {
+  "id": "m21",
+  "text": "Nói cách khác: bóng sợi không tạo ra ánh sáng, nó tạo ra nhiệt, rồi nhiệt mới phát ra ánh sáng.",
+  "gap": 0.67
+ },
+ {
+  "id": "m22",
+  "text": "Đỉnh của đám hồng ngoại ấy nằm ở khoảng một micrômet.",
+  "gap": 0.57,
+  "asr": "Đỉnh cổ đám hầu ngoại ấy nằm ở khoảng 1 mí cân."
+ },
+ {
+  "id": "m22b",
+  "text": "Mắt ta chỉ thấy được đầu dải đó, phần cuối thì vô hình.",
+  "gap": 0.5
+ },
+ {
+  "id": "m23",
+  "text": "Trong khi mắt ta chỉ thấy được từ không phẩy bốn đến không phẩy tám micrômet.",
+  "gap": 0.62,
+  "asr": "Trong khi mắt ta chỉ thấy được từ 0,4 đến 0,8 micrôn."
+ },
+ {
+  "id": "m24",
+  "text": "Ánh sáng của bóng sợi chỉ là phần rò rí của một đám nhiệt.",
+  "gap": 0.72
+ },
+ {
+  "id": "m25",
+  "text": "Bây giờ mình sang cái bóng LED kia.",
+  "gap": 0.82
+ },
+ {
+  "id": "m26",
+  "text": "Cùng một cái vỏ, nhưng bên trong không có sợi dây nào cả.",
+  "gap": 0.57
+ },
+ {
+  "id": "m27",
+  "text": "Chỉ có một mảnh bán dẫn, nhỏ hơn hạt gạo, xếp thành hai lớp.",
+  "gap": 0.57
+ },
+ {
+  "id": "m27b",
+  "text": "Hai lớp ấy tiếp xúc nhau ở một mặt rất mỏng.",
+  "gap": 0.5
+ },
+ {
+  "id": "m28",
+  "text": "Khi có dòng điện chạy qua, nó đẩy các electron sang một bên.",
+  "gap": 0.57
+ },
+ {
+  "id": "m29",
+  "text": "Bên kia, chỗ các electron rơi xuống một mức năng lượng thấp hơn...",
+  "gap": 0.52
+ },
+ {
+  "id": "m29b",
+  "text": "Ở chỗ hai lớp chạm nhau, electron gặp lỗ trống rồi rơi xuống.",
+  "gap": 0.5
+ },
+ {
+  "id": "m30",
+  "text": "...một photon được sinh ra ngay tại chỗ đó.",
+  "gap": 0.52
+ },
+ {
+  "id": "m31",
+  "text": "Không một sợi dây nào phải nóng trước, nên ánh sáng ra ngay tức thì.",
+  "gap": 0.62
+ },
+ {
+  "id": "m32",
+  "text": "Phần nhiệt thừa chỉ còn rất ít, phải tản ra ở đế bóng.",
+  "gap": 0.67
+ },
+ {
+  "id": "m33",
+  "text": "Nên bóng LED mát, và bền hơn bóng sợi tới hai mươi lăm lần.",
+  "gap": 0.72,
+  "asr": "Nền bóng LED-MAC và bền hơn bóng sợi tới 25 lần."
+ },
+ {
+  "id": "m33b",
+  "text": "Tuổi thọ của nó cũng dài hơn nhiều lần.",
+  "gap": 0.5
+ },
+ {
+  "id": "m34",
+  "text": "Quay lại cái bàn, mình sờ bóng LED lần này.",
+  "gap": 0.77
+ },
+ {
+  "id": "m35",
+  "text": "Mát. Và tay mình không rụt lại.",
+  "gap": 0.67,
+  "asr": "Mắc và tay mình không rục lãi."
+ },
+ {
+  "id": "m36",
+  "text": "Tính ra mỗi vòng đèn sáng, bóng sợi cho mười sáu lumen trên một oát.",
+  "gap": 0.57,
+  "asr": "Tính ra mỗi vòng đàn sáng bóng sợi cho 16 lungan trên một quát."
+ },
+ {
+  "id": "m37",
+  "text": "Bóng LED trắng cho mười lumên trên một oát, hơn sáu lần.",
+  "gap": 0.57,
+  "asr": "Bỗng lét trắng cho 10 luân trên 1 quát hơn 6 lần."
+ },
+ {
+  "id": "m38",
+  "text": "Nên khi mua bóng, mình đừng nhìn số oát nữa.",
+  "gap": 0.72
+ },
+ {
+  "id": "m38b",
+  "text": "Cứ nhìn vào con số lumen in trên vỏ hộp.",
+  "gap": 0.5
+ },
+ {
+  "id": "m39",
+  "text": "Hãy nhìn số lumen: một nghìn một trăm lumen thì bóng sợi tốn bảy mươi lăm oát.",
+  "gap": 0.52,
+  "asr": "Hãy nhìn số Lumen, 1.100 Lumen thì bóng sợi tuốn 75 quát."
+ },
+ {
+  "id": "m40",
+  "text": "Còn bóng LED chỉ tốn chín oát cho lượng sáng đó.",
+  "gap": 0.57
+ },
+ {
+  "id": "m41",
+  "text": "Sáng như nhau, tốn điện ít hơn, và tay không bị nóng.",
+  "gap": 0.82
+ },
+ {
+  "id": "m41b",
+  "text": "Hoá ra bóng LED không phải là không nóng, chỉ là nóng ít hơn thôi.",
+  "gap": 0.7
+ }
+]

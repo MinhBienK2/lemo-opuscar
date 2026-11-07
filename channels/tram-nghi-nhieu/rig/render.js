@@ -179,4 +179,5 @@ export function subtitle(g, text, { size = 46 } = {}) {
   return { id: 'sub', text, x0: Math.round(W / 2 - w / 2), y0: 985 - size, x1: Math.round(W / 2 + w / 2), y1: 985 + 12 };
 }
 
-function rrect(g, x, y, w, h, r) { g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r); g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath(); }
+export function rect(g, x, y, w, h) { g.beginPath(); g.rect(x, y, w, h); }
+export function rrect(g, x, y, w, h, r) { g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r); g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath(); }

@@ -6,8 +6,12 @@ where the films are):
 
   - a film whose movie is not built yet is **in preparation**: it says nothing yet, so it has no row in FILMS.md and
     the check says so and does not fail. A new episode is in preparation until its movie is rendered;
+  - a film the repository does not hold (it lives only on this machine) is **not in the index**: it has no row, and a
+    row that names it is a failure;
   - a film whose movie is there must have a manifest, the manifest must name that movie, and the runtime it claims
     must be the one ffprobe measures on that movie (within 1.5 s);
+  - a film whose movie is a local artefact (the episodes keep their finished movie out of the repository) must have a
+    row, and the runtime it claims is not checked: the movie is not here to measure;
   - a film whose movie is there must have a row in FILMS.md, and every row must name a film whose movie is there.
 
 A film whose manifest names a movie that is not the one that is there is a failure: the index would point at nothing.
@@ -20,7 +24,7 @@ import subprocess
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from gen_films_index import INDEX, ROOT, UNKNOWN, discovery, film_state, movies_in   # noqa: E402  (the index tools share the discovery)
+from gen_films_index import INDEX, ROOT, UNKNOWN, discovery, film_state, held_by_repo, movies_in   # noqa: E402  (the index tools share the discovery)
 
 ROW = re.compile(r'^\|\s*(?P<title>.*?)\s*\|\s*`(?P<folder>[^`]+)`\s*\|\s*(?P<runtime>[^|]*?)\s*\|\s*(?P<movie>`[^`]*`|—)\s*\|\s*$')
 CHANNELS_HEADING = re.compile(r'^##\s+Channels\b', re.M)
@@ -79,8 +83,20 @@ def main():
     built = {}          # the films that have a movie: they are the ones the index must name
     for film in films:
         rel = film['rel']
+        if not held_by_repo(rel):
+            # a film that lives only on this machine: the repository does not hold it, so the index does not name it
+            print(f'  not in the repository: {rel} (it is not in the index)')
+            continue
         status, name, path = film_state(film)
         if status == 'preparing':
+            manifest = film['manifest'] or {}
+            runtime = (manifest.get('runtime') or '').strip()
+            if runtime:
+                # the manifest names a movie that is not here: the movie is a local artefact (the finished film of an
+                # episode is too big for the repository). The row must exist; the runtime cannot be measured here.
+                print(f'  {rel}: the movie is a local artefact — the runtime {runtime} was not checked')
+                built[rel + '/'] = film
+                continue
             print(f'  in preparation: {rel} (no movie yet)')
             continue
         if status == 'unwritten':
@@ -125,10 +141,14 @@ def main():
 
     index_name = os.path.basename(INDEX)
     listed = {}
+    known = {f['rel'] + '/': f for f in films}
     for row in table:
         folder = row['folder']
         if folder not in built:
-            if folder in {f['rel'] + '/' for f in films}:
+            film = known.get(folder)
+            if film and not held_by_repo(film['rel']):
+                print(f'  FAIL {index_name} names {folder}, and the repository does not hold that film: it is not in the index')
+            elif film:
                 print(f'  FAIL {index_name} names {folder}, and that film has no movie: the row is stale')
             else:
                 print(f'  FAIL {index_name} names {folder}, and no such film exists')

@@ -120,6 +120,20 @@ escape hatches that were caught and guarded.
 | K7 | Loudness check in `review.sh` was purely decorative and ignored True Peak violations | medium | `core/render/review.sh` now uses `ebur128=peak=true` and checks True Peak ceiling |
 | K8 | `review.sh` did not verify that the delivered movie was newer than the source files | medium | `core/render/review.sh` now checks artifact freshness against `src/*.js` and `voice/lines.json` |
 
+## The sixth record: supervising the 18-minute sleep episode (Tập 01 Cơ thể)
+
+[`retro/2026-11-07-tap-01-ngu-trua-day-me.md`](retro/2026-11-07-tap-01-ngu-trua-day-me.md) — an 18-minute episode of Trạm Nghĩ Nhiều
+produced under the supervisor. It records the 3D drawing check gap, citation regex rigidity, manifest format bypasses,
+sleep polling, and premature completion on review FAIL that were caught and guarded.
+
+| # | Finding | Severity | Guard now |
+|---|---|---|---|
+| S1 | `drawcheck.mjs` failed on 3D toon films by demanding 2D canvas helpers (`rect`, `cel`, `path`) | critical | `core/render/drawcheck.mjs` recognizes 3D scene rigs (Three.js) and `rrect`; `channels/tram-nghi-nhieu/rig/render.js` exports `rect` and `rrect` |
+| S2 | `tools/check_citations.py` rejected valid scientific citations without colons (`PMID 16676778`) | high | `tools/check_citations.py` allows optional colons in `IDENTIFIER` regex (`\bpmid\s*:?\s*\d+`); `FACTS.md` standardized |
+| S3 | `filmcheck.mjs` permitted unvalidated `runtime` format and title drift to escape to the index | high | `core/render/filmcheck.mjs` enforces `M:SS` runtime format and checks `film.json` title against `TREATMENT.md` |
+| S4 | Title discrepancy between manifest and production documents | medium | Harmonized across `film.json`, `CREDITS`, `index.html`, and `FILMS.md` |
+| S5 | 95 `sleep` polling calls burned ~8 hours of wall-clock time and locked the shell | high | `CODING_STANDARDS.md` R5 reinforced; documented in `channels/tram-nghi-nhieu/CHANNEL.md` |
+| S6 | Agent stopped and presented a "final handoff" when independent review had `VERDICT: FAIL` | high | `channels/tram-nghi-nhieu/CHANNEL.md` and `AGENTS.md` explicitly forbid delivery on review FAIL; require fixing until PASS |
 ## The supervisor
 
 [`tools/supervise.sh`](../tools/supervise.sh) watches the episode that is being made: every fifteen minutes it finds

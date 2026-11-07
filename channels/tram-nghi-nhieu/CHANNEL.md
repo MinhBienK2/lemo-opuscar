@@ -37,6 +37,12 @@ import { film, label, subtitle, toScreen } from '../../../../rig/render.js';   /
 
 Tạo tập: `sh core/render/new_episode.sh tram-nghi-nhieu series/do-vat/tap-01-ten "Câu hỏi?"` (từ gốc thư viện).
 
+## Kiểm tra và Nghiệm thu (Delivery Gate)
+
+- **Không bao giờ dừng lại hay bàn giao khi review mang `VERDICT: FAIL`**: Nếu `review.sh` hoặc `gate.py` trả về FAIL, đọc ngay danh sách lỗi (`[CHẶN]`, `[NẶNG]`, cờ máy), sửa trực tiếp trong code/lời và chấm lại. Chỉ bàn giao khi người chấm độc lập cho PASS (`gate.py check` exit 0).
+- **Không thăm dò tiến trình bằng `sleep`**: Tuyệt đối không chạy lệnh `sleep 300..900` trong shell; các tác vụ dài (render, TTS, review) phải được await hoặc chạy đồng bộ, tránh làm nghẽn session shell và mất biến môi trường.
+- **Cổng cơ học bắt buộc phải xanh**: `sh core/render/review.sh <thư mục tập>` phải exit 0 (filmcheck, drawcheck, citations, facts, index) trước khi kết thúc phiên.
+
 ## Máy này
 
 - WebGL headless chỉ chạy với `LEMO_ANGLE=vulkan` trước mọi lệnh `still.mjs`, `video.mjs`, `review.sh`.

@@ -6,6 +6,9 @@ Every film of the library, one row each. The one-shots live in `films/`; the epi
 
 | Film | Folder | Runtime | Movie |
 |---|---|---|---|
+| Vì sao ngủ trưa dậy lại mệt hơn lúc mới ngủ? | `channels/tram-nghi-nhieu/series/co-the/tap-01-ngu-trua-day-me/` | 17:37 | `channels/tram-nghi-nhieu/series/co-the/tap-01-ngu-trua-day-me/tram-nghi-nhieu-series-co-the-tap-01-ngu-trua-day-me.mp4` |
+| Vì sao bóng đèn LED sáng mà không nóng? | `channels/tram-nghi-nhieu/series/do-vat/tap-01-bong-den-led/` | 3:12 | `channels/tram-nghi-nhieu/series/do-vat/tap-01-bong-den-led/tram-nghi-nhieu-series-do-vat-tap-01-bong-den-led.mp4` |
+| Vì sao mở chai nước ngọt lại xì bọt? | `channels/tram-nghi-nhieu/series/do-vat/tap-01-chai-nuoc-ngot-xi-bot/` | 0:57 | `channels/tram-nghi-nhieu/series/do-vat/tap-01-chai-nuoc-ngot-xi-bot/tram-nghi-nhieu-series-do-vat-tap-01-chai-nuoc-ngot-xi-bot.mp4` |
 | Phi vụ triệu đô trong 2 phút — a Money Heist explainer in a talking-head toon | `films/host-toon-test/` | 2:12 | `films/host-toon-test/phi-vu-trieu-do-2-phut.mp4` |
 
 ## Channels
