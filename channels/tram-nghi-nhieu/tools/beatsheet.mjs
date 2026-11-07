@@ -13,7 +13,7 @@
 //           number while it is said: give it a counter, a calendar, a label. A number painted into a 3D texture is not
 //           seen by this check: then say so in LOOK.md.
 import fs from 'fs'; import path from 'path'; import { spawnSync } from 'child_process';
-import { openDemo, closeServer, requireDemo } from '../../core/render/page.mjs';
+import { openDemo, closeServer, requireDemo } from '../../../core/render/page.mjs';
 
 const args = process.argv.slice(2);
 const take = k => { const i = args.indexOf(k); return i >= 0 ? args.splice(i, 2)[1] : null; };
@@ -55,7 +55,7 @@ for (const [i, l] of lines.entries()) {
 await browser.close(); closeServer();
 fs.writeFileSync(path.join(out, 'beats.json'), JSON.stringify(beats, null, 1));
 
-const font = path.resolve(path.dirname(new URL(import.meta.url).pathname), 'fonts/BeVietnamPro-Bold.ttf');
+const font = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../fonts/BeVietnamPro-Bold.ttf');
 const py = `
 import json, sys, textwrap, re
 import numpy as np

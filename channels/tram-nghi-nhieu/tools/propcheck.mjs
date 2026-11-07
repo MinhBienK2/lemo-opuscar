@@ -3,11 +3,11 @@
 // (film.js imports its objects from there). Without an episode: the rig's own objects (propcheck/rig.js).
 // Writes <out>/p_NN.jpg (three views side by side) and <out>/props.json [{n, name, f}]. review.sh --props judges them.
 import fs from 'fs'; import path from 'path'; import { spawnSync } from 'child_process';
-import { openDemo, closeServer } from '../../core/render/page.mjs';
+import { openDemo, closeServer } from '../../../core/render/page.mjs';
 const args = process.argv.slice(2), take = k => { const i = args.indexOf(k); return i < 0 ? null : args.splice(i, 2)[1]; };
 const out = take('--out'), ep = args[0];
 if (!out) { console.error('usage: propcheck.mjs [<episode>] --out <dir>'); process.exit(2); }
-const HERE = path.dirname(new URL(import.meta.url).pathname), LIB = path.resolve(HERE, '../..');
+const HERE = path.dirname(new URL(import.meta.url).pathname), LIB = path.resolve(HERE, '../../..');
 let q = '';
 if (ep) {
   const mod = path.join(path.resolve(ep), 'src/props.js');
@@ -15,7 +15,7 @@ if (ep) {
   q = 'mod=' + encodeURIComponent('/' + path.relative(LIB, mod));
 }
 fs.mkdirSync(out, { recursive: true });
-const { browser, page } = await openDemo(path.join(HERE, 'propcheck'), { q });
+const { browser, page } = await openDemo(path.join(HERE, '../propcheck'), { q });
 const names = await page.evaluate(() => window.PROPS);
 const res = [];
 for (const [k, name] of names.entries()) {
