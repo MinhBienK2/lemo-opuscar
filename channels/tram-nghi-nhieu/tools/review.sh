@@ -399,7 +399,7 @@ T = [f"# Chấm câu {a}–{b} ({scope}; {rule})", '']
 if a > 1: T.append(f"Câu {a-1} (chỉ để so, không chấm): beats/b_{a-1:03d}.jpg")
 for x in pick:
     s = f"#{x['n']}  beats/b_{x['n']:03d}.jpg" + (f"  strips/s_{x['n']:03d}.jpg" if mp4 else '')
-    T.append(s + f"  cờ: {' '.join(x.get('flags') or []) or '—'}  lời: {x['text']}")
+    T.append(s + f"  cờ: {' '.join(x.get('flags') or []) or '—'}  fill {int((x.get('fill') or 0) * 100)}%  lời: {x['text']}")
 open(W + '/TASK.md', 'w').write('\n'.join(T) + '\n')
 open(W + '/flags.txt', 'w').write(' '.join(f"#{x['n']}:{'+'.join(x['flags'])}" for x in pick if x.get('flags')))
 EOF
