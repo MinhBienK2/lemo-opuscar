@@ -20,6 +20,11 @@ Nhiệm vụ của bạn là thẩm định nhịp điệu phim qua từng phân
    - Máy quay di chuyển có mượt mà không? Có bị giật lag khung hình hoặc clipping (xuyên qua vật thể lạ) không?
 5. **Phụ đề & Thẻ chú thích (Readability):**
    - Chữ phụ đề có xuất hiện đúng lúc người nói phát âm không? Thẻ chữ `label` có trỏ đúng vào tâm chi tiết máy không?
+6. **Khung hình có kể được chuyện không (Framing):**
+   - **BẮT LỖI NGAY** khi vật chính của câu này quá nhỏ để đọc ra: một vệt nhỏ giữa một mảng trống (bức tường trơn, mặt nước trống, nền trơn, mảng đất trống) là FAIL — khung hình đó không kể được chuyện gì, dù hình đẹp.
+   - Cảnh bên trong vật (ruột sợi, giữa vải, trong pin) được phép có nền tối trơn; nhưng vật chính vẫn phải đủ lớn để người xem tắt tiếng đoán ra đang xảy ra chuyện gì.
+   - Cận cảnh vào một mặt phẳng trơn mà không có vật nào đọc được trong đó là FAIL.
+   - Ghi rõ nhát nào FAIL và đề xuất sửa cụ thể: đưa máy lại gần hơn, đổi góc, dời vật chính vào giữa khung, hay thêm vật để khung có chuyện.
 ## Định dạng Output Bắt buộc (`SCENE-REVIEW.md`)
 
 ```markdown

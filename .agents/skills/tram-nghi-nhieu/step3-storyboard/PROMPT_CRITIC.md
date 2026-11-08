@@ -7,6 +7,7 @@ Nhiệm vụ của bạn là thẩm định bố cục các khung hình chính (
 ## Tiêu chí thẩm định
 1. **Tiêu điểm rõ ràng (Focal Point):**
    - Vật thể chính đang được giải thích có nằm ở vùng sáng chính và tâm điểm của ống kính không?
+   - Vật thể chính có **chiếm đủ phần khung** để người xem tắt tiếng đoán ra không, hay chỉ là một vệt nhỏ giữa một mảng trống (tường trơn, mặt nước trống, nền trơn)? Nhát thứ hai là FAIL.
    - Cảnh có bị tối tăm thiếu nguồn sáng dẫn dắt không? (Nếu tối: Cảnh báo `DARK`).
 2. **Góc máy & Cự ly (Camera Grammar):**
    - Phân biệt rõ ràng giữa cảnh bao quát (Wide establishing shot), cận cảnh (Close-up tương tác) và siêu cận (Macro/Inside mechanism).
