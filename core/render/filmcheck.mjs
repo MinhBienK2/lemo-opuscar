@@ -191,10 +191,14 @@ for (const arg of args) {
       if (fj.runtime && !/^\d+:[0-5]\d$/.test(fj.runtime)) {
         fail(name, `film.json runtime "${fj.runtime}" is not M:SS format (e.g. 17:38)`);
       }
-      // a film that names a movie has a length: an empty runtime passes the format check above (it is falsy)
-      // and the index then prints UNKNOWN for a film that exists
+      // A film that has been built has a length: an empty runtime passes the format check above (it is falsy)
+      // and the index then prints UNKNOWN for a film that exists. A film that is not built yet has no length to
+      // give — that is "not built yet", not a fault.
       if (fj.movie && !String(fj.runtime || '').trim()) {
-        fail(name, 'film.json has a "movie" but no "runtime" — the index would print UNKNOWN for a film that exists');
+        const built = path.join(folder, 'out', fj.movie);
+        if (fs.existsSync(built)) {
+          fail(name, 'film.json has a "movie" but no "runtime" — the index would print UNKNOWN for a film that exists');
+        }
       }
       const treatmentText = read(path.join(folder, 'TREATMENT.md'));
       if (treatmentText && fj.title) {

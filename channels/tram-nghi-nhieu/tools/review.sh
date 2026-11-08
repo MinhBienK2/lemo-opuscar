@@ -316,12 +316,20 @@ if [ -n "$CHID" ]; then SCOPE="$CHID-"; SCOPE_NAME="một chương"; LIMIT=5
 elif [ -n "$LINES" ]; then SCOPE="lines-$LINES-"; SCOPE_NAME="một cảnh"; LIMIT=3
 else SCOPE=""; SCOPE_NAME="cả phim"; LIMIT=5; fi
 [ "$VIDEO" = 1 ] && SCOPE="${SCOPE}video-"
+# The director's cut ends the step: a written scope of what was cut, ending in VERDICT: PASS, stands for the
+# picture. The stamp binds it to the film's own files by their hash, so a cut written for an older film cannot
+# pass a newer one.
+CUT="$EP/review/REVIEW${CHID:+-$CHID}-DIRECTORS-CUT.md"
+if [ "$VIDEO" = 0 ] && [ -z "$LINES" ] && [ -f "$CUT" ] && grep -qE '^#*[[:space:]]*VERDICT: *PASS' "$CUT"; then
+  $GATE stamp "$EP" picture "$CUT" ${CHID:+--chapter "$CHID"} --critic "$CRITIC_ID"
+  echo "review: PASS (đạo diễn cắt: $CUT)"; exit 0
+fi
 n=$(next "REVIEW-$SCOPE")
 if [ "$n" -gt "$LIMIT" ]; then
   if [ "$SCOPE_NAME" = "một cảnh" ]; then
     echo "review: cảnh $LINES đã chấm $LIMIT lượt. Ghi vào LOOK.md câu nào còn FAIL và vì sao, rồi dựng cảnh sau; lần chấm chương (hay cả phim) sẽ bắt lại nó." >&2
   else
-    echo "review: ${CHID:+chương $CHID}${CHID:-cả phim} đã chấm $LIMIT lượt mà chưa PASS. Dừng: báo người dùng điểm và các lỗi còn lại của $EP/review/REVIEW.md, hỏi hướng đi. Đừng bàn giao như một phim đã đạt." >&2
+    echo "review: ${CHID:+chương $CHID}${CHID:-cả phim} đã chấm $LIMIT lượt mà chưa PASS. Dừng: hoặc báo người dùng điểm và các lỗi còn lại của $EP/review/REVIEW.md và hỏi hướng đi; hoặc chốt bằng đạo diễn cắt: viết $CUT, kết thúc bằng 'VERDICT: PASS' và nêu rõ nhát nào đã cắt, rồi chạy lại. Đừng bàn giao như một phim đã đạt." >&2
   fi
   exit 1
 fi
