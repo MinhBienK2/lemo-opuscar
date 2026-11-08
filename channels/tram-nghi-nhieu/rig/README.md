@@ -43,6 +43,19 @@ Thứ tự vẽ: lớp đặc (layer 0) → nét mực → lớp fx (`fxLayer`, 
 - `canvasTex(w, h, draw, repeat)` để vẽ texture riêng; `TEX.floor/wood/wall/sheet/pillow/blanket/rug/screen/radial()` có sẵn.
 - `rbox(w, h, d, r)`, `mesh(geo, mat, pos, {rot, cast, recv, parent})`, `fxLayer(obj)` (vật phát sáng: không vào lượt mực, không đổ bóng), `cushionGeo(L, T, D, lift)` (gối, túi, nệm), `surface(nu, nv, (u,v) => [x,y,z])` (vải rủ, địa hình).
 
+## motion.js — chuyển động vật thể & diễn hoạt nhân quả (học từ vsim)
+
+Giúp đồ vật tự động chuyển động sống động và khớp với lời nói mà không phải code toán Three.js thủ công:
+
+| Hàm | Mô tả | Cách dùng mẫu |
+|---|---|---|
+| `sway(mesh, {axis, amp, freq})` | Đung đưa tự nhiên cho vải, dây, rèm, lá cây | `const S = sway(shirt); S.update(t, wind)` |
+| `breathe(mesh, {axis, amp, freq})` | Nhịp thở vi mô (scale Y) để vật thể không bao giờ chết trân | `const B = breathe(device); B.update(t)` |
+| `motor(mesh, {axis, rpm, dir})` | Xoay quạt/động cơ/bánh răng có gia tốc mượt mà | `const M = motor(fan); M.update(t, fanPower)` |
+| `actionAt(t, triggerT, {type, dur})` | Biến đổi theo từ ngữ (`popIn`, `shrink`, `pulse`, `shake`, `fill`) | `actionAt(t, V.w('c30', 'bay'), { target: drop, type: 'shrink' })` |
+| `particleStream(scene, {from, to, count, color, speed})` | Dòng hạt bay nhẹ GPU (gió, hơi nước, điện) bằng InstancedMesh | `const P = particleStream(scene, { from, to }); P.update(t, power)` |
+| `createActionRunner(actions)` | Khai báo kịch bản hành động ở tầng cao (Story Altitude) | `const R = createActionRunner([...]); R.update(t)` |
+
 ## inside.js — vào bên trong vật mà không rời căn phòng
 
 `tissue({ skin, skinTo, cell, cellTo, gates })`: một khối cắt dở đặt trên bàn của bối cảnh (ở `S.focus`), có lớp vỏ với các cửa mở được (thụ thể, lỗ, cổng) và mặt cắt xếp tế bào; mỗi tế bào đổi màu, phồng lên, và các hạt bên trong nhỏ dần (tinh bột → đường, nước → đá, thứ gì bị dùng hết). Mặt cắt có đèn riêng nên luôn sáng. Xem `demo/stills/inside.jpg` và `demo/sets/main.js` (`?inside=1`).

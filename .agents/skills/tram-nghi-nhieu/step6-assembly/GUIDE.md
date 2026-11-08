@@ -5,10 +5,16 @@ Lắp ráp các linh kiện (từ `src/props.js`) vào bối cảnh hoàn chỉn
 
 ## Quy chuẩn kỹ thuật
 - **Timeline đồng bộ:** Khớp từng chuyển động theo từ ngữ thông qua `V.w(line_id, 'từ_khoá')`.
+- **Diễn hoạt vật thể (Props Acting):** Tận dụng `channels/tram-nghi-nhieu/rig/motion.js` để vật thể luôn chuyển động sống động:
+  - Dùng `sway()` cho vải, dây, rèm đung đưa theo gió.
+  - Dùng `breathe()` cho vật thể nhấp nhô nhịp thở vi mô (tránh khung hình chết).
+  - Dùng `motor()` cho quạt, bánh xe xoay có quán tính tăng/giảm tốc.
+  - Dùng `actionAt()` gắn trực tiếp vào mốc từ ngữ (`V.w(id, 'từ')`) để đồ vật phản ứng tức thì (co lại, biến mất, nảy lên).
+  - Dùng `particleStream()` tạo dòng hạt bay biểu diễn gió, hơi nước, nhiệt, điện cực nhẹ GPU.
+- **Cấm camera rỗng (No aimless camera pan):** Tuyệt đối không chống chế cờ `SAME` bằng cách chỉ nhích nhẹ camera trên một bối cảnh chết. Camera chỉ chuyển động khi bám theo hành động của đồ vật hoặc cơ chế vật lý.
 - **Cơ chế nhân quả:** Khi có lực tác động $\rightarrow$ vật thể phải biến đổi thấy được trong 1-2 giây.
-- **Dòng chảy vô hình:** Dùng `flow()` to bản, có điểm xuất phát rõ ràng và điểm tiếp xúc thực tế (không dùng mũi tên vẽ lơ lửng).
+- **Dòng chảy vô hình:** Dùng `flow()` hoặc `particleStream()` to bản, có điểm xuất phát rõ ràng và điểm tiếp xúc thực tế (không dùng mũi tên vẽ lơ lửng).
 - **Thẻ thuật ngữ (`label`):** Tối đa 1 thẻ xuất hiện cùng lúc, mũi tên chỉ đúng điểm tiếp xúc.
-
 ## Quy trình thực hiện
 1. Dựng bối cảnh phòng (Set): Đặt các props vào đúng tọa độ, gắn camera, thiết lập đèn chính in bóng qua lỗ tường (`wallWithHole`).
 2. Viết keyframes diễn hoạt với `keys()` và easing tự nhiên (có lấy đà và vung đà).

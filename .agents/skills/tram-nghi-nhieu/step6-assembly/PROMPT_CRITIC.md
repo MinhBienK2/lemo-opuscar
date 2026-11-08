@@ -11,13 +11,15 @@ Nhiệm vụ của bạn là thẩm định nhịp điệu phim qua từng phân
    - Cờ `NUM`: Câu thoại nhắc đến số đo, thời gian, nhiệt độ nhưng màn hình không có thước đo trực quan? (Bắt buộc thêm đồng hồ/chỉ số).
    - Cờ `RUN`: Cảnh quay kéo dài lê thê không có điểm dừng nhịp?
    *(Ghi chú: Nếu bạn thấy cờ cảnh báo sai vì hình ảnh thực tế đã rất rõ ràng, bạn có quyền ghi chú `CỜ SAI <FLAG>: <lý do>` để giải phóng cờ).*
-2. **Nhân quả tức thì (Action & Consequence):**
+2. **Diễn hoạt nội tại của vật thể (Props Acting vs Camera Drift):**
+   - Vật thể chính có thực sự chuyển động hay biến đổi theo lời nói không? (Ví dụ: vạt áo đung đưa theo gió, quạt xoay có trớn, giọt nước co lại, dòng hạt hơi nước bay đi).
+   - **Cấm camera rỗng:** BẮT LỖI NGAY nếu phát hiện Đạo diễn chỉ lia/xoay nhẹ camera để lách cờ `SAME` trong khi toàn bộ đồ vật trong phòng đứng chết trân. Khung hình phải sống động từ chính các vật thể.
+3. **Nhân quả tức thì (Action & Consequence):**
    - Khi dòng điện chạy qua, sợi dây có phát sáng ngay không? Khi van mở, hơi nước có phì ra không? Không được để hành động xảy ra trước khi có nguyên nhân.
-3. **Chuyển cảnh (Camera Transition):**
+4. **Chuyển cảnh (Camera Transition):**
    - Máy quay di chuyển có mượt mà không? Có bị giật lag khung hình hoặc clipping (xuyên qua vật thể lạ) không?
-4. **Phụ đề & Thẻ chú thích (Readability):**
+5. **Phụ đề & Thẻ chú thích (Readability):**
    - Chữ phụ đề có xuất hiện đúng lúc người nói phát âm không? Thẻ chữ `label` có trỏ đúng vào tâm chi tiết máy không?
-
 ## Định dạng Output Bắt buộc (`SCENE-REVIEW.md`)
 
 ```markdown
