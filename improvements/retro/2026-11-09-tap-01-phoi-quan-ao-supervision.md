@@ -411,6 +411,55 @@ Số đo rồi mới được phát ra, và một số gõ tay thì hỏng cổn
 
 ---
 
+## N20 — high — Vật bị chấm HỎNG vì một từ "chắc thấp", không phải vì hình
+
+**Phát hiện P9 của phần một (23:29 ngày 8) để ở đây:** *"cần một phiên chấm mù chạy lại trên **cùng tập ảnh**"* —
+để biết vòng nào là lỗi thật chứ không phải dao động của người chấm. Hôm nay làm.
+
+**Cách làm.** Ba người đoán mù đặt tên **cùng một bộ 25 ảnh** (`review/props/p_01.jpg … p_25.jpg`, dựng lúc
+02:39 ngày 9):
+
+1. người chấm của phiên, trong `PROPS-REVIEW-5.md` (mục "Người xem không biết tên đã gọi");
+2. một lượt đoán mù do tao chạy (agent A);
+3. một lượt đoán mù khác, cùng prompt, chạy song song (agent B).
+
+Cả ba đều không biết vật nào được dựng, và không ai thấy phán quyết của người khác.
+
+**Kết quả.** Năm vật đổi phán quyết tùy theo người đoán — **cùng ảnh, cùng đoạn rubric**:
+
+| # | Vật định dựng | Người chấm của phiên | Agent A | Agent B | Phán quyết theo từng tên |
+|---|---|---|---|---|---|
+| 2 | kẹp quần áo bằng gỗ | "hai kẹp gỗ nối với nhau bằng một vòng gỗ" (**chắc thấp**) | "kẹp gỗ quần áo có vòng kim loại" (**vừa**) | "kẹp gỗ phơi quần áo cỡ lớn" (**vừa**) | HỎNG / **KHỚP** / **KHỚP** |
+| 7 | khăn tắm có mép tua | "khăn vải vàng có tua… nghiêng về khăn trải bàn" (vừa) | "khăn **trải** vàng có tua rua" (**cao**) | "khăn vải vàng có tua" (vừa) | KHỚP / **HỎNG** / KHỚP |
+| 22 | áo phơi rộng: cả hai mặt | "áo polo kem bị **cắt làm đôi**" (vừa) | "áo sơ mi cổ bọc **bị cắt dọc làm đôi**" (vừa) | "áo sơ mi ngắn tay màu kem" (**cao**) | KHỚP / **HỎNG** / **KHỚP** |
+| 24 | giọt nước rơi từ mép khăn | "tấm ván nâu cam uốn cong… sỏi trắng" (thấp) | "mảnh **bìa carton** bị ướt" (vừa) | "**miếng khăn** vàng đang rỉ nước" (vừa) | HỎNG / HỎNG / **KHỚP** |
+| 25 | bàn tay người | "KHÔNG RÕ — **bàn chân** người gắn vào một cán gỗ" (thấp) | "cánh tay **bàn tay** có ống nhựa" (thấp) | "**bàn tay** người (tay phải)" (thấp) | HỎNG / **KHỚP** / **KHỚP** |
+
+**Cái #25 là bằng chứng rõ nhất:** vật định dựng **là một bàn tay người**, và cả hai lượt đoán của tao đều thấy
+một bàn tay. Người chấm của phiên thấy "bàn chân" và chấm HỎNG — rồi **không mở ảnh để kiểm**, mà phán
+quyết theo cái tên.
+
+**Vật nào là lỗi thật.** Với ba vật, cả ba người đoán đều thấy sai — #17 (đống lọ thuỷ tinh thay cho sợi đan),
+#19 (que có vạch số và quả cầu thay cho giọt nước trên sợi), #20 (chổi quét thay cho mặt nước cận). Ba vật đó
+**là lỗi dựng thật**, không phải dao động. Còn #2, #7, #22, #24, #25 thì hình là như nhau; chỉ tên và độ chắc
+khác nhau.
+
+**Còn một chỗ rubric không nhất quán:** điều khoản "chất liệu đúng" được áp cho #9 ("bát **sứ**" ≠ bồn **nhựa** →
+HỎNG) nhưng không áp cho #11 ("túi **vải**" ≠ túi **nylon** → KHỚP), và điều khoản "trạng thái đúng" không áp cho
+#23 (áo đang **đứng ngược**, không úp → vẫn KHỚP).
+
+**Guard (rubric, không phải check).** Đây là chỗ một luật viết bằng lời quyết định, nên nó sửa ở rubric:
+
+1. **Độ chắc không phải là phán quyết.** Điều khoản "HỎNG khi … chắc thấp" bỏ đi. Một tên đúng nhưng "chắc thấp"
+   vẫn là KHỚP; một tên sai nhưng "chắc cao" vẫn là HỎNG. Chỉ **ảnh** mới quyết định.
+2. **Người chấm mở ảnh và phán theo ảnh**, không theo tên của người đoán. Tên mù là một lần đoán của người khác,
+   và người đó cũng có thể sai.
+3. **Người đoán thứ hai cho vật mơ hồ:** vật nào tên mù "chắc thấp" hoặc "KHÔNG RÕ" thì một người đoán nữa đặt
+   tên cùng ảnh đó; hai tên lệch nhau thì ghi rõ lệch, và vật đó **không thể bị HỎNG chỉ vì tên**.
+4. Chất liệu và trạng thái phải được áp **đều** cho mọi vật: cùng một câu luật, mọi vật.
+
+---
+
 ## Đề xuất thứ tự xử lý
 
 | # | Việc | File cần sửa | Trạng thái |
