@@ -306,6 +306,27 @@ sh core/render/mux.sh "$OUT/video.mp4" "$OUT/mix.wav" "$OUT/$NAME.mp4" 24 0
 PS=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$OUT/$NAME.mp4" 2>/dev/null | cut -d, -f1)
 if [ -n "$PS" ]; then PS=$(LC_ALL=C awk -v d="$PS" 'BEGIN { printf "%.1f", d * 0.4 }'); else PS=1; fi
 ffmpeg -y -ss "$PS" -i "$OUT/$NAME.mp4" -vframes 1 -q:v 2 "$OUT/poster.jpg" >/dev/null 2>&1 || true
+# the length of the film is measured from the movie that was just built, never written by hand: the index
+# publishes this number, and a guess is a lie with a timestamp on it
+DUR=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$OUT/$NAME.mp4" 2>/dev/null | cut -d, -f1)
+if [ -n "$DUR" ]; then
+  "$LIB/.venv/bin/python" - "$HERE/film.json" "$DUR" <<'PY'
+import re, sys
+path, secs = sys.argv[1], float(sys.argv[2])
+mm, ss = int(secs // 60), int(round(secs - 60 * (secs // 60)))
+if ss == 60:
+    mm, ss = mm + 1, 0
+rt = f"{mm}:{ss:02d}"
+try:
+    body = open(path, encoding="utf-8").read()
+except OSError:
+    sys.exit(0)
+new = re.sub(r'("runtime"\s*:\s*)"[^"]*"', lambda m: m.group(1) + f'"{rt}"', body, count=1)
+if new != body:
+    open(path, "w", encoding="utf-8").write(new)
+    print(f"film.json: runtime {rt} (measured from the movie)")
+PY
+fi
 # the deliverables stay in the project folder, where they are committed and where the review finds them.
 # The captions are already burned into the picture: the .srt is the transcript for the platform, and it is not
 # named like the film so that a player does not load it on top of the captions that are in the picture.
@@ -357,6 +378,6 @@ Next:
   5. The voice, with the channel's scripts and this episode's paths (run from this folder):
        \$LIB/.venv/bin/python "\$CHANNEL/voice/tts_vi.py" voice/lines.json voice/
   6. sh build.sh — the build ends with the gate: sh core/render/review.sh <this folder>
-  7. film.json — measure the runtime from the finished movie and put it in the manifest:
-       ffprobe -v error -show_entries format=duration -of csv=p=0 "$MOVIE"
+  7. film.json — the build writes the runtime into the manifest, measured from the movie it just made.
+     Nothing is written there by hand: a hand-written length is a guess, and the index publishes it.
 EOF

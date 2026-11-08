@@ -228,6 +228,45 @@ if [ -n "$MP4" ]; then
   else
     echo "    FAILED: ffmpeg could not read $MP4"; FAIL=$((FAIL + 1))
   fi
+  # the manifest's runtime against the movie's own length: the index publishes this number, so it must be
+  # measured, never written by hand
+  echo "--- runtime: the manifest against the movie"
+  RT=$("$PY" - "$FOLDER/film.json" "$MP4" <<'PY'
+import json, subprocess, sys
+try:
+    d = json.load(open(sys.argv[1], encoding="utf-8"))
+except Exception:
+    print("SKIP the manifest could not be read")
+    sys.exit(0)
+claim = (d.get("runtime") or "").strip()
+if not claim:
+    print("SKIP the manifest has no runtime")
+    sys.exit(0)
+parts = claim.split(":")
+if len(parts) != 2 or not all(p.strip().isdigit() for p in parts):
+    print(f"BAD {claim} is not M:SS")
+    sys.exit(0)
+want = int(parts[0]) * 60 + int(parts[1])
+try:
+    out = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0",
+                          sys.argv[2]], capture_output=True, text=True, timeout=60).stdout.strip()
+    secs = float(out.split(",")[0])
+except Exception:
+    print("SKIP ffprobe could not read the movie")
+    sys.exit(0)
+mm, ss = int(secs // 60), int(round(secs - 60 * (secs // 60)))
+if abs(secs - want) > 1.5:
+    print(f"BAD the manifest says {claim}, the movie is {mm}:{ss:02d}")
+else:
+    print(f"ok the manifest says {claim}, the movie is {secs:.1f}s")
+PY
+)
+  case "$RT" in
+    BAD*) echo "    FAILED: $RT"; FAIL=$((FAIL + 1)) ;;
+    ok*) echo "    $RT" ;;
+    *) echo "    $RT" ;;
+  esac
+
   # a film directed from a board must move: actions over time, not props switched on
   if [ -f "$FOLDER/board.json" ] || [ -f "$BCH/board_rules.json" ]; then
     run motion "$PY" "$HERE/tools/check_motion.py" "$FOLDER" --mp4 "$MP4"
