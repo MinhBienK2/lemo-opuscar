@@ -5,7 +5,7 @@ Dựa trên `COMPONENTS_SPEC.md` đã được duyệt ở Bước 4, lập trì
 
 ## Quy chuẩn kỹ thuật Three.js của kênh
 - **Vật thật dựng đúng là nó:** Không dùng các khối hình học nguyên sinh trơn tuột (cấm cylinder hoặc box trơ trọi để biểu diễn đồ vật phức tạp).
-- **Vật liệu Toon:** Dùng `toonMat`, `canvasTex` có hạt ngẫu nhiên (`seed`) cho các bề mặt lớn.
+- **Vật liệu Toon:** Dùng `MeshToonMaterial` của Three.js với `color`, `gradientMap`, `toonMat`, hoặc `canvasTex` có hạt ngẫu nhiên (`seed`). **LƯU Ý:** `MeshToonMaterial` không phải PBR shader, KHÔNG khai báo `roughness` hoặc `metalness` để tránh cảnh báo rác log.
 - **Ruột máy móc:** Tận dụng `channels/tram-nghi-nhieu/rig/parts.js` (lò xo, chip, bánh răng, cuộn cảm, pin).
 - **Cấu trúc xuất khẩu chuẩn:**
   ```javascript
