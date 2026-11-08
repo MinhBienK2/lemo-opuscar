@@ -183,22 +183,36 @@ print("\n".join(rows[-80:]))
 PY
 
 # the rules the session broke, read off its own tool log (R1–R5 of CODING_STANDARDS.md)
-python3 - "$SESSION" "$LIB/tools/transcript.py" > "$RULES" <<'PY'
+SUPERVISE_FILM="$FILM" python3 - "$SESSION" "$LIB/tools/transcript.py" > "$RULES" <<'PY'
 import collections, json, os, re, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(sys.argv[2])))
 import transcript
 out = []
+drawn = set()   # a file is reported once, not once per edit
+# is the film under production a three.js film? its src/ says so.
+film = os.environ.get("SUPERVISE_FILM", "")
+three_d = False
+if film:
+    src_dir = os.path.join(film, "src")
+    if os.path.isdir(src_dir):
+        for name in os.listdir(src_dir):
+            if name.endswith(".js"):
+                try:
+                    if re.search(r"from\s+['\"]three['\"]|require\(['\"]three['\"]\)", open(os.path.join(src_dir, name), encoding="utf8").read()):
+                        three_d = True
+                except OSError:
+                    pass
 # the same command five times over is a poll, whatever it looks for (R9). Counted first, reported last: the
 # report keeps the last forty lines, and a poll loop is the finding that must never be the one that falls off.
 seen = collections.Counter()
 for at, tool, args in transcript.events(sys.argv[1]):
-    cmd = args.get("command", "") or ""
+    cmd = " ".join((args.get("command", "") or "").split())
     if tool == "bash" and cmd:
         seen[cmd.strip()] += 1
 polls = [f"R9 {n} lần cùng một lệnh — một vòng dò, không phải việc: {cmd[:120]}"
          for cmd, n in seen.most_common() if n >= 5]
 for at, tool, args in transcript.events(sys.argv[1]):
-    cmd = args.get("command", "") or ""
+    cmd = " ".join((args.get("command", "") or "").split())   # one line: a heredoc must not spill into the report
     at = at[11:19] if 'T' in at else at
     if tool == "bash":
         # a settle of a second after a kill is not a poll; a wait of half a minute is
@@ -216,10 +230,15 @@ for at, tool, args in transcript.events(sys.argv[1]):
                        f"before believing it): {cmd[:120]}")
     if tool in ("write", "edit"):
         p = args.get("path", "")
-        if "/src/" in p and p.endswith(".js"):
+        if "/src/" in p and p.endswith(".js") and p not in drawn:
             try:
                 src = open(p, encoding="utf8").read()
-                if "fillText(" in src:
+                # T9 is about text drawn straight onto the screen canvas. A three.js film paints its
+                # textures the same way — the "MAX 400" on a scale, the "°C" on a thermometer — and that
+                # text is a marking on an object, which is exactly what the channel wants on screen. Firing
+                # on a 3D film would bury the real findings under fifteen reports of the same prop file.
+                if "fillText(" in src and not three_d:
+                    drawn.add(p)
                     out.append(f"T9 {at} {p} draws a string with a raw fillText() — the reading check cannot see it")
             except OSError:
                 pass
@@ -248,14 +267,16 @@ REVIEW="(the reviewer model did not run: SUPERVISE_LLM=$MODE)"
 SESSION_NAME=$(basename "$SESSION")
 FILM_NAME=$(basename "$FILM")
 
+# the evidence goes into files and the reviewer reads them: a long prompt comes back empty.
+# The files are written every cycle, not only when the reviewer model runs: a cycle with the model
+# switched off still produced evidence, and throwing it away left the last written report hours old.
+cp "$GATE" "$OUT/gate-latest.txt"
+cp "$TOOLS" "$OUT/session-latest.txt"
+cp "$RULES" "$OUT/rules-latest.txt"
 if [ "$RUN_LLM" -eq 1 ]; then
   # :high was measured to run past four minutes on a trivial prompt; :medium answered the same review in two
   # and a half. SUPERVISE_MODEL overrides it.
   MODEL=${SUPERVISE_MODEL:-2tocom/MiniMax-M3.1-Flash:medium}
-  # the evidence goes into files and the reviewer reads them: a long prompt comes back empty
-  cp "$GATE" "$OUT/gate-latest.txt"
-  cp "$TOOLS" "$OUT/session-latest.txt"
-  cp "$RULES" "$OUT/rules-latest.txt"
   PROMPT=$(mktemp)
   cat > "$PROMPT" <<EOF
 You are the supervisor of a film that is being produced right now in the repository $LIB.
