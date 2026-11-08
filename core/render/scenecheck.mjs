@@ -70,9 +70,15 @@ let res;
 try {
   res = await page.evaluate(readPage, { STEP, BAND });
 } catch (e) {
-  console.error(`scenecheck: COULD NOT RUN — the page died while the check was reading it: ${String(e.message || e).split('\n')[0]}`);
-  console.error('  Two usual causes: the film was edited while the check ran, or the browser ran out of memory.');
-  console.error('  A check that crashed is not a verdict about the film — run it again on a settled file.');
+  const msg = String(e.message || e).split('\n')[0];
+  if (/Target (page|closed)|browser has been closed|Session closed|Target closed/i.test(msg)) {
+    console.error(`scenecheck: COULD NOT RUN — the page died while the check was reading it: ${msg}`);
+    console.error('  Two usual causes: the film was edited while the check ran, or the browser ran out of memory.');
+    console.error('  A check that crashed is not a verdict about the film — run it again on a settled file.');
+  } else {
+    console.error(`scenecheck: COULD NOT RUN — the film's own code threw while the check was reading it: ${msg}`);
+    console.error("  That is a defect in the film (or in the rig it draws with), not in the check: the error above is the film's.");
+  }
   try { await browser.close(); } catch {}
   closeServer();
   process.exit(2);

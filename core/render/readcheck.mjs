@@ -74,9 +74,16 @@ for (let i = 0; i < total; i += CHUNK) {
   try {
     res = await page.evaluate(readChunk, { i0: i, n });
   } catch (e) {
-    console.error(`readcheck: COULD NOT RUN — the page died while the check was reading it (at ${(i * STEP).toFixed(1)}s of ${head.dur.toFixed(1)}s): ${String(e.message || e).split('\n')[0]}`);
-    console.error('  Two usual causes: the film was edited while the check ran, or the browser ran out of memory.');
-    console.error('  A check that crashed is not a verdict about the film — run it again on a settled file.');
+    const msg = String(e.message || e).split('\n')[0];
+    const at = `${(i * STEP).toFixed(1)}s of ${head.dur.toFixed(1)}s`;
+    if (/Target (page|closed)|browser has been closed|Session closed|Target closed/i.test(msg)) {
+      console.error(`readcheck: COULD NOT RUN — the page died while the check was reading it (at ${at}): ${msg}`);
+      console.error('  Two usual causes: the film was edited while the check ran, or the browser ran out of memory.');
+      console.error('  A check that crashed is not a verdict about the film — run it again on a settled file.');
+    } else {
+      console.error(`readcheck: COULD NOT RUN — the film's own code threw while the check was reading it (at ${at}): ${msg}`);
+      console.error("  That is a defect in the film (or in the rig it draws with), not in the check: the error above is the film's.");
+    }
     try { await browser.close(); } catch {}
     closeServer();
     process.exit(2);
