@@ -187,9 +187,72 @@ HỎNG. Lần này phán quyết là có cơ sở — bản sửa của vòng 1 
 2 biến kẹp gỗ thành "hai thanh/ván màu vàng nâu". Nhưng nó cho thấy **sửa hình theo lời chấm vòng trước
 làm hỏng vật đang đúng**, và vòng sau lại chỉ ra vật mới hỏng.
 
-**Guard.** Chưa có. Cần một vòng chấm mù chạy lại trên **cùng tập ảnh** để biết vòng 2 là dao động của người
-chấm hay lỗi thật. `review.sh` có thể so hash `src/props.js` giữa hai lượt chấm và in cảnh báo khi vật đổi
-trạng thái mà mã không đổi.
+**Guard đã có.** `review.sh --props` ghi hash của `src/props.js` vào mỗi bản chấm
+(`<!-- code: … -->`), rồi so với vòng trước: **vật nào đổi phán quyết mà mã y hệt** thì in ra
+(`⚠ 1 vật đổi phán quyết giữa vòng 3 và vòng 4 MÀ MÃ KHÔNG ĐỔI`) kèm lời nhắc xem lại ảnh vật đó trước
+khi sửa. Đo được trên chính tập này: vòng 3 → vòng 4, `#3` và `#9` đi từ HỎNG sang KHỚP (tốt), còn `#21`
+đi từ KHỚP sang HỎNG — đúng loại dao động mà trước đó chỉ có thể đoán. Việc còn lại (một phiên chấm mù
+chạy lại trên **cùng tập ảnh** để biết vòng nào là lỗi thật) chưa làm.
+
+---
+
+## N11 — high — Một bài kiểm tra chết giữa chừng không phải là phán quyết về phim, nhưng nó được đọc như một phán quyết
+
+**Bằng chứng.** `node core/render/readcheck.mjs <tập> 880` chết hai lần với
+`page.evaluate: Target page, context or browser has been closed` — một dấu vết của lỗi Node, không phải
+một phán quyết. Lần thứ nhất lúc 01:34, lần thứ hai lúc 01:38, cả hai lần khi phiên sản xuất đang dựng
+hình song song. Phiên sản xuất tự đã gặp đúng lỗi này một lần trước đó và đã đoán: *"readcheck ran
+against a mid-edit file. That's expected during concurrent edits — I should not run checks while agents
+edit."* — một phỏng đoán đúng, nhưng đoán, và tốn thời gian.
+
+Về mặt kỹ thuật, `readcheck` đọc **cả phim trong một vòng lặp đồng bộ**: 176 s phim, bước 0.04 s ⇒ 4 400
+lần `window.render(t)` trong *một* task của trình duyệt. Trong suốt thời gian đó trang không thở được, hàng
+đợi GPU chồng lên nhau, và renderer có thể chết giữa chừng. Tệ hơn: khi trang chết, tập tin bị sửa dở,
+không ai nói — kết quả là phán quyết về một bản phim không tồn tại.
+
+**Guard đã có.**
+- `core/render/sourcewatch.mjs`: bài kiểm tra chụp vân tay (hash) của `index.html`, `src/*.js`,
+  `voice/lines.json` **trước** khi mở trang, và so lại **sau** khi đọc xong. File nào đổi trong lúc chạy
+  ⇒ kết quả bị bỏ, và bài kiểm tra nói *"the film's source changed while the check was reading it … Run
+  it again on a settled file"* rồi thoát mã 2 (chạy được, không phải phán quyết).
+- `readcheck` đọc phim **theo chặng** (120 khung mỗi lượt) thay vì một vòng lặp dài: trình duyệt được thở
+  giữa mỗi chặng, và khi trang chết, bài kiểm tra biết nó chết ở giây nào.
+- `scenecheck` dùng chung hai điều trên.
+- `core/render/review.sh`: mã thoát 2 được gọi đúng tên — *"COULD NOT RUN — not a verdict about the
+  film"* — thay vì *"FAILED"*. Một dòng này tiết kiệm cho agent một vòng điều tra sai.
+
+---
+
+## N12 — medium — Một con trỏ hỏng trong tài liệu không ai thấy, vì con trỏ hỏng thì im lặng
+
+**Bằng chứng.** Chính tôi viết dòng trỏ sai trong `SKILL.md`:
+`[improvements/lessons.md](../../improvements/lessons.md)` — từ `.agents/skills/tram-nghi-nhieu/` mà đi lên
+hai bậc là `.agents/`, nơi không có `improvements/`. Dòng trỏ đó **không bao giờ** tới đúng file, và không
+ai để ý, vì con trỏ hỏng không phát ra tiếng động: agent đọc dòng đó, đi tìm, không thấy, đi tiếp — và
+luật mà dòng đó mang theo không tới được ai.
+
+Khi viết `tools/check_doc_links.py` để quét toàn thư viện, nó tìm ra thêm một lỗi thật trong tài liệu
+của tôi: `improvements/README.md` trỏ tới `retro/2026-10-30-tram-nghi-nhieu.md` (thừa một chữ `i`),
+trong khi file thật là `retro/2026-10-30-tram-nghi-nhieu.md`.
+
+**Guard đã có.** `tools/check_doc_links.py` mở mọi file `.md` của thư viện, lấy đích của mọi liên kết
+markdown, và giải nó theo thư mục chứa nó. Liên kết nằm trong code thì bỏ qua (đó là ví dụ, không phải
+con trỏ); thư mục `_template` thì bỏ qua (mẫu chưa viết). Chạy trong pre-commit khi có `.md` được stage,
+và trong CI.
+
+---
+
+## N13 — medium — Một bước CI không thể thất bại, nên nó không kiểm tra gì
+
+**Bằng chứng.** Bước CI *"the two copies of the channel skill are the same skill"* chạy
+`diff -r .claude/skills/tram-nghi-nhieu .agents/skills/tram-nghi-nhieu`. Nhưng
+`.claude/skills/tram-nghi-nhieu` là **symlink** trỏ tới `.agents/skills/tram-nghi-nhieu` — `diff` so một
+thư mục với chính nó, và luôn trả về 0. Bước này không thể thất bại, nên nó không kiểm tra gì: một bản
+skill trôi lệch sẽ đi qua.
+
+**Guard đã có.** CI kiểm tra **cấu trúc** thay vì nội dung: `.claude/skills/tram-nghi-nhieu` phải là
+symlink, và phải trỏ tới cùng thư mục thật với bản `.agents`. Hai bản không thể trôi lệch, vì chúng là
+một.
 
 ---
 
@@ -204,7 +267,10 @@ trạng thái mà mã không đổi.
 | 5 | Nới `.gitignore`; `check_tracked` vào cổng supervisor (N5) | `.gitignore`, `tools/supervise.sh` | **xong** |
 | 6 | `runtime` rỗng; bản chấm không hậu tố giữ verdict cũ (N6, N7) | `core/render/filmcheck.mjs` | **xong** |
 | 7 | `FILMS.md` (N8); trỏ skill tới `lessons.md`; CI giữ hai bản skill (N9) | `tools/gen_films_index.py`, `SKILL.md`, `.github/workflows/films.yml` | **xong** |
-| 8 | So trạng thái vật giữa hai lượt chấm props (N10) | `tools/review.sh` | chưa làm |
+| 8 | So trạng thái vật giữa hai lượt chấm props (N10) | `channels/tram-nghi-nhieu/tools/review.sh` | **xong** |
+| 9 | Bài kiểm tra chết giữa chừng không phải phán quyết (N11) | `core/render/sourcewatch.mjs`, `core/render/readcheck.mjs`, `core/render/scenecheck.mjs`, `core/render/review.sh` | **xong** |
+| 10 | Con trỏ hỏng trong tài liệu (N12) | `tools/check_doc_links.py`, `.git/hooks/pre-commit`, CI | **xong** |
+| 11 | Bước CI không thể thất bại (N13) | `.github/workflows/films.yml` | **xong** |
 
 ---
 
@@ -212,6 +278,8 @@ trạng thái mà mã không đổi.
 
 - **[ ]** Chưa có phim: `out/` còn rỗng. Cổng props đã đổi và đang chạy vòng 5; cổng storyboard mới; cổng
   hình (`picture`) và cổng lời kể (`script`) vẫn chưa có PASS cho tập này.
-- **[ ]** `film.json` của tập còn `"runtime": ""` — `filmcheck` sẽ FAIL cho tới khi điền.
-- **[ ]** N10: cần một phiên chấm mù chạy lại trên **cùng tập ảnh**. Chưa làm.
+- **[ ]** N10 (một phần): một phiên chấm mù chạy lại trên **cùng tập ảnh** vẫn chưa làm — để biết vòng nào là
+  lỗi thật chứ không phải dao động của người chấm. Đã có guard báo hiện trạng.
 - **[ ]** `improvements/lessons.md` chưa có dòng nào cho N1–N4 và N10.
+- **[ ]** Chưa có lượt sản xuất nào chạy với các guard mới (chặng đọc, vân tay nguồn, kiểm tra con trỏ):
+  lần sản xuất kế tiếp là lần kiểm chứng đầu tiên của chúng.

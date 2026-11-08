@@ -176,6 +176,39 @@ rồi in lại nó."
   [ -s PROPS-REVIEW.md ] || cp out.txt PROPS-REVIEW.md
   n=$(next PROPS-REVIEW-)
   { cat PROPS-REVIEW.md; printf '\n## Người xem không biết tên đã gọi\n'; cat BLIND.md; } > R.md; sign "--props" R.md
+  # The hash of the props code goes into the report: two rounds that judged the same code and disagreed about
+  # a prop are the reviewer changing its mind, and the director has to see that (not guess it).
+  CODE_SHA=$(python3 -c "import hashlib,sys;print(hashlib.sha1(open(sys.argv[1],'rb').read()).hexdigest())" "$EP/src/props.js" 2>/dev/null || echo "")
+  printf '\n<!-- code: %s -->\n' "$CODE_SHA" >> R.md
+  python3 - "$EP" "$n" "$CODE_SHA" "$W/R.md" <<'PY' >&2
+import os, re, sys
+ep, n, sha, cur = sys.argv[1], int(sys.argv[2]), sys.argv[3], sys.argv[4]
+if n < 2:
+    sys.exit(0)
+prev = os.path.join(ep, 'review', f'PROPS-REVIEW-{n-1}.md')
+if not os.path.isfile(prev):
+    sys.exit(0)
+# the group letter (A or B) is optional: a round written before the two-tier rubric has no group
+VERDICT = re.compile(r'^#(\d+)\s+(.*?)\s+—\s+(?:[AB]\s+—\s+)?(KHỚP|HỎNG)', re.M)
+
+
+def read(path):
+    t = open(path, encoding='utf8', errors='replace').read()
+    m = re.search(r'<!-- code: ([0-9a-f]*) -->', t)
+    return (m.group(1) if m else None), {int(a): c for a, b, c in VERDICT.findall(t)}
+
+
+old_sha, old = read(prev)
+new_sha, new = read(cur)
+if not old_sha or old_sha != new_sha:
+    sys.exit(0)      # the code changed between the rounds: a different picture, a different verdict is expected
+flips = [(k, old[k][1], new[k][1]) for k in sorted(new) if k in old and old[k][1] != new[k][1]]
+if flips:
+    print(f"review --props: ⚠ {len(flips)} vật đổi phán quyết giữa vòng {n-1} và vòng {n} MÀ MÃ KHÔNG ĐỔI "
+          f"(src/props.js y hệt): " + ", ".join(f"#{k} {a}→{b}" for k, a, b in flips))
+    print("  → Người chấm đổi ý trên cùng một bức ảnh. Sửa theo lời chấm vòng này có thể phá vật đang đúng: "
+          "hãy nhìn lại ảnh của vật đó (review/props/p_NN.jpg) và tự xác nhận trước khi sửa.")
+PY
   cp R.md "$EP/review/PROPS-REVIEW-$n.md"; cp R.md "$EP/review/PROPS-REVIEW.md"
   mkdir -p "$EP/review/props"; cp p/p_*.jpg "$EP/review/props/"
   cat R.md
