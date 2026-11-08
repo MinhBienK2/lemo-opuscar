@@ -117,7 +117,10 @@ const NUM = new Set('không một hai ba bốn năm sáu bảy tám chín mườ
 const BIG = new Set('mươi trăm nghìn ngàn triệu tỷ tỉ linh lẻ'.split(' '));
 let numbers = 0; const numList = [];
 for (const l of lines) {
-  const toks = String(l.text || '').toLowerCase().replace(/[^\p{L}\p{N}%]+/gu, ' ').split(' ').filter(Boolean);
+  // what is spoken is what `say` says; `text` is the written line, and in a film that spells numbers out
+  // for the voice the two differ ("2,4 tỷ" written, "hai phẩy bốn tỷ" spoken). The rule is about numbers
+  // heard, so the number words are counted where they are heard.
+  const toks = String(l.say || l.text || '').toLowerCase().replace(/[^\p{L}\p{N}%]+/gu, ' ').split(' ').filter(Boolean);
   for (let i = 0; i < toks.length;) {
     if (/\d/.test(toks[i])) { numbers++; numList.push(toks[i]); i++; continue; }
     let j = i; while (j < toks.length && NUM.has(toks[j])) j++;
