@@ -36,6 +36,46 @@ trong phiên, với tư cách người giám sát: đọc toàn bộ transcript 
 4. **Phiên nghe lời khi được chỉ đường.** Khi giám sát nói "đừng dò file, hãy chờ thông báo của subagent;
    cổng props đã đổi", phiên dừng vòng dò ngay (không còn lệnh `ls -l src/props.js` nào sau 18:09),
    `TaskStop` subagent, và chuyển sang dùng `core/render/sheet.py` — đúng công cụ có sẵn.
+5. **Vòng 8 của bản LOOK là một bài sửa đúng gốc.** Người làm tự tìm ra rằng mọi nhát trong bối cảnh N2
+   chia sẻ **một** bàn sợi, nên mọi khung đều là "một mớ sợi" chứ không phải một vật — rồi dựng cơ chế
+   `aux`/`hero` để mỗi nhát chỉ có một vật chính, sửa cầu mào của nước trong khe, giảm tím nền, mảnh
+   nét mực lại, và đổi góc máy của bàn tay. Đây là loại sửa đáng giá hơn nhiều so với sửa từng khung: nó
+   sửa nguyên nhân, không sửa triệu chứng.
+6. **Khoa học của tập đứng vững.** `FACTS.md` có nguồn thật cho từng con số (Rogers & Yau, Alduchov &
+   Eskridge, Teske et al.), ghi rõ **phạm vi** ("đây là đường cong hiệu chỉnh cho hơi nước trong mây, không
+   phải nhiệt ẩn ở điểm sôi"), và viết sẵn **cách nói** để không vỡ nhịp. Lời kể đo được: 60 câu, chỉ
+   **3 con số** (0,34 mỗi 20 giây, dưới cả luật của kênh lẫn ngưỡng mặc định của thư viện).
+
+---
+
+## Đánh giá quá trình: phiên này làm được gì và còn mắc gì
+
+**Còn mắc (đo được, không phải cảm nhận).**
+
+| Vấn đề | Đo bằng gì | Xem ở đâu |
+|---|---|---|
+| Khung hình rỗng đi qua nhiều vòng chấm | `b_002` là một bức tường trơn, `b_025` là một mảng nâu, `b_050` có hai vùng chết | `review/beatsheet/` |
+| Rubric chấm hình không hỏi "vật chính đủ lớn không" | `PROMPT_CRITIC.md` của bước 6 có `DARK`, `SAME`, `RUN`, `NUM` — không có câu nào về bố cục | `.agents/skills/…/step6-assembly/` |
+| Bài kiểm tra chết giữa chừng bị đọc như phán quyết | `readcheck` chết hai lần, không có lời giải thích | `core/render/readcheck.mjs` |
+| Vòng chấm dao động, không ai biết | vòng props 3 → 4: `#3` và `#9` tốt lên, `#21` hỏng đi | `review/PROPS-REVIEW-3.md`, `-4.md` |
+| Luật của kênh không được máy giữ | `STRATEGY.md` nói "hai con số mỗi phút"; `scenecheck` cho phép hai con số mỗi **hai mươi** giây | `STRATEGY.md`, `core/render/scenecheck.mjs` |
+| Bảng phim không được dựng lại khi manifest đổi | `FILMS.md` không có dòng của tập → cổng supervisor đỏ | `FILMS.md` |
+| Báo cáo luật của supervisor nhiễu và sai | T9 bắn 15 lần vào một phim 3D; lệnh có heredoc tràn ra nhiều dòng; bằng chứng không được ghi khi tắt model | `improvements/supervision/rules-latest.txt` |
+
+**Không mắc.**
+
+- Không còn vòng dò file: sau 18:09 không còn lệnh `ls -l src/props.js` nào trong log (một lần nữa ở
+  17:42–18:06, đúng lúc còn một subagent sở hữu file — xem N2).
+- Một người viết mỗi file tại một thời điểm: hai lần ghi `src/props.js` chồng nhau đã được phát hiện và
+  dừng.
+- Nghiên cứu không bịa: mọi con số trên màn hình có nguồn, và `check_claims`/`check_citations`/`check_facts`
+  xanh suốt.
+- Cổng hình và cổng props **chưa** mở, và phim **chưa** có. Tập vẫn chưa được ký tên là xong — đúng.
+
+**Điều mà tập này dạy cho tập sau.** Một tập hay không phụ thuộc vào việc dựng đẹp, mà vào việc **một
+câu nói có một hình đúng đi kèm**: `c21` ("hơn hai kilojoule nhiệt") phải có một vật để nhìn; `b_021` có
+một nhãn `2 kJ`; `b_015` có một giọt nước. Chỗ nào thiếu vật — `b_002`, `b_025`, `b_050` — câu nói trôi
+đi và người xem tắt tiếng không đoán được. Rubric của bước 6 giờ hỏi đúng câu đó.
 
 ---
 
