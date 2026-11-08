@@ -1,6 +1,6 @@
 Tiếp theo: làm đúng thứ tự trong .agents/skills/tram-nghi-nhieu/SKILL.md.
-  1. research/FACTS.md, rồi TREATMENT.md (mẫu của kênh), rồi: sh channels/tram-nghi-nhieu/review.sh <tập> --outline
-  2. voice/lines.json, rồi: sh channels/tram-nghi-nhieu/review.sh <tập> --script   (tập có chương: --chapter n)
+  1. research/FACTS.md, rồi TREATMENT.md (mẫu của kênh), rồi: sh channels/tram-nghi-nhieu/tools/review.sh <tập> --outline
+  2. voice/lines.json, rồi: sh channels/tram-nghi-nhieu/tools/review.sh <tập> --script   (tập có chương: --chapter n)
   3. giọng: tts_vi.py chỉ chạy khi lời đã PASS
   4. src/props.js, rồi --props; dựng cảnh; chấm từng cảnh, rồi cả phim (hay từng chương)
   5. sh build.sh: chỉ dựng khi mọi con dấu còn đúng
