@@ -86,3 +86,4 @@ Distilled from the retro records in [`retro/`](retro/). Each line is a rule; eac
 
 - **A label has to sit on the line that names it** — a label on the wrong beat says one thing while the voice says another, and no gate that reads only the storyboard can see it. — Guard: `channels/tram-nghi-nhieu/tools/check_labels.py` finds the line that names each label and reports the label when it sits more than one beat early.
 - **A way out of the rounds must still say something about the film as it is now** — a director's cut written before the last edit of the code closes the gate on code nobody looked at. — Guard: `channels/tram-nghi-nhieu/tools/gate.py` refuses a cut older than the code it judges.
+- **A check that counts must count the thing it names** — the rule says numbers *spoken*, the check read the written column, and the film was reported twice as dense as it sounds. — Guard: `core/render/scenecheck.mjs` counts `l.say || l.text`.

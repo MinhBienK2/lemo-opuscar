@@ -521,6 +521,20 @@ nên một bản cắt cũ ở đó cũng không nói gì về code hiện tại
 
 ---
 
+## N23 — medium — Bài đếm con số đọc cột viết, không đọc cột nói
+
+**Bằng chứng.** `films/host-toon-test` không vượt được cổng bàn giao: `scenecheck` báo *"2,42 con số mỗi
+20 giây"* trong khi luật của thư viện là 2. Nhưng phim có hai cột cho mỗi câu: `text` (dòng viết) và `say`
+(dòng đọc cho giọng nói) — *"in 2,4 tỷ euro"* viết, *"in hai phẩy bốn tỷ ơ-rô"* nói. `scenecheck` đọc `text`.
+
+Đếm lại trên cột nói: 8 con số, **1,21 mỗi 20 giây** — phim không hề dày. Bài kiểm tra đang đo một câu
+chưa từng được đọc ra.
+
+**Guard đã có.** `core/render/scenecheck.mjs` đếm trên `l.say || l.text`: tập của kênh không có cột `say`
+nên không đổi gì; phim nào có cột thì đếm đúng những gì người nghe nghe.
+
+---
+
 ## Đề xuất thứ tự xử lý
 
 | # | Việc | File cần sửa | Trạng thái |
@@ -548,6 +562,7 @@ nên một bản cắt cũ ở đó cũng không nói gì về code hiện tại
 | 21 | Thời lượng phim được **đo** rồi mới ghi vào manifest; cổng so manifest với `ffprobe` (N19) | `core/render/new_episode.sh`, `core/render/review.sh` | **xong** |
 | 22 | Nhãn phải nằm ở câu gọi tên nó — kiểm bằng máy, trước khi tốn một vòng chấm (N21) | `channels/tram-nghi-nhieu/tools/check_labels.py`, `tools/review.sh`, `SKILL.md` | **xong** |
 | 23 | Bản cắt của đạo diễn phải viết sau lần sửa code cuối, không đóng tem cho code cũ (N22) | `channels/tram-nghi-nhieu/tools/gate.py`, `tools/review.sh` | **xong** |
+| 24 | Bài đếm con số đếm trên cột viết, không phải cột nói (N23) | `core/render/scenecheck.mjs` | **xong** |
 
 ### Mỗi phát hiện đã có dòng riêng trong `improvements/lessons.md`
 
