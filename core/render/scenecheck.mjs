@@ -5,7 +5,7 @@
 //   words      frames where at least one thing is named on screen (a label, a sign, a number on an object): a picture with
 //              no word at all for minutes does not explain itself (≥ 30 %)
 //   looks      the picture cut into stretches by its colour histogram (a new place, light, framing), alike stretches merged (≥ 1 per 20 s)
-//   numbers    numbers and years spoken in voice/lines.json (≤ 2 per 20 s)
+//   numbers    numbers and years spoken in voice/lines.json (≤ 2 per 20 s; --numbers-per-20s changes the limit)
 //   sound      every foley event in window.EV against the picture: before (t − 0.2 s) and after (t + 0.25 s) its onset,
 //              ≥ 0.4 % of a thumbnail must change — a sound with nothing moving under it is noise (≥ 80 %)
 //   sparse     sound moments (sounds closer than 0.6 s merged) ≤ 30 a minute, and ≥ 15 % of the 3 s windows with no sound
@@ -21,6 +21,10 @@ const args = process.argv.slice(2), { w: VW, h: VH } = takeSize(args), opt = (k,
 const dir = args[0]; requireDemo(dir);
 const STEP = +opt('--step', 1), BAND = +opt('--band', 880), COVER = +opt('--card-cover', 0.12), BOXES = +opt('--card-boxes', 5);
 const SYNC = +opt('--sync', 0.3), REPORT = args.includes('--report'), JSON_OUT = opt('--json', '');
+// how many numbers the film may speak in twenty seconds. The default is the library's own; a channel states
+// its own limit in scene_rules.json and the delivery review passes it here, so the rule a channel writes down
+// is the rule the gate keeps.
+const NUMS = +opt('--numbers-per-20s', 2);
 const snap = fingerprint(dir);
 const { browser, page } = await openDemo(dir, { w: VW, h: VH });
 const readPage = ({ STEP, BAND }) => {
@@ -164,7 +168,7 @@ const checks = [
   ['text-led frames', out.cards <= 0.35, `${(out.cards * 100).toFixed(0)} % of frames are mostly text (≤ 35 %: a film, not a deck)`],
   ['frames with words', out.framesWithWords >= 0.3, `${(out.framesWithWords * 100).toFixed(0)} % of frames name something on screen — a label, a sign, a number on a thing (≥ 30 %: a picture that explains itself)`],
   ['looks', out.looksPer20s >= 1, `${out.looks} different looks, ${out.looksPer20s} per 20 s (≥ 1)`],
-  ['numbers', out.numbersPer20s <= 2, `${numbers} numbers spoken, ${out.numbersPer20s} per 20 s (≤ 2; each must be a thing or a chart on screen)`],
+  ['numbers', out.numbersPer20s <= NUMS, `${numbers} numbers spoken, ${out.numbersPer20s} per 20 s (≤ ${NUMS}; each must be a thing or a chart on screen)`],
   ['sound on motion', out.soundOnMotion != null && out.soundOnMotion >= 0.8, `${out.soundOnMotion == null ? 'no foley' : (out.soundOnMotion * 100).toFixed(0) + ' %'} of ${fol.length} sounds land on something that moves (≥ 80 %)` + (uncaused.length ? ` — silent picture under ${uncaused.slice(0, 6).map(e => e.type + '@' + e.t.toFixed(1)).join(', ')}` : '')],
   ['sound moments', out.momentsPerMin <= 30, `${out.momentsPerMin} sound moments a minute (≤ 30: sound marks what matters, not every gesture)`],
   ['quiet windows', out.quietWindows >= 0.15, `${(out.quietWindows * 100).toFixed(0)} % of 3 s windows carry no sound effect (≥ 15 %: the ear needs rests)`],

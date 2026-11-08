@@ -66,7 +66,16 @@ BAND=""
 case "$FOLDER" in */films/*|films/*|*/channels/*|channels/*) BAND="--band 880";; esac
 run readcheck node "$HERE/core/render/readcheck.mjs" "$FOLDER" $BAND
 # a narrated film must stage its story, not read it: text-led frames, different looks, spoken numbers, foley on words
-if [ -n "$BAND" ]; then run scenecheck node "$HERE/core/render/scenecheck.mjs" "$FOLDER" --band 880; fi
+# A channel states its own limits in scene_rules.json (the channel writes "two numbers a minute"; the library's
+# default is looser), and the delivery review passes them to the check — so the rule a channel writes down is
+# the rule the gate keeps.
+NUMOPT=""
+_d=$FOLDER; while [ ! -f "$_d/CHANNEL.md" ] && [ "$_d" != / ]; do _d=$(dirname "$_d"); done
+if [ -f "$_d/CHANNEL.md" ] && [ -f "$_d/scene_rules.json" ]; then
+  N=$(python3 -c "import json,sys;print(json.load(open(sys.argv[1])).get('numbersPer20s',''))" "$_d/scene_rules.json" 2>/dev/null || true)
+  [ -n "$N" ] && NUMOPT="--numbers-per-20s $N"
+fi
+if [ -n "$BAND" ]; then run scenecheck node "$HERE/core/render/scenecheck.mjs" "$FOLDER" --band 880 $NUMOPT; fi
 
 # the voice: every line has to transcribe back to the script. The run happens in a scratch folder, so the
 # film's own words.json is never rewritten by a check.

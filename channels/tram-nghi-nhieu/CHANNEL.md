@@ -63,6 +63,7 @@ Khi đề tài đòi hỏi đào sâu hoặc người dùng yêu cầu video dà
 - Ổ đĩa gần đầy: xoá still thử và `out/` cũ khi xong.
 - **Bài kiểm tra đọc hình (`readcheck`, `scenecheck`) phải chạy trên một tập đã đứng yên.** Chúng so vân tay của `index.html` / `src/*.js` / `voice/lines.json` lúc mở trang và lúc đọc xong: file nào đổi trong lúc chạy thì kết quả bị bỏ và bài kiểm tra in *"the film's source changed while the check was reading it … Run it again on a settled file"* rồi thoát mã 2. Trang chết giữa chừng cũng ra *"COULD NOT RUN"*, không phải một phán quyết về phim. Vậy nên: dựng xong một đợt sửa, để nó đứng yên, rồi mới chấm — đừng chạy kiểm tra trong kúc một agent khác đang sửa cùng thư mục.
 - **Một máy, một lần dựng nặng.** Một tập 3D dựng nhiều khung (beatsheet 88 khung, readcheck hàng nghìn khung) chiếm GPU và RAM; chạy hai việc nặng cùng lúc thì trình duyệt có thể chết giữa chừng. Xong một việc nặng rồi hãy làm việc tiếp theo.
+- **Luật của kênh do máy giữ, không chỉ trên giấy.** `scene_rules.json` nói giới hạn của kênh (hiện: tối đa hai con số mỗi phút, `STRATEGY.md`), và `core/render/review.sh` truyền nó cho `scenecheck`. Mặc định của thư viện là 2 con số mỗi 20 giây — lỏng hơn luật của kênh ba lần, nên cột giới hạn trong `scene_rules.json` mới là thứ được giữ.
 
 ## Đăng YouTube
 

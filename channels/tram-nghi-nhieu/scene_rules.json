@@ -1,0 +1,4 @@
+{
+  "numbersPer20s": 0.67,
+  "_numbersPer20s": "Kênh nói tối đa khoảng hai con số mỗi phút (STRATEGY.md, phần 'Giọng kể'): 2 con số / 60 s = 0,67 con số mỗi 20 s. Mặc định của thư viện là 2 mỗi 20 s — lỏng hơn luật của kênh ba lần."
+}
