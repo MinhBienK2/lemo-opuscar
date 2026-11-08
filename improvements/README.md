@@ -199,6 +199,7 @@ seventh record had only proposed.
 | N13 | A CI step that diffed a symlink against its own target could not fail, so it checked nothing | medium | the CI step checks the symlink and the two real paths |
 | N14 | The reading check drew every frame twice — once itself, once because the film's `TEXTS` draws the frame before it answers — so the slowest step of the delivery gate cost double | medium | [`core/render/readcheck.mjs`](../core/render/readcheck.mjs) counts the draws `TEXTS` makes and draws the frame itself only when `TEXTS` does not |
 | N15 | The picture critic judged "the subject is a speck in an empty field" from the picture alone, with no number to weigh, and it took nine LOOK rounds to fix the shots that lost their subject | high | the beatsheet prints `fill N%` under every frame (the rays the rig already casts) · the critic's criterion 6 asks the reader to weigh it |
+| N16 | The reading check draws at the film's shipping quality, so on a 6 GB GPU it lost the browser 91 s into a 3-minute film — the check that measures text boxes never finished | high | the channel says how the reading check must draw (`scene_rules.json`: `readcheckQ`) · `core/render/review.sh` passes it on · the stills and the render stay at the shipping quality |
 
 ## The supervisor
 

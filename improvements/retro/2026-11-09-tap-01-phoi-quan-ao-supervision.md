@@ -328,6 +328,26 @@ cảnh toàn cảnh) — nên con số không thay được con mắt, nhưng n�
 
 ---
 
+## N16 — high — Bài kiểm tra đọc hình vẽ ở đúng chất lượng phim, và mất máy vì chính cái hình đó
+
+**Bằng chứng.** `readcheck` trên tập này chết ở giây 91,2 / 176,4: *"the page died while the check was reading
+it"*. Rig của kênh vẽ ở **siêu lấy mẫu 2×** (3840×2160) với ba lượt dựng bối cảnh, một lượt nét mực và
+bloom; trên máy này (GTX 1660 Ti, 6 GB) trình duyệt không chịu nổi.
+
+**Đo lại.** `node core/render/readcheck.mjs <tập> --band 880 --q ss=1` đọc **trọn 176 giây** không chết.
+Hộp chữ mà bài này đo là hộp trên canvas 1920×1080 và phép chiếu của camera — **không đổi** khi bỏ siêu lấy
+mẫu. Nên kết quả là của cùng một phim, chỉ vẽ rẻ hơn.
+
+**Guard đã có.** `scene_rules.json` của kênh có `"readcheckQ": "ss=1"`, và `core/render/review.sh` truyền nó
+cho `readcheck`. Ảnh chụp và bản dựng vẫn ở 2× — chỉ bài đo bị hạ.
+
+**Đáng chú ý.** Lần chạy đó bị bỏ vì người làm sửa `src/film.js` và `src/props.js` **trong lúc** bài kiểm tra
+đang đọc: *"the film's source changed while the check was reading it … the result is void"*. Đó là bộ chặn
+vân tay nguồn (N11) làm đúng việc — nhưng nó cũng cho thấy một điều: phiên sửa code ngay cả khi đang chạy bài
+kiểm tra. Đã báo phiên: để code đứng yên rồi chạy.
+
+---
+
 ## Đề xuất thứ tự xử lý
 
 | # | Việc | File cần sửa | Trạng thái |
@@ -345,6 +365,10 @@ cảnh toàn cảnh) — nên con số không thay được con mắt, nhưng n�
 | 11 | Bước CI không thể thất bại (N13) | `.github/workflows/films.yml` | **xong** |
 | 12 | `readcheck` vẽ mỗi khung hình **hai lần** (một lần của nó, một lần vì `TEXTS` tự vẽ trước khi trả lời) (N14) | `core/render/readcheck.mjs` | **xong** |
 | 13 | Tờ beat in `fill N%`, và tiêu chí 6 của người chấm hình cân số đó (N15) | `channels/tram-nghi-nhieu/tools/beatsheet.mjs`, `step6-assembly/PROMPT_CRITIC.md` | **xong** |
+| 14 | Bài đọc hình vẽ ở `ss=1` theo luật của kênh, nên nó đọc trọn phim (N16) | `channels/tram-nghi-nhieu/scene_rules.json`, `core/render/review.sh` | **xong** |
+| 15 | Rig bỏ hộp `id: 'sub'` khỏi `TEXTS`; bài kiểm tra nói rõ trình duyệt chết hay code phim ném lỗi | `channels/tram-nghi-nhieu/rig/render.js`, `core/render/readcheck.mjs`, `scenecheck.mjs` | **xong** |
+| 16 | `tools/replace.py`: sửa file bằng kịch bản mà vẫn đếm số lần khớp và ghi nguyên tệp | `tools/replace.py`, `CODING_STANDARDS.md` R1 | **xong** |
+| 17 | CI đo được chính các phim trong repository: định dạng, độ lớn tiếng, thời lượng | `tools/check_movies.py`, `.github/workflows/films.yml` | **xong** |
 
 ### Mỗi phát hiện đã có dòng riêng trong `improvements/lessons.md`
 
