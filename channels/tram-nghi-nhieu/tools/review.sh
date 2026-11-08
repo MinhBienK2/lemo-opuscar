@@ -181,7 +181,6 @@ fi
 # nobody can count: five rounds of a storyboard graded by hand are five rounds nobody signed.
 if [ "$STORYBOARD" = 1 ]; then
   [ -f "$EP/LOOK.md" ] || die "--storyboard needs LOOK.md"
-  [ -f "$EP/src/film.js" ] || die "--storyboard needs src/film.js"
   # The director's cut ends the step: a written scope of what was cut, ending in VERDICT: PASS, stands for the
   # storyboard. It must be at least as new as the last round it answers, or a cut from an earlier state of the
   # film would pass a later one.
@@ -198,10 +197,11 @@ if [ "$STORYBOARD" = 1 ]; then
   fi
   mkdir -p "$W/hero"
   cp "$EP"/review/hero/*.jpg "$W/hero/" 2>/dev/null || true
-  cp "$EP/LOOK.md" "$W/" ; cp "$EP/src/film.js" "$W/film.js"; [ -f "$EP/TREATMENT.md" ] && cp "$EP/TREATMENT.md" "$W/"
+  cp "$EP/LOOK.md" "$W/"; [ -f "$EP/src/film.js" ] && cp "$EP/src/film.js" "$W/film.js"
+  [ -f "$EP/TREATMENT.md" ] && cp "$EP/TREATMENT.md" "$W/"
   cd "$W"
   critic "$(get_prompt step3-storyboard)
-Thư mục làm việc của bạn: $W. Đọc LOOK.md (bảng bố cục, từng nhát, góc máy, lý do máy đứng ở đó), film.js (mã dựng khung hình) và TREATMENT.md; mở từng ảnh trong hero/ và soi nó. Chấm đúng những tiêu chí trên, nhớ rằng đây là vòng $n/5 và những gì đã sửa từ vòng trước thì không nêu lại là lỗi.
+Thư mục làm việc của bạn: $W. Đọc LOOK.md (bảng bố cục, từng nhát, góc máy, lý do máy đứng ở đó), film.js (nếu có: mã dựng khung hình) và TREATMENT.md; mở từng ảnh trong hero/ và soi nó. Chấm đúng những tiêu chí trên, nhớ rằng đây là vòng $n/5 và những gì đã sửa từ vòng trước thì không nêu lại là lỗi.
 Viết STORYBOARD-REVIEW.md ở thư mục này theo mẫu, rồi in lại nó."
   [ -s STORYBOARD-REVIEW.md ] || cp out.txt STORYBOARD-REVIEW.md
   { cat STORYBOARD-REVIEW.md; } > R.md; sign "--storyboard" R.md
