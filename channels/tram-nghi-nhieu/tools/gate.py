@@ -151,6 +151,12 @@ def valid(ep, kind, ch=None):
     head = (got[0].strip(), *got[1].split()) if len(got) > 2 else ()
     if len(head) != 3 or not got[2].startswith('critic: '): return f'con dấu {os.path.basename(p)} không đúng mẫu của review.sh'
     if kind != 'outline' and head[0] != digest(ep, kind, ch): return 'đã đổi sau lần PASS cuối'
+    if kind == 'outline' and head[0] != digest(ep, kind, ch):
+        # The outline is deliberately not reopened by later edits (a treatment may be refined after it passes), but a
+        # reader must be able to see that the dàn ý on disk is no longer the dàn ý that was judged.
+        print(f'gate: cảnh báo — {os.path.basename(p)} chấm một dàn ý khác với TREATMENT.md/FACTS.md hiện tại '
+              f'(đã sửa sau lần PASS). Dàn ý không bị mở lại, nhưng bản chấm không nói về dàn ý đang dùng.',
+              file=sys.stderr)
     review = os.path.join(ep, head[2])
     if not os.path.isfile(review) or sha(review) != head[1] or not passed(review):
         return f'bản chấm {head[2]} không còn là bản đã PASS (bị sửa hay mất)'

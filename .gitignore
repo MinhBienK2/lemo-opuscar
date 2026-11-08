@@ -143,4 +143,8 @@ styles/*/demo/**/*_try.py
 styles/*/demo/stills/*_v1*
 !styles/art-deco/demo/stills/kit_v2.jpg
 
-channels/tram-nghi-nhieu/series
+# A channel's episodes are films: their treatment, script, source and credits go to GitHub (channels/.gitignore).
+# Only the regenerable review frames stay local — build.sh draws them again.
+channels/tram-nghi-nhieu/series/**/review/beatsheet/
+channels/tram-nghi-nhieu/series/**/review/hero/
+channels/tram-nghi-nhieu/series/**/review/props/

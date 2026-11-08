@@ -29,7 +29,15 @@ NODE=$(command -v node || true)
 PY=$(command -v python3 || true)
 [ -n "$PY" ] || PY=python3
 SLUG=$(printf '%s' "$LIB" | sed "s|^$HOME||; s|/|-|g")
-SESSIONS=${SUPERVISE_SESSIONS:-$HOME/.omp/agent/sessions/$SLUG}
+CLSLUG=$(printf '%s' "$LIB" | sed "s|/|-|g")
+# The transcripts live in the session folder of whichever tool ran the film. Claude Code writes them under
+# ~/.claude/projects/<the whole path, slashes as dashes>/, omp under ~/.omp/agent/sessions/<the path under the
+# home, slashes as dashes>/ — two different names for the same place. Both are read, because a supervisor that
+# watches the wrong folder watches nothing and says nothing was broken.
+SESSIONS=${SUPERVISE_SESSIONS:-}
+if [ -z "$SESSIONS" ]; then
+  SESSIONS="$HOME/.claude/projects/$CLSLUG:$HOME/.omp/agent/sessions/$SLUG"
+fi
 OUT="$LIB/improvements/supervision"
 DATE=$(date +%F)
 NOW=$(date +%H:%M)
@@ -82,9 +90,11 @@ echo "supervise: film $(basename "$FILM")"
 SESSION=${SUPERVISE_SESSION:-}
 if [ -z "$SESSION" ]; then
   # the session that wrote inside the film folder most recently
-  SESSION=$(python3 - "$SESSIONS" "$FILM" <<'PY'
-import glob, json, os, sys, time
-sessions, film = sys.argv[1], sys.argv[2]
+  SESSION=$(python3 - "$SESSIONS" "$FILM" "$LIB/tools/transcript.py" <<'PY'
+import glob, os, sys, time
+sessions, film, lib = sys.argv[1], sys.argv[2], sys.argv[3]
+sys.path.insert(0, os.path.dirname(os.path.abspath(lib)))
+import transcript
 now = time.time()
 
 
@@ -93,29 +103,23 @@ def writes_film(path):
     merely runs the checks on that folder is not taken for the one that builds it"""
     last = ''
     try:
-        with open(path, encoding='utf8', errors='replace') as fh:
-            for line in fh:
-                if '"tool_execution_start"' not in line:
-                    continue
-                try: d = json.loads(line)
-                except Exception: continue
-                if d.get('type') != 'custom' or d.get('customType') != 'tool_execution_start':
-                    continue
-                da = d.get('data', {})
-                if da.get('toolName') not in ('write', 'edit'):
-                    continue
-                p = (da.get('args') or {}).get('path', '')
-                if not isinstance(p, str) or not p.startswith(film):
-                    continue
-                at = da.get('startedAt', '')
-                if at > last:
-                    last = at
+        for at, tool, args in transcript.events(path):
+            if tool not in ('write', 'edit'):
+                continue
+            p = args.get('path', '')
+            if not p.startswith(film):
+                continue
+            if at > last:
+                last = at
     except OSError:
         pass
     return last
 
 
-files = sorted(glob.glob(os.path.join(sessions, '*.jsonl')), key=os.path.getmtime, reverse=True)[:25]
+files = []
+for d in sessions.split(':'):
+    files += glob.glob(os.path.join(d, '*.jsonl'))
+files = sorted(files, key=os.path.getmtime, reverse=True)[:50]
 best, best_at = '', ''
 for f in files:
     if now - os.path.getmtime(f) > 7200:
@@ -158,73 +162,68 @@ gate_step() {   # run one check, keep its output, remember whether it passed
   fi
   # the film's index row: a film that is not built yet is "not built yet", not a fault
   gate_step index "$PY" "$LIB/tools/check_films_index.py"
+  # a film's treatment is a deliverable: it must be committable, or the episode vanishes with the machine
+  gate_step tracked "$PY" "$LIB/tools/check_tracked.py" "$FILM"
 } > "$GATE" 2>&1
-echo "supervise: gate $( [ "$GATE_OK" -eq 1 ] && echo PASS || echo FAIL ) (filmcheck, drawcheck, citations, claims, facts, index)"
+echo "supervise: gate $( [ "$GATE_OK" -eq 1 ] && echo PASS || echo FAIL ) (filmcheck, drawcheck, citations, claims, facts, index, tracked)"
 
 # --- the session's own tool log: what it did, and when -------------------------------
 TOOLS=$(mktemp)
 RULES=$(mktemp)
 trap 'rm -rf "$LOCK" "$GATE" "$TOOLS" "$RULES"' EXIT
-python3 - "$SESSION" > "$TOOLS" <<'PY'
-import json, sys
-path = sys.argv[1]
+python3 - "$SESSION" "$LIB/tools/transcript.py" > "$TOOLS" <<'PY'
+import json, os, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(sys.argv[2])))
+import transcript
 rows = []
-try:
-    for line in open(path):
-        try: d = json.loads(line)
-        except Exception: continue
-        if d.get("type") == "custom" and d.get("customType") == "tool_execution_start":
-            da = d.get("data", {})
-            args = da.get("args", {})
-            keep = {k: v for k, v in args.items() if k in ("path", "command", "intent", "name")}
-            rows.append(f"{da.get('startedAt','')[11:19]} {da.get('toolName')} {json.dumps(keep, ensure_ascii=False)[:220]}")
-except FileNotFoundError:
-    pass
+for at, tool, args in transcript.events(sys.argv[1]):
+    keep = {k: v for k, v in args.items() if k in ("path", "command", "intent", "name")}
+    rows.append(f"{at[11:19] if 'T' in at else at} {tool} {json.dumps(keep, ensure_ascii=False)[:220]}")
 print("\n".join(rows[-80:]))
 PY
 
 # the rules the session broke, read off its own tool log (R1–R5 of CODING_STANDARDS.md)
-python3 - "$SESSION" > "$RULES" <<'PY'
-import json, re, sys
-path = sys.argv[1]
+python3 - "$SESSION" "$LIB/tools/transcript.py" > "$RULES" <<'PY'
+import collections, json, os, re, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(sys.argv[2])))
+import transcript
 out = []
-try:
-    for line in open(path):
-        try: d = json.loads(line)
-        except Exception: continue
-        if d.get("type") != "custom" or d.get("customType") != "tool_execution_start":
-            continue
-        da = d.get("data", {})
-        args = da.get("args", {})
-        cmd = args.get("command", "") or ""
-        tool = da.get("toolName", "")
-        at = da.get("startedAt", "")[11:19]
-        if tool == "bash":
-            # a settle of a second after a kill is not a poll; a wait of half a minute is
-            if re.search(r'(^|[;&|]\s*)sleep\s+([5-9]|\d{2,})', cmd):
-                out.append(f"R5 {at} a long job is polled with sleep: {cmd[:120]}")
-            if re.search(r'git\s+add\s+(-\S+\s+)*(-A|--all)\b', cmd):
-                out.append(f"R3 {at} every file is staged on a dirty tree: {cmd[:120]}")
-            # R1: a file written by the shell. The log truncates the command, so a heredoc that names one of the
-            # film's source files is reported for a reader to check — not counted as a violation.
-            writes = bool(re.search(r"open\(\s*[^)]*['\"]w['\"]|\.write\(|os\.replace|shutil\.(copy|move)", cmd))
-            if writes and re.search(r'(cat|tee)\s*>|\bpython3?\s+-\s*<<|<<\s*[\'"]?EOF', cmd):
-                out.append(f"R1 {at} a file is written by the shell: {cmd[:120]}")
-            elif re.search(r'\bpython3?\s+-\s*<<', cmd) and re.search(r"['\"][^'\"]*\.(js|json|md)['\"]", cmd):
-                out.append(f"R1? {at} a shell script touches a source file (the log truncates the command — read it "
-                           f"before believing it): {cmd[:120]}")
-        if tool in ("write", "edit") and isinstance(args.get("path"), str):
-            p = args["path"]
-            if "/src/" in p and p.endswith(".js"):
-                try:
-                    src = open(p, encoding="utf8").read()
-                    if "fillText(" in src:
-                        out.append(f"T9 {at} {p} draws a string with a raw fillText() — the reading check cannot see it")
-                except OSError:
-                    pass
-except FileNotFoundError:
-    pass
-print("\n".join(out[-40:]))
+# the same command five times over is a poll, whatever it looks for (R9). Counted first, reported last: the
+# report keeps the last forty lines, and a poll loop is the finding that must never be the one that falls off.
+seen = collections.Counter()
+for at, tool, args in transcript.events(sys.argv[1]):
+    cmd = args.get("command", "") or ""
+    if tool == "bash" and cmd:
+        seen[cmd.strip()] += 1
+polls = [f"R9 {n} lần cùng một lệnh — một vòng dò, không phải việc: {cmd[:120]}"
+         for cmd, n in seen.most_common() if n >= 5]
+for at, tool, args in transcript.events(sys.argv[1]):
+    cmd = args.get("command", "") or ""
+    at = at[11:19] if 'T' in at else at
+    if tool == "bash":
+        # a settle of a second after a kill is not a poll; a wait of half a minute is
+        if re.search(r'(^|[;&|]\s*)sleep\s+([5-9]|\d{2,})', cmd):
+            out.append(f"R5 {at} a long job is polled with sleep: {cmd[:120]}")
+        if re.search(r'git\s+add\s+(-\S+\s+)*(-A|--all)\b', cmd):
+            out.append(f"R3 {at} every file is staged on a dirty tree: {cmd[:120]}")
+        # R1: a file written by the shell. The log truncates the command, so a heredoc that names one of the
+        # film's source files is reported for a reader to check — not counted as a violation.
+        writes = bool(re.search(r"open\(\s*[^)]*['\"]w['\"]|\.write\(|os\.replace|shutil\.(copy|move)", cmd))
+        if writes and re.search(r'(cat|tee)\s*>|\bpython3?\s+-\s*<<|<<\s*[\'"]?EOF', cmd):
+            out.append(f"R1 {at} a file is written by the shell: {cmd[:120]}")
+        elif re.search(r'\bpython3?\s+-\s*<<', cmd) and re.search(r"['\"][^'\"]*\.(js|json|md)['\"]", cmd):
+            out.append(f"R1? {at} a shell script touches a source file (the log truncates the command — read it "
+                       f"before believing it): {cmd[:120]}")
+    if tool in ("write", "edit"):
+        p = args.get("path", "")
+        if "/src/" in p and p.endswith(".js"):
+            try:
+                src = open(p, encoding="utf8").read()
+                if "fillText(" in src:
+                    out.append(f"T9 {at} {p} draws a string with a raw fillText() — the reading check cannot see it")
+            except OSError:
+                pass
+print("\n".join(out[-40:] + polls))
 PY
 if [ -s "$RULES" ]; then
   echo "supervise: the session broke $(wc -l < "$RULES") of the library's rules"
