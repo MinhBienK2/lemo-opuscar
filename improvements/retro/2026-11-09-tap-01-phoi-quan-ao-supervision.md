@@ -581,16 +581,13 @@ nên không đổi gì; phim nào có cột thì đếm đúng những gì ngư�
 
 ## Mục chưa xử lý
 
-- **[ ]** Chưa có phim: `out/` còn rỗng. Cổng props đã đổi và đang chạy vòng 5; cổng storyboard mới; cổng
-  hình (`picture`) và cổng lời kể (`script`) vẫn chưa có PASS cho tập này.
-- **[x]** N10 (một phần): một phiên chấm mù chạy lại trên **cùng tập ảnh** vẫn chưa làm — để biết vòng nào là
-  lỗi thật chứ không phải dao động của người chấm. Đã có guard báo hiện trạng.
+- **[ ]** Chưa có phim: `out/` còn rỗng. Bản chấm cả phim **vòng 1/5 đã REJECT** (`review/REVIEW-1.md`): 5 câu
+  FAIL về khung hình (#23, #37, #40, #57, #60), 14 cờ SAME chưa xử lý, cờ RUN ở #22, và nhóm lỗi "nhãn gán
+  sai beat" (N21 — nay có cổng máy chặn trước). Phiên đang sửa `src/props.js` và `src/set.js`.
+- **[x]** N10 (một phần): một phiên chấm mù chạy lại trên **cùng tập ảnh** đã làm — xem N20.
 - **[x]** `improvements/lessons.md` đã có dòng cho N1–N4 và N10 (xem bảng trên).
-- **[ ]** `films/host-toon-test` **không vượt được cổng bàn giao của thư viện** hôm nay: `readcheck` báo
-  "5 tháng" chạm vào dải phụ đề (`y=911` > 880), và `scenecheck` báo 2,42 con số mỗi 20 giây (7,3 mỗi phút)
-  trong khi luật của kênh là 2 mỗi phút. Cả hai lỗi là **cũ**, không phải do các guard mới: chạy lại bằng
-  `readcheck` **trước** khi sửa (`git stash`) cho ra đúng dòng BAD đó. CI không bắt được vì bước kiểm tra
-  của CI không mở trình duyệt. Đây là phim một-lần của thư viện, không phải tập của kênh — luật của kênh
-  không áp cho nó, nhưng cổng của thư viện thì có.
-- **[ ]** Chưa có lượt sản xuất nào chạy với các guard mới (chặng đọc, vân tay nguồn, kiểm tra con trỏ):
-  lần sản xuất kế tiếp là lần kiểm chứng đầu tiên của chúng.
+- **[~]** `films/host-toon-test`: **nguyên nhân đã tìm ra và sửa** (N23 cho phần con số; nhãn "5 tháng" đã
+  lên khỏi dải phụ đề). Còn một việc: `.mp4` trong `films/host-toon-test/` **đã cũ hơn code** — phải dựng lại
+  khi GPU rảnh (một lượt dựng nặng trên máy này là chỗ hai phiên cùng làm thì bài kiểm tra chết).
+- **[ ]** Chưa có lượt sản xuất nào chạy với các guard mới (chặng đọc, vân tay nguồn, kiểm tra con trỏ, nhãn
+  đúng câu, bản cắt đúng code): lượt sản xuất kế tiếp (tập 02) là lần kiểm chứng đầu tiên của chúng.
