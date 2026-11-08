@@ -32,7 +32,7 @@ channels/tram-nghi-nhieu/
 ├── templates/        # TREATMENT.tmpl.md (mẫu dàn ý của kênh), NEXT.txt: new_episode.sh dùng
 ├── demo/             # phim mẫu 18 s, cutaway/ 8 s, stills/ (khung tham chiếu)
 ├── tools/            # các công cụ & script kiểm soát tự động của kênh
-│   ├── review.sh     #   chấm độc lập: --outline, --script, --props, cảnh, chương, cả phim
+│   ├── review.sh     #   chấm độc lập: --outline, --script, --storyboard, --props, cảnh, chương, cả phim
 │   ├── gate.py       #   con dấu PASS (cổng máy)
 │   ├── mix.py        #   nhạc, ambience, foley, master -14 LUFS
 │   ├── beatsheet.mjs #   kiểm tra nhịp điệu khung hình & cờ máy
