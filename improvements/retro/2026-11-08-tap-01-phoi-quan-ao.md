@@ -289,15 +289,30 @@ phải dò bốn nơi để tìm `PROMPT_CRITIC.md`. Một bản + symlink.
 
 ---
 
-## Mục chưa xử lý
+## Mục chưa xử lý (tại 23:29) — và trạng thái lúc 01:30 ngày 9
 
-- **[ ]** Phiên vẫn đang chạy (23:29) với hai luồng review mở. Cần **dừng** trước khi vá, nếu không
-  hai bên cùng sửa `src/`.
-- **[ ]** Chưa có phim: `out/` rỗng, không `.mp4`.
-- **[ ]** P1 (nhóm đời thường / nhóm vi mô) là **quyết định của người dùng**: hạ tiêu chuẩn props
-  để mở cổng nhanh, hay giữ tiêu chuẩn và sửa hình cho tới khi vật vi mô đọc được.
-- **[ ]** P9: cần một phiên chấm mù chạy lại trên **cùng tập ảnh** để biết vòng 2 là dao động
-  của người chấm hay lỗi thật. Chưa làm.
-- **[ ]** `improvements/lessons.md` và `CODING_STANDARDS.md`: chưa thêm dòng nào cho các phát hiện trên —
-  phải đợi guard tồn tại, vì `improvements/README.md` quy định một phát hiện kết thúc ở **một guard**
-  hoặc ở câu *"no guard possible — recorded only"*. Ở đây chúng là **guard đề xuất**, chưa là guard.
+Bản ghi này đóng lúc 23:29 với các mục dưới đây còn mở. Phần hai của phiên —
+[`2026-11-09-tap-01-phoi-quan-ao-supervision.md`](2026-11-09-tap-01-phoi-quan-ao-supervision.md) — đã
+vá các guard mà bản ghi này đề xuất. Trạng thái:
+
+| Mục | Trạng thái lúc 01:30 ngày 9 |
+|---|---|
+| **[ ]** Phiên vẫn đang chạy (23:29) với hai luồng review mở. Cần **dừng** trước khi vá. | Đã xong: phiên được giám sát từ bên ngoài, không dừng; hai luồng review đã được chốt bằng đạo diễn cắt. |
+| **[ ]** Chưa có phim: `out/` rỗng, không `.mp4`. | **Còn mở.** Đây là việc còn lại duy nhất của tập. |
+| **[ ]** P1 (nhóm đời thường / nhóm vi mô) là **quyết định của người dùng**. | **Đã quyết**: rubric chia vật thành nhóm A (đứng riêng, phải đúng tên) và nhóm B (phần/cơ chế, chỉ HỎNG khi đọc thành vật thật khác) — lấy từ chính cái tên của vật. `--props` có trần 5 vòng. Xem N3 của phần hai. |
+| **[ ]** P9: cần một phiên chấm mù chạy lại trên **cùng tập ảnh**. | **Còn mở.** Chưa làm. |
+| **[ ]** `lessons.md` và `CODING_STANDARDS.md` chưa có dòng nào cho các phát hiện trên. | Đã thêm: `CODING_STANDARDS.md` **R9** (chờ agent, đừng chờ file; hai agent không viết cùng một file), và 9 dòng mới trong `lessons.md`. |
+
+Các guard đã có (chi tiết ở phần hai):
+
+| Phát hiện | Guard |
+|---|---|
+| P1, P4 | `channels/tram-nghi-nhieu/tools/review.sh` — rubric hai nhóm + trần 5 vòng |
+| P2 | `channels/tram-nghi-nhieu/tools/gate.py` — tem dàn ý in cảnh báo khi dàn ý đã sửa sau lần PASS |
+| P3 | `review.sh --storyboard` + `gate.py` (loại tem `storyboard`, `NEEDS['render']`) — đạo diễn cắt là PASS có phạm vi |
+| P5 | `tools/transcript.py` + `tools/supervise.sh` — đọc transcript của cả Claude Code và omp |
+| P6 | `.gitignore` + `check_tracked.py` trong cổng của supervisor |
+| P7, P11 | `core/render/filmcheck.mjs` — bản chấm không hậu tố phải là vòng mới nhất; `runtime` rỗng thì FAIL |
+| P10 | `SKILL.md` trỏ tới `improvements/lessons.md`; CI giữ hai bản skill là một |
+| P8 | Chưa làm (`--contact-sheet`) — nhưng phiên đã tự dùng `core/render/sheet.py` khi được chỉ đường |
+

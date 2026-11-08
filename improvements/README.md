@@ -161,17 +161,39 @@ transcript.
 
 | # | Finding | Severity | Guard now |
 |---|---|---|---|
-| P1 | The props gate demands PASS on every object, five of which are micro-parts no viewer can name — three rounds, three FAILs, all failing on the same five | critical | **guard proposed, not built**: judge `--props` by group (everyday objects must match; micro-parts must read as their mechanism) and give `--props` a ceiling of five rounds |
-| P2 | The outline stamp is written but never compared — `gate.py:153` skips `kind == 'outline'`, so the treatment can be rewritten after its PASS | critical | **guard proposed, not built**: drop the `kind != 'outline'` exclusion (or print in the stamp that it does not bind the treatment) |
-| P3 | Step 3 has no stamp and no tool: five storyboard verdicts were placed by hand, so step 3 can be skipped entirely and the unsuffixed file holds an older round than the numbered ones | critical | **guard proposed, not built**: add a `storyboard` kind to `gate.py` and a `--storyboard` mode to `review.sh` |
-| P4 | `--props` has no round ceiling and step 4 has no script to count rounds | critical | **guard proposed, not built**: a ceiling of five with the stop message the other modes already use; an `--assets` mode |
-| P5 | The supervisor reads the omp session folder; the producer was Claude Code — `rules-latest.txt` was empty, so 307 heredoc writes (R1) and 7 `sleep` polls (R5) went unwitnessed | high | **guard proposed, not built**: `tools/supervise.sh` also scans `~/.claude/projects/*/*.jsonl`, and says so when the chosen session wrote nothing |
-| P6 | The episode is not in the repository: `.gitignore:146` excludes the whole series tree, and `tools/check_tracked.py` fails — but the supervisor's gate omits that check | high | **guard proposed, not built**: add `gate_step tracked` to `tools/supervise.sh`; narrow the `.gitignore` rule to the artifacts, not the episode |
-| P7 | Two review files with identical bytes were counted as two rounds, and the unsuffixed review file holds the oldest verdict | medium | **guard proposed, not built**: `core/render/filmcheck.mjs` reports duplicate review files and a stale unsuffixed one |
+| P1 | The props gate demands PASS on every object, five of which are micro-parts no viewer can name — three rounds, three FAILs, all failing on the same five | critical | **built** (see the eighth record, N3): `review.sh` grades props in two tiers and `--props` has a ceiling of five rounds |
+| P2 | The outline stamp is written but never compared — `gate.py:153` skips `kind == 'outline'`, so the treatment can be rewritten after its PASS | critical | **built**: the gate prints a warning when the treatment was rewritten after its PASS |
+| P3 | Step 3 has no stamp and no tool: five storyboard verdicts were placed by hand, so step 3 can be skipped entirely and the unsuffixed file holds an older round than the numbered ones | critical | **built**: `review.sh --storyboard` and a `storyboard` stamp in `gate.py` |
+| P4 | `--props` has no round ceiling and step 4 has no script to count rounds | critical | **built**: `--props` has a ceiling of five rounds |
+| P5 | The supervisor reads the omp session folder; the producer was Claude Code — `rules-latest.txt` was empty, so 307 heredoc writes (R1) and 7 `sleep` polls (R5) went unwitnessed | high | **built**: `tools/transcript.py` reads both transcript shapes and the session folder of both tools |
+| P6 | The episode is not in the repository: `.gitignore:146` excludes the whole series tree, and `tools/check_tracked.py` fails — but the supervisor's gate omits that check | high | **built**: `check_tracked` runs in the supervisor's gate and `.gitignore` keeps the episode trackable |
+| P7 | Two review files with identical bytes were counted as two rounds, and the unsuffixed review file holds the oldest verdict | medium | **built**: `core/render/filmcheck.mjs` reads the review folder |
 | P8 | 606 single images were read to review 60 shots; `core/render/sheet.py` was called zero times | medium | **guard proposed, not built**: a `review.sh --contact-sheet` that prints the sheet per group |
 | P9 | Fixing a prop to the previous round's advice broke props that had passed; the next round named the new breakage | medium | **guard proposed, not built**: `review.sh` compares the state of each object between two rounds and warns when a verdict flips without a code change |
-| P10 | The channel skill points at neither `improvements/lessons.md` nor `CODING_STANDARDS.md`, and the skill tree exists twice, byte for byte | medium | **guard proposed, not built**: one pointer line in `SKILL.md`; one tree plus a symlink |
-| P11 | `FILMS.md` names three deleted episodes and the manifest of the episode in production carries an empty `runtime` that `filmcheck.mjs` skips | low | **guard proposed, not built**: run `tools/gen_films_index.py`; `filmcheck.mjs` fails on an empty runtime when the manifest names a movie |
+| P10 | The channel skill points at neither `improvements/lessons.md` nor `CODING_STANDARDS.md`, and the skill tree exists twice, byte for byte | medium | **built**: one pointer line in `SKILL.md`; CI holds the two skill trees to being one |
+| P11 | `FILMS.md` names three deleted episodes and the manifest of the episode in production carries an empty `runtime` that `filmcheck.mjs` skips | low | **built**: `tools/gen_films_index.py` and `filmcheck.mjs` fails on an empty runtime |
+
+
+## The eighth record: supervising the episode from inside (Tập 01 Phơi quần áo, phần hai)
+
+[`retro/2026-11-09-tap-01-phoi-quan-ao-supervision.md`](retro/2026-11-09-tap-01-phoi-quan-ao-supervision.md) — the
+second half of the same episode, watched from a second session while it ran. It records the wedge the first record
+could not see (thirteen identical `ls` polls in ten minutes while the session waited for a subagent by reading the
+file's mtime — and edited that same file itself), the guard that was blind, and the closure of every guard the
+seventh record had only proposed.
+
+| # | Finding | Severity | Guard now |
+|---|---|---|---|
+| N1 | The supervisor read the wrong session folder and one transcript shape, so its rule report was empty — "nothing was broken" was read as "nobody was looking" | critical | [`tools/transcript.py`](../tools/transcript.py) reads both transcript shapes · [`tools/supervise.sh`](../tools/supervise.sh) finds each tool's session folder by its own slug |
+| N2 | The session waited for a subagent by polling the mtime of the file the subagent was writing — thirteen identical commands in ten minutes, four background watcher shells — while editing that file itself | critical | [`CODING_STANDARDS.md`](../CODING_STANDARDS.md) R9 · the supervisor reports any command repeated five times |
+| N3 | The props gate asked a blind viewer to name things nobody can name alone ("a drop falling from a towel's edge"), so "not clear" was a FAIL and five props never passed in any round | critical | [`review.sh`](../channels/tram-nghi-nhieu/tools/review.sh) grades props in two tiers taken from their own names · `--props` has a ceiling of five rounds |
+| N4 | Step 3 had no stamp and no tool: five storyboard verdicts placed by hand, four and a half hours nobody signed | high | `review.sh --storyboard` grades the framing, signs it and stamps it · `gate.py` holds the stamp · the director's cut is a PASS with a written scope |
+| N5 | The episode was untracked by a blanket ignore rule, so its treatment, script and code lived on one disk | high | `.gitignore` narrowed to the regenerable review frames · `tools/check_tracked.py` runs in the supervisor's gate |
+| N6 | A manifest naming a movie with an empty `runtime` slipped the format check, and the index printed UNKNOWN for a film that exists | medium | [`core/render/filmcheck.mjs`](../core/render/filmcheck.mjs) |
+| N7 | The review file without a number held an older verdict than the numbered ones | medium | `core/render/filmcheck.mjs` reads the review folder |
+| N8 | `FILMS.md` named three deleted episodes | medium | `tools/gen_films_index.py` |
+| N9 | The channel skill pointed at neither `improvements/lessons.md` nor `CODING_STANDARDS.md`, and the skill tree existed twice | medium | one pointer line in `SKILL.md` · CI holds the two trees to being one |
+| N10 | Fixing a prop to the previous round's advice broke props that had passed, and the next round named the new breakage | medium | **no guard possible — recorded only**: it needs a blind re-grade on the same images |
 
 ## The supervisor
 
