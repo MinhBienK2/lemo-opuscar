@@ -314,5 +314,5 @@ Các guard đã có (chi tiết ở phần hai):
 | P6 | `.gitignore` + `check_tracked.py` trong cổng của supervisor |
 | P7, P11 | `core/render/filmcheck.mjs` — bản chấm không hậu tố phải là vòng mới nhất; `runtime` rỗng thì FAIL |
 | P10 | `SKILL.md` trỏ tới `improvements/lessons.md`; CI giữ hai bản skill là một |
-| P8 | Chưa làm (`--contact-sheet`) — nhưng phiên đã tự dùng `core/render/sheet.py` khi được chỉ đường |
+| P8 | **Đã xong** theo cách rẻ hơn một công cụ mới: nguyên tắc 4 của `SKILL.md` — dựng sheet rồi nhìn sheet (`core/render/sheet.py`), chỉ mở ảnh riêng khi sheet đã chỉ ra khung nào cần soi. Một tập 60 nhát đọc ảnh một-lẻ tốn hơn 250 MB và hàng trăm nghìn token. |
 
