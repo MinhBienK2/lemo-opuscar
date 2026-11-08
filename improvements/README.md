@@ -151,6 +151,28 @@ episode of Trạm Nghĩ Nhiều.
 | C7 | The machine flags contradicted the reviewer | medium | `CỜ SAI <FLAG>:` in the report, honoured by `review.sh` |
 | C8 | Maps out of date, rules repeated | low | `CHANNEL.md`, `rig/README.md`, the skill rewritten — no guard possible for staleness, recorded only |
 
+## The seventh record: the episode that never finished (Tập 01 Phơi quần áo)
+
+[`retro/2026-11-08-tap-01-phoi-quan-ao.md`](retro/2026-11-08-tap-01-phoi-quan-ao.md) — the first episode of the column
+`series/do-vat/`, built for twelve hours and forty-seven minutes and **still not a film**: `out/` is empty, no `.mp4`,
+and the two stamps the render gate demands (`PROPS.pass`, `PICTURE.pass`) are missing. It records a review loop with
+no ceiling, a props gate that cannot be passed, a step that has no stamp, and a supervisor that watched the wrong
+transcript.
+
+| # | Finding | Severity | Guard now |
+|---|---|---|---|
+| P1 | The props gate demands PASS on every object, five of which are micro-parts no viewer can name — three rounds, three FAILs, all failing on the same five | critical | **guard proposed, not built**: judge `--props` by group (everyday objects must match; micro-parts must read as their mechanism) and give `--props` a ceiling of five rounds |
+| P2 | The outline stamp is written but never compared — `gate.py:153` skips `kind == 'outline'`, so the treatment can be rewritten after its PASS | critical | **guard proposed, not built**: drop the `kind != 'outline'` exclusion (or print in the stamp that it does not bind the treatment) |
+| P3 | Step 3 has no stamp and no tool: five storyboard verdicts were placed by hand, so step 3 can be skipped entirely and the unsuffixed file holds an older round than the numbered ones | critical | **guard proposed, not built**: add a `storyboard` kind to `gate.py` and a `--storyboard` mode to `review.sh` |
+| P4 | `--props` has no round ceiling and step 4 has no script to count rounds | critical | **guard proposed, not built**: a ceiling of five with the stop message the other modes already use; an `--assets` mode |
+| P5 | The supervisor reads the omp session folder; the producer was Claude Code — `rules-latest.txt` was empty, so 307 heredoc writes (R1) and 7 `sleep` polls (R5) went unwitnessed | high | **guard proposed, not built**: `tools/supervise.sh` also scans `~/.claude/projects/*/*.jsonl`, and says so when the chosen session wrote nothing |
+| P6 | The episode is not in the repository: `.gitignore:146` excludes the whole series tree, and `tools/check_tracked.py` fails — but the supervisor's gate omits that check | high | **guard proposed, not built**: add `gate_step tracked` to `tools/supervise.sh`; narrow the `.gitignore` rule to the artifacts, not the episode |
+| P7 | Two review files with identical bytes were counted as two rounds, and the unsuffixed review file holds the oldest verdict | medium | **guard proposed, not built**: `core/render/filmcheck.mjs` reports duplicate review files and a stale unsuffixed one |
+| P8 | 606 single images were read to review 60 shots; `core/render/sheet.py` was called zero times | medium | **guard proposed, not built**: a `review.sh --contact-sheet` that prints the sheet per group |
+| P9 | Fixing a prop to the previous round's advice broke props that had passed; the next round named the new breakage | medium | **guard proposed, not built**: `review.sh` compares the state of each object between two rounds and warns when a verdict flips without a code change |
+| P10 | The channel skill points at neither `improvements/lessons.md` nor `CODING_STANDARDS.md`, and the skill tree exists twice, byte for byte | medium | **guard proposed, not built**: one pointer line in `SKILL.md`; one tree plus a symlink |
+| P11 | `FILMS.md` names three deleted episodes and the manifest of the episode in production carries an empty `runtime` that `filmcheck.mjs` skips | low | **guard proposed, not built**: run `tools/gen_films_index.py`; `filmcheck.mjs` fails on an empty runtime when the manifest names a movie |
+
 ## The supervisor
 
 [`tools/supervise.sh`](../tools/supervise.sh) watches the episode that is being made: every fifteen minutes it finds
