@@ -388,6 +388,31 @@ khoảng mười lần mà mỗi câu vẫn soi được.
 
 ---
 
+## N19 — high — Thời lượng của phim được gõ tay vào manifest, rồi index phát ra số đó
+
+**Bằng chứng.** `film.json` của tập ghi `"runtime": "2:56"`. Transcript ghi rõ lý do (mục 18:37): *"The film's
+narration ends at 173.43 s = 2:53.4… Let me set runtime '2:56' for now and correct it after the render with
+ffprobe"*. Tại giờ đó **chưa có khung hình nào được dựng** — `out/` rỗng. `FILMS.md` dòng 9 đã phát số 2:56 ra
+trang chỉ mục.
+
+**Vì sao không ai bắt được.** `tools/check_movies.py` so runtime của manifest với `ffprobe` — nhưng nó chỉ
+đo phim **có trong repository**, và phim của một tập kênh thì không có trong repository (quá nặng cho GitHub).
+Nên đúng cái phim mà bàn giao cần đo nhất lại là cái mà không bài nào nhìn thấy. Cổng bàn giao cũng im: nó mở
+trình duyệt để đọc hình, không đọc `film.json`.
+
+**Guard đã có.**
+
+- `core/render/new_episode.sh`: `build.sh` đo `ffprobe` trên phim vừa mux và **ghi số đó** vào `film.json`
+  (giữ nguyên thứ tự khoá JSON cũ; chỉ ghi khi số đo khác số đang có).
+- `core/render/review.sh`: khi có `.mp4`, cổng so `runtime` trong manifest với độ dài `ffprobe` đo được —
+  lệch quá 1,5 giây là **FAIL**, đúng như giới hạn mà `check_movies.py` dùng.
+
+Số đo rồi mới được phát ra, và một số gõ tay thì hỏng cổng thay vì hỏng chỉ mục.
+
+---
+
+## Đề xuất thứ tự xử lý
+
 | # | Việc | File cần sửa | Trạng thái |
 |---|---|---|---|
 | 1 | Chấm props theo nhóm + trần 5 vòng (N3) | `tools/review.sh` | **xong** |
@@ -409,6 +434,7 @@ khoảng mười lần mà mỗi câu vẫn soi được.
 | 17 | CI đo được chính các phim trong repository: định dạng, độ lớn tiếng, thời lượng | `tools/check_movies.py`, `.github/workflows/films.yml` | **xong** |
 | 18 | Luật R1 của người giám sát đếm **file được ghi**, không phải file được nhắc tới; một dòng cho mỗi luật (N17) | `tools/supervise.sh`, `improvements/README.md` N17, `improvements/lessons.md` | **xong** |
 | 19 | Người chấm hình đọc **tờ sheet** trước, ảnh riêng chỉ khi tờ chưa đủ (N18) | `channels/tram-nghi-nhieu/tools/review.sh`, `step6-assembly/PROMPT_CRITIC.md` | **xong** |
+| 20 | Thời lượng phim được **đo** rồi mới ghi vào manifest; cổng so manifest với `ffprobe` (N19) | `core/render/new_episode.sh`, `core/render/review.sh` | **xong** |
 
 ### Mỗi phát hiện đã có dòng riêng trong `improvements/lessons.md`
 
