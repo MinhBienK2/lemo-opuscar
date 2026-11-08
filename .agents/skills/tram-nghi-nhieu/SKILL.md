@@ -23,6 +23,10 @@ Quy trình này thay cho bước 1–6 của `AGENTS.md` / `DIRECTOR.md` khi là
 
 Mọi lệnh dưới đây chạy từ gốc thư viện. Trên máy này, mọi lệnh dựng hình (`still.mjs`, `beatsheet.mjs`, `review.sh`, `build.sh`) cần `LEMO_ANGLE=vulkan` ở đầu lệnh.
 
+Trước khi dựng, đọc [`improvements/lessons.md`](../../improvements/lessons.md) — mỗi dòng là một lỗi một phiên đã mắc, và cách chặn nó. Skill này không biết những lỗi đó; file đó thì biết.
+
+Trước khi dựng, đọc [`improvements/lessons.md`](../../improvements/lessons.md) — mỗi dòng là một lỗi một phiên đã mắc, và cách chặn nó. Skill này không biết những lỗi đó; file đó thì biết.
+
 ---
 
 ## Sơ đồ 7 Bước và Ánh xạ Prompt trong Skill

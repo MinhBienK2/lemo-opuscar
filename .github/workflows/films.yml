@@ -134,3 +134,7 @@ jobs:
         run: |
           python3 tools/check_films_index.py
           echo "the film index was checked"
+      - name: the two copies of the channel skill are the same skill
+        run: |
+          diff -r .claude/skills/tram-nghi-nhieu .agents/skills/tram-nghi-nhieu
+          echo "the skill Claude Code loads and the skill omp loads are one skill"

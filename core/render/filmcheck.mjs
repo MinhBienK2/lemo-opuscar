@@ -21,6 +21,7 @@
 // episodes of its channel.
 //
 // Exit code: 0 nothing found; 1 problems found; 2 usage.
+import crypto from 'crypto';
 import fs from 'fs';
 import path from 'path';
 import { REPO_ROOT, listFilms } from './films.mjs';
@@ -190,6 +191,11 @@ for (const arg of args) {
       if (fj.runtime && !/^\d+:[0-5]\d$/.test(fj.runtime)) {
         fail(name, `film.json runtime "${fj.runtime}" is not M:SS format (e.g. 17:38)`);
       }
+      // a film that names a movie has a length: an empty runtime passes the format check above (it is falsy)
+      // and the index then prints UNKNOWN for a film that exists
+      if (fj.movie && !String(fj.runtime || '').trim()) {
+        fail(name, 'film.json has a "movie" but no "runtime" — the index would print UNKNOWN for a film that exists');
+      }
       const treatmentText = read(path.join(folder, 'TREATMENT.md'));
       if (treatmentText && fj.title) {
         const firstLine = treatmentText.split('\n')[0] || '';
@@ -206,6 +212,43 @@ for (const arg of args) {
         }
       }
     } catch { fail(name, 'film.json is not valid JSON'); }
+  }
+
+  // 7. the review folder tells the truth about the rounds that were graded
+  // A family is one grading run: OUTLINE-REVIEW.md and OUTLINE-REVIEW-3.md are the same family. Two rules:
+  // the file without a number must be the newest round of its family (a reader who opens it must not read a
+  // verdict that was already superseded), and two numbered rounds with the same content are one round written
+  // twice — which also inflates the round count the review caps count.
+  const reviewDir = path.join(folder, 'review');
+  if (fs.existsSync(reviewDir)) {
+    const families = new Map();
+    for (const f of fs.readdirSync(reviewDir)) {
+      const m = /^(.*-REVIEW)(?:-([0-9]+))?\.md$/.exec(f);
+      if (!m) continue;
+      const [, fam, num] = m;
+      if (!families.has(fam)) families.set(fam, []);
+      families.get(fam).push({ f, n: num === undefined ? null : Number(num) });
+    }
+    for (const [fam, files] of families) {
+      const numbered = files.filter(x => x.n !== null).sort((a, b) => a.n - b.n);
+      const plain = files.find(x => x.n === null);
+      const hashOf = f => crypto.createHash('sha256').update(fs.readFileSync(path.join(reviewDir, f))).digest('hex');
+      const seen = new Map();
+      for (const x of numbered) {
+        const h = hashOf(x.f);
+        if (seen.has(h)) {
+          fail(name, `review/${x.f} is byte-identical to review/${seen.get(h)} — one round written twice, and the ` +
+            `round counter counts it twice`);
+        } else seen.set(h, x.f);
+      }
+      if (plain && numbered.length) {
+        const newest = numbered[numbered.length - 1];
+        if (hashOf(plain.f) !== hashOf(newest.f)) {
+          fail(name, `review/${plain.f} is not the newest round of ${fam} (review/${newest.f} is) — the file without ` +
+            `a number must hold the latest verdict`);
+        }
+      }
+    }
   }
 }
 
