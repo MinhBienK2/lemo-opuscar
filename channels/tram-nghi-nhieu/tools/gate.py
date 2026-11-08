@@ -8,6 +8,9 @@
   python3 gate.py chapter <episode> <n|id>              prints "<first line>-<last line> <id>" of a chapter
   python3 gate.py stamp <episode> <kind> <review> [--chapter <id>] --critic "<who judged>"
       written by review.sh, and only by it, when a review passes
+  python3 gate.py cut <episode> <kind> <cut> [--chapter <id>]
+      exit 1 when a director's cut is older than the code it judges (a cut written before the last edit says
+      nothing about the code that is there now)
 
 The stamps live in <episode>/review/:
   OUTLINE.pass        the outline (TREATMENT.md + research/FACTS.md) passed review.sh --outline. It is not reopened by
