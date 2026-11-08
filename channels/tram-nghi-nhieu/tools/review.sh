@@ -374,7 +374,8 @@ REL=$(python3 -c "import os,sys; print(os.path.relpath(sys.argv[1], sys.argv[2])
 cp "$EP/voice/lines.json" "$W/"; [ -f "$EP/research/FACTS.md" ] && cp "$EP/research/FACTS.md" "$W/"
 cp "$W/beats/beats.json" "$W/"
 for f in set_kitchen inside_banana flow cutaway_3; do [ -f "$CHANNEL/demo/stills/$f.jpg" ] && cp "$CHANNEL/demo/stills/$f.jpg" "$W/ref/"; done
-rm -f "$W/beats/"sheet_*.jpg
+# the sheets stay: they are how the reviewer reads the whole film at once (a sheet holds twelve frames with their
+# line, their flags and their fill, where opening sixty frames one by one costs an hour and a lot of tokens)
 
 MP4=""
 if [ "$VIDEO" = 1 ]; then MP4=$(ls -t "$EP"/*.mp4 2>/dev/null | head -1); [ -n "$MP4" ] || die "--video: no mp4 in $EP yet"; fi
@@ -396,7 +397,15 @@ if mp4:
 rule = ("PASS khi mọi mục ≥ 4, không lỗi CHẶN, không câu FAIL" if scope == 'một cảnh'
         else "chấm như cả phim: PASS khi OVERALL ≥ 9, không lỗi CHẶN, không câu FAIL")
 T = [f"# Chấm câu {a}–{b} ({scope}; {rule})", '']
+sheets = sorted(x for x in os.listdir(W + '/beats') if x.startswith('sheet_') and x.endswith('.jpg'))
+if sheets:
+    T.append("## Đọc tờ sheet trước")
+    T.append("Mỗi tờ dưới đây chứa nhiều câu: một khung hình mỗi câu, và dưới khung là mã câu, cờ máy, `fill N%` và lời của câu.")
+    T.append("Mở hết các tờ này để soi toàn bộ phim — đừng mở từng ảnh riêng, trừ khi một tờ chưa đủ để quyết định.")
+    for s in sheets: T.append(f"  beats/{s}")
+    T.append('')
 if a > 1: T.append(f"Câu {a-1} (chỉ để so, không chấm): beats/b_{a-1:03d}.jpg")
+T.append("## Từng câu (ảnh riêng: mở khi tờ sheet chưa đủ)")
 for x in pick:
     s = f"#{x['n']}  beats/b_{x['n']:03d}.jpg" + (f"  strips/s_{x['n']:03d}.jpg" if mp4 else '')
     T.append(s + f"  cờ: {' '.join(x.get('flags') or []) or '—'}  fill {int((x.get('fill') or 0) * 100)}%  lời: {x['text']}")
