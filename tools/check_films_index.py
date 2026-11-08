@@ -91,10 +91,14 @@ def main():
         if status == 'preparing':
             manifest = film['manifest'] or {}
             runtime = (manifest.get('runtime') or '').strip()
-            if runtime:
+            movie = (manifest.get('movie') or '').strip()
+            if movie:
                 # the manifest names a movie that is not here: the movie is a local artefact (the finished film of an
                 # episode is too big for the repository). The row must exist; the runtime cannot be measured here.
-                print(f'  {rel}: the movie is a local artefact — the runtime {runtime} was not checked')
+                if runtime:
+                    print(f'  {rel}: the movie is a local artefact — the runtime {runtime} was not checked')
+                else:
+                    print(f'  {rel}: the movie is a local artefact and the manifest claims no runtime yet')
                 built[rel + '/'] = film
                 continue
             print(f'  in preparation: {rel} (no movie yet)')
@@ -159,7 +163,8 @@ def main():
     for folder, film in built.items():
         row = listed.get(folder)
         if row is None:
-            print(f'  FAIL {index_name} has no row for {folder}')
+            print(f'  FAIL {index_name} has no row for {folder} — the index is generated, not written: '
+                  f'run `python3 tools/gen_films_index.py`')
             bad += 1
             continue
         manifest = film['manifest'] or {}
