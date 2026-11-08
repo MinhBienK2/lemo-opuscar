@@ -44,6 +44,11 @@ Quy trình này thay cho bước 1–6 của `AGENTS.md` / `DIRECTOR.md` khi là
 
 Mọi lệnh dưới đây chạy từ gốc thư viện. Trên máy này, mọi lệnh dựng hình (`still.mjs`, `beatsheet.mjs`, `review.sh`, `build.sh`) cần `LEMO_ANGLE=vulkan` ở đầu lệnh.
 
+**Tập đang dở.** Một tập mất hơn một ngày, nên phiên mở tập thường không phải phiên làm xong tập. Khi thư mục
+tập đã có, hỏi cổng trước khi làm bất cứ việc gì:
+`python3 channels/tram-nghi-nhieu/tools/gate.py status <tập>` in ra từng tem (còn hiệu lực, hết hiệu lực,
+chưa có), phán quyết của vòng chấm gần nhất, và phim đã có hay chưa.
+
 Trước khi dựng, đọc `improvements/lessons.md` ở gốc thư viện — mỗi dòng là một lỗi một phiên đã mắc, và cách chặn nó. Skill này không biết những lỗi đó; file đó thì biết.
 
 ---

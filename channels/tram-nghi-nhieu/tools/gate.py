@@ -226,6 +226,26 @@ def kind_ok(ep, kind):
 NEEDS = {'voice': ('outline', 'script'), 'render': ('outline', 'script', 'props', 'storyboard', 'picture')}
 
 
+def status(ep):
+    """where the episode stands: every stamp, whether it still holds, and the last verdict"""
+    for kind in ('outline', 'script', 'props', 'storyboard', 'picture'):
+        p = stamp_path(ep, kind)
+        if not os.path.isfile(p):
+            print(f'{kind:<11} chưa có PASS')
+            continue
+        why = valid(ep, kind)
+        print(f'{kind:<11} {"PASS còn hiệu lực" if why is None else "PASS đã hết hiệu lực: " + why}')
+    reports = sorted(glob.glob(os.path.join(ep, 'review', '*REVIEW*.md')) + glob.glob(os.path.join(ep, 'review', 'REVIEW*.md')),
+                     key=os.path.getmtime)
+    if reports:
+        last = reports[-1]
+        head = open(last, encoding='utf-8', errors='replace').read()
+        verdict = re.search(r'^#*\s*VERDICT: *\w+', head, re.M)
+        print(f'last verdict: {verdict.group(0).strip() if verdict else "?"} ({os.path.relpath(last, ep)})')
+    movies = [f for f in glob.glob(os.path.join(ep, '*.mp4')) + glob.glob(os.path.join(ep, 'out', '*.mp4'))]
+    print('movie:', ', '.join(os.path.basename(m) for m in movies) if movies else 'chưa có')
+
+
 def check(ep, step='render'):
     """None when the step may run, else the reason it may not"""
     L = lines(ep)
@@ -262,6 +282,8 @@ if __name__ == '__main__':
         c = chapter(ep, a[2]) if len(a) >= 3 else None
         ph = placeholders(ep, c)
         if ph: sys.exit(f"src/{', src/'.join(ph)} vẫn là file giữ chỗ (placeholder): dựng thật trước khi chấm")
+    elif op == 'status' and len(a) >= 2:
+        status(os.path.abspath(a[1]))
     elif op == 'cut' and len(a) >= 4 and a[2] in WHAT:
         ch = chapter(ep, opt('--chapter')) if opt('--chapter') else None
         why = stale_cut(ep, a[2], os.path.abspath(a[3]), ch)
