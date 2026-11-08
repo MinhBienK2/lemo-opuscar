@@ -228,6 +228,12 @@ for at, tool, args in transcript.events(sys.argv[1]):
         elif re.search(r'\bpython3?\s+-\s*<<', cmd) and re.search(r"['\"][^'\"]*\.(js|json|md)['\"]", cmd):
             out.append(f"R1? {at} a shell script touches a source file (the log truncates the command — read it "
                        f"before believing it): {cmd[:120]}")
+        # R10: a hand-rolled ffmpeg montage of frames. The library has core/render/sheet.py for this.
+        if 'ffmpeg' in cmd:
+            jpgs = len(re.findall(r'-i\s+\S+\.jpg', cmd))
+            if jpgs >= 2 and re.search(r'filter_complex|tile=|hstack|vstack|xstack', cmd):
+                out.append(f"R10 {at} a hand-rolled ffmpeg montage of {jpgs} frames: core/render/sheet.py tiles them and "
+                           f"names each frame: {cmd[:100]}")
     if tool in ("write", "edit"):
         p = args.get("path", "")
         if "/src/" in p and p.endswith(".js") and p not in drawn:

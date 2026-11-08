@@ -11,7 +11,7 @@ Distilled from the retro records in [`retro/`](retro/). Each line is a rule; eac
 - **Never commit a file the user has modified.** — Guard: `CODING_STANDARDS.md` R3 — stage your own change only, never `git add -A` on a dirty tree.
 - **Start a long job in the background and keep working; never poll it with `sleep`.** — Guard: `CODING_STANDARDS.md` R5.
 - **Read the reference film's file map before reading the reference film.** — Guard: `TECHNIQUE.md` §13 "Anatomy of a reference film".
-- **Use the tools the library already has: `core/render/still.mjs` and `core/render/sheet.py`, not a hand-rolled ffmpeg montage.** — Guard: `core/render/review.sh` builds the contact sheet with them.
+- **Use the tools the library already has: `core/render/still.mjs` and `core/render/sheet.py`, not a hand-rolled ffmpeg montage.** — Guard: `core/render/review.sh` builds the contact sheet with them; `CODING_STANDARDS.md` R10 and the supervisor's R10 report catch the montage written by hand.
 - **Derive a convention from the code in front of you, not from memory of the library.** — Guard: `drawcheck` reads each film's own `rect` helper, because the signature differs per style.
 - **Every source in a research file must be traceable.** — Guard: `tools/check_citations.py` requires DOI, PMID, arXiv or a URL per entry.
 - **A caption that names a state must be gated on that state** — the label and the state share one clock. — Guard: `DIRECTOR.md` §11 (a doc rule: no check can see that a label lies about the picture); the cases are in the retro records.
