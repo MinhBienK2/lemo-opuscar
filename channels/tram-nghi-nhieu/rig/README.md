@@ -17,11 +17,11 @@ Mẫu dùng đầy đủ: `demo/main.js`, `demo/room.js`, `demo/macro.js`. Bắt
 | `film({fov, near, far})` | → `{ renderer, camera, ov, frame, texts }`. Tạo một lần. |
 | `frame(scene, {t, thick, ref, flash, fade, vig, overlay, key})` | Render một khung. `thick` 3–3.6 px; `ref` là khoảng cách nét chuẩn (toàn cảnh ≈ 2.5, cận ≈ .3); `flash` là `THREE.Color` cộng thêm khi chuyển cảnh; `overlay(g, t)` vẽ chữ 2D và trả về các hộp cho `window.TEXTS`; `key` là đèn chính, dùng cho `?lightcam`. |
 | `label(g, text, x, y, t, t0, t1, {id})` | Thẻ thuật ngữ, có nảy vào và thu ra. Trả về hộp, hoặc null khi đang nảy. |
-| `subtitle(g, text)` | Phụ đề khắc ở dải dưới (y ≥ 880). |
+| `subtitle(g, text)` | Phụ đề khắc ở dải dưới (y ≥ 880). Độ dài giữ do `.srt` quyết định, nên **không tính vào `TEXTS`** — rig tự loại hộp có `id: 'sub'`. |
 | `toScreen(vec3, camera)` | → `[x, y]` pixel. |
 | `W`, `H`, `Q` | 1920, 1080, tham số URL. |
 
-Hợp đồng trang: `window.TEXTS = t => { window.render(t); return F.texts(); }`.
+Hợp đồng trang: `window.TEXTS = t => { window.render(t); return F.texts(); }`. Hộp nào có `id: 'sub'` bị rig loại khỏi `TEXTS`: độ dài giữ của phụ đề do `.srt` quyết định, đo lại nó sẽ báo sai mọi câu thoại.
 
 Thứ tự vẽ: lớp đặc (layer 0) → nét mực → lớp fx (`fxLayer`, layer 1: khí, kính, quầng sáng) phủ lên sau, có so độ sâu với lớp đặc. Nhờ vậy cạnh nằm sau một làn khí chỉ hiện mờ qua làn khí, không thành một đường đen in trên nó. Vật nào trong suốt hay mềm (khói, hơi, kính) thì đưa vào `fxLayer`, đừng để ở layer 0.
 

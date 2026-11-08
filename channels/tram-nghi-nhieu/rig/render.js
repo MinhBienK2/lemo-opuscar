@@ -142,6 +142,9 @@ export function film({ fov = 36, near = .02, far = 40 } = {}) {
     F.uFlash.value.copy(o.flash || new THREE.Color(0, 0, 0));
     ov.clearRect(0, 0, W, H);
     texts = o.overlay ? (o.overlay(ov, t) || []) : [];
+    // the subtitle is not a text piece: its hold is set by the .srt, not by the film. A film that hands the subtitle
+    // box back from its overlay would have every spoken line measured as a too-short text, so the rig drops it here.
+    texts = texts.filter(b => b && b.id !== 'sub');
     ovTex.needsUpdate = true; F.uOv.value = o.overlay ? 1 : 0;
     renderer.setRenderTarget(null); fin.render(renderer);
   }
