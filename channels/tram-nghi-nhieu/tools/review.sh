@@ -23,12 +23,14 @@
 # in the report with "CỜ SAI <FLAG>: <why>" (LONG and the picture flags only: a digit or a missing FACTS.md is never
 # wrong). The maker cannot clear a flag.
 #
-# The reviewer: LEMO_CRITIC_CLI=omp|claude (default: omp when it is installed, else claude), LEMO_CRITIC_MODEL for the
-# model (default: that tool's own default model, which may not be the model you are). Who judged is signed under every
+# The reviewer: LEMO_CRITIC_CLI=claude|omp (default: claude), LEMO_CRITIC_MODEL for the
+# model (default: that tool's own default model). Who judged is signed under every
 # report and written into the stamp.
 set -e
-HERE=$(cd "$(dirname "$0")" && pwd); LIB=$(cd "$HERE/../.." && pwd)
-GATE="python3 $HERE/gate.py"
+HERE=$(cd "$(dirname "$0")" && pwd)
+CHANNEL=$(cd "$HERE" && while [ ! -f "CHANNEL.md" ] && [ "$PWD" != "/" ]; do cd ..; done; pwd)
+LIB=$(cd "$HERE" && while [ ! -f "AGENTS.md" ] && [ "$PWD" != "/" ]; do cd ..; done; pwd)
+GATE="python3 $CHANNEL/tools/gate.py"
 die() { echo "review: $*" >&2; exit 2; }
 EP=$1; [ -n "$EP" ] && [ -d "$EP" ] || die "usage: review.sh <episode> [--outline | --script | --props | --lines a-b | --chapter n] [--video]"
 EP=$(cd "$EP" && pwd); shift
@@ -46,13 +48,28 @@ while [ $# -gt 0 ]; do
 done
 
 # —— the reviewer ——
-[ -n "$LEMO_CRITIC" ] && die "LEMO_CRITIC (any command as the reviewer) is gone: choose LEMO_CRITIC_CLI=omp|claude and LEMO_CRITIC_MODEL"
-CLI=${LEMO_CRITIC_CLI:-$(command -v omp >/dev/null && echo omp || echo claude)}
-case "$CLI" in omp|claude) command -v "$CLI" >/dev/null || die "the reviewer '$CLI' is not installed" ;; *) die "LEMO_CRITIC_CLI must be omp or claude" ;; esac
+[ -n "$LEMO_CRITIC" ] && die "LEMO_CRITIC (any command as the reviewer) is gone: choose LEMO_CRITIC_CLI=claude and LEMO_CRITIC_MODEL"
+if [ "$LEMO_CRITIC_CLI" = "omp" ]; then
+  echo "review: LEMO_CRITIC_CLI=omp is disabled by project policy; falling back to claude (unsetting non-claude model override)" >&2
+  CLI="claude"
+  unset LEMO_CRITIC_MODEL
+else
+  CLI=${LEMO_CRITIC_CLI:-claude}
+fi
+command -v "$CLI" >/dev/null || die "the reviewer '$CLI' is not installed"
 CRITIC_ID="$CLI -p ${LEMO_CRITIC_MODEL:+--model $LEMO_CRITIC_MODEL}"; [ -n "$LEMO_CRITIC_MODEL" ] || CRITIC_ID="$CRITIC_ID(model mặc định của $CLI)"
 critic() {   # $1 = the prompt; runs in the current folder, leaves the reviewer's answer in out.txt
-  if [ "$CLI" = omp ]; then omp -p ${LEMO_CRITIC_MODEL:+--model "$LEMO_CRITIC_MODEL"} --cwd "$PWD" "$1" < /dev/null > out.txt 2>&1 || true
-  else claude -p ${LEMO_CRITIC_MODEL:+--model "$LEMO_CRITIC_MODEL"} --permission-mode acceptEdits "$1" < /dev/null > out.txt 2>&1 || true; fi
+  "$CLI" -p ${LEMO_CRITIC_MODEL:+--model "$LEMO_CRITIC_MODEL"} --permission-mode acceptEdits "$1" < /dev/null > out.txt 2>&1 || true
+}
+get_prompt() {
+  _step=$1
+  for _p in "$LIB/.agents/skills/tram-nghi-nhieu/$_step/PROMPT_CRITIC.md" \
+            "$LIB/.claude/skills/tram-nghi-nhieu/$_step/PROMPT_CRITIC.md" \
+            "$HOME/.agents/skills/tram-nghi-nhieu/$_step/PROMPT_CRITIC.md" \
+            "$HOME/.claude/skills/tram-nghi-nhieu/$_step/PROMPT_CRITIC.md"; do
+    if [ -f "$_p" ]; then cat "$_p"; return 0; fi
+  done
+  die "cannot find PROMPT_CRITIC.md for $_step"
 }
 sign() { printf '\n---\nNgười chấm: %s · review.sh %s · %s\n' "$CRITIC_ID" "$1" "$(date '+%Y-%m-%d %H:%M')" >> "$2"; }
 # next number of a report: next <prefix> → n for <prefix>n.md
@@ -96,13 +113,13 @@ if [ "$OUTLINE" = 1 ]; then
   if [ "$n" -gt 4 ]; then
     echo "review --outline: đã chấm 4 lần mà dàn ý vẫn chưa PASS. Dừng: báo người dùng các lỗi CHẶN còn lại của $EP/review/OUTLINE-REVIEW.md (câu hỏi có cần hẹp lại, đổi định dạng, dữ kiện nào thiếu nguồn) và hỏi hướng đi." >&2; exit 1
   fi
-  cp "$EP/TREATMENT.md" "$EP/research/FACTS.md" "$HERE/STRATEGY.md" "$W/"
+  cp "$EP/TREATMENT.md" "$EP/research/FACTS.md" "$CHANNEL/STRATEGY.md" "$W/"
   p=$((n - 1)); [ -f "$EP/review/OUTLINE-REVIEW-$p.md" ] && cp "$EP/review/OUTLINE-REVIEW-$p.md" "$W/PREVIOUS.md"
   cd "$W"
   PREV=""; [ -f PREVIOUS.md ] && PREV="
 Đây là lần chấm thứ $n. PREVIOUS.md là bản chấm lần trước của chính bạn; người làm đã sửa theo nó. Trước tiên xét từng lỗi trong đó: đã sửa chưa, sửa đúng chưa. Đừng đổi ý về điều lần trước bạn đã chấp nhận; mục đích là đưa dàn ý tới PASS."
   echo "review --outline: reviewer at work in $W…" >&2
-  critic "$(cat "$LIB/.agents/skills/tram-nghi-nhieu/step1-outline/PROMPT_CRITIC.md")
+  critic "$(get_prompt "step1-outline")
 $PREV
 Thư mục làm việc của bạn: $W. Đọc TREATMENT.md, FACTS.md, STRATEGY.md (và PREVIOUS.md nếu có), rồi viết OUTLINE-REVIEW.md ở đó theo mẫu, và in lại nó."
   [ -s OUTLINE-REVIEW.md ] || cp out.txt OUTLINE-REVIEW.md
@@ -161,7 +178,7 @@ if [ "$SCRIPT" = 1 ]; then
   if [ "$n" -gt 6 ]; then
     echo "review --script: đã chấm 6 lần ${CHID:+chương $CHID }mà lời vẫn chưa PASS. Dừng: báo người dùng các lỗi CHẶN còn lại của $EP/review/SCRIPT-REVIEW${CHID:+-$CHID}.md và hỏi hướng đi (bỏ ý, đổi câu hỏi, dữ kiện nào cần nguồn). Đừng chấm lần thứ bảy." >&2; exit 1
   fi
-  cp "$EP/voice/lines.json" "$HERE/STRATEGY.md" "$W/"; [ -f "$EP/research/FACTS.md" ] && cp "$EP/research/FACTS.md" "$W/"
+  cp "$EP/voice/lines.json" "$CHANNEL/STRATEGY.md" "$W/"; [ -f "$EP/research/FACTS.md" ] && cp "$EP/research/FACTS.md" "$W/"
   p=$((n - 1)); [ -f "$EP/review/SCRIPT-REVIEW-$TAG$p.md" ] && cp "$EP/review/SCRIPT-REVIEW-$TAG$p.md" "$W/PREVIOUS.md"
   [ -f "$EP/review/script-lines-$TAG$p.json" ] && cp "$EP/review/script-lines-$TAG$p.json" "$W/PREVIOUS-lines.json"
   cp "$EP/voice/lines.json" "$EP/review/script-lines-$TAG$n.json"
@@ -214,7 +231,7 @@ open(W + '/flags.txt', 'w').write(' '.join(fl))
 PY
   cd "$W"
   echo "review --script: reviewer at work in $W…" >&2
-  critic "$(cat "$LIB/.agents/skills/tram-nghi-nhieu/step2-script/PROMPT_CRITIC.md")
+  critic "$(get_prompt "step2-script")
 
 $(cat TASK.md)
 
@@ -263,7 +280,7 @@ REL=$(python3 -c "import os,sys; print(os.path.relpath(sys.argv[1], sys.argv[2])
 (cd "$LIB" && node channels/tram-nghi-nhieu/beatsheet.mjs "$REL" --out "$W/beats" ${LINES:+--lines "$LINES"} >/dev/null)
 cp "$EP/voice/lines.json" "$W/"; [ -f "$EP/research/FACTS.md" ] && cp "$EP/research/FACTS.md" "$W/"
 cp "$W/beats/beats.json" "$W/"
-for f in set_kitchen inside_banana flow cutaway_3; do [ -f "$HERE/demo/stills/$f.jpg" ] && cp "$HERE/demo/stills/$f.jpg" "$W/ref/"; done
+for f in set_kitchen inside_banana flow cutaway_3; do [ -f "$CHANNEL/demo/stills/$f.jpg" ] && cp "$CHANNEL/demo/stills/$f.jpg" "$W/ref/"; done
 rm -f "$W/beats/"sheet_*.jpg
 
 MP4=""
@@ -296,7 +313,7 @@ EOF
 
 cd "$W"
 echo "review: reviewer at work in $W…" >&2
-critic "$(cat "$LIB/.agents/skills/tram-nghi-nhieu/step6-assembly/PROMPT_CRITIC.md")
+critic "$(get_prompt "step6-assembly")
 
 $(cat TASK.md)
 

@@ -36,7 +36,6 @@ async def synth(text, voice, rate, pitch, path):
                 os.replace(part, path); return
             except Exception as e:
                 last = e
-                if type(e).__name__ == 'NoAudioReceived': break   # wrong voice name/text; retrying won't help
                 await asyncio.sleep(1.5 * (attempt + 1))
         raise last
     finally:

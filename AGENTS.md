@@ -93,6 +93,8 @@ Report progress in the user's language. If a step fails, read the error, fix the
 - **In skill mode** the project folder is `<name>/` in the folder the user started from (see the skill's `SKILL.md`); an episode still goes into its channel's own folder, wherever the user keeps that channel. Wherever a guide says "the project folder", read that folder. Work only there, unless the user asks you to work in their own project.
 - A channel the user keeps as their own style stays where `~/lemo-my-styles/README.md` says; its episodes go in that channel's folder, not in `films/`.
 - In a clone the source, the credits and the finished film are committed; render outputs and generated audio stay local (`films/.gitignore`, `channels/.gitignore`).
-- Run `node core/…` and `sh tools/…` from the library root (`$LIB` in skill mode).
+- Run `node core/…`, `sh tools/…`, and episode scripts from the library root (`$LIB` in skill mode). Keep cwd at `$LIB`; use relative paths instead of arbitrary `cd` in shells.
+- Python virtual environment: use `.venv/bin/python` in the repository root (not `~/.venv`).
+- Edge-TTS transient errors: Microsoft Edge-TTS occasionally drops connections (`NoAudioReceived`); tools auto-retry with backoff. Do not rewrite valid script lines for transient network dropouts.
 - `core/` has ready-made tools (rendering, TTS, speech check, sampler, sfx, mux). Use them or your own stack, but don't edit `core/` or `styles/` for a user's film.
-- Never kill processes you didn't start. Don't leave background processes running.
+- Never kill processes you didn't start. Don't leave background processes running, and avoid long shell `sleep` commands (which get blocked by safety filters).

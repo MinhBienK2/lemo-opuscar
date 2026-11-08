@@ -34,22 +34,34 @@ def variants(say, rate, pitch):
             yield s, f'{r + dr:+d}%', f'{p + dp:+d}Hz'
 
 
-async def fetch(text, voice, rate, pitch, path):
-    import edge_tts
+async def fetch(text, voice, rate, pitch, path, max_retries=3):
+    import edge_tts, random
     part = path + '.part'
-    try:
-        await edge_tts.Communicate(text, voice, rate=rate, pitch=pitch).save(part)
-        if os.path.getsize(part) == 0: return False
-        os.replace(part, path); return True
-    except Exception as e:
-        if type(e).__name__ != 'NoAudioReceived': print('  ', type(e).__name__, str(e)[:120], file=sys.stderr)
-        return False
-    finally:
-        if os.path.exists(part): os.remove(part)
+    for attempt in range(max_retries):
+        try:
+            await edge_tts.Communicate(text, voice, rate=rate, pitch=pitch).save(part)
+            if os.path.exists(part) and os.path.getsize(part) > 0:
+                os.replace(part, path)
+                return True
+        except Exception as e:
+            if attempt < max_retries - 1:
+                delay = 1.0 * (attempt + 1) + random.uniform(0.1, 0.4)
+                await asyncio.sleep(delay)
+                continue
+            if type(e).__name__ != 'NoAudioReceived':
+                print(f'   {type(e).__name__}: {str(e)[:120]}', file=sys.stderr)
+            return False
+        finally:
+            if os.path.exists(part):
+                try: os.remove(part)
+                except OSError: pass
+        if attempt < max_retries - 1:
+            delay = 1.0 * (attempt + 1) + random.uniform(0.1, 0.4)
+            await asyncio.sleep(delay)
+    return False
 
 
 class NoAudio(Exception): pass
-
 
 def one(L, out):
     """make the voice of one line: (id, seconds)"""
@@ -61,13 +73,18 @@ def one(L, out):
     if not plausible(decoded):
         decoded = None
         for k, (s, r, p) in enumerate(variants(say, rate, pitch)):
-            if asyncio.run(fetch(s, voice, r, p, mp3)):
+            retries = 3 if k == 0 else 2
+            if asyncio.run(fetch(s, voice, r, p, mp3, max_retries=retries)):
                 decoded = to_wav(mp3)
                 if plausible(decoded):
                     if k: print(f"  {L['id']}: took variant {k} ({r}, {p}{', lowercased' if s != say else ''})", file=sys.stderr)
                     break
-                os.remove(mp3); decoded = None
-        if decoded is None: raise NoAudio(f"tts_vi.py: no audio for line '{L['id']}' after every variant; reword it")
+                if os.path.exists(mp3):
+                    try: os.remove(mp3)
+                    except OSError: pass
+                decoded = None
+        if decoded is None:
+            raise NoAudio(f"tts_vi.py: no audio for line '{L['id']}' after all variants and retries. Note: Check network/edge-tts connectivity or reword text.")
     y, sr = decoded
     nz = np.where(np.abs(y) > np.abs(y).max() * .02)[0]
     y = y[max(0, nz[0] - int(.03 * sr)): nz[-1] + int(.10 * sr)]
