@@ -27,6 +27,8 @@ Quy trình này thay cho bước 1–6 của `AGENTS.md` / `DIRECTOR.md` khi là
      `python3 core/render/sheet.py <scratch>/sheet.jpg <scratch>/t_*.jpg --cols 4`
      (`node core/render/still.mjs <tập> <mốc1> <mốc2> …` dựng được nhiều khung trong một lệnh.)
    - Chỉ mở ảnh riêng khi sheet đã chỉ ra khung nào cần soi kỹ.
+   - Đừng tự viết montage bằng `ffmpeg`: `core/render/sheet.py` xếp khung, đặt tên từng khung và không vỡ khi
+     một khung thiếu. Một montage tự viết là cùng một việc làm lại, tệ hơn.
 
 5. **Sửa file bằng công cụ sửa file.**
    - Dùng `edit` / `write`. Khi đoạn thay quá dài để khớp chính xác, dùng
