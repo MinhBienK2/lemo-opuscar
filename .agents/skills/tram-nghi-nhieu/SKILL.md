@@ -21,6 +21,13 @@ Quy trình này thay cho bước 1–6 của `AGENTS.md` / `DIRECTOR.md` khi là
      - Điểm nào Subagent hiểu sai về mặt kỹ thuật Three.js / giới hạn WebGL / mâu thuẫn với `STYLE.md`: Đạo diễn viết luận điểm phản biện rõ ràng để bảo vệ tính khả thi.
    - **Hiệu chỉnh & Đánh giá lại:** Lặp lại tối đa 5 hiệp cho tới khi đạt `PASS` (hoặc sau vòng 5 Đạo diễn dùng quyền tối hậu Director's Cut để chốt phương án an toàn nhất và chuyển bước).
 
+4. **Nhìn nhiều khung hình bằng sheet, không bằng từng ảnh.**
+   - Một tập có 60 nhát. Đọc 60 ảnh một-lẻ là hơn 250 MB ảnh và hàng trăm nghìn token, và con mắt không so sánh được hai khung cạnh nhau.
+   - Dựng sheet rồi nhìn sheet:
+     `python3 core/render/sheet.py <scratch>/sheet.jpg <scratch>/t_*.jpg --cols 4`
+     (`node core/render/still.mjs <tập> <mốc1> <mốc2> …` dựng được nhiều khung trong một lệnh.)
+   - Chỉ mở ảnh riêng khi sheet đã chỉ ra khung nào cần soi kỹ.
+
 Mọi lệnh dưới đây chạy từ gốc thư viện. Trên máy này, mọi lệnh dựng hình (`still.mjs`, `beatsheet.mjs`, `review.sh`, `build.sh`) cần `LEMO_ANGLE=vulkan` ở đầu lệnh.
 
 Trước khi dựng, đọc [`improvements/lessons.md`](../../improvements/lessons.md) — mỗi dòng là một lỗi một phiên đã mắc, và cách chặn nó. Skill này không biết những lỗi đó; file đó thì biết.
