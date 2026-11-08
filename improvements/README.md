@@ -13,7 +13,7 @@ This folder is the library's memory of its own mistakes. Every retro session wri
 
 ## Findings and their guards
 
-Every row links to the record it came from: [`retro/2026-10-30-tram-nghi-nhiieu.md`](retro/2026-10-30-tram-nghi-nhiieu.md).
+Every row links to the record it came from: [`retro/2026-10-30-tram-nghi-nhieu.md`](retro/2026-10-30-tram-nghi-nhieu.md).
 
 | # | Finding | Severity | Guard now |
 |---|---|---|---|

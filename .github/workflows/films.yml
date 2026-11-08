@@ -8,9 +8,9 @@ name: films
 
 on:
   push:
-    paths: ['films/**', 'channels/**', 'styles/**/src/**', 'core/**', 'tools/**', '.github/workflows/films.yml']
+    paths: ['films/**', 'channels/**', 'styles/**/src/**', 'core/**', 'tools/**', 'improvements/**', '.agents/**', '.claude/**', '*.md', 'docs/**', '.github/workflows/films.yml']
   pull_request:
-    paths: ['films/**', 'channels/**', 'styles/**/src/**', 'core/**', 'tools/**', '.github/workflows/films.yml']
+    paths: ['films/**', 'channels/**', 'styles/**/src/**', 'core/**', 'tools/**', 'improvements/**', '.agents/**', '.claude/**', '*.md', 'docs/**', '.github/workflows/films.yml']
 
 permissions:
   contents: read
@@ -134,7 +134,12 @@ jobs:
         run: |
           python3 tools/check_films_index.py
           echo "the film index was checked"
-      - name: the two copies of the channel skill are the same skill
+      - name: the skill Claude Code loads and the skill omp loads are one skill
         run: |
-          diff -r .claude/skills/tram-nghi-nhieu .agents/skills/tram-nghi-nhieu
+          test -L .claude/skills/tram-nghi-nhieu || { echo "::error::the Claude Code copy of the channel skill must be a symlink to the omp copy, so the two cannot drift"; exit 1; }
+          test "$(readlink -f .claude/skills/tram-nghi-nhieu)" = "$(readlink -f .agents/skills/tram-nghi-nhieu)" || { echo "::error::the two copies of the channel skill point at different folders"; exit 1; }
           echo "the skill Claude Code loads and the skill omp loads are one skill"
+      - name: every pointer in a document points at something that exists
+        run: |
+          python3 tools/check_doc_links.py .
+          echo "every link in every document of the library resolves"
