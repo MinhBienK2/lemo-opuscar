@@ -296,6 +296,38 @@ một.
 
 ---
 
+## N14 — medium — Bài kiểm tra đọc hình vẽ mỗi khung hình hai lần
+
+**Bằng chứng.** `core/render/readcheck.mjs` gọi `window.render(t)` rồi mới gọi `window.TEXTS(t)`. Nhưng
+rig của kênh viết `window.TEXTS = t => { window.render(t); return F.texts(); }` — **TEXTS tự vẽ khung
+hình trước khi trả lời**. Mỗi khung vì thế được vẽ hai lần: một lần của chính bài kiểm tra, một lần
+của phim. Với một phim 3D, đây là bước chậm nhất của cổng bàn giao, và nó tốn gấp đôi.
+
+**Kiểm chứng.** Chạy lại trên `films/host-toon-test` trước và sau: **cùng một phán quyết** (đúng một
+dòng BAD: "5 tháng" chạm dải phụ đề), và thời gian giảm một nửa.
+
+**Guard đã có.** `readcheck` đếm số lần vẽ mà `TEXTS` tự làm, và chỉ tự vẽ khi `TEXTS` không vẽ. Bài
+kiểm tra in ra dòng nói mình đang đọc theo cách nào.
+
+---
+
+## N15 — high — Người chấm hình phải đoán "vật chính bé tí trong một mảng trống" bằng mắt, và phải mất chín vòng mới sửa xong
+
+**Bằng chứng.** Vòng LOOK của phiên này kéo dài tới vòng 9. Những vòng sau là sửa đúng những khung mà
+tôi đã soi bằng mắt từ tờ beat cũ: c2 (mảng gỗ trơn), c6, c25, c50, c54 (bàn tay nhỏ như búp bê gỗ).
+Nguyên nhân không phải là người làm không tinh — mà là **tiêu chí của người chấm hình không có số nào để
+cân**: câu "vật chính có đủ lớn không" phải trả lời bằng mắt trên một tờ 60 khung.
+
+**Guard đã có.** Rig đã bắn tia qua khung hình để đo RUN (những tia đó cho biết vật nào chiếm bao nhiêu
+khung) — số đó **bị bỏ đi**. Nay tờ beat in `fill N%` dưới mỗi khung (đỏ dưới 15%), và tiêu chí 6 của
+người chấm yêu cầu cân số đó với con mắt: cảnh toàn cảnh đọc 0% mà cận cảnh một mặt phẳng trơn có
+thể đọc 100%, nên con số là gợi ý, không phải phán quyết.
+
+**Đo được.** Trên tập này: 26/60 khung dưới 15%. Trong đó có cả những khung hợp lệ (cảnh trong sợi vải,
+cảnh toàn cảnh) — nên con số không thay được con mắt, nhưng nó đưa con mắt tới đúng chỗ cần soi.
+
+---
+
 ## Đề xuất thứ tự xử lý
 
 | # | Việc | File cần sửa | Trạng thái |
@@ -311,7 +343,8 @@ một.
 | 9 | Bài kiểm tra chết giữa chừng không phải phán quyết (N11) | `core/render/sourcewatch.mjs`, `core/render/readcheck.mjs`, `core/render/scenecheck.mjs`, `core/render/review.sh` | **xong** |
 | 10 | Con trỏ hỏng trong tài liệu (N12) | `tools/check_doc_links.py`, `.git/hooks/pre-commit`, CI | **xong** |
 | 11 | Bước CI không thể thất bại (N13) | `.github/workflows/films.yml` | **xong** |
-| 12 | `readcheck` vẽ mỗi khung hình **hai lần** (một lần của nó, một lần vì `TEXTS` tự vẽ trước khi trả lời) | `core/render/readcheck.mjs` | **xong** |
+| 12 | `readcheck` vẽ mỗi khung hình **hai lần** (một lần của nó, một lần vì `TEXTS` tự vẽ trước khi trả lời) (N14) | `core/render/readcheck.mjs` | **xong** |
+| 13 | Tờ beat in `fill N%`, và tiêu chí 6 của người chấm hình cân số đó (N15) | `channels/tram-nghi-nhieu/tools/beatsheet.mjs`, `step6-assembly/PROMPT_CRITIC.md` | **xong** |
 
 ### Mỗi phát hiện đã có dòng riêng trong `improvements/lessons.md`
 
