@@ -27,7 +27,15 @@ FAIL=0
 run() {   # run a step, keep going when it fails
   NAME=$1; shift
   echo "--- $NAME"
-  if "$@"; then echo "    ok"; else echo "    FAILED"; FAIL=$((FAIL + 1)); fi
+  if "$@"; then
+    echo "    ok"
+  else
+    RC=$?
+    # exit 2 is the check's own "I could not run" — a crash or a film edited under the check.
+    # It is not a verdict about the film, and saying so stops the reader from chasing a defect that is not there.
+    if [ "$RC" -eq 2 ]; then echo "    COULD NOT RUN (exit 2) — not a verdict about the film"; else echo "    FAILED"; fi
+    FAIL=$((FAIL + 1))
+  fi
 }
 
 run filmcheck node "$HERE/core/render/filmcheck.mjs" "$FOLDER"

@@ -10,37 +10,83 @@
 //   Text that never fully enters the frame (cropped at the edge, a ticker running out of frame) is reported as "never fully visible".
 // Exit code: 0 all pass; 1 some fail; 2 the check couldn't run (the page has no window.TEXTS, or the whole film never returned any text) — this does not count as a pass.
 import { openDemo, closeServer, requireDemo, takeSize } from './page.mjs';
+import { fingerprint, changed } from './sourcewatch.mjs';
 const args = process.argv.slice(2), { w: VW, h: VH } = takeSize(args), opt = (k, d) => { const i = args.indexOf(k); return i >= 0 ? args[i + 1] : d; };
 const dir = args[0]; requireDemo(dir);
 const Q = opt('--q', ''), STEP = +opt('--step', 0.04), LATIN = +opt('--latin-cps', 15), CJK = +opt('--cjk-cps', 4.5), PAD = +opt('--pad', 1.5), MIN = +opt('--min', 1.5);
 if (![STEP, LATIN, CJK, PAD, MIN].every(Number.isFinite) || STEP <= 0 || LATIN <= 0 || CJK <= 0) { console.error('bad option value (step and the cps values must be > 0)'); process.exit(2); }
 if (!Number.isFinite(+opt('--band', 0)) || +opt('--band', 0) < 0) { console.error('bad option value (--band must be a y coordinate)'); process.exit(2); }
+const snap = fingerprint(dir);
 const { browser, page } = await openDemo(dir, { w: VW, h: VH, q: Q });
-const res = await page.evaluate(({ STEP }) => {
+
+// The film is read in chunks, not in one long loop.
+// One synchronous loop over thousands of frames blocks the page for minutes: the GPU queue grows while
+// nothing drains it, and the renderer can die in the middle of the read. A chunk returns to Node, the
+// browser catches up, and a crash names the frames it died on instead of leaving a bare stack trace.
+const CHUNK = 120;   // frames per round trip
+const head = await page.evaluate(({ STEP }) => {
   if (typeof window.TEXTS !== 'function') return { noTexts: true };
   if (!(window.DUR > 0)) return { noDur: true };
-  const W = innerWidth, H = innerHeight, seen = {}, partial = {};
-  for (let t = 0; t <= window.DUR; t += STEP) {
+  window.__rc = { step: STEP, dur: window.DUR, seen: {}, partial: {} };
+  return { dur: window.DUR };
+}, { STEP });
+if (head.noTexts || head.noDur) {
+  console.error('readcheck: NOT CHECKED — ' + (head.noTexts ? 'the page has no window.TEXTS(t) (see the header of core/render/readcheck.mjs for the contract).'
+    : 'window.DUR is not a positive number.') + ' This is not a pass.');
+  try { await browser.close(); } catch {}
+  closeServer();
+  process.exit(2);
+}
+const readChunk = ({ i0, n }) => {
+  const st = window.__rc, W = innerWidth, H = innerHeight;
+  for (let k = 0; k < n; k++) {
+    const t = (i0 + k) * st.step;
     window.render(t);
     const vis = new Set();
     for (const b of window.TEXTS(t) || []) {
       b.id = String(b.id);   // numeric ids are fine too
       const key = b.id + '\u0000' + b.text;   // text changed under the same id = a new piece
-      if (!(b.x0 >= 0 && b.y0 >= 0 && b.x1 <= W && b.y1 <= H)) { partial[key] ??= { id: b.id, text: b.text, t0: t, y1: b.y1 }; continue; }
+      if (!(b.x0 >= 0 && b.y0 >= 0 && b.x1 <= W && b.y1 <= H)) { st.partial[key] ??= { id: b.id, text: b.text, t0: t, y1: b.y1 }; continue; }
       vis.add(key);
-      const s = seen[key] ??= { id: b.id, text: b.text, t0: t, run: 0, done: false, y1: b.y1 };
-      if (!s.done) s.run = Math.min(t + STEP, window.DUR) - s.t0;
+      const s = st.seen[key] ??= { id: b.id, text: b.text, t0: t, run: 0, done: false, y1: b.y1 };
+      if (!s.done) s.run = Math.min(t + st.step, st.dur) - s.t0;
     }
-    for (const k in seen) if (!vis.has(k)) seen[k].done = true;   // only the first continuous on-screen stretch counts
+    for (const k2 in st.seen) if (!vis.has(k2)) st.seen[k2].done = true;   // only the first continuous on-screen stretch counts
   }
-  for (const k in partial) if (seen[k]) delete partial[k];
-  return { seen: Object.values(seen), partial: Object.values(partial) };
-}, { STEP });
+  return { seen: Object.values(st.seen), partial: Object.values(st.partial) };
+};
+// a page that dies mid-read is not a verdict about the film: the check says it could not run, and why
+let res = { seen: [], partial: [] };
+const total = Math.floor(head.dur / STEP) + 1;
+for (let i = 0; i < total; i += CHUNK) {
+  const n = Math.min(CHUNK, total - i);
+  try {
+    res = await page.evaluate(readChunk, { i0: i, n });
+  } catch (e) {
+    console.error(`readcheck: COULD NOT RUN — the page died while the check was reading it (at ${(i * STEP).toFixed(1)}s of ${head.dur.toFixed(1)}s): ${String(e.message || e).split('\n')[0]}`);
+    console.error('  Two usual causes: the film was edited while the check ran, or the browser ran out of memory.');
+    console.error('  A check that crashed is not a verdict about the film — run it again on a settled file.');
+    try { await browser.close(); } catch {}
+    closeServer();
+    process.exit(2);
+  }
+}
+const moved = changed(dir, snap);
+if (moved.length) {
+  console.error(`readcheck: COULD NOT RUN — the film's source changed while the check was reading it (${moved.join(', ')}): the result is void. Run it again on a settled file.`);
+  try { await browser.close(); } catch {}
+  closeServer();
+  process.exit(2);
+}
 await browser.close(); closeServer();
 
-if (res.noTexts || res.noDur || (!res.seen.length && !res.partial.length)) {
-  console.error('readcheck: NOT CHECKED — ' + (res.noTexts ? 'the page has no window.TEXTS(t) (see the header of core/render/readcheck.mjs for the contract).'
-    : res.noDur ? 'window.DUR is not a positive number.' : 'window.TEXTS(t) never returned any text over the whole film.') + ' This is not a pass.');
+// a piece that was cropped at one moment and whole at another is a piece that was readable: the cropped
+// moment is not a second fault
+const seenKeys = new Set(res.seen.map(s => s.id + '\u0000' + s.text));
+res.partial = res.partial.filter(p => !seenKeys.has(p.id + '\u0000' + p.text));
+
+if (!res.seen.length && !res.partial.length) {
+  console.error('readcheck: NOT CHECKED — window.TEXTS(t) never returned any text over the whole film. This is not a pass.');
   process.exit(2);
 }
 const isCJK = ch => /[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Hangul}]/u.test(ch);

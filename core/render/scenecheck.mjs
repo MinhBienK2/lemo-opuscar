@@ -16,12 +16,14 @@
 // Exit code: 0 all pass; 1 some fail; 2 the check couldn't run. --report prints the numbers and always exits 0 (for comparing films).
 import fs from 'fs'; import path from 'path';
 import { openDemo, closeServer, requireDemo, takeSize } from './page.mjs';
+import { fingerprint, changed } from './sourcewatch.mjs';
 const args = process.argv.slice(2), { w: VW, h: VH } = takeSize(args), opt = (k, d) => { const i = args.indexOf(k); return i >= 0 ? args[i + 1] : d; };
 const dir = args[0]; requireDemo(dir);
 const STEP = +opt('--step', 1), BAND = +opt('--band', 880), COVER = +opt('--card-cover', 0.12), BOXES = +opt('--card-boxes', 5);
 const SYNC = +opt('--sync', 0.3), REPORT = args.includes('--report'), JSON_OUT = opt('--json', '');
+const snap = fingerprint(dir);
 const { browser, page } = await openDemo(dir, { w: VW, h: VH });
-const res = await page.evaluate(({ STEP, BAND }) => {
+const readPage = ({ STEP, BAND }) => {
   if (!(window.DUR > 0)) return { noDur: true };
   const W = innerWidth, H = innerHeight, cv = [...document.querySelectorAll('canvas')].sort((a, b) => b.width * b.height - a.width * a.height)[0];
   const sm = document.createElement('canvas'); sm.width = 48; sm.height = 27; const sg = sm.getContext('2d', { willReadFrequently: true });
@@ -58,7 +60,26 @@ const res = await page.evaluate(({ STEP, BAND }) => {
     e.motion = m / a.length; e.moved = big / a.length;
   }
   return { dur: window.DUR, frames, ev, hasTexts: typeof window.TEXTS === 'function', hasCanvas: !!cv };
-}, { STEP, BAND });
+};
+// a page that dies mid-read is not a verdict about the film
+let res;
+try {
+  res = await page.evaluate(readPage, { STEP, BAND });
+} catch (e) {
+  console.error(`scenecheck: COULD NOT RUN — the page died while the check was reading it: ${String(e.message || e).split('\n')[0]}`);
+  console.error('  Two usual causes: the film was edited while the check ran, or the browser ran out of memory.');
+  console.error('  A check that crashed is not a verdict about the film — run it again on a settled file.');
+  try { await browser.close(); } catch {}
+  closeServer();
+  process.exit(2);
+}
+const moved = changed(dir, snap);
+if (moved.length) {
+  console.error(`scenecheck: COULD NOT RUN — the film's source changed while the check was reading it (${moved.join(', ')}): the result is void. Run it again on a settled file.`);
+  try { await browser.close(); } catch {}
+  closeServer();
+  process.exit(2);
+}
 await browser.close(); closeServer();
 if (res.noDur) { console.error('scenecheck: NOT CHECKED — window.DUR is not a positive number.'); process.exit(2); }
 
