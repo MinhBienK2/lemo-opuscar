@@ -31,7 +31,8 @@ Hoàn thiện toàn bộ hệ thống âm thanh (tiếng động foley, nhạc n
    `$LIB/.venv/bin/python channels/tram-nghi-nhieu/tools/mix.py <tập>`
 4. Render video headless và mux sản phẩm cuối cùng:
    `sh <tập>/build.sh`
-   (Lệnh này tự từ chối nếu thiếu tem — xem phần Tem kiểm duyệt số ở trên.)
+   (Lệnh này tự từ chối nếu thiếu tem — xem phần Tem kiểm duyệt số ở trên. Nó cũng **tự ghi thời lượng đo
+   được** vào `film.json`; đừng gõ tay số thời lượng — cổng bàn giao sẽ so manifest với phim và bắt lỗi.)
 5. Chấm phim đã dựng:
    `sh channels/tram-nghi-nhieu/tools/review.sh <tập> --video`
 6. **Cổng bàn giao của thư viện** — bắt buộc, phải thoát mã 0:

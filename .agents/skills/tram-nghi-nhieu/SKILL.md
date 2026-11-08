@@ -1,7 +1,7 @@
 ---
 name: tram-nghi-nhieu
 description: Đạo diễn và dựng một tập của kênh Trạm Nghĩ Nhiều — câu hỏi "tại sao" đời thường, trả lời bằng diorama 3D toon (three.js) có ánh sáng thật, viền mực vẽ tay, máy quay đi vào bên trong vật, mọi vật dựng đúng là nó, chỉ thứ vô hình mới thành hình minh hoạ; một giọng kể tiếng Việt. Dùng khi làm bất kỳ tập nào của kênh.
-version: 14.0.0
+version: 14.1.0
 ---
 
 # Một tập Trạm Nghĩ Nhiều: Quy trình Đạo diễn & Phản biện Độc lập Phân tầng
@@ -27,6 +27,18 @@ Quy trình này thay cho bước 1–6 của `AGENTS.md` / `DIRECTOR.md` khi là
      `python3 core/render/sheet.py <scratch>/sheet.jpg <scratch>/t_*.jpg --cols 4`
      (`node core/render/still.mjs <tập> <mốc1> <mốc2> …` dựng được nhiều khung trong một lệnh.)
    - Chỉ mở ảnh riêng khi sheet đã chỉ ra khung nào cần soi kỹ.
+
+5. **Sửa file bằng công cụ sửa file.**
+   - Dùng `edit` / `write`. Khi đoạn thay quá dài để khớp chính xác, dùng
+     `python3 tools/replace.py <file> <đoạn cũ> <đoạn mới>`: nó đếm số lần khớp, không khớp đúng một lần
+     thì không ghi gì cả, và nó ghi nguyên tệp mới đè lên tệp cũ — tệp cũ không bao giờ bị nửa vời.
+   - Heredoc của shell (`cat >> file <<EOF`) đã làm hỏng chữ tiếng Việt trong một tài liệu của phiên trước:
+     shell ghi UTF-8 hỏng, không ai thấy ngay, và phải sửa lại bằng một lần ghi shell nữa.
+
+6. **Chờ việc xong, đừng dò file.**
+   - Một việc dài (dựng khung, chấm hình, render) thì chạy nền; harness báo khi nó xong, đọc output của nó một lần.
+   - `until [ -f file ]; do sleep 15; done` là một vòng dò: nó ăn hết lượt của bạn và không quyết định gì.
+   - Cùng một lệnh lặp năm lần trở lên, dù nó đang nhìn cái gì, là một vòng dò.
 
 Mọi lệnh dưới đây chạy từ gốc thư viện. Trên máy này, mọi lệnh dựng hình (`still.mjs`, `beatsheet.mjs`, `review.sh`, `build.sh`) cần `LEMO_ANGLE=vulkan` ở đầu lệnh.
 
