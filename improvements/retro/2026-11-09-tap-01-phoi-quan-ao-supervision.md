@@ -471,6 +471,56 @@ HỎNG) nhưng không áp cho #11 ("túi **vải**" ≠ túi **nylon** → KHỚ
 
 ---
 
+## N21 — high — Nhãn nằm lệch câu: máy đọc được, cổng storyboard thì không
+
+**Bằng chứng.** Bản chấm cả phim (`review/REVIEW-1.md`, vòng 1/5) REJECT với nhóm lỗi thứ hai: *"nhãn
+`LỚP HƠI ẨM` xuất hiện ở #22 và #23, trong khi câu mà nó gọi tên … là **#24** — và #24 thì không có nhãn nào"*.
+
+**Cái lạ là lỗi này đã đi qua cổng storyboard.** Cổng storyboard đọc `LOOK.md` + `src/film.js` và chấm bằng
+một người đọc — nhưng nó không có cách nào biết nhãn nào gắn với câu nào. Nhãn là một bảng dữ liệu trong
+`src/film.js` (`CARDS`: `text` + `lines`), và quan hệ "nhãn này nói về câu nào" **có thể đọc bằng máy**.
+
+**Đối chiếu bằng tay (29 nhãn × 60 câu).** Đối chiếu từng nhãn với câu nào trong `voice/lines.json` gọi tên nó:
+
+| nhãn | `lines` | câu gọi tên nó | kết luận |
+|---|---|---|---|
+| LỚP HƠI ẨM | c22, c23 | **c24** ("Lớp hơi ẩm ấy bám sát mặt áo"), c25 ("Lớp đó") | lệch 2 câu |
+| QUẠT | c3 | **c5** ("Một cái trước quạt") | lệch 2 câu |
+| 3 ÁO | c40 | c40 ✓ | beat đúng, **hình** sai |
+| NƯỚC PHẢI ĐI ĐƯỢC | c56, c57 | c57 ✓ | beat đúng, **điểm neo** sai |
+| 20 g/kg | c41, c42 | c41, c42 ✓ | beat đúng, **thang đồng hồ** thiếu đơn vị |
+| 27 nhãn còn lại | — | khớp | không cần sửa |
+
+**Guard đã có.** `channels/tram-nghi-nhieu/tools/check_labels.py`: đọc `CARDS` và `voice/lines.json`, tìm câu
+gọi tên từng nhãn (số trong nhãn đọc thành chữ: "3 ÁO" → "ba áo"; đơn vị không tính là từ đặc trưng), và báo
+nhãn nằm sớm hơn câu đó hơn một nhịp. Chạy trên tập này: **đúng hai cái, đúng hai cái bản chấm nêu, không báo
+nhầm nhãn nào trong 27 nhãn còn lại.**
+
+`review.sh --storyboard` và `review.sh` (chấm cả phim) chạy nó **trước** khi gọi người chấm — một nhãn lệch câu
+tốn một giây thay vì một vòng chấm và một lượt dựng.
+
+---
+
+## N22 — high — Bản cắt của đạo diễn đóng tem cho một bản code cũ
+
+**Bằng chứng.** `gate.py stamp()` ghi vào tem **digest của code lúc đóng tem** — không phải digest của code mà
+bản chấm đã xem. Nên lối ra "đạo diễn cắt" (`PROPS-DIRECTORS-CUT.md`, `REVIEW-DIRECTORS-CUT.md`) đóng tem cho bất
+kỳ code nào đang nằm trên đĩa, kể cả code **đã đổi sau khi bản cắt được viết**. Comment trong `review.sh` nói
+đúng ý mình — *"the stamp binds the cut to LOOK.md + src/film.js by their hash, so a cut written for an older
+film cannot pass a newer one"* — nhưng digest lại ghi lúc đóng tem, nên nó **không** làm việc đó.
+
+Trên tập này: `PROPS-DIRECTORS-CUT.md` viết lúc 02:40; `src/props.js` sửa sau đó (đang sửa lúc 20:37). Chạy lại
+`review.sh --props` sẽ đóng tem `PROPS.pass` cho `props.js` mà **không ai xem**.
+
+Cùng kiểu lỗi ở cổng storyboard: nó cố ý **không** mở lại khi `LOOK.md`/`src/film.js` đổi (chỉ in cảnh báo),
+nên một bản cắt cũ ở đó cũng không nói gì về code hiện tại.
+
+**Guard đã có.** `gate.py stale_cut()`: một bản cắt phải được viết **sau** lần sửa code cuối cùng mà nó chấm;
+`review.sh` nói rõ phải làm gì. Luật này áp cho hai cổng nghiêm (`props`, `picture`) — hai cổng mà digest cũng
+đã phá tem khi code đổi. Cổng `outline` và `storyboard` cố ý mềm, nên chúng không đổi.
+
+---
+
 ## Đề xuất thứ tự xử lý
 
 | # | Việc | File cần sửa | Trạng thái |
@@ -496,6 +546,8 @@ HỎNG) nhưng không áp cho #11 ("túi **vải**" ≠ túi **nylon** → KHỚ
 | 19 | Luật R1 của người giám sát đếm **file được ghi**, không phải file được nhắc tới; một dòng cho mỗi luật (N17) | `tools/supervise.sh`, `improvements/README.md` N17, `improvements/lessons.md` | **xong** |
 | 20 | Người chấm hình đọc **tờ sheet** trước, ảnh riêng chỉ khi tờ chưa đủ (N18) | `channels/tram-nghi-nhieu/tools/review.sh`, `step6-assembly/PROMPT_CRITIC.md` | **xong** |
 | 21 | Thời lượng phim được **đo** rồi mới ghi vào manifest; cổng so manifest với `ffprobe` (N19) | `core/render/new_episode.sh`, `core/render/review.sh` | **xong** |
+| 22 | Nhãn phải nằm ở câu gọi tên nó — kiểm bằng máy, trước khi tốn một vòng chấm (N21) | `channels/tram-nghi-nhieu/tools/check_labels.py`, `tools/review.sh`, `SKILL.md` | **xong** |
+| 23 | Bản cắt của đạo diễn phải viết sau lần sửa code cuối, không đóng tem cho code cũ (N22) | `channels/tram-nghi-nhieu/tools/gate.py`, `tools/review.sh` | **xong** |
 
 ### Mỗi phát hiện đã có dòng riêng trong `improvements/lessons.md`
 
