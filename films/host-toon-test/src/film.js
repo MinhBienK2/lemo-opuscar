@@ -117,7 +117,7 @@ function shots() {
       if (fp > 0) card(g, { x: 1440 + (1 - fp) * 700, y: 380, w: 600, h: 400, rot: .04, tape: true }, S.farmInner(T));
       for (let i = 0; i < 8; i++) { const p = seg(T, t0 + .1 + i * .1, t0 + .35 + i * .1); if (p > 0) personIcon(g, 1150 + i * 64, 840 - ease.back(p) * 20, .95, STORY.f); }
       const cp = seg(T, w('train', 9), w('train', 11) + .5);
-      if (T > w('train', 9) - .3) { S.calendar(g, 1790, 700, cp); hilite(g, 1690, 852, 200, 56, seg(T, w('train', 11), w('train', 11) + .3), PAL.accent.f, 6); if (T > w('train', 11)) text(g, '5 tháng', 1790, 898, { font: font(400, 50, 'Patrick Hand'), align: 'center' }); }
+      if (T > w('train', 9) - .3) { S.calendar(g, 1790, 700, cp); hilite(g, 1690, 812, 200, 56, seg(T, w('train', 11), w('train', 11) + .3), PAL.accent.f, 6); if (T > w('train', 11)) text(g, '5 tháng', 1790, 858, { font: font(400, 50, 'Patrick Hand'), align: 'center' }); }
       g.restore();
       S.chapter(g, 'KẾ HOẠCH', seg(lt, .15, .5));
     }, ev() { const r = [[this.t + .15, 'pop'], [this.t + .4, 'pin']]; for (let i = 0; i < 8; i++) r.push([L('train').t0 + .1 + i * .1, 'tick']); r.push([w('train', 9), 'paper'], [w('train', 10), 'paper'], [w('train', 11), 'marker'], [w('train', 13) - .2, 'paper']); return r; } },

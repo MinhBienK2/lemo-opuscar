@@ -257,8 +257,8 @@ if [ "$STORYBOARD" = 1 ]; then
   # a label that names a line it does not sit on: a machine catches this in a second, before a round is spent
   LRC=0
   LAB=$(python3 "$CHANNEL/tools/check_labels.py" "$EP" 2>&1) || LRC=$?
+  echo "$LAB"
   if [ "$LRC" = 1 ]; then
-    echo "$LAB"
     echo "review --storyboard: nhãn lệch câu — sửa \`lines\` của nhãn trong src/film.js (nhãn phải nằm ở câu gọi tên nó) rồi chạy lại" >&2
     exit 1
   fi
@@ -416,8 +416,8 @@ mkdir -p "$W/beats" "$W/ref"
 # the same machine check as the storyboard gate: a label off its line must not reach the renderer
 LRC=0
 LAB=$(python3 "$CHANNEL/tools/check_labels.py" "$EP" 2>&1) || LRC=$?
+echo "$LAB"
 if [ "$LRC" = 1 ]; then
-  echo "$LAB"
   echo "review: nhãn lệch câu — sửa \`lines\` của nhãn trong src/film.js rồi chạy lại" >&2
   exit 1
 fi

@@ -107,12 +107,17 @@ def main():
         print(f'check_labels: thiếu {film} hoặc {linesf}', file=sys.stderr)
         return 2
     body = open(film, encoding='utf-8').read()
+    cards = cards_of(body)
+    if not cards:
+        # a film that draws labels some other way gets no verdict from this check, and it must say so
+        print('check_labels: không tìm thấy bảng CARDS trong src/film.js — kiểm tra nhãn chưa áp dụng')
+        return 2
     lines = json.load(open(linesf, encoding='utf-8'))
     texts = [(l.get('text') or '') for l in lines]
     ltok = [set(tokens(t)) for t in texts]
 
     bad = []
-    for text, lines_ids in cards_of(body):
+    for text, lines_ids in cards:
         if not lines_ids:
             continue
         nums = []
