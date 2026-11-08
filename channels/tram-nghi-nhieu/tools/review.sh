@@ -5,6 +5,7 @@
 #   sh channels/tram-nghi-nhieu/review.sh <episode> --outline                 TREATMENT.md + FACTS.md, before any line
 #   sh channels/tram-nghi-nhieu/review.sh <episode> --script [--chapter n]    voice/lines.json, before any voice
 #   sh channels/tram-nghi-nhieu/review.sh <episode> --props                   every object of src/props.js, alone
+#   sh channels/tram-nghi-nhieu/review.sh <episode> --storyboard              the framing of the film, before it is built
 #   sh channels/tram-nghi-nhieu/review.sh <episode> --lines a-b               one scene just built (no stamp)
 #   sh channels/tram-nghi-nhieu/review.sh <episode> [--chapter n]             the picture of a chapter / of the film
 #   sh channels/tram-nghi-nhieu/review.sh <episode> --video [--chapter n]     after the render: four frames per line
@@ -16,7 +17,7 @@
 # (tts_vi.py), the mix (mix.py) and the render (core/render/video.mjs) refuse an episode whose stamps do not hold.
 # An episode with src/chapters.js is judged chapter by chapter: --script --chapter n and --chapter n.
 #
-# Rounds: the outline 4, the words 6 (per chapter), the props 5, a scene 3, a chapter or the whole film 5. When the rounds are used
+# Rounds: the outline 4, the words 6 (per chapter), the props 5, the storyboard 5, a scene 3, a chapter or the whole film 5. When the rounds are used
 # up the episode needs the user, not another round: the script says so and exits 1.
 #
 # A machine flag (script: DIGIT LONG NOFACTS; picture: DARK SAME RUN NUM) fails its line unless the reviewer cleared it
@@ -32,9 +33,9 @@ CHANNEL=$(cd "$HERE" && while [ ! -f "CHANNEL.md" ] && [ "$PWD" != "/" ]; do cd 
 LIB=$(cd "$HERE" && while [ ! -f "AGENTS.md" ] && [ "$PWD" != "/" ]; do cd ..; done; pwd)
 GATE="python3 $CHANNEL/tools/gate.py"
 die() { echo "review: $*" >&2; exit 2; }
-EP=$1; [ -n "$EP" ] && [ -d "$EP" ] || die "usage: review.sh <episode> [--outline | --script | --props | --lines a-b | --chapter n] [--video]"
+EP=$1; [ -n "$EP" ] && [ -d "$EP" ] || die "usage: review.sh <episode> [--outline | --script | --props | --storyboard | --lines a-b | --chapter n] [--video]"
 EP=$(cd "$EP" && pwd); shift
-LINES=""; VIDEO=0; SCRIPT=0; PROPS=0; OUTLINE=0; CHAPTER=""
+LINES=""; VIDEO=0; SCRIPT=0; PROPS=0; OUTLINE=0; STORYBOARD=0; CHAPTER=""
 while [ $# -gt 0 ]; do
   case "$1" in
     --lines) LINES=$2; shift 2 ;;
@@ -43,6 +44,7 @@ while [ $# -gt 0 ]; do
     --script) SCRIPT=1; shift ;;
     --props) PROPS=1; shift ;;
     --outline) OUTLINE=1; shift ;;
+    --storyboard) STORYBOARD=1; shift ;;
     *) die "unknown: $1" ;;
   esac
 done
@@ -126,7 +128,7 @@ Thư mục làm việc của bạn: $W. Đọc TREATMENT.md, FACTS.md, STRATEGY.
   sign "--outline" OUTLINE-REVIEW.md
   cp OUTLINE-REVIEW.md "$EP/review/OUTLINE-REVIEW-$n.md"; cp OUTLINE-REVIEW.md "$EP/review/OUTLINE-REVIEW.md"
   cat OUTLINE-REVIEW.md
-  if grep -q '^VERDICT: *PASS' OUTLINE-REVIEW.md; then
+  if grep -qE '^#*[[:space:]]*VERDICT: *PASS' OUTLINE-REVIEW.md; then
     $GATE stamp "$EP" outline "$EP/review/OUTLINE-REVIEW-$n.md" --critic "$CRITIC_ID"; echo "review --outline: PASS"; exit 0
   fi
   echo "review --outline: FAIL (sửa TREATMENT.md và FACTS.md theo $EP/review/OUTLINE-REVIEW.md, rồi chạy lại)"; exit 1
@@ -170,8 +172,43 @@ rồi in lại nó."
   cp R.md "$EP/review/PROPS-REVIEW-$n.md"; cp R.md "$EP/review/PROPS-REVIEW.md"
   mkdir -p "$EP/review/props"; cp p/p_*.jpg "$EP/review/props/"
   cat R.md
-  if grep -q '^VERDICT: *PASS' R.md; then $GATE stamp "$EP" props "$EP/review/PROPS-REVIEW-$n.md" --critic "$CRITIC_ID"; echo "review --props: PASS"; exit 0; fi
+  if grep -qE '^#*[[:space:]]*VERDICT: *PASS' R.md; then $GATE stamp "$EP" props "$EP/review/PROPS-REVIEW-$n.md" --critic "$CRITIC_ID"; echo "review --props: PASS"; exit 0; fi
   echo "review --props: FAIL (sửa src/props.js theo $EP/review/PROPS-REVIEW.md, ảnh ở $EP/review/props/, rồi chạy lại)"; exit 1
+fi
+
+# ——————————————————————————————————————————— the storyboard ———————————————————————————————————————————
+# The framing of the film, judged before the film is built. A step with no tool is a step nobody can skip and
+# nobody can count: five rounds of a storyboard graded by hand are five rounds nobody signed.
+if [ "$STORYBOARD" = 1 ]; then
+  [ -f "$EP/LOOK.md" ] || die "--storyboard needs LOOK.md"
+  [ -f "$EP/src/film.js" ] || die "--storyboard needs src/film.js"
+  # The director's cut ends the step: a written scope of what was cut, ending in VERDICT: PASS, stands for the
+  # storyboard. It must be at least as new as the last round it answers, or a cut from an earlier state of the
+  # film would pass a later one.
+  # The stamp binds the cut to LOOK.md + src/film.js by their hash, so a cut written for an older film cannot
+  # pass a newer one — the digest is that guard, and no timestamp rule is needed on top of it.
+  CUT="$EP/review/STORYBOARD-DIRECTORS-CUT.md"
+  if [ -f "$CUT" ] && grep -qE '^#*[[:space:]]*VERDICT: *PASS' "$CUT"; then
+    $GATE stamp "$EP" storyboard "$CUT" --critic "$CRITIC_ID"
+    echo "review --storyboard: PASS (đạo diễn cắt: $CUT)"; exit 0
+  fi
+  n=$(next STORYBOARD-REVIEW-)
+  if [ "$n" -gt 5 ]; then
+    echo "review --storyboard: đã chấm 5 lần mà khung hình vẫn chưa PASS. Dừng: báo người dùng các lỗi CHẶN còn lại của $EP/review/STORYBOARD-REVIEW.md, hoặc chốt bằng đạo diễn cắt (review/STORYBOARD-DIRECTORS-CUT.md, kết thúc bằng 'VERDICT: PASS' và nêu rõ nhát nào đã cắt) rồi chạy lại." >&2; exit 1
+  fi
+  mkdir -p "$W/hero"
+  cp "$EP"/review/hero/*.jpg "$W/hero/" 2>/dev/null || true
+  cp "$EP/LOOK.md" "$W/" ; cp "$EP/src/film.js" "$W/film.js"; [ -f "$EP/TREATMENT.md" ] && cp "$EP/TREATMENT.md" "$W/"
+  cd "$W"
+  critic "$(get_prompt step3-storyboard)
+Thư mục làm việc của bạn: $W. Đọc LOOK.md (bảng bố cục, từng nhát, góc máy, lý do máy đứng ở đó), film.js (mã dựng khung hình) và TREATMENT.md; mở từng ảnh trong hero/ và soi nó. Chấm đúng những tiêu chí trên, nhớ rằng đây là vòng $n/5 và những gì đã sửa từ vòng trước thì không nêu lại là lỗi.
+Viết STORYBOARD-REVIEW.md ở thư mục này theo mẫu, rồi in lại nó."
+  [ -s STORYBOARD-REVIEW.md ] || cp out.txt STORYBOARD-REVIEW.md
+  { cat STORYBOARD-REVIEW.md; } > R.md; sign "--storyboard" R.md
+  cp R.md "$EP/review/STORYBOARD-REVIEW-$n.md"; cp R.md "$EP/review/STORYBOARD-REVIEW.md"
+  cat R.md
+  if grep -qE '^#*[[:space:]]*VERDICT: *PASS' R.md; then $GATE stamp "$EP" storyboard "$EP/review/STORYBOARD-REVIEW-$n.md" --critic "$CRITIC_ID"; echo "review --storyboard: PASS"; exit 0; fi
+  echo "review --storyboard: REJECT (sửa theo $EP/review/STORYBOARD-REVIEW.md, rồi chạy lại)"; exit 1
 fi
 
 # ——————————————————————————————————————————— the words ———————————————————————————————————————————
@@ -247,14 +284,14 @@ Thư mục làm việc của bạn: $W. Đọc lines.json, FACTS.md, STRATEGY.md
   [ -s SCRIPT-REVIEW.md ] || cp out.txt SCRIPT-REVIEW.md
   FLAGGED=$(unflag SCRIPT-REVIEW.md "$(cat flags.txt)" "LONG")   # a digit or a missing FACTS.md is never wrong
   # from the fourth run only a CHẶN holds the words back
-  if [ "$n" -ge 4 ] && [ -z "$FLAGGED" ] && ! grep -q '^VERDICT: *PASS' SCRIPT-REVIEW.md && ! grep -q '\[CHẶN\]' SCRIPT-REVIEW.md && grep -q '^#[0-9]' SCRIPT-REVIEW.md; then
+  if [ "$n" -ge 4 ] && [ -z "$FLAGGED" ] && ! grep -qE '^#*[[:space:]]*VERDICT: *PASS' SCRIPT-REVIEW.md && ! grep -q '\[CHẶN\]' SCRIPT-REVIEW.md && grep -q '^#[0-9]' SCRIPT-REVIEW.md; then
     sed -i "s/^VERDICT:.*/VERDICT: PASS (lần chấm thứ $n, không còn lỗi CHẶN; sửa nốt các lỗi NẶNG bên dưới theo VIẾT LẠI rồi chạy --script thêm một lần để đóng dấu lời mới)/" SCRIPT-REVIEW.md
   fi
   { cat SCRIPT-REVIEW.md; [ -n "$FLAGGED" ] && printf '\n## Cờ máy chưa sửa (tự động FAIL)\n%s\n' "$FLAGGED"; } > R.md
   sign "--script${CHID:+ --chapter $CHID}" R.md
   cp R.md "$EP/review/SCRIPT-REVIEW-$TAG$n.md"; cp R.md "$EP/review/SCRIPT-REVIEW${CHID:+-$CHID}.md"
   cat R.md
-  if grep -q '^VERDICT: *PASS' R.md && [ -z "$FLAGGED" ]; then
+  if grep -qE '^#*[[:space:]]*VERDICT: *PASS' R.md && [ -z "$FLAGGED" ]; then
     $GATE stamp "$EP" script "$EP/review/SCRIPT-REVIEW-$TAG$n.md" ${CHID:+--chapter "$CHID"} --critic "$CRITIC_ID"
     echo "review --script: PASS${CHID:+ (chương $CHID)}"; exit 0
   fi
@@ -335,7 +372,7 @@ MODE="(cả phim)"; [ -n "$LINES" ] && MODE="--lines $LINES"; [ -n "$CHID" ] && 
 sign "$MODE" R.md
 cp R.md "$EP/review/REVIEW-$SCOPE$n.md"; cp R.md "$EP/review/REVIEW.md"
 cat R.md
-if grep -q '^VERDICT: *PASS' R.md && [ -z "$FLAGGED" ]; then
+if grep -qE '^#*[[:space:]]*VERDICT: *PASS' R.md && [ -z "$FLAGGED" ]; then
   # only a review of a chapter or of the whole film, before the render, opens the gate
   if [ "$VIDEO" = 0 ] && [ -n "$CHID" ]; then $GATE stamp "$EP" picture "$EP/review/REVIEW-$SCOPE$n.md" --chapter "$CHID" --critic "$CRITIC_ID"
   elif [ "$VIDEO" = 0 ] && [ -z "$LINES" ]; then $GATE stamp "$EP" picture "$EP/review/REVIEW-$SCOPE$n.md" --critic "$CRITIC_ID"; fi

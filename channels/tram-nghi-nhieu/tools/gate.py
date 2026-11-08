@@ -16,6 +16,7 @@ The stamps live in <episode>/review/:
   SCRIPT.pass         the words of voice/lines.json                          review.sh --script
   SCRIPT-<ch>.pass    the words of one chapter                               review.sh --script --chapter <n>
   PROPS.pass          src/props.js                                           review.sh --props
+  STORYBOARD.pass     LOOK.md + src/film.js                                  review.sh --storyboard
   PICTURE.pass        the words, src/*.js but timeline.js, index.html        review.sh (whole film, no --lines/--video)
   PICTURE-<ch>.pass   the chapter's words, its own files, the shared files   review.sh --chapter <n>
 
@@ -33,8 +34,8 @@ import glob, hashlib, json, os, re, sys
 SHARED_EXCLUDE = ('timeline.js',)
 PLACEHOLDER = re.compile(r'placeholder|giữ chỗ', re.I)
 WHAT = {'outline': 'dàn ý (TREATMENT.md + FACTS.md)', 'script': 'lời kể', 'props': 'vật dựng (src/props.js)',
-        'picture': 'hình'}
-FLAG = {'outline': '--outline', 'script': '--script', 'props': '--props', 'picture': ''}
+        'storyboard': 'khung hình (LOOK.md + src/film.js)', 'picture': 'hình'}
+FLAG = {'outline': '--outline', 'script': '--script', 'props': '--props', 'storyboard': '--storyboard', 'picture': ''}
 
 
 # ——— what an episode holds ———
@@ -118,6 +119,7 @@ def digest(ep, kind, ch=None):
     if kind in ('script', 'picture'): h.update(words(ep, ch).encode())
     files = []
     if kind == 'props': files = [os.path.join(ep, 'src/props.js')]
+    if kind == 'storyboard': files = [os.path.join(ep, 'LOOK.md'), os.path.join(ep, 'src/film.js')]
     if kind == 'picture':
         files = [os.path.join(ep, 'src', f) for f in picture_files(ep, ch)] + [os.path.join(ep, 'index.html')]
     for f in files:
@@ -128,7 +130,9 @@ def digest(ep, kind, ch=None):
 def sha(path): return hashlib.sha256(open(path, 'rb').read()).hexdigest()
 
 
-def passed(review): return bool(re.search(r'^VERDICT: *PASS', open(review, encoding='utf-8').read(), re.M))
+def passed(review):
+    """a verdict of PASS — it may sit under a heading ('## VERDICT: PASS'), the way a director's cut ends"""
+    return bool(re.search(r'^#*\s*VERDICT: *PASS', open(review, encoding='utf-8').read(), re.M))
 
 
 def stamp_path(ep, kind, ch=None):
@@ -183,7 +187,7 @@ def kind_ok(ep, kind):
     return f"{WHAT[kind]}: {whole}. Chạy: {run_cmd(ep, kind)}"
 
 
-NEEDS = {'voice': ('outline', 'script'), 'render': ('outline', 'script', 'props', 'picture')}
+NEEDS = {'voice': ('outline', 'script'), 'render': ('outline', 'script', 'props', 'storyboard', 'picture')}
 
 
 def check(ep, step='render'):
