@@ -183,7 +183,7 @@ print("\n".join(rows[-80:]))
 PY
 
 # the rules the session broke, read off its own tool log (R1–R5 of CODING_STANDARDS.md)
-SUPERVISE_FILM="$FILM" python3 - "$SESSION" "$LIB/tools/transcript.py" > "$RULES" <<'PY'
+SUPERVISE_FILM="$FILM" SUPERVISE_LIB="$LIB" python3 - "$SESSION" "$LIB/tools/transcript.py" > "$RULES" <<'PY'
 import collections, json, os, re, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(sys.argv[2])))
 import transcript
@@ -211,6 +211,49 @@ for at, tool, args in transcript.events(sys.argv[1]):
         seen[cmd.strip()] += 1
 polls = [f"R9 {n} lần cùng một lệnh — một vòng dò, không phải việc: {cmd[:120]}"
          for cmd, n in seen.most_common() if n >= 5]
+
+
+# is the file the command names a file of the project, or a scratch file under /tmp? R1 is about the project's own
+# files: a heredoc that writes a scratch script in /tmp is the way a long script gets to a program, not a violation.
+def project_file(f, cmd):
+    if not f or f.startswith("/tmp/") or f.startswith("/dev/") or f.startswith("~"):
+        return False
+    root = os.environ.get("SUPERVISE_LIB", "")
+    if root and f.startswith(root):
+        return True
+    if "/" in f:
+        return True          # a path with a directory: src/film.js, voice/lines.json, review/x.md
+    # a bare name: it belongs to the project unless the command changed into /tmp first
+    return not re.search(r"cd\s+/tmp\b", cmd)
+
+
+# the files the command writes, as opposed to the files it merely names: a script that reads core/render/still.mjs
+# and writes src/film.js has written one file, not two.
+def write_targets(cmd):
+    tg = []
+    body = cmd
+    m = re.search(r"<<-?\s*['\"]?[A-Za-z_]\w*", cmd)
+    if m:
+        body = cmd[m.end():]
+    for m2 in re.finditer(r"open\(\s*([^,)]{1,160}?)\s*,\s*['\"]w", body):
+        expr = m2.group(1).strip().strip("'\"")
+        if re.fullmatch(r"[\w./-]+", expr):
+            tg.append(expr)
+        else:
+            for m3 in re.finditer(re.escape(expr) + r"\s*=\s*['\"]([^'\"]+)['\"]", body):
+                tg.append(m3.group(1))
+    tg += re.findall(r"(?<![0-9&])>{1,2}\s*([\w./-]+)", cmd)
+    tg += re.findall(r"\bsed\s+-i(?:\.\w+)?\s+(?:'[^']*'|\"[^\"]*\"|\S+)\s+([\w./-]+)", cmd)
+    for m4 in re.finditer(r"\b(?:cp|mv)\s+(?:-\S+\s+)*([\w./-]+)\s+([\w./-]+)", cmd):
+        tg.append(m4.group(2))
+    tg += re.findall(r"os\.replace\([^,]+,\s*['\"]?([\w./-]+)", body)
+    tg += re.findall(r"shutil\.(?:copy|move)\([^,]+,\s*['\"]?([\w./-]+)", body)
+    return tg
+
+
+r1_n = 0
+r1_files = {}
+r10_n = 0
 for at, tool, args in transcript.events(sys.argv[1]):
     cmd = " ".join((args.get("command", "") or "").split())   # one line: a heredoc must not spill into the report
     at = at[11:19] if 'T' in at else at
@@ -220,19 +263,30 @@ for at, tool, args in transcript.events(sys.argv[1]):
             out.append(f"R5 {at} a long job is polled with sleep: {cmd[:120]}")
         if re.search(r'git\s+add\s+(-\S+\s+)*(-A|--all)\b', cmd):
             out.append(f"R3 {at} every file is staged on a dirty tree: {cmd[:120]}")
-        # R1: a file written by the shell. The log truncates the command, so a heredoc that names one of the
-        # film's source files is reported for a reader to check — not counted as a violation.
-        writes = bool(re.search(r"open\(\s*[^)]*['\"]w['\"]|\.write\(|os\.replace|shutil\.(copy|move)", cmd))
-        is_r1 = writes and bool(re.search(r'(cat|tee)\s*>|\bpython3?\s+-\s*<<|<<\s*[\'"]?EOF', cmd))
+        # R1: a file written by the shell. Four shapes: a heredoc (the shell hands a body to a program, which then
+        # decides what to write), a redirect into a file, an in-place edit (sed -i), and a copy or a move. The log
+        # truncates the command, so the rule reads the shape and the file name, not the whole script.
+        repo_file = r"[\w./-]+\.(?:md|js|mjs|py|json|sh|html|txt|css|yml|yaml|toml|mp4|srt)\b"
+        heredoc = bool(re.search(r"<<-?\s*['\"]?[A-Za-z_]", cmd))
+        redirect = bool(re.search(r"(?<![0-9&])>{1,2}\s*[\w./-]+\.(?:md|js|mjs|py|json|sh|html|txt|css|yml|yaml|toml)\b", cmd))
+        in_place = bool(re.search(r"\bsed\s+-i\b|\bcp\b\s|\bmv\b\s", cmd))
+        names_repo_file = bool(re.search(repo_file, cmd))
+        # only the files a person edits count: a rendered frame copied into a review folder is a build step
+        src_ext = r"\.(?:md|js|mjs|py|json|sh|html|txt|css|yml|yaml|toml)\b"
+        targets = [f for f in write_targets(cmd) if project_file(f, cmd) and re.search(src_ext, f)]
+        is_r1 = bool(targets)
         # R10: a hand-rolled ffmpeg montage of frames. The library has core/render/sheet.py for this. A command that
         # both edits a file and tiles frames is reported once, as the edit.
         jpgs = len(re.findall(r'-i\s+\S+\.jpg', cmd))
         is_r10 = 'ffmpeg' in cmd and jpgs >= 2 and bool(re.search(r'filter_complex|tile=|hstack|vstack|xstack', cmd))
         if is_r1:
-            out.append(f"R1 {at} a file is written by the shell: {cmd[:120]}")
+            targets = [f for f in re.findall(repo_file, cmd) if project_file(f, cmd)]
+            if targets:
+                r1_n += 1
+                for f in set(targets):
+                    r1_files[f] = r1_files.get(f, 0) + 1
         elif is_r10:
-            out.append(f"R10 {at} a hand-rolled ffmpeg montage of {jpgs} frames: core/render/sheet.py tiles them and "
-                       f"names each frame: {cmd[:100]}")
+            r10_n += 1
         elif re.search(r'\bpython3?\s+-\s*<<', cmd) and re.search(r"['\"][^'\"]*\.(js|json|md)['\"]", cmd):
             out.append(f"R1? {at} a shell script touches a source file (the log truncates the command — read it "
                        f"before believing it): {cmd[:120]}")
@@ -250,6 +304,12 @@ for at, tool, args in transcript.events(sys.argv[1]):
                     out.append(f"T9 {at} {p} draws a string with a raw fillText() — the reading check cannot see it")
             except OSError:
                 pass
+if r1_n:
+    top = ", ".join(f"{f}×{n}" for f, n in sorted(r1_files.items(), key=lambda kv: -kv[1])[:8])
+    out.append(f"R1 {r1_n} lần — file của dự án bị ghi bằng shell, không bằng công cụ sửa file: {top}. "
+               f"Dùng `edit`, hoặc `python3 tools/replace.py` khi đoạn cần thay quá dài.")
+if r10_n:
+    out.append(f"R10 {r10_n} lần — montage ffmpeg tự viết: `core/render/sheet.py` xếp các khung lại và đặt tên từng khung.")
 print("\n".join(out[-40:] + polls))
 PY
 if [ -s "$RULES" ]; then
