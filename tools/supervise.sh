@@ -223,17 +223,19 @@ for at, tool, args in transcript.events(sys.argv[1]):
         # R1: a file written by the shell. The log truncates the command, so a heredoc that names one of the
         # film's source files is reported for a reader to check — not counted as a violation.
         writes = bool(re.search(r"open\(\s*[^)]*['\"]w['\"]|\.write\(|os\.replace|shutil\.(copy|move)", cmd))
-        if writes and re.search(r'(cat|tee)\s*>|\bpython3?\s+-\s*<<|<<\s*[\'"]?EOF', cmd):
+        is_r1 = writes and bool(re.search(r'(cat|tee)\s*>|\bpython3?\s+-\s*<<|<<\s*[\'"]?EOF', cmd))
+        # R10: a hand-rolled ffmpeg montage of frames. The library has core/render/sheet.py for this. A command that
+        # both edits a file and tiles frames is reported once, as the edit.
+        jpgs = len(re.findall(r'-i\s+\S+\.jpg', cmd))
+        is_r10 = 'ffmpeg' in cmd and jpgs >= 2 and bool(re.search(r'filter_complex|tile=|hstack|vstack|xstack', cmd))
+        if is_r1:
             out.append(f"R1 {at} a file is written by the shell: {cmd[:120]}")
+        elif is_r10:
+            out.append(f"R10 {at} a hand-rolled ffmpeg montage of {jpgs} frames: core/render/sheet.py tiles them and "
+                       f"names each frame: {cmd[:100]}")
         elif re.search(r'\bpython3?\s+-\s*<<', cmd) and re.search(r"['\"][^'\"]*\.(js|json|md)['\"]", cmd):
             out.append(f"R1? {at} a shell script touches a source file (the log truncates the command — read it "
                        f"before believing it): {cmd[:120]}")
-        # R10: a hand-rolled ffmpeg montage of frames. The library has core/render/sheet.py for this.
-        if 'ffmpeg' in cmd:
-            jpgs = len(re.findall(r'-i\s+\S+\.jpg', cmd))
-            if jpgs >= 2 and re.search(r'filter_complex|tile=|hstack|vstack|xstack', cmd):
-                out.append(f"R10 {at} a hand-rolled ffmpeg montage of {jpgs} frames: core/render/sheet.py tiles them and "
-                           f"names each frame: {cmd[:100]}")
     if tool in ("write", "edit"):
         p = args.get("path", "")
         if "/src/" in p and p.endswith(".js") and p not in drawn:
