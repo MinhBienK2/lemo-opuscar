@@ -134,6 +134,11 @@ jobs:
         run: |
           python3 tools/check_films_index.py
           echo "the film index was checked"
+      - name: the movies the repository holds are right
+        run: |
+          command -v ffmpeg >/dev/null || { sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg; }
+          python3 tools/check_movies.py
+          echo "every movie in the repository has the right format, the right loudness and the runtime its manifest claims"
       - name: the skill Claude Code loads and the skill omp loads are one skill
         run: |
           test -L .claude/skills/tram-nghi-nhieu || { echo "::error::the Claude Code copy of the channel skill must be a symlink to the omp copy, so the two cannot drift"; exit 1; }

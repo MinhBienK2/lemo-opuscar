@@ -64,17 +64,24 @@ fi
 # The band is matched on the path, so it must match the one-shots under films/ and the episodes under channels/.
 BAND=""
 case "$FOLDER" in */films/*|films/*|*/channels/*|channels/*) BAND="--band 880";; esac
-run readcheck node "$HERE/core/render/readcheck.mjs" "$FOLDER" $BAND
-# a narrated film must stage its story, not read it: text-led frames, different looks, spoken numbers, foley on words
 # A channel states its own limits in scene_rules.json (the channel writes "two numbers a minute"; the library's
 # default is looser), and the delivery review passes them to the check — so the rule a channel writes down is
-# the rule the gate keeps.
-NUMOPT=""
+# the rule the gate keeps. It also says how the reading check must draw: a channel that draws at 2× on a small
+# GPU loses the browser halfway through the film, and the check that never finished says nothing about the film.
+NUMOPT=""; QOPT=""
 _d=$FOLDER; while [ ! -f "$_d/CHANNEL.md" ] && [ "$_d" != / ]; do _d=$(dirname "$_d"); done
 if [ -f "$_d/CHANNEL.md" ] && [ -f "$_d/scene_rules.json" ]; then
   N=$(python3 -c "import json,sys;print(json.load(open(sys.argv[1])).get('numbersPer20s',''))" "$_d/scene_rules.json" 2>/dev/null || true)
   [ -n "$N" ] && NUMOPT="--numbers-per-20s $N"
+  Q=$(python3 -c "import json,sys;print(json.load(open(sys.argv[1])).get('readcheckQ',''))" "$_d/scene_rules.json" 2>/dev/null || true)
+  [ -n "$Q" ] && QOPT="$Q"
 fi
+if [ -n "$QOPT" ]; then
+  run readcheck node "$HERE/core/render/readcheck.mjs" "$FOLDER" $BAND --q "$QOPT"
+else
+  run readcheck node "$HERE/core/render/readcheck.mjs" "$FOLDER" $BAND
+fi
+# a narrated film must stage its story, not read it: text-led frames, different looks, spoken numbers, foley on words
 if [ -n "$BAND" ]; then run scenecheck node "$HERE/core/render/scenecheck.mjs" "$FOLDER" --band 880 $NUMOPT; fi
 
 # the voice: every line has to transcribe back to the script. The run happens in a scratch folder, so the
