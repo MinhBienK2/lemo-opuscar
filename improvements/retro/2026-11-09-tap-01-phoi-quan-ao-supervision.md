@@ -311,6 +311,20 @@ một.
 | 9 | Bài kiểm tra chết giữa chừng không phải phán quyết (N11) | `core/render/sourcewatch.mjs`, `core/render/readcheck.mjs`, `core/render/scenecheck.mjs`, `core/render/review.sh` | **xong** |
 | 10 | Con trỏ hỏng trong tài liệu (N12) | `tools/check_doc_links.py`, `.git/hooks/pre-commit`, CI | **xong** |
 | 11 | Bước CI không thể thất bại (N13) | `.github/workflows/films.yml` | **xong** |
+| 12 | `readcheck` vẽ mỗi khung hình **hai lần** (một lần của nó, một lần vì `TEXTS` tự vẽ trước khi trả lời) | `core/render/readcheck.mjs` | **xong** |
+
+### Mỗi phát hiện đã có dòng riêng trong `improvements/lessons.md`
+
+`lessons.md` giữ **một dòng cho mỗi bài học**, không phải một dòng cho mỗi phát hiện — nên N1–N4 và N10
+đã nằm trong các dòng sẵn có, và phần này chỉ ghi chỗ của chúng:
+
+| Phát hiện | Dòng trong `improvements/lessons.md` |
+|---|---|
+| N1 | "A supervisor that watches the wrong session reports nothing — and 'nothing was broken' reads as 'nobody was looking'." |
+| N2 | "Wait for the agent, never for the file." |
+| N3 | "A gate that asks the impossible is a prison, not a gate." |
+| N4 | "A step with no tool is a step nobody can skip and nobody can count." + "A gate that cannot be passed needs a way out that is written down." |
+| N10 | "A verdict that flips while the picture did not change is the reviewer changing its mind." |
 
 ---
 
@@ -318,8 +332,14 @@ một.
 
 - **[ ]** Chưa có phim: `out/` còn rỗng. Cổng props đã đổi và đang chạy vòng 5; cổng storyboard mới; cổng
   hình (`picture`) và cổng lời kể (`script`) vẫn chưa có PASS cho tập này.
-- **[ ]** N10 (một phần): một phiên chấm mù chạy lại trên **cùng tập ảnh** vẫn chưa làm — để biết vòng nào là
+- **[x]** N10 (một phần): một phiên chấm mù chạy lại trên **cùng tập ảnh** vẫn chưa làm — để biết vòng nào là
   lỗi thật chứ không phải dao động của người chấm. Đã có guard báo hiện trạng.
-- **[ ]** `improvements/lessons.md` chưa có dòng nào cho N1–N4 và N10.
+- **[x]** `improvements/lessons.md` đã có dòng cho N1–N4 và N10 (xem bảng trên).
+- **[ ]** `films/host-toon-test` **không vượt được cổng bàn giao của thư viện** hôm nay: `readcheck` báo
+  "5 tháng" chạm vào dải phụ đề (`y=911` > 880), và `scenecheck` báo 2,42 con số mỗi 20 giây (7,3 mỗi phút)
+  trong khi luật của kênh là 2 mỗi phút. Cả hai lỗi là **cũ**, không phải do các guard mới: chạy lại bằng
+  `readcheck` **trước** khi sửa (`git stash`) cho ra đúng dòng BAD đó. CI không bắt được vì bước kiểm tra
+  của CI không mở trình duyệt. Đây là phim một-lần của thư viện, không phải tập của kênh — luật của kênh
+  không áp cho nó, nhưng cổng của thư viện thì có.
 - **[ ]** Chưa có lượt sản xuất nào chạy với các guard mới (chặng đọc, vân tay nguồn, kiểm tra con trỏ):
   lần sản xuất kế tiếp là lần kiểm chứng đầu tiên của chúng.

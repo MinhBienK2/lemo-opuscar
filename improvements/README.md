@@ -194,6 +194,9 @@ seventh record had only proposed.
 | N8 | `FILMS.md` named three deleted episodes | medium | `tools/gen_films_index.py` |
 | N9 | The channel skill pointed at neither `improvements/lessons.md` nor `CODING_STANDARDS.md`, and the skill tree existed twice | medium | one pointer line in `SKILL.md` · CI holds the two trees to being one |
 | N10 | Fixing a prop to the previous round's advice broke props that had passed, and the next round named the new breakage | medium | **no guard possible — recorded only**: it needs a blind re-grade on the same images |
+| N11 | A check that died mid-read left a stack trace where a verdict should be, so the reader hunted for a defect that was not there | high | [`core/render/sourcewatch.mjs`](../core/render/sourcewatch.mjs) fingerprints the sources before and after the read · [`readcheck.mjs`](../core/render/readcheck.mjs) reads in chunks and says "COULD NOT RUN" |
+| N12 | A pointer to a file that is not there is silent, so the rule it carried reached nobody | medium | [`tools/check_doc_links.py`](../tools/check_doc_links.py) resolves every link of the library · the pre-commit hook and the CI run it |
+| N13 | A CI step that diffed a symlink against its own target could not fail, so it checked nothing | medium | the CI step checks the symlink and the two real paths |
 
 ## The supervisor
 

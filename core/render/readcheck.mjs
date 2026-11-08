@@ -1,5 +1,6 @@
 // Reading-time self-check: node core/render/readcheck.mjs <demo> [--q 'k=v'] [--step 0.04] [--latin-cps 15] [--cjk-cps 4.5] [--pad 1.5] [--min 1.5] [--band 0] [--size 1920x1080]
 // Page contract: window.TEXTS(t) → [{id, text, x0, y0, x1, y1}]: every piece of text visible on screen at t seconds and its screen box (pixels, viewport the same as --size, default 1920×1080).
+//   A film whose TEXTS(t) draws the frame itself (window.render(t) before returning the boxes) is read one draw per frame; a film whose TEXTS only reads is read the same way.
 //   id identifies "this block of text" (a number or a string); if the text under the same id changes, it counts as a new piece and timing restarts. Don't report the subtitle bar: its hold is set by the .srt.
 // --band N: also report every text whose box reaches below y=N — the subtitle band. The subtitles themselves are drawn with a raw
 //   fillText() and are not registered, so they never appear in this list; anything else down there lands under the words.
@@ -27,8 +28,18 @@ const CHUNK = 120;   // frames per round trip
 const head = await page.evaluate(({ STEP }) => {
   if (typeof window.TEXTS !== 'function') return { noTexts: true };
   if (!(window.DUR > 0)) return { noDur: true };
-  window.__rc = { step: STEP, dur: window.DUR, seen: {}, partial: {} };
-  return { dur: window.DUR };
+  window.__rc = { step: STEP, dur: window.DUR, seen: {}, partial: {}, renders: 0 };
+  // Some films draw the frame inside TEXTS(t) itself (the channel's rig does: TEXTS calls window.render and then
+  // returns the boxes the overlay just wrote). Drawing the frame a second time before asking for the text is the
+  // same picture twice — on a 3D film that doubled the check's cost. So count the draws and ask TEXTS first.
+  const orig = window.render;
+  if (typeof orig === 'function') window.render = function (...a) { window.__rc.renders++; return orig.apply(this, a); };
+  const before = window.__rc.renders;
+  window.TEXTS(0);
+  const selfRender = window.__rc.renders > before;   // TEXTS draws by itself: do not draw again
+  window.__rc.renders = 0;
+  window.__rc.selfRender = selfRender;
+  return { dur: window.DUR, selfRender };
 }, { STEP });
 if (head.noTexts || head.noDur) {
   console.error('readcheck: NOT CHECKED — ' + (head.noTexts ? 'the page has no window.TEXTS(t) (see the header of core/render/readcheck.mjs for the contract).'
@@ -41,7 +52,7 @@ const readChunk = ({ i0, n }) => {
   const st = window.__rc, W = innerWidth, H = innerHeight;
   for (let k = 0; k < n; k++) {
     const t = (i0 + k) * st.step;
-    window.render(t);
+    if (!st.selfRender) window.render(t);   // when TEXTS does not draw, the frame must be drawn first
     const vis = new Set();
     for (const b of window.TEXTS(t) || []) {
       b.id = String(b.id);   // numeric ids are fine too
@@ -78,6 +89,7 @@ if (moved.length) {
   closeServer();
   process.exit(2);
 }
+console.log(`readcheck: read ${total} frames at ${STEP}s steps (${head.selfRender ? 'the film draws the frame inside TEXTS: one draw per frame' : 'the film does not draw inside TEXTS: one draw per frame here'})`);
 await browser.close(); closeServer();
 
 // a piece that was cropped at one moment and whole at another is a piece that was readable: the cropped
