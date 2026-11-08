@@ -75,6 +75,8 @@ Trước khi dựng, đọc `improvements/lessons.md` ở gốc thư viện — 
 ### Bước 3: Storyboard & Khung hình Hero (Visual Framing & Camera)
 - **Đạo diễn thực hiện:** Đọc `step3-storyboard/GUIDE.md`. Xác định góc máy, vùng nhìn frustum, ánh sáng qua tường có lỗ `wallWithHole`. Xuất still tham chiếu và ghi `LOOK.md`.
 - **Review độc lập:** Dùng prompt `step3-storyboard/PROMPT_CRITIC.md` thẩm định độ tương phản, góc đặt ống kính.
+- **Nhãn nằm đúng câu:** mỗi nhãn trong `src/film.js` gắn với câu lời kể gọi tên nó. `review.sh --storyboard` kiểm
+  bằng máy (`tools/check_labels.py`) và dừng trước khi tốn một vòng chấm nếu có nhãn lệch câu.
 - **Vòng lặp:** Điều chỉnh góc máy, tiêu cự cho tới khi `PASS`.
 
 ### Bước 4: Bóc tách Linh kiện 3D chi tiết (3D Component Breakdown & Spec)
@@ -91,6 +93,7 @@ Trước khi dựng, đọc `improvements/lessons.md` ở gốc thư viện — 
 ### Bước 6: Lắp ghép Cảnh, Diễn hoạt & Nhịp điệu (Assembly, Animation & Beatsheet)
 - **Đạo diễn thực hiện:** Đọc `step6-assembly/GUIDE.md`. Ghép linh kiện vào `src/film.js`, viết keyframes diễn hoạt theo từ `V.w()`. Chạy kiểm tra `beatsheet.mjs`.
 - **Review độc lập:** Dùng prompt `step6-assembly/PROMPT_CRITIC.md` thẩm định nhịp điệu, triệt tiêu các cờ `DARK`, `SAME`, `NUM`, `RUN`.
+- **Nhãn nằm đúng câu:** cổng chấm hình cũng chạy `tools/check_labels.py` — một nhãn lệch câu phải sửa trước khi dựng.
 - **Vòng lặp:** Đạo diễn sửa lỗi diễn hoạt/ánh sáng cho tới khi `PASS`.
 
 ### Bước 7: Âm thanh, Mux & Nghiệm thu Tổng thể (Audio, Mux & Delivery)

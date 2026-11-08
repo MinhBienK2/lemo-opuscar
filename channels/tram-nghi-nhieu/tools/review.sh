@@ -141,6 +141,10 @@ if [ "$PROPS" = 1 ]; then
   # props. The stamp binds it to src/props.js by its hash, so a cut written for older code cannot pass newer code.
   CUT="$EP/review/PROPS-DIRECTORS-CUT.md"
   if [ -f "$CUT" ] && grep -qE '^#*[[:space:]]*VERDICT: *PASS' "$CUT"; then
+    if ! python3 "$CHANNEL/tools/gate.py" cut "$EP" props "$CUT" >&2; then
+      echo "review --props: bản cắt không còn nói về code hiện tại — viết lại bản cắt sau khi sửa code xong rồi chạy lại" >&2
+      exit 1
+    fi
     $GATE stamp "$EP" props "$CUT" --critic "$CRITIC_ID"
     echo "review --props: PASS (đạo diễn cắt: $CUT)"; exit 0
   fi
@@ -250,6 +254,14 @@ fi
 # nobody can count: five rounds of a storyboard graded by hand are five rounds nobody signed.
 if [ "$STORYBOARD" = 1 ]; then
   [ -f "$EP/LOOK.md" ] || die "--storyboard needs LOOK.md"
+  # a label that names a line it does not sit on: a machine catches this in a second, before a round is spent
+  LRC=0
+  LAB=$(python3 "$CHANNEL/tools/check_labels.py" "$EP" 2>&1) || LRC=$?
+  if [ "$LRC" = 1 ]; then
+    echo "$LAB"
+    echo "review --storyboard: nhãn lệch câu — sửa \`lines\` của nhãn trong src/film.js (nhãn phải nằm ở câu gọi tên nó) rồi chạy lại" >&2
+    exit 1
+  fi
   # The director's cut ends the step: a written scope of what was cut, ending in VERDICT: PASS, stands for the
   # storyboard. It must be at least as new as the last round it answers, or a cut from an earlier state of the
   # film would pass a later one.
@@ -383,6 +395,10 @@ else SCOPE=""; SCOPE_NAME="cả phim"; LIMIT=5; fi
 # pass a newer one.
 CUT="$EP/review/REVIEW${CHID:+-$CHID}-DIRECTORS-CUT.md"
 if [ "$VIDEO" = 0 ] && [ -z "$LINES" ] && [ -f "$CUT" ] && grep -qE '^#*[[:space:]]*VERDICT: *PASS' "$CUT"; then
+  if ! python3 "$CHANNEL/tools/gate.py" cut "$EP" picture "$CUT" ${CHID:+--chapter "$CHID"} >&2; then
+    echo "review: bản cắt không còn nói về code hiện tại — viết lại bản cắt sau khi sửa code xong rồi chạy lại" >&2
+    exit 1
+  fi
   $GATE stamp "$EP" picture "$CUT" ${CHID:+--chapter "$CHID"} --critic "$CRITIC_ID"
   echo "review: PASS (đạo diễn cắt: $CUT)"; exit 0
 fi
@@ -397,6 +413,14 @@ if [ "$n" -gt "$LIMIT" ]; then
 fi
 
 mkdir -p "$W/beats" "$W/ref"
+# the same machine check as the storyboard gate: a label off its line must not reach the renderer
+LRC=0
+LAB=$(python3 "$CHANNEL/tools/check_labels.py" "$EP" 2>&1) || LRC=$?
+if [ "$LRC" = 1 ]; then
+  echo "$LAB"
+  echo "review: nhãn lệch câu — sửa \`lines\` của nhãn trong src/film.js rồi chạy lại" >&2
+  exit 1
+fi
 echo "review: beat frames…" >&2
 REL=$(python3 -c "import os,sys; print(os.path.relpath(sys.argv[1], sys.argv[2]))" "$EP" "$LIB")   # the page server serves the library root
 (cd "$LIB" && node channels/tram-nghi-nhieu/beatsheet.mjs "$REL" --out "$W/beats" ${LINES:+--lines "$LINES"} >/dev/null)

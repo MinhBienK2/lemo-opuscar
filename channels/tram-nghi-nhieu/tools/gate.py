@@ -139,6 +139,36 @@ def stamp_path(ep, kind, ch=None):
     return os.path.join(ep, 'review', f"{kind.upper()}{'-' + ch['id'] if ch else ''}.pass")
 
 
+def newest_code_mtime(ep, kind, ch=None):
+    """when the code this kind judges was last touched"""
+    files = []
+    if kind == 'props':
+        files = [os.path.join(ep, 'src/props.js')]
+    if kind == 'picture':
+        files = [os.path.join(ep, 'src', f) for f in picture_files(ep, ch)] + [os.path.join(ep, 'index.html')]
+    ts = [os.path.getmtime(f) for f in files if os.path.isfile(f)]
+    return max(ts) if ts else None
+
+
+def stale_cut(ep, kind, cut, ch=None):
+    """why a director's cut may not be used, or None when it may
+
+    The cut is the way out of the round limit, so it has to say something about the film as it is now. A cut
+    written before the last change of the code says nothing about that code: accepting it would stamp code
+    nobody looked at. The cut therefore has to be written after the code it judges.
+    """
+    if kind not in ('props', 'picture'):
+        return None
+    t = newest_code_mtime(ep, kind, ch)
+    if t is None or not os.path.isfile(cut):
+        return None
+    if os.path.getmtime(cut) < t - 1:
+        return (f'bản cắt {os.path.basename(cut)} viết trước lần sửa code cuối cùng, nên nó không nói gì '
+                f'về code hiện tại — viết lại bản cắt (nêu rõ vật nào cắt, vật nào sửa) sau khi sửa code xong, '
+                f'rồi chạy lại')
+    return None
+
+
 def stamp(ep, kind, review, ch=None, critic=''):
     if not passed(review): sys.exit(f'gate: {review} does not say VERDICT: PASS')
     if not critic: sys.exit('gate: a stamp names who judged it (--critic); only review.sh writes stamps')
@@ -229,6 +259,11 @@ if __name__ == '__main__':
         c = chapter(ep, a[2]) if len(a) >= 3 else None
         ph = placeholders(ep, c)
         if ph: sys.exit(f"src/{', src/'.join(ph)} vẫn là file giữ chỗ (placeholder): dựng thật trước khi chấm")
+    elif op == 'cut' and len(a) >= 4 and a[2] in WHAT:
+        ch = chapter(ep, opt('--chapter')) if opt('--chapter') else None
+        why = stale_cut(ep, a[2], os.path.abspath(a[3]), ch)
+        if why: sys.exit('cổng chấm: ' + why)
+        print('bản cắt còn hợp lệ')
     elif op == 'chapter' and len(a) >= 3:
         c = chapter(ep, a[2])
         if not c: sys.exit(f"gate: không có chương '{a[2]}' trong {ep}/src/chapters.js")
