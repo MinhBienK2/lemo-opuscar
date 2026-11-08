@@ -23,16 +23,38 @@ Hoàn thiện toàn bộ hệ thống âm thanh (tiếng động foley, nhạc n
 
 ## Quy trình thực hiện
 1. Điền đầy đủ sự kiện âm thanh vào mảng `window.EV` trong code tập phim.
-2. Chạy thẩm định toàn diện:
+2. Chấm hình (cổng riêng của kênh):
    `sh channels/tram-nghi-nhieu/tools/review.sh <tập>`
    (Yêu cầu: `OVERALL ≥ 9` và không có câu nào bị đánh giá FAIL).
+   **Chạy lúc code đã đứng yên** — không sửa `src/` trong khi chấm.
 3. Biên tập và tổng hợp âm thanh:
    `$LIB/.venv/bin/python channels/tram-nghi-nhieu/tools/mix.py <tập>`
 4. Render video headless và mux sản phẩm cuối cùng:
    `sh <tập>/build.sh`
-5. Chạy kiểm tra video thành phẩm sau khi render:
+   (Lệnh này tự từ chối nếu thiếu tem — xem phần Tem kiểm duyệt số ở trên.)
+5. Chấm phim đã dựng:
    `sh channels/tram-nghi-nhieu/tools/review.sh <tập> --video`
-6. Bàn giao kết quả:
-   - File video: `<tập>/out/<tên_tập>.mp4`
-   - File phụ đề: `<tập>/out/<tên_tập>.transcript.srt`
-   - Ảnh đại diện: `poster.jpg` kèm 4-6 chữ tiêu đề.
+6. **Cổng bàn giao của thư viện** — bắt buộc, phải thoát mã 0:
+   `sh core/render/review.sh <tập>`
+   Cổng này chạy những thứ cổng của kênh không chạy: `filmcheck` (tập là của riêng nó),
+   kiểm tra trích dẫn và con số trên màn hình, `readcheck` (chữ đủ lâu để đọc),
+   `scenecheck` (hình kể chuyện chứ không đọc chuyện), kiểm tra giọng, ảnh chụp mẫu, và
+   độ lớn tiếng (−14 LUFS, đỉnh thật ≤ −1,0 dBFS).
+7. Nếu `film.json` của tập đã đổi (tiêu đề, thời lượng), dựng lại bảng phim:
+   `python3 tools/gen_films_index.py` — bảng `FILMS.md` do máy sinh, không sửa tay.
+
+## Bàn giao kết quả
+- File video: `<tập>/out/<tên_tập>.mp4`
+- File phụ đề: `<tập>/out/<tên_tập>.transcript.srt`
+- Ảnh đại diện: `poster.jpg` kèm 4-6 chữ tiêu đề.
+
+## Đọc kết quả của một bài kiểm tra
+
+- **`COULD NOT RUN (exit 2)`** — bài kiểm tra **không chạy được**, chưa phải phán quyết về phim.
+  Dòng ngay dưới nói lý do. Hai nguyên nhân thường gặp: tập vừa bị sửa trong lúc kiểm tra chạy
+  (`readcheck`/`scenecheck` so vân tay của `index.html`, `src/*.js`, `voice/lines.json` trước và sau
+  nên kết quả bị bỏ), hoặc trang chết giữa chừng. **Để code đứng yên rồi chạy lại** — đừng đi tìm
+  lỗi trong phim khi bài kiểm tra chưa kịp đọc phim.
+- **`FAILED`** — phim có lỗi thật; đọc dòng lỗi và sửa.
+- **R1–R9** — luật của thư viện trong `CODING_STANDARDS.md`. R9: chờ một agent, đừng chờ một file
+  (một lệnh lặp năm lần là một vòng dò); job dài thì chạy nền và để harness báo khi nó xong.
