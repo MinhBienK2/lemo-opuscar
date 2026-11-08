@@ -348,7 +348,45 @@ kiểm tra. Đã báo phiên: để code đứng yên rồi chạy.
 
 ---
 
-## Đề xuất thứ tự xử lý
+## N17 — medium — Luật R1 của người giám sát đếm sai thứ nó tưởng nó đếm
+
+**Bằng chứng.** Báo cáo của `tools/supervise.sh` bảo *"the session broke 475 of the library's rules"*. Sự thật là
+**34**: phiên sửa file của dự án bằng shell 34 lần (heredoc `cat >>`, `sed -i`, `open(p, 'w')` trong script
+python) — con số đáng kể, nhưng không phải 475.
+
+**Vì sao sai.** Luật cũ nhận ra một lệnh shell *ghi file* khi lệnh đó có dấu hiệu `open(..., 'w')` **và** có
+heredoc. Nên:
+
+- một script heredoc đọc `core/render/still.mjs` rồi ghi `src/film.js` bị tính là **hai** lần ghi file;
+- một lệnh `cat >> LOOK.md <<'EOF'` — đúng hình dạng R1 cấm — bị bỏ sót, vì không có `open(..., 'w')` nào.
+
+Tệ hơn: báo cáo liệt kê **một dòng cho mỗi lần xảy ra**, nên 475 dòng gần giống nhau đẩy các phát hiện khác
+ra khỏi màn hình cuối.
+
+**Guard đã có.** `tools/supervise.sh` giờ đọc **vị trí ghi**: `open(x, 'w')` (và đoán `x` qua biến được gán trong
+thân heredoc), một redirect (`>`, `>>`), `sed -i`, `cp`/`mv` (đích), `os.replace`, `shutil.copy/move`. Một file
+lệnh **chỉ nhắc tới** không phải file lệnh **ghi**; một file tạm trong `/tmp` không phải file của dự án. Báo cáo
+gộp mỗi luật thành **một dòng** có số lần và tên các file.
+
+**Còn lại.** Số 34 là **cận dưới**: transcript cắt ngắn lệnh dài, nên những script bị cắt giữa chừng không tìm
+thấy đường dẫn. Báo cáo ghi rõ điều đó. Muốn con số đúng thì phải đọc transcript gốc, không phải dòng lệnh đã cắt.
+
+---
+
+## N18 — medium — Người chấm hình mở sáu mươi ảnh riêng để soi một tập phim
+
+**Bằng chứng.** `review.sh` (chế độ chấm cả phim) xóa tờ sheet sau khi dựng, rồi bảo người chấm mở **từng
+khung riêng** (`beats/b_NNN.jpg`). Một tập 60 câu = 60 lần đọc ảnh, mỗi lần một bức.
+
+**Cái đã biết từ đầu.** `core/render/sheet.py` xếp các khung thành một tờ, và **tờ đã có đủ thông tin**: mã câu,
+cờ máy, `fill N%`, lời của câu, dưới mỗi khung. Người chấm chỉ cần mở ảnh riêng khi tờ chưa đủ để quyết định.
+
+**Guard đã có.** `channels/tram-nghi-nhieu/tools/review.sh` **giữ** các tờ sheet và xếp chúng lên đầu
+`TASK.md` ("Đọc tờ sheet trước"), rồi mới tới danh sách từng câu kèm `fill N%`. `PROMPT_CRITIC.md` có mục
+"Cách đọc" nói rõ: đọc tờ, mở ảnh riêng chỉ khi tờ chưa đủ. Chi phí đọc ảnh của một vòng chấm cả phim giảm
+khoảng mười lần mà mỗi câu vẫn soi được.
+
+---
 
 | # | Việc | File cần sửa | Trạng thái |
 |---|---|---|---|
@@ -369,6 +407,8 @@ kiểm tra. Đã báo phiên: để code đứng yên rồi chạy.
 | 15 | Rig bỏ hộp `id: 'sub'` khỏi `TEXTS`; bài kiểm tra nói rõ trình duyệt chết hay code phim ném lỗi | `channels/tram-nghi-nhieu/rig/render.js`, `core/render/readcheck.mjs`, `scenecheck.mjs` | **xong** |
 | 16 | `tools/replace.py`: sửa file bằng kịch bản mà vẫn đếm số lần khớp và ghi nguyên tệp | `tools/replace.py`, `CODING_STANDARDS.md` R1 | **xong** |
 | 17 | CI đo được chính các phim trong repository: định dạng, độ lớn tiếng, thời lượng | `tools/check_movies.py`, `.github/workflows/films.yml` | **xong** |
+| 18 | Luật R1 của người giám sát đếm **file được ghi**, không phải file được nhắc tới; một dòng cho mỗi luật (N17) | `tools/supervise.sh`, `improvements/README.md` N17, `improvements/lessons.md` | **xong** |
+| 19 | Người chấm hình đọc **tờ sheet** trước, ảnh riêng chỉ khi tờ chưa đủ (N18) | `channels/tram-nghi-nhieu/tools/review.sh`, `step6-assembly/PROMPT_CRITIC.md` | **xong** |
 
 ### Mỗi phát hiện đã có dòng riêng trong `improvements/lessons.md`
 
