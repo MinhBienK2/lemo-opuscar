@@ -408,7 +408,8 @@ if a > 1: T.append(f"Câu {a-1} (chỉ để so, không chấm): beats/b_{a-1:03
 T.append("## Từng câu (ảnh riêng: mở khi tờ sheet chưa đủ)")
 for x in pick:
     s = f"#{x['n']}  beats/b_{x['n']:03d}.jpg" + (f"  strips/s_{x['n']:03d}.jpg" if mp4 else '')
-    T.append(s + f"  cờ: {' '.join(x.get('flags') or []) or '—'}  fill {int((x.get('fill') or 0) * 100)}%  lời: {x['text']}")
+    fill = f"{int(x['fill'] * 100)}%" if 'fill' in x else "— (đo chưa có)"
+    T.append(s + f"  cờ: {' '.join(x.get('flags') or []) or '—'}  fill {fill}  lời: {x['text']}")
 open(W + '/TASK.md', 'w').write('\n'.join(T) + '\n')
 open(W + '/flags.txt', 'w').write(' '.join(f"#{x['n']}:{'+'.join(x['flags'])}" for x in pick if x.get('flags')))
 EOF
