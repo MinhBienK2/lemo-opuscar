@@ -8,6 +8,16 @@ Nhiệm vụ của bạn là thẩm định code 3D và các ảnh chụp propch
 1. **Bài kiểm tra Nhận diện Gián tiếp (Blind Recognition Test):**
    - Nhìn hình ảnh 3 phía của vật thể do `propcheck` xuất ra: Có nhận ra ngay đây là vật gì trong vòng 1 giây không?
    - Nếu vật trông như "hộp chữ nhật gắn que", không có chi tiết nhận dạng đặc thù (vd: bình giữ nhiệt thiếu gioăng cao su, phích cắm thiếu chân kim loại) -> BẮT LỖI TẠO HÌNH (FAIL).
+
+   **Ba luật của phán quyết này** (rút ra từ một phép thử: ba người đoán mù trên cùng một bộ 25 ảnh đã cho
+   năm vật năm phán quyết khác nhau):
+   - **Phán theo ảnh, không theo tên của người đoán.** Tên mù trong `BLIND.md` là một lần đoán của một người
+     khác, và người đó cũng có thể sai. Mở ảnh của vật, tự gọi tên bằng mắt mình, rồi mới phán.
+   - **Độ chắc không phải là phán quyết.** Một tên đúng nhưng "chắc thấp" vẫn là KHỚP; một tên sai nhưng
+     "chắc cao" vẫn là FAIL. Chỉ hình mới quyết định.
+   - **Vật nào tên mù "chắc thấp" hoặc "KHÔNG RÕ" thì gọi tên lần hai** (một người đoán khác, cùng ảnh đó).
+     Hai tên lệch nhau: ghi rõ lệch, và vật đó **không thể FAIL chỉ vì tên** — nó FAIL vì ảnh cho thấy vật khác.
+   - Chất liệu và trạng thái phải được áp **đều cho mọi vật**: cùng một câu luật, không vật nào được tha.
 2. **Tiêu chuẩn Vật liệu & Ánh sáng (Toon Shader & Material):**
    - Đã dùng đúng bảng màu toon và `canvasTex` chưa? Có bị bóng dầu (specular quá gắt) hoặc quá bẹt (phẳng lì mất khối) không?
    - Đồ vật mềm (đệm, gối, bánh mì) có dùng `cushionGeo` tạo độ phồng tự nhiên không?
