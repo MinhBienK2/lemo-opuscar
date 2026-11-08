@@ -8,7 +8,7 @@ Read this **at review time**, not at implementation time: when you are asked to 
 
 ## The rules
 
-**R1 — Edit files with the file-editing tools (`edit`, `ast_edit`, `write`), never with a shell heredoc or a shell redirect.** A shell write can truncate a file before it fails, and it leaves no record of what was intended.
+**R1 — Edit files with the file-editing tools (`edit`, `ast_edit`, `write`), never with a shell heredoc or a shell redirect.** A shell write can truncate a file before it fails, and it leaves no record of what was intended. When the snippet is too long for an exact-match edit, use `python3 tools/replace.py <file> <old-snippet> <new-snippet>`: it counts the matches, refuses to write unless there is exactly one, and renames a whole new file over the target — so the target is never half-written.
 
 **R2 — A codemod is not applied until you have re-read the file it touched.** A patch script that aborts part-way leaves the file half-patched, and the edits it did not land are invisible; report which ones did not land instead of assuming.
 
