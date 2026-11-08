@@ -21,6 +21,7 @@ Nhiệm vụ của bạn là thẩm định nhịp điệu phim qua từng phân
 5. **Phụ đề & Thẻ chú thích (Readability):**
    - Chữ phụ đề có xuất hiện đúng lúc người nói phát âm không? Thẻ chữ `label` có trỏ đúng vào tâm chi tiết máy không?
 6. **Khung hình có kể được chuyện không (Framing):**
+   - Dưới mỗi khung trên tờ beat có ghi `fill N%` — N là phần khung mà vật lớn nhất chiếm. **Dưới 15% là số đỏ**: hãy soi kỹ xem người xem tắt tiếng có đoán ra đang xem gì không.
    - **BẮT LỖI NGAY** khi vật chính của câu này quá nhỏ để đọc ra: một vệt nhỏ giữa một mảng trống (bức tường trơn, mặt nước trống, nền trơn, mảng đất trống) là FAIL — khung hình đó không kể được chuyện gì, dù hình đẹp.
    - Cảnh bên trong vật (ruột sợi, giữa vải, trong pin) được phép có nền tối trơn; nhưng vật chính vẫn phải đủ lớn để người xem tắt tiếng đoán ra đang xảy ra chuyện gì.
    - Cận cảnh vào một mặt phẳng trơn mà không có vật nào đọc được trong đó là FAIL.
