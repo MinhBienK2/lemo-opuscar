@@ -458,6 +458,17 @@ HỎNG) nhưng không áp cho #11 ("túi **vải**" ≠ túi **nylon** → KHỚ
    tên cùng ảnh đó; hai tên lệch nhau thì ghi rõ lệch, và vật đó **không thể bị HỎNG chỉ vì tên**.
 4. Chất liệu và trạng thái phải được áp **đều** cho mọi vật: cùng một câu luật, mọi vật.
 
+**Guard đã có.** `channels/tram-nghi-nhieu/tools/review.sh` (chế độ `--props`):
+
+- **Người đoán thứ hai chạy thật, không phải lời hứa.** Sau lượt đoán mù đầu, `review.sh` đọc `BLIND.md`, lấy
+  những dòng có `CHẮC: thấp` hoặc `TÊN: KHÔNG RÕ`, và gọi một người đoán nữa **chỉ trên những ảnh đó**,
+  không cho xem lần đoán trước; kết quả nằm ở `BLIND2.md` và được đưa vào prompt của người chấm.
+- **Prompt người chấm viết lại theo ảnh:** *"mở ảnh của nó, TỰ GỌI TÊN bằng mắt mình, rồi mới phán"*;
+  điều khoản *"HỎNG khi … chắc thấp"* bỏ đi; *"độ chắc cao hoặc vừa"* bỏ khỏi điều kiện KHỚP; nhóm A không còn
+  phán theo tên mù nữa mà theo ảnh; nhóm B giữ nguyên (chỉ HỎNG khi ảnh **cho thấy một vật thật khác**).
+- Mẫu kết quả mang thêm tên của lần đoán thứ hai, để người đọc bản chấm thấy hai lần đoán lệch nhau ở đâu.
+- `step5-props-code/PROMPT_CRITIC.md` ghi ba luật trên, để người chấm đọc skill cũng thấy chúng.
+
 ---
 
 ## Đề xuất thứ tự xử lý
@@ -479,12 +490,12 @@ HỎNG) nhưng không áp cho #11 ("túi **vải**" ≠ túi **nylon** → KHỚ
 | 13 | Tờ beat in `fill N%`, và tiêu chí 6 của người chấm hình cân số đó (N15) | `channels/tram-nghi-nhieu/tools/beatsheet.mjs`, `step6-assembly/PROMPT_CRITIC.md` | **xong** |
 | 14 | Bài đọc hình vẽ ở `ss=1` theo luật của kênh, nên nó đọc trọn phim (N16) | `channels/tram-nghi-nhieu/scene_rules.json`, `core/render/review.sh` | **xong** |
 | 15 | Rig bỏ hộp `id: 'sub'` khỏi `TEXTS`; bài kiểm tra nói rõ trình duyệt chết hay code phim ném lỗi | `channels/tram-nghi-nhieu/rig/render.js`, `core/render/readcheck.mjs`, `scenecheck.mjs` | **xong** |
-| 16 | Rubric props: phán theo **ảnh**, độ chắc không phải phán quyết, vật mơ hồ có người đoán thứ hai, chất liệu và trạng thái áp đều (N20) | `channels/tram-nghi-nhieu/tools/review.sh`, `step5-props-code/PROMPT_CRITIC.md` | skill **xong**; `review.sh` **đang làm** (đang chạy, không sửa giữa lúc) |
-| 16 | `tools/replace.py`: sửa file bằng kịch bản mà vẫn đếm số lần khớp và ghi nguyên tệp | `tools/replace.py`, `CODING_STANDARDS.md` R1 | **xong** |
-| 17 | CI đo được chính các phim trong repository: định dạng, độ lớn tiếng, thời lượng | `tools/check_movies.py`, `.github/workflows/films.yml` | **xong** |
-| 18 | Luật R1 của người giám sát đếm **file được ghi**, không phải file được nhắc tới; một dòng cho mỗi luật (N17) | `tools/supervise.sh`, `improvements/README.md` N17, `improvements/lessons.md` | **xong** |
-| 19 | Người chấm hình đọc **tờ sheet** trước, ảnh riêng chỉ khi tờ chưa đủ (N18) | `channels/tram-nghi-nhieu/tools/review.sh`, `step6-assembly/PROMPT_CRITIC.md` | **xong** |
-| 20 | Thời lượng phim được **đo** rồi mới ghi vào manifest; cổng so manifest với `ffprobe` (N19) | `core/render/new_episode.sh`, `core/render/review.sh` | **xong** |
+| 16 | Rubric props: phán theo **ảnh**, độ chắc không phải phán quyết, vật mơ hồ có người đoán thứ hai, chất liệu và trạng thái áp đều (N20) | `channels/tram-nghi-nhieu/tools/review.sh`, `step5-props-code/PROMPT_CRITIC.md` | **xong** |
+| 17 | `tools/replace.py`: sửa file bằng kịch bản mà vẫn đếm số lần khớp và ghi nguyên tệp | `tools/replace.py`, `CODING_STANDARDS.md` R1 | **xong** |
+| 18 | CI đo được chính các phim trong repository: định dạng, độ lớn tiếng, thời lượng | `tools/check_movies.py`, `.github/workflows/films.yml` | **xong** |
+| 19 | Luật R1 của người giám sát đếm **file được ghi**, không phải file được nhắc tới; một dòng cho mỗi luật (N17) | `tools/supervise.sh`, `improvements/README.md` N17, `improvements/lessons.md` | **xong** |
+| 20 | Người chấm hình đọc **tờ sheet** trước, ảnh riêng chỉ khi tờ chưa đủ (N18) | `channels/tram-nghi-nhieu/tools/review.sh`, `step6-assembly/PROMPT_CRITIC.md` | **xong** |
+| 21 | Thời lượng phim được **đo** rồi mới ghi vào manifest; cổng so manifest với `ffprobe` (N19) | `core/render/new_episode.sh`, `core/render/review.sh` | **xong** |
 
 ### Mỗi phát hiện đã có dòng riêng trong `improvements/lessons.md`
 
