@@ -1,0 +1,3 @@
+1cd58c364e80377da51bbcd524d8916729018aa8617ed4b1254e236e89eabe33
+d8326aca19db7887a9092bbde31f20f5fa721d01902c16b10c79e9c1844c8455 review/SCRIPT-REVIEW-2.md
+critic: omp -p --model minimax

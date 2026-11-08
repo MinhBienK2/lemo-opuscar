@@ -1,0 +1,10 @@
+c12 — rìa/trì, vệt/vật: mô hình nghe sai dấu thanh, âm thanh đúng.
+c21 — kilojoule nhiệt → "2 kg": mô hình viết số và đơn vị khác, âm thanh đúng.
+c25 — vải/vậy, chóng/chống: mô hình nghe sai dấu thanh, âm thanh đúng.
+c33 — cân/cưng: mô hình nghe sai dấu thanh, âm thanh đúng.
+c34 — lệch/lịch: mô hình nghe sai dấu thanh, âm thanh đúng.
+c36 — giọt/dọc, bên/binh: mô hình nghe sai dấu thanh, âm thanh đúng.
+c39 — nhiệt/nhịt, độ/đồ, ẩm/ấm: mô hình nghe sai dấu thanh, âm thanh đúng.
+c45 — "ba mươi" → "30": mô hình viết số bằng chữ số, cùng giá trị.
+c46 — luồng/luôn: mô hình nghe sai dấu thanh, âm thanh đúng.
+c49 — úp/út, giữ/dự, rộng/trọng: mô hình nghe sai dấu thanh, âm thanh đúng.

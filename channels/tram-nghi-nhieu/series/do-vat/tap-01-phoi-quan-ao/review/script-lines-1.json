@@ -1,0 +1,267 @@
+[
+  {
+    "id": "c1",
+    "text": "Quần áo ướt treo trên dây, nước vẫn còn đó, chưa đi đâu cả.",
+    "gap": 2.4
+  },
+  {
+    "id": "c2",
+    "text": "Nó còn ở trên vải, và sẽ phải rời đi bằng một cách khác.",
+    "gap": 0.45
+  },
+  {
+    "id": "c3",
+    "text": "Để xem có đúng không, mình làm một thí nghiệm nhỏ.",
+    "gap": 0.26
+  },
+  {
+    "id": "c4",
+    "text": "Trong một căn phòng kín, hai cái áo giống nhau treo cạnh nhau.",
+    "gap": 0.26
+  },
+  {
+    "id": "c5",
+    "text": "Một cái ở trước quạt, một cái ở góc xa, chỗ không có gió.",
+    "gap": 0.26
+  },
+  {
+    "id": "c6",
+    "text": "Không khí trong phòng đứng yên, nên chỗ nào có quạt thì mới có gió.",
+    "gap": 0.26
+  },
+  {
+    "id": "c7",
+    "text": "Cái trước quạt đang nhạt màu dần, còn cái kia vẫn sẫm.",
+    "gap": 0.45
+  },
+  {
+    "id": "c8",
+    "text": "Nước không tự mất đi. Muốn rời khỏi vải, nó phải đổi thành thứ khác.",
+    "gap": 0.45
+  },
+  {
+    "id": "c9",
+    "text": "Đi sâu vào cái áo, mình thấy các sợi vải đan qua nhau.",
+    "gap": 0.26
+  },
+  {
+    "id": "c10",
+    "text": "Nước nằm ở khe giữa các sợi, và còn bám trong chính sợi.",
+    "gap": 0.26
+  },
+  {
+    "id": "c11",
+    "text": "Ở rìa sợi, nó thành vệt trong xơ.",
+    "gap": 0.45
+  },
+  {
+    "id": "c12",
+    "text": "Muốn rời khỏi vải, nước phải đổi thành hơi nước.",
+    "gap": 0.26
+  },
+  {
+    "id": "c13",
+    "text": "Mình sẽ đi xem điều đó xảy ra thế nào.",
+    "gap": 0.45
+  },
+  {
+    "id": "c14",
+    "text": "Ở mặt nước, các phân tử cứ nhảy lung tung.",
+    "gap": 0.26
+  },
+  {
+    "id": "c15",
+    "text": "Chỉ một phần nhỏ đủ năng lượng để bứt ra ngoài.",
+    "gap": 0.45
+  },
+  {
+    "id": "c16",
+    "text": "Phân tử bay lên mang theo năng lượng của nó. Phần nước còn lại thì mát đi.",
+    "gap": 0.45
+  },
+  {
+    "id": "c17",
+    "text": "Nước lấy nhiệt từ chính cái vải, nên vải ướt thành vải lạnh.",
+    "gap": 0.26
+  },
+  {
+    "id": "c18",
+    "text": "Chạm vào nó, mình thấy lạnh ngay.",
+    "gap": 0.26
+  },
+  {
+    "id": "c19",
+    "text": "Mỗi gram nước bay hơi lấy hơn hai kilojoule nhiệt từ chính cái vải.",
+    "gap": 0.45
+  },
+  {
+    "id": "c20",
+    "text": "Nhưng nước chỉ bay hơi đều hơn khi không khí ngay trên vải còn trống.",
+    "gap": 0.26
+  },
+  {
+    "id": "c21",
+    "text": "Chỗ trống đó, hơi nước mới đi được.",
+    "gap": 0.26
+  },
+  {
+    "id": "c22",
+    "text": "Lớp hơi ẩm ấy bám sát mặt áo, mỏng như một tấm kính mờ.",
+    "gap": 0.45
+  },
+  {
+    "id": "c23",
+    "text": "Lớp hơi ẩm bám sát vải nhanh chóng bị bão hoà. Từ đó, nước bay hơi chậm lại.",
+    "gap": 0.45
+  },
+  {
+    "id": "c24",
+    "text": "Gió thổi tới, lớp ẩm bị quét đi, và khí khô thay vào chỗ.",
+    "gap": 0.26
+  },
+  {
+    "id": "c25",
+    "text": "Gió làm đường đi của hơi nước ngắn lại.",
+    "gap": 0.45
+  },
+  {
+    "id": "c26",
+    "text": "Gió không sấy nước. Gió chở hơi nước đi.",
+    "gap": 0.45
+  },
+  {
+    "id": "c27",
+    "text": "Gió mạnh hơn thì hơi nước đi được xa hơn. Nên nước bốc hơi nhanh hơn.",
+    "gap": 0.45
+  },
+  {
+    "id": "c28",
+    "text": "Đo được: hai cái cân, một áo trước quạt, một ở góc xa. Hai cái kim lệch nhau.",
+    "gap": 0.45
+  },
+  {
+    "id": "c29",
+    "text": "Một thí nghiệm đơn giản trên bàn.",
+    "gap": 0.26
+  },
+  {
+    "id": "c30",
+    "text": "Không có gió thì tốc độ bay hơi rơi còn một nửa.",
+    "gap": 0.26
+  },
+  {
+    "id": "c31",
+    "text": "Hai giọt nước, một bên có gió, một bên không.",
+    "gap": 0.45
+  },
+  {
+    "id": "c32",
+    "text": "Còn lại, ba thứ quyết định tốc độ.",
+    "gap": 0.26
+  },
+  {
+    "id": "c33",
+    "text": "Nhiệt độ, độ ẩm, và diện tích phơi.",
+    "gap": 0.26
+  },
+  {
+    "id": "c34",
+    "text": "Ba cái áo phơi chồng lên nhau trên dây thứ hai.",
+    "gap": 0.45
+  },
+  {
+    "id": "c35",
+    "text": "Không khí ở nhiệt độ này chứa được tối đa khoảng hai mươi gam hơi nước.",
+    "gap": 0.26
+  },
+  {
+    "id": "c36",
+    "text": "Tính trên mỗi kilogam không khí khô. Đó là trần của nó.",
+    "gap": 0.45
+  },
+  {
+    "id": "c37",
+    "text": "Nóng hơn thì không khí chứa được nhiều hơn.",
+    "gap": 0.26
+  },
+  {
+    "id": "c38",
+    "text": "Ba mươi độ thì hơi nước lan xa hơn, đặc hơn.",
+    "gap": 0.45
+  },
+  {
+    "id": "c39",
+    "text": "Cùng một luồng gió, không khí ẩm chín mươi phần trăm làm nước bay hơi chậm hơn khoảng năm lần.",
+    "gap": 0.26
+  },
+  {
+    "id": "c40",
+    "text": "Lớp hơi quanh áo mờ đục, hạt hơi nước lơ lửng.",
+    "gap": 0.45
+  },
+  {
+    "id": "c41",
+    "text": "Phơi chồng lên nhau, phơi một mặt thì diện tích bốc hơi nhỏ.",
+    "gap": 0.26
+  },
+  {
+    "id": "c42",
+    "text": "Cái áo úp giữ ẩm lâu hơn cái áo phơi rộng.",
+    "gap": 0.45
+  },
+  {
+    "id": "c43",
+    "text": "Quần áo dày giữ nhiều nước và giữ lâu hơn áo mỏng.",
+    "gap": 0.26
+  },
+  {
+    "id": "c44",
+    "text": "Nước tụ ở mép khăn rồi rơi thành giọt.",
+    "gap": 0.45
+  },
+  {
+    "id": "c45",
+    "text": "Đó là lý do phơi trong nhà lâu khô hơn.",
+    "gap": 0.26
+  },
+  {
+    "id": "c46",
+    "text": "Không khí trong phòng không đi đâu cả, nó quay lại bám quanh cái áo.",
+    "gap": 0.45
+  },
+  {
+    "id": "c47",
+    "text": "Cùng cơ chế đó giải thích vì sao quạt thổi tay lại thấy mát.",
+    "gap": 0.26
+  },
+  {
+    "id": "c48",
+    "text": "Hơi nước bám trên da bị gió cuốn đi.",
+    "gap": 0.45
+  },
+  {
+    "id": "c49",
+    "text": "Vậy quần áo khô không phải vì gió sấy nó.",
+    "gap": 0.26
+  },
+  {
+    "id": "c50",
+    "text": "Quần áo khô vì nước phải đi được.",
+    "gap": 0.26
+  },
+  {
+    "id": "c51",
+    "text": "Gió chỉ làm cho nước có chỗ để đi.",
+    "gap": 0.45
+  },
+  {
+    "id": "c52",
+    "text": "Muốn áo khô nhanh, hãy treo ở nơi thoáng gió.",
+    "gap": 0.26
+  },
+  {
+    "id": "c53",
+    "text": "Phơi cả hai mặt, và không chồng quần áo lên nhau.",
+    "gap": 0.26
+  }
+]

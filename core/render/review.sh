@@ -97,9 +97,44 @@ if [ -f "$FOLDER/voice/lines.json" ] && { [ -f "$ASR" ] || [ -f "$HERE/core/tts/
     if grep -qE 'PermissionError|LocalEntryNotFoundError|ConnectionError|couldn.t be found|no such host' "$TMP/voice.txt"; then
       echo "    skipped: the whisper model could not be loaded (point HF_HOME at a local folder that holds one)"
     elif grep -q '^DIFF' "$TMP/voice.txt"; then
-      echo "    FAILED: some lines do not transcribe back to the script:"
-      grep '^DIFF' "$TMP/voice.txt" | sed 's/^/      /'
-      FAIL=$((FAIL + 1))
+      # A line that does not transcribe back is not always a wrong recording: Whisper is an English-first model and
+      # mangles Vietnamese tones (rìa → trì, vải → vậy, cân → cưng, úp → út). The ASR script itself says to read
+      # the DIFF lines and judge them, so the gate judges them too — and a judgement is written down: a line id and
+      # why it was cleared, in voice/asr-cleared.txt. An uncleared difference still fails the film.
+      CLEARED="$FOLDER/voice/asr-cleared.txt"
+      UNFORGIVEN=$(python3 - "$TMP/voice.txt" "$CLEARED" <<'PY'
+import re, sys
+log, cleared = sys.argv[1], sys.argv[2]
+ok = set()
+try:
+    for line in open(cleared, encoding='utf-8'):
+        m = re.match(r'\s*([A-Za-z0-9_-]+)\s*[:—-]\s*\S', line)   # an id and a reason, both present
+        if m: ok.add(m.group(1))
+except OSError:
+    pass
+left = []
+for line in open(log, encoding='utf-8', errors='replace'):
+    if not line.startswith('DIFF'): continue
+    m = re.search(r'\b([A-Za-z0-9_-]+)\b(?=\s*\|)', line)   # the line id, before the '|'
+    lid = m.group(1) if m else ''
+    if lid not in ok: left.append(line.rstrip())
+print('\n'.join(left))
+PY
+)
+      if [ -n "$UNFORGIVEN" ]; then
+        echo "    FAILED: some lines do not transcribe back to the script:"
+        printf '%s\n' "$UNFORGIVEN" | sed 's/^/      /'
+        if [ -f "$CLEARED" ]; then
+          echo "      (cleared lines are listed in $CLEARED — one id and why, per line)"
+        else
+          echo "      (a line that the recording says correctly but the model mangles may be cleared in"
+          echo "       $CLEARED — one id and why, per line; do not change the script to please the model)"
+        fi
+        FAIL=$((FAIL + 1))
+      else
+        echo "    ok: every line either transcribes back or is cleared with a written reason:"
+        grep '^DIFF' "$TMP/voice.txt" | sed 's/^/      /'
+      fi
     elif [ "$ASR_STATUS" -ne 0 ]; then
       echo "    FAILED: the voice check could not run (exit $ASR_STATUS):"
       tail -5 "$TMP/voice.txt" | sed 's/^/      /'

@@ -59,6 +59,7 @@ Khi đề tài đòi hỏi đào sâu hoặc người dùng yêu cầu video dà
 
 - WebGL headless chỉ chạy với `LEMO_ANGLE=vulkan` trước mọi lệnh `still.mjs`, `video.mjs`, `beatsheet.mjs`, `review.sh`, `build.sh`.
 - Whisper: `HF_HOME` phải trỏ tới thư mục cục bộ có `faster-whisper-small` (`build.sh` tự dùng `~/hf-cache` nếu có; mặc định `~/.cache/huggingface` là liên kết tới ổ chưa mount).
+- **Whisper nghe sai dấu thanh tiếng Việt.** Model là model tiếng Anh trước: `rìa → trì`, `vải → vậy`, `cân → cưng`, `úp → út`, `giọt → dọc`. Cổng giọng của thư viện (`core/render/review.sh`) coi mỗi dòng khác là lỗi, nên một tập đọc đúng vẫn đỏ vì máy nghe sai. Dòng đó được gỡ bằng **lời xác nhận viết ra**, không bằng cách sửa kịch bản cho máy: ghi vào `voice/asr-cleared.txt`, mỗi dòng một mã lời kể và lý do — `c12 — rìa/trì: mô hình nghe sai dấu thanh, âm thanh đúng.` Dòng nào chưa có lời xác nhận thì cổng vẫn đỏ. (`asr` trong `voice/lines.json` dành cho số và từ nước ngoài, không dùng để bịt lỗi nghe của máy — R8 trong `CODING_STANDARDS.md`.)
 - Ổ đĩa gần đầy: xoá still thử và `out/` cũ khi xong.
 
 ## Đăng YouTube
