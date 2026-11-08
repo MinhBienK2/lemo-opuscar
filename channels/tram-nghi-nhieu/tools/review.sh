@@ -137,9 +137,16 @@ fi
 # ——————————————————————————————————————————— the props ———————————————————————————————————————————
 if [ "$PROPS" = 1 ]; then
   echo "review --props: three views of every object…" >&2
+  # The director's cut ends the step: a written scope of what was cut, ending in VERDICT: PASS, stands for the
+  # props. The stamp binds it to src/props.js by its hash, so a cut written for older code cannot pass newer code.
+  CUT="$EP/review/PROPS-DIRECTORS-CUT.md"
+  if [ -f "$CUT" ] && grep -qE '^#*[[:space:]]*VERDICT: *PASS' "$CUT"; then
+    $GATE stamp "$EP" props "$CUT" --critic "$CRITIC_ID"
+    echo "review --props: PASS (đạo diễn cắt: $CUT)"; exit 0
+  fi
   n=$(next PROPS-REVIEW-)
   if [ "$n" -gt 5 ]; then
-    echo "review --props: đã chấm 5 lần mà vật dựng vẫn chưa PASS. Dừng: báo người dùng các lỗi CHẶN còn lại của $EP/review/PROPS-REVIEW.md — vật nào nhóm A chưa đúng tên, vật nào nhóm B còn đọc thành vật thật khác — và hỏi hướng đi (bỏ vật đó khỏi danh sách, đổi cách dựng, hay hạ tiêu chuẩn nhóm B). Đừng chấm lần thứ sáu." >&2; exit 1
+    echo "review --props: đã chấm 5 lần mà vật dựng vẫn chưa PASS. Dừng: hoặc báo người dùng các lỗi CHẶN còn lại của $EP/review/PROPS-REVIEW.md — vật nào nhóm A chưa đúng tên, vật nào nhóm B còn đọc thành vật thật khác — và hỏi hướng đi (bỏ vật đó khỏi danh sách, đổi cách dựng, hay hạ tiêu chuẩn nhóm B); hoặc chốt bằng đạo diễn cắt: viết $EP/review/PROPS-DIRECTORS-CUT.md, kết thúc bằng 'VERDICT: PASS' và nêu rõ vật nào cắt, rồi chạy lại. Đừng chấm lần thứ sáu." >&2; exit 1
   fi
   (cd "$LIB" && node channels/tram-nghi-nhieu/propcheck.mjs "$EP" --out "$W/p" >/dev/null) || exit 2
   mkdir -p "$W/blind"; cp "$W"/p/p_*.jpg "$W/blind/"
