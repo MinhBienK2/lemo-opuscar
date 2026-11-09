@@ -14,7 +14,7 @@ import * as THREE from 'three';
 import { toon, mesh, rbox, canvasTex, PAL, clamp, lerp, ss, mulberry, fxLayer, glowMat } from '../../../../rig/kit.js';
 import { keyLight, ambience, pool, beam } from '../../../../rig/lights.js';
 import { kitchen, desk } from '../../../../rig/sets.js';
-import { buildHand, glowDots, setDot, squiggle } from '../../../../rig/fx.js';
+import { buildHand, squiggle } from '../../../../rig/fx.js';
 import {
   iceCube, puddle, steelTray, saltTin, saltBag, iceBox, hammer, thermo, tumbler,
   stirRod, beaker, iceBath, bowlOfIce, zipBag, iceFace, molecules, ions, saltGrain,
@@ -472,8 +472,8 @@ export function buildNano(scene) {
   // `s` là **độ tản ra**, không phải cỡ hạt: để s=.5 thì đám phân tử nằm
   // trong bán kính 0,9 m và mỗi hạt chỉ 6 mm — ở cận cảnh chỉ thấy mấy chấm
   // trời. Đặt tụ lại quanh mặt đá và phóng to thì phân tử mới là chủ thể.
-  const mol = molecules({ n: 30, s: .12, seed: 41 });
-  mol.scale.setScalar(2.4);
+  const mol = molecules({ n: 26, s: .12, seed: 41, y0: .015, dy: .055 });
+  mol.scale.setScalar(1.5);
   // đám phân tử phải **nằm trên mặt đá**: trước đây nó lệch 8 cm sang góc,
   // nên nửa đám rơi ngoài mép mảng đá và chỉ còn mấy quả cầu trôi trên trời.
   mol.position.set(-.03, 0, -.03);
@@ -482,8 +482,8 @@ export function buildNano(scene) {
   // ion của muối nằm ngay tại mặt đá, **chen vào** băng: cành nối xuống
   // mặt đá và bán kính tải ra hẹp, để không có cầu nào lơ lửng giữa
   // trời như một đĩa trơn (vòng chấm hình ảnh 3 ở c15).
-  const ion = ions({ n: 16, seed: 71, band: [.010, .030], rmax: .125, stem: true });
-  ion.scale.setScalar(.85);
+  const ion = ions({ n: 12, seed: 71, band: [.010, .030], rmax: .125, stem: true });
+  ion.scale.setScalar(.42);
   scene.add(ion);
 
   // vệt muối tan trên mặt đá — nằm **trong** khung: trước đây nó ở rìa

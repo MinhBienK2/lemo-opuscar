@@ -324,7 +324,7 @@ function applyState(id, t, sc) {
     // nếu không có cầu ion nổi ngay trước ống kính và che mất hạt
     // (vòng chấm hình ảnh 2 ở c17). Ở c12 ion cũng phải nhỏ lại: chủ thể
     // của c12 là mảnh đá đang rã, không phải đám ion.
-    PP.ion.scale.setScalar(k === 17 ? .22 : k === 12 ? .30 : .45);
+    PP.ion.scale.setScalar(k === 17 ? .18 : k === 12 ? .22 : .32);
     // vùng trống trước ống kính: không có nó thì một cầu ion cách máy vài
     // centimet là một quả bóng khổng lồ ở giữa khung (vòng chấm hình ảnh 2).
     PP.ion.setClear(.17);
@@ -362,11 +362,11 @@ function applyState(id, t, sc) {
     // khỏi ống kính (một quả bóng trắng khổng lồ che mất cả mặt đá), ion
     // lùi ra và nhỏ lại, còn lưới tinh thể thì sáng dần lên (vòng chấm hình
     // ảnh 2 ở c16).
-    NP.mol.scale.setScalar(k === 16 ? 1.0 : 2.4);
+    NP.mol.scale.setScalar(k === 16 ? .70 : 1.5);
     NP.mol.update(t, camera);
     NP.mol.setClear(k === 16 ? .26 : .16);
     NP.ion.visible = k >= 15;              // ion clorua chỉ xuất hiện ở c15
-    NP.ion.scale.setScalar(k === 16 ? .40 : .85);
+    NP.ion.scale.setScalar(k === 16 ? .22 : .42);
     NP.ion.setClear(k === 16 ? .26 : .13);
     NP.ion.update(t, camera);
     NP.face.setLayer(layerThin(t), layerWet(t));

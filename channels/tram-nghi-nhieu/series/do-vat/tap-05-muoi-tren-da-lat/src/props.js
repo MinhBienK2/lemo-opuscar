@@ -779,7 +779,7 @@ export function molecules({ n = 34, s = .5, seed = 41, y0 = .12, dy = .3 } = {})
     // que, có viền mực và sắc độ toon như mọi vật khác. Một quả cầu trắng
     // trơn, không viền, cháy bloom đọc ra là "quầng sáng", không phải phân
     // tử (vòng chấm hình ảnh 3 ở c11, c13 và c14).
-    const d = molCluster({ r: .0075 });
+    const d = molCluster({ r: .005 });
     d.userData = {
       from: new THREE.Vector3((r() - .5) * s * 1.6, y0 + r() * dy, (r() - .5) * s * 1.6),
       to: new THREE.Vector3((r() - .5) * s * .8, .02, (r() - .5) * s * .8),
