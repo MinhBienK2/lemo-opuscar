@@ -82,6 +82,9 @@ tập sau, không mở lại bước nào. Đưa tóm tắt của nó cho ngư�
 - **Công cụ đứng yên suốt một tập.** `core/`, `rig/` và `channels/tram-nghi-nhieu/tools/` giữ nguyên khi đang làm
   tập: sửa chúng giữa chừng làm mọi phép đo trước đó thành cũ. Một công cụ sai thì đi vòng qua nó, và ghi lỗi cùng
   cách đi vòng vào báo cáo cuối cho người dùng.
+- **Hai tập cùng lúc.** Khi một tập khác đang chạy, `rig/` và `core/` của kênh là của cả hai: đừng sửa chúng, và
+  đừng kỳ vọng bản dựng của mình giữ nguyên giữa chừng. Chỗ trống dựng hình của máy là chung
+  (`RENDER_SLOTS`, mặc định 2): hai tập cùng dựng sẽ xếp hàng, đó là bình thường.
 - **Một chặng một phiên.** `python3 channels/tram-nghi-nhieu/tools/episode.py <tập> ["Câu hỏi?"]` làm cả tập, mỗi
   chặng (bước 1, 2, 3, 4–5, 6, 7) trong một phiên `claude -p` mới, và ghi chi phí từng phiên vào
   `out/sessions.jsonl`. Phiên được giao một chặng thì làm chặng đó tới khi cổng báo xong, rồi dừng.
