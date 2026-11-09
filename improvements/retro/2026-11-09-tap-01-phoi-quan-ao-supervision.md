@@ -3903,3 +3903,87 @@ là đúng việc.
 
 Một con số đáng nói: tập 01 đọc lại log **211 lần** mà không lần nào bị chặn — và transcript của nó dài
 981 MB. Một nửa cái phim đó là công cốc.
+
+## N122 — high — Nguyên nhân gốc của các vòng chấm "chết" là **máy**, không phải tập
+
+**Bằng chứng.** Lúc 16:30 ngày 09-11:
+
+```
+Mem:  15 GiB tổng · 9,4 dùng · free 0 · available 4,0 GiB
+Swap: 7,0 / 7,6 GiB đã dùng
+load average: 25,7 · 26,0 · 27,0   trên 12 nhân
+43 tiến trình chrome-headless (2 trình duyệt Playwright của beatsheet)
+```
+
+Một tờ nhịp điện của tập 01 (`beatsheet.mjs`) chạy **55 phút** chưa xong — trong khi một phiên khác đo
+được tờ sheet mất ~300 giây **một nhịp**, tức ~5 giờ cho 60 câu. Vòng chấm `--props` của tập 02 chết
+**đúng 3600 s**. Vòng `--final` của tập 01 chết **đúng 3600 s**. Ba vòng chấm khác nhau, hai tập khác
+nhau, cùng một con số: hết giờ.
+
+**Vì sao đáng ghi riêng.** Từ trước tới giờ, mọi vòng chấm chết đều được đọc là "lỗi của tập" và phiên
+đáp bằng cách **mở vòng mới** — đúng cách làm khiến máy càng kẹt hơn. Nguyên nhân thật nằm ngoài phim:
+năm phiên cùng dựng khung hình trên một máy 15 GiB. Sửa từng tập thì không bao giờ hết; phải sửa **cách
+nhiều việc nặng cùng chạy trên một máy**.
+
+**Đã làm.** Hook `PreToolUse` thứ tư: `tools/hook_load.py`. Nó chặn lệnh nặng (`review.sh`,
+`beatsheet.mjs`, `core/render/*.mjs`, `mux.sh`, `ffmpeg`) khi máy quá tải — ngưỡng: load 1 phút > 1,5×
+số nhân, hoặc `MemAvailable` < 1 GiB, hoặc swap đã dùng ≥ 80 % — và lời cảnh báo **kèm danh sách việc
+đang chạy**, để phiên bị chặn biết ai đang chiếm máy thay vì phải đi hỏi. Selftest 14 ca. Commit
+`bedaf31`.
+
+Chặn có hiệu lực **ngay** với các phiên đang chạy: phiên tập 05 báo lại lúc 16:33 là lệnh `--script` của
+nó bị chặn kèm danh sách "tap-01 beatsheet, tap-03 props, tap-03 storyboard".
+
+## N123 — high — Hai vòng chấm cho **cùng một tập** chạy cùng lúc: hai phán quyết trên hai mã nguồn
+
+**Bằng chứng.** Lúc 16:27:33 phiên tập 03 mở `--props`; lúc 16:27:44, mười một giây sau, cùng phiên đó
+mở `--storyboard`. Cả hai đều đang chạy song song (16:34), trên cùng một thư mục tập.
+
+**Vì sao là lỗi chứ không phải lựa chọn.** Thứ tự của cổng là props → storyboard → assets → picture →
+final: mỗi vòng sau đứng trên kết quả vòng trước. Chạy song song nghĩa là vòng `--storyboard` phán trên
+mã mà `--props` chưa ổn định — nên phán quyết của nó có thể đúng về một thứ không tồn tại. Thêm nữa,
+hai vòng cùng một tập là hai lần đọc/ghi cùng một thư mục `review/`.
+
+**Đã làm.** Cùng hook `hook_load.py`: nếu tập này đã có một vòng chấm chạy, lệnh mở vòng thứ hai cho
+**đúng tập đó** bị chặn kèm lời giải thích và nhắc đúng thứ tự của cổng. Các tập khác nhau thì vẫn chạy
+được cùng nhau (chỉ tranh CPU, và CPU thì máy đang kẹt thì cũng bị chặn ở N122).
+
+**Còn lại.** Chặn là *cơ chế*, không phải lời nhắc cho người đọc: luật "một tập, một vòng chấm" cũng nên
+có trong skill của kênh, để phiên không cần gặp chặn mới biết.
+
+## N124 — medium — Sửa một script **đang chạy** là cách làm vỡ vòng chấm
+
+**Bằng chứng.** Chính tôi đã sửa `channels/tram-nghi-nhieu/tools/review.sh` khi bốn vòng chấm đang chạy
+trên nó (thêm phần chia đồng hồ theo khối lượng việc, commit `6ac8047`). Bash đọc script **theo byte
+từng khối**, và nhớ vị trí đọc; sửa tệp giữa lúc chạy làm vị trí đó sai, nên phần còn lại của script
+được thực thi sai. Vòng chấm không chết vì lỗi phim — nó chết vì lỗi của kẻ giám sát.
+
+May mắn là các vòng đó đã nạp sẵn khối đang chạy nên chưa hỏng (tập 03 nhận `timeout 6480` — đúng
+công thức mới — nên chứng minh nó đã đọc mã mới). Nhưng đó là may mắn, không phải thiết kế.
+
+**Đã làm.** Một nguyên tắc mới trong luật của phiên giám sát: **không sửa một script mà đang có tiến
+trình chạy trên nó**; nếu cần sửa, sửa bằng công cụ ghi nguyên tử (`tools/replace.py`) và báo cho phiên
+đang chạy biết. Và mọi cơ chế mới nên nằm ở **tệp riêng**, không nằm trong script đang chạy — hook
+`hook_load.py` vì thế là một tệp mới, không phải một đoạn thêm trong `review.sh`.
+
+## N125 — medium — Khối hình lạ trong phim: nhìn thấy **bóng**, không phải vật thể
+
+**Bằng chứng.** Vòng `--final` của tập 01 REJECT lúc 16:31: ở nhát c27 (78,5–85,5 s) có một khối xanh
+navy đứng yên ở góc dưới–bên phải khung, có sừng nhọn và lỗ tam giác. Người chấm kết luận "không khớp
+với bất kỳ vật nào trong phòng kín", và đó là lý do nó không tìm ra thủ phạm.
+
+Tôi cắt lại từ chính mp4 ở cỡ thật và đọc lại: khối đó **có mặt trong cả tờ sheet** `b_027.jpg` — nghĩa
+là nó đã nằm trong tấm hình mà năm vòng chấm trước nhìn qua. Ba dấu hiệu nói đây là **bóng đổ**: không có
+viền mực (viền mực là hiệu ứng sau-render, bóng không có cạnh), không được chiếu sáng, đứng yên; và nó
+nằm trên cả sàn lẫn tường như một hình chiếu bị kéo dài. Gai nhọn và lỗ tam giác là hình chiếu của **một
+mạng hình hỏng** đứng trong phòng kín mà không ai nhìn thấy.
+
+**Vì sao đáng ghi.** Người chấm đã làm đúng mọi thứ có thể làm (đo toàn bộ 4234 khung, cắt từ mp4, đối
+chiếu tọa độ từng vật trong `set.js`) và vẫn đi sai, vì câu hỏi nó đặt ra là "vật thể lạ này là gì" thay
+vì "tại sao có thứ không có viền mực". Câu hỏi đúng đưa ra lời giải trong một bước.
+
+**Đã làm.** Luật mới trong `step6-assembly/PROMPT_CRITIC.md`: khối hình lạ **không có viền mực** thì
+nghĩ tới bóng đổ, nghĩa là thứ đang đứng ngoài khung — hãy dựng riêng từng vật trong phòng và tìm vật
+nào có hình dáng khớp với bóng đó, thay vì tìm "vật thể lạ" trong khung. Đồng thời thêm vào
+`step6-assembly/GUIDE.md`: **không để bóng cứng của vật ngoài khung rơi vào giữa khung** — nó đọc như
+một lỗ hình, và người xem tưởng phim hỏng.

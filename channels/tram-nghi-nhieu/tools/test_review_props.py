@@ -138,7 +138,11 @@ def selftest():
         chunks = [c.strip() for c in prompts.split("===PROMPT===") if c.strip()]
         check("người chấm nhận đủ ba prompt", len(chunks) == 3, str(len(chunks)))
         for i, c in enumerate(chunks):
-            check("prompt %d không bị cắt ở giữa" % (i + 1), c.endswith("in lại nó."), c[-120:])
+            # "Không bị cắt" nghĩa là prompt đi hết bộ tiêu chí, không phải là kết thúc bằng một câu
+            # cụ thể: `critic()` nối thêm khối "Bối cảnh vòng chấm" vào sau prompt, nên câu cuối cùng
+            # của prompt đã đổi. Cái cần giữ là tiêu chí vẫn trọn và khối bối cảnh vẫn có.
+            check("prompt %d không bị cắt ở giữa" % (i + 1),
+                  "in lại nó." in c and "Bối cảnh vòng chấm:" in c, c[-160:])
         check("người chấm nhận đủ tiêu chí KHỚP/HỎNG", "KHỚP" in prompts and "HỎNG" in prompts, "")
         check("người chấm nhận đủ hai nhóm A và B",
               "A. VẬT ĐỨNG RIÊNG" in prompts and "B. VẬT LÀ PHẦN HOẶC CƠ CHẾ" in prompts, "")

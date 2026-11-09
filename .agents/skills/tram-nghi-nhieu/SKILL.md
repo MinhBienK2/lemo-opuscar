@@ -1,7 +1,7 @@
 ---
 name: tram-nghi-nhieu
 description: Đạo diễn và dựng một tập của kênh Trạm Nghĩ Nhiều — câu hỏi "tại sao" đời thường, trả lời bằng diorama 3D toon (three.js) có ánh sáng thật, viền mực vẽ tay, máy quay đi vào bên trong vật, mọi vật dựng đúng là nó, chỉ thứ vô hình mới thành hình minh hoạ; một giọng kể tiếng Việt. Dùng khi làm bất kỳ tập nào của kênh.
-version: 14.9.0
+version: 15.0.0
 ---
 
 # Một tập Trạm Nghĩ Nhiều: Quy trình Đạo diễn & Phản biện Độc lập Phân tầng
@@ -81,6 +81,10 @@ Quy trình này thay cho bước 1–6 của `AGENTS.md` / `DIRECTOR.md` khi là
      ghi vào `review/`.
    - Một tập, một vòng chấm cho mỗi phần. `review.sh` giữ chốt: nếu nó nói còn một vòng đang chạy trên tập
      này, hãy chờ — mở vòng thứ hai là hai bản chấm đè lên nhau, hai vòng bị tính, và ngân sách bị tiêu hai lần.
+     Thứ tự là props → storyboard → assets → picture → final: vòng sau phán trên kết quả vòng trước.
+   - **Máy quá tải thì việc nặng sẽ bị chặn**, kèm danh sách việc đang chạy. Khi đó chờ rồi chạy lại. Máy
+     hết swap thì một tờ nhịp điện mất hàng chung phút và vòng chấm chết **đúng giờ** — đó là lỗi của máy,
+     không phải của tập, và mở thêm vòng chỉ khiến nó chết nhanh hơn.
 
 8. **Hết lượt thì chốt bằng bản cắt của đạo diễn, đúng hình dạng.**
    - Một bước có ngân sách vòng (xem `channels/tram-nghi-nhieu/tools/README.md`) sẽ nói bằng chữ khi hết

@@ -13,6 +13,7 @@ Lắp ráp các linh kiện (từ `src/props.js`) vào bối cảnh hoàn chỉn
   - Dùng `particleStream()` tạo dòng hạt bay biểu diễn gió, hơi nước, nhiệt, điện cực nhẹ GPU.
 - **Cấm camera rỗng (No aimless camera pan):** Tuyệt đối không chống chế cờ `SAME` bằng cách chỉ nhích nhẹ camera trên một bối cảnh chết. Camera chỉ chuyển động khi bám theo hành động của đồ vật hoặc cơ chế vật lý.
 - **Cơ chế nhân quả:** Khi có lực tác động $\rightarrow$ vật thể phải biến đổi thấy được trong 1-2 giây.
+- **Bóng đổ không được đọc như một lỗ hình:** bóng cứng của một vật đứng ngoài khung mà rơi vào giữa khung sẽ thành một khối sẫm không có viền mực — người xem tưởng phim hỏng (tập 01, c27). Khi dựng xong một nhát, nhìn lại: khối sẫm nào trong khung không khớp với vật nào thì đó là bóng của một vật (hoặc của một mạng hình hỏng) ngoài khung — sửa vật đó, hoặc dời ánh sáng để bóng đổ không rơi vào giữa khung.
 - **Mốc nhịp (`markBeats`):** mỗi câu lời kể gắn một mốc vào `window.EV` — một lệnh cho cả tập:
   `markBeats(ev, V, (id, t) => [x, y])`, trong đó `(id, t)` **đặt máy ở đúng góc của câu đó** rồi trả về
   điểm của nhịp **trên khung 1920×1080** (`toScreen(point, camera)` cho một điểm trong không gian: điểm
@@ -37,6 +38,8 @@ Lắp ráp các linh kiện (từ `src/props.js`) vào bối cảnh hoàn chỉn
    người chấm chỉ mở được khoảng 25/60 khung, nên lỗi máy thấy sẵn thì đừng để người chấm là
    người phát hiện ra.
 4. **Vòng lặp Thẩm định Diễn hoạt & Khung cảnh (Max 5 rounds):**
+   - **Một tập, một vòng chấm.** Thứ tự của cổng là props → storyboard → assets → picture → final: mỗi vòng sau phán trên kết quả vòng trước. Chạy hai vòng của cùng một tập cùng lúc là hai phán quyết trên hai mã nguồn khác nhau, và chúng tranh nhau máy. Đọc phán quyết **đúng một lần**, sửa theo nó, rồi mới mở vòng kế tiếp.
+   - **Đợi khi máy đang quá tải.** Máy của kênh dùng chung với các phiên khác: nhiều tờ nhịp điện và nhiều người chấm cùng lúc làm máy hết swap, một tờ sheet mất hàng chung phút, và vòng chấm chết đúng giờ — mà lỗi nằm ở máy, không ở tập. Lệnh nặng (mở vòng chấm, dựng tờ sheet) sẽ bị chặn kèm danh sách việc đang chạy; lúc đó chờ rồi chạy lại, đừng mở thêm vòng.
    - Nạp `step6-assembly/PROMPT_CRITIC.md` triệu hồi Subagent Scene Critic.
    - Quét và triệt tiêu 4 cờ lỗi hệ thống:
      - `DARK`: Vùng diễn hoạt bị thiếu sáng $\rightarrow$ Thêm đèn điểm hoặc `pool`.
