@@ -32,6 +32,20 @@ for f in tools/*.py channels/*/tools/*.py; do
     missing="$missing $f"
   fi
 done
+
+# the checks written in JavaScript run the same way
+for f in core/render/*.mjs; do
+  [ -f "$f" ] || continue
+  grep -q -- '--selftest' "$f" || continue
+  if node "$f" --selftest >/tmp/selftest.$$ 2>&1; then
+    echo "ok   $f"
+  else
+    echo "FAIL $f"
+    sed 's/^/       /' /tmp/selftest.$$
+    status=1
+  fi
+  ran=$((ran + 1))
+done
 rm -f /tmp/selftest.$$
 
 if [ -n "$missing" ]; then

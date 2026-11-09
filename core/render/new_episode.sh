@@ -185,6 +185,11 @@ shows them. Nothing goes on screen that is not written down here.
 must not appear in the film. (Mọi con số trên màn hình đều có nguồn ở đây; một giá trị mà file
 này cấm thì **không được nói** trong phim.)
 
+**Every angle-bracket below is a slot to fill, and the whole line is deleted when you have filled
+it.** Nothing in angle brackets survives into the finished file: the outline gate stops while one is
+left. (Mọi dòng có dấu `<…>` là chỗ cần điền; điền xong thì **xoá hẳn dòng đó**. Cổng dàn ý dừng
+ngay khi còn một dòng như vậy.)
+
 ## 1. <claim, in the words the film will use>
 
 > <the sentence of the source, quoted>

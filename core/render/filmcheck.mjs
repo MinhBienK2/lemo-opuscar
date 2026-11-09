@@ -27,6 +27,51 @@ import path from 'path';
 import { REPO_ROOT, listFilms } from './films.mjs';
 
 const args = process.argv.slice(2);
+
+// The unexpanded placeholders of the scaffolds. A slot is a placeholder outside backticks; a mention inside
+// `…` is a mention — the treatment's own first line names the placeholder it asks for, and a finished
+// treatment was once turned away for that mention.
+const TEMPLATE_PLACEHOLDERS = [
+  '<structure>', '<logline>', '<beat>', '<image>', '<line id>',
+  '<the sentence of the source, quoted>', '<doi or link>',
+  '<claim, in the words the film will use>', '<Title of the paper>',
+  '<Author>', '<viết:'
+];
+
+// The placeholder a text still carries, or null when it carries none. Written as a function of the text so
+// that it can be proved on its own cases: node core/render/filmcheck.mjs --selftest
+function placeholderIn(text) {
+  const unfilled = text.replace(/`[^`]*`/g, '');
+  for (const ph of TEMPLATE_PLACEHOLDERS) if (unfilled.includes(ph)) return ph;
+  return null;
+}
+
+// The check proves itself: a written file that merely names a placeholder is not a scaffold, and a scaffold is.
+function selftest() {
+  const cases = [
+    ['a written research file that mentions the placeholder inside backticks is not a scaffold',
+     '# Facts\n\n- Author: `<Author>`, doi `<doi or link>`\n', null],
+    ['a research file that still carries the scaffold is caught',
+     '# Facts\n\n## 1. <claim, in the words the film will use>\n', '<claim, in the words the film will use>'],
+    ['a treatment that names the placeholder in backticks is not a scaffold',
+     '> Dàn ý của tập. Thay mọi chỗ `<viết: …>`.\n\n## Câu hỏi\n- Vì sao điện thoại nóng lúc sạc?\n', null],
+    ['a treatment with a slot left empty is caught',
+     '## Câu hỏi\n- Câu hỏi: <viết: câu hỏi>\n', '<viết:'],
+    ['a written file is not a scaffold', '# Facts\n\n## 1. Nhiệt của pin khi sạc nhanh\n\n- 45 °C\n', null],
+  ];
+  let bad = 0;
+  for (const [name, text, want] of cases) {
+    const got = placeholderIn(text);
+    const good = got === want;
+    if (!good) bad++;
+    console.log(`${good ? 'ok  ' : 'FAIL'} ${name}`);
+    if (!good) console.log(`       got ${JSON.stringify(got)}, want ${JSON.stringify(want)}`);
+  }
+  console.log(bad ? `FAIL: ${bad} case(s)` : 'ok');
+  process.exit(bad ? 1 : 0);
+}
+
+if (args[0] === '--selftest') selftest();
 if (!args.length) { console.error('usage: node core/render/filmcheck.mjs <film-folder> [<film-folder> ...]'); process.exit(2); }
 
 const IDENTITY_FILES = ['TREATMENT.md', 'CREDITS', 'index.html', 'research/FACTS.md', 'src/film.js', 'src/timeline.js'];
@@ -89,25 +134,16 @@ for (const arg of args) {
   // 2. the identity files are this episode's own
   let copied = 0;
   const labels = [];
-  const TEMPLATE_PLACEHOLDERS = [
-    '<structure>', '<logline>', '<beat>', '<image>', '<line id>',
-    '<the sentence of the source, quoted>', '<doi or link>',
-    '<claim, in the words the film will use>', '<Title of the paper>',
-    '<Author>', '<viết:'
-  ];
   for (const rel of IDENTITY_FILES) {
     const mine = read(path.join(folder, rel));
     if (mine === null) continue;
     // 2a. template placeholder check: an unexpanded scaffold is not a written file.
     // A mention inside `…` is a mention, not a slot: the treatment's own first line names the placeholder it
     // asks for, and a finished treatment was once turned away for that mention.
-    const unfilled = mine.replace(/`[^`]*`/g, '');
-    for (const ph of TEMPLATE_PLACEHOLDERS) {
-      if (unfilled.includes(ph)) {
-        fail(name, `${rel} still contains unexpanded template placeholder "${ph}" — write the file before delivery`);
-        copied++;
-        break;
-      }
+    const ph = placeholderIn(mine);
+    if (ph) {
+      fail(name, `${rel} still contains unexpanded template placeholder "${ph}" — write the file before delivery`);
+      copied++;
     }
     // the episode number the file's heading claims ("Tập 02", "tập 2")
     const head = mine.split('\n').slice(0, 5).join('\n');
