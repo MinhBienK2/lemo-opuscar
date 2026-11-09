@@ -178,9 +178,11 @@ for b in B:
     # bằng 0. Tờ sheet đo độ trống của khung bằng 'cover'.
     b['cover'] = round(sum(vals), 4)
     if says_number(b['text']) and not any(re.search(r'\\d|' + NUMW, x.lower()) for x in b.get('shown', [])): b['flags'].append('NUM')
-    # PTR: a label's arrow ends on nothing (or on a room). The machine can see that the arrow hits no object;
+    # PTR: a label's arrow ends on nothing. The machine can see that the arrow hits no object;
     # whether it should have hit this object is the maker's eye (N78).
-    if any(L.get('hit') is None or L.get('big') for L in (b.get('labels') or [])): b['flags'].append('PTR')
+    # Only "hits nothing" is a flag: a label may rightly point at a *group* (e.g. "2 ÁO"), and a
+    # group is big — flagging that taught the maker to ignore the flag, so it was taken out.
+    if any(L.get('hit') is None for L in (b.get('labels') or [])): b['flags'].append('PTR')
     # does the picture act inside this line? (needs --motion) the camera shift is taken out first, so a frame that
     # only drifts does not count as motion. It is a note, not a machine flag: the maker judges the line by eye.
     if b.get('mf'):

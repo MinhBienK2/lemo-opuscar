@@ -2395,9 +2395,15 @@ trỏ vào vật nào". Vì vậy:
 (tính cả góc nghiêng và độ lớn), và sau khi lớp phủ 2D vẽ xong thì rig raycast từ đúng điểm đó để biết
 nó chạm vật nào, hay không chạm vật nào. `beatsheet.mjs` bật probe này cùng `SHOTPROBE` và ghi kết quả
 vào tờ sheet (`labels` mỗi câu); `check_shots.py` đọc nó và báo cờ mới **`PTR`** — *nhãn trỏ vào không* (mũi
-tên không chạm vật nào) hoặc *nhãn trỏ vào một vật lớn hơn cả vật trong cảnh* (tường, bàn, phòng). Đây là
-**cờ gợi ý**, không phải phán quyết: máy đo được mũi tên có chạm vật không, còn việc nó *phải* chạm vật
-nào thì cần mắt người — cùng đẳng cấp với `SAME`/`RUN`.
+tên không chạm vật nào). Đây là **cờ gợi ý**, không phải phán quyết: máy đo được mũi tên có chạm vật
+không, còn việc nó *phải* chạm vật nào thì cần mắt người — cùng đẳng cấp với `SAME`/`RUN`.
+
+**Cột "mũi tên chạm một vật lớn hơn cả vật trong cảnh" thì không báo nữa — và đó là một sửa lần hai.**
+Ban đầu cờ `PTR` báo cả trường hợp mũi tên chạm một vật *lớn hơn 1,2 m* (tường, bàn, phòng). Thử trên
+tập 01 thấy ngay nó **báo sai**: nhãn `2 ÁO` ở câu c4 trỏ vào **cả hai cái áo cùng treo**, mà hai cái áo đó
+là một *nhóm* rộng hơn 1,2 m, nên máy bảo "trỏ nhầm" — trong khi nhãn đó trỏ đúng thứ nó gọi tên.
+Một cờ báo sai dạng này dạy người làm phim bỏ qua cờ, nên nay chỉ còn một loại: **mũi tên không chạm gì
+cả**. Thử lại trên tám câu đầu của tập 01: cờ rơi vào c4, c5, c7 — ba nhãn mũi tên không chạm vật nào.
 
 Còn một phần chưa làm được: **tên vật**. Rig trả về `uuid` (`dcd71e8e`) vì các vật trong cảnh không có
 `tên` — nên máy biết nhãn này trỏ vào *một vật*, nhưng chưa biết nó có phải vật *đúng* không. Muốn vậy thì
@@ -3021,9 +3027,10 @@ cho đúng trường hợp này. (Dòng `.strip('`')` là của chính phiên t�
 - **[x]** N93: `check_shots.py --note` (cổng bàn giao chỉ chặn lỗi cấu trúc) và `core/render/review.sh`
   gọi bài này với `--note`; vòng chấm hình của kênh không đổi.
 - **[x]** N78 (phần lớn): `window.LABELPROBE` trong rig raycast từ mũi tên của mỗi nhãn; `beatsheet.mjs`
-  ghi kết quả vào tờ sheet; `check_shots.py` báo cờ `PTR` (nhãn trỏ vào không / trỏ vào vật lớn hơn cả vật
-  trong cảnh). Còn thiếu: **tên vật** — rig trả `uuid` vì các vật chưa được đặt tên, nên máy biết nhãn trỏ
-  vào *một vật* chứ chưa biết là vật *đúng*.
+  ghi kết quả vào tờ sheet; `check_shots.py` báo cờ `PTR` (nhãn trỏ vào không — chỉ khi mũi tên không chạm
+  vật nào; trường hợp "chạm một vật lớn" đã bỏ vì báo sai với nhãn trỏ vào một *nhóm* vật). Còn thiếu:
+  **tên vật** — rig trả `uuid` vì các vật chưa được đặt tên, nên máy biết nhãn trỏ vào *một vật* chứ chưa
+  biết là vật *đúng*.
 
 **Đã xong trong đợt này:** N77 (`check_shots.py` phân biệt *chưa đo* với *đo được 0 %*; `review.sh` không
 dùng lại tờ sheet nửa vời cho vòng chấm cả phim) — commit `c8856c6`.

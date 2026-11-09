@@ -183,9 +183,6 @@ def problems(beat):
         if L.get('hit') is None:
             out.append(('PTR', 'nhãn "%s" trỏ vào không — mũi tên không chạm vật nào; người xem đọc một ngón tay '
                                'chỉ vào chỗ trống' % str(L.get('text') or L.get('id') or '?')[:40]))
-        elif L.get('big'):
-            out.append(('PTR', 'nhãn "%s" trỏ vào một vật lớn hơn cả vật trong cảnh (tường, bàn, phòng) — mũi tên '
-                               'trỏ nhầm' % str(L.get('text') or L.get('id') or '?')[:40]))
     cover, _ = coverage(beat)
     if cover == 0:
         # Máy không thấy vật nào đủ lớn trong khung: cảnh cận trong một vật lớn, cảnh toàn cảnh, hay
