@@ -37,7 +37,8 @@ Hoàn thiện toàn bộ hệ thống âm thanh (tiếng động foley, nhạc n
    `sh channels/tram-nghi-nhieu/tools/review.sh <tập> --video`
 5b. **Tự soi phim đã dựng như một người xem.** Cắt một khung giữa mỗi câu lời kể **từ chính file mp4**
    rồi dán lại thành tờ:
-   `python3 tools/frames_at.py <tập>/out/<tên_tập>.mp4 <tập>/review/beatsheet/beats.json <scratch>/film.jpg --cols 3`
+   `python3 tools/frames_at.py <tập>/out/<tên_tập>.mp4 <tập>/out/beats/beats.json <scratch>/film.jpg --cols 3`
+   (`beats.json` là của tờ sheet đã dựng — nếu tập dựng tờ ở chỗ khác thì lấy đúng tệp đó.)
    Đọc tờ để xem phim nói gì, rồi **mở khung gốc** cho câu nào tờ đã chỉ ra là có vấn đề:
    `python3 tools/frames_at.py <mp4> <beats.json> <scratch>/one.jpg --lines c17 --cols 1 --w 1200`.
    Tờ là **bản đồ, không phải bằng chứng**: ô nhỏ mất tương phản và kích thước, nên một câu có thể trông
