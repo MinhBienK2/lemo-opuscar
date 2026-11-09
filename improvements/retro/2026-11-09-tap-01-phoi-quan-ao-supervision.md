@@ -2444,6 +2444,21 @@ dựng phim đi sửa hai câu không có lỗi, và trong lúc phim đang dựn
 mới là bằng chứng** (N87) — và **người giám sát cũng phải mở khung gốc trước khi nói câu nào hỏng**,
 đúng như người làm phim.
 
+**Đo trên file cuối (sau `mux.sh`, 12:21).**
+
+| Đo | Kết quả |
+|---|---|
+| Tệp | 373,7 MB · 1920×1080 · 24 fps · 176,4 s |
+| Độ lớn tiếng | **−14,0 LUFS** (đích −14) · độ rộng 2,6 LU · đỉnh thật −2,5 dBFS — **đúng đích** |
+| Vùng đen | không có vùng nào ≥ 0,5 s |
+| Khoảng lặng | không có khoảng nào ≥ 1,0 s |
+| Phụ đề | 79 câu, mỗi câu 0,94–3,89 s — **một câu giữ 0,94 s** (câu 55), hơi nhanh để đọc |
+| Chuyển động (`tools/check_motion.py`) | **PASS** — 77 % giây có chuyển động, 46 % cửa sổ 2 s có hành động lớn, đoạn đứng yên dài nhất 6 s, camera trượt 12 % khung, 55/60 mốc nhịp thay đổi phần của mình |
+| Hình so với bản dựng | PSNR trung bình **40,7 dB** (thấp nhất 39,4) — những gì đọc trên bản dựng vẫn đúng trên phim |
+
+Phim đạt: có tiếng, đúng độ lớn, không có chỗ chết, hình chuyển động, và phần đã soi ở trên là của
+chính phim này.
+
 **Và một cái bẫy khi đo.** Tôi chạy `tools/film_report.py` trên `out/video.mp4` — đó là bản **dựng
 hình, chưa ghép tiếng** — và báo cáo in ra "không có khoảng lặng từ 1,0 s trở lên" cho một tệp không
 có tiếng nào, và "độ lớn tiếng — không đo được". Cả hai câu đúng theo nghĩa đen, sai theo nghĩa đúng:
