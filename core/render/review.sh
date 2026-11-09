@@ -6,7 +6,8 @@
 #   3b. board   — the storyboard (board.json) against the script, the sounds and the code (tools/check_board.py)
 #       treatment — TREATMENT.md and LOOK.md of a channel that asks for a board (tools/check_treatment.py)
 #   4. facts     — the research file against itself: no duplicated bullet, no wrong cross-reference (tools/check_facts.py)
-#   5. readcheck — every text stays on screen long enough to be read (node core/render/readcheck.mjs)
+#   5. readcheck — every text stays on screen long enough to be read, and, when the channel asks for it, no two
+#      texts lie on top of each other (node core/render/readcheck.mjs --overlap)
 #      scenecheck — films and episodes only: the picture stages the story instead of reading it (node core/render/scenecheck.mjs)
 #   6. stills    — review frames every 2 s, from 0 to the film's length (core/render/still.mjs)
 #   7. sheet     — the frames on one contact sheet (core/render/sheet.py)
@@ -100,7 +101,7 @@ case "$FOLDER" in */films/*|films/*|*/channels/*|channels/*) BAND="--band 880";;
 # default is looser), and the delivery review passes them to the check — so the rule a channel writes down is
 # the rule the gate keeps. It also says how the reading check must draw: a channel that draws at 2× on a small
 # GPU loses the browser halfway through the film, and the check that never finished says nothing about the film.
-NUMOPT=""; QOPT=""; MOTION=0
+NUMOPT=""; QOPT=""; MOTION=0; OOPT=""
 # The walk starts inside the folder, so the path it compares is absolute: a relative folder turns into "." and
 # dirname(".") is "." forever, and the gate then spins without printing a line until it is killed.
 _d=$(cd "$FOLDER" 2>/dev/null && while [ ! -f CHANNEL.md ] && [ "$PWD" != / ]; do cd ..; done && pwd)
@@ -114,11 +115,15 @@ if [ -f "$_d/CHANNEL.md" ] && [ -f "$_d/scene_rules.json" ]; then
   # diorama keeps saying out loud ("the props stand still", "the camera drifts").
   M=$(python3 -c "import json,sys;print(1 if json.load(open(sys.argv[1])).get('checkMotion') else 0)" "$_d/scene_rules.json" 2>/dev/null || echo 0)
   [ "$M" = "1" ] && MOTION=1
+  # a channel can ask the gate to measure two pieces of text lying on top of each other: the rule lives in
+  # core/render/overlap.mjs, so the gate and the picture round measure the same thing and cannot contradict
+  O=$(python3 -c "import json,sys;print(1 if json.load(open(sys.argv[1])).get('checkOverlap') else 0)" "$_d/scene_rules.json" 2>/dev/null || echo 0)
+  [ "$O" = "1" ] && OOPT="--overlap"
 fi
 if [ -n "$QOPT" ]; then
-  run readcheck node "$HERE/core/render/readcheck.mjs" "$FOLDER" $BAND --q "$QOPT"
+  run readcheck node "$HERE/core/render/readcheck.mjs" "$FOLDER" $BAND --q "$QOPT" $OOPT
 else
-  run readcheck node "$HERE/core/render/readcheck.mjs" "$FOLDER" $BAND
+  run readcheck node "$HERE/core/render/readcheck.mjs" "$FOLDER" $BAND $OOPT
 fi
 # a narrated film must stage its story, not read it: text-led frames, different looks, spoken numbers, foley on words
 if [ -n "$BAND" ]; then run scenecheck node "$HERE/core/render/scenecheck.mjs" "$FOLDER" --band 880 $NUMOPT; fi

@@ -3041,12 +3041,21 @@ họ lỗi, và cả hai đều **không có bài kiểm tra nào bắt được
 | Mặt vật **cháy trắng**, mất hết chi tiết | tập 02 c14 (vỏ củ sạc, chữ `60 W` đọc không được), tập 03 #9 (mặt đồng hồ áp suất trắng xóa, mất vạch chia) | Chưa — cần đo độ phẳng của vùng trắng trong khung; chưa có ngưỡng nào đáng tin |
 | Chủ thể **quá nhỏ** trong khung / tường trống chiếm 40 % | tập 02 c1, c20 | Một phần — `FILL`/`cover` đo được phần khung mà vật chiếm, nhưng không đo được *chủ thể có đủ lớn không* (xem N93) |
 
-**Guard đã có (13:2x).** Cờ mới **`OVERLAP`**: hai hộp chữ trên màn hình chồng lên nhau quá một phần
-tư diện tích hộp nhỏ hơn thì người xem không đọc được chữ nào. `beatsheet.mjs` gom hộp của từng
-chữ (nó **đã** gọi `window.TEXTS` sẵn cho cờ `NUM`, nên không tốn thêm khung hình nào), và
-`check_shots.py` báo cờ. Đây là lỗi **đo được** — hai hình chữ nhau là hai chữ không ai đọc được —
-nên nó chặn ở cả vòng chấm hình lẫn cổng bàn giao (xem N93: chặn bằng phép so sánh thì không,
-chặn bằng phép đo thì có).
+**Guard đã có (13:2x → 13:5x).** Cờ mới **`OVERLAP`**: hai hộp chữ trên màn hình chồng lên nhau quá một phần
+tư diện tích hộp nhỏ hơn (và lớn hơn 400 điểm ảnh) thì người xem không đọc được chữ nào.
+
+Luật đo nằm ở **một chỗ duy nhất**: `core/render/overlap.mjs` (có selftest riêng: hộp chỉ chạm mép thì
+không phải đè; một vệt mỏng thì không phải đè). Trước đó luật nằm trong `check_shots.py` — và đó là
+chỗ sai: tờ sheet **không có** hộp chữ, nên cờ đó không bao giờ bật (mã chết, không lỗi). Nay:
+- **vòng chấm hình**: `beatsheet.mjs` gom hộp của từng chữ lúc dựng tờ (nó **đã** gọi `window.TEXTS` sẵn
+  cho cờ `NUM`, nên không tốn thêm khung hình nào), đo bằng luật của thư viện, và ghi các cặp đè nhau
+  vào `beats.json`; `check_shots.py` chỉ đọc lại rồi báo cờ;
+- **cổng bàn giao**: `readcheck.mjs --overlap` đo trên **chính phim đã dựng** (`window.TEXTS` trả hộp ở
+  mỗi bước thời gian, nên không tốn thêm lần dựng nào); kênh bật nó bằng `checkOverlap` trong
+  `scene_rules.json`.
+
+Đây là lỗi **đo được** — hai hình chữ nhau là hai chữ không ai đọc được — nên nó chặn ở cả vòng chấm hình
+lẫn cổng bàn giao (xem N93: chặn bằng phép so sánh thì không, chặn bằng phép đo thì có).
 
 **Còn lại — ghi ra để lần sau không phải nghĩ lại từ đầu.** Ba lỗi còn lại đều cần cùng một thứ:
 **hộp của vật trên màn hình** (và tên của vật). Một thay đổi duy nhất trong rig — trả về hộp màn

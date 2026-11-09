@@ -4,5 +4,7 @@
   "readcheckQ": "ss=1",
   "_readcheckQ": "Bài kiểm tra đọc hình đo hộp chữ, không đo hình — mà hộp chữ thì không đổi khi bỏ siêu lấy mẫu. Ở ss=1 (1 thay vì 2) trình duyệt sống sót cả phim: ở ss=2 nó chết ở giây 91 trên máy này (6 GB VRAM). Vì thế bài đọc hình chạy ở ss=1, còn ảnh chụp và bản dựng vẫn ở ss=2.",
   "checkMotion": true,
-  "_checkMotion": "Kênh này không có board.json, mà bài đo chuyển động lại đúng thứ người chấm cứ nói: vật đứng yên, camera trượt để giữ khung sống. Bài đo được chạy khi kênh yêu cầu nó (checkMotion), không chỉ khi phim có board.json."
+  "_checkMotion": "Kênh này không có board.json, mà bài đo chuyển động lại đúng thứ người chấm cứ nói: vật đứng yên, camera trượt để giữ khung sống. Bài đo được chạy khi kênh yêu cầu nó (checkMotion), không chỉ khi phim có board.json.",
+  "checkOverlap": true,
+  "_checkOverlap": "Hai thẻ chữ nằm đè lên nhau thì người xem không đọc được thẻ nào. Luật đo nằm ở core/render/overlap.mjs: hai hộp chữ chồng nhau khi phần chung chiếm ít nhất 25% hộp nhỏ hơn và ít nhất 400 điểm ảnh. Cổng bàn giao đo trên chính phim đã dựng (readcheck --overlap), vòng chấm hình đo trên tờ sheet (beatsheet ghi cặp chữ đè nhau vào beats.json)."
 }

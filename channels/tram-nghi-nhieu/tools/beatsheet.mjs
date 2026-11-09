@@ -16,6 +16,8 @@
 //   NUM   — the line says a number (four days, 100 ppm) and no on-screen text (window.TEXTS, subtitle excluded) shows a
 //           number while it is said: give it a counter, a calendar, a label. A number painted into a 3D texture is not
 //           seen by this check: then say so in LOOK.md.
+//   OVERLAP — two pieces of on-screen text lie on top of each other: the viewer reads neither. The rule is the
+//           library's (core/render/overlap.mjs), so the delivery gate measures the same way on the finished film.
 // Under every frame the sheet prints "phu N%" — the share of the frame real things fill — plus "fill N%" when the
 //   largest single object-sized thing is smaller than that (the same rays that measure a RUN). Emptiness is judged by
 //   "phu": a subject made of a GROUP of things reads a small "fill" and a large "phu"; a frame with nothing
@@ -24,6 +26,7 @@
 //   to raise it.
 import fs from 'fs'; import path from 'path'; import { spawnSync } from 'child_process';
 import { openDemo, closeServer, requireDemo } from '../../../core/render/page.mjs';
+import { overlapping } from '../../../core/render/overlap.mjs';   // the one rule for two texts lying on top of each other
 
 const args = process.argv.slice(2);
 const take = k => { const i = args.indexOf(k); return i >= 0 ? args.splice(i, 2)[1] : null; };
@@ -71,13 +74,31 @@ for (const [i, l] of lines.entries()) {
   const t0 = start[l.id], d = dur[l.id] ?? 2, t = +(t0 + at * d).toFixed(2);
   const lineT0 = Date.now();
   try {
-    // what text is on screen while the line is said (the subtitle band excluded), for the NUM check
-    const shown = await clock(lineNum, page.evaluate(([a, b]) => {
-      const o = new Set();
-      for (let k = 0; k <= 6; k++) for (const x of (typeof window.TEXTS === 'function' && window.TEXTS(a + (b - a) * k / 6)) || [])
-        if (x && x.id !== 'sub' && x.y0 < 870) o.add(x.text);
-      return [...o];
+    // what text is on screen while the line is said (the subtitle band excluded), for the NUM check — and the
+    // boxes of that text, so the same rule as the delivery gate can say whether two texts lie on top of each other
+    const seen = await clock(lineNum, page.evaluate(([a, b]) => {
+      const texts = new Set(), frames = [];
+      for (let k = 0; k <= 6; k++) {
+        const boxes = (typeof window.TEXTS === 'function' && window.TEXTS(a + (b - a) * k / 6)) || [];
+        const fb = [];
+        for (const x of boxes) {
+          if (!x || x.id === 'sub' || x.y0 >= 870) continue;
+          texts.add(x.text);
+          fb.push({ id: String(x.id), text: x.text, x0: +x.x0, y0: +x.y0, x1: +x.x1, y1: +x.y1 });
+        }
+        frames.push(fb);
+      }
+      return { texts: [...texts], frames };
     }, [t0, t0 + d]));
+    const shown = seen.texts;
+    // two texts on top of each other: the viewer reads neither. The geometry is the library's rule, not a second
+    // copy of it here — the gate measures the same way on the finished film.
+    const ov = new Map();
+    for (const fb of seen.frames) for (const p of overlapping(fb)) {
+      const key = String(p.a.text) + '||' + String(p.b.text);
+      const old = ov.get(key);
+      if (!old || p.frac > old.frac) ov.set(key, { a: String(p.a.text), b: String(p.b.text), frac: p.frac });
+    }
     await clock(lineNum, page.evaluate(x => { window.SHOTPROBE = 1; window.LABELPROBE = 1; window.render(x); }, t));
     await present();
     const shot = await clock(lineNum, page.evaluate(() => window.SHOT || null));
@@ -94,7 +115,7 @@ for (const [i, l] of lines.entries()) {
       mf = path.join(out, `m_${String(i + 1).padStart(3, '0')}.jpg`);
       await clock(lineNum, page.screenshot({ path: mf, type: 'jpeg', quality: 80 }));
     }
-    beats.push({ n: i + 1, id: l.id, text: l.text, t0, t1: +(t0 + d).toFixed(2), t, f, mf, shown, shot, labels });
+    beats.push({ n: i + 1, id: l.id, text: l.text, t0, t1: +(t0 + d).toFixed(2), t, f, mf, shown, shot, labels, overlap: [...ov.values()] });
   } catch (e) {
     // a line that will not answer must say so, and must not take the rest of the sheet with it
     console.error(`beatsheet: line ${lineNum} (${l.id}) failed: ${e.message}`);
@@ -183,6 +204,9 @@ for b in B:
     # Only "hits nothing" is a flag: a label may rightly point at a *group* (e.g. "2 ÁO"), and a
     # group is big — flagging that taught the maker to ignore the flag, so it was taken out.
     if any(L.get('hit') is None for L in (b.get('labels') or [])): b['flags'].append('PTR')
+    # OVERLAP: hai chữ đè nhau — người xem không đọc được chữ nào. Các cặp đo sẵn lúc dựng tờ (luật ở
+    # core/render/overlap.mjs), nên tờ sheet và cổng bàn giao đo cùng một cách.
+    if b.get('overlap'): b['flags'].append('OVERLAP')
     # does the picture act inside this line? (needs --motion) the camera shift is taken out first, so a frame that
     # only drifts does not count as motion. It is a note, not a machine flag: the maker judges the line by eye.
     if b.get('mf'):

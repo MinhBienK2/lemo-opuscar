@@ -166,43 +166,9 @@ def sheet_older_than_code(episode, beats_path):
     return f(os.path.getmtime(beats_path)), f(newest)
 
 
-# Hai hộp chữ coi là đè nhau khi phần chồng chiếm từ một phần tư hộp nhỏ hơn trở lên, và phần chồng
-# phải lớn hơn một vệt nhỏ. Hai hộp chỉ **chạm mép** nhau thì không phải đè — nếu báo cả, cờ báo sai
-# dạy người làm phim bỏ qua cờ (xem N80, N94).
-OVERLAP_MIN_FRAC = 0.25
-OVERLAP_MIN_PX = 400
-
-
-def overlapping(beat):
-    """the pairs of on-screen texts that sit on top of each other: [(text a, text b, % of the smaller box)]"""
-    boxes = beat.get('boxes') or []
-    out = []
-    for i in range(len(boxes)):
-        a = boxes[i]
-        for j in range(i + 1, len(boxes)):
-            b = boxes[j]
-            if str(a.get('id')) == str(b.get('id')):
-                continue                      # cùng một chữ, ở hai thời điểm khác nhau
-            try:
-                ax0, ay0, ax1, ay1 = (float(a['x0']), float(a['y0']), float(a['x1']), float(a['y1']))
-                bx0, by0, bx1, by1 = (float(b['x0']), float(b['y0']), float(b['x1']), float(b['y1']))
-            except (KeyError, TypeError, ValueError):
-                continue
-            ox = min(ax1, bx1) - max(ax0, bx0)
-            oy = min(ay1, by1) - max(ay0, by0)
-            if ox <= 0 or oy <= 0:
-                continue
-            area = ox * oy
-            if area < OVERLAP_MIN_PX:
-                continue
-            small = min((ax1 - ax0) * (ay1 - ay0), (bx1 - bx0) * (by1 - by0))
-            if small <= 0:
-                continue
-            frac = area / small
-            if frac >= OVERLAP_MIN_FRAC:
-                out.append((str(a.get('text') or a.get('id'))[:40],
-                            str(b.get('text') or b.get('id'))[:40], round(frac * 100)))
-    return out
+# Hai chữ đè nhau: luật đo nằm ở core/render/overlap.mjs, không phải ở đây — hai bản sao của cùng một
+# luật thì trôi lệch nhau, và cổng bàn giao sẽ trái với vòng chấm đã duyệt. Tờ sheet đo sẵn các cặp đè
+# nhau lúc chụp và ghi vào beats.json (`overlap`), nên công cụ này chỉ đọc lại.
 
 
 def problems(beat):
@@ -228,9 +194,10 @@ def problems(beat):
     # OVERLAP: hai chữ trên màn hình cùng lúc ở một chỗ — người xem không đọc được chữ nào (N98).
     # Đây là lỗi **đo được** (hai hình chữ nhau là hai chữ không ai đọc), nên nó chặn cả ở vòng chấm
     # lẫn ở cổng bàn giao — khác với SAME/RUN/DARK, vốn là phép so sánh cần mắt người.
-    for pair in overlapping(beat):
+    # Các cặp đè nhau do tờ sheet đo sẵn (luật ở core/render/overlap.mjs).
+    for pair in (beat.get('overlap') or []):
         out.append(('OVERLAP', 'hai chữ đè nhau: "%s" và "%s" (%d %% diện tích hộp nhỏ hơn)'
-                    % (pair[0], pair[1], pair[2])))
+                    % (str(pair.get('a', '?'))[:40], str(pair.get('b', '?'))[:40], pair.get('frac', 0))))
     cover, _ = coverage(beat)
     if cover == 0:
         # Máy không thấy vật nào đủ lớn trong khung: cảnh cận trong một vật lớn, cảnh toàn cảnh, hay
@@ -341,14 +308,13 @@ def selftest():
         {'n': 9, 'text': 'Câu có nhóm vật', 'flags': [], 'fill': 0.06, **cast(0.06, 0.08, 0.07)},
         # cảnh cận trong vật lớn / toàn cảnh: máy không thấy vật nào — máy không kết luận được
         {'n': 10, 'text': 'Câu máy không nhìn thấy', 'flags': [], 'fill': 0.0, **cast()},
-        # hai chữ đè nhau: người xem không đọc được chữ nào (N98)
+        # hai chữ đè nhau: người xem không đọc được chữ nào (N98). Cặp đè nhau do tờ sheet đo sẵn;
+        # luật đo (hộp chạm mép thì không phải đè) nằm ở core/render/overlap.mjs, tự kiểm chứng ở đó.
         {'n': 11, 'text': 'Câu hai thẻ đè nhau', 'flags': [], 'fill': 0.4, **cast(0.4),
-         'boxes': [{'id': 'a', 'text': 'THẺ 1', 'x0': 100, 'y0': 100, 'x1': 300, 'y1': 200},
-                   {'id': 'b', 'text': 'THẺ 2', 'x0': 200, 'y0': 150, 'x1': 400, 'y1': 250}]},
-        # hai chữ chỉ chạm mép nhau thì không phải đè
+         'overlap': [{'a': 'THẺ 1', 'b': 'THẺ 2', 'frac': 25}]},
+        # hai thẻ chỉ chạm mép nhau thì không phải đè: tờ sheet không ghi cặp nào
         {'n': 12, 'text': 'Câu hai thẻ chạm mép', 'flags': [], 'fill': 0.4, **cast(0.4),
-         'boxes': [{'id': 'c', 'text': 'THẺ 3', 'x0': 100, 'y0': 100, 'x1': 300, 'y1': 200},
-                   {'id': 'd', 'text': 'THẺ 4', 'x0': 300, 'y0': 100, 'x1': 500, 'y1': 200}]},
+         'overlap': []},
     ]
     with tempfile.TemporaryDirectory() as d:
         p = os.path.join(d, 'beats.json')
