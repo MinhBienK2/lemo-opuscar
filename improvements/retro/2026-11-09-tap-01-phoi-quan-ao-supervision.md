@@ -3164,6 +3164,35 @@ tức là **đoạn sửa nằm trong một tệp**, do công cụ viết tệp 
 `{"file": ..., "old_file": ..., "new_file": ...}`. Selftest có một ca (đoạn sửa có dấu nháy và xuống
 dòng nằm trong tệp, áp dụng đúng). R1 trong `CODING_STANDARDS.md` nói luôn điều đó.
 
+## N102 — medium — Hai khoá của thẻ chữ (`hold`, `lead`) chỉ có trong tập 01, nên tập sau phải tự nghĩ lại
+
+**Bằng chứng.** `channels/tram-nghi-nhieu/rig/render.js` — rig dùng chung của kênh — **không** có
+khoá `hold` hay `lead`. Cả hai chỉ có trong `channels/tram-nghi-nhieu/series/do-vat/tap-01-phoi-quan-ao/src/film.js`:
+mô tả ở dòng 181–182, dùng ở các thẻ (199, 202, 210, 223, 224), và phần dán thủ công ở dòng 232–238:
+
+```js
+C.t0 = t0 - (C.lead ?? 0);
+C.t1 = V.L['c' + n1].t1 + (C.hold ?? 0);
+```
+
+**Vì sao đáng sửa.** Luật đọc trong `core/render/readcheck.mjs` chặn một thẻ hiện trên màn hình ít
+giây hơn thời gian người xem cần để đọc trọn — đó chính là lý do tập 01 phải tự thêm hai khoá này
+(P12 của bản ghi ngày 8). Tập sau sẽ dính đúng bức tường đó, và sẽ phải tự nghĩ ra cùng một cách
+vá. Theo R7, một cách làm chung chỉ nên có **một** bản: ở tầng rig, để tập chỉ cần viết
+`{ id: '…', text: '…', hold: 1.5 }` là xong.
+
+**Guard — kế hoạch, chưa áp dụng, và lý do chưa áp dụng.**
+
+1. Rig nhận hai khoá `hold` (giữ thêm N giây) và `lead` (hiện sớm hơn N giây), **mặc định 0** — với
+   mọi tập không dùng hai khoá này thì hành vi **y hệt** trước đây, nên không phải dựng lại tập nào
+   đang chạy.
+2. **Chưa sửa bây giờ** vì hai lý do cụ thể: (a) rig đang được ba tập dùng song song, mà đổi mã
+   chung dưới lúc một tập đang dựng là đúng cái R13 cảnh báo; (b) tập 01 vẫn còn đoạn dán tay trong
+   `src/film.js`, và nếu thêm khoá vào rig mà chưa gỡ đoạn dán thì thẻ bị giữ **hai lần**.
+3. Thứ tự đúng khi tập 01 giao phim xong và cổng xanh: sửa rig → gỡ đoạn dán trong
+   `src/film.js` của tập 01 → dựng lại tập 01 (luật đọc của cổng phải vẫn xanh) → ghi vào `SKILL.md`
+   một câu: *thẻ quá ngắn thì thêm `hold`/`lead`, đừng tự tính lại thời gian*.
+
 ## Còn lại
 
 - **[x]** N72: `core/render/still.mjs` chờ hai khung hình rồi mới chụp (12:47) — ảnh là của khung vừa dựng,
@@ -3224,6 +3253,9 @@ dòng nằm trong tệp, áp dụng đúng). R1 trong `CODING_STANDARDS.md` nói
   approval" — 37 phút để cắt một tấm ảnh, rồi vòng chấm chết mà không có bản chấm); `review.sh` có
   con chó canh dừng người chấm ngay khi log hiện câu đó. Hai vòng đang chạy (tập 02, tập 03) cần chạy
   lại với `review.sh` đã sửa.
+- **[ ]** N102: hai khoá thẻ chữ `hold`/`lead` mới chỉ có trong tập 01 — chuyển vào rig dùng chung,
+  **sau khi** tập 01 giao phim xong, rồi gỡ đoạn dán tay trong `src/film.js` của tập 01 và dựng lại
+  tập 01. Xem mục N102 để biết vì sao chưa áp dụng ngay.
 
 **Đã xong trong đợt này:** N77 (`check_shots.py` phân biệt *chưa đo* với *đo được 0 %*; `review.sh` không
 dùng lại tờ sheet nửa vời cho vòng chấm cả phim) — commit `c8856c6`.
