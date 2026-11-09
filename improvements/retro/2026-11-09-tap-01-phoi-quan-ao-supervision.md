@@ -1118,6 +1118,107 @@ một ví dụ nó phải bắt** (N30), và bài nào không có thì bài đó
 
 ---
 
+## N40 — high — Người chấm hình bắt đầu mỗi vòng từ đầu: công cụ biết vòng trước đã sửa gì, nhưng chỉ màn hình của phiên thấy
+
+**Bằng chứng.** `channels/tram-nghi-nhieu/tools/review.sh` chạy `check_progress.py` sau mỗi vòng chấm hình,
+và dòng chú thích của chính nó nói đúng ý: *"what the last round fixed and what is still open: the next round
+must not start from zero"*. Nhưng **kết quả ấy chỉ ra màn hình của phiên điều khiển**; người chấm hình —
+một tiến trình `claude -p` khác, đọc trong thư mục làm việc riêng — **không hề thấy nó**. Thư mục làm việc
+mỗi vòng là một thư mục tạm mới (`mktemp -d`), và trong đó chỉ có: tờ beat, `beats.json`, `lines.json`,
+`FACTS.md`, và ảnh tham chiếu.
+
+Hậu quả đo được: vòng 4 của tập 01 vẫn còn **một lỗi CHẶN ở c60** mà người chấm đã gọi tên ở vòng 3 và
+đã sửa, và lại phát hiện ra hai lỗi mới (c6, c55) trong khi mười lỗi cũ đã hết. Người chấm phải đọc lại
+sáu mươi khung từ đầu mỗi vòng, và phần lớn công sức rơi vào việc **xác nhận lại những gì đã đúng** —
+đúng cái mà bản so sánh hai vòng đã tính sẵn.
+
+**Đã sửa.** `review.sh` nay ghi bản so sánh vào `$W/PROGRESS.md` **trước** khi gọi người chấm, và câu lệnh
+gọi người chấm có thêm một dòng: *"Nếu có PROGRESS.md, hãy đọc nó trước khi chấm: nó nói vòng trước đã sửa
+được gì và còn mở gì. Câu đã sửa rồi thì đừng nêu lại là lỗi; câu còn mở thì phải soi kỹ và nói rõ đã sửa
+hay chưa."*
+
+**Còn phải làm.** Đây là lần thứ hai trong đợt này mà một thứ đã được **tính** lại không tới được người cần
+nó (xem thêm N37: cùng một khung hình mở mười bảy lần). Nguyên tắc: *một bản so sánh chỉ có tác dụng khi
+đường dẫn của nó tới được bên cần nó.*
+
+---
+
+## N41 — high — Bài kiểm tra nhịp nói "đã kiểm tra" về một phim nó chưa từng mở
+
+**Bằng chứng.** `tools/check_timing.py` được viết cho định dạng 2D cũ của kênh: nó cần
+`const ORDER = [['shot','lineId'], …]` trong mã tập. Các tập 3D hiện tại (`sh('N1','c3', …)` trong
+`src/film.js`) không có `ORDER`, và **không tệp nào trong repository còn có `ORDER`** nữa (khuôn 2D đã bị
+thay bằng bản dựng lại 3D). Bài kiểm tra vì thế không tìm thấy gì để kiểm tra và in ra:
+
+```
+OK  tap-01-phoi-quan-ao: visual timing, micro-clocks, and anti-spoiler gates verified
+```
+
+Một chữ **verified** về một phim chưa từng được mở. Bước `timing` của cổng bàn giao vì thế là một đèn xanh
+không có bóng đèn.
+
+**Đã sửa.** Bài kiểm tra giờ nói thật khi không hiểu định dạng: nó in ra câu *"định dạng này không phải
+định dạng mà bài này biết — không luật nhịp nào được áp dụng"* và **thoát mã 2** ("không chạy được", không
+phải phán quyết về phim). Thêm vào đó, kênh có bài kiểm tra riêng cho định dạng 3D
+(`channels/tram-nghi-nhieu/tools/check_shots.py`): mỗi câu lời kể phải có đúng một nhát, mỗi nhát phải gọi
+đúng câu, và các nhát phải đi đúng thứ tự của lời — cổng bàn giao gọi bài của kênh khi kênh có bài của
+riêng nó, đúng như nó đã làm với bài kiểm tra dàn ý.
+
+**Còn phải làm.** Ba tệp trong `styles/*/demo/tts/lines.json` có dạng khác (`[id, text]` thay vì đối tượng)
+nên `check_script` **crash** khi chạy lên chúng. Không ai chạy lên chúng, nên chưa ai thấy.
+
+---
+
+## N42 — high — Lời kể nói đúng câu mà file nghiên cứu cấm, vì máy chỉ canh con số chứ không canh câu
+
+**Bằng chứng.** Tập 02 có trong `research/FACTS.md` (mục *Phạm vi* của mốc 12) câu:
+
+> … không nói "chỗ nóng nhất trong máy", không nói "ma sát ở chỗ hạt chen chúc", không nói tỉ lệ nhiệt nào
+> giữa các lớp …
+
+Và `voice/lines.json` của chính tập đó nói:
+
+> "Đây là chỗ nóng nhất trong cả cái máy."
+
+`tools/check_claims.py` **có** canh những giá trị bị cấm — nhưng nó đọc **con số** ("90 %", "100 W"). Một
+cấm đoán bằng lời không phải con số thì không con số nào hỏng được, và bài kiểm tra xanh. Người chấm dàn ý
+bắt được lỗi này bằng mắt, sau một giờ đọc.
+
+**Đã sửa.** `channels/tram-nghi-nhieu/tools/check_voice_facts.py`: đọc các cụm bị cấm trong
+`FACTS.md` (`không nói "…"`, `không được nói "…"`, `tránh nói "…"`), so với lời kể và dàn ý sau khi bình
+thường hoá (bỏ chữ trôi như "cả", "cái"; bỏ dấu câu) — nên `chỗ nóng nhất trong cả cái máy` khớp với
+`chỗ nóng nhất trong máy`. Luật thứ hai: một xếp hạng (`<gốc từ> nhất`) mà `FACTS.md` chỉ cấm thì lời kể
+không được dùng.
+
+**Còn phải làm.** Cổng của kênh phải gọi bài này **trước** vòng chấm lời kể, để lỗi loại này không tốn
+một vòng chấm nữa.
+
+---
+
+## N43 — medium — Dàn ý là cái cổng chấm: một phiên sửa được phim mà để nguyên dàn ý cũ, thì cổng vẫn bắt
+
+**Bằng chứng.** Vòng dàn ý số 1 của tập 02 bị REJECT với bốn lỗi CHẶN. Trong vòng hai mươi phút sau đó,
+phiên tập 02 **đã sửa đúng những gì cần sửa**: `voice/lines.json` viết lại (95 câu, không còn siêu từ nào),
+cơ chế "ma sát ở chỗ hạt chen chúc" bị bỏ, câu 45 °C gắn đúng vào **tế bào pin**, và mã cảnh sửa nhiệt kế
+đứng cạnh vỏ thay vì chồng lên lưng máy.
+
+Nhưng `TREATMENT.md` — **tài liệu mà cổng dàn ý chấm** — vẫn là bản cũ (mtime 08:21, trước bản chấm 08:28):
+vẫn còn "nhiều nhất trong ruột pin" ở câu trả lời một câu, "chỗ nóng nhất trong pin" ở dòng ý 14, và vẫn
+viết "nhiệt kế đặt trên lưng máy". Chạy lại `--outline` thì **cùng bốn lỗi CHẶN quay lại**, trên một phim
+đã đúng.
+
+Đây là hệ quả của việc cổng chấm **tài liệu** chứ không chấm phim: tài liệu phải được sửa theo phim, và
+một phiên có thể sửa phim mà quên tài liệu. Người giám sát phải nhìn thấy đúng chỗ lệch này — sửa lời kể
+mà để dàn ý cũ — và báo lại.
+
+**Đã sửa (tạm thời).** Người giám sát báo lại cho phiên tập 02, nêu đúng dòng và đúng câu, và yêu cầu sửa
+`TREATMENT.md` rồi chạy lại cổng dàn ý. Đây là sửa tay, không phải guard.
+
+**Còn phải làm.** Một guard: **cổng dàn ý phải đọc dàn ý cùng với lời kể và mã, và hỏi xem chúng còn khớp
+nhau không** — chứ không chỉ chấm dàn ý như một văn bản đứng riêng.
+
+---
+
 ## Các guard đã bắt được gì (tính từ 08:00, hai tập còn chạy)
 
 Đây là bằng chứng rằng các guard không phải lý thuyết — mỗi cái đã bắt một lỗi thật, hoặc đã được một
@@ -1133,6 +1234,9 @@ phiên chấp nhận và dùng:
 | `R11` + `R12` (đọc lại) | 186 lần đọc lại ba tệp mã; 1 032 lần mở ảnh, 311 lần mở lại một tệp đã xem | phiên tập 01 đã tự viết `src/MAP.md` (bản đồ mã: tên hàm → dòng) |
 | `markBeat` / mốc nhịp | kênh **không** ghi mốc nhịp, nên cổng không đo được "nhịp này có đổi phần khung của nó không" | phiên tập 01 đã viết vòng lặp ghi mốc cho cả 60 câu; `rig/render.js` nay có `markBeats` cho các tập sau |
 | `check_progress.py` (điểm so hai vòng) | phần so điểm **im lặng**: khoá tiếng Việt bị lớp ký tự cắt thành mảnh, nên không khoá nào khớp và "CHUYỂN_ĐỘNG 4 → 2" không bao giờ được in ra | sửa xong; vòng 4 của tập 01 nhận đủ danh sách năm chỗ còn mở (c6, c37, c55, c60, c22:RUN) |
+| `check_voice_facts.py` (câu bị cấm) | tập 02 nói "chỗ nóng nhất trong cả cái máy" — đúng câu `FACTS.md` cấm; máy chỉ canh con số nên không thấy | phiên tập 02 đã bỏ khỏi lời kể, dàn ý thì người giám sát báo lại (N42, N43) |
+| `check_shots.py` (mỗi câu một nhát) | một câu lời kể không có nhát nào — người xem nhìn một khung đứng yên trong lúc người kể vẫn nói | hai tập đều hợp lệ: 60 câu, 60 nhát (N41) |
+| `PROGRESS.md` (vòng sau đọc vòng trước) | vòng 4 của tập 01 còn sót một lỗi CHẶN đã sửa ở vòng 3, vì người chấm không thấy bản so sánh | sửa xong: `review.sh` ghi `PROGRESS.md` vào thư mục làm việc của người chấm (N40) |
 
 Bốn trong bảy dòng trên là lỗi **đã** bị bắt và **đã** được sửa trong lúc hai phiên còn chạy. Đó là câu trả lời
 cho câu hỏi lớn nhất của đợt đúc kết này: các guard có tác dụng thật, khi chúng nằm **trước** bước tốn
@@ -1185,7 +1289,11 @@ tiền (trước vòng chấm, trước lúc dựng, trước lúc bàn giao), c
 | 39 | Xem tờ sheet, không mở lại một khung hình: 436 MB ảnh, 311 lần mở lại (N37) | `CODING_STANDARDS.md` R12, `tools/supervise.sh` | **xong** |
 | 40 | Một mốc không được đứng trên Wikipedia một mình — bách khoa là dẫn chiếu (N38) | `channels/tram-nghi-nhieu/tools/check_research.py`, `step1-outline/PROMPT_CRITIC.md` | **xong** |
 | 41 | Bản so sánh hai vòng phải nói được phần điểm; lớp ký tự ASCII viết tay cắt mất tiếng Việt (N39) | `channels/tram-nghi-nhieu/tools/check_progress.py` | **xong** |
-| 42 | Mọi bài kiểm tra phải có ví dụ nó phải bắt — và phải có ai chạy ví dụ đó | `tools/run_selftests.sh`, `.github/workflows/films.yml`, `tools/check_*.py` | **đang làm** |
+| 42 | Mọi bài kiểm tra phải có ví dụ nó phải bắt — và phải có ai chạy ví dụ đó | `tools/run_selftests.sh`, `.github/workflows/films.yml`, `tools/check_*.py` | **đang làm** — 18 bài đã có `--selftest`; `check_motion`, `check_script`, `check_timing` vừa có |
+| 43 | Người chấm hình phải đọc bản so sánh hai vòng trước khi chấm (N40) | `channels/tram-nghi-nhieu/tools/review.sh` | **xong** — `PROGRESS.md` nằm trong thư mục làm việc của người chấm |
+| 44 | Bài kiểm tra nhịp không được nói "verified" về phim nó chưa mở; kênh có bài riêng cho định dạng 3D (N41) | `tools/check_timing.py`, `channels/tram-nghi-nhieu/tools/check_shots.py`, `core/render/review.sh` | **đang làm** |
+| 45 | Lời kể không được nói câu mà file nghiên cứu cấm (N42) | `channels/tram-nghi-nhieu/tools/check_voice_facts.py` | **đang làm** |
+| 46 | Cổng dàn ý phải hỏi xem dàn ý còn khớp với lời kể và mã không (N43) | `channels/tram-nghi-nhieu/tools/check_voice_facts.py`, `channels/tram-nghi-nhieu/tools/review.sh` | **chưa làm** — hiện người giám sát phải báo tay |
 
 ### Mỗi phát hiện đã có dòng riêng trong `improvements/lessons.md`
 
