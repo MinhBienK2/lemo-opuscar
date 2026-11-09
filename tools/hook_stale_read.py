@@ -1,0 +1,169 @@
+"""Chặn việc đọc lại một tệp lớn mà tệp đó không hề đổi.
+
+Claude Code gọi hook này **trước** mỗi lần dùng công cụ `Read` (PreToolUse). Đầu vào là JSON trên
+stdin; đầu ra là mã thoát:
+
+- `0` — cho qua;
+- `2` — **chặn** lần đọc này, và thông điệp trên stderr được đưa lại cho người làm.
+
+**Vì sao cần.** Đọc cả một tệp hai trăm kilobyte để tìm đúng một hàm là mua không được gì: tệp lớn
+mỗi lần đọc lại là hàng chục nghìn token, và đội hình cảu một phiên dài (luật R11 trong
+`CODING_STANDARDS.md`). Phiên tập 02 đọc lại `src/film.js` **46 lần**, `src/props.js` 27 lần,
+`src/set.js` 21 lần; phiên tập 03 đọc lại `src/props.js` 30 lần. Cả hai đều đã có `src/MAP.md`
+(tên hàm → dòng) — nhưng bản đồ thì bị bỏ quên khi mã đổi.
+
+Luật ở đây là **mtime**: đọc lại một tệp mà tệp **không đổi** thì lần đọc đó không mang tin mới
+gì, nên từ lần thứ ba trở đi thì chặn. Đọc lại sau khi vừa sửa tệp thì mtime đã đổi, nên vẫn
+được phép — đó là việc bình thường.
+
+Lời nhắc trong lời cảnh báo nói cách làm đúng: `grep -n "<tên hàm>" <tệp>` rồi đọc đúng đoạn
+(`offset`/`limit`), và giữ `src/MAP.md` bên cạnh mã.
+
+    python3 tools/hook_stale_read.py --selftest     # chứng minh bằng ví dụ
+"""
+import json
+import os
+import re
+import sys
+import time
+
+STATE = os.path.join(os.environ.get('TMPDIR', '/tmp'), 'lemo-stale-reads.json')
+LIMIT = 3          # chặn từ lần đọc thứ 3 của cùng một tệp khi tệp không đổi
+WINDOW = 7200      # quên tệp đã đọc quá 2 giờ trước đó
+BIG = 40 * 1024    # tệp nhỏ hơn thì đọc cả cũng được
+
+MESSAGE = (
+    'Bạn đã đọc tệp %s %d lần mà tệp không đổi (mtime %s). Lần đọc thứ %d không mang tin mới gì, '
+    'mà mỗi lần đọc cả tệp là hàng chục nghìn token của phiên bạn (luật R11).\n'
+    'Cách làm đúng: `grep -n "<tên hàm>" %s` rồi đọc đúng đoạn cần (Read với `offset`/`limit`); '
+    'và giữ `src/MAP.md` (tên hàm → dòng) bên cạnh mã — `python3 tools/check_map.py <tập>` kiểm tra nó.\n')
+
+
+def mtime_of(path):
+    try:
+        return os.path.getmtime(path)
+    except OSError:
+        return None
+
+
+def decide(path, session, state, now=None):
+    """(mã thoát, thông điệp) cho một lần đọc tệp."""
+    if not path:
+        return 0, ''
+    now = now if now is not None else time.time()
+    mt = mtime_of(path)
+    if mt is None:          # tệp không tồn tại (đã bị xoá): không chặn
+        return 0, ''
+    try:
+        size = os.path.getsize(path)
+    except OSError:
+        return 0, ''
+    if size < BIG:          # tệp nhỏ: đọc cả cũng rẻ, không chặn
+        return 0, ''
+    seen = state.setdefault(session, {})
+    first, last_mt, count = seen.get(path, (now, mt, 0))
+    if now - first > WINDOW:
+        first, count = now, 0
+    if last_mt != mt:       # tệp đã đổi: đọc lại là việc, không phải lãng phí
+        seen[path] = (first, mt, 1)
+        return 0, ''
+    count += 1
+    seen[path] = (first, mt, count)
+    if count < LIMIT:
+        return 0, ''
+    return 2, MESSAGE % (path, count, time.strftime('%H:%M:%S', time.localtime(mt)), count, path)
+
+
+def load_state():
+    try:
+        with open(STATE, encoding='utf-8') as f:
+            return json.load(f)
+    except (OSError, ValueError):
+        return {}
+
+
+def save_state(state):
+    try:
+        tmp = STATE + '.tmp'
+        with open(tmp, 'w', encoding='utf-8') as f:
+            json.dump(state, f)
+        os.replace(tmp, STATE)
+    except OSError:
+        pass
+
+
+def main():
+    if '--selftest' in sys.argv:
+        return selftest()
+    try:
+        data = json.loads(sys.stdin.read())
+    except ValueError:
+        return 0
+    ti = data.get('tool_input') or {}
+    path = ti.get('file_path') or ''
+    session = data.get('session_id') or 'default'
+    state = load_state()
+    rc, message = decide(path, session, state)
+    if path:
+        save_state(state)
+    if rc != 0:
+        sys.stderr.write(message)
+    return rc
+
+
+def selftest():
+    import tempfile
+    big = None
+    small = None
+    try:
+        with tempfile.NamedTemporaryFile('w', suffix='.js', delete=False) as f:
+            f.write('x' * (BIG + 500))
+            big = f.name
+        with tempfile.NamedTemporaryFile('w', suffix='.js', delete=False) as f:
+            f.write('x' * 1000)
+            small = f.name
+        state = {}
+        # lần 1, 2 cho qua; lần 3 chặn (tệp lớn, không đổi)
+        for i in range(3):
+            rc, msg = decide(big, 's1', state)
+            assert rc == (0 if i < 2 else 2), (i, rc)
+            assert (msg != '') == (rc != 0)
+            print('ok   lần đọc %d của tệp lớn không đổi → rc=%d' % (i + 1, rc))
+        # sửa tệp → mtime đổi → đọc lại được phép
+        time.sleep(0.01)
+        with open(big, 'w') as f:
+            f.write('y' * (BIG + 600))
+        rc, _ = decide(big, 's1', state)
+        assert rc == 0, rc
+        print('ok   tệp vừa đổi → rc=0 (đọc lại là việc)')
+        # phiên khác
+        rc, _ = decide(big, 's2', state)
+        assert rc == 0, rc
+        print('ok   phiên khác → rc=0')
+        # tệp không tồn tại
+        rc, _ = decide('/tmp/khong-ton-tai-xyz.js', 's1', state)
+        assert rc == 0, rc
+        print('ok   tệp không tồn tại → rc=0')
+        # quá cửa sổ thời gian
+        state['s1'][big] = (time.time() - WINDOW - 10, os.path.getmtime(big), 99)
+        rc, _ = decide(big, 's1', state)
+        assert rc == 0, rc
+        print('ok   quá cửa sổ thời gian → rc=0')
+        # tệp nhỏ thì cho qua luôn
+        state2 = {}
+        for i in range(5):
+            rc, _ = decide(small, 's3', state2)
+            assert rc == 0, rc
+        print('ok   tệp nhỏ → rc=0')
+    finally:
+        for p in (big, small):
+            try:
+                os.unlink(p)
+            except OSError:
+                pass
+    print('%d ca đều đúng' % 9)
+    return 0
+
+
+if __name__ == '__main__':
+    sys.exit(main())

@@ -64,6 +64,10 @@ Quy trình này thay cho bước 1–6 của `AGENTS.md` / `DIRECTOR.md` khi là
    - **Đọc lại tệp log của chính bạn lần thứ ba sẽ bị chặn** (`tools/hook_bg_log.py`, hook `PreToolUse` của thư viện):
      lệnh bị từ chối và lời nhắc nói đúng cách làm thay thế. Đó là cơ chế, không phải lời nhắc — nên
      đừng thử lại lệnh đó, hãy đọc output của harness.
+   - **Đọc lại một tệp lớn không đổi lần thứ ba cũng bị chặn** (`tools/hook_stale_read.py`): đọc lại tệp
+     mà tệp không đổi (mtime y hệt) không mang tin mới, mà mỗi lần đọc cả tệp là hàng chục nghìn token.
+     Vừa sửa tệp xong thì đọc lại vẫn được phép (mtime đã đổi). Khi bị chặn: `grep -n "<tên hàm>" <tệp>`
+     rồi đọc đúng đoạn (`offset`/`limit`).
 
 7. **Một vòng chấm, một người chấm.**
    - `review.sh` là công cụ của cả kênh: nó đọc mẫu, đánh số vòng, ký tên người chấm và đóng tem. Đừng tự làm lại

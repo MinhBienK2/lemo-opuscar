@@ -9,6 +9,15 @@
             "command": "python3 \"${CLAUDE_PROJECT_DIR:-.}/tools/hook_bg_log.py\""
           }
         ]
+      },
+      {
+        "matcher": "Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PROJECT_DIR:-.}/tools/hook_stale_read.py\""
+          }
+        ]
       }
     ]
   }
