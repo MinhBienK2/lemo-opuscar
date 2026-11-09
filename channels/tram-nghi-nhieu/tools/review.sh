@@ -471,7 +471,8 @@ if [ "$PROPS" = 1 ]; then
   # 1. blind: this session never sees the names
   cd "$W/blind"
   critic "Trong thư mục này có $N ảnh p_01.jpg … Mỗi ảnh là MỘT vật dựng 3D kiểu hoạt hình, nhìn từ ba phía (chéo, ngang, trên xuống), đặt trên nền trơn. Mở từng ảnh. Với mỗi ảnh, nói nó là vật gì như một người xem bình thường sẽ gọi: một cụm danh từ tiếng Việt cụ thể (\"quả chuối chín\", \"con chip máy tính\", \"cục pin điện thoại bị cắt đôi\"), cả trạng thái nếu thấy (xanh/chín, nguyên/cắt đôi). Đừng đoán theo một câu chuyện nào. Nếu không chắc, viết KHÔNG RÕ và nói nó giống những gì. Viết BLIND.md ở đây, mỗi ảnh một dòng:
-#n TÊN: <tên> | CHẮC: cao|vừa|thấp | THẤY: <những chi tiết làm bạn gọi tên như vậy; chi tiết nào lạ>
+#n (p_NN.jpg) TÊN: <tên> | CHẮC: cao|vừa|thấp | THẤY: <những chi tiết làm bạn gọi tên như vậy; chi tiết nào lạ>
+Ghi tên file ảnh vào đầu dòng — tên file là sự thật, số bạn tự đánh thì không. Một ảnh, một dòng: đừng bỏ ảnh nào.
 rồi in lại nó." no-verdict
   [ -s BLIND.md ] || cp out.txt BLIND.md
   cd "$W"; cp blind/BLIND.md .
@@ -505,7 +506,8 @@ PY
     # đoán mù là phép đo của một người, lần đoán thứ hai là phép đo của một người khác; mất lần thứ hai thì mất
     # phép đo của người khác, nhưng không được để một phép đo phụ giết vòng chấm của cả vật dựng.
     if ! (cd "$W/blind2" && critic "Trong thư mục này có $M ảnh: $(ls "$W/blind2" | tr '\n' ' '). Mỗi ảnh là MỘT vật dựng 3D kiểu hoạt hình, nhìn từ ba phía (chéo, ngang, trên xuống), đặt trên nền trơn. Hãy gọi tên từng vật như một người xem bình thường sẽ gọi: một cụm danh từ tiếng Việt cụ thể, có cả trạng thái nếu thấy. Đừng đoán theo một câu chuyện nào. Đây là lần đoán thứ hai, độc lập: không ai cho bạn xem lần đoán trước. Nếu không chắc, viết KHÔNG RÕ và nói nó giống những gì. Viết BLIND2.md ở đây, mỗi ảnh một dòng:
-#n TÊN: <tên> | CHẮC: cao|vừa|thấp | THẤY: <những chi tiết làm bạn gọi tên như vậy>
+#n (p_NN.jpg) TÊN: <tên> | CHẮC: cao|vừa|thấp | THẤY: <những chi tiết làm bạn gọi tên như vậy>
+Ghi tên file ảnh vào đầu dòng — tên file là sự thật, số bạn tự đánh thì không. Một ảnh, một dòng: đừng bỏ ảnh nào.
 rồi in lại nó." no-verdict); then
       echo "review --props: lần đoán thứ hai không trả lời — vòng này đi tiếp với một lần đoán; số đoán thứ hai là của người khác sẽ thiếu." >&2
     fi
@@ -517,16 +519,16 @@ open('NAMES.md','w').write('\n'.join(f\"#{x['n']} {x['name']}  (p/p_{x['n']:02d}
   # 2. judge: the blind names against the intended ones
   # The judge opens every object's image too, so its clock is the big one again.
   [ -n "$CRITIC_TIMEOUT_SET" ] || CRITIC_TIMEOUT=$((3600 + 180 * N))
-  critic "Bạn kiểm tra vật dựng cho kênh Trạm Nghĩ Nhiều, nơi mọi vật có thật phải dựng đúng là nó, nhìn một giây là biết (trực thăng ra trực thăng có cánh quạt, đuôi, càng; không bao giờ là một cái hộp thay cho nó). Một người xem khác, không biết vật định dựng là gì, đã gọi tên từng vật trong BLIND.md. BLIND2.md (nếu có) là lần đoán thứ hai, của một người khác, chỉ với những vật mà lần đoán đầu không chắc. NAMES.md là tên người làm định dựng. Ảnh ở p/.
+  critic "Bạn kiểm tra vật dựng cho kênh Trạm Nghĩ Nhiều, nơi mọi vật có thật phải dựng đúng là nó, nhìn một giây là biết (trực thăng ra trực thăng có cánh quạt, đuôi, càng; không bao giờ là một cái hộp thay cho nó). Một người xem khác, không biết vật định dựng là gì, đã gọi tên từng vật trong BLIND.md. BLIND2.md (nếu có) là lần đoán thứ hai, của một người khác, chỉ với những vật mà lần đoán đầu không chắc. NAMES.md là tên người làm định dựng. Ảnh ở p/. Số trong BLIND.md là người đoán mù tự đánh và có thể lệch với file ảnh (đã có vòng đánh số hoán đổi và thiếu mục): hãy mở đúng ảnh p_NN.jpg theo NAMES.md rồi tự nhìn.
 Với từng vật: mở ảnh của nó, TỰ GỌI TÊN bằng mắt mình, rồi mới phán. Tên trong BLIND.md và BLIND2.md là lần đoán của người khác, và họ cũng có thể sai. ĐỘ CHẮC KHÔNG PHẢI LÀ PHÁN QUYẾT: một tên đúng nhưng \"chắc thấp\" vẫn là KHỚP, một tên sai nhưng \"chắc cao\" vẫn là HỎNG. Hai lần đoán lệch nhau thì ghi rõ lệch, và vật đó KHÔNG THỂ HỎNG CHỈ VÌ TÊN — nó HỎNG khi ảnh cho thấy vật khác.
 KHỚP khi ảnh tự nó nói ra vật thật đó: danh từ chính là đúng vật đó (từ đồng nghĩa được), trạng thái đúng (xanh/chín, nguyên/cắt đôi, chất liệu như thuỷ tinh/nhựa/kim loại), tỉ lệ và bộ phận đặc trưng đúng. HỎNG khi: ảnh cho thấy một vật gần giống (bát thành đĩa, thuỷ tinh thành nhựa, chuối lốm đốm thành chuối chín), vật định dựng chỉ là một phần trong tên của vật khác (\"ống vàng có găng tay\" cho một bàn tay), hoặc ảnh không cho biết đó là vật gì sau một giây nhìn. Đừng nương tay: người xem phim chỉ có một giây. Riêng linh kiện kỹ thuật mà người thường không biết tên (thanh lưỡng kim, tiếp điểm công tắc, rơ-le, mâm nhiệt): KHỚP khi người xem tả đúng hình thật làm nên nó (hai lớp kim loại khác màu dán vào nhau; hai lá kim loại có đầu tiếp xúc bạc, nối dây điện; đĩa kim loại có dây điện trở) và không gọi nó thành một vật thường khác (kẹp quần áo, bản lề, bếp ga): đó là HỎNG. Mở ảnh của vật hỏng, chỉ ra vì sao nó bị gọi sai (thiếu bộ phận đặc trưng nào, tỉ lệ sai, màu hay chất liệu sai, trông như vật nào khác), và cách sửa bằng hình: thêm bộ phận gì, đổi hình dáng gì, chất liệu gì. Cả vật khớp cũng ghi chỗ còn thô (khối trơn, thiếu chi tiết bề mặt) nếu có.
 Bốn nhóm, xếp theo CHÍNH CÁI TÊN trong NAMES.md — mỗi vật in ra nhóm của nó cùng lý do, không xếp sau:
 A. VẬT ĐỨNG RIÊNG — người xem nhìn một mình vật đó cũng gọi được tên nó (giàn phơi, kẹp gỗ, áo phông, quần, khăn tắm, bồn chậu, quạt, túi, cân, nhiệt kế, ẩm kế, ghế, bàn). Nhóm này KHỚP khi ảnh tự nó đúng vật; HỎNG khi ảnh cho thấy vật khác, hoặc khi ảnh không cho biết sau một giây nhìn đó là vật gì — kể cả khi người đoán gọi KHÔNG RÕ (lúc đó bạn tự mở ảnh và tự phán: bạn cũng không gọi được tên thì HỎNG).
-B. VẬT LÀ PHẦN HOẶC CƠ CHẾ — cái chỉ đọc được trong phim, không ai gọi tên được khi nó đứng riêng (sợi vải đan, tấm vải dệt, giọt nước đọng trên sợi, mặt nước cận, nửa áo ướt, áo úp, giọt nước rơi từ mép khăn, bàn tay người). Nhóm này chỉ HỎNG khi ảnh CHO THẤY MỘT VẬT THẬT KHÁC — nồi ba chân thay cho quần, lưới thép mắt xích thay cho tấm vải, mannequin gỗ thay cho bàn tay, bình thuỷ tinh thay cho giọt nước. Tên mù là KHÔNG RÕ, hoặc là một danh từ chung đúng (nước, vải, sợi, tay, áo) thì ảnh vẫn được chấp nhận là vật đó: KHỚP, kèm ghi chỗ còn thô. Đây là luật của kênh: vật có thật phải dựng đúng là nó, không bao giờ là vật khác đứng thay cho nó.
+B. VẬT LÀ PHẦN HOẶC CƠ CHẾ — cái chỉ đọc được trong phim, không ai gọi tên được khi nó đứng riêng (sợi vải đan, tấm vải dệt, giọt nước đọng trên sợi, mặt nước cận, nửa áo ướt, áo úp, giọt nước rơi từ mép khăn, bàn tay người). Nhóm này chỉ HỎNG khi ảnh CHO THẤY MỘT VẬT THẬT KHÁC — nồi ba chân thay cho quần, lưới thép mắt xích thay cho tấm vải, mannequin gỗ thay cho bàn tay, bình thuỷ tinh thay cho giọt nước. Căn cứ để phán là ảnh bạn tự mở, không phải lời của người đoán mù: khi ảnh đúng là vật mà người xem gọi nhầm tên (một lưới sợi đan đọc thành đống lọ thuỷ tinh, một bàn tay đọc thành bàn chân), dòng đó là KHỚP kèm ghi chú tên mù — vật chỉ HỎNG khi ảnh thật sự thay bằng một vật khác. Tên mù là KHÔNG RÕ, hoặc là một danh từ chung đúng (nước, vải, sợi, tay, áo) thì ảnh vẫn được chấp nhận là vật đó: KHỚP, kèm ghi chỗ còn thô. Đây là luật của kênh: vật có thật phải dựng đúng là nó, không bao giờ là vật khác đứng thay cho nó.
 Nhóm A và B cùng lấy ở tên: tên ngắn, danh từ quen thuộc (quần, áo, khăn, bồn, ghế, bàn) là A; tên có câu bổ nghĩa mô tả một mảnh hay một hiện tượng (sợi vải đan cận, giọt nước đọng trên sợi, mặt nước cận có gợn sóng, áo úp: mép dưới úp lên, mảng ẩm nằm trên mặt gấp) là B.
 Viết PROPS-REVIEW.md ở thư mục này theo mẫu:
 VERDICT: PASS | FAIL      (PASS khi không vật nào HỎNG: nhóm A phải đúng tên, nhóm B không được đọc thành vật thật khác)
-#n <tên định dựng> — [A|B] — KHỚP|HỎNG — người xem gọi: <tên mù> (lần 2: <tên mù thứ hai> nếu có)
+#n <tên định dựng> — [A|B] — KHỚP|HỎNG — ảnh cho thấy: <bạn tự mở ảnh và thấy gì> — người xem gọi: <tên mù> (lần 2: <tên mù thứ hai> nếu có)
   → SỬA: <cách sửa bằng hình>
 rồi in lại nó."
   # the critic may write the report under the name in its template or the name in the task line;
@@ -575,6 +577,14 @@ PY
   # number written two rounds ago can point at a different object today — and the image beside it is the new one.
   if ! python3 "$CHANNEL/tools/check_props_refs.py" "$EP" >&2; then
     echo "review --props: FAIL (các số trong bản chấm không còn trỏ vào vật cũ — sửa lại số trong bản chấm, hoặc dời vật để số không dịch)" >&2
+    exit 1
+  fi
+  # Every prop needs exactly one verdict, and every verdict needs to say what the image shows. A prop
+  # nobody judged is a prop that goes into the film unchecked (tap-01: vật #25 không có dòng nào); and a
+  # verdict that only repeats the blind namer's words cannot be checked by anyone — two correct props were
+  # sent for repair that way (tap-01: lưới sợi đan đọc thành lọ thuỷ tinh, bàn tay đọc thành bàn chân).
+  if ! python3 "$CHANNEL/tools/props_report_check.py" "$EP" "$W/R.md" "$W/BLIND.md" "$N" >&2; then
+    echo "review --props: FAIL (bản chấm chưa đủ — mỗi vật phải có đúng một dòng phán quyết, và dòng phải nói \"ảnh cho thấy:\" để người đọc kiểm tra được)" >&2
     exit 1
   fi
   mkdir -p "$EP/review/props"; cp p/p_*.jpg "$EP/review/props/"
