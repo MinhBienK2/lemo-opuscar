@@ -134,8 +134,10 @@ def sha(path): return hashlib.sha256(open(path, 'rb').read()).hexdigest()
 
 
 def passed(review):
-    """a verdict of PASS — it may sit under a heading ('## VERDICT: PASS'), the way a director's cut ends"""
-    return bool(re.search(r'^#*\s*VERDICT: *PASS', open(review, encoding='utf-8').read(), re.M))
+    """a verdict of PASS — it may sit under a heading ('## VERDICT: PASS'), the way a director's cut ends,
+    and it may be written in bold ('**VERDICT: PASS**'), the way a critic writes it when it answers in chat"""
+    return bool(re.search(r'^#*\s*[*_]{0,2}VERDICT: *[*_]{0,2} *PASS',
+                          open(review, encoding='utf-8').read(), re.M))
 
 
 def stamp_path(ep, kind, ch=None):
@@ -240,7 +242,7 @@ def status(ep):
     if reports:
         last = reports[-1]
         head = open(last, encoding='utf-8', errors='replace').read()
-        verdict = re.search(r'^#*\s*VERDICT: *\w+', head, re.M)
+        verdict = re.search(r'^#*\s*[*_]{0,2}VERDICT: *[*_]{0,2} *\w+', head, re.M)
         print(f'last verdict: {verdict.group(0).strip() if verdict else "?"} ({os.path.relpath(last, ep)})')
     movies = [f for f in glob.glob(os.path.join(ep, '*.mp4')) + glob.glob(os.path.join(ep, 'out', '*.mp4'))]
     print('movie:', ', '.join(os.path.basename(m) for m in movies) if movies else 'chưa có')

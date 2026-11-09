@@ -28,6 +28,11 @@
 # model (default: that tool's own default model). Who judged is signed under every
 # report and written into the stamp.
 set -e
+
+# The verdict line of a report. The critic may write it plain ("VERDICT: PASS") or in bold
+# ("**VERDICT: PASS**"), with or without a heading mark in front — and a report whose verdict the tool
+# cannot read is a round thrown away, not a verdict about the film.
+VPASS='^#*[[:space:]]*[*_]{0,2}VERDICT: *[*_]{0,2} *PASS'
 HERE=$(cd "$(dirname "$0")" && pwd)
 CHANNEL=$(cd "$HERE" && while [ ! -f "CHANNEL.md" ] && [ "$PWD" != "/" ]; do cd ..; done; pwd)
 LIB=$(cd "$HERE" && while [ ! -f "AGENTS.md" ] && [ "$PWD" != "/" ]; do cd ..; done; pwd)
@@ -185,7 +190,7 @@ Thư mục làm việc của bạn: $W. Đọc TREATMENT.md, FACTS.md, STRATEGY.
   sign "--outline" OUTLINE-REVIEW.md
   cp OUTLINE-REVIEW.md "$EP/review/OUTLINE-REVIEW-$n.md"; cp OUTLINE-REVIEW.md "$EP/review/OUTLINE-REVIEW.md"
   cat OUTLINE-REVIEW.md
-  if grep -qE '^#*[[:space:]]*VERDICT: *PASS' OUTLINE-REVIEW.md; then
+  if grep -qE "$VPASS" OUTLINE-REVIEW.md; then
     $GATE stamp "$EP" outline "$EP/review/OUTLINE-REVIEW-$n.md" --critic "$CRITIC_ID"; echo "review --outline: PASS"; exit 0
   fi
   echo "review --outline: FAIL (sửa TREATMENT.md và FACTS.md theo $EP/review/OUTLINE-REVIEW.md, rồi chạy lại)"; exit 1
@@ -197,7 +202,7 @@ if [ "$PROPS" = 1 ]; then
   # The director's cut ends the step: a written scope of what was cut, ending in VERDICT: PASS, stands for the
   # props. The stamp binds it to src/props.js by its hash, so a cut written for older code cannot pass newer code.
   CUT="$EP/review/PROPS-DIRECTORS-CUT.md"
-  if [ -f "$CUT" ] && grep -qE '^#*[[:space:]]*VERDICT: *PASS' "$CUT"; then
+  if [ -f "$CUT" ] && grep -qE "$VPASS" "$CUT"; then
     if ! python3 "$CHANNEL/tools/gate.py" cut "$EP" props "$CUT" >&2; then
       echo "review --props: bản cắt không còn nói về code hiện tại — viết lại bản cắt sau khi sửa code xong rồi chạy lại" >&2
       exit 1
@@ -307,7 +312,7 @@ PY
   cp R.md "$EP/review/PROPS-REVIEW-$n.md"; cp R.md "$EP/review/PROPS-REVIEW.md"
   mkdir -p "$EP/review/props"; cp p/p_*.jpg "$EP/review/props/"
   cat R.md
-  if grep -qE '^#*[[:space:]]*VERDICT: *PASS' R.md; then $GATE stamp "$EP" props "$EP/review/PROPS-REVIEW-$n.md" --critic "$CRITIC_ID"; echo "review --props: PASS"; exit 0; fi
+  if grep -qE "$VPASS" R.md; then $GATE stamp "$EP" props "$EP/review/PROPS-REVIEW-$n.md" --critic "$CRITIC_ID"; echo "review --props: PASS"; exit 0; fi
   echo "review --props: FAIL (sửa src/props.js theo $EP/review/PROPS-REVIEW.md, ảnh ở $EP/review/props/, rồi chạy lại)"; exit 1
 fi
 
@@ -330,7 +335,7 @@ if [ "$STORYBOARD" = 1 ]; then
   # The stamp binds the cut to LOOK.md + src/film.js by their hash, so a cut written for an older film cannot
   # pass a newer one — the digest is that guard, and no timestamp rule is needed on top of it.
   CUT="$EP/review/STORYBOARD-DIRECTORS-CUT.md"
-  if [ -f "$CUT" ] && grep -qE '^#*[[:space:]]*VERDICT: *PASS' "$CUT"; then
+  if [ -f "$CUT" ] && grep -qE "$VPASS" "$CUT"; then
     $GATE stamp "$EP" storyboard "$CUT" --critic "$CRITIC_ID"
     echo "review --storyboard: PASS (đạo diễn cắt: $CUT)"; exit 0
   fi
@@ -352,7 +357,7 @@ Viết STORYBOARD-REVIEW.md ở thư mục này theo mẫu, rồi in lại nó."
   sign "--storyboard" R.md
   cp R.md "$EP/review/STORYBOARD-REVIEW-$n.md"; cp R.md "$EP/review/STORYBOARD-REVIEW.md"
   cat R.md
-  if grep -qE '^#*[[:space:]]*VERDICT: *PASS' R.md; then $GATE stamp "$EP" storyboard "$EP/review/STORYBOARD-REVIEW-$n.md" --critic "$CRITIC_ID"; echo "review --storyboard: PASS"; exit 0; fi
+  if grep -qE "$VPASS" R.md; then $GATE stamp "$EP" storyboard "$EP/review/STORYBOARD-REVIEW-$n.md" --critic "$CRITIC_ID"; echo "review --storyboard: PASS"; exit 0; fi
   echo "review --storyboard: REJECT (sửa theo $EP/review/STORYBOARD-REVIEW.md, rồi chạy lại)"; exit 1
 fi
 
@@ -429,7 +434,7 @@ Thư mục làm việc của bạn: $W. Đọc lines.json, FACTS.md, STRATEGY.md
   [ -s SCRIPT-REVIEW.md ] || cp out.txt SCRIPT-REVIEW.md
   FLAGGED=$(unflag SCRIPT-REVIEW.md "$(cat flags.txt)" "LONG")   # a digit or a missing FACTS.md is never wrong
   # from the fourth run only a CHẶN holds the words back
-  if [ "$n" -ge 4 ] && [ -z "$FLAGGED" ] && ! grep -qE '^#*[[:space:]]*VERDICT: *PASS' SCRIPT-REVIEW.md && ! grep -q '\[CHẶN\]' SCRIPT-REVIEW.md && grep -q '^#[0-9]' SCRIPT-REVIEW.md; then
+  if [ "$n" -ge 4 ] && [ -z "$FLAGGED" ] && ! grep -qE "$VPASS" SCRIPT-REVIEW.md && ! grep -q '\[CHẶN\]' SCRIPT-REVIEW.md && grep -q '^#[0-9]' SCRIPT-REVIEW.md; then
     sed -i "s/^VERDICT:.*/VERDICT: PASS (lần chấm thứ $n, không còn lỗi CHẶN; sửa nốt các lỗi NẶNG bên dưới theo VIẾT LẠI rồi chạy --script thêm một lần để đóng dấu lời mới)/" SCRIPT-REVIEW.md
   fi
   { cat SCRIPT-REVIEW.md; [ -n "$FLAGGED" ] && printf '\n## Cờ máy chưa sửa (tự động FAIL)\n%s\n' "$FLAGGED"; } > R.md
@@ -437,7 +442,7 @@ Thư mục làm việc của bạn: $W. Đọc lines.json, FACTS.md, STRATEGY.md
   sign "--script${CHID:+ --chapter $CHID}" R.md
   cp R.md "$EP/review/SCRIPT-REVIEW-$TAG$n.md"; cp R.md "$EP/review/SCRIPT-REVIEW${CHID:+-$CHID}.md"
   cat R.md
-  if grep -qE '^#*[[:space:]]*VERDICT: *PASS' R.md && [ -z "$FLAGGED" ]; then
+  if grep -qE "$VPASS" R.md && [ -z "$FLAGGED" ]; then
     $GATE stamp "$EP" script "$EP/review/SCRIPT-REVIEW-$TAG$n.md" ${CHID:+--chapter "$CHID"} --critic "$CRITIC_ID"
     echo "review --script: PASS${CHID:+ (chương $CHID)}"; exit 0
   fi
@@ -459,7 +464,7 @@ else SCOPE=""; SCOPE_NAME="cả phim"; LIMIT=5; fi
 # picture. The stamp binds it to the film's own files by their hash, so a cut written for an older film cannot
 # pass a newer one.
 CUT="$EP/review/REVIEW${CHID:+-$CHID}-DIRECTORS-CUT.md"
-if [ "$VIDEO" = 0 ] && [ -z "$LINES" ] && [ -f "$CUT" ] && grep -qE '^#*[[:space:]]*VERDICT: *PASS' "$CUT"; then
+if [ "$VIDEO" = 0 ] && [ -z "$LINES" ] && [ -f "$CUT" ] && grep -qE "$VPASS" "$CUT"; then
   if ! python3 "$CHANNEL/tools/gate.py" cut "$EP" picture "$CUT" ${CHID:+--chapter "$CHID"} >&2; then
     echo "review: bản cắt không còn nói về code hiện tại — viết lại bản cắt sau khi sửa code xong rồi chạy lại" >&2
     exit 1
@@ -559,7 +564,7 @@ cp R.md "$EP/review/REVIEW-$SCOPE$n.md"; cp R.md "$EP/review/REVIEW.md"
 # what the last round fixed and what is still open: the next round must not start from zero
 python3 "$CHANNEL/tools/check_progress.py" "$EP" 2>/dev/null || true
 cat R.md
-if grep -qE '^#*[[:space:]]*VERDICT: *PASS' R.md && [ -z "$FLAGGED" ]; then
+if grep -qE "$VPASS" R.md && [ -z "$FLAGGED" ]; then
   # only a review of a chapter or of the whole film, before the render, opens the gate
   if [ "$VIDEO" = 0 ] && [ -n "$CHID" ]; then $GATE stamp "$EP" picture "$EP/review/REVIEW-$SCOPE$n.md" --chapter "$CHID" --critic "$CRITIC_ID"
   elif [ "$VIDEO" = 0 ] && [ -z "$LINES" ]; then $GATE stamp "$EP" picture "$EP/review/REVIEW-$SCOPE$n.md" --critic "$CRITIC_ID"; fi
