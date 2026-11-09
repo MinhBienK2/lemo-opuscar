@@ -67,13 +67,18 @@ def number_words(n):
         t, u = divmod(n, 10)
         tens = {1: 'mười', 2: 'hai mươi', 3: 'ba mươi', 4: 'bốn mươi', 5: 'năm mươi',
                 6: 'sáu mươi', 7: 'bảy mươi', 8: 'tám mươi', 9: 'chín mươi'}.get(t, '')
-        return (tens + ' ' + WORDS.get(u, '')).strip()
+        # Trong số ghép, con số năm là "lăm": "bốn mươi lăm", không phải "bốn mươi năm".
+        # Sai chỗ này thì một nhãn vẽ "45 °C" bị coi là chưa được lời kể đọc, dù lời kể
+        # nói "bốn mươi lăm độ" — máy chặn một phim đúng.
+        ones = 'lăm' if u == 5 else WORDS.get(u, '')
+        return (tens + ' ' + ones).strip()
     if n < 1000:
         h, r = divmod(n, 100)
         head = {1: 'một trăm', 2: 'hai trăm', 3: 'ba trăm', 4: 'bốn trăm',
                 5: 'năm trăm', 6: 'sáu trăm', 7: 'bảy trăm', 8: 'tám trăm',
                 9: 'chín trăm'}.get(h, '')
-        return (head + ' ' + number_words(r)).strip()
+        ones = 'lăm' if r == 5 else number_words(r)
+        return (head + ' ' + ones).strip()
     return str(n)
 
 
@@ -228,6 +233,16 @@ def selftest():
          lambda: [v for v, _ in numbers_in('20 g/kg')] == [20.0]
          and [v for v, _ in numbers_in('30 °C')] == [30.0]
          and [v for v, _ in numbers_in('MAX 400')] == [400.0]),
+        # Trong số ghép, "năm" là "lăm" — sai chỗ này thì nhãn "45 °C" bị coi là chưa được đọc
+        ('"bốn mươi lăm" là 45, "bốn mươi năm" không phải',
+         lambda: number_words(45) == 'bốn mươi lăm' and number_words(5) == 'năm'
+         and number_words(15) == 'mười lăm' and number_words(55) == 'năm mươi lăm'
+         and number_words(105) == 'một trăm lăm'),
+        ('lời kể nói "bốn mươi lăm độ" thì 45 đã được đọc',
+         lambda: is_said(45, ['quanh bốn mươi lăm độ, tế bào pin không nên sạc nữa'],
+                         ['quanh bốn mươi lăm độ'])),
+        ('lời kể nói "bốn mươi độ" thì 45 chưa được đọc',
+         lambda: not is_said(45, ['quanh bốn mươi độ'], ['quanh bốn mươi độ'])),
     ]
     bad = [name for name, ok in cases if not ok()]
     for name, ok in cases:
