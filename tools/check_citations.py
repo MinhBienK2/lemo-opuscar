@@ -47,8 +47,14 @@ def blocks(lines):
             cur = None
             continue
         kind = 'quote' if QUOTE.match(line) else ('list' if LIST_ITEM.match(line) else 'para')
-        cont = (cur is not None and cur['kind'] == kind
-                and (kind == 'quote' or kind == 'para' or (line[:1].isspace() and not LIST_ITEM.match(line))))
+        cont = False
+        if cur is not None:
+            if cur['kind'] == kind:
+                cont = (kind == 'quote' or kind == 'para' or (line[:1].isspace() and not LIST_ITEM.match(line)))
+            elif cur['kind'] == 'list' and line[:1].isspace() and not LIST_ITEM.match(line):
+                # a list item written over several lines: the indented continuation belongs to the item above it,
+                # so the DOI on the second line is still part of the source
+                cont = True
         if cont:
             cur['lines'].append(line)
         else:
@@ -166,8 +172,29 @@ def selftest():
 
 - **Đạo cụ:** trên đồng hồ treo tường, kim chỉ ở 15:20; cân nhà bếp đặt cạnh khung phơi.
 '''
+    # a source written over several lines: the DOI on the second line is still part of the source
+    wrapped = '''# Facts — Vì sao cầu vồng lại luôn ở hướng đối diện với Mặt Trời?
+
+## Nguồn / Sources
+
+- Harvey, A. H., Gallagher, J. S., Levelt Sengers, J. M. H. (1998). Revised formulation for the
+  refractive index of water and steam as a function of wavelength, temperature and density.
+  Journal of Physical and Chemical Reference Data 27(4), 761–770. DOI: 10.1063/1.556029
+'''
+    # the same source, written over several lines, and with no identifier anywhere in it
+    wrapped_untraceable = '''# Facts — Vì sao cầu vồng lại luôn ở hướng đối diện với Mặt Trời?
+
+## Nguồn / Sources
+
+- Harvey, A. H., Gallagher, J. S., Levelt Sengers, J. M. H. (1998). Revised formulation for the
+  refractive index of water and steam as a function of wavelength, temperature and density.
+  Journal of Physical and Chemical Reference Data 27(4), 761–770.
+'''
     cases = [
         ('a source with no DOI/PMID/URL is caught', untraceable, 1, 'no DOI/PMID/URL in this source'),
+        ('a source written over several lines keeps its DOI', wrapped, 0, 'every source is traceable'),
+        ('a source written over several lines and with no identifier is caught', wrapped_untraceable, 1,
+         'no DOI/PMID/URL in this source'),
         ('an unexpanded template placeholder is caught', template, 1, 'unexpanded template placeholder in research file'),
         ('every source with a DOI/PMID/URL passes', good, 0, 'every source is traceable'),
         ('a source cited with its identifier elsewhere in the same file is traceable', traceable, 0, 'every source is traceable'),
