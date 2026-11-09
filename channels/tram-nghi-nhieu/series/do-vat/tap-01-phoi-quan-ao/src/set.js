@@ -60,9 +60,12 @@ export function buildBalcony() {
   }
   // khung cửa + cánh cửa có ô kính
   const frame = toon('#e8dcc0');
-  scene.add(mesh(rbox(DOORX1 - DOORX0 + .12, .07, .16, .012), frame, [(DOORX0 + DOORX1) / 2, DOORH, WZ]));
-  scene.add(mesh(rbox(.07, DOORH, .16, .012), frame, [DOORX0 - .03, DOORH / 2, WZ]));
-  scene.add(mesh(rbox(.07, DOORH, .16, .012), frame, [DOORX1 + .03, DOORH / 2, WZ]));
+  const doorFrame = [
+    mesh(rbox(DOORX1 - DOORX0 + .12, .07, .16, .012), frame, [(DOORX0 + DOORX1) / 2, DOORH, WZ]),
+    mesh(rbox(.07, DOORH, .16, .012), frame, [DOORX0 - .03, DOORH / 2, WZ]),
+    mesh(rbox(.07, DOORH, .16, .012), frame, [DOORX1 + .03, DOORH / 2, WZ]),
+  ];
+  doorFrame.forEach(m => scene.add(m));
   const doorLeaf = new THREE.Group(); doorLeaf.position.set((DOORX0 + DOORX1) / 2, 0, WZ - .03); scene.add(doorLeaf);
   doorLeaf.add(mesh(rbox(DOORX1 - DOORX0 - .02, 1.05, .05, .01), P.M.woodDark, [0, .53, 0]));      // ván dưới
   const pane = mesh(new THREE.PlaneGeometry(DOORX1 - DOORX0 - .08, .78), toon('#dff0f7', { transparent: true, opacity: .15, depthWrite: false }), [0, 1.5, .02], { cast: false });
@@ -129,12 +132,15 @@ export function buildBalcony() {
   const roomAmb = new THREE.PointLight('#7f8fd8', .40, 4.0, 2); roomAmb.position.set(1.0, 1.9, -3.2); scene.add(roomAmb);
   const roomCeil = new THREE.PointLight('#ffe2b4', 1.25, 7.0, 2); roomCeil.position.set(-.1, 2.55, -3.6); scene.add(roomCeil);
   const roomFill = new THREE.PointLight('#cfd8ff', .45, 5.0, 2); roomFill.position.set(-1.9, 1.6, -2.0); scene.add(roomFill);
+  // đèn góc xa: nó nằm ở góc tường phải, ngay trên áo tối treo ở thanh treo B.
+  // Trước đây nó đứng sát tường (2.45, còn mặt trong của tường ở 2.54) nên đốt thành một
+  // vũng sáng trắng cháy trên tường, ngay trên chiếc áo tối — nhận xét nghiệm thu vòng 1.
+  // Đẩy ra khỏi tường và hạ sáng: vùng sáng vẫn có để đọc góc phòng, nhưng không còn chói.
+  const cornerLamp = new THREE.PointLight('#8ea6ff', .30, 3.2, 2); cornerLamp.position.set(2.02, 2.02, -5.10); scene.add(cornerLamp);
   // đèn trong phòng (kể cả nắng, vì nắng là đèn chiều nên nó rọi vào cả phòng) hạ sáng theo từng nhát:
   // góc xa của phòng phải thật tối, không phải một căn phòng sáng đều
-  const roomLights = [roomLamp, roomAmb, roomCeil, roomFill, sun];
+  const roomLights = [roomLamp, roomAmb, roomCeil, roomFill, sun, cornerLamp];
   const roomBase = roomLights.map(l => l.intensity);
-  // đèn tập trung: mỗi nhát đặt vào đúng điểm nhìn, để vùng sáng nhất luôn là thứ đang kể
-  const cornerLamp = new THREE.PointLight('#8ea6ff', .90, 3.2, 2); cornerLamp.position.set(2.45, 1.78, -5.30); scene.add(cornerLamp);
   // đèn tập trung: rộng và mềm, để không để lại một vệt trắng chói trên vải
   const focus = new THREE.SpotLight('#ffe0b0', 0, 5.0, .60, .85, 1.2);
   focus.position.set(0, 2.4, 1.2); scene.add(focus); scene.add(focus.target);
@@ -246,6 +252,24 @@ export function buildBalcony() {
   const flipCornerPos = new THREE.Vector3();
   flipShirt.group.updateMatrixWorld(true);
   flipCorner.getWorldPosition(flipCornerPos);
+  // ── cái áo úp CÒN ẨM TRÊN SÀN: đúng hình kết mà TREATMENT đã hứa
+  // ("quay lại hiên … cạnh đó TRÊN SÀN còn để một cái áo úp còn ẩm").
+  // Không tái dùng cái áo úp trên bàn của câu 49: nó đã nằm đó, và một cái áo
+  // tự bay từ bàn xuống sàn giữa phim là điều không có thật.
+  // Trải phẳng (không gấp, không chồng): cả hai mặt đều hứng gió.
+  // Màu NGƯỜI ẨM, không phải màu vải khô: nền sàn hiên là gạch ấm, một cái áo
+  // kem trên nền ấm thì không tách ra được. Mặt áo úp xuống sàn vẫn ẩm, nên cả
+  // mặt nhìn thấy là màu lạnh ẩm — đọc được ngay "còn ẩm".
+  const floorShirt = P.tShirt({ color: '#c9d3d7', wetColor: '#a2b4c0', w: .60, h: .72 });
+  floorShirt.group.rotation.order = 'ZYX';
+  floorShirt.group.rotation.set(-Math.PI / 2, .46, 0);
+  floorShirt.group.scale.set(1, 1, .42);
+  floorShirt.group.position.set(0, 0, 0);
+  floorShirt.group.updateMatrixWorld(true);
+  const fsBox = new THREE.Box3().setFromObject(floorShirt.group);
+  floorShirt.group.position.set(.30, .010 - fsBox.min.y, 1.50);
+  scene.add(floorShirt.group);
+  const floorPos = () => floorShirt.group.getWorldPosition(new THREE.Vector3()).toArray();
   // túi nylon buộc ở đầu dây phơi, nơi gió thổi qua
   const bag = P.nylonBag(); bag.group.position.set(1.86, 1.30, .85); scene.add(bag.group);
   scene.add(mesh(new THREE.CylinderGeometry(.004, .004, .12, 6), P.M.rope, [1.86, 1.50, .85]));
@@ -442,6 +466,12 @@ export function buildBalcony() {
   apoPuddle.rotation.x = -Math.PI / 2;
   apoPuddle.position.set(-1.30, .4235, 1.22); apoPuddle.renderOrder = 4;
   fxLayer(apoPuddle); scene.add(apoPuddle);
+  // vệt ẩm dưới cái áo úp trên sàn (câu 60): nó CÒN ẨM, và phải thấy được
+  const floorWetPatch = new THREE.Mesh(new THREE.PlaneGeometry(.62, .48), wetPatchMat.clone());
+  floorWetPatch.material.opacity = .62;
+  floorWetPatch.rotation.x = -Math.PI / 2;
+  floorWetPatch.position.set(.30, .006, 1.56); floorWetPatch.renderOrder = 4;
+  fxLayer(floorWetPatch); scene.add(floorWetPatch);
 
   // ── cột hơi nước bốc lên từ mép trên của tấm áo A ──
   // "Chỗ trống ngay trên vải" và "hơi nước mới đi được" là hai câu cùng một
@@ -668,11 +698,31 @@ export function buildBalcony() {
   const sweatPos = [], sweatVel = [];
   for (let i = 0; i < 6; i++) { sweatPos.push(new THREE.Vector3()); sweatVel.push(new THREE.Vector3(1, .25, 0)); }
 
+  // ── Sửa lỗi "vỡ hình" ở nhát c27 (vòng nghiệm thu cuối, 16:31) ──
+  // Người xem thấy ở góc dưới–bên phải nhát c27 một khối hình màu xanh navy đứng
+  // yên: mặt phẳng sắc cạnh chồng lên, một lỗ tam giác, một sừng nhọn chạy chéo
+  // ra ngoài khung, một mảnh vụn dẹp trên sàn — chiếm ~1/4 khung.
+  //
+  // Đó KHÔNG phải vật thể: dựng lại nhát đó với `?noshadow` (tắt đèn đổ bóng)
+  // thì khối đó biến mất sạch. Nó là **bóng đổ** của khu cửa hiên đổ vào tường
+  // phải của phòng kín — và bóng rơi ở một góc rất xiên, nên bản đồ bóng vỡ
+  // thành mảnh vụn và gai. Đo từng vật (tắt bóng của từng đối tượng rồi so số)
+  // cho ra: bóng đổ vào chỗ đó là của **khung cửa + cánh cửa** và của **đàn áo +
+  // áo phơi một mặt** (hai đồ đang treo ngay trước lối cửa).
+  //
+  // Sửa: bốn vật đó không đổ bóng. Không mất gì đáng kể — trong những nhát khác
+  // bóng của chúng rơi ngoài khung, còn góc tường đó vốn đã là chỗ tối nhất của
+  // phòng. Không sửa mã dùng chung: đây là mã của riêng tập này.
+  for (const o of [doorLeaf, ...doorFrame, pile.group, half.group]) {
+    o.traverse(c => { c.castShadow = false; });
+  }
+
   const S = {
     scene, sun, line, line2, shirt, pants, twl, tee, half, hemDrop, pile, basin, chair, upShirt, bag,
     thermo, hygro, fan, fanB, fanTable, shirtA, shirtB, lab, scale1, scale2, scaleShirt1, scaleShirt2, teeBack,
     wallClock, hand, mist, mistG, mistRim, mistFar, mistBal, doorLeaf, pane, spread, labSpk, vapTrailSpk, vapUpSpk, vapBal, sweat, focus, fanC, cmpBar,
     bench, cmpA, cmpB, cmpFan, jeansPatch, teePatch, hygro2, paneFog, vapApoSpk, apoPuddle, flipCornerPos,
+    floorShirt, floorPos, bench2, flipShirt,
     thermo30, thermo30Top, spreadPos, upPos, hemTop,
     vapColSpk, hemBand, doorSpk, denseSpk, vapBand, windVeil, windVeil2, wetLayer,
     update(t, opt = {}) {
@@ -695,11 +745,15 @@ export function buildBalcony() {
       // bàn bên phải; chỉ cái áo phơi rộng của câu 49 là ẩn đi (nó nằm chồng).
       const b49 = opt.bench49 ?? true;
       const noCmp = opt.noCmp ?? false;      // câu 1: cặp áo của câu 49 chưa tới giờ xuất hiện
-      spread.group.visible = b49 && !noCmp;
-      upShirt.group.visible = !noCmp;
-      // bàn phơi đứng NGAY TRƯỚC bồn chậu dưới mép áo ướt: ở câu 1 nó che mất
-      // bồn, nên câu 1 không có bàn phơi (bàn phơi là đạo cụ của câu 49 và câu 60)
-      bench.group.visible = !(opt.noBench ?? false);
+      // câu 60 là hình kết: hai cái bàn phơi (đạo cụ của câu 49) không được đứng
+      // giữa hình kết, và theo TREATMENT thì chỗ của chúng là MỘT cái áo úp còn
+      // ẩm nằm trên sàn. Chúng không xuất hiện ở câu 59, nên không gãy liên tục.
+      const benchOn = !(opt.noBench2 ?? false);
+      spread.group.visible = benchOn && b49 && !noCmp;
+      upShirt.group.visible = benchOn && !noCmp;
+      bench.group.visible = benchOn && !(opt.noBench ?? false);
+      bench2.group.visible = benchOn;
+      flipShirt.group.visible = benchOn;
       apoPuddle.visible = true;
       // gió ở hiên: vải bay, túi nylon nghiêng, dây phơi đung đưa
       const gust = .5 + .5 * Math.sin(t * .8) * Math.sin(t * .31 + 1.2);
@@ -1078,7 +1132,13 @@ export function buildFabric() {
   const fibres = P.wovenFibres(); scene.add(fibres.group);
   // tấm vải đan thật: lưới sợi dọc–ngang luồn qua nhau, đặt lệch sang phải–sau
   // để c10 (cận cảnh rộng) có một vật riêng khác với c11 (cận cảnh khe sợi)
-  const cloth = P.wovenCloth({ n: 44, size: .34 });
+  //
+  // Sợi THƯA (18 sợi mỗi chiều, không phải 44): với 44 sợi, mỗi sợi chỉ còn
+  // vài chấm ảnh và lớp viền mực vẽ trên mỗi sợi dính lại thành một mớ nét
+  // — tấm vải đọc ra như một bìa có vân in, không thấy sợi đan qua nhau
+  // (nhận xét nghiệm thu vòng 1, 0:32–0:37). Với 18 sợi, người xem thấy rõ
+  // sợi nào nằm trên sợi nào ở từng điểm giao.
+  const cloth = P.wovenCloth({ n: 18, size: .34 });
   cloth.group.position.set(.205, -.010, -.085);
   cloth.group.rotation.set(-.12, .20, .07);        // tấm vải nghiêng, để có chiều sâu chứ không phẳng như một tấm ảnh
   scene.add(cloth.group);
@@ -1135,7 +1195,7 @@ export function buildWater() {
   // bờ chật phía sau: gỗ tối, không phải một thanh nâu sáng.
   // Mặt trên của thanh bờ chỉ nhô cao hơn mặt nước một chút, nên ở nhát thấp
   // nó là một dải tối mảnh ở đường chân trời — không thành một dải nâu cắt ngang bầu trời.
-  const bank = mesh(rbox(1.8, .14, .5, .02), toon('#3a2c22'), [0, -.058, -.66]); scene.add(bank);
+  const bank = mesh(rbox(3.2, .14, .5, .02), toon('#2e241d'), [.20, -.062, -.66]); scene.add(bank);
   // hơi lạnh bốc lên từ phần nước còn lại: mã hình cho chữ "phần nước còn lại
   // thì mát đi" — không có hơi lạnh và đổi màu, câu đó không có hình.
   const coldTex = canvasTex(256, 256, (c, w, h) => {

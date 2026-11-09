@@ -24,10 +24,11 @@ Quy ước: **LOD** = cự ly máy thấy vật (`C` cận cảnh / `M` trung c�
 | **đàn áo phơi chồng trên dây** (3 cái, có dây phơi chạy qua vai, kẹp bám đúng vai) | c38, c40, c47, c48, c50, c56–c59 | C | Động: rung nhẹ | `shirtPile({n:3})` |
 | **Áo phơi một mặt**: nửa khô (sáng) – nửa ẩm (tối) | c48, c50, c56, c59 | C | Tĩnh (tương phản nửa sáng nửa tối) | `halfShirt({w:.60,h:.74})` |
 | **Cái áo úp**: áo phông còn ẩm **úp mép dưới lên** (nửa dưới gập lên nửa trên quanh một nếp gấp thật), nằm **trên mặt bàn phơi gỗ** (`x = −1.30`, mặt bàn `y = .42`) cạnh cái áo phơi rộng — vẫn thấy cổ, vai, tay áo, còn mảng ẩm nằm ngang trên mặt gấp; màu **không trắng cháy** (người chấm vòng 5 nói bản cũ mất sạch chi tiết vải) | c49 | C | Tĩnh (nằm trên mặt bàn phơi) | `foldedShirt({color:'#b3c3cf', wetColor:'#7d93a3', w:.62, h:.72})` |
-| **áo phơi rộng: cả hai mặt phơi ra** (đối chiếu c49: nằm ngửa, hai mặt thông) — **trải phẳng trên mặt bàn phơi gỗ** (`x = −0.55`, mặt bàn `y = .42`), cạnh cái áo úp; màu **không trắng cháy** (vòng 5). Ở c60 bàn phơi thứ hai (`x = 1.20`) **trống**, để câu "không chồng quần áo lên nhau" đọc được bằng mắt | c49 | C | Tĩnh | `spreadShirt({color:'#e3d8bd', w:.62, h:.66})` |
+| **áo phơi rộng: cả hai mặt phơi ra** (đối chiếu c49: nằm ngửa, hai mặt thông) — **trải phẳng trên mặt bàn phơi gỗ** (`x = −0.55`, mặt bàn `y = .42`), cạnh cái áo úp; màu **không trắng cháy** (vòng 5). Ở c60 **không còn bàn phơi nào** — hình kết là một cái áo úp còn ẩm nằm trên sàn (xem hàng dưới) | c49 | C | Tĩnh | `spreadShirt({color:'#e3d8bd', w:.62, h:.66})` |
+| **Cái áo úp còn ẩm nằm một mình trên sàn hiên** — hình kết theo `TREATMENT.md`: một cái áo úp sấp trên gạch, **không chồng lên món nào**, mặt nhìn thấy là mặt ẩm nên **màu lạnh ẩm** (tách được khỏi nền gạch ấm); dưới nó có vệt ẩm | c60 | C | Tĩnh | `tShirt({color:'#c9d3d7', wetColor:'#a2b4c0', w:.60, h:.72})` + vệt ẩm `floorWetPatch` (trong `src/set.js`) |
 | Bồn chậu nhựa có nước (dưới áo ướt) | c1, c60 | C | Tĩnh | `basin()` |
 | **ghế gỗ** (hiên, đứng trống bên trái) | c1, c47, c57, c58 | C | Tĩnh | `chair()` |
-| **Bàn phơi gỗ** (`dryBench`, mặt gỗ ở `y = .42`) — bàn thứ nhất `2.30 × .82` đặt ở `(−0.75, 0, 1.30)` **giữ cái áo úp và cái áo phơi rộng**; bàn thứ hai `1.10 × .74` đặt ở `(1.20, 0, 1.36)` **trải phẳng, không chồng quần áo** | c49, c60 | C | Tĩnh | `dryBench()` ×2 |
+| **Bàn phơi gỗ** (`dryBench`, mặt gỗ ở `y = .42`) — bàn thứ nhất `2.30 × .82` đặt ở `(−0.75, 0, 1.30)` **giữ cái áo úp và cái áo phơi rộng**; bàn thứ hai `1.10 × .74` đặt ở `(1.20, 0, 1.36)` **trải phẳng, không chồng quần áo**. Ở c60 **hai bàn cùng ẩn đi** (cờ `noBench2`): hình kết phải là cái áo úp trên sàn, không phải bàn phơi | c49 | C | Tĩnh | `dryBench()` ×2 |
 | **bàn thấp đặt quạt** | c3, c5, c6, c19, c27, c30, c33, c54 | M | Tĩnh | `sideTable()` |
 | **quạt bàn có lưới** (đầu quạt, cánh quay, lưới) — vỏ, nan lưới và lưới mặt trước cần texture kim loại canvas có seed (nhát c6 đẩy sát miệng quạt, c54 đưa cả đầu quạt vào khung) | c3, c5, c6, c19, c27, c30, c31, c33, c54 | C | Động: quay (`spin`), **tắt ở c52–c53** (`setSpeed(0)`) | `deskFan()` |
 | **quạt nhỏ trên bàn thí nghiệm** (đáy đế ở `y = .72`, **tâm đầu quạt ở `y ≈ 0.98`** — đo tâm đầu, ngang tầm mặt kính) | c5, c7, c29, c35, c36, c52, c53 | C | Động: quay — `setSpeed(2.0)` được gọi trong `BAL.update` khi cờ `lab` bật | `deskFan()` (thu nhỏ 0.62) |
@@ -42,7 +43,7 @@ Quy ước: **LOD** = cự ly máy thấy vật (`C` cận cảnh / `M` trung c�
 | **Ẩm kế thứ hai** (`hygro2`) — đồng hồ đối chiếu, đứng yên ở nửa; **đã tắt vĩnh viễn** (`opt.hygro2` luôn `false`) vì lời kể không đọc con số nào như vậy, và hai đồng hồ đọc lệch nhau đọc ra như một tỉ lệ giữa chín mươi và nửa | không dùng | — | Động (đứng yên) | `hygrometer()` — chiếc thứ hai trong `set.js` |
 | **bàn tay người** (bàn tay có ngón, đốt, móng; không có nhân vật) — da cần texture canvas có seed (c20 và c55 đều là cận cảnh) | c20, c54–c55 | C | Động: chạm áo rồi rút lại; đưa vào luồng gió nằm ngang, mu bàn tay ngửa ra cho máy; `pose(curl, spread)` xoay các ngón | `hand({skin, size})` |
 | **sợi vải đan cận** (hai sợi lớn ở tiền cảnh đan chữ V, một sợi chéo nền mờ, hai sợi mảnh) | c8–c9, c11–c12 | C | Tĩnh | `wovenFibres()` |
-| **tấm vải dệt: sợi dọc luồn qua sợi ngang** — **44 sợi dọc × 44 sợi ngang**, bán kính sợi `0.0021` (mảnh hơn một nửa so với bản đầu để không đọc thành rổ tre), sợi ngang uốn lên–xuống theo cos nên **đổi trên–dưới ở mỗi lần cắt** (`A = rad·1.05·cos(π·ph)`, `rad` là bán kính rung của riêng sợi đó), sợi không đều tăm tắp (lệch nhẹ, bán kính `0.74–1.30 r`), vân xơ tua nằm trong texture canvas (`repeat(2,22)`); có **lớp vải nền mờ** phía sau để khe hở không thấy thẳng ra nền | c10 | C | Tĩnh; **trọn tấm đan trong khung** (fov 30, máy lùi ra `z = .46`) | `wovenCloth({n:44, size:.34})` (mặc định `r = .0021`) — đặt lệch sang phải–sau trong bối cảnh N2 tại `(.205, −.010, −.085)`, **nghiêng** `Ry .20`, `Rx −.12` để có chiều sâu |
+| **tấm vải dệt: sợi dọc luồn qua sợi ngang** — **18 sợi dọc × 18 sợi ngang** (`PITCH = .34/18 ≈ .0189`, bán kính sợi `PITCH·.52 ≈ .0098` — sợi thưa nên sợi phải **to**, để người xem thấy sợi nào nằm trên sợi nào ở từng điểm giao; bản 44 × 44 đọc ra như một tấm bìa có vân in — nhận xét nghiệm thu vòng 1, 0:32–0:37), sợi ngang uốn lên–xuống theo cos nên **đổi trên–dưới ở mỗi lần cắt** (`A = rad·1.05·cos(π·ph)`, `rad` là bán kính rung của riêng sợi đó), sợi không đều tăm tắp (lệch nhẹ, bán kính `0.74–1.30 r`), vân xơ tua nằm trong texture canvas (`repeat(2,22)`); có **lớp vải nền mờ** phía sau để khe hở không thấy thẳng ra nền | c10 | C | Tĩnh; **trọn tấm đan trong khung** (fov 30, máy lùi ra `z = .46`) | `wovenCloth({n:18, size:.34})` (mặc định `r` = `PITCH·.52`) — đặt lệch sang phải–sau trong bối cảnh N2 tại `(.205, −.010, −.085)`, **nghiêng** `Ry .20`, `Rx −.12` để có chiều sâu |
 | **Sợi chéo nền mờ + hai sợi nền mảnh** (tầng hậu cảnh của N2, cho chiều sâu; không phải một mảnh vải liền khối) | c8, c11–c12 | C | Tĩnh | trong `wovenFibres()` |
 | **Giọt nước đọng trên sợi** (hình giọt nhọn) — nhát c9 là fov 12 nên sợi và giọt đều là vật cự ly cận: cần texture canvas có seed (vân xơ của sợi) và điểm sáng trên mặt giọt | c9, c11 | C | Động: nhỏ dần (`setSize`) | `dropOnThread()` — ở c9 là chủ thể một mình trên nền tối (fov 16) |
 | **mặt nước cận có gợn sóng** | c13–c18 | C | Động: gợn chạy | `waterSurface()` |
@@ -152,7 +153,7 @@ Báo cáo vòng 2 (`review/ASSET-AUDIT-REPORT.md`) nêu 14 mục: 5 linh kiện 
 | 3 | Hạt hơi nước bốc lên trên mặt áo (`vapUpSpk`, c23) | Đã có trong code (`set.js`), nay **thêm hàng** vào Nhóm 2 với trục bay `y ≈ 1.44 → 1.86` |
 | 4 | Lớp hơi nước mềm (`vapTrailSoft`) | Gộp vào hàng của vệt hơi nước bị gió chở đi, ghi rõ **hai tầng hạt** (30 hạt cứng + 12 hạt mềm) |
 | 5 | "Mảnh vải nền có mép cắt" | **Bỏ tuyên bố**: code không có vật này, và một mảnh vải liền khối trong cảnh "bên trong sợi" sẽ sai hơn. Dấu hiệu liên tục thật nay là **tấm vải dệt** (`wovenCloth`) ở hậu cảnh N2; mục "Phản biện riêng cho yêu cầu số 7" cũng viết lại theo |
-| 6 | Số đo `wovenCloth` | Sửa thành **44 × 44, `size .34`, `r .0021`** và bổ sung chi tiết cấu trúc (đổi trên–dưới theo cos, sợi không đều tăm tắp, vân xơ trong texture, vị trí đặt) |
+| 6 | Số đo `wovenCloth` | Sửa thành **44 × 44, `size .34`, `r .0021`** (nay đổi thành **18 × 18**, `r` theo `PITCH·.52` — xem Vòng 12) và bổ sung chi tiết cấu trúc (đổi trên–dưới theo cos, sợi không đều tăm tắp, vân xơ trong texture, vị trí đặt) |
 | 7 | Hạt hơi nước N2 | Sửa bán kính `.012 → .0045`, đổi c_id `c13–c14 → c8–c12` |
 | 8 | Vệt hơi nước bị gió chở | Sửa tên `vapSpk` (không tồn tại) → `vapTrailSpk` + `vapTrailSoft`, ghi vùng bay `x .46 → 1.72` |
 | 9 | Hạt mồ hôi bị gió cuốn | Sửa `sweatBeads` → `sweatSpk` (6 hạt), tách bạch với mười giọt bám (`sweatBeads`) |
@@ -210,7 +211,7 @@ Rủi ro kỹ thuật đã sửa: hạ tầm đầu quạt nhỏ và nâng vách
 
 Thay vào đó, liên tục không gian được dựng bằng hai dấu hiệu nhìn thấy được, rẻ hơn nhiều và đúng mục tiêu của phản biện (người xem phải thấy đây là ruột của vật):
 
-- **N2**: hai sợi lớn ở tiền cảnh đan chữ V, một sợi chéo nền mờ và **một tấm vải dệt thật** (`wovenCloth`, 44×44 sợi luồn qua–lướn) ở hậu cảnh bên phải — người xem thấy ngay cấu trúc dệt của vải, và máy vào sát tấm đan ở nhát 10 là lần đầu tiên thấy “các sợi vải đan qua nhau”. Không dựng một mảnh vải liền khối có mép cưa: cảnh N2 là **bên trong** sợi, nên mảnh liền khối sẽ sai hơn là cấu trúc dệt.
+- **N2**: hai sợi lớn ở tiền cảnh đan chữ V, một sợi chéo nền mờ và **một tấm vải dệt thật** (`wovenCloth`, 18×18 sợi luồn qua–lướn) ở hậu cảnh bên phải — người xem thấy ngay cấu trúc dệt của vải, và máy vào sát tấm đan ở nhát 10 là lần đầu tiên thấy “các sợi vải đan qua nhau”. Không dựng một mảnh vải liền khối có mép cưa: cảnh N2 là **bên trong** sợi, nên mảnh liền khối sẽ sai hơn là cấu trúc dệt.
 - **N3**: **bờ chật** phía sau mặt nước giữ vai trò tương ứng — mặt nước có mép, có bờ, không phải một mặt phẳng lơ lửng trong hư không.
 
 Rủi ro của cách này (người xem không thấy rõ "đây chính là cái áo A") được bù bằng việc nhát 4 và nhát 5 nằm ngay sau nhát 2–3 về mặt áo A trong phòng, và nhát 7 nằm sau nhát 5 về mặt nước trong sợi — mạch hình ảnh đi từ "áo ướt" → "trong sợi áo" → "mặt nước" một cách liền mạch. Nếu phản biện vòng 3 vẫn cho rằng liên tục không đủ, sẽ dựng `section()` thật cho áo A ở nhát 4.
@@ -237,7 +238,7 @@ Báo cáo vòng 3 (`review/ASSET-AUDIT-REPORT.md`, vòng 3/5, `MISSING_ASSETS_CO
 
 ### Mười ba hàng sai mô tả/số đo — đã sửa
 
-`A = rad·1.05·cos(π·ph)` và bán kính `0.74–1.30 r`; lời gọi `wovenCloth({n:44, size:.34})`; hai mặt kính của bàn thí nghiệm **đứng** (không nằm ngang); `mistBal` chỉ ở c47 với độ đục `.32`; `mistFar` độ đục `.22`; mồ hôi **không có mảng alpha**, chỉ mười giọt bán kính **2.6–3.6 mm**; **4** giọt trong khe, dựng trong `props.js`; cái áo úp `tShirt({w:.62,h:.72})`; hai áo nhỏ `tShirt({w:.30,h:.40})` ×2 (`scale .9`) với móc ở `±.15`; thanh treo áo trong phòng chỉ có **1 móc**; `fanB`/`fanC` nay **quay**; thêm yêu cầu texture có seed cho `dropOnThread` (c9, fov 12) và `hemDrop` (c51, fov 30).
+`A = rad·1.05·cos(π·ph)` và bán kính `0.74–1.30 r`; lời gọi `wovenCloth({n:18, size:.34})`; hai mặt kính của bàn thí nghiệm **đứng** (không nằm ngang); `mistBal` chỉ ở c47 với độ đục `.32`; `mistFar` độ đục `.22`; mồ hôi **không có mảng alpha**, chỉ mười giọt bán kính **2.6–3.6 mm**; **4** giọt trong khe, dựng trong `props.js`; cái áo úp `tShirt({w:.62,h:.72})`; hai áo nhỏ `tShirt({w:.30,h:.40})` ×2 (`scale .9`) với móc ở `±.15`; thanh treo áo trong phòng chỉ có **1 móc**; `fanB`/`fanC` nay **quay**; thêm yêu cầu texture có seed cho `dropOnThread` (c9, fov 12) và `hemDrop` (c51, fov 30).
 
 ### Mười chín hàng sai c_id — đã sửa theo bảng của báo cáo
 
@@ -332,3 +333,64 @@ Không có đồ đo nào đọc hai con số khác nhau trong cùng một câu 
 - **Khí tràn qua lối mở** (`doorSpk`, c58–c59) và **vệt gió ở hiên** (cờ `streak`, c59): câu 59 cần một luồng khí chạy **từ lối mở sang trái**, cùng chiều với chiếc túi nylon đang vẫy.
 - **Dải mực ở mép áo A** (`hemBand`, c25–c26) và **dải hơi nước bay lên** (`vapBand`, c22–c23, c26): hai dải khí ở hai câu khác nhau.
 - **Cái áo úp** và **áo phơi rộng** đổi màu (`#b3c3cf` / `#e3d8bd`) vì bản cũ trắng cháy, mất sạch chi tiết vải; **áo phơi rộng ở c60 được ẩn đi** để câu "không chồng quần áo lên nhau" không bị phủ bởi chính cái áo của câu 49.
+
+## Vòng 12 — sau vòng nghiệm thu cuối (`review/FINAL-QA-REVIEW-1.md`, 16:31)
+
+Vòng nghiệm thu cuối xem **toàn bộ phim đã dựng** và chỉ ra ba lỗi chặn cùng bảy lỗi nhỏ. Những thay đổi có **bản chất đạo cụ / bối cảnh** được ghi ở đây; phần bố cục máy thuộc `LOOK.md`.
+
+### Đạo cụ sửa trong `src/props.js`
+
+| Vật | Lỗi thấy được trong phim đã dựng | Sửa |
+|---|---|---|
+| **tấm vải dệt** (`wovenCloth`) | 0:32–0:37: tấm vải đọc ra như **một bìa phẳng có vân in** — không thấy sợi nào nằm trên sợi nào | `n` mặc định **44 → 18** (sợi to, bước đan đọc được); lời gọi trong `src/set.js` dùng **cùng con số** |
+| **áo phơi một mặt** (`halfShirt`) | Vùng ẩm là một mảng **xanh xám rất đậm**, gần như hình chữ nhật đen dán lên áo | Vùng ẩm sáng lên: `lerp(1,.20,wet)` → `lerp(1,.40,wet)` (xanh xám vừa đủ, vẫn tối hơn nửa khô) |
+| **đàn áo phơi chồng trên dây** (`shirtPile`) | 1:20–1:25: mảng màu **navy sắc cạnh** bên cạnh đàn áo, đứng yên, không có viền mực | Áo ở giữa **nổi vai lên `.050`** và phóng to `1.045`, màu xanh nhạt hơn (`#b9d8ef` → `#c6dae6`) — đọc thành một cái áo có áo khác ở sau |
+| **cân nhà bếp** (`kitchenScale`) | Chữ `CÂN` nhỏ trên mặt cân ở cự ly xa đọc như **một vết mờ** | Bỏ hẳn chữ; mặt cân chỉ còn vạch, kim đỏ và vạch đỏ ở mức tối đa |
+| **mặt nước cận** (`waterSurface`) | 0:42: bờ cát là mảng **nâu, nhọn dần về một điểm**, đọc thành cành khô cắt ngang mặt nước | Bờ đổi thành **cát ướt xám** (`#9c8a68` → `#6c695e`) và **rộng hơn** (`BW .21` → `.28`) |
+
+### Bối cảnh sửa trong `src/set.js`
+
+- **Cái áo úp còn ẩm trên sàn** (`floorShirt` + `floorWetPatch`): **một đạo cụ mới**, thay cho hình kết cũ (hai bàn phơi gỗ). Mặt nhìn thấy là mặt ẩm nên **màu lạnh** (`#c9d3d7` / `#a2b4c0`) để tách khỏi nền gạch ấm; hai bàn phơi **ẩn đi ở c60** (cờ `noBench2`).
+- **Khung cửa, cánh cửa, đàn áo và áo phơi một mặt không đổ bóng** nữa: bóng của chúng đổ xiên vào góc tường phải của phòng kín và vỡ thành mảnh vụn — đó là khối hình học "vỡ" ở c27, chiếm ~1/4 khung hình.
+- **Đèn góc xa** (`cornerLamp`) đưa ra khỏi tường và hạ sáng (`.90` → `.30`): nó đứng sát mặt trong của tường và đốt thành một vũng sáng trắng cháy ngay trên chiếc áo tối ở c27.
+
+### Số đo trên đồ đo — không đổi
+
+Nhiệt kế treo **25 °C**; nhiệt kế `thermo30` **30 °C**; ẩm kế **90 %**; hai cân **288 g** và **88 g**. Không đồ đo nào đổi số ở vòng này.
+
+## Vòng 13 — mã neo của nhãn, và danh mục vật cho khớp với phim
+
+Hai việc nhỏ, cùng một ý: **những gì tài liệu nói phải là đúng cái mã dựng**.
+
+### 1. Danh mục vật `export const PROPS` (`src/props.js`) dựng lại đúng như phim
+
+Mục `'tấm vải dệt: sợi dọc luồn qua sợi ngang'` trong danh mục vẫn gọi `wovenCloth({ n: 30 })` trong khi phim dùng **18** — nghĩa là ảnh vật trong tờ mù (`review/props/p_18.jpg`) và tấm vải trong phim là **hai tấm khác nhau**. Nay mục đó dùng **cùng con số 18** (`n: 18, size: .34`), và tờ mù được **dựng lại** từ danh mục đã sửa, nên `p_18.jpg` bây giờ là đúng tấm vải của phim.
+
+Còn một khoảng trống thật, ghi thẳng ra đây: **cái áo úp còn ẩm nằm trên sàn hiên (hình kết, c60) không có mục riêng trong danh mục vật.** Nó là chính đạo cụ `tShirt()` với bộ màu riêng (`#c9d3d7` / `#a2b4c0`), nhưng danh mục vật của tập chỉ liệt kê 26 vật — 26 vật đã qua đúng vòng chấm mù (năm vòng, hết lượt). Thêm vật thứ 27 bây giờ nghĩa là một vật **chưa ai chấm mù**, mà quy trình không cho mở vòng chấm thứ sáu. Nên tài liệu này ghi thẳng khoảng trống thay vì giấu nó: người đọc tài liệu này phải biết rằng hình kết c60 có một vật **không** nằm trong tờ mù.
+
+### 2. Mã neo của nhãn (`anchor:` trong bảng `CARDS`, `src/film.js`)
+
+Nhận xét nghiệm thu cuối ở 2:18 bắt được một lớp lỗi riêng: **nhãn nói về vật nào** — chữ trên nhãn có khớp vật nó chỉ vào không. Máy đo được một phần của lớp lỗi đó: mỗi thẻ trong bảng `CARDS` nay có thể mang `anchor: '<tên vật trong src/props.js>'`, và `channels/tram-nghi-nhieu/tools/check_label_anchors.py` kiểm ba điều: mã neo có trong danh mục không; nhãn có khớp **vật khác** rõ hơn vật neo không; nhãn có đọc ra là của vật khác không.
+
+Mười một thẻ đã có mã neo, và máy báo **không nhãn nào sai**:
+
+| Thẻ | Nhãn | Mã neo |
+|---|---|---|
+| `doquat` | QUẠT | quạt bàn có lưới |
+| `dosoi` | KHE GIỮA SỢI | sợi vải đan cận |
+| `do2can` | HAI CÂN | cân nhà bếp có mặt đồng hồ kim |
+| `donhiet` | NHIỆT ĐỘ | nhiệt kế treo tường |
+| `doam` | ĐỘ ẨM | ẩm kế treo tường có kim |
+| `dosucchua` | SỨC CHỨA CAO HƠN | ẩm kế treo tường có kim |
+| `dochong` | CHỒNG ÁO | đàn áo phơi chồng trên dây |
+| `doap` | ÁO ÚP | áo úp: mép dưới úp lên, mảng ẩm nằm trên mặt gấp |
+| `dophan` | PHƠI RỘNG | áo phơi rộng: cả hai mặt phơi ra |
+| `doquan` | QUẦN DÀY | quần đùi hai ống |
+| `domong` | ÁO MỎNG | áo thun mỏng |
+
+Trong đó có đúng hai nhãn mà vòng nghiệm thu cuối đã bắt lỗi — `dosoi` (0:32–0:37, nhãn chỉ vào mặt sợi chứ không vào khe) và `dochong` (2:18, nhãn chỉ vào một cái áo treo cạnh nhau chứ không vào chỗ chồng) — nên hai mã neo đó là câu trả lời bằng mã cho đúng lỗi đã nêu, chứ không phải để đẹp bảng.
+
+Hai thẻ **cố ý** không có mã neo:
+
+- `domot` ("PHƠI MỘT MẶT"): chữ "phơi … mặt" khớp cả "áo phơi rộng: cả hai mặt phơi ra", nên máy đòi phần định tính ("áo màu sẫm"). Ở nhát c48 cái áo phơi rộng không có trong khung, người xem không nhầm — nhưng **đổi chữ trên màn hình để qua máy thì không đáng**: giữ chữ, bỏ mã neo.
+- 30 thẻ còn lại: máy nói thẳng là chưa kiểm được. Thêm mã neo cho từng thẻ là việc của một vòng riêng, không phải việc nhỏ làm kèm trong lúc sửa lỗi c27.

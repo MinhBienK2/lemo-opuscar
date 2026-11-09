@@ -54,7 +54,7 @@ Bản cắt này viết lại sau vòng chấm **hình thứ thứ năm**, khi t
 - `LOOK.md`: ba chỗ sai đã sửa, c49 và c60 viết lại theo khung mới, thêm mục *"Vòng 7 (dàn lại cặp đối chiếu ở c49–c60)"*.
 - Vì đã hết 5 hiệp, **Bước 4 chốt ở đây** bằng Director's Cut này; các điểm còn lại của vòng 5 đã được xử lý trong mã và kiểm bằng ảnh thật, nên sang Bước 5 (dựng đạo cụ) và Bước 6 (lắp ghép, nhịp điệu).
 
-SCOPE: bản cắt này đóng **Bước 4 (bóc tách linh kiện)** cho tập `tap-01-phoi-quan-ao`, bao gồm vòng soi tài liệu 5 hiệp và lần làm mới sau vòng chấm hình thứ năm. Nó được viết **sau lần sửa mã và tài liệu cuối cùng** (`COMPONENTS_SPEC.md`), nên cổng đọc được phán quyết và đóng được tem `ASSET.pass`.
+SCOPE: bản cắt này đóng **Bước 4 (bóc tách linh kiện)** cho tập `tap-01-phoi-quan-ao`, bao gồm vòng soi tài liệu 5 hiệp, lần làm mới sau vòng chấm hình thứ năm và lần làm mới sau vòng nghiệm thu cuối (mục "Vòng 11" ở trên). Nó được viết **sau lần sửa mã và tài liệu cuối cùng** (`COMPONENTS_SPEC.md`, `LOOK.md`), nên cổng đọc được phán quyết và đóng được tem `ASSET.pass`.
 
 ## Vòng 6 — bàn phơi và bồn chậu ở câu 1
 
@@ -106,5 +106,35 @@ không đụng một dòng.
 - Số đo trên đồ đo vẫn khoá như đã chốt: nhiệt kế treo 25 °C; `thermo30` 30 °C; ẩm kế 90 %; hai cân 288 g và 88 g.
 - Lợi ích phụ cho các tập sau: cửa sổ thẻ giờ tính bằng **một hàm chung của rig**, nên đổi công thức không
   phải sửa ở từng tập — và một tập dùng rig cũ sẽ không âm thầm tính khác tập dùng rig mới.
+
+## Vòng 11 — sau vòng nghiệm thu cuối (`review/FINAL-QA-REVIEW-1.md`)
+
+Vòng nghiệm thu cuối xem toàn bộ phim đã dựng và chỉ ra bảy lỗi nhỏ, trong đó có ba lỗi làm **hình sai nghĩa** (khối hình vỡ ở c27, quầng sáng cháy trắng, hình kết không đúng lời hứa trong `TREATMENT.md`). Những thay đổi có bản chất **đạo cụ / bối cảnh** đã được ghi vào `COMPONENTS_SPEC.md` (mục "Vòng 12") và `LOOK.md` (mục "Vòng 13"); bản cắt này chỉ ghi **điều đã đổi trong danh mục linh kiện** và **điều không đổi**.
+
+| Linh kiện | Đổi gì | Cột "Xuất hiện ở" |
+|---|---|---|
+| **tấm vải dệt** (`wovenCloth`) | `n` mặc định **44 → 18**: sợi to, bước đan đọc được (0:32–0:37 trước đó đọc ra như bìa có vân in) | không đổi (`c10`) |
+| **áo phơi một mặt** (`halfShirt`) | Vùng ẩm sáng lên (`lerp(1,.20,wet)` → `lerp(1,.40,wet)`): không còn là hình chữ nhật đen dán lên áo | không đổi |
+| **đàn áo phơi chồng trên dây** (`shirtPile`) | Áo ở giữa nổi vai lên `.050`, phóng to `1.045`, màu nhạt hơn: đọc thành một cái áo có áo khác ở sau, không phải mảng navy sắc cạnh | không đổi |
+| **cân nhà bếp** (`kitchenScale`) | Bỏ chữ `CÂN` trên mặt cân (chữ nhỏ ở cự ly xa đọc như vết mờ); mặt cân chỉ còn vạch và kim | không đổi |
+| **mặt nước cận** (`waterSurface`) | Bờ cát đổi thành **cát ướt xám** (`#6c695e`) và rộng hơn (`BW .21` → `.28`): không còn đọc thành cành khô cắt ngang mặt nước | không đổi |
+| **Cái áo úp còn ẩm nằm trên sàn** (`floorShirt` + `floorWetPatch`) | **Linh kiện mới** ở c60: một cái áo úp còn ẩm nằm một mình trên sàn hiên, mặt ẩm hướng lên (màu lạnh `#c9d3d7` / `#a2b4c0`), dưới có vệt ẩm. Hai bàn phơi **ẩn đi ở c60** (cờ `noBench2`) | thêm `c60` |
+| **khung cửa / cánh cửa / đàn áo / áo phơi một mặt** | Bốn vật này **không đổ bóng** nữa: bóng của chúng đổ xiên vào góc tường phải của phòng kín và vỡ thành khối hình học vỡ chiếm ~1/4 khung ở c27 | không đổi |
+| **đèn góc xa** (`cornerLamp`) | Đưa ra khỏi tường (`(2.45, 1.78, −5.30)` → `(2.02, 2.02, −5.10)`) và hạ sáng (`.90` → `.30`): không còn đốt thành vũng sáng trắng cháy trên dây phơi ở c27 | không đổi |
+
+**Điều không đổi, và không được đổi:** không có linh kiện nào bị bỏ khỏi danh mục; `check_props_used.py` vẫn thấy đủ **26 vật**. Cột "Xuất hiện ở" chỉ đổi ở **hai bàn phơi gỗ** (bỏ `c60`) và **cái áo úp còn ẩm trên sàn** (thêm `c60`). Số đo trên đồ đo vẫn khoá như đã chốt: nhiệt kế treo 25 °C; `thermo30` 30 °C; ẩm kế 90 %; hai cân 288 g và 88 g.
+
+## Vòng 12 — mã neo của nhãn và danh mục vật cho khớp phim
+
+Hai việc nhỏ, cùng một ý: **những gì tài liệu nói phải là đúng cái mã dựng**. Chi tiết đầy đủ nằm ở `COMPONENTS_SPEC.md` mục "Vòng 13"; đây là phần bản cắt này chịu trách nhiệm.
+
+| Thay đổi | Chỗ | Ảnh hưởng lên danh mục linh kiện |
+|---|---|---|
+| Mục `'tấm vải dệt: sợi dọc luồn qua sợi ngang'` trong `export const PROPS` của `src/props.js` gọi `wovenCloth({ n: 30 })` trong khi phim dùng **18** | `src/props.js` | **Danh mục vật thay đổi**: trước đây ảnh vật của #18 và tấm vải trong phim là **hai tấm khác nhau**. Nay cùng con số 18, và tờ mù `review/props/p_01…p_26.jpg` **được dựng lại** từ danh mục đã sửa (09-11, 19:53). Số lượng vật **không đổi**: vẫn 26 |
+| **11 thẻ nhãn** trong bảng `CARDS` của `src/film.js` mang thêm trường `anchor:` (tên vật trong `src/props.js`) | `src/film.js` | `check_label_anchors.py` báo **không nhãn nào sai**. Mười thẻ đó là: `doquat`, `dosoi`, `do2can`, `donhiet`, `doam`, `dosucchua`, `dochong`, `doap`, `dophan`, `doquan`, `domong` — trong đó có đúng hai nhãn vòng nghiệm thu cuối đã bắt lỗi (`dosoi` 0:32–0:37, `dochong` 2:18) |
+
+**Một khoảng trống thật, ghi thẳng:** cái **áo úp còn ẩm nằm trên sàn hiên** (hình kết, c60) **không có mục riêng trong danh mục vật**. Nó là chính đạo cụ `tShirt()` với bộ màu riêng, nhưng danh mục của tập chỉ liệt kê 26 vật — 26 vật đã qua đúng vòng chấm mù, và quy trình không cho mở vòng chấm thứ sáu. `COMPONENTS_SPEC.md` và bản cắt vật đều ghi rõ khoảng trống này. Thêm vật thứ 27 bây giờ nghĩa là một vật **chưa ai chấm mù** — điều mà quy trình không cho phép.
+
+**Điều không đổi, và không được đổi:** không có linh kiện nào bị bỏ khỏi danh mục; `check_props_used.py` vẫn thấy đủ **26 vật**; cột "Xuất hiện ở" không đổi thêm ô nào. Số đo trên đồ đo vẫn khoá: nhiệt kế treo 25 °C; `thermo30` 30 °C; ẩm kế 90 %; hai cân 288 g và 88 g.
 
 ## VERDICT: PASS

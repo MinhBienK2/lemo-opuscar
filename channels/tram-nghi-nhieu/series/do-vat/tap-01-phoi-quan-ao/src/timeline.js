@@ -200,8 +200,8 @@ export const SUBS = {
     'Ba cái áo phơi chồng lên nhau trên dây thứ hai.',
   ],
   c41: [
-    'Không khí ở nhiệt độ này chứa được tối đa khoảng hai',
-    'mươi gam hơi nước.',
+    'Không khí ở nhiệt độ này chứa được tối đa khoảng',
+    'hai mươi gam hơi nước.',
   ],
   c42: [
     'Tính trên mỗi kilogam không khí khô.',

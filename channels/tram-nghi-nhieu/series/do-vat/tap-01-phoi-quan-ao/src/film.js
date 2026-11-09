@@ -37,11 +37,11 @@ const SHOTS = [
   // ── N4 · phòng kín: cái thí nghiệm nhỏ ──
   // Cặp áo thí nghiệm (cmpA trước quạt nhỏ, cmpB ngoài tầm gió) ở góc trước-phải
   // của phòng: một khung chỉ có HAI cái áo, quan hệ giữa chúng đọc được.
-  sh('N4', 'c3', 38, [-.72, 1.34, -2.62], [-1.46, 1.14, -3.30], [-.06, -.02, -.06]), // quạt
+  sh('N4', 'c3', 32, [-.62, 1.30, -2.58], [-1.42, 1.16, -3.28], [-.06, -.02, -.06]), // quạt
   sh('N4', 'c4', 50, [2.00, 1.15, -1.70], [1.98, 1.05, -2.60], [0, 0, -.02]),   // hai cái áo giống nhau treo cạnh nhau (máy trong phòng)
   sh('N4', 'c5', 50, [2.05, 1.28, -1.58], [1.85, 1.02, -2.60], [0, 0, -.02]),   // quạt + một áo trước quạt, một áo ngoài tầm gió
   sh('N4', 'c6', 46, [1.78, 1.12, -1.60], [1.92, 1.06, -2.60], [0, 0, -.03]),   // quạt nhỏ + CẢ HAI cái áo trong một khung (áo đối chiếu không bị cắt ở mép phải)
-  sh('N4', 'c7', 42, [1.80, 1.58, -1.42], [2.02, 1.26, -2.62], [0, 0, -.02]),   // hai áo: một nhạt, một sẫm (máy nghiêng xuống, tường không nuốt khung)
+  sh('N4', 'c7', 38, [1.80, 1.50, -1.50], [2.02, 1.20, -2.60], [0, 0, -.02]),   // hai áo: một nhạt, một sẫm (máy nghiêng xuống, tường không nuốt khung)
 
   // ── N2 · trong sợi vải ──
   sh('N2', 'c8', 12, [.10, .06, .24], [0, .00, .00], [.02, 0, -.03]),        // nước còn nằm trong khe sợi
@@ -70,7 +70,7 @@ const SHOTS = [
   // C22–C26 nói về một tầng hơi mỏng bám trên vải; mỗi câu một hình khác:
   // khoảng không phía trên (c22), hơi nước đi lên qua khoảng trống (c23),
   // cận cảnh lớp kính mờ (c24), mép đã bão hoà (c25), và cột hơi nước (c26).
-  sh('N4', 'c22', 36, [.30, 1.05, -2.45], [.43, 1.56, -3.28], [0, 0, -.03]),   // nhìn LÊN khe không khí; mép áo còn ở đáy khung
+  sh('N4', 'c22', 37, [.31, 1.08, -2.52], [.44, 1.45, -3.26], [0, 0, -.03]),   // nhìn LÊN khe không khí; mép áo còn ở đáy khung
   // c23: cận vào DẢI HƠI NƯỚC bay lên từ vai áo — hơi nước có đường đi,
   // không phải mấy hạt tròn đứng yên giữa mảng vải trơn.
   sh('N4', 'c23', 34, [.26, 1.25, -2.85], [.44, 1.52, -3.26], [0, 0, -.03]),   // nhìn LÊN khe không khí giữa vai áo và dây phơi
@@ -152,9 +152,10 @@ const SHOTS = [
   sh('N1', 'c57', 40, [-.60, 1.30, 2.00], [-1.20, .95, .85], [-.02, -.01, -.04]),  // áo đã khô
   sh('N1', 'c58', 44, [1.95, 1.50, .60], [.75, 1.20, -.95], [-.06, -.02, -.08]),    // lối thông gió: nước có chỗ để đi
   sh('N1', 'c59', 50, [2.14, 1.40, 1.70], [.90, 1.20, -.90], [-.03, 0, -.04]),       // túi nylon vẫy ở tiền cảnh, lối mở phía sau: nơi thoáng gió
-  // c60: KHUNG MỚI — nhìn chéo xuống bàn phơi thứ hai, nơi chỉ có một cái áo
-  // úp mặt trong lên, và khe hở giữa hai bàn. Không lặp lại khung của câu 49.
-  sh('N1', 'c60', 48, [2.30, 1.16, 2.55], [.85, .44, 1.36], [-.02, -.01, -.04]),   // nhìn xuống: khe hở giữa hai bàn + cái áo úp lật góc
+  // c60: KHUNG MỚI — nhìn xuống SÀN hiên, nơi có một cái áo úp còn ẩm nằm một mình
+  // (không chồng lên nhau), góc áo lật lộ ra mặt trong. Phía sau là dây phơi
+  // đã khô — đúng hình kết TREATMENT đã hứa.
+  sh('N1', 'c60', 42, [1.25, 1.40, 2.20], [.30, .06, 1.56], [-.02, -.01, -.03]),   // nhìn xuống: áo úp còn ẩm nằm một mình trên sàn, dây phơi đã khô phía sau
 ];
 
 // Trong ruột vải (N2), mỗi nhất chỉ giữ MỘT vật chính. Lưới sợi nền ('aux')
@@ -183,11 +184,14 @@ const MARK = SHOTS.map(sh => ({
 // bám vào vẫn còn trong khung và đuôi thẻ vẫn chỉ đúng vật.
 const CARDS = [
   { id: 'doao',      text: 'QUẦN ÁO ƯỚT',    at: [-1.25, 1.28, .85],    lines: ['c1'],            size: 32 },
-  { id: 'doquat',    text: 'QUẠT',          at: [1.20, .86, -2.60],    lines: ['c5', 'c6'],      size: 34 },
+  { id: 'doquat',    text: 'QUẠT',          at: [1.20, .86, -2.60],    lines: ['c5'],            size: 34, anchor: 'quạt bàn có lưới' },
   { id: 'do2ao',     text: '2 ÁO',          at: [2.30, 1.22, -2.60],   lines: ['c4'],            size: 30 },
-  { id: 'dogocxa',   text: 'KHÔNG CÓ GIÓ',  at: [2.30, 1.50, -2.60],   lines: ['c5'],            size: 28 },
+  { id: 'dogocxa',   text: 'KHÔNG CÓ GIÓ',  at: [2.18, 1.24, -2.60],   lines: ['c5'],            size: 28 },
   { id: 'dotruoc',   text: 'TRƯỚC QUẠT',    at: [1.70, 1.16, -2.60],   lines: ['c5', 'c6', 'c7'], size: 28 },
-  { id: 'dosoi',     text: 'KHE GIỮA SỢI',  at: [0, .004, .004],        lines: ['c11'],           size: 30 },
+  // đuôi thẻ phải chỉ vào KHE (dải nước giữa hai sợi), không chỉ vào mặt sợi:
+  // vị trí này là giữa hai sợi lớn, đúng chỗ có màng nước (nhận xét nghiệm thu
+  // vòng 1, 0:32–0:37 — "nhãn chỉ vào mặt sợi chứ không vào khe").
+  { id: 'dosoi',     text: 'KHE GIỮA SỢI',  at: [.026, -.006, .000],     lines: ['c11'],           size: 30, anchor: 'sợi vải đan cận' },
   { id: 'do1pt',     text: '1 PHẦN NHỎ',    at: () => ESC_POS(),        lines: ['c16'],           size: 34, dx: 86, mark: [.005, .072, .010] },
   { id: 'dohoi',     text: 'PHÂN TỬ BAY LÊN', at: () => ESC_POS(),       lines: ['c17'],           size: 32, mark: [.000, .105, .000] },
   { id: 'do2kj',     text: 'HƠN 2 kJ / 1 g', at: [.42, 1.18, -3.26],   lines: ['c21'],           size: 30 },
@@ -198,34 +202,40 @@ const CARDS = [
   { id: 'doquet',    text: 'BỊ QUÉT ĐI',    at: [.20, .86, -3.24],      lines: ['c27'],           size: 32 },
   { id: 'dochoi',    text: 'HƠI NƯỚC BỊ CHỞ ĐI', at: [.60, 1.18, -3.20], lines: ['c30'],           size: 30, hold: 1.5 },
   { id: 'doquetxa',  text: 'QUÉT XA HƠN',   at: [.90, 1.12, -3.00],     lines: ['c31'],           size: 28 },
-  { id: 'do2can',    text: 'HAI CÂN',       at: [-1.56, .80, -5.45],    lines: ['c33', 'c34'],    size: 30 },
+  { id: 'do2can',    text: 'HAI CÂN',       at: [-1.56, .80, -5.45],    lines: ['c33', 'c34'],    size: 30, anchor: 'cân nhà bếp có mặt đồng hồ kim' },
   { id: 'dogocxacan', text: 'GÓC XA',       at: [-2.04, .84, -5.55],    lines: ['c34'],           size: 28, lead: 0.8 },
   { id: 'dogiot',    text: 'HAI GIỌT NƯỚC', at: [1.36, .953, -6.13],    lines: ['c36'],           size: 30 },
   { id: 'do1nua',    text: 'TỐC ĐỘ CHẬM 1/2', at: [1.36, .953, -6.13], lines: ['c37'],           size: 26 },
   { id: 'dodientich', text: 'DIỆN TÍCH PHƠI', at: [1.02, 1.56, -.62],    lines: ['c39'],           size: 26 },
-  { id: 'donhiet',   text: 'NHIỆT ĐỘ',      at: [-2.25, 2.11, -.966],   lines: ['c39'],           size: 30 },
-  { id: 'doam',      text: 'ĐỘ ẨM',        at: [-1.72, 2.07, -.966],   lines: ['c39'],           size: 30 },
+  { id: 'donhiet',   text: 'NHIỆT ĐỘ',      at: [-2.25, 2.11, -.966],   lines: ['c39'],           size: 30, anchor: 'nhiệt kế treo tường' },
+  { id: 'doam',      text: 'ĐỘ ẨM',        at: [-1.72, 2.07, -.966],   lines: ['c39'],           size: 30, anchor: 'ẩm kế treo tường có kim' },
   { id: 'do3ao',     text: '3 ÁO',          at: [.45, 1.70, -.62],      lines: ['c40'],           size: 30 },
   { id: 'do20',      text: '20 g/kg',       at: [-1.6925, 1.927, -.968], lines: ['c41'],        size: 34, dx: 150 },
   { id: 'domoikg',   text: 'MỖI KG KHÔNG KHÍ KHÔ', at: [-1.72, 1.904, -.968], lines: ['c42'],  size: 26, hold: 0.8 },
   { id: 'do30',      text: '30 °C',         at: () => BAL.thermo30Top(), lines: ['c44', 'c45'], size: 34 },
   { id: 'do90',      text: '90 %',          at: [-1.6326, 1.9287, -.966], lines: ['c46'],         size: 34 },
-  { id: 'dosucchua', text: 'SỨC CHỨA CAO HƠN', at: [-1.618, 1.868, -.968], lines: ['c44'],         size: 28 },
+  { id: 'dosucchua', text: 'SỨC CHỨA CAO HƠN', at: [-1.618, 1.868, -.968], lines: ['c44'],         size: 28, anchor: 'ẩm kế treo tường có kim' },
   { id: 'dox5',      text: '×5',            at: [-1.98, 1.96, -.90],    lines: ['c46'],           size: 34 },
   { id: 'dolopmo',   text: 'LỚP HƠI MỜ',    at: [-1.25, 1.18, .80],     lines: ['c47'],           size: 28 },
-  { id: 'dochong',   text: 'CHỒNG ÁO',      at: [.30, 1.80, -.62],      lines: ['c48'],           size: 28 },
+  // đuôi thẻ chỉ vào CHỖ CHỒNG của hai cái áo (áo xám ở sau, áo hồng ở trước),
+  // không chỉ vào một cái áo treo cạnh cái kia trên cùng dây (nhận xét nghiệm
+  // thu vòng 1, 2:18).
+  { id: 'dochong',   text: 'CHỒNG ÁO',      at: [.414, 1.758, -.62],    lines: ['c48'],           size: 28, anchor: 'đàn áo phơi chồng trên dây' },
+  // KHÔNG gắn mã neo cho thẻ này: chữ "phơi … mặt" khớp cả "áo phơi rộng:
+  // cả hai mặt phơi ra", và máy đòi phần định tính ("áo màu sẫm"). Ở nhát c48
+  // cái áo phơi rộng không có trong khung, nên người xem không nhầm — nhưng
+  // thay đổi chữ trên màn hình để qua máy thì không đáng: giữ chữ, bỏ mã neo.
   { id: 'domot',     text: 'PHƠI MỘT MẶT',  at: [1.02, 1.78, -.60],     lines: ['c48'],           size: 30 },
-  { id: 'doap',      text: 'ÁO ÚP',         at: () => BAL.upPos(),    lines: ['c49'],      size: 32 },
-  { id: 'dophan',    text: 'PHƠI RỘNG',     at: () => BAL.spreadPos(), lines: ['c49'],      size: 28 },
-  { id: 'doquan',    text: 'QUẦN DÀY',      at: [-.55, 1.28, .85],     lines: ['c50'],           size: 30 },
-  { id: 'domong',    text: 'ÁO MỎNG',       at: [1.42, 1.30, .85],      lines: ['c50'],           size: 30 },
+  { id: 'doap',      text: 'ÁO ÚP',         at: () => BAL.upPos(),    lines: ['c49'],      size: 32, anchor: 'áo úp: mép dưới úp lên, mảng ẩm nằm trên mặt gấp' },
+  { id: 'dophan',    text: 'PHƠI RỘNG',     at: () => BAL.spreadPos(), lines: ['c49'],      size: 28, anchor: 'áo phơi rộng: cả hai mặt phơi ra' },
+  { id: 'doquan',    text: 'QUẦN DÀY',      at: [-.55, 1.28, .85],     lines: ['c50'],           size: 30, anchor: 'quần đùi hai ống' },
+  { id: 'domong',    text: 'ÁO MỎNG',       at: [1.42, 1.30, .85],      lines: ['c50'],           size: 30, anchor: 'áo thun mỏng' },
   { id: 'doquay',    text: 'QUAY LẠI BÁM ÁO', at: [2.26, 1.14, -5.02],  lines: ['c52'],           size: 30 },
   { id: 'domo',      text: 'HƠI BỊ CUỐN ĐI', at: [-1.10, 1.05, -3.30],   lines: ['c55'],           size: 28, hold: 0.4 },
   { id: 'dodi',      text: 'NƯỚC PHẢI ĐI ĐƯỢC', at: [-1.34, .80, .86],  lines: ['c57'],           size: 28, lead: 1.0 },
   { id: 'dothoang',  text: 'CHỖ THOÁNG GIÓ', at: [1.86, 1.18, .85],      lines: ['c59'],           size: 30 },
-  { id: 'dotach',    text: 'TÁCH RIÊNG',    at: [.50, .44, 1.34],       lines: ['c60'],           size: 30 },
-  { id: 'dohaimat',  text: 'CẢ HAI MẶT',    at: () => [BAL.flipCornerPos.x, BAL.flipCornerPos.y, BAL.flipCornerPos.z],
-                                                    lines: ['c60'],           size: 30 },
+  { id: 'dotach',    text: 'KHÔNG CHỒNG',  at: () => BAL.floorPos(), lines: ['c60'],           size: 30 },
+  { id: 'dohaimat',  text: 'CÒN ẨM',       at: [.06, .02, 1.62],      lines: ['c60'],           size: 30 },
 ];
 // Thẻ hiện từ lúc máy cắt sang nhát của câu (tức từ lúc câu trước kết thúc)
 // đến lúc câu của nó kết thúc: luôn đủ lâu để đọc trọn.
@@ -415,6 +425,7 @@ window.render = t => {
       // thì chúng đứng ngay trước ống kính và chắn mất bồn chậu dưới mép áo ướt
       noCmp: id === 'c1',
       noBench: id === 'c1',                    // bàn phơi che mất bồn chậu dưới mép áo ướt ở câu 1
+      noBench2: id === 'c60',                  // hình kết: cái áo úp trên sàn, không phải hai bàn phơi
       // nhiệt kế treo trong cảnh LUÔN đọc hai mươi lăm độ (FACTS.md). Ba mươi
       // độ của câu 44–45 nằm ở MỘT THIẾT BỊ KHÁC: một nhiệt kế đặt cạnh tấm
       // vải thử. Thanh đỏ mờ đứng cạnh vỏ nhiệt kế (cột "ma" cũ) bị bỏ: nó
@@ -493,7 +504,8 @@ window.render = t => {
       // c55: ngón chĩa theo dòng gió, cẳng tay rời khung bên trái — mu bàn tay ngửa lên cho máy.
       hand.rotation.set(0, Math.PI, id === 'c54' ? .10 : .06);
       hand.position.set(-1.05, 1.02 + Math.sin(t * 2.6) * .008, -3.30);   // tay đưa vào luồng gió, ngay trước miệng quạt
-      hand.pose(.16, .7);   // ngón hơi cong, không xòe: đọc ra là bàn tay người, không phải chân thú
+      hand.pose(id === 'c55' ? .46 : .16, id === 'c55' ? .08 : .7);
+      // c55: ngón co lại thành nắm đấm (xòe ra thì đọc thành búi ngón tay, không ra bàn tay)
     }
     // c47: ngoài hiên có lớp hơi mờ đục — khung này phải mờ và tối hơn hẳn, để tách khỏi hai nhát sáng hai bên
     if (sh.s === 'N1') BAL.scene.fog = id === 'c47' ? new THREE.Fog('#93a6d6', 1.1, 4.2) : null;

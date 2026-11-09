@@ -736,8 +736,9 @@ export function halfShirt({ w = .62, h = .78 } = {}) {
     const wet = clamp(Math.max(clamp((line - y) / .055), creep(x, y)));   // biên mềm, loang
     const st = streak(x, y) * clamp((line - y) / .10);                    // vệt nước chảy
     const gl = glint(x, y) * wet;
-    // vải ướt: xanh xám đậm, TỐI hơn hẳn nửa khô
-    let r = lerp(1, .20, wet), gg = lerp(1, .23, wet), b = lerp(1, .28, wet);
+    // vải ướt: xanh xám, TỐI hơn hẳn nửa khô — nhưng không đen: vùng ẩm quá
+    // tối đọc thành một hình chữ nhật đen dán lên áo, không phải vải ướt
+    let r = lerp(1, .40, wet), gg = lerp(1, .44, wet), b = lerp(1, .50, wet);
     r *= 1 - .20 * st; gg *= 1 - .20 * st; b *= 1 - .14 * st;              // vệt chảy đậm hơn
     const pool = 1 - .10 * clamp((line - y) / (h * .55)) * wet;
     r = (r + gl * .16) * pool; gg = (gg + gl * .17) * pool; b = (b + gl * .21) * pool;
@@ -1652,13 +1653,19 @@ export function shirtPile({ n = 3, yAt: yAtExt = null } = {}) {
   const ropeG = gA_ropeGroup(curve, { r: .0098, twist: .0022, pitch: .05, mat: ropeMat });
   g.add(ropeG);
   const yAt = (x) => yAtExt ? yAtExt(x) : -SAG * (1 - Math.min(1, (2 * x / LEN) ** 2));
-  const COLORS = ['#f2f0e6', '#b9d8ef', '#e8b7c8'];
+  const COLORS = ['#f2f0e6', '#c6dae6', '#e8b7c8'];
   for (let i = 0; i < n; i++) {
     const x = (i - (n - 1) / 2) * .26;
     const z = (i - (n - 1) / 2) * .024;
     // áo cổ tròn, không có mảng kính, xếp chồng lên nhau dọc theo dây
     const s = gA_plainShirt({ color: COLORS[i % 3], w: .58, h: .72 });
-    s.group.position.set(x, yAt(x) - .012, z);
+    // ÁO Ở GIỮA nhô vai lên cao hơn một chút: nhìn từ bên, nó đọc thành MỘT
+    // CÁI ÁO CÓ ÁO KHÁC Ở SAU, chứ không phải một mảng màu lạ dán bên cạnh
+    // (vòng nghiệm thu vòng 1 gọi mảng đó là "hình chữ nhật tối sắc cạnh trên
+    // áo, đọc như lỗ hình")
+    const mid = i === 1 ? .050 : 0;
+    s.group.position.set(x, yAt(x) - .012 + mid, z);
+    if (mid) s.group.scale.setScalar(1.045);
     s.group.rotation.y = (i - 1) * .22;
     s.group.rotation.z = (i - 1) * .05;
     g.add(s.group);
@@ -2051,12 +2058,10 @@ export function kitchenScale() {
       c.lineTo(cx + Math.cos(a) * 296, cy - Math.sin(a) * 296);
       c.stroke();
     }
-    // KHÔNG in số trên mặt cân: phim không nói con số gam nào (FACTS.md), và một
-    // mặt cân in "400" khiến người xem đọc nhầm thành số đo của câu kể. Cân đo
-    // bằng vạch và kim — thấy hai kim lệch nhau là đủ để kể.
+    // KHÔNG in chữ trên mặt cân: chữ nhỏ trên mặt cân ở cự ly xa đọc như một
+    // vết mờ, người xem thấy một mặt cân bẩn. Vạch và kim là đủ để kể, và
+    // mặt cân không in số gam nào (FACTS.md).
     c.textAlign = 'center'; c.textBaseline = 'middle';
-    c.font = 'bold 44px sans-serif'; c.fillStyle = '#8d93a4';
-    c.fillText('CÂN', cx, cy + 224);
     // vạch đỏ ở mức tối đa
     c.strokeStyle = '#d1443c'; c.lineWidth = 16;
     const am = 3.927 - 4.712;
@@ -2853,7 +2858,11 @@ function dropProfile(R) {
 }
 
 // ── tấm vải đan: sợi dọc (warp) luồn qua sợi ngang (weft), thay phiên trên dưới ──
-export function wovenCloth({ n = 44, size = .34, r = null } = {}) {
+// Sợi THƯA (18 sợi mỗi chiều): với 44 sợi, mỗi sợi chỉ còn vài chấm ảnh và
+// lớp viền mực vẽ trên từng sợi dính lại thành một mớ nét — tấm vải đọc ra
+// như một bìa có vân in, không thấy sợi đan qua nhau (nhận xét nghiệm thu vòng 1,
+// 0:32–0:37). 18 sợi là số dùng chung: phim và ảnh vật đều dựng bằng nó.
+export function wovenCloth({ n = 18, size = .34, r = null } = {}) {
   const g = new THREE.Group();
   const N = Math.max(12, Math.min(n | 0, 48));          // số sợi mỗi chiều
   const PITCH = size / N;
@@ -3404,7 +3413,10 @@ export function waterSurface({ w = 1.6, d = 1.0 } = {}) {
   // ── bờ: dải đất/cát cong, mép nước ướt, sườn bờ lên rồi tụt xuống ──
   {
     const sandTex = canvasTex(512, 512, (c, cw, ch) => {
-      c.fillStyle = '#9c8a68'; c.fillRect(0, 0, cw, ch);
+      // bờ là CÁT ƯỚT, không phải cành khô: màu phải tối và XÁM (nhận xét
+      // nghiệm thu vòng 1, 0:42 — "màu nâu và dạng như cành khô"). Đặt bờ xám,
+      // đèn ấm của cảnh không biến nó thành cành khô nữa.
+      c.fillStyle = '#6c695e'; c.fillRect(0, 0, cw, ch);
       const r = mulberry(733);
       for (let i = 0; i < 26; i++) {
         const x = r() * cw, y = r() * ch, rad = 30 + r() * 150;
@@ -3421,7 +3433,7 @@ export function waterSurface({ w = 1.6, d = 1.0 } = {}) {
     });
     const sandMat = toon('#ffffff', { map: sandTex, vertexColors: true, side: THREE.DoubleSide });
     const outerX = -W / 2;
-    const NZ = 110, NU = 16, BW = .21;               // bờ HẸP: một dải cát ướt, không phải mảng tam giác kem
+    const NZ = 110, NU = 16, BW = .28;               // bờ: một dải cát ướt, không phải mảng tam giác kem
     const bp = [], bu = [], bi = [], bc = [];
     const YU = [-.075, -.052, -.026, -.004, .014, .034, .052, .066, .076, .082, .086];
     for (let j = 0; j <= NZ; j++) {
@@ -4502,7 +4514,10 @@ export const PROPS = {
   'ghế gỗ': () => chair().group,
   'bàn gỗ với hai mặt kính và vách ngăn': () => labTable().group,
   'sợi vải đan cận': () => wovenFibres().group,
-  'tấm vải dệt: sợi dọc luồn qua sợi ngang': () => wovenCloth({ n: 30, size: .34 }).group,
+  // 18 sợi mỗi chiều — CÙNG con số với lời gọi trong `src/set.js` và với
+  // COMPONENTS_SPEC.md: ảnh vật trong danh mục này phải là đúng cái tấm vải
+  // mà phim đưa lên màn hình, chứ không phải một tấm vải khác cùng loại.
+  'tấm vải dệt: sợi dọc luồn qua sợi ngang': () => wovenCloth({ n: 18, size: .34 }).group,
   'giọt nước đọng trên sợi': () => dropOnThread().group,
   'mặt nước cận có gợn sóng': () => waterSurface().group,
   'áo phơi một mặt: nửa khô nửa ẩm': () => halfShirt().group,

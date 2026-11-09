@@ -160,6 +160,64 @@ rig sửa (`c2df58d`: `probe.layers.enableAll()`). Tờ mới đang được d�
 mới; **không khung nào nào của phim sửa theo con số cũ** — tôi đã mở từng khung bằng mắt, và những lần
 sửa hình đã làm (vòng 6–9) đều do cổng đo được, không do con số của tờ này.
 
+## Vòng 11 — sau vòng nghiệm thu cuối (`review/FINAL-QA-REVIEW-1.md`, 16:31)
+
+Nghiệm thu cuối xem **toàn bộ phim đã dựng** (4234 khung), không chỉ tờ nhịp. Nó chấm âm thanh là đạt, khoa học là đúng nguồn, và **loại phim** vì một lỗi hình thật ở c27. Bản cắt này ghi lại **đúng những gì đã sửa trong mã cho đến lúc viết**, cái gì **giữ**, và vì sao. Không câu nào bị cắt khỏi phim: cả 60 câu vẫn còn, và cả 60 câu vẫn có một hình riêng.
+
+### Lỗi chặn — đã sửa ở mã
+
+| Câu | Lỗi của vòng nghiệm thu cuối | Sửa trong mã |
+|---|---|---|
+| **c27** (1:20.5–1:25) | Góc dưới–bên phải khung hình bị chiếm bởi một **khối hình màu xanh navy đậm**: các mặt phẳng cứng sắc cạnh chồng lên nhau, một lỗ hình tam giác xuyên thủng, một sừng nhọn mảnh như kim chạy chéo ra ngoài khung, một mảnh vụn nằm dẹp trên sàn — chiếm ~1/4 khung, **đứng yên** suốt ~4 s, **không có viền mực**, không khớp vật nào trong bối cảnh | Khối đó **không phải vật thể**: dựng lại nhát đó với đèn tắt đổ bóng (`?noshadow`) thì nó biến mất sạch. Đó là **bóng đổ** của khung cửa + cánh cửa hiên đổ xiên vào tường phải của phòng kín, cộng với bóng của đàn áo và áo phơi một mặt đang treo ngay trước lối cửa — bóng rơi ở góc rất xiên nên bản đồ bóng vỡ thành mảnh vụn và gai. Sửa: **bốn vật đó không đổ bóng** nữa (`src/set.js`). Ở các nhát khác bóng của chúng rơi ngoài khung, còn góc tường đó vốn đã là chỗ tối nhất của phòng |
+| **c27** | Cùng nhát còn **một quầng sáng cháy trắng** (lõi 255, ~0.36 % diện tích, có hào quang) ngay trên dây phơi, phía trên chiếc áo tối | Đèn góc xa (`cornerLamp`) đứng **sát mặt trong của tường** (`x = 2.45`, mặt trong ở 2.54) nên nó đốt thành một vũng sáng trắng. Sửa: **đưa ra khỏi tường** (`(2.02, 2.02, −5.10)`) và **hạ sáng** (`.90` → `.30`). Đo lại toàn khung: **0 điểm ảnh ≥ 250** (trước đó 6465) |
+
+### Lỗi nhỏ — đã sửa ở mã
+
+| Lỗi | Lỗi của vòng nghiệm thu cuối | Sửa trong mã |
+|---|---|---|
+| **0:22** | Nhãn `KHÔNG CÓ GIÓ` bị **cắt bởi mép trên khung** | Hộp thẻ ở `y = 8..52` — nhãn đã bị kẹp vào giới hạn trên của khung. Hạ xuống `y = 1.24` → hộp ở `y = 212..256`, **trọn trong khung** |
+| **1:58** | Số "hai mươi" bị cắt làm đôi qua hai câu phụ đề: câu 54 kết bằng "…tối đa khoảng **hai**", câu 55 là "**mươi** gam hơi nước." | Không phải lỗi bố cục: lỗi của **bộ cắt mảng phụ đề** của kênh — khi ranh giới mảng rơi đúng vào **đuôi** mảng thì luật "một cụm số không được cắt làm đôi" không bắt được. Công cụ của kênh đã sửa; `src/timeline.js` của tập này được **sinh lại bằng công cụ của kênh** (bản trong thư mục tập đã xoá) và ra **giống hệt** bản cũ: câu 41 nay là `… tối đa khoảng` / `hai mươi gam hơi nước.` |
+| **0:32–0:37** | Cận cảnh sợi vải đọc ra như **một tấm bìa phẳng có vân in**, không thấy sợi đan qua nhau | Sợi **thưa hơn: 18 × 18** thay vì 44 × 44 (`n` mặc định của `wovenCloth` và cả lời gọi trong `src/set.js` — cùng một con số). Sợi to, bước đan đọc được: người xem thấy sợi nào nằm trên sợi nào |
+| **0:32–0:37** | Nhãn `KHE GIỮA SỢI` chỉ vào **mặt sợi** chứ không vào khe; khe giữa hai sợi là một dải xám phẳng, không có mặt nước | Nhãn **neo vào giữa hai sợi** (`.026, −.006, .000` — đúng chỗ có màng nước), nên mũi tên chỉ vào **dải nước trong khe**. Dải nước đã có mặt nước (màng nước trong khe + cầu nước nối hai mép) |
+| **0:12** | Một mảng tường phẳng chiếm **45 % khung** | Máy dựng lại: **nhìn xuống vào quạt bàn** (fov 32, `(−.62, 1.30, −2.58)` → `(−1.42, 1.16, −3.28)`) — lưới quạt chiếm phần lớn khung |
+| **0:27** | Một vùng tối trống chiếm **35 % khung** | Máy nghiêng xuống hơn (fov 38, `(1.80, 1.50, −1.50)` → `(2.02, 1.20, −2.60)`) — **hai cái áo chiếm gần hết khung** |
+| **0:42** | Sợi vải cắt ngang mặt nước có **màu nâu và dạng như cành khô**, không giống sợi bông | Mảng nâu đó **không phải sợi**: đó là **bờ cát** của mặt nước, nhưng màu `#9c8a68` dưới đèn ấm của cảnh biến nó thành cành khô, và dải bờ hẹp (21 cm) nên ở cự ly xa nó thu về một sừng nhọn. Bờ đổi thành **cát ướt màu xám** (`#6c695e`) và **rộng hơn** (28 cm) |
+| **2:18** | Nhãn `CHỒNG LÊN NHAU` chỉ vào **một cái áo đang treo cạnh chiếc khác** trên cùng dây, chưa thật sự "chồng lên nhau" | Nhãn **dời vào đúng chỗ chồng** (`.414, 1.758, −.62`): mũi tên chỉ vào chỗ áo xám ở sau bị áo hồng ở trước che |
+| **2:53** | Hình kết theo `TREATMENT.md` phải là **một cái áo úp còn ẩm trên sàn**, nhưng dựng lại thành **hai cái bàn gỗ với bốn món quần áo trải trên đó** | Hình kết **dựng lại theo lời hứa**: hai bàn phơi **ẩn đi** ở c60 (cờ `noBench2`), và **một cái áo úp còn ẩm nằm một mình trên sàn hiên** (`floorShirt` + vệt ẩm `floorWetPatch`), mặt ẩm hướng lên nên **màu lạnh** để tách khỏi nền gạch ấm. Thẻ `CÒN ẨM` và `KHÔNG CHỒNG` chỉ vào chính cái áo đó |
+
+### Giữ — và lý do
+
+1. **0:68 (c22) — "60 % khung là trần trơn".** Giữ. Lý do: đây là nhát **cố ý nhìn LÊN khe không khí** — câu 22 nói *"nước chỉ bay hơi đều hơn khi không khí ngay trên vải còn trống"*, nên **khoảng trống trên vải chính là thứ đang được kể**, và cột hơi nước bốc lên qua khe đó là hình của nó. Máy hạ xuống một chút (fov 37, `(.31, 1.08, −2.52)` → `(.44, 1.45, −3.26)`) để **mép áo còn ở đáy khung** và cột hơi nước vẫn nằm giữa khung; nhưng trần không được lấp đầy, vì lấp đầy nó là bỏ đi cái câu nói.
+2. **Cột hơi nước ở mép vải (c22)** — giữ, như trên: nó loãng dần khi bay lên nên đọc ra là hơi nước *đang rời vải*, không phải một tấm kính hơi kín.
+3. **Cánh quạt trong ảnh tĩnh (c29)** — giữ: cánh quạt **có quay trong phim**; dấu hiệu gió nằm ở hai vệt hạt khí chạy ngang từ miệng quạt.
+4. **Cái đứng giữa khung ở c37** — giữ: đó là **vách ngăn có mặt kính mờ** của bàn thí nghiệm, không phải quạt.
+
+### Số đọc trên đồ đo — không đổi
+
+Nhiệt kế treo **25 °C**; nhiệt kế `thermo30` **30 °C**; ẩm kế **90 %**; hai cân **288 g** và **88 g**. Vòng này không đổi một số đo nào — mọi sửa đổi ở **ánh sáng, bóng đổ, màu vật, số sợi, góc máy và nội dung thẻ**, không đụng vào số.
+
+### Vòng 12 — mã neo của nhãn (11 thẻ)
+
+Bảng `CARDS` trong `src/film.js` nay mang thêm trường `anchor:` cho 11 thẻ: mỗi nhãn nêu tên vật nó gắn vào, theo tên vật trong danh mục `src/props.js`. Máy kiểm (`channels/tram-nghi-nhieu/tools/check_label_anchors.py`) báo **không nhãn nào sai**, và hai nhãn trong số đó đúng là hai nhãn vòng nghiệm thu cuối đã bắt lỗi:
+
+| Nhãn | Mã neo | Vì sao quan trọng |
+|---|---|---|
+| `KHE GIỮA SỢI` (c11) | sợi vải đan cận | Nghiệm thu cuối bắt lỗi: nhãn chỉ vào **mặt sợi** chứ không vào khe. Giờ đuôi thẻ neo vào đúng giữa hai sợi, nơi có màng nước |
+| `CHỒNG ÁO` (c48) | đàn áo phơi chồng trên dây | Nghiệm thu cuối bắt lỗi: nhãn chỉ vào **một cái áo treo cạnh nhau** chứ không vào chỗ chồng |
+| `QUẠT` (c5) | quạt bàn có lưới | — |
+| `HAI CÂN` (c33–c34) | cân nhà bếp có mặt đồng hồ kim | — |
+| `NHIỆT ĐỘ` (c39) | nhiệt kế treo tường | — |
+| `ĐỘ ẨM` (c39) | ẩm kế treo tường có kim | — |
+| `SỨC CHỨA CAO HƠN` (c44) | ẩm kế treo tường có kim | — |
+| `ÁO ÚP` (c49) | áo úp: mép dưới úp lên, mảng ẩm nằm trên mặt gấp | — |
+| `PHƠI RỘNG` (c49) | áo phơi rộng: cả hai mặt phơi ra | — |
+| `QUẦN DÀY` (c50) | quần đùi hai ống | — |
+| `ÁO MỎNG` (c50) | áo thun mỏng | — |
+
+Ba mươi thẻ còn lại **cố ý không có mã neo**: máy nói thẳng là chưa kiểm được. Riêng `PHƠI MỘT MẶT` (c48) thì máy đòi phần định tính ("áo màu sẫm") vì chữ "phơi … mặt" khớp cả "áo phơi rộng: cả hai mặt phơi ra" — nhưng ở nhát c48 cái áo phơi rộng không có trong khung, nên **giữ nguyên chữ trên màn hình**, chỉ bỏ mã neo.
+
+Mã neo không đổi hình nào: nó chỉ buộc mỗi nhãn phải nêu được vật của nó bằng tên. Vì vậy bản cắt này không cần chấm lại hình vì lý do đó.
+
 ## VERDICT: PASS
 
 SCOPE: bản cắt này đóng **Bước 6 (hình ảnh)** cho tập `tap-01-phoi-quan-ao` sau vòng chấm thứ năm: ba câu FAIL chặn (c45, c49, c59), tám câu phải sửa (c25, c34, c38, c40, c44, c46, c60, c5–c7) đã sửa ở mã; số đọc trên đồ đo đã khoá lại trong cả phim (nhiệt kế 25 °C, ba mươi độ ở một thiết bị riêng, ẩm kế chín mươi phần trăm, mặt cân không in số); sáu nhóm lỗi giữ lại kèm lý do; và **bốn vòng sửa hình sau đó** (vòng 6: khung mở đầu; vòng 7: năm thẻ không đủ lâu để đọc; vòng 8: hai mũi tên chỉ vào khoảng trống; vòng 9: mũi tên c17 chạm không gì) — mục "Vòng 6–9" ở trên. Không câu nào bị cắt khỏi phim. `LOOK.md` viết lại theo đúng mã (mười chín dòng bố cục và số đọc).

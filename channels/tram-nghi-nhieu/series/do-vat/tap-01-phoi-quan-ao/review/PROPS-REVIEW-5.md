@@ -72,13 +72,13 @@ VERDICT: FAIL
 #24 giọt nước rơi từ mép khăn — B — HỎNG — người xem gọi: "KHÔNG RÕ — tấm ván nâu cam uốn cong, mép có sỏi trắng và giọt nước xanh" (chắc thấp — giống máng đất đá có giọt nước, khay bày hàng, miếng da/thảm)
   → SỬA: ảnh cho thấy một TẤM VÁN/MÁNG ĐÁ (tấm nâu cam cứng, mép là thanh gỗ có dãy sỏi trắng) thay cho mép khăn — chỉ có giọt nước là đúng. Sửa: mép khăn phải là vải dệt dày (nổi xù, có tua ở mép), bỏ dãy sỏi trắng và thanh gỗ, giữ một giọt nước lớn đang rơi/tu ở mép khăn với ánh sáng xuyên qua cho thấy nó là nước, thêm vài giọt nhỏ hơn dính trên vải.
 
-#25 bàn tay người — B — HỎNG — người xem gọi: "KHÔNG RÕ — bàn chân người gắn vào một cán gỗ dài" (chắc thấp — giống chân ghế gỗ hình bàn chân, cây chổi đầu bàn chân, mô hình giải phẫu)
+#26 bàn tay người — B — HỎNG — người xem gọi: "KHÔNG RÕ — bàn chân người gắn vào một cán gỗ dài" (chắc thấp — giống chân ghế gỗ hình bàn chân, cây chổi đầu bàn chân, mô hình giải phẫu)
   → SỬA: ảnh cho thấy một BÀN CHÂN/MANNEQUIN GỖ (5 ngón chân + cán gỗ tròn) thay cho bàn tay. Thay bằng bàn tay người thật: lòng bàn tay, 4 ngón + ngón cái, màu da, móng tay, gân/khớp, cổ tay và cán tay cắt ngang; bỏ hoàn toàn cán gỗ tròn và bàn chân.
 
 ---
 
 GHI CHÚ
-- Tổng hợp: 8 vật HỎNG — nhóm A: #2 (kẹp quần áo gỗ), #9 (bồn chậu nhựa); nhóm B: #17 (lọ thuỷ tinh thay sợi đan), #18 (lưới kim loại thay tấm vải dệt), #19 (que có vạch số thay giọt nước), #20 (cọ/chổi thay mặt nước), #24 (ván/máng đá thay mép khăn), #25 (bàn chân mannequin thay bàn tay) → FAIL.
+- Tổng hợp: 8 vật HỎNG — nhóm A: #2 (kẹp quần áo gỗ), #9 (bồn chậu nhựa); nhóm B: #17 (lọ thuỷ tinh thay sợi đan), #18 (lưới kim loại thay tấm vải dệt), #19 (que có vạch số thay giọt nước), #20 (cọ/chổi thay mặt nước), #24 (ván/máng đá thay mép khăn), #26 (bàn chân mannequin thay bàn tay) → FAIL.
 - Nhóm A chỉ đạt khi tên mù đúng vật (kể cả khi tên mù là KHÔNG RÕ); nhóm B chỉ HỎNG khi ảnh cho thấy một vật thật khác đứng thay cho nó.
 - LỖI ĐÁNH SỐ TRONG BLIND.md: hai mục #20 và #21 bị hoán đổi so với file ảnh. Ảnh p_20.jpg là "cọ/chổi cán cong + chùm sợi xanh" (mô tả nằm ở mục #21 của BLIND.md); ảnh p_21.jpg là "áo thun kem ướt + kẹp gỗ ở vai" (mô tả nằm ở mục #20). Bản review này ghép tên mù theo đúng file ảnh.
 - Lưu ý về #5: tên mù ("quần jean xanh đậm gấp đôi") trùng vật với ảnh, nên tính KHỚP; nhưng nếu ý đồ là "quần đùi" (quần ngắn) thì ảnh hiện là quần dài — xem dòng #5.
@@ -111,7 +111,7 @@ GHI CHÚ
 #22 TÊN: áo polo kem bị cắt làm đôi | CHẮC: vừa | THẤY: áo polo màu kem có cổ gọn và tay ngắn, nhưng thân áo bị tách dọc ra làm hai nửa lệch nhau, nửa phải màu xám đật hơn và nhìn thấy đường may bên trong; lạ ở chỗ hai nửa áo lệch nhau và xoay.
 #23 TÊN: áo thun kem có túi ngực, phần dưới ẩm màu xám kèm giọt nước | CHẮC: vừa | THẤY: áo phông ngắn tay màu kem, có một túi ngực vạch nhỏ, nửa dưới là một mảng xám-đen bị cắt ngang bằng mép trắng như đã ướt/đổ mực, trên mảng đó có vài giọt nước xanh nhạt.
 #24 TÊN: KHÔNG RÕ — tấm ván nâu cam uốn cong, mép có sỏi trắng và giọt nước xanh | CHẮC: thấp | THẤY: một tấm vải/ván màu nâu cam dạng lá cong ngược, dọc theo mép dưới là một thanh trắng nhỏ có các viên sỏi trắng và bong bóng xanh, bên dưới treo một giọt nước xanh to; giống máng đất đá có giọt nước, giống khay bày hàng, cũng giống miếng da/thảm.
-#25 TÊN: KHÔNG RÕ — bàn chân người gắn vào một cán gỗ dài | CHẮC: thấp | THẤY: một ống/cán gỗ nâu tròn, dài, kết thúc bằng một bàn chân trần (thấy rõ 5 ngón chân, mu bàn chân và gót), phần cổ chân có mảng da vàng; giống chân ghế gỗ hình bàn chân, giống cây chổi đầu bàn chân, cũng giống mô hình giải phẫu.
+#26 TÊN: KHÔNG RÕ — bàn chân người gắn vào một cán gỗ dài | CHẮC: thấp | THẤY: một ống/cán gỗ nâu tròn, dài, kết thúc bằng một bàn chân trần (thấy rõ 5 ngón chân, mu bàn chân và gót), phần cổ chân có mảng da vàng; giống chân ghế gỗ hình bàn chân, giống cây chổi đầu bàn chân, cũng giống mô hình giải phẫu.
 
 ---
 Người chấm: claude -p (model mặc định của claude) · review.sh --props · 2026-11-09 02:08
