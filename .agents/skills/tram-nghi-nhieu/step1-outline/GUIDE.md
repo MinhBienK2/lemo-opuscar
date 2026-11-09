@@ -19,6 +19,10 @@ Tạo ra `research/FACTS.md` và `TREATMENT.md` với chuỗi nhân quả hoàn 
      quoted>`… là dòng chưa được viết. Cổng dàn ý dừng ở đây:
      `python3 channels/tram-nghi-nhieu/tools/check_research.py <tập>` — file còn dòng mẫu, hoặc chưa có
      mục nào, hoặc chưa có nguồn nào, thì dàn ý chưa được chấm.
+   - **Viết mỗi claim ngay khi bạn đã có nguồn của nó** — đừng tìm hết rồi mới viết. Một tập cần **bốn đến
+     sáu** claim; tìm mãi không dừng là cách dễ mất cả buổi mà chưa có một dòng nào trong tệp. Và mỗi lần viết
+     xong thì `check_research.py` báo gần hơn một chút — còn nếu tìm hết rồi mới viết thì cả buổi tìm không
+     để lại dấu vết nào trong tập.
 3. Viết `TREATMENT.md`:
    - Tách câu hỏi: Chủ thể thay đổi là gì? Thay đổi thế nào?
    - Câu trả lời tóm tắt trong đúng 1 câu.
