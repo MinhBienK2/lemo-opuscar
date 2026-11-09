@@ -345,6 +345,8 @@ PY
 )
   mkdir -p "$W/blind2"
   for n in $UNSURE; do
+    # "09" là số có số 0 ở đầu: printf hiểu nó là bát phân và báo lỗi, nên bỏ số 0 trước
+    n=$(printf '%s' "$n" | sed 's/^0*//'); [ -n "$n" ] || n=0
     f=$(printf 'p_%02d.jpg' "$n")
     if [ -f "$W/p/$f" ]; then cp "$W/p/$f" "$W/blind2/"; fi
   done
