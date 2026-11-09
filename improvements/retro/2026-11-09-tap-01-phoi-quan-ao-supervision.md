@@ -2868,17 +2868,19 @@ rõ*, và nói thẳng rằng máy không đo được chủ thể có đủ l�
 
 ## Còn lại
 
-- **[ ]** N72: sửa `core/render/still.mjs` (chờ khung đã trình chiếu). Chưa làm vì R13 — phiên đang
-  chạy dùng công cụ này.
-- **[ ]** N73: đồng hồ cho từng câu trong `beatsheet.mjs`, và `review.sh` bọc bước dựng tờ. Chưa làm vì
-  R13 — phiên đang chạy chính công cụ này.
+- **[x]** N72: `core/render/still.mjs` chờ hai khung hình rồi mới chụp (12:47) — ảnh là của khung vừa dựng,
+  không phải khung trước đó; `beatsheet.mjs` cũng chờ như vậy trước khi chụp.
+- **[x]** N73: `beatsheet.mjs` có đồng hồ từng câu (60 s) và in số câu sau mỗi câu (12:47). `review.sh` **chưa**
+  bọc bước dựng tờ trong `timeout` — nhưng đồng hồ trong chính công cụ đã đủ: một câu treo thì công cụ dừng,
+  nói câu nào, và thoát mã khác 0 thay vì treo cả vòng chấm.
 - **[x]** N74: `tools/check_map.py` (mới, có selftest) đối chiếu bản đồ với mã; hướng dẫn của bước 5 gọi nó.
   Chưa nối vào `gate.py`: một bản đồ thối không làm phim xấu hơn, nên nó là ghi chú chứ không phải
   chặn — quyết định đó là của người dùng, xem phần "Còn lại".
 - **[ ]** N75: `tools/supervise.sh` đếm lệnh ghi file bằng cách nhắc tới đường dẫn dự án.
 - **[ ]** N76: `tools/supervise.sh` đếm lượt đọc `tasks/*.output`; R9 nói thêm về output của lệnh nền.
-- **[ ]** N81: `beatsheet.mjs` ghi tệp khoá theo tập; giết job bằng pid đọc từ tệp khoá, không `pkill`
-  theo mẫu chung; `lessons.md` có một dòng về lệnh giết theo tên.
+- **[x]** N81: `beatsheet.mjs` ghi tệp khoá `out/beats/beats.lock` với pid của nó (12:47), và lời của R14
+  trong `CODING_STANDARDS.md` nói rõ giết job bằng pid đọc từ tệp khoá, không `pkill` theo mẫu chung.
+  `lessons.md` đã có một dòng về lệnh giết theo tên.
 - **[ ]** N82: bài kiểm tra của kênh đối chiếu các câu "Dùng trong phim" / "Phim nói:" của
   `research/FACTS.md` với thẻ chữ trong `src/*.js` và với `voice/lines.json`.
 - **[ ]** N88 (nửa việc): cho `mux.sh` tự ưu tiên encode **tại chỗ** khi phim ngắn — đo được: encode
