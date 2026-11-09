@@ -55,9 +55,12 @@ EPISODE = re.compile(r'(channels/[^\s"\'|;&]*?/tap-[^\s"\'|;&/]+)')
 LOAD_MSG = (
     'Máy đang quá tải (%s), nên việc nặng này sẽ không xong trong thời gian cho phép.\n\n'
     'Đây là nguyên nhân gốc của các vòng chấm "chết đúng giờ" và của vòng lặp mở-vòng-mới. '
-    'Cách làm đúng: **đợi việc đang chạy xong rồi chạy lại** (chạy lệnh nền rồi chờ thông báo '
-    '"job đã xong"; đừng vòng lặp đọc lại output). Nếu đã có một vòng chấm chạy cho tập này thì '
-    'đừng mở vòng thứ hai — hãy sửa theo phán quyết vòng đó rồi chạy vòng kế tiếp.\n\n'
+    '**Cách làm đúng: đợi bên trong một job nền, để harness báo khi xong** — đừng vòng lặp `sleep` '
+    'rồi thử lại (đó là dò giữa chừng, luật R5):\n\n'
+    '    Bash(command="until awk \'{exit !($1 < 12)}\' /proc/loadavg; do sleep 30; done; '
+    'sh channels/tram-nghi-nhieu/tools/review.sh <tập> --props", run_in_background=true)\n\n'
+    'Một lần gọi công cụ, không vòng dò, và bạn được báo khi nó xong. Nếu tập này đã có một vòng chấm '
+    'chạy thì đừng mở vòng thứ hai — hãy sửa theo phán quyết vòng đó rồi chạy vòng kế tiếp.\n\n'
     'Nếu tải đến từ chương trình khác trên máy (không phải việc của bạn), hãy nói với người dùng '
     'thay vì cố chạy tiếp: máy hết swap thì mọi vòng chấm đều chết, và mở thêm vòng chỉ khiến nó '
     'chết nhanh hơn.\n')

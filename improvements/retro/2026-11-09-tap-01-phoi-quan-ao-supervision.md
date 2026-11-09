@@ -4009,3 +4009,32 @@ bị giết — và nó đủ để nói lên sự thật.
 
 **Còn lại.** Tệp `.round-<phần>.running` của một vòng đã chết nên được dọn khi vòng sau mở; hiện
 khoá đã tự dọn (theo pid) nhưng tệp `.running` thì chưa.
+
+## Kiểm chứng — phiên mới (tập 05) đo bằng chính bộ đo luật, so với các phiên cũ
+
+Cơ chế chặn chỉ đáng tin khi nó **làm phiên sau khác hẳn phiên trước**. Tôi đo bằng `tools/rules.py` —
+cùng một bộ đo, cùng một cách đếm:
+
+| Luật | tập 02 (cũ) | tập 03 (cũ) | **tập 05 (mới, sau khi cài cơ chế)** |
+|---|---|---|---|
+| R5b đọc lại log của job nền | **114** (9 tệp) | **82** (9 tệp) | **0** |
+| R9 cùng một lệnh chạy lại | 5 | 23 | **0** |
+| R11 đọc lại tệp lớn | **118** (`film.js` 57, `props.js` 34, `set.js` 27) | **70** | **0** |
+| R12 mở lại ảnh | **188** | **164** | **0** |
+| R1 ghi tệp bằng shell | 42 | 1 | 1 (lúc 15:51, trước khi có chặn) |
+| R5 dò bằng `sleep` | — | — | 1 (xem dưới) |
+| Transcript | 140 MB | 126 MB | **14 MB** |
+
+Không phải một phiên nào "biết luật" hơn phiên nào khác — cả ba đều có cùng một điểm khởi đầu. Khác
+biệt là **cơ chế**: tập 05 mở sau khi các hook có mặt, và nó không phạm những luật mà các phiên trước
+phạm hàng trăm lần.
+
+**Nhưng cơ chế cũng có thể dạy sai cách.** Lời cảnh báo đầu tiên của chặn tải nói "đợi việc đang chạy
+xong rồi chạy lại" — phiên tập 05 hiểu thành *vòng lặp `sleep` để dò load*, tức R5. Đó là lỗi của
+lời cảnh báo, không phải của phiên: nó cho một đích (đợi) mà không cho **cách** (đợi trong một job
+nền, để harness báo). Nay lời cảnh báo dạy đúng công thức:
+
+    Bash(command="until awk '{exit !($1 < 12)}' /proc/loadavg; do sleep 30; done; sh …/review.sh <tập> --props", run_in_background=true)
+
+Một lần gọi công cụ, không vòng dò, được báo khi xong. Đây là hình dạng chung của các cơ chế: **một
+lời cảnh báo phải đi kèm cách làm đúng**, nếu không nó chỉ dạy phiên làm sai theo một cách khác.
