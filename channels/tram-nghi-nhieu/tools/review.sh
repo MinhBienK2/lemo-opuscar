@@ -88,6 +88,22 @@ get_prompt() {
   die "cannot find PROMPT_CRITIC.md for $_step"
 }
 sign() { printf '\n---\nNgười chấm: %s · review.sh %s · %s\n' "$CRITIC_ID" "$1" "$(date '+%Y-%m-%d %H:%M')" >> "$2"; }
+# The round number in a report is the tool's truth, not the reviewer's memory. A reviewer that is not told which
+# round it is writes "ROUND: 1/5" every time, and a report that always says round 1 cannot tell a loop from a
+# first attempt — nor can a reader who wants to know how much of the round budget is gone.
+set_round() {  # <file> <n> <limit>
+  python3 - "$1" "$2" "$3" <<'PY'
+import re, sys
+path, n, lim = sys.argv[1], sys.argv[2], sys.argv[3]
+t = open(path, encoding='utf-8', errors='replace').read()
+line = f"ROUND: {n}/{lim}"
+if re.search(r'^ROUND:.*$', t, re.M):
+    t = re.sub(r'^ROUND:.*$', line, t, count=1, flags=re.M)
+else:
+    t = re.sub(r'^(VERDICT:.*)$', lambda m: m.group(1) + '\n' + line, t, count=1, flags=re.M)
+open(path, 'w', encoding='utf-8').write(t)
+PY
+}
 # next number of a report: next <prefix> → n for <prefix>n.md
 next() { n=$(ls "$EP/review" 2>/dev/null | grep -cE "^$1[0-9]+\.md$" || true); echo $((n + 1)); }
 # the flags still standing after the reviewer's "CỜ SAI": unflag <review> "<#n:A+B …>" "<flags it may clear>"
@@ -403,6 +419,7 @@ Thư mục làm việc của bạn: $W. Đọc lines.json, FACTS.md, STRATEGY.md
     sed -i "s/^VERDICT:.*/VERDICT: PASS (lần chấm thứ $n, không còn lỗi CHẶN; sửa nốt các lỗi NẶNG bên dưới theo VIẾT LẠI rồi chạy --script thêm một lần để đóng dấu lời mới)/" SCRIPT-REVIEW.md
   fi
   { cat SCRIPT-REVIEW.md; [ -n "$FLAGGED" ] && printf '\n## Cờ máy chưa sửa (tự động FAIL)\n%s\n' "$FLAGGED"; } > R.md
+  set_round R.md "$n" 6
   sign "--script${CHID:+ --chapter $CHID}" R.md
   cp R.md "$EP/review/SCRIPT-REVIEW-$TAG$n.md"; cp R.md "$EP/review/SCRIPT-REVIEW${CHID:+-$CHID}.md"
   cat R.md
@@ -507,6 +524,7 @@ critic "$(get_prompt "step6-assembly")
 
 $(cat TASK.md)
 
+Đây là vòng $n/$LIMIT của phần chấm này; dòng thứ hai của bản chấm phải là "ROUND: $n/$LIMIT".
 Thư mục làm việc của bạn: $W. Mở từng ảnh của các câu trên, rồi viết REVIEW.md ở đó theo mẫu, và in lại nó."
 [ -s REVIEW.md ] || cp out.txt REVIEW.md
 # the machine flags stand unless the reviewer cleared them with "CỜ SAI <FLAG>: <why>"
@@ -514,6 +532,7 @@ FLAGGED=$(unflag REVIEW.md "$(cat flags.txt)" "DARK SAME RUN NUM")
 { cat REVIEW.md; [ -n "$FLAGGED" ] && printf '\n## Cờ máy chưa sửa (tự động FAIL)\n%s\n' "$FLAGGED"; } > R.md
 MODE="(cả phim)"; [ -n "$LINES" ] && MODE="--lines $LINES"; [ -n "$CHID" ] && MODE="--chapter $CHID"
 [ "$VIDEO" = 1 ] && MODE="$MODE --video"
+set_round R.md "$n" "$LIMIT"
 sign "$MODE" R.md
 cp R.md "$EP/review/REVIEW-$SCOPE$n.md"; cp R.md "$EP/review/REVIEW.md"
 # what the last round fixed and what is still open: the next round must not start from zero

@@ -895,6 +895,7 @@ từng dòng một, không phải để đọc lướt:
 | Đồng hồ của người chấm (`CRITIC_TIMEOUT`) | một vòng chấm kẹt thì thoát mã 2, không ăn tròn vòng | người chấm treo nuốt trần 5 vòng (N25) |
 | R11 (đếm số lần đọc lại) | `src/props.js` của tập 02 **không** bị đọc lại 15 lần trở lên | cùng cái tốn thời gian của tập 01 (N32) |
 | `src/MAP.md` | tồn tại sau bước 5 | tìm chỗ sửa bằng cách đọc lại cả tệp |
+| `ROUND:` trong bản chấm | mỗi bản chấm ghi đúng vòng của nó (`REVIEW-2.md` → `ROUND: 2/5`) | bản chấm tự khai số vòng, và khai sai (N34) |
 
 Điều kiện để tập 02 được coi là **xác nhận**: cổng bàn giao thoát 0, và bảng trên không có dòng nào ở cột
 "Nếu không thấy".
@@ -928,6 +929,35 @@ con số `motion` của từng câu trong `beats.json`. Nó **không phải phá
 tức là cần **mốc nhịp** (`{type:'mark', kind:'beat', beat, t, d, xy}` trong `events.json`) mà kênh này
 chưa ghi. Có mốc thì `check_motion.py` dùng luôn được quy tắc "mỗi nhịp phải làm thay đổi phần khung của
 nó" — đó là thước đo gần với mắt của người chấm nhất mà máy có.
+
+---
+
+## N34 — medium — Bản chấm tự khai số vòng của nó, và nó khai sai
+
+**Bằng chứng.** Ba bản chấm hình của tập 01 — `review/REVIEW-1.md`, `REVIEW-2.md`, `REVIEW-3.md` — đều mở
+đầu bằng **"ROUND: 1/5"**. Ba vòng đã chạy, mỗi vòng một tệp riêng, và cả ba bản đều tự nhận là vòng
+thứ nhất. Vòng 2 nói `OVERALL: 3.4/5`; vòng 3 vẫn nói `ROUND: 1/5`.
+
+Nguyên nhân nằm ở chỗ ai viết dòng đó. `review.sh` **biết** vòng nào đang chạy (`n=$(next "REVIEW-$SCOPE")`)
+và **biết** trần của nó (`LIMIT`), và nó chặn đúng khi `n > LIMIT`. Nhưng dòng `ROUND:` trong mẫu bản
+chấm là một ô để **người chấm tự điền**, và lời dặn đưa cho người chấm ở đúng khối đó không có câu nào nói
+"đây là vòng mấy" — khác với khối dàn ý ("Đây là lần chấm thứ $n") và khối storyboard ("đây là vòng $n/5").
+Người chấm không biết mình đang ở vòng nào thì viết `1/5`. Với khối lời kể còn tệ hơn: trần của nó là
+**6** vòng, mà mẫu vẫn ghi `[1-5]/5`.
+
+**Nghĩa là gì.** Số vòng là thứ duy nhất để phân biệt **"vòng chấm đang tiến"** với **"vòng chấm đang
+lặp"**. Một bản chấm mà luôn nói "vòng 1" giấu mất chính cái thông tin đó: người đọc không biết mình đã
+dùng hết ngân sách vòng chưa, và người giám sát (như tôi) phải đếm tên tệp để biết phiên đang ở đâu —
+tức là phải làm thủ công cái mà máy đã biết. Không có hại trực tiếp với phim, nhưng nó đúng loại "đồ
+đo sai" mà khiến một phiên dài trông như đang lặp khi nó không lặp, hoặc ngược lại.
+
+**Đã sửa.** `review.sh` có `set_round`: sau khi người chấm trả lời, **công cụ tự viết lại** dòng `ROUND:`
+bằng số của chính nó — vòng hình thì `n/LIMIT`, vòng lời thì `n/6` — và khối hình còn được nói trước trong
+lời dặn cho người chấm. Người chấm không còn giữ bí mật về vòng mình đang ở; số vòng là của công cụ.
+
+**Còn phải làm.** Số trần trong mẫu (`ROUND: [1-5]/5`) vẫn nằm trong sáu tệp `PROMPT_CRITIC.md`; nó
+thành sự thật chỉ ở hai khối đã sửa. Và `check_progress.py` vẫn đếm vòng bằng **tên tệp** — đó là đúng,
+nhưng nếu sau này có một bản chấm sinh ra ngoài `review.sh` thì nó sẽ không có dòng `ROUND:` đúng.
 
 ---
 
@@ -970,6 +1000,7 @@ nó" — đó là thước đo gần với mắt của người chấm nhất m�
 | 33 | Con số trên nhãn phải có lời kể đọc — luật của chính FACTS.md, nay do máy canh (N31) | `channels/tram-nghi-nhieu/tools/check_labels.py`, `tools/review.sh` | **xong** (chưa nhìn `src/props.js`) |
 | 34 | Đếm số lần đọc lại cùng một tệp lớn: 186 lần đọc ba tệp mã là phần lớn chi phí của phiên (N32) | `tools/supervise.sh`, `CODING_STANDARDS.md` R11 | **xong** (chưa có `src/MAP.md`) |
 | 35 | Hai thước đo "phim có chuyển động" đo hai thứ khác nhau; thêm số đo theo từng câu trước khi dựng (N33) | `channels/tram-nghi-nhieu/tools/beatsheet.mjs` | **xong** (chưa có mốc nhịp `xy` trong `events.json`) |
+| 36 | Số vòng trong bản chấm là của công cụ, không phải trí nhớ của người chấm (N34) | `channels/tram-nghi-nhieu/tools/review.sh` | **xong** |
 
 ### Mỗi phát hiện đã có dòng riêng trong `improvements/lessons.md`
 
