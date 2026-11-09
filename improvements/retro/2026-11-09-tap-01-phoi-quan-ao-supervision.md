@@ -2962,6 +2962,11 @@ Tôi đã báo quyết định này cho phiên của tập 01, kèm lý do và c
   nhiêu, cái nào cũ nhất) và chỉ xóa khi được bảo `--apply`; giữ mặc định 12 thư mục mới nhất, và **không
   bao giờ xóa thư mục mới hơn 24 giờ** — bằng chứng của một vòng vừa xong thì còn đang được đọc. (Bản ghi
   đó là bằng chứng — P5 đọc chính nó — nên tôi **không** tự xóa; lượt dọn thật là của người dùng.)
+- **[x]** N94: `tools/rules.py` không báo `R1?` cho một script **chỉ đọc** tệp nguồn. Trước đó mọi
+  script `python3 - <<'PY'` có nhắc tới một tệp `.js`/`.json`/`.md` đều bị báo, và ở tập 02 có **hơn 40
+  dòng** như vậy — phần lớn là script chỉ đọc. Bốn mươi dòng báo sai chôn mất một dòng báo thật.
+  Nay dòng `R1?` chỉ hiện khi script có dấu của việc ghi (`open(…,'w')`, `.write(`, `write_text`,
+  `shutil.copy`, `>`); tập 02 còn 8 dòng, và 8 dòng đó đều có dấu ghi thật.
 - **[x]** N92: `check_shots.py` báo `tờ sheet CŨ HƠN mã (tờ …, mã …)` — chỉ tính file `.js`, và in cả
   ngày khi khác ngày.
 - **[x]** N93: `check_shots.py --note` (cổng bàn giao chỉ chặn lỗi cấu trúc) và `core/render/review.sh`

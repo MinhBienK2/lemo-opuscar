@@ -91,6 +91,18 @@ def project_file(f, cmd, lib=''):
 # the safe way to edit — it counts the matches and refuses an ambiguous snippet — so the rule must not count
 # it as a shell write. It only has to notice that the tool is being run (N66).
 SANCTIONED_EDIT = re.compile(r'\breplace\.py\b')
+# a sign that a script really writes something. A heredoc python program that only READS a source file
+# (`open('src/film.js').read()`) is not a violation — but the R1? line used to be printed for it anyway,
+# and forty read-only scripts bury the one real finding (N94).
+WRITE_MARK = re.compile(
+    r"open\s*\([^)]*['\"][wa]['\"]"      # open(p, 'w') / open(p, "a")
+    r"|\.\s*write\s*\("                   # f.write(...)
+    r"|write_text|write_bytes|json\.dump\("
+    r"|shutil\.(copy|move|rmtree|copytree)"
+    r"|os\.(replace|remove|unlink|rename|rmdir)"
+    r"|rmtree\(|unlink\("
+    r"|>[^\s>][^\n]{0,80}"                  # a redirect: > file
+)
 
 
 def sanctioned_edit(cmd):
@@ -300,9 +312,13 @@ def rules(session, film='', lib=''):
                 r1_via_tool += 1
             elif is_r10:
                 r10_n += 1
-            elif re.search(r'\bpython3?\s+-\s*<<', cmd) and re.search(r"['\"][^'\"]*\.(js|json|md)['\"]", cmd):
+            elif (re.search(r'\bpython3?\s+-\s*<<', cmd)
+                  and re.search(r"['\"][^'\"]*\.(js|json|md)['\"]", cmd)
+                  and WRITE_MARK.search(cmd)):
                 # The command does not say which file it writes — a python program from stdin decides that, and
                 # the rule cannot read the program's mind. Say that, and do not name a file.
+                # (A script that only READS the file has no sign of writing at all: then the rule can tell —
+                # it is not a violation, and saying so would bury the one real finding.)
                 out.append(f"R1? {at} a shell script touches a source file (lệnh không nói tệp nào — đọc lệnh "
                            f"trước khi tin): {cmd[:120]}")
         if tool in ("write", "edit"):
@@ -458,6 +474,11 @@ def selftest():
         _fake_transcript(session, ['cat %s' % job] * 5)
         got = '\n'.join(rules(session))
         cases.append(('đọc lại output của job nền nhiều lần thì báo R9', 'R9 ' in got and 'job nền' in got, got, ''))
+
+        # a script that only READS a source file is not a violation, and must not be reported as one
+        _fake_transcript(session, ["python3 - <<'PY'\nimport re\ns=open('src/film.js',encoding='utf-8').read()\nprint(re.findall(r'x', s))\nPY"])
+        got = '\n'.join(rules(session))
+        cases.append(('script chỉ đọc tệp nguồn thì không báo R1?', 'R1' not in got, got, ''))
 
         # a scratch file under /tmp is not a project file
         _fake_transcript(session, ["cat > /tmp/scratch.py <<'EOF'\nx=1\nEOF"])
