@@ -47,7 +47,9 @@ Dựa trên `COMPONENTS_SPEC.md` đã được duyệt ở Bước 4, lập trì
      sau lần sửa `src/props.js` cuối cùng** — bản cắt cũ không nói gì về code hiện tại.
 5. **Thêm một vật làm dịch mọi số vật đứng sau nó.** Bản chấm và bản cắt chỉ vật bằng **số thứ tự**
    (#25 bàn tay, ảnh `review/props/p_25.jpg`), nên sau khi thêm một vật vào `src/props.js`, số cũ trong bản
-   chấm trỏ sang vật khác — và không ai báo, vì mọi thứ vẫn hợp lệ. Khi thêm vật: sửa lại số trong
-   `review/PROPS-REVIEW-*.md` và `review/PROPS-DIRECTORS-CUT.md` theo danh mục mới, rồi chạy
+   chấm trỏ sang vật khác — và không ai báo, vì mọi thứ vẫn hợp lệ. **Vì vậy hãy thêm vật mới vào CUỐI
+   danh mục**: thứ tự trong danh mục không quyết định gì trong phim (phim gọi vật **theo tên**), còn số thứ
+   tự thì giữ cho mọi bản chấm cũ. Nếu đã chèn giữa rồi, sửa lại số trong `review/PROPS-REVIEW-*.md` và
+   `review/PROPS-DIRECTORS-CUT.md` theo danh mục mới, rồi chạy
    `python3 channels/tram-nghi-nhieu/tools/check_props_refs.py <tập>` — nó nói **vật nào** mỗi số đang
    chỉ. Vòng `--props` tự gọi kiểm tra này, nên một số lệch sẽ chặn vòng chấm thay vì lọt xuống phim.
