@@ -2121,6 +2121,7 @@ tiền (trước vòng chấm, trước lúc dựng, trước lúc bàn giao), c
 | 69 | Một kiểm tra hỏi sai câu giết đúng vòng chấm đã làm xong (N69) | `channels/tram-nghi-nhieu/tools/review.sh`, `channels/tram-nghi-nhieu/tools/test_review_critic.py` | **xong** — `critic()` biết pha nào hỏi phán quyết và pha nào hỏi danh sách; ca selftest chạy chính hàm đó với một người chấm giả (6 ca). Đo trên tap-02: hai vòng chấm vật dựng chết oan, mỗi vòng 9 phút; ngân sách vòng không mất |
 | 70 | Người chấm đã chấm phim bằng một prompt bị cắt cụt (N70) | `channels/tram-nghi-nhieu/tools/review.sh`, `channels/tram-nghi-nhieu/tools/check_prompts.py`, `channels/tram-nghi-nhieu/tools/test_review_props.py` | **xong** — 3 prompt bị cắt (83 % lời dặn của vòng chấm vật dựng mất); guard tĩnh đọc tệp shell, bài kiểm tra chạy trọn vòng chấm với người chấm giả (19 điều, 2 giây, không GPU) |
 | 71 | Hướng dẫn của bước vẫn bảo gọi subagent, và người làm phim làm đúng như vậy (N71) | `.agents/skills/tram-nghi-nhieu/step{1,2,3,4,5}-*/GUIDE.md`, `.agents/skills/tram-nghi-nhieu/SKILL.md`, `channels/tram-nghi-nhieu/tools/check_reports.py` | **xong** — mọi hướng dẫn gọi đúng lệnh `review.sh`, kèm hợp đồng của bản cắt; cảnh báo sai về hai bước đã có công cụ bị xoá, và bài kiểm tra bắt đúng lỗi thật (bản cắt tập 01 không có dòng phán quyết) |
+| 77 | Bài kiểm tra hình báo "60 câu vật quá nhỏ" về 54 câu chưa từng được dựng: tờ sheet vẽ cho một khoảng câu đánh dấu phần còn lại là `skipped`, mà máy coi `fill` thiếu là 0 — nên 54 câu không hề có lỗi biến thành 54 lỗi giả, ngay ở chỗ người làm phim phải tin trước khi mở một vòng chấm bốn mươi phút | high | `check_shots.py` phân biệt *chưa đo* với *đo được 0* (câu `skipped` không còn bị báo lỗi, được đếm riêng), báo lỗi thật cho câu thiếu sự kiện giọng (`VOICE`), ra mã 2 khi chưa đo hết, chọn tờ sheet nào đo được nhiều câu hơn, và `review.sh` không dùng lại tờ nửa vời cho vòng chấm cả phim |
 
 ### Mỗi phát hiện đã có dòng riêng trong `improvements/lessons.md`
 
@@ -2168,10 +2169,10 @@ tiền (trước vòng chấm, trước lúc dựng, trước lúc bàn giao), c
 
 Vòng chấm hình thứ năm (`review/REVIEW.md`, 10:12) trả lời **REJECT**: ba câu FAIL (c45, c49, c59) và
 22 cờ máy còn mở. Phiên bắt đầu sửa, sửa được một lượt, rồi **tờ sheet nhịp điệu treo**. Năm phát hiện
-dưới đây là của đoạn đó — chúng không có trong N1–N69, và cả năm đều là lỗi của **công cụ**, không
+dưới đây là của đoạn đó — chúng không có trong N1–N71, và cả năm đều là lỗi của **công cụ**, không
 phải của phim.
 
-## N70 — high — `core/render/still.mjs` chụp phải khung cũ, và phiên làm phim tự viết lại công cụ của thư viện
+## N72 — high — `core/render/still.mjs` chụp phải khung cũ, và phiên làm phim tự viết lại công cụ của thư viện
 
 **Bằng chứng.** `core/render/still.mjs` gọi `await page.evaluate(t => window.render(t), t)` rồi chụp
 ngay: `await page.screenshot(...)` — không chờ khung hình nào được trình chiếu. Lúc 11-08 04:56 phiên
@@ -2192,7 +2193,7 @@ và tờ beat dùng đúng cơ chế đó nên ảnh của nó không bị lệc
 trình chiếu (hai `requestAnimationFrame`, hoặc dùng luôn đường `SHOTPROBE` của rig) trước khi chụp;
 `core/README.md` nói rõ công cụ chụp *sau* khi khung đã có.
 
-## N71 — high — Bài dựng tờ beat không có đồng hồ: một câu treo là cả vòng chấm treo
+## N73 — high — Bài dựng tờ beat không có đồng hồ: một câu treo là cả vòng chấm treo
 
 **Bằng chứng.** `channels/tram-nghi-nhieu/tools/beatsheet.mjs` gọi
 `await page.evaluate(x => { window.SHOTPROBE = 1; window.render(x); }, t)` cho từng câu — không có
@@ -2215,7 +2216,7 @@ trong `beatsheet.mjs`, mỗi câu phải có đồng hồ (`Promise.race` với 
 trình duyệt, in câu số và thời điểm, thoát mã khác 0); `tools/README.md` nói `--lines a-b` là cách
 khoanh vùng một lần treo.
 
-## N72 — medium — Bản đồ mã (`src/MAP.md`), cách chữa R11, sai ngay sau khi viết và không ai kiểm tra
+## N74 — medium — Bản đồ mã (`src/MAP.md`), cách chữa R11, sai ngay sau khi viết và không ai kiểm tra
 
 **Bằng chứng.** `src/MAP.md` viết lúc 10:45: `src/film.js (524 dòng)`, `src/set.js (1099 dòng)`.
 Ngay lúc 10:58 hai tệp đó dài **553** và **1194** dòng (`props.js` 4514 vẫn đúng). Bản đồ tự ghi:
@@ -2230,7 +2231,7 @@ sinh ra vi phạm R11.
 **Guard đã có.** Chưa có. **Đề xuất:** `tools/check_map.py` đọc các dòng "tên → dòng" của
 `src/MAP.md`, kiểm tra dòng đó còn chứa đúng tên, và báo lệch; `gate.py` chạy nó cho tập.
 
-## N73 — medium — Số lần phá R1 bị đếm sai một bậc: 34 trong báo cáo, 376 trong transcript gốc
+## N75 — medium — Số lần phá R1 bị đếm sai một bậc: 34 trong báo cáo, 376 trong transcript gốc
 
 **Bằng chứng.** N17 ghi báo cáo của người giám sát thấy 34 lần ghi file bằng shell. Đếm lại transcript
 gốc của phiên `e8ec853c`: **376** lệnh heredoc chạm vào tệp của dự án — `film.js` 215, `props.js` 99,
@@ -2245,7 +2246,7 @@ nằm trong lệnh; biến thì không.
 **nhắc tới đường dẫn của dự án** (đo từ gốc thư viện), bỏ qua biến mang nó; và đọc phần lệnh gốc
 trong transcript thay vì dòng đã hiển thị.
 
-## N74 — medium — Chờ một việc nền bằng cách đọc file output của chính nó
+## N76 — medium — Chờ một việc nền bằng cách đọc file output của chính nó
 
 **Bằng chứng.** `…/tasks/bib9128mh.output` được đọc **24** lần, `…/tasks/buqnq0skq.output` **13** lần —
 đó là file output của chính các lệnh nền của harness, và harness tự giao file đó khi lệnh xong. Thêm
@@ -2260,13 +2261,60 @@ lệnh nền là của harness để giao*.
 
 ---
 
+## N77 — high — Bài kiểm tra hình báo "60 câu vật quá nhỏ" về 54 câu chưa từng được dựng
+
+**Bằng chứng.** Lúc 11:05, khi đọc lại tờ nhịp của tập 01 bằng công cụ của kênh:
+
+```
+python3 channels/tram-nghi-nhieu/tools/check_shots.py channels/tram-nghi-nhieu/series/do-vat/tap-01-phoi-quan-ao
+→ check_shots: 60 câu, 60 câu có vấn đề máy thấy được
+  c1  [—]  fill 0%  "Quần áo ướt treo trên dây, nước vẫn còn đó, chưa đi đâu cả."
+    → FILL: vật chính chỉ chiếm 0 % khung — đưa máy gần hơn, hoặc đổi bố cục để vật chiếm chỗ.
+  (… 60 câu, tất cả đều fill 0 %.)
+```
+
+Câu 1 không hề nhỏ: nó là cảnh mở đầu, có áo trên dây. Máy báo nó "0 % khung" vì **câu đó chưa từng
+được dựng**: tờ sheet trong `out/beats/beats.json` lúc đó là tờ vẽ cho **một khoảng câu**
+(`--lines a-b`), nên 54 câu còn lại được đánh dấu `skipped` — không có ảnh, không có `fill`.
+Nhưng `check_shots.py` coi `fill` thiếu là `0.0`, và vậy **54 câu chưa đo** thành **54 câu vật quá nhỏ**.
+
+**Vì sao quan trọng.** Đây là kiểu cảnh báo sai nguy hiểm nhất: nó không im lặng, nó **chỉ đúng một
+dòng** và sai 54 dòng còn lại, và nó nằm đúng chỗ người làm phim phải tin trước khi mở một vòng chấm
+bốn mươi phút. Người làm phim đã chạy lệnh này và thấy "60 câu có vấn đề" — nếu không có một người
+đọc lại tờ sheet, phiên sẽ đi sửa 54 cảnh không hề có lỗi, và mỗi cảnh sửa lại là một vòng chấm nữa.
+
+Một tờ sheet nửa vời còn đi vào vòng chấm: `review.sh` dùng lại tờ sheet đã dựng nếu nó không cũ hơn
+lần sửa code cuối — mà **một tờ nửa vời cũng "không cũ hơn"**. Người chấm cả phim sẽ nhìn một nửa phim
+mà không được báo gì.
+
+**Đã sửa.**
+
+- `check_shots.py` phân biệt **chưa đo** với **đo được 0 %**: chỉ câu nào thật sự có `fill` mới được
+  kết luận. Câu `skipped` không còn bị báo là lỗi; nó được đếm riêng và nói rõ là *chưa đo*.
+- Câu lời kể có mà `window.EV` không có sự kiện giọng thì được báo là lỗi thật (`VOICE`) — trước đó nó
+  rơi vào nhóm "chưa đo" và im lặng.
+- Khi có câu chưa đo, lệnh ra mã **2** (chưa kết luận được) thay vì 1 (có lỗi), kèm câu dựng lại tờ
+  sheet cho cả tập.
+- Khi một thư mục tập có nhiều tờ sheet, công cụ chọn **tờ nào đo được nhiều câu hơn** — tờ đầy đủ thắng
+  tờ một khoảng câu.
+- `review.sh` không dùng lại một tờ sheet có câu `skipped` cho vòng chấm **cả phim**, và nói rõ là đã
+  bỏ qua tờ đó và vì sao.
+- Selftest của `check_shots.py` nay có 14 ca, gồm ba ca mới: câu chưa đo không bị báo là vật quá nhỏ,
+  câu thiếu sự kiện giọng bị báo `VOICE`, và tờ nào đo được nhiều câu hơn thì thắng.
+
+**Đo lại sau khi sửa, trên chính tập 01:** `60 câu — đo được 60 câu, 36 câu có vấn đề máy thấy được`.
+Tờ sheet đầy đủ nằm ở `review/beatsheet/beats.json`; tờ nửa vời ở `out/beats/beats.json` là tờ
+`--lines` cũ, và công cụ nay bỏ qua nó.
+
+---
+
 ## Còn lại
 
-- **[ ]** N70: sửa `core/render/still.mjs` (chờ khung đã trình chiếu). Chưa làm vì R13 — phiên đang
+- **[ ]** N72: sửa `core/render/still.mjs` (chờ khung đã trình chiếu). Chưa làm vì R13 — phiên đang
   chạy dùng công cụ này.
-- **[ ]** N71: đồng hồ cho từng câu trong `beatsheet.mjs`, và `review.sh` bọc bước dựng tờ. Chưa làm vì
+- **[ ]** N73: đồng hồ cho từng câu trong `beatsheet.mjs`, và `review.sh` bọc bước dựng tờ. Chưa làm vì
   R13 — phiên đang chạy chính công cụ này.
-- **[ ]** N72: `tools/check_map.py` + `gate.py`.
-- **[ ]** N73: `tools/supervise.sh` đếm lệnh ghi file bằng cách nhắc tới đường dẫn dự án.
-- **[ ]** N74: `tools/supervise.sh` đếm lượt đọc `tasks/*.output`; R9 nói thêm về output của lệnh nền.
+- **[ ]** N74: `tools/check_map.py` + `gate.py`.
+- **[ ]** N75: `tools/supervise.sh` đếm lệnh ghi file bằng cách nhắc tới đường dẫn dự án.
+- **[ ]** N76: `tools/supervise.sh` đếm lượt đọc `tasks/*.output`; R9 nói thêm về output của lệnh nền.
 

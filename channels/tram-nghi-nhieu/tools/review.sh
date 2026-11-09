@@ -749,6 +749,12 @@ REUSED=""
 if [ -z "$LINES" ]; then
   for CAND in "$EP/out/beats" "$EP/review/beatsheet"; do
     if [ -f "$CAND/beats.json" ] && ls "$CAND"/sheet_*.jpg >/dev/null 2>&1; then
+      # A sheet drawn for a range of lines (--lines a-b) leaves the rest of the episode unmeasured. The reviewer of
+      # the WHOLE film must not be handed half a film: only a sheet that covers every line can serve this round.
+      if ! python3 -c "import json,sys; B=json.load(open(sys.argv[1])); sys.exit(1 if any(b.get('skipped') for b in B) else 0)" "$CAND/beats.json"; then
+        echo "review: bỏ qua tờ sheet $CAND — nó chỉ dựng một khoảng câu, không phải cả phim." >&2
+        continue
+      fi
       if python3 -c "import os,sys; sys.exit(0 if os.path.getmtime(sys.argv[1]) >= float(sys.argv[2]) else 1)" "$CAND/beats.json" "$NEWEST"; then
         REUSED="$CAND"
         break

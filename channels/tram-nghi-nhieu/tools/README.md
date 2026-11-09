@@ -23,7 +23,7 @@ Các công cụ của `core/` có sẵn [`core/README.md`](../../../core/README.
 | `python3 channels/tram-nghi-nhieu/tools/gate.py status <tập>` | tập đang ở đâu: tem nào có, tem nào không, vì sao | — |
 | `python3 channels/tram-nghi-nhieu/tools/gate.py check --for render <tập>` | cổng: được dựng chưa | — |
 | `node channels/tram-nghi-nhieu/tools/beatsheet.mjs <tập> --out <tập>/out/beats` | dựng tờ sheet (một khung cho mỗi câu) + cờ máy | `<tập>/out/beats/` |
-| `python3 channels/tram-nghi-nhieu/tools/check_shots.py <tập>/out/beats` | đọc cờ máy ra thành **danh sách câu phải sửa** | — |
+| `python3 channels/tram-nghi-nhieu/tools/check_shots.py <tập>` | đọc cờ máy ra thành **danh sách câu phải sửa**; ra mã 1 = có câu phải sửa, ra mã 2 = tờ sheet chưa đo hết (chưa kết luận được) | — |
 | `python3 channels/tram-nghi-nhieu/tools/check_labels.py <tập>` | nhãn có nằm ở câu gọi tên nó không; nhãn có vẽ số lời không đọc không | — |
 | `python3 channels/tram-nghi-nhieu/tools/check_props_used.py <tập>` | vật nào trong danh mục chưa hề lên hình | — |
 | `python3 channels/tram-nghi-nhieu/tools/check_research.py <tập>` | file nghiên cứu còn ô trống, mốc thiếu nguồn, Wikipedia đứng một mình | — |
@@ -76,6 +76,11 @@ và cả phim chỉ có 5 lượt: một tập 60 câu không thể hội tụ t
   vòng: `check_shots.py <tập>/out/beats`.
 - **Tờ sheet được dùng lại.** Nếu mã không đổi từ lúc tờ sheet được dựng, vòng chấm dùng lại tờ đó
   thay vì dựng lại sáu mươi khung.
+- **Tờ sheet một khoảng câu không phải tờ sheet của cả phim.** `beatsheet.mjs --lines a-b` chỉ dựng
+  những câu trong khoảng đó; phần còn lại được đánh dấu `skipped` — **chưa được đo**, không phải lỗi.
+  `check_shots.py` vì thế ra mã **2** chứ không ra mã 1, và vòng chấm cả phim không dùng lại tờ đó.
+  Muốn máy đo được cả tập thì dựng tờ sheet cho cả tập:
+  `node channels/tram-nghi-nhieu/tools/beatsheet.mjs <tập> --out <tập>/out/beats`.
 
 ## Đạo diễn cắt — lối ra khi hết lượt
 
