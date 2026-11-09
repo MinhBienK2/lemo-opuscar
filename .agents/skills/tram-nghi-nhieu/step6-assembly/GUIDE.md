@@ -40,5 +40,6 @@ Lắp ráp các linh kiện (từ `src/props.js`) vào bối cảnh hoàn chỉn
      - `NUM`: Câu nói có con số nhưng hình không có đồng hồ/thước đo $\rightarrow$ Bổ sung hiển thị trực quan.
      - `RUN`: Cảnh kéo dài quá lâu không có biến chuyển máy quay.
    - Chọn đường chấm theo độ dài tập: tập ngắn (≤ 30 câu) thì chấm cả phim — `sh channels/tram-nghi-nhieu/tools/review.sh <tập>`; tập dài thì **chia chương trước** (`src/chapters.js`: mỗi chương `{ id: 'ch1', lines: ['c1', 'c10'], files: [...] }`, các chương phủ hết các câu, đúng thứ tự), rồi chấm từng chương — `review.sh <tập> --chapter <id>`. Mỗi chương có 5 lượt riêng và cổng mở khi **mọi chương** PASS; cổng không mở bằng một vòng chấm cả phim của tập dài. `--lines a-b` (3 lượt mỗi cảnh) dùng để soi lại đúng một cảnh vừa sửa.
+   - **Hết lượt thì không chấm lần thứ sáu.** Ba lối ra, rẻ nhất trước: `--lines a-b` cho đúng câu đã sửa → chia chương rồi chấm từng chương → **đạo diễn cắt** (tệp trong `review/`, kết thúc bằng `VERDICT: PASS`, nêu rõ cái gì đã cắt, **viết sau lần sửa code cuối** vì cổng so mốc và từ chối bản cắt cũ). Tên tệp bản cắt của từng bước: `channels/tram-nghi-nhieu/tools/README.md`.
    - **Đạo diễn tiếp nhận:** Điều chỉnh timing, camera track, ánh sáng.
    - Lặp lại tối đa 5 hiệp cho tới khi `VERDICT: PASS`.

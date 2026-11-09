@@ -66,6 +66,8 @@ Quy trình này thay cho bước 1–6 của `AGENTS.md` / `DIRECTOR.md` khi là
 
 Mọi lệnh dưới đây chạy từ gốc thư viện. Trên máy này, mọi lệnh dựng hình (`still.mjs`, `beatsheet.mjs`, `review.sh`, `build.sh`) cần `LEMO_ANGLE=vulkan` ở đầu lệnh.
 
+**Công cụ của kênh: đọc `channels/tram-nghi-nhieu/tools/README.md` (ở gốc thư viện) trước khi đọc mã nguồn của chúng.** Nó có lệnh của từng công cụ, thứ tự các bước, ngân sách vòng chấm, hợp đồng của đạo diễn cắt, và bảng "khi công cụ từ chối thì làm gì". Một phiên đã đọc `review.sh` 85 lần và mất 350 nghìn token ngữ cảnh chỉ để biết những thứ đó.
+
 **Tập đang dở.** Một tập mất hơn một ngày, nên phiên mở tập thường không phải phiên làm xong tập. Khi thư mục
 tập đã có, hỏi cổng trước khi làm bất cứ việc gì:
 `python3 channels/tram-nghi-nhieu/tools/gate.py status <tập>` in ra từng tem (còn hiệu lực, hết hiệu lực,

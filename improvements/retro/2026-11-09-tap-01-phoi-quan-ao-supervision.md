@@ -1860,6 +1860,45 @@ sửa khác tệp trên dòng lệnh thì bị từ chối"*, *"sửa đọc t�
 
 ---
 
+## N68 — high — Công cụ của kênh không có sổ tay, nên phiên đọc mã nguồn của chúng 449 lần
+
+**Bằng chứng.** Phiên tập 01 đọc mã nguồn của công cụ **449 lệnh**, khoảng **1,4 triệu ký tự** output
+(~**350 nghìn token**, 15 % toàn bộ output của phiên):
+
+| Đọc mã của | Số lần |
+|---|---|
+| `channels/tram-nghi-nhieu/tools/review.sh` | 85 |
+| `channels/tram-nghi-nhieu/rig/render.js` | 60 |
+| `channels/tram-nghi-nhieu/rig/kit.js` | 37 |
+| `channels/tram-nghi-nhieu/tools/gate.py` | 30 |
+| `core/render/page.mjs` | 21 |
+| `core/render/still.mjs` | 17 |
+| `channels/tram-nghi-nhieu/tools/beatsheet.mjs` | 16 |
+
+Phiên **có** đọc các hướng dẫn của từng bước (`step1`…`step7/GUIDE.md`, ~40 lần). Nó đọc mã vì các
+hướng dẫn nói *làm gì*, chứ không nói *chạy lệnh nào với cờ nào, và khi công cụ từ chối thì làm gì*.
+Đúng những thứ đó nó đi tìm: cờ của `review.sh`, ngân sách vòng chấm, tên tệp bản cắt của từng bước,
+tên các con dấu, điều kiện của cổng. Không chỗ nào viết ra.
+
+**Vì sao nó quan trọng.** `core/` có sẵn một sổ tay đúng hình dạng này
+([`core/README.md`](../../../core/README.md)): mỗi lệnh một dòng, "nó làm gì", "nó ghi đâu", cộng
+một mục "đọc kết quả của một bài kiểm tra". Công cụ của kênh — vốn nhiều hơn, và quyết định nhiều
+hơn — chỉ có một dòng mô tả trong `CHANNEL.md`. Một phiên làm phim phải đọc mã để biết dùng, và
+đọc mã thì tốn: 350 nghìn token là hai phần trăm của ngữ cảnh cả một phiên dài, và ngân sách đó
+đáng lẽ dùng để làm phim.
+
+Cái tệ hơn: đọc mã để *đoán* công cụ sẽ từ chối thế nào là đọc mã để **đoán**, và một lần đoán sai
+là một vòng chấm 40 phút bị đốt.
+
+**Đã sửa.** `channels/tram-nghi-nhieu/tools/README.md` — sổ tay của công cụ kênh, cùng hình dạng
+với `core/README.md`: lệnh của từng công cụ và nó ghi đâu; thứ tự các bước và điều kiện của từng bước;
+ngân sách vòng chấm của từng phần; cờ máy tự FAIL và cách xoá; **hợp đồng của đạo diễn cắt** (tệp
+nào, dòng `VERDICT: PASS`, phải viết sau lần sửa code cuối); và một bảng **"khi công cụ từ chối"**:
+mỗi câu mà công cụ in ra → nó nghĩa là gì → làm gì tiếp. Ba con trỏ tới nó: `CHANNEL.md` (dòng
+"các công cụ"), `SKILL.md` của kênh (trước khi đọc mã), và hướng dẫn bước 6 (ngay ở chỗ hết lượt).
+
+---
+
 ## Các guard đã bắt được gì (tính từ 08:00, hai tập còn chạy)
 
 Đây là bằng chứng rằng các guard không phải lý thuyết — mỗi cái đã bắt một lỗi thật, hoặc đã được một
@@ -1959,6 +1998,7 @@ tiền (trước vòng chấm, trước lúc dựng, trước lúc bàn giao), c
 | 65 | Cùng một tấm hình thì không phải trả tiền hai lần (N65) | `channels/tram-nghi-nhieu/tools/review.sh`, `.agents/skills/tram-nghi-nhieu/step6-assembly/GUIDE.md` | **xong** — vòng chấm dùng lại tờ sheet đã dựng nếu mã không đổi. Đo trên tap-01: tờ sheet được dựng **16 lần** cho cùng một bộ mã |
 | 66 | Luật R1 phải biết công cụ sửa file khỏi cách viết tay, và tính một tệp một lần (N66) | `tools/rules.py` | **xong** — 4 ca selftest (14/14). Đo lại tap-01: 369 lần ghi bằng shell = **344** lần script tự viết (297 `open(p,'w')`, 20 heredoc, 6 cp/mv, 3 sed -i) + **25** lần qua công cụ, nay báo riêng là `R1t`; `src/film.js` gộp lại `×167` thay vì `×90` và `×76` |
 | 67 | Đường đi an toàn phải là một lệnh (N67) | `tools/replace.py`, `CODING_STANDARDS.md` R1, `.agents/skills/tram-nghi-nhieu/SKILL.md` | **xong** — 4 ca selftest (9/9). `--batch -` đọc từ stdin, mỗi sửa tự nêu tệp: một lệnh sửa được nhiều tệp, mọi tệp được kiểm tra trước khi tệp nào bị ghi |
+| 68 | Công cụ của kênh phải có sổ tay (N68) | `channels/tram-nghi-nhieu/tools/README.md`, `channels/tram-nghi-nhieu/CHANNEL.md`, `.agents/skills/tram-nghi-nhieu/SKILL.md`, `.agents/skills/tram-nghi-nhieu/step6-assembly/GUIDE.md` | **xong** — sổ tay: lệnh của từng công cụ, thứ tự bước, ngân sách vòng, hợp đồng đạo diễn cắt, bảng "khi công cụ từ chối". Đo trước: **449** lệnh đọc mã công cụ, **350 nghìn token** (15 % output của phiên) |
 
 ### Mỗi phát hiện đã có dòng riêng trong `improvements/lessons.md`
 
