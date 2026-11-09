@@ -47,13 +47,15 @@ const K = N1.props, I = N2.props, D = N3.props;
 // Mũi tên của thẻ chỉ vào đúng vật đang được nói tới. Số trong lời kể viết
 // bằng chữ ("năm mươi phần trăm"), số trên thẻ viết bằng số ("50 %").
 const CARDS = [
-  { id: 'soi-cellulose', text: 'sợi cellulose', lines: ['c9'], anchor: 'sợi giấy dẹt màu vàng nhạt, có hạt trắng nhỏ dính hai bên', size: 26, at: () => [I.fA.position.x + .14, I.fA.position.y, I.fA.position.z] },
-  { id: 'nhom-hydroxyl', text: 'nhóm hydroxyl', lines: ['c10'], anchor: 'sợi giấy dẹt màu vàng nhạt, có hạt trắng nhỏ dính hai bên', size: 26, at: () => [I.fA.position.x - .04, I.fA.position.y + .022, I.fA.position.z] },
-  { id: 'lien-ket-hydrogen', text: 'liên kết hydrogen', lines: ['c11'], anchor: 'móc sáng nhỏ nối hai sợi giấy, móc màu vàng', size: 26, at: () => (I.heroBonds[0] ? [I.heroBonds[0].position.x, I.heroBonds[0].position.y, I.heroBonds[0].position.z] : [0, 0, .16]) },
+  { id: 'soi-cellulose', text: 'sợi cellulose', lines: ['c9'], anchor: 'sợi cellulose tròn màu vàng nhạt, có nhóm hydroxyl trắng dính hai bên', size: 26, at: () => [I.fA.position.x + .14, I.fA.position.y, I.fA.position.z] },
+  { id: 'nhom-hydroxyl', text: 'nhóm hydroxyl', lines: ['c10'], anchor: 'sợi cellulose tròn màu vàng nhạt, có nhóm hydroxyl trắng dính hai bên', size: 26, at: () => [I.fA.position.x - .04, I.fA.position.y + .022, I.fA.position.z] },
+  { id: 'lien-ket-hydrogen', text: 'liên kết hydrogen', lines: ['c11'], anchor: 'liên kết hydrogen: móc vàng nối hai sợi giấy, hai đầu cắm vào hai cụm trắng', size: 26, at: () => (I.heroBonds[0] ? [I.heroBonds[0].position.x, I.heroBonds[0].position.y, I.heroBonds[0].position.z] : [0, 0, .16]) },
   { id: 'do-am-50', text: '50 %', lines: ['c27'], anchor: 'đồng hồ độ ẩm mặt thang tròn, kim xanh và chân đứng', size: 30, at: () => [D.hygro.position.x + .016, D.hygro.position.y + .016, D.hygro.position.z] },
   { id: 'do-am-90', text: '90 %', lines: ['c29'], anchor: 'đồng hồ độ ẩm mặt thang tròn, kim xanh và chân đứng', size: 30, at: () => [D.hygro.position.x + .016, D.hygro.position.y + .016, D.hygro.position.z] },
-  { id: 'bet-uot', text: '3–10 %', lines: ['c34'], anchor: 'dải giấy dài mỏng bị ướt, sẫm màu và nhăn', size: 30, at: () => [D.strip.position.x, D.strip.position.y + .016, D.strip.position.z] },
-  { id: 'nguong-15', text: '15 %', lines: ['c35'], anchor: 'đồng hồ đo lực mặt thang tròn, kim đỏ và móc treo dưới', size: 30, at: () => [D.gauge.position.x + .004, D.gauge.position.y + .004, D.gauge.position.z] },
+  { id: 'bet-uot', text: '3–10 %', lines: ['c34'], anchor: 'dải giấy dài mỏng bị ướt, sẫm màu và nhăn', size: 30, at: () => [D.strip.position.x + .016, D.strip.position.y + .052, D.strip.position.z] },
+  // Thẻ '15 %' nói về **dải giấy ướt**, nên mũi tên phải chỉ vào dải giấy, không
+  // phải vào mặt thang lực kế ngay dưới nó. Móc neo ở nửa trên của dải.
+  { id: 'nguong-15', text: '15 %', lines: ['c35'], anchor: 'dải giấy dài mỏng bị ướt, sẫm màu và nhăn', size: 30, at: () => [D.strip.position.x + .016, D.strip.position.y + .052, D.strip.position.z] },
   { id: 'sau-khi-say', text: '1/2', lines: ['c40'], anchor: 'tờ giấy nhăn dày sau khi ướt rồi sấy, còn vệt ẩm hằn trên mặt', size: 30, at: () => [D.dried.position.x, D.dried.position.y + .012, D.dried.position.z] },
 ];
 // Cửa sổ của mỗi thẻ lấy bằng `cardWindow` của rig: thẻ hiện từ **hết câu trước** câu
@@ -152,7 +154,10 @@ window.render = t => {
   const dist = camera.position.distanceTo(new THREE.Vector3(sh.look[0], sh.look[1], sh.look[2]));
   F.frame(SC[sh.s], {
     t,
-    thick: clamp(1.95 + dist * .7, 2.0, 3.8),
+    // Viền mực phải **đậm như bản mẫu của kênh**: sàn 2,9 px cho mọi cảnh,
+    // kể cả cảnh cận trong tờ giấy. Viền mảnh 2 px ở cảnh cận làm mọi vật trông
+    // như sticker dán, không phải vật dựng trong khung.
+    thick: clamp(1.95 + dist * .7, 2.9, 3.8),
     ref: dist,
     key: set.key || null,
     fade: Math.min(1, t / .3 + .2, (window.DUR - t) / .4),

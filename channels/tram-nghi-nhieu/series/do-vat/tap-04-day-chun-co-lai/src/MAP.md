@@ -24,28 +24,28 @@ Các số dòng **đúng với lần sửa sau cùng**; khi sửa code, sửa l�
 | 441–450 | `F.markBeats(ev, V, …)` — mốc nhịp của từng câu (thẻ số nếu có, nếu không thì điểm máy nhìn) |
 | 452–458 | `window.DIAG(t)` — chẩn đoán: nhát đang quay và trạng thái |
 
-## src/props.js (833 dòng — vật dựng: mỗi vật một hàm)
+## src/props.js (959 dòng — vật dựng: mỗi vật một hàm)
 
 | Dòng | Cái gì |
 |---|---|
 | 18–148 | phần dùng chung: `roundSection()` (mặt cắt bo tròn) · `ribbonMesh()` (dải theo đường cong) · `arcGeometry()` + `fillArc()` (vòng) · `shade()` · `metalTex()` |
-| 150–184 | `bandRing()` — vòng dây chun dẹt, mặt cắt bo tròn, có chỗ hai đầu dán; `setTighten(k)` |
-| 185–216 | `bandStrip()` — dải dây nằm ngang, cong nhẹ, có đoạn hai đầu dán; `setLen(k)` |
-| 222–258 | `strap()` — dải dây treo dọc, đầu trên gập qua đầu ghim; `setLen(k)` |
-| 264–293 | `jar()` — hũ thủy tinh có vai, cổ và nắp vặn ren xoắn ốc |
-| 299–340 | `hairdryer()` — thân, lưới nan thẳng ở đuôi và miệng, tay cầm, vòng treo; `g.mouth` |
-| 346–362 | `steelWire()` — sợi thép tròn, vân sáng không chạm mép cắt; `setLen(k)` |
-| 368–378 | `pin()` — ghim nhỏ: đầu đĩa ở trên, mũi kim chĩa xuống |
-| 384–405 | `weight()` — quả cân kim loại, móc treo hình chữ J |
-| 411–445 | `jouleBand()` — vòng cao su nghiêng quanh bầu nhiệt kế + đuôi dây; `setYank(amp, phase)` · `stretch(amp)` · `tipX(s)` |
-| 451–532 | `ruler()` — thước gỗ có vạch centimet (bản nằm; bản đứng có đế) |
-| 538–576 | `thermometer()` — bầu đỏ, cột thuỷ ngân, dải thang dán sát ống; `setTemp(k)` |
-| 582–647 | `dynamometer()` — mặt thang tròn có kim, móc dưới hình chữ J; `setReading(k)` |
-| 653–720 | `chain()` — dây xích hạt nối, hạt xen kẽ lớn–nhỏ; `spiral` = xoắn ốc nằm phẳng; `setCoil(k)` (1 = cuộn, 0 = kéo thẳng) · `update(t)` |
-| 726–746 | `crosslink()` — móc liên kết chéo hình chữ C, hai sợi hạt xuyên qua lỗ |
-| 752–757 | `heatFlow()` — luồng hơi nóng (dùng `flow()` của rig) |
-| 759–793 | `heatFront()` — vệt nhiệt chạy dọc mạng; `set(x, k)` |
-| 799–833 | `PROPS` — danh sách vật cho vòng chấm đạo cụ (mỗi vật một mình, ba phía) |
+| 150–200 | `bandRing()` — vòng dây chun dẹt, mặt cắt bo tròn, có chỗ hai đầu dán; `setTighten(k)` |
+| 201–237 | `bandStrip()` — dải dây nằm ngang, cong nhẹ, có đoạn hai đầu dán; `setLen(k)` |
+| 238–279 | `strap()` — dải dây treo dọc, đầu trên gập qua đầu ghim; `setLen(k)` |
+| 280–326 | `jar()` — hũ thủy tinh có vai, cổ và nắp vặn ren xoắn ốc, răng cưa viền **nông, sát mép** |
+| 327–386 | `hairdryer()` — thân, lưới nan thẳng ở đuôi và miệng, tay cầm, vòng treo; `g.mouth` |
+| 387–421 | `steelWire()` — sợi thép tròn, vân sáng không chạm mép cắt; `setLen(k)` |
+| 422–439 | `pin()` — ghim nhỏ: đầu đĩa ở trên, mũi kim chĩa xuống |
+| 440–476 | `weight()` — quả cân kim loại, móc treo hình chữ J |
+| 477–516 | `jouleBand()` — vòng cao su nghiêng quanh bầu nhiệt kế + đuôi dây; `setYank(amp, phase)` · `stretch(amp)` · `tipX(s)` |
+| 517–603 | `ruler()` — thước gỗ có vạch centimet (bản nằm; bản đứng có đế) |
+| 604–652 | `thermometer()` — bầu đỏ, cột thuỷ ngân, dải thang dán sát ống; `setTemp(k)` |
+| 653–729 | `dynamometer()` — mặt thang tròn có kim, móc dưới hình chữ J; `setReading(k)` |
+| 730–830 | `chain()` — dây xích hạt nối, hạt xen kẽ lớn–nhỏ; `spiral` = xoắn ốc nằm phẳng; `setCoil(k)` (1 = cuộn, 0 = kéo thẳng) · `update(t)` |
+| 831–877 | `crosslink()` — móc liên kết chéo hình chữ C, hai sợi hạt xuyên qua lỗ |
+| 878–884 | `heatFlow()` — luồng hơi nóng (dùng `flow()` của rig) |
+| 885–924 | `heatFront()` — vệt nhiệt chạy dọc mạng; `set(x, k)` |
+| 925–959 | `PROPS` — danh sách vật cho vòng chấm đạo cụ (mỗi vật một mình, ba phía) |
 
 ## src/set.js (531 dòng — ba nơi chốn)
 

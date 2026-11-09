@@ -3,24 +3,79 @@
 // File này tách khỏi film.js để phần "diễn" nằm một chỗ: film.js lo máy quay và
 // thẻ chữ, acts.js lo trạng thái của vật và bàn tay. Cùng một bộ mã dựng được
 // nhiều lần, và cũng dựng lại được khi cần soi từng nhát mà không cần giọng.
+//
+// Bàn tay ở đây **đặt bằng toán học, không đoán**: đầu ngón giữa phải nằm đúng
+// chỗ nó nắm (vết rách trên tờ giấy, chỗ hai sợi chạm nhau, vành lực kế…), và
+// cẳng tay phải lùi ra khỏi khung. Đặt tay "cho có" thì khung chỉ còn một mảng
+// hồng phẳng, người xem không đọc ra bàn tay — và tay là thứ đang kể.
 import * as THREE from 'three';
-import { keys, clamp, lerp } from '../../../../rig/kit.js';
+import { keys, clamp, lerp, ss } from '../../../../rig/kit.js';
 import { buildHand } from '../../../../rig/fx.js';
 import { droplets } from './set.js';
 
-// Tay đưa vào từ bên trái: ngón chỉ sang +x, cẳng tay lùi về -x (ra ngoài khung).
-function gripSide(hand, x, y, z, curl = .85, tilt = 0) {
-  hand.position.set(x, y, z);
-  hand.rotation.set(0, 0, tilt);
-  hand.pose(curl, .12);
-  hand.visible = true;
+// ── hình học bàn tay của rig ────────────────────────────────────────────
+// Vị trí đầu ngón giữa tính ra từ hình học thật (rig/fx.js, buildHand): gốc
+// ngón [0.2014, 0.004, −0.025], ba đốt dài [0.062, 0.040, 0.030]; mỗi khớp
+// gập thêm 1.0 / 1.3 / 0.9 lần `curl` rad.
+const FROOT = [.2014, .004, -.025], FSEG = [.062, .040, .030];
+function tipLocal(curl) {
+  const a = [-curl, -curl * 2.3, -curl * 3.2];
+  let x = FROOT[0], y = FROOT[1];
+  FSEG.forEach((L, i) => { x += L * Math.cos(a[i]); y += L * Math.sin(a[i]); });
+  return new THREE.Vector3(x, y, FROOT[2]);
 }
-// Tay đưa vào từ trên: ngón chỉ xuống, cẳng tay vươn lên.
-function gripDown(hand, x, y, z, curl = .85) {
-  hand.position.set(x, y, z);
-  hand.rotation.set(0, 0, -Math.PI / 2);
-  hand.pose(curl, .12);
+
+// Đặt bàn tay sao cho **đầu ngón giữa** nằm đúng ở `tip` và ngón chỉ theo
+// hướng `dir`.
+// `roll` xoay bàn tay quanh trục ngón: lòng bàn tay nghiêng đi, các ngón tách
+// ra thành hàng chứ không dồn vào một khối hồng.
+// Cẳng tay luôn nằm ngược hướng ngón, nên hướng ngón chính là hướng ta chọn
+// để cẳng tay lùi ra khỏi khung.
+function placeHand(hand, tip, dir, curl, { size = .5, roll = 0, spread = .25 } = {}) {
+  const p = tip.isVector3 ? tip : new THREE.Vector3(...tip);
+  const d = new THREE.Vector3(...dir).normalize();
+  const hz = Math.hypot(d.x, d.z);
+  const beta = Math.atan2(d.y, hz);              // ngón chỉ lên hay xuống
+  const psi = Math.atan2(-d.z, d.x);              // ngón chỉ sang hướng nào
+  const q = new THREE.Quaternion()
+    .setFromAxisAngle(new THREE.Vector3(0, 1, 0), psi)
+    .multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 0, 1), beta))
+    .multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), roll));
+  hand.quaternion.copy(q);
+  hand.scale.setScalar(size);
+  const off = tipLocal(curl).applyQuaternion(q).multiplyScalar(size);
+  hand.position.set(p.x - off.x, p.y - off.y, p.z - off.z);
+  hand.pose(curl, spread);
+  hand.userData.curl = curl;
   hand.visible = true;
+  return hand;
+}
+
+// Khe rách giữa hai nửa tờ giấy: props.js dịch **cả hai** nửa cùng một hướng,
+// nên tờ giấy không hề có vết rách — người xem chỉ thấy mặt giấy phẳng lì.
+// Ở đây ta mở khe bằng tay: nửa phải lùi sang phải (phía được kéo), nửa trái
+// lùi trái ít hơn. Khe mở **lệch sang phải** để nó lộ ra bên cạnh ngón tay,
+// chứ không nằm trọn dưới ngón mà không ai thấy.
+function tearGap(sheet, k) {
+  const halves = sheet.children.filter(o => o.isMesh && o.material === sheet.mat);
+  if (halves.length < 2) return;
+  const g = .022 * clamp(k);
+  halves[0].position.x = -.30 * g;
+  halves[1].position.x = .70 * g;
+}
+
+// Tay áo của rig dài 55 cm: trong nhát máy đứng gần, nó là một **ống navy**
+// chiếm cả khung và người xem tưởng đang nhìn một ống, không phải một tay.
+// Ta cuộn tay áo lại (cẳng tay còn ~20 cm, khớp với cổ tay áo sẵn có): trong
+// khung chỉ còn bàn tay và một chút cổ tay, đúng như lời yêu cầu.
+function shortSleeve(hand, len = .20) {
+  hand.traverse(o => {
+    if (!o.isMesh || !o.geometry || o.geometry.type !== 'CylinderGeometry') return;
+    const p = o.geometry.parameters;
+    if (Math.abs(p.height - .55) > 1e-6 || Math.abs(p.radiusTop - .075) > 1e-6) return;
+    o.scale.x = len / .55;                  // cắt tay áo, giữ nguyên độ dày
+    o.position.x = -.094 - len / 2;         // mép cắt dán ngay sau cổ tay áo
+  });
 }
 
 // makeActs(V, sets, SC): dựng bàn tay và trả về hàm trạng thái theo câu.
@@ -30,15 +85,17 @@ export function makeActs(V, sets, SC) {
   // một tay kéo mép tờ giấy ướt.
   // Trong tờ giấy: một tay kéo hai sợi ra xa nhau.
   // Bàn đo: một tay kéo lực kế xuống, một tay rót nước, một tay ấn tờ giấy đã sấy.
-  const handWet = buildHand({ size: .45 }); SC.N1.add(handWet);
+  const handWet = buildHand({ size: .5 }); SC.N1.add(handWet);
   droplets(handWet, 8, 5);
-  const handDry = buildHand({ size: .45 }); SC.N1.add(handDry);
-  const handPullK = buildHand({ size: .45 }); SC.N1.add(handPullK);
-  const handI = buildHand({ size: 1.0 }); SC.N2.add(handI);
+  const handDry = buildHand({ size: .5 }); SC.N1.add(handDry);
+  const handPullK = buildHand({ size: .5 }); SC.N1.add(handPullK);
+  const handI = buildHand({ size: .6 }); SC.N2.add(handI);
   droplets(handI, 6, 9);                            // đây là tay ướt: có giọt nước
-  const handD = buildHand({ size: .42 }); SC.N3.add(handD);
-  const handDip = buildHand({ size: .42 }); SC.N3.add(handDip);
-  const handPress = buildHand({ size: .5 }); SC.N3.add(handPress);
+  const handD = buildHand({ size: .45 }); SC.N3.add(handD);
+  const handDip = buildHand({ size: .5 }); SC.N3.add(handDip);
+  const handPress = buildHand({ size: .55 }); SC.N3.add(handPress);
+  // Tay áo cuộn lại cho cả bảy tay: cẳng tay không được nằm ngang giữa khung.
+  for (const h of [handWet, handDry, handPullK, handI, handD, handDip, handPress]) shortSleeve(h);
 
   const K = N1.props, I = N2.props, D = N3.props;
 
@@ -87,6 +144,10 @@ export function makeActs(V, sets, SC) {
   const breakK = keys([[0, 0], [T('c26'), 0], [E('c26'), .30], [T('c33'), .30], [E('c33'), .42],
     [T('c34'), .42], [E('c34'), 1], [1, 1]]);
   const pressK = keys([[0, 2.4], [T('c41'), 2.4], [E('c41'), 3.3], [1, 3.3]]);
+  // Dấu ấn của ngón tay trên tờ giấy đã sấy: nếp hăn **tỏa ra** từ chỗ ngón
+  // ấn, và một vòng ẩm nhỏ (dấu ngón) nằm đúng dưới đầu ngón. Không có nó,
+  // câu "sấy khô xong vẫn chưa trở lại" không có gì để đọc.
+  const pressMarkK = keys([[0, 0], [T('c41'), 0], [E('c41'), 1], [1, 1]]);
 
   // ── trạng thái theo câu ───────────────────────────────────────────────
   // id: câu đang kể; t: thời gian trong câu đó.
@@ -94,43 +155,56 @@ export function makeActs(V, sets, SC) {
     const k = num(id);
 
     // ── bếp ──
+    // Tờ giấy ướt được nhấc khỏi mặt quầy một chút: nếp nhăn có phần âm, tờ
+    // giấy sẽ chui xuống quầy và mặt quầy ló ra thành những lỗ nâu trên giấy.
+    K.sheetWet.position.y = .003;
     K.sheetWet.setWet(wetK(t));
-    K.sheetWet.setWrinkle(wrinkleK(t));
+    K.sheetWet.setWrinkle(wrinkleK(t) * 1.6);
     K.sheetWet.setTear(tearK(t));
+    tearGap(K.sheetWet, tearK(t));
     // tờ giấy khô: không có gì xảy ra với nó, và đó là điều câu ba nói
     K.sheetDry.setWet(0);
+    // Vết rách nằm giữa tờ, hơi về phía máy: đó là chỗ ngón tay ấn vào, và
+    // chỗ tay kéo ở câu năm.
+    const tearX = K.sheetWet.position.x, tearZ = K.sheetWet.position.z;
     // tay ướt: đè xuống tờ giấy ướt ở câu một, ở lại ở câu hai; ở câu bốn nó đã
     // quay về bát nước — nước phải có mặt trong khung
     handWet.visible = k <= 4;
     if (handWet.visible) {
       if (k <= 2) {
-        // Tay ướt quay ngược lại (ngón chỏi về -x) để **ngón tay đè đúng lên
-        // mép rách** ở giữa tờ, và để cẳng tay vươn ra khỏi khung bên phải
-        // chứ không cắt ngang tờ giấy.
-        const press = .050 - .012 * prog('c1', t);
-        handWet.position.set(-.78, press, .82);
-        handWet.rotation.set(0, Math.PI, .18);
-        handWet.pose(.95, .12);
+        // Ngón tay ấn **đúng lên vết rách**: đầu ngón nằm ở khe, ngón chỉ
+        // sang trái (xa khỏi máy) để máy nhìn thấy ngón **từ bên**, không phải
+        // một mảng lòng bàn tay úp về mình. Cẳng tay lùi sang phải, ra ngoài
+        // mép khung.
+        const down = lerp(.030, .013, ss(prog('c1', t)));   // ngón hạ xuống giấy
+        placeHand(handWet, [tearX - .009, down, tearZ], [-.95, -.18, -.15], .30,
+          { size: .5, roll: .45 });
       } else {
-        gripSide(handWet, -1.18, .05, .92, .55, -.10);
+        // Ở bát nước: ngón chụp **xuống mặt nước** trong bát (đó là lý do tay
+        // này ướt), cẳng tay vươn lên ra khỏi khung — máy nhìn bát từ trên
+        // xuống, nên tay ở trên sẽ không che bát.
+        placeHand(handWet, [-1.190, .048, .945], [-.35, -.85, .40], .40,
+          { size: .5, roll: .35 });
       }
     }
-    // tay khô: đặt lên tờ giấy khó phẳng ở câu ba, còn ở câu bốn; ở lời chốt nó
-    // quay lại đúng chỗ đó. Tay này đưa vào **từ phía gần máy** (ngón chỉ ra
-    // xa, cẳng tay vươn ra khỏi khung dưới chân hình) để cẳng tay không cắt
-    // ngang tờ giấy ướt ở bên kia.
+    // tay khô: đặt lên tờ giấy khô ở câu ba, còn ở câu bốn; ở lời chốt nó
+    // quay lại đúng chỗ đó. Tay này chỉ **chạm** giấy — ngón nằm trên mặt
+    // tờ, cẳng tay lùi sang phải ra ngoài khung.
     handDry.visible = (k >= 3 && k <= 4) || k >= 42;
     if (handDry.visible) {
-      handDry.position.set(-.42, .05, .85);
-      handDry.rotation.set(0, Math.PI, .14);
-      handDry.pose(.85, .12);
+      placeHand(handDry, [K.sheetDry.position.x, .013, K.sheetDry.position.z],
+        [-.95, -.18, -.15], .28, { size: .5, roll: .45 });
     }
-    // tay kéo mép tờ giấy ướt ở câu năm: giấy ướt kéo nhẹ là rách
+    // tay kéo mép tờ giấy ướt ở câu năm: ngón bấu vào **khe rách** và kéo sang
+    // phải, nên khe rách mở ra ngay dưới ngón tay.
     handPullK.visible = k === 5;
     if (handPullK.visible) {
-      const pull = prog('c5', t);
-      gripDown(handPullK, -.82, .181, .90 + .05 * pull, .8);
-      handPullK.rotation.y = .35;
+      const pull = ss(prog('c5', t));
+      // Đầu ngón bám theo mép khe rách: nửa phải lùi sang phải theo tearK
+      // (xem tearGap), nên ngón luôn nằm đúng chỗ giấy đang rách, và càng
+      // kéo thì mép giấy càng lùi khỏi ngón.
+      placeHand(handPullK, [tearX + .0154 * tearK(t) + .004 * pull, .014, tearZ],
+        [-.95, -.18, -.12], .45, { size: .5, roll: .45 });
     }
 
     // ── trong tờ giấy ──
@@ -173,12 +247,12 @@ export function makeActs(V, sets, SC) {
     // mu như tay ướt ở câu một, thì người xem mới biết đây là cùng một vật.
     handI.visible = k === 19;
     if (handI.visible) {
-      // Tay **ở sau** mạng sợi: ngón vươn tới đúng chỗ hai sợi chạm nhau và
-      // kéo chúng ra xa nhau. Tay ở sau thì chỗ chạm, móc nối và khe hở mở
-      // ra đều **thấy được** — đó là thứ câu này cần người xem nhìn thấy.
-      handI.position.set(-.30 + .10 * prog('c19', t), -.01, .090);
-      handI.rotation.set(Math.PI / 2, 0, 0);      // lòng bàn tay quay về phía máy
-      handI.pose(.75, .2);
+      // Tay ở **bên trái** mạng sợi, ngón chỉ sang phải và bấu vào đúng chỗ hai
+      // sợi chạm nhau; lòng bàn tay nghiêng (roll âm) nên máy nhìn thấy tay
+      // **từ bên**, các ngón tách ra và cong quanh chỗ chạm — chứ không phải
+      // một mảng hồng phẳng. Cẳng tay lùi sang trái, ra ngoài mép khung.
+      placeHand(handI, [I.fB.position.x, (I.fA.position.y + I.fB.position.y) / 2, .175],
+        [1, 0, 0], .55, { size: .55, roll: -.45 });
     }
     // mặt cắt của tờ giấy quét ngang khung khi máy lui ra: nó che dần mạng sợi
     // và cuối nhát thì **phủ kín** khung, để cảnh kế tiếp mở ra từ mép giấy.
@@ -203,14 +277,15 @@ export function makeActs(V, sets, SC) {
     // dải giấy ướt: rót nước vào rồi kéo, nó nhăn và rách
     D.strip.setWet(wetStripK(t));
     D.strip.setBreak(breakK(t));
-    // tay kéo lực kế: nắm ngang thân lực kế, kéo xuống
+    // tay kéo lực kế: ngón bấu vào **vành bên** của thân lực kế, ở phía trước
+    // mặt thang, nên mặt thang và kim vẫn đọc được; lòng bàn tay lùi sang
+    // phải, ra ngoài mép khung.
     handD.visible = k === 26 || k === 33 || k === 34;
     if (handD.visible) {
-      // bàn tay nắm **thân lực kế** (đứng bên phải lực kế, ngón chỉ sang trái
-      // ôm lấy mặt thang), và nó đi xuống cùng lực kế khi tải kéo tăng.
-      handD.position.set(N3.grip.x + .085, drop - .012, N3.grip.z + .040);
-      handD.rotation.set(0, Math.PI, 0);
-      handD.pose(.85, .12);
+      const gm = new THREE.Matrix4().compose(D.gauge.position, D.gauge.quaternion, new THREE.Vector3(1, 1, 1));
+      const rim = new THREE.Vector3(.058, 0, .020).applyMatrix4(gm);   // vành bên, phía máy
+      placeHand(handD, [rim.x, rim.y, rim.z], [-1, 0, 0], .55,
+        { size: .45, roll: .40 });
     }
     // tay rót nước: cầm bát nước lên và nghiêng qua dải giấy (câu 32 — câu 33
     // thì tay kéo dải giấy ướt, không rót nữa)
@@ -218,7 +293,9 @@ export function makeActs(V, sets, SC) {
     handDip.visible = pouring;
     D.pour.visible = pouring;
     if (pouring) {
-      const dip = prog('c33', t);
+      // Bát nước nâng lên rồi nghiêng **trong câu ba mươi hai** (câu này kể
+      // chuyện giấy ướt hẳn); nước chảy qua miệng bát xuống dải giấy.
+      const dip = prog('c32', t);
       // bát nước nâng lên rồi nghiêng; nước chảy qua miệng bát xuống dải giấy
       D.bowl.position.set(
         lerp(N3.bowlHome.x, -.16, dip),
@@ -228,21 +305,29 @@ export function makeActs(V, sets, SC) {
       D.bowl.rotation.z = lerp(0, .85, clamp((dip - .25) / .5));
       D.bowl.rotation.x = lerp(0, .25, clamp((dip - .25) / .5));
       if (D.pour.update) D.pour.update(t, clamp((dip - .2) / .3));
-      handDip.position.set(.00, .30, 1.09);
-      handDip.rotation.set(0, -.5, .2);
-      handDip.pose(.9, .12);
+      // Bàn tay nắm vành bát, tính từ chính cái bát đang nghiêng: ngón chỉ vào
+      // trong bát, cẳng tay lùi ra góc dưới-trái khung.
+      const bq = new THREE.Quaternion().setFromEuler(D.bowl.rotation);
+      const bm = new THREE.Matrix4().compose(D.bowl.position, bq, new THREE.Vector3(1, 1, 1));
+      const grip = new THREE.Vector3(-.085, 0, 0).applyMatrix4(bm);
+      const dir = new THREE.Vector3(1, 0, 0).applyQuaternion(bq);
+      placeHand(handDip, [grip.x, grip.y, grip.z], [dir.x, dir.y, dir.z], .45,
+        { size: .5, roll: .50 });
     } else {
       D.bowl.position.copy(N3.bowlHome);
       D.bowl.rotation.set(0, 0, 0);
     }
-    // tay ấn tờ giấy đã sấy: giấy nhăn thêm và rạn
+    // tay ấn tờ giấy đã sấy: đầu ngón ấn **đúng giữa tờ** — chỗ nếp hăn tỏa
+    // ra và vòng ẩm của ngón — để người xem thấy giấy bị ấn rạn.
     handPress.visible = k === 41;
     if (handPress.visible) {
       const p = prog('c41', t);
-      gripSide(handPress, .16, .05 - .012 * p, .57, .8, -.2);
+      placeHand(handPress, [D.dried.position.x, lerp(.030, .013, ss(p)), D.dried.position.z],
+        [-.97, -.16, -.20], .40, { size: .55, roll: .45 });
     }
     D.dried.setWrinkle(pressK(t));
     D.dried.setWet(.45 + .12 * (pressK(t) - 2.4));
+    D.dried.setPress(pressMarkK(t));
   }
 
   return { applyState, hands: { handWet, handDry, handPullK, handI, handD, handDip, handPress } };

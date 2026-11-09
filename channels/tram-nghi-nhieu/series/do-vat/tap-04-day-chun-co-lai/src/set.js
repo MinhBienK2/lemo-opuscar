@@ -11,7 +11,7 @@
 import * as THREE from 'three';
 import { toon, mesh, rbox, canvasTex, PAL, clamp, lerp, ss, mulberry, fxLayer, glowMat } from '../../../../rig/kit.js';
 import { keyLight, ambience, pool, beam } from '../../../../rig/lights.js';
-import { kitchen, desk } from '../../../../rig/sets.js';
+import { kitchen, desk, mug } from '../../../../rig/sets.js';
 import { jar, bandRing, bandStrip, strap, jouleBand, hairdryer, steelWire, pin, weight, ruler, thermometer, dynamometer, chain, crosslink, heatFlow, heatFront } from './props.js';
 
 // Tia sáng hình nón mà rig dựng sẵn (beam) chạy ngang qua mặt quầy, và mọi
@@ -46,22 +46,24 @@ export function buildKitchen(scene) {
   // đúng dây chun thật quấn quanh nắp hũ, và nhô lên trên miệng nắp. Dây chỉ
   // **co lại một chút** khi siết (shrink nhỏ), vì co nhiều thì dây chuiy vào
   // trong nắp và biến mất — mất hẳn cái mà câu kể nói.
-  const band1 = bandRing({ R: .075, w: .007, h: .020, color: '#e0465c', shrink: .05 });
-  band1.position.set(jar1.position.x, .2055, jar1.position.z);
+  // Dây **quấn quanh thân nắp** (nắp vặn), không nằm trên mặt nắp: vòng dây
+  // ôm sát thành nắp ở bán kính .073, tâm cao .198 — nắp có thân từ .19 đến
+  // .206, nên dây ôm đúng thân nắp và **để mặt nắp (có ren xoắn) lộ ra**.
+  const band1 = bandRing({ R: .0750, w: .007, h: .020, color: '#c2183a', shrink: .02 });
+  band1.position.set(jar1.position.x, .198, jar1.position.z);
+  // **đoạn hai đầu dán chồng** của dây quay về phía sau hũ: ở cận cảnh
+  // c2183a nó nằm ngay trước máy và đọc ra là một mảnh dây bị rách.
+  band1.rotation.y = Math.PI;
   scene.add(band1);
-  // vết của dây ăn vào rãnh nắp: một vòng mờ ngay dưới mép dây, quanh miệng nắp
-  const groove1 = mesh(new THREE.TorusGeometry(.0696, .0022, 8, 32), toon('#a89c88'), [jar1.position.x, .1945, jar1.position.z], { rot: [Math.PI / 2, 0, 0] });
-  scene.add(groove1);
 
   // hũ thứ hai lấy ra từ tủ lạnh (chương bốn) — trước đó nó chưa ở trong cảnh
   const jar2 = jar({ R: .068, H: .19, lidColor: '#e6dfcd' });
   jar2.position.set(F.x + .11, 0, F.z - .02);
   scene.add(jar2);
-  const band2 = bandRing({ R: .075, w: .007, h: .020, color: '#e0465c', shrink: .05 });
-  band2.position.set(jar2.position.x, .2055, jar2.position.z);
+  const band2 = bandRing({ R: .0750, w: .007, h: .020, color: '#c2183a', shrink: .02 });
+  band2.position.set(jar2.position.x, .198, jar2.position.z);
+  band2.rotation.y = Math.PI;
   scene.add(band2);
-  const groove2 = mesh(new THREE.TorusGeometry(.0696, .0022, 8, 32), toon('#a89c88'), [jar2.position.x, .1945, jar2.position.z], { rot: [Math.PI / 2, 0, 0] });
-  scene.add(groove2);
 
   // máy sấy tóc: tay cầm cố định ở một chỗ, miệng hướng thẳng về dây.
   // Nó đứng **gần** hũ (cách .37 m) để một khung hình ngắn vừa thấy cả máy vừa
@@ -83,6 +85,23 @@ export function buildKitchen(scene) {
   scene.add(flowHot);
   // một vệt sáng nhẹ từ phía máy quay: để mặt trước của hũ không chìm trong bóng
   pool(scene, { from: new THREE.Vector3(F.x - .10, 1.05, F.z + 1.30), to: new THREE.Vector3(F.x - .10, .14, F.z), color: '#ffe6c4', intensity: .45, angle: .52 });
+
+  // **Nền của các khung cận cảnh**: trên quầy, sau hũ, có một tấm khăn navy
+  // và một cái cốc tím. Khung cận cảnh của tập này toàn kem–nâu ấm thì vòng
+  // dây đỏ không nổi lên thành điểm nhấn — cần một mảng **navy–tím** tối hơn
+  // nó, đúng tông nền mà STYLE.md đòi.
+  const clothTex = canvasTex(256, 256, (g, w, h) => {
+    g.fillStyle = '#252d50'; g.fillRect(0, 0, w, h);
+    const r = mulberry(23);
+    for (let y = 0; y < h; y += 8) { g.fillStyle = 'rgba(255,255,255,.05)'; g.fillRect(0, y, w, 3); }
+    for (let x = 0; x < w; x += 8) { g.fillStyle = 'rgba(0,0,0,.12)'; g.fillRect(x, 0, 3, h); }
+    for (let k = 0; k < 5000; k++) { g.fillStyle = `rgba(200,214,255,${r() * .06})`; g.fillRect(r() * w, r() * h, 2, 2); }
+  });
+  const cloth = mesh(rbox(.30, .014, .22, .006), toon('#ffffff', { map: clothTex }), [F.x - .52, .007, F.z - .36], { rot: [0, .24, 0] });
+  scene.add(cloth);
+  const cup = mug('#9a5be5', '#4a2f6e');
+  cup.position.set(F.x - .62, .012, F.z - .50);
+  scene.add(cup);
 
   // Dây thép mỏng làm đối chứng: một đầu ghim cố định, đầu kia tự do nằm trước
   // một vạch trên thước gỗ — nung nóng thì đầu tự do tiến ra. Nó nằm **sát
@@ -123,7 +142,7 @@ export function buildKitchen(scene) {
   slackG.add(slack);
 
   return {
-    ...S, props: { jar1, band1, groove1, jar2, band2, groove2, dry, wire, pinW, rul, pinS1, pinS2, slack, flowHot },
+    ...S, props: { jar1, band1, jar2, band2, dry, wire, pinW, rul, pinS1, pinS2, slack, flowHot },
     dryMouth: mouth,
     dryGrip: new THREE.Vector3(F.x - .65, .08, F.z),
   };
@@ -158,11 +177,24 @@ export function buildInside(scene) {
   // khối cao su bị cắt: mặt cắt toả ra, sau mạng chuỗi
   const blk = mesh(rbox(7.0, 4.6, .5, .06), toon('#4a3768'), [0, 0, -1.45]);
   scene.add(blk);
-  // các lớn của mặt cắt: những vệt màu nhạt hơn, để mặt cắt không phẳng
+  // các lớn của mặt cắt: những vệt màu nhạt hơn, để mặt cắt không phẳng.
+  // Mặt cắt là **nền** của cả chương hai: nếu nó là một mảng tím trơn thì mọi
+  // khung bên trong sợi dây đều có một nửa là tường trơn, và người xem không
+  // đọc ra đây là bên trong một vật. Nay mặt cắt có **thớ cao su**: các vệt
+  // tròn (bóng khí) xen với các thớ dài chạy chéo, đủ dày để cả khung có
+  // nền có chiều.
   const rnd = mulberry(7);
-  for (let i = 0; i < 26; i++) {
+  for (let i = 0; i < 90; i++) {
     const x = (rnd() - .5) * 6.4, y = (rnd() - .5) * 4.0;
-    scene.add(mesh(new THREE.CircleGeometry(.07 + rnd() * .16, 12), toon(rnd() > .5 ? '#5c4683' : '#412f66'), [x, y, -1.19], { cast: false }));
+    const r = .07 + rnd() * .22;
+    scene.add(mesh(new THREE.CircleGeometry(r, 12), toon(rnd() > .5 ? '#5c4683' : '#412f66'), [x, y, -1.19], { cast: false }));
+  }
+  // thớ cao su: những sợi dài chạy chéo, làm nền có hướng
+  for (let i = 0; i < 34; i++) {
+    const x = (rnd() - .5) * 6.2, y = (rnd() - .5) * 3.8;
+    const w = .05 + rnd() * .07, h = .35 + rnd() * .8;
+    scene.add(mesh(rbox(w, h, .02, .01), toon(rnd() > .55 ? '#553f7c' : '#3a2a5e'),
+      [x, y, -1.18], { rot: [0, 0, (rnd() - .5) * 1.2], cast: false }));
   }
 
   // mạng chuỗi: tám sợi chạy song song theo trục x, đan qua nhau ở độ sâu
@@ -196,8 +228,11 @@ export function buildInside(scene) {
   // Sợi này **ngắn** và **nằm trong nhóm mạng**: nhóm mạng phải còn **dưới
   // 1,2 m** (đường chéo của khối bao quanh nó), nếu không máy đo coi cả mạng
   // là một vật quá cỡ và bỏ qua — mạng biến thành "không có gì trong khung".
+  // Đầu sợi ở x = .43: tay nắm ở .43·netScale và **sợi chui vào lòng bàn tay**
+  // (đầu ngón ở trước đầu sợi), nên nhìn thấy một cái **nắm**, không phải một
+  // cái nhặm ở đầu ngón.
   const grab = chain({ n: 16, bead: .011, len: .18, turns: 1.6, rad: .012, color: '#ff9a3d', seed: 131 });
-  grab.position.set(.39, .0675, -.08);
+  grab.position.set(.34, .0675, -.08);
   net.add(grab); chains.push(grab);
 
   // móc liên kết chéo: những cầu nhỏ **vòng quanh hai sợi liền nhau**, giữ
@@ -243,22 +278,30 @@ export function buildInside(scene) {
   strand.setCoil(.55);
   scene.add(strand);
 
-  // hai mạng cạnh nhau để so sánh: bên trái mát, bên phải nóng. Hai cột
-  // **đứng**, song song, cách nhau .32 m — người xem thấy ngay cột nào cuộn
-  // chặt hơn cột nào.
+  // hai mạng cạnh nhau để so sánh: bên trái mát, bên phải nóng. Hai bó
+  // **đứng**, song song, **sát nhau** (cách nhau .104 m) — người xem thấy ngay
+  // bó nào cuộn chặt (mát) và bó nào bị kéo thẳng (nóng). Hai bó phải **ở
+  // giữa khung**, không đẩy ra hai mép: giữa hai bó là một khoảng tím trống,
+  // đọc ra là khung hụt chứ không phải là so sánh.
+  // **Hai mạng dài bằng nhau** (cùng số hạt, cùng khoảng cách hạt): bó nóng
+  // **thẳng**, bó mát **cuộn**. Cùng một độ giãn mà một bó thẳng, một bó
+  // cuộn — đúng như câu kể: cùng độ giãn, mạng nóng co mạnh hơn.
   const pair = new THREE.Group(); scene.add(pair);
   const cool = [], hot = [];
   for (let i = 0; i < 3; i++) {
-    const a = chain({ n: 34, bead: .012, len: .30, turns: 3, rad: .024, color: '#67e8f9', seed: 40 + i });
+    const a = chain({ n: 22, bead: .0065, len: .30, turns: 3, rad: .024, color: '#67e8f9', seed: 40 + i });
     a.rotation.z = Math.PI / 2;
-    a.position.set(-.16, -.28 + i * .28, (i % 2) * .06);
+    a.position.set(-.040, -.17 + i * .17, (i % 2) * .05);
     pair.add(a); cool.push(a);
-    const b = chain({ n: 34, bead: .012, len: .30, turns: 3, rad: .024, color: '#ff8a3d', seed: 60 + i });
+    const b = chain({ n: 22, bead: .0065, len: .30, turns: 3, rad: .024, color: '#ff8a3d', seed: 60 + i });
     b.rotation.z = Math.PI / 2;
-    b.position.set(.16, -.28 + i * .28, (i % 2) * .06);
+    b.position.set(.040, -.17 + i * .17, (i % 2) * .05);
     pair.add(b); hot.push(b);
   }
-  pair.position.set(.52, .30, .46);
+  // Hai bó đứng **lệch sang phải**, xa mạng chuỗi vàng ở giữa: trong khung
+  // so sánh, mạng vàng xen vào đọc ra là một mạng thứ ba, người xem không biết
+  // phải so sánh cái nào với cái nào.
+  pair.position.set(.78, .30, .46);
 
   // quả cân nhỏ treo trong lát cắt
   const wgt = weight({ R: .05, H: .11, color: '#c9973a' });
@@ -290,7 +333,7 @@ export function buildInside(scene) {
 
 // Một đoạn dây chun ở trạng thái đang kéo căng: hai ghim ở hai đầu, một quả cân nhỏ treo
 // giữa. setPull(k): k = 1 là đoạn dây co lại (quả cân nhích lên), k = 0 là dài nguyên.
-function tensionSegment({ len = .30, drop = .17, color = '#e0465c' } = {}) {
+function tensionSegment({ len = .30, drop = .17, color = '#c2183a' } = {}) {
   const g = new THREE.Group();
   for (const x of [-len / 2, len / 2]) {
     const p = new THREE.Group(); p.position.set(x, .2, 0);
@@ -346,7 +389,7 @@ function strandFamily({ count = 4, gap = .17, len = .70, n = 34, bead = .0155, c
 // ra rõ. Vùng nóng **tự sáng và ửng cam dần theo mức nung** — người xem tắt tiếng
 // vẫn biết vùng nào đang nóng, và thấy nhiệt **đi vào** dải chứ không thấy nó
 // xuất hiện từ hư không.
-function sagBand({ len = .82, bandW = .034, bandT = .012, drop = .16, color = '#e0465c', hotColor = '#ff8a3d', sag0 = .10 } = {}) {
+function sagBand({ len = .82, bandW = .034, bandT = .012, drop = .16, color = '#c2183a', hotColor = '#ff8a3d', sag0 = .10 } = {}) {
   const g = new THREE.Group();
   const N = 56;
   const cCold = new THREE.Color(color), cHot = new THREE.Color(hotColor);
@@ -469,7 +512,7 @@ export function buildDesk(scene) {
 
   // dây chun treo thẳng đứng từ móc dưới đồng hồ, quả cân bên dưới
   // dải treo ở bàn đo **móc vào móc dưới đồng hồ**, nên không ghim thêm ghim
-  const band = strap({ len: BAND, w: .020, t: .009, color: '#e0465c', pinned: false });
+  const band = strap({ len: BAND, w: .020, t: .009, color: '#c2183a', pinned: false });
   band.position.set(GX, TOP, Z);
   scene.add(band);
   const wgt = weight({ R: .023, H: .05, color: '#c9973a' });

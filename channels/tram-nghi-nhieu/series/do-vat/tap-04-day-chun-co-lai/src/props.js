@@ -147,15 +147,17 @@ function metalTex(color) {
 //
 // setTighten(k): k = 0 là vòng lỏng, k = 1 là vòng siết chặt — siết thì vòng
 // nhỏ lại và dải hẹp lại (dây bị kéo thì mỏng đi, đó là điều thật).
-export function bandRing({ R = .075, w = .014, h = .006, color = '#e0465c', seed = 3, shrink = .22 } = {}) {
+export function bandRing({ R = .075, w = .014, h = .006, color = '#c2183a', seed = 3, shrink = .22 } = {}) {
   const AJ = .20;                                    // góc của đoạn hai đầu dán chồng
   const base = roundSection(w / 2, h / 2, Math.min(w, h) * .34, 16);
   const main = arcGeometry(96, base.map(p => p.slice()));
   const lap = arcGeometry(14, base.map(p => p.slice()));
-  // Cao su **lỏng** đỏ đậm, cao su **đã kéo căng** thì nhạt hơn và bóng hơn:
-  // một dải căng không giữ được màu đậm như dải nằm chùng.
+  // Cao su **lỏng** và cao su **đã kéo căng** đều phải **đỏ bão hoà**: dây
+  // chun là điểm nhấn của cả phim, một dải nhợt hồng là dải không còn đỏ.
+  // Dải căng khác dải lỏng ở **hình dạng** (mỏng đi, vòng nhỏ lại, mép nhăn),
+  // không phải ở độ đậm của màu.
   const matLoose = toon(color);
-  const matTight = toon('#' + new THREE.Color(color).lerp(new THREE.Color('#ffffff'), .32).getHexString());
+  const matTight = toon(shade(color, .82));
   const mm = mesh(main.g, matLoose, [0, 0, 0]);
   const ml = mesh(lap.g, matLoose, [0, 0, 0]);
   const grp = new THREE.Group(); grp.add(mm, ml);
@@ -198,7 +200,7 @@ export function bandRing({ R = .075, w = .014, h = .006, color = '#e0465c', seed
 // đầu hơi quay, và ở một đầu có đoạn hai đầu dán chồng lên. Một thanh thẳng
 // cứng, vuông vức, đọc ra là que kem hay thước nhựa, không phải dây chun.
 // `pivot`: 'left' giữ đầu trái tại chỗ, 'top' giữ đầu trên tại chỗ — đầu ấy là đầu ghim vào.
-export function bandStrip({ len = .5, w = .016, h = .008, color = '#e0465c', pivot = 'center' } = {}) {
+export function bandStrip({ len = .5, w = .016, h = .008, color = '#c2183a', pivot = 'center' } = {}) {
   const grp = new THREE.Group();
   const bow = Math.min(.006, h * .9);                 // dải hơi cong về phía trên
   const pts = [];
@@ -235,7 +237,7 @@ export function bandStrip({ len = .5, w = .016, h = .008, color = '#e0465c', piv
 // qua đầu ghim**. Đầu ghim là một đĩa nhỏ dẹt, mũi kim **chĩa xuống** —
 // một cây nhọn chĩa lên trên đầu dải thì đọc ra là cây bút chì, không phải
 // ghim. Dải cũng có dấu vết xuyên ghim ở chỗ bị ghim.
-export function strap({ len = .19, w = .020, t = .009, color = '#e0465c', pinned = true } = {}) {
+export function strap({ len = .19, w = .020, t = .009, color = '#c2183a', pinned = true } = {}) {
   const grp = new THREE.Group();
   // thân dải: từ đỉnh xuống dưới, hơi cong về phía trước
   const bp = [];
@@ -294,24 +296,21 @@ export function jar({ R = .052, H = .15, lid = true, lidColor = '#e8e2d4' } = {}
   g.add(mesh(new THREE.CylinderGeometry(R * 1.006, R * .975, BODY * .38, 28, 1, true), toon('#eef8fd', { transparent: true, opacity: .22 }), [0, BODY * .32, 0]));
   const lg = new THREE.Group(); g.add(lg);
   if (lid) {
+    const TOP = H + .016;                                  // mặt trên của nắp
     lg.add(mesh(new THREE.CylinderGeometry(R * 1.02, R * 1.02, .016, 28), toon(lidColor), [0, H + .008, 0]));
-    lg.add(mesh(new THREE.TorusGeometry(R * 1.02, .005, 8, 32), toon('#d6cfbe'), [0, H + .006, 0], { rot: [Math.PI / 2, 0, 0] }));
-    // **răng cưa viền nắp**: nắp vặn có răng cưa để siết, đứng quanh mép nắp.
-    // Nắp trơn một mảng thì đọc ra là một đĩa úp lên, không phải nắp vặn.
-    const kr = 30;
-    for (let i = 0; i < kr; i++) {
-      const a = i / kr * Math.PI * 2;
-      lg.add(mesh(rbox(.006, .016, .005, .0015), toon(shade(lidColor, .88)),
-        [Math.cos(a) * R * 1.03, H + .008, Math.sin(a) * R * 1.03], { rot: [0, -a, 0] }));
+    lg.add(mesh(new THREE.TorusGeometry(R * 1.015, .0035, 8, 32), toon('#d6cfbe'), [0, H + .006, 0], { rot: [Math.PI / 2, 0, 0] }));
+    // **ren xoắn ốc trên mặt nắp**: một nắp vặn có ren, và mặt nắp là chỗ
+    // người xem nhìn thấy đầu tiên. Ren là một **đường xoắn nổi** chạy từ
+    // tâm ra mép; một đĩa trơn là đĩa úp lên, không phải nắp.
+    const sp = [];
+    for (let i = 0; i <= 110; i++) {
+      const u = i / 110, a = u * Math.PI * 2 * 1.9;
+      const rr = R * (.14 + .80 * u);
+      sp.push(new THREE.Vector3(Math.cos(a) * rr, TOP + .0014, Math.sin(a) * rr));
     }
-    // **ren vặn**: một đường xoắn ốc quanh thân nắm. Răng chốt đứng thành vòng
-    // thì đọc ra là vương miện, không phải ren của nắp vặn.
-    const th = [];
-    for (let i = 0; i <= 64; i++) {
-      const u = i / 64, a = u * Math.PI * 2 * 1.6;
-      th.push(new THREE.Vector3(Math.cos(a) * R * 1.035, H + .002 + u * .012, Math.sin(a) * R * 1.035));
-    }
-    lg.add(mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(th), 72, .0022, 6, false), toon('#cfc7b4')));
+    lg.add(mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(sp), 150, .0026, 6, false), toon(shade(lidColor, .88))));
+    // **núm nắp** ở tâm: nắp thật có núm để mở
+    lg.add(mesh(new THREE.CylinderGeometry(R * .13, R * .15, .004, 20), toon(shade(lidColor, .93)), [0, TOP + .0018, 0]));
   }
   g.lid = lg;
   g.R = R; g.H = H;
@@ -470,7 +469,7 @@ export function weight({ R = .022, H = .05, color = '#c9973a' } = {}) {
 // Hai đầu dây dán chồng lên ở một chỗ (đoạn cuối của vòng nằm ngoài vòng).
 // setYank(amp, phase): tay giật đuôi dây thì đuôi dây giãn ra rồi co lại;
 // tipX(s) là chỗ đầu đuôi dây để tay nắm đúng vào.
-export function jouleBand({ R = .030, w = .012, h = .009, tail = .055, color = '#e0465c' } = {}) {
+export function jouleBand({ R = .030, w = .012, h = .009, tail = .055, color = '#c2183a' } = {}) {
   const g = new THREE.Group();
   const th = 55 * Math.PI / 180;                 // góc nghiêng của mặt phẳng vòng
   const e1 = new THREE.Vector3(1, 0, 0);
@@ -919,21 +918,21 @@ export function heatFront({ len = 1.2, w = .5, color = '#ff8a3d' } = {}) {
 // Mỗi mục là một vật một mình trên nền trơn, nhìn từ ba phía. Tên là cái
 // gọi của người xem, không phải tên hàm trong mã.
 export const PROPS = {
-  'vòng dây chun dẹt, hai đầu dán giao nhau': () => bandRing({ R: .083, w: .014, h: .009, color: '#e0465c' }),
+  'vòng dây chun dẹt, hai đầu dán giao nhau': () => bandRing({ R: .083, w: .014, h: .009, color: '#c2183a' }),
   'vòng dây chun đã siết chặt, vòng nhỏ lại và dày lên': () => {
-    const g = bandRing({ R: .083, w: .014, h: .009, color: '#e0465c' });
+    const g = bandRing({ R: .083, w: .014, h: .009, color: '#c2183a' });
     g.setTighten(1);
     return g;
   },
   'dải dây chun thẳng nằm ngang, mặt cắt chữ nhật dẹp': () => bandStrip({ len: .32, w: .026, h: .006, color: '#d8566a' }),
-  'dải dây chun treo thẳng đứng, đầu trên ghim cố định': () => strap({ len: .16, w: .020, t: .009, color: '#e0465c' }),
+  'dải dây chun treo thẳng đứng, đầu trên ghim cố định': () => strap({ len: .16, w: .020, t: .009, color: '#c2183a' }),
   'hũ thủy tinh có nắp vặn, nắp có răng cưa viền': () => jar({ R: .068, H: .19, lidColor: '#e6dfcd' }),
   'máy sấy tóc có tay cầm, lưới lọc ở đuôi và miệng máy': () => hairdryer({ color: '#f04462' }),
   'sợi thép mỏng tròn đặc, một đầu tự do': () => steelWire({ len: .30, r: .004 }),
   'ghim nhỏ có đầu kim nhọn': () => pin({ color: '#b9bfd0' }),
   'quả cân đồng hình trụ có móc treo ở nắp': () => weight({ R: .023, H: .05, color: '#c9973a' }),
   'vòng cao su quấn quanh một bầu tròn, một đuôi dây nằm sang trái': () => {
-    const g = jouleBand({ R: .030, tail: .055, color: '#e0465c' });
+    const g = jouleBand({ R: .030, tail: .055, color: '#c2183a' });
     // bầu tròn ở giữa: dây quấn quanh một vật, chứ không phải một vòng trống.
     // Bầu **đục**, không loé: một quả cầu bóng như mặt kính thì đọc ra là kính
     // lúp, không phải bầu nhiệt kế.
@@ -950,6 +949,6 @@ export const PROPS = {
     g.setCoil(0);
     return g;
   },
-  'vòng móc nối chéo, nối hai chuỗi với nhau': () => crosslink({ r: .010, color: '#f0c76a' }),
+  'vòng móc nối chéo, nối hai chuỗi với nhau': () => crosslink({ r: .040, color: '#f0c76a', through: 'x' }),
 };
 

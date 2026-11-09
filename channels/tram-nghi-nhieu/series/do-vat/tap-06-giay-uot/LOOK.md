@@ -79,6 +79,79 @@ lỗi nhẹ về tính nhất quán giữa hình, lời kể và bảng thẻ ch
   khoảng trống; dòng 19 là **kéo mạnh** thì chúng tuột khỏi mạng. Dòng 21 đổi vế
   "bị kéo lệch" cho khỏi lặp với dòng 19.
 
+## Vòng 5 — mỗi câu một hình riêng (đo bằng tờ sheet của máy)
+
+Tờ sheet đo từng câu thành một tấm ảnh, rồi máy đo xem câu nào **giống câu trước**
+(SAME), câu nào **trong khung trống** (FILL), câu nào **đứng trên cùng một bộ vật**
+(RUN), câu nào **nói số mà trên hình không có số** (NUM). Tờ sheet đầu ra báo mười ba
+cờ. Sửa ở `src/shots.js`, đo lại, còn hai cờ; sửa tiếp, còn không cờ nào.
+
+Nguyên tắc khi sửa: **không đưa máy sát vật chỉ để đẩy con số lên** — máy đo được
+phần khung vật chiếm, không đo được vật đó có đủ lớn để làm chủ thể không; mà mỗi
+nhát phải **có một lý do** đứng ở đó, và lý do ấy nằm trong bảng dưới.
+
+- **Cờ NUM ở câu 29** ("chín mươi phần trăm"): thẻ "90 %" đang neo ở câu 28, nên câu
+  29 nói số mà hình không có số. Sửa: thẻ "90 %" neo ở **câu 29** (đồng hồ độ ẩm đứng
+  yên ở chín mươi phần trăm, thẻ "50 %" vẫn ở câu 27).
+- **Cờ FILL ở câu 34**: khung của dải giấy ướt trống, vật chỉ chiếm mười bố phần
+  trăm khung. Sửa: máy lệch sang trái và áp vào **vết rách ở mép trên dải giấy** —
+  dải giấy ướt nằm ở nửa phải khung, cây thước làm mốc sau, và thẻ "3–10 %" nằm
+  chung góc với vết rách.
+- **Cờ SAME ở câu 35**: mặt lực kế và dải giấy ướt cho hai khung giống nhau ở tầng
+  thu nhỏ 16×9. Sửa: máy lùi sang **phải**, mặt lực kế rơi vào **nửa trái** khung
+  và nửa phải để trống cho nền đêm — hai khung giờ khác nhau rõ, không chỉ khác góc.
+- **Cờ RUN ở câu 39–41**: ba câu liên tiếp đứng trên cùng một tờ giấy đã sấy. Sửa:
+  câu 36 không cầm lực kế làm vật chính nữa mà chỉ vào **túi bao bì dạng phẳng và
+  mẻ giấy khăn** (đúng câu chuyện: giấy có nhựa), và câu 39 hạ máy xuống gần mặt
+  bàn để **hai tờ giấy cạnh nhau** — tờ đã sấy và tờ tươi — thay vì một toàn cảnh
+  bàn đã xem ở câu trước.
+
+Những nhát này đã đổi cả trong `TREATMENT.md`: bảng dàn ý hứa khung nào thì khung
+đó phải ra đúng thế — câu 4 nay là **bát nước** (nước mới là thủ phạm), câu 6 là
+**bát nước ở tiền cảnh, tờ giấy đã rách ở giữa khung**, câu 13 là **hai phân tử
+nước** ghép vào nhau, câu 36 là **hai vật của ngành**, câu 39 là **hai tờ giấy cạnh
+nhau**.
+
+## Vòng 6 — vòng chấm khung hình chính (bước `look`, vòng 1)
+
+Công cụ chấm của kênh nhìn từng ảnh trong `review/hero/` và trả về **10 đạt · 33 phải sửa**;
+tất cả là lỗi chặn, và mỗi lỗi đều chỉ ra được chỗ hỏng **trong ảnh**. Ba nhóm:
+
+1. **Bên trong tờ giấy (N2)** — sợi là dải dẹt không có thể tích; nhóm hydroxyl là hạt
+   trắng trôi lơ lửng, không hạt nào dính sợi; liên kết hydrogen là một quả cầu vàng
+   có vành chứ không phải móc nối; phân tử nước là hai quả cầu trơn; vệt nứt là mảng
+   tối dán lên sợi; nền tím là một mảng phẳng không có lớp sâu; và có bóng đen méo
+   cứng không thuộc vật nào (hình dấu hỏi, hình đầu người, hình cánh tay).
+2. **Bàn đo (N3)** — mặt thang lực kế xoay gần như song song tầm nhìn nên không đọc
+   được kim; dải vạch chỉ kéo dài nửa mặt; kim không có trục ở tâm; **bát nước và khăn
+   lau của bếp nằm giữa bàn đo**; dải giấy không móc vào vòng treo, thước bị dải giấy
+   che gần hết; tay nắm lực kế là một khối hồng trơn không có ngón; bàn sáng bằng
+   vệt nắng ban ngày dù cảnh là bàn đo ban đêm.
+3. **Bếp (N1)** — tay là khối hình tròn không có ngón; tờ ướt là mảng phẳng tím xanh,
+   không nhăn không rách; ở mép bát có một vòng tròn trắng đứng một mình.
+
+Cách sửa, và vì sao:
+
+- **`src/props.js` dựng lại vật** — sợi thành **ống tròn có vân**, nhọn hai đầu như
+  đầu sợi bị túm; nhóm hydroxyl thành **cụm oxy–hydro chìm nửa vào mặt sợi**, mọc hai
+  bên; liên kết hydrogen thành **móc cong thật**, hai đầu cắm vào hai cụm; phân tử
+  nước thành **một oxy + hai hydro trên que** ở 104,5°; vệt nứt thành **khe thật giữa
+  hai môi giấy lệch nhau**, có đầu sợi chìa ra; mặt thang đồng hồ có **vòng vạch quanh
+  cả mặt** với số ở từng vạch, **kim bắt đầu ở tâm** có trục; vòng treo là vòng đứng
+  thật; dải giấy có **móc thép** ở đầu dưới; vệt ẩm trên tờ là **nâu ấm méo viền mờ**,
+  không xanh tím; thêm `setPress(k)` cho tờ bị ngón ấn.
+- **`src/set.js` dựng lại nơi chốn** — N2 có **ba lớp sâu** (khối giấy xa, mạng sợi
+  giữa, sợi tiền cảnh) và các sợi **đan qua nhau** thay vì nằm song song; móc nối đặt
+  đúng chỗ hai sợi chạm; có **màng nước** kẹp giữa hai sợi; không còn bóng lệch hình.
+  N3 là **bàn đo**: bát nước và khăn rời khỏi tâm bộ đo, đồng hồ độ ẩm và lực kế quay
+  mặt thang về phía máy, thước đứng thẳng **cao hơn dải giấy**, đèn bàn là nguồn sáng
+  chính, cửa sổ không còn vệt nắng ban ngày.
+- **`src/acts.js`** — mọi bàn tay phải lộ **ngón tay** trong khung (tay đè tờ ướt, tay
+  kéo mép giấy, tay nắm lực kế, tay rót nước, tay ấn tờ đã sấy), và ngón ấn phải để
+  lại nếp hăn tỏa ra từ giữa tờ.
+- **`src/shots.js`** — máy đứng lại ở những chỗ mà khung **đọc được** vật câu đó kể:
+  mặt thang ở giữa khung, dải giấy và thước cùng một góc, sợi và móc ở vùng sáng.
+
 ## Bảng nhát
 
 | # | câu | nhìn gì | lý do của góc máy | nhãn |
@@ -115,13 +188,13 @@ lỗi nhẹ về tính nhất quán giữa hình, lời kể và bảng thẻ ch
 | 30 | c30 | "Độ giãn cũng tăng: giấy dễ bị kéo dài hơn trước khi đứt." | Cận đầu dải giấy và cây thước gỗ đứng dựng cạnh: đầu dải đi xuống qua từng vạch | |
 | 31 | c31 | "Vậy độ ẩm cao chỉ là bước đầu của chuyện này." | Toàn cảnh bàn đo, hai thiết bị cùng đọc: kim lực kế tụt, kim độ ẩm lên | |
 | 32 | c32 | "Còn khi giấy ướt hẳn, chuyện xảy ra khác hẳn." | Toàn cảnh rộng hơn, lùi thêm: chuẩn bị đổi cảnh bài | |
-| 33 | c33 | "Dải giấy ướt bị kéo: nó rách ngay, trước khi lực kế kịp đọc." | Cận dải giấy khi nước rót xuống và tay kéo | |
+| 33 | c33 | "Dải giấy ướt bị kéo: nó rách ngay, trước khi lực kế kịp đọc." | Cận **dải giấy ướt** đứng trong kẹp, cây thước kẻ vạch bên cạnh và mặt lực kế bên dưới: giấy nhăn, kim lực kế chưa kịp đọc | |
 | 34 | c34 | "Giấy bão hòa nước chỉ còn khoảng ba đến mười phần trăm độ bền khô." | Cận chỗ dải giấy đứt: vết rạn phải thấy được | `3–10 %` |
 | 35 | c35 | "Thấp hơn mười lăm phần trăm thì người ta không gọi là giấy bền ướt." | Cận mặt lực kế: thẻ "15 %" neo vào mặt thang, kim đỏ đứng gần vạch không | `15 %` |
 | 36 | c36 | "Người ta làm ra loại giấy chịu nước bằng cách thêm nhựa vào lúc ép." | Hai vật **của ngành** trên bàn: mẻ giấy khăn và chiếc túi giấy bao bì dạng phẳng — máy không cầm lực kế (máy đo) làm vật chính | |
 | 37 | c37 | "Một cách giải thích phổ biến: nhựa tạo ra mối nối mới mà nước không phá được." | Cận góc giấy khăn giấy bị cắt: lộ ra các móc nối màu **hồng**, to hơn móc vàng thường | |
 | 38 | c38 | "Một số loại khăn giấy và túi giấy trong ngành là loại như vậy." | Khung rộng: mẻ giấy khăn và túi giấy bao bì dạng phẳng đứng trên bàn; ở trước là góc giấy khăn bị cắt lộ móc nối hồng | |
-| 39 | c39 | "Còn tờ giấy thường đã qua nước rồi sấy thì sao?" | Toàn cảnh bàn: mẻ khăn, túi, tờ đã sấy, tờ tươi — bốn tờ giấy so sánh | |
+| 39 | c39 | "Còn tờ giấy thường đã qua nước rồi sấy thì sao?" | Máy hạ thấp gần mặt bàn, nhìn ngang qua **hai tờ giấy cạnh nhau**: tờ đã sấy (nhăn, vệt ẩm còn hằn) và tờ tươi (phẳng) | |
 | 40 | c40 | "Nó cũng mất độ bền: có mẫu mất tới một nửa." | Cận tờ giấy đã sấy: nếp nhăn dày hơn tờ tươi | `1/2` |
 | 41 | c41 | "Nên sấy khô xong vẫn chưa trở lại." | Cận ngón tay ấn tờ giấy đã sấy: giấy rạn, không quay lại như cũ | |
 | 42 | c42 | "Quay lại quầy bếp: tay khô đặt lên tờ giấy, nó vẫn nguyên vẹn." | Quay lại N1: cùng góc với câu ba, tờ khó vẫn nguyên | |
@@ -137,7 +210,7 @@ Tám thẻ, mỗi thẻ có câu lời đọc nó ✓. Thẻ chỉ hiện ở c�
 | `nhóm hydroxyl` | câu 10 | các hạt trắng trên sợi |
 | `liên kết hydrogen` | câu 11 | móc sáng ở chỗ hai sợi chạm nhau |
 | `50 %` | câu 27 | mặt thang đồng hồ độ ẩm |
-| `90 %` | câu 28 | mặt thang đồng hồ độ ẩm |
+| `90 %` | câu 29 | mặt thang đồng hồ độ ẩm |
 | `3–10 %` | câu 34 | chỗ dải giấy đứt |
 | `15 %` | câu 35 | mặt thang lực kế |
 | `1/2` | câu 40 | tờ giấy đã sấy |

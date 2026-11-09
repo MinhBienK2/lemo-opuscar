@@ -103,16 +103,16 @@ Kênh / channel: **tram-nghi-nhieu** · Tập / episode: `series/do-vat/tap-06-g
 | 1 | Mình vừa rửa tay, chạm vào tờ giấy trên quầy bếp, và nó rách ngay. | Cận quầy bếp: tay ướt đè lên tờ giấy trắng, vệt nước loang, mép giấy nhăn, **vết rách đang mở ngay dưới ngón** | Tay ướt ấn xuống, giấy nhăn, vết rách mở ra | Bếp |
 | 2 | Chỉ một chút nước thôi. | Cận vệt nước loang trên mặt giấy, đường rách mở ra dưới ngón tay | Vệt ẩm loang, vết rách dài thêm | Bếp |
 | 3 | Tay khô chạm vào tờ giấy bên cạnh thì không sao. | Tay khô đặt lên tờ giấy thứ hai, tờ giấy phẳng, không rách | Tay khô ấn, giấy không đổi | Bếp |
-| 4 | Vậy tay không phải thủ phạm; nước mới là thủ phạm. | Khung rộng quầy bếp: hai tay, hai tờ giấy — một tờ đã rách, một tờ còn nguyên; ở góc khung là bát nước với khăn lau trên miệng | Không gì chạy, hai tờ giấy đứng yên | Bếp |
+| 4 | Vậy tay không phải thủ phạm; nước mới là thủ phạm. | Cận **bát nước** trên quầy: nước xanh đầy bát, khăn lau sọc đỏ treo ở mép bát, tay ướt vừa rút khỏi nước nằm bên cạnh | Không gì chạy, bát đứng yên | Bếp |
 | 5 | Và tờ giấy ướt thì còn dễ rách hơn nữa: mềm, nhăn, kéo nhẹ là đứt. | Cận tờ giấy ướt: mặt giấy sẫm màu, nếp nhăn sâu, một góc bị kéo nhẹ thì rách ra | Tay kéo nhẹ mép giấy, giấy rách | Bếp |
-| 6 | Tại sao một chút nước lại làm thay đổi thứ vốn rất bền như thế? | Đứng yên trên hai tờ giấy trên quầy, nắng vẫn đọng vệt cũ | Không gì chạy | Bếp |
+| 6 | Tại sao một chút nước lại làm thay đổi thứ vốn rất bền như thế? | Máy đứng sau bát nước: **nước ở tiền cảnh**, tờ giấy ướt đã rách nằm ở giữa khung, vệt nước cũ còn hằn trên quầy | Không gì chạy | Bếp |
 | 7 | Câu trả lời nằm ở bên trong tờ giấy. | Máy bắt đầu đẩy về phía mặt tờ giấy, mặt giấy chiếm dần khung | Máy đi vào giấy | Bếp |
 | 8 | Mình thò máy quay vào tờ giấy xem. | Máy đẩy xuyên qua mặt tờ giấy, cả bếp lùi ra sau | Máy chui vào giấy | Bếp → trong giấy |
 | 9 | Ở đó chỉ là những sợi cellulose đan vào nhau. | Mở ra: mạng sợi chạy chéo qua khung, đan vào nhau, không gì khác; thẻ "sợi cellulose" neo vào một sợi | Sợi rung nhẹ | Trong giấy |
 | 10 | Mỗi sợi có những nhóm hydroxyl dính ra hai bên. | Cận một sợi: các cục nhỏ trắng mọc ra hai bên thân sợi, thẻ "nhóm hydroxyl" | Cục nhóm mọc theo sợi | Trong giấy |
 | 11 | Ở chỗ hai sợi chạm nhau, các nhóm hydroxyl bám vào nhau bằng liên kết hydrogen. | Cận hai sợi chạm nhau: một móc sáng vàng nối chúng, thẻ "liên kết hydrogen" | Móc nối sáng giữ hai sợi | Trong giấy |
 | 12 | Đó là thứ giữ cho tờ giấy chịu được lực kéo. | Lùi ra: cả mạng sợi với những móc sáng ở mọi điểm chạm | Móc nhấp nháy nhẹ | Trong giấy |
-| 13 | Nước tới — và nước cũng tạo ra liên kết hydrogen. | Các phân tử nước (hạt xanh lam nhạt, hai hạt trắng) bay vào mạng sợi từ bên trái | Phân tử nước bay vào | Trong giấy |
+| 13 | Nước tới — và nước cũng tạo ra liên kết hydrogen. | Cận **hai phân tử nước** (hạt xanh lam nhạt, hai hạt trắng) bay vào mạng sợi từ bên trái rồi dừng lại cạnh nhau | Phân tử nước bay vào, rồi ghép vào nhau | Trong giấy |
 | 14 | Nhưng mối liên kết giữa hai sợi thì bị nước phá vỡ. | Cận hai phân tử nước đã tới gần nhau và dính vào nhau bằng một móc nhỏ **xanh lam**; móc **vàng** giữa hai sợi bên cạnh còn nguyên | Hai phân tử nước dính nhau bằng móc xanh lam; móc vàng bên cạnh chưa đổi | Trong giấy |
 | 15 | Các phân tử nước chen vào đúng chỗ các nhóm hydroxyl đang đứng gần nhau. | Nhiều phân tử nước đến và chui vào các điểm chạm của hai sợi | Nước lấn vào mối chạm | Trong giấy |
 | 16 | Nên nước nằm giữa các sợi, như một lớp bôi trơn. | Cận: móc vàng giữ hai sợi tắt dần và thay bằng móc xanh lá — nước nằm ở chỗ chạm, hai sợi chưa rời nhau | Móc đổi vàng → xanh lá | Trong giấy |
@@ -171,18 +171,19 @@ Vì tập có `src/chapters.js`, cổng chấm từng chương: mỗi chương c
 
 | Âm thanh | Vào lúc | Nơi | Đặc điểm | Vì sao |
 |---|---|---|---|---|
-| Không khí bếp ban sáng | dòng 1 → 8 | Bếp | tiếng bếp xa, tiếng đồng hồ treo tường đều đặn | Người xem phải tin đây là một buổi sáng bình thường |
+| Không khí bếp ban sáng | dòng 1 → 8 và 42 → 43 | Bếp | tiếng bếp xa, tiếng đồng hồ treo tường đều đặn | Người xem phải tin đây là một buổi sáng bình thường |
 | Không khí trong giấy | dòng 9 → 23 | Trong giấy | trầm hơn, gần như không có tiếng gì | Ở trong vật, không khí trong phòng không còn ý nghĩa |
 | Không khí bàn đo ban đêm | dòng 24 → 41 | Bàn đo | gần như tĩnh, chỉ tiếng đèn bàn rung nhẹ | Cảnh đo cần tĩnh để nghe được tiếng giấy và tiếng kéo |
-| Tiếng giấy ướt bị ấn | dòng 1, 2, 5 | Bếp | tiếng giấy ẩm bị ấn, mềm hơn tiếng giấy khô | Người xem phải nghe ra sự khác biệt trước khi được thấy |
+| Tiếng nước nhỏ | dòng 1, 33 | Bếp, bàn đo | tiếng tí tách nhỏ, hạt nước rơi | Nước là tác nhân, nó phải có giọng khi tới |
+| Tiếng giấy ướt bị ấn | dòng 2, 4 | Bếp | tiếng giấy ẩm bị ấn, mềm hơn tiếng giấy khô | Người xem phải nghe ra sự khác biệt trước khi được thấy |
 | Tiếng giấy khô bị ấn | dòng 3, 42 | Bếp | tiếng giấy khô, sắc, khô | Đối chứng với tiếng giấy ướt |
-| Tiếng giấy rách | dòng 2, 5, 26, 33 | Bếp, bàn đo | tiếng xé dọc, ngắn | Nhịp kéo căng, dứt — dòng 26 là lúc dải giấy thử rạch |
-| Tiếng nước nhỏ | dòng 15, 32 | Trong giấy, bàn đo | tiếng tí tách nhỏ, hạt nước rơi | Nước là tác nhân, nó phải có giọng khi tới |
-| Tiếng phân tử nước trượt vào chỗ chạm | dòng 14 → 18 | Trong giấy | tiếng trượt rất nhỏ, gần như tiếng kim loại mềm | Chỗ nước lấn vào là chỗ mấu chốt của cơ chế |
-| Tiếng kéo giấy trong kẹp | dòng 26, 30, 33 | Bàn đo | tiếng giấy bị kéo dài, hơi rít | Đây là tiếng của phép đo |
-| Tiếng kim lực kế | dòng 26, 29, 33 | Bàn đo | tiếng kim va nhẹ vào vạch dừng | Con số phải có tiếng để người xem biết lúc nào nó đọc được |
-| Tiếng lật giấy khăn giấy | dòng 36 | Bàn đo | tiếng giấy mềm sột soạt | Vật thật phải kêu |
-| Tiếng giấy nhăn rạn | dòng 40, 41 | Bàn đo | tiếng giấy bị ấn, rạn ở chỗ gấp | Tờ giấy đã qua nước yếu hơn, phải nghe ra |
+| Tiếng giấy rách | dòng 2, 5, 20, 21, 26, 34 | Bếp, trong giấy, bàn đo | tiếng xé dọc, ngắn | Nhịp kéo căng, rồi đứt — dòng 34 là lúc dải giấy ướt rách trước khi lực kế kịp đọc |
+| Tiếng phân tử nước trượt vào chỗ chạm | dòng 13 → 18 | Trong giấy | tiếng trượt rất nhỏ, gần như tiếng kim loại mềm | Chỗ nước lấn vào là chỗ mấu chốt của cơ chế |
+| Tiếng kéo giấy trong kẹp | dòng 31, 33 | Bàn đo | tiếng giấy bị kéo dài, hơi rít | Đây là tiếng của phép đo |
+| Tiếng kim lực kế | dòng 26, 28, 29, 34 | Bàn đo | tiếng kim va nhẹ vào vạch dừng | Con số phải có tiếng để người xem biết lúc nào nó đọc được |
+| Tiếng máy đẩy vào và lui ra | dòng 7, 8, 17, 18, 23 | Bếp, trong giấy | tiếng gió nhẹ khi máy đổi nơi | Mỗi lần máy đi phải có lý do, và người xem phải nghe ra nó |
+| Tiếng lật giấy khăn giấy | dòng 37, 38 | Bàn đo | tiếng giấy mềm sột soạt, rồi một tiếng nhẹ khi góc giấy khăn hé ra | Vật thật phải kêu |
+| Tiếng giấy nhăn rạn | dòng 19, 41 | Trong giấy, bàn đo | tiếng giấy bị ấn, rạn ở chỗ gấp | Tờ giấy đã qua nước yếu hơn, phải nghe ra |
 
 > Mọi tiếng động và mọi mốc giọng đều phải có trong `window.EV` của `src/film.js`, với tên đúng trong danh mục
 > (`paper_slide`, `paper_tear`, `paper_flip`, `pour`, `whoosh_soft`, `blip_up`, `blip_down`, `reveal_soft`, `cup_set`, `plastic_set`…).
@@ -206,17 +207,17 @@ Vì tập có `src/chapters.js`, cổng chấm từng chương: mỗi chương c
 |---|---|---|---|
 | 0:02 | Tay ướt đè lên tờ giấy trên quầy bếp, vết rách mở dưới ngón | Đứng yên, khung chậm | Người xem phải thấy ngay hiện tượng trong ba giây đầu |
 | 0:06 | Vệt nước loang trên mặt giấy, vết rách mở ra dưới ngón | Cận hơn vào chỗ rách | Phải thấy được nước là thứ đã làm rách, không phải sức tay |
-| 0:08 | Tay khô đặt lên tờ giấy thứ hai | Trượt sang ngang tới tờ giấy bên | Đối chứng phải ở cùng một mặt quầy, cùng một lúc |
-| 0:11 | Khung rộng: hai tay, hai tờ giấy, bát nước có khăn lau | Lùi ra | Câu hỏi cần cả hai thứ cùng một khung |
+| 0:08 | Tay khô đặt lên tờ giấy thứ hai, tờ giấy phẳng, không rách | Máy lùi khỏi cảnh tờ ướt, cận riêng tờ khô | Đối chứng phải thấy rõ tờ khó còn nguyên, và hai tờ không được lẫn vào nhau |
+| 0:11 | Bát nước đầy nước, khăn lau sọc ở mép bát, tay ướt bên cạnh | Máy nhìn xuống bát nước | Câu này gọi tên **nước** thì hình phải có nước, chứ không phải một toàn cảnh quầy |
 | 0:14 | Tay kéo nhẹ mép tờ giấy ướt, giấy rách | Cận vào mép giấy | Chỉ kéo nhẹ thôi mà rách — đó là điều cần thấy |
-| 0:18 | Đứng yên trên hai tờ giấy | Đứng yên | Câu hỏi không cần hình, chỉ cần khoảng lặng |
+| 0:18 | Bát nước ở tiền cảnh, tờ giấy ướt đã rách ở giữa khung | Đứng yên sau bát nước | Câu hỏi cần một khoảng lặng, và nước phải ở trước mặt |
 | 0:21 | Máy bắt đầu đẩy về phía mặt tờ giấy | Đẩy vào | Lời hứa "câu trả lời nằm ở bên trong" phải được trả lời bằng hình |
 | 0:24 | Máy đi xuyên qua mặt tờ giấy | Đẩy thẳng | Câu chuyện đi vào bên trong vật thật |
 | 0:27 | Mạng sợi cellulose chạy chéo | Tiến vào rồi lùi | Cho thấy đây là một mạng, không phải một sợi |
 | 0:29 | Cận một sợi với các cục nhóm hydroxyl | Cận | Khái niệm "nhóm hydroxyl" phải có hình trước khi dùng |
 | 0:32 | Cận hai sợi chạm nhau, móc sáng nối chúng | Cận | Chi tiết làm nhận ra mối liên kết, không phải một sơ đồ |
 | 0:37 | Lùi ra: cả mạng sợi với móc sáng ở mọi điểm chạm | Lùi ra | "Thứ giữ cho giấy chịu được lực kéo" phải thấy là nhiều chỗ, không phải một chỗ |
-| 0:40 | Các phân tử nước bay vào mạng sợi | Trượt theo dòng hạt nước | Nối tác nhân với chỗ nó tới |
+| 0:40 | Cận hai phân tử nước bay vào mạng sợi rồi dừng lại cạnh nhau | Cận, đứng yên ở chỗ chúng dừng | Nước phải **đến và ghép vào nhau** trước khi móc ở chỗ chạm đổi màu |
 | 0:43 | Cận hai phân tử nước dính vào nhau bằng móc xanh lam; móc vàng bên cạnh còn nguyên | Cận | Nước phải tới trước khi mối liên kết đổi màu — chưa đổi thì người xem mới thấy nó đổi |
 | 0:46 | Nhiều phân tử nước chui vào các điểm chạm | Trượt dọc theo mạng | Quá trình lấn lan, không phải một sự kiện |
 | 0:50 | Móc vàng tắt dần, thay bằng móc xanh lá, khe hở mở ra | Cận, đứng yên | Hình thể hiện quá trình trước → sau |
@@ -224,7 +225,7 @@ Vì tập có `src/chapters.js`, cổng chấm từng chương: mỗi chương c
 | 0:56 | Hai sợi trượt ra xa nhau, lộ khoảng trống | Trượt nhẹ theo sợi | Khe hở là hậu quả phải thấy |
 | 0:60 | Tay ướt phóng to lên kéo hai sợi ra, móc nối lỏng dần | Trục ngang theo tay | Chính tay ở câu một, thấy qua kính lúp: cùng một vật, phóng to lên |
 | 1:03 | Cận chỗ sợi yếu nhất: hai sợi vẫn chồng lên nhau, không có vết rách | Cận, đứng yên | "Không đứt ra ở chỗ sợi yếu" phải thấy được, không nói bằng lời |
-| 1:06 | Vệt nứt chạy dọc, các sợi hai bên bị kéo tuột | Trượt dọc | Vết nứt chạy, máy chạy theo vết nứt |
+| 1:06 | Vệt nứt chạy dọc, các sợi hai bên bị kéo tuột | Máy áp vào vệt nứt đang lan | Vết nứt là vật chính của khung, không phải một vệt nhỏ giữa mạng sợi |
 | 1:09 | Cận mép vệt nứt: sợi nguyên vẹn, chỗ bám lỏng | Cận | Câu chốt "nước không cắt đứt sợi" cần hình đúng |
 | 1:12 | Máy lui ra khỏi mạng sợi, mặt cắt của tờ giấy phủ vào khung | Lùi ra nhanh | Ra khỏi mạng sợi để chuẩn bị sang nơi đo |
 | 1:16 | Bàn gỗ dưới vòng đèn bàn: **giá đo kẹp dải giấy, lực kế, đồng hồ độ ẩm** đứng trên mặt bàn | Đi từ cận đèn bàn ra | Một nơi mới, một tầng mới; khung mở phải giới thiệu **trọn bộ đo** |
@@ -237,12 +238,12 @@ Vì tập có `src/chapters.js`, cổng chấm từng chương: mỗi chương c
 | 1:41 | Khung rộng bàn đo: ba vùng sáng | Lùi ra | Câu chốt "càng ẩm, giấy càng yếu" cần cả bàn trong khung |
 | 1:43 | Tay nhúng dải giấy vào bát nước | Cận bát nước | Nước phải vào từ một vật thật |
 | 1:46 | Tay kéo dải giấy ướt, giấy nhăn rồi rách | Trục theo tay, cận lực kế | Phép đo thứ hai khác hẳn phép đo thứ nhất |
-| 1:50 | Thẻ ba đến mười phần trăm trên dải giấy ướt | Đứng yên | Con số phải neo vào đúng vật vừa bị đo |
-| 1:53 | Thẻ mười lăm phần trăm trên mặt lực kế | Đứng yên | Ngưỡng đặt tên của ngành cũng nằm trên chính cái thang |
-| 1:57 | Mẻ giấy khăn giấy **của ngành** và **túi giấy bao bì dạng phẳng** trên mặt bàn | Lùi ra | Vật thật của loại giấy có nhựa |
+| 1:50 | Vết rách ở mép trên dải giấy ướt; thẻ ba đến mười phần trăm nằm cạnh vết rách | Máy lệch sang trái, áp vào vết rách | Con số phải neo vào đúng chỗ giấy **đã rách**, và dải giấy phải chiếm chỗ trong khung |
+| 1:53 | Mặt lực kế nằm ở nửa trái khung, kim đỏ đứng gần vạch không; thẻ mười lăm phần trăm neo vào mặt thang | Máy lùi sang phải | Ngưỡng đặt tên của ngành nằm trên chính cái thang, và khung phải khác hẳn nhát dải giấy ướt |
+| 1:57 | Túi bao bì dạng phẳng đứng trong giá, mẻ giấy khăn phía sau | Máy chỉ vào hai vật của ngành | Vật thật của loại giấy có nhựa, chứ không phải cái máy đo |
 | 1:60 | Góc giấy khăn giấy bị cắt, lộ các móc nối màu hồng | Cận | Cách giải thích phổ biến về nhựa phải có hình |
-| 2:04 | Khung rộng: giấy khăn giấy, túi giấy bao bì dạng phẳng, bát nước | Đứng yên | Ví dụ phải đứng yên để người xem nhìn cho đủ |
-| 2:07 | Tờ giấy đã qua nước rồi sấy, vệt ẩm còn hằn | Trượt nhẹ | Dấu vết của nước phải còn trên giấy |
+| 2:04 | Khung rộng: giấy khăn giấy, túi giấy bao bì dạng phẳng, góc giấy khăn bị cắt ở trước | Máy lùi ra, đêm mở ra phía sau | Ví dụ phải đứng yên để người xem nhìn cho đủ |
+| 2:07 | Hai tờ giấy cạnh nhau: tờ đã qua nước rồi sấy (nhăn, vệt ẩm còn hằn) và tờ tươi (phẳng) | Máy hạ thấp gần mặt bàn, nhìn ngang | Dấu vết của nước phải còn trên giấy, và phải có tờ đối chứng |
 | 2:10 | Tay ấn tờ giấy đã sấy, giấy nhăn rạn | Cận | Yếu hơn phải nghe và thấy |
 | 2:13 | Tay buông ra: tờ giấy đã sấy vẫn nhăn rạn, đặt cạnh tờ giấy khô phẳng | Cận, lùi nhẹ | "Sấy khô xong vẫn chưa trở lại" phải thấy bằng hình, không chỉ bằng lời |
 | 2:15 | Quay lại bếp: tay khô đặt lên tờ giấy khô | Đi ngang qua | Khung kết phải là lại đúng chỗ mở đầu |

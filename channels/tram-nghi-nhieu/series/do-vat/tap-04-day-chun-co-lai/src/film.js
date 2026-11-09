@@ -10,7 +10,7 @@
 // Mỗi con số đều có câu lời đọc nó, và mỗi con số là một vật trong khung.
 import * as THREE from 'three';
 import { film, label, subtitle, toScreen } from '../../../../rig/render.js';
-import { keys, ss, clamp } from '../../../../rig/kit.js';
+import { keys, ss, clamp, toon, canvasTex, mulberry } from '../../../../rig/kit.js';
 import { build } from './timeline.js';
 import { loadVoice } from '../../../../rig/voice.js';
 import { buildKitchen, buildInside, buildDesk } from './set.js';
@@ -39,6 +39,45 @@ const handD2 = buildHand(); SC.N3.add(handD2);
 const handD3 = buildHand(); SC.N3.add(handD3);
 const handD4 = buildHand(); SC.N3.add(handD4);
 
+// Tay có cổ tay áo. Cổ tay áo trắng là **vùng sáng nhất khung** (trắng cháy
+// ở mép trên, có quầng bloom) và cánh tay áo là một mảng xanh phẳng không
+// texture, không nếp — đúng kiểu "khối trơn một màu ở tiền cảnh" mà
+// STYLE.md cấm. Ở đây: cổ tay áo hạ xuống **kem xám thấp hơn độ sáng của
+// da** (da là điểm nhìn, phải là vùng sáng nhất khung), và cánh tay áo được
+// phủ vải có nếp gấp.
+const sleeveTex = canvasTex(256, 256, (g, w, h) => {
+  g.fillStyle = '#48547d'; g.fillRect(0, 0, w, h);
+  const r = mulberry(41);
+  for (let y = 0; y < h; y += 5) { g.fillStyle = 'rgba(255,255,255,.035)'; g.fillRect(0, y, w, 1); }
+  for (let x = 0; x < w; x += 5) { g.fillStyle = 'rgba(0,0,0,.045)'; g.fillRect(x, 0, 1, h); }
+  for (let k = 0; k < 6000; k++) { g.fillStyle = `rgba(220,228,255,${r() * .04})`; g.fillRect(r() * w, r() * h, 2, 2); }
+});
+function dressSleeve(hand, cuffColor = '#cdc9bd') {
+  // Cổ tay áo của rig là một **vòng mỏng** (torus) ở cổ tay: vòng mỏng thì
+  // nét mực của nó ăn gần hết, và khi nó trắng thì còn cháy thành vùng sáng
+  // nhất khung. Ở đây vòng đó **bị bỏ hẳn** — cổ tay áo chỉ còn là mép vải
+  // của cánh tay, có nét mực viền, không có mảng trắng nào trong khung.
+  hand.traverse(o => {
+    if (!o.isMesh) return;
+    const g = o.geometry, pr = g.parameters || {};
+    if (g.type === 'TorusGeometry' && Math.abs(pr.radius - .074) < 1e-6) {
+      o.visible = false;                                         // vòng cổ tay cũ
+    } else if (g.type === 'CylinderGeometry' && Math.abs(pr.height - .55) < 1e-6) {
+      const pos = g.attributes.position;                               // cánh tay áo
+      for (let i = 0; i < pos.count; i++) {
+        const x = pos.getX(i), y = pos.getY(i), z = pos.getZ(i);
+        // nếp gấp **ở giữa cánh tay**, không ở mép cổ tay: nếp ngay cổ tay
+        // thì cổ tay áo nằm trong bóng nếp và thành một vòng tối.
+        const k = 1 + .035 * Math.sin(x * 16) * (1 - Math.min(1, Math.abs(x) / .24));
+        pos.setY(i, y * k); pos.setZ(i, z * k);
+      }
+      pos.needsUpdate = true; g.computeVertexNormals();
+      o.material = toon('#ffffff', { map: sleeveTex });
+    }
+  });
+}
+[handK, handK2, handI, handD, handD2, handD3, handD4].forEach(dressSleeve);
+
 // Bàn tay nắm một vật: ngón tay cuộn quanh vật, cẳng tay đi ra khỏi khung.
 //   gripSide: ngón chỉ sang +x, cẳng tay lùi về -x (tay đưa vào từ bên trái)
 //   gripDown: ngón chỉ xuống, cẳng tay vươn lên (tay đưa vào từ trên)
@@ -61,7 +100,7 @@ const SHOTS = [
   // ── N1: bếp ──
   // Mọi cận cảnh phải thấy trọn cái hũ (19 cm) hoặc trọn vòng dây quanh nắp,
   // nên máy quay đứng ở cự ly 0,3–0,6 m, không áp vào hũ.
-  { ids: ['c1'], s: 'N1', pos: [-.60, .30, 1.22], look: [-.86, .15, .80], fov: 28, d: [.03, .02, -.02] },
+  { ids: ['c1'], s: 'N1', pos: [-.60, .36, 1.10], look: [-.85, .16, .79], fov: 26, d: [.03, .02, -.02] },
   { ids: ['c2'], s: 'N1', pos: [-1.06, .24, 1.12], look: [-1.00, .18, .82], fov: 34, d: [.04, 0, -.03] },
   { ids: ['c3'], s: 'N1', pos: [-.62, .34, 1.10], look: [-.86, .18, .79], fov: 30, d: [-.02, .01, -.02] },
   { ids: ['c4'], s: 'N1', pos: [.36, .13, .96], look: [.26, .01, .82], fov: 22, d: [.02, 0, -.015] },
@@ -84,13 +123,13 @@ const SHOTS = [
   { ids: ['c15'], s: 'N2', pos: [.08, .52, .72], look: [0, .02, -.18], fov: 34, d: [-.03, -.02, -.02] },
   { ids: ['c16'], s: 'N2', pos: [-.62, .06, .18], look: [.20, .06, -.18], fov: 26, d: [0, -.01, -.02] },
   { ids: ['c17'], s: 'N2', pos: [-.72, .14, .86], look: [-.92, .10, .52], fov: 24, d: [.02, .01, -.015] },
-  { ids: ['c18'], s: 'N2', pos: [1.20, .20, .85], look: [.15, .02, -.05], fov: 30, d: [.03, 0, -.02] },
+  { ids: ['c18'], s: 'N2', pos: [1.05, .20, .72], look: [.52, .05, -.05], fov: 26, d: [.03, 0, -.02] },
   { ids: ['c19'], s: 'N2', pos: [.25, .18, .88], look: [.05, .02, -.18], fov: 36, d: [0, 0, -.03] },
   { ids: ['c20'], s: 'N2', pos: [.32, .06, .30], look: [.34, .02, -.16], fov: 18, d: [.02, .01, -.02] },
   { ids: ['c21'], s: 'N2', pos: [.90, .30, .60], look: [.26, .02, -.10], fov: 30, d: [-.02, .01, -.02] },
   { ids: ['c22'], s: 'N2', pos: [.30, .12, .60], look: [0, .00, -.16], fov: 30, d: [0, 0, -.03] },
-  { ids: ['c23'], s: 'N2', pos: [0, .60, 1.00], look: [0, .72, .58], fov: 34, d: [0, -.01, -.02] },
-  { ids: ['c24'], s: 'N2', pos: [.52, .30, 1.04], look: [.52, .30, .46], fov: 28, d: [-.02, .01, -.03] },
+  { ids: ['c23'], s: 'N2', pos: [0, .66, .95], look: [0, .66, .58], fov: 30, d: [0, -.01, -.02] },
+  { ids: ['c24'], s: 'N2', pos: [.78, .30, .76], look: [.78, .30, .46], fov: 24, d: [-.02, .01, -.03] },
   { ids: ['c25'], s: 'N2', pos: [0, .28, 1.10], look: [0, .14, .52], fov: 36, d: [0, 0, -.03] },
   { ids: ['c26'], s: 'N2', pos: [-.22, .14, .95], look: [0, .12, .52], fov: 30, d: [-.02, .01, -.015] },
   // ── N1: về lại bếp ──
@@ -99,7 +138,7 @@ const SHOTS = [
   // Bàn đo: cột đứng cao .41 m, đồng hồ ở .38, dây chun treo xuống .14, quả cân ở .06.
   // Trục bàn: máy sấy tóc ở -.72 · cột dây chun ở -.30 (thước ở -.375) ·
   // · nhiệt kế chính ở -.20 · vòng dây Joule ở .15 · cột sợi thép ở .32.
-  { ids: ['c28'], s: 'N3', pos: [-.10, .24, 1.70], look: [-.10, .22, .91], fov: 38, d: [.02, -.02, -.04] },
+  { ids: ['c28'], s: 'N3', pos: [-.10, .30, 1.80], look: [-.08, .22, .91], fov: 32, d: [.02, -.02, -.04] },
   { ids: ['c29'], s: 'N3', pos: [-.10, .10, 1.16], look: [-.30, .10, .91], fov: 24, d: [.02, 0, -.03] },
   { ids: ['c30'], s: 'N3', pos: [-.30, .13, 1.12], look: [-.26, .09, .95], fov: 26, d: [-.02, .01, -.03] },
   { ids: ['c31'], s: 'N3', pos: [-.14, .28, 1.26], look: [-.46, .21, .92], fov: 34, d: [.03, 0, -.03] },
@@ -175,12 +214,12 @@ function applyState(id, t) {
   // ── bếp ──
   const tk = tight1(t);
   K.band1.setTighten(tk);
-  K.band1.position.y = .2055 - .005 * tk;          // dây ăn sâu vào nắp
+  K.band1.position.y = .198 - .005 * tk;            // dây ăn sâu vào nắp
   K.wire.setLen(1 + .06 * wireK(t));                  // thép dài ra khi nung
   K.wire.position.x = K.pinW.position.x + K.wire.len * (1 + .06 * wireK(t)) / 2;  // đầu ghim đứng yên
   K.slack.setLen(1 + .13 * slackK(t));                // dây chùng dài ra khi nung
   const cold = k >= 42;                                // hũ lấy ra từ tủ lạnh chỉ ở chương bốn
-  K.jar2.visible = cold; K.band2.visible = cold; K.groove2.visible = cold;
+  K.jar2.visible = cold; K.band2.visible = cold;
   // luồng hơi nóng: chỉ khi đang thổi
   const blowing = (k >= 2 && k <= 8) || k >= 46;
   K.flowHot.visible = blowing;
@@ -205,21 +244,18 @@ function applyState(id, t) {
   for (const c of I.chains) c.setCoil(coil);
   const netScale = 1 + .16 * pull;
   I.net.scale.x = netScale;
-  // tay kéo mạng ở c18–c21: tay **nắm đúng đầu mạng** (ngón tay chạm vào
-  // hạt cuối cùng của mạng, ở x = .41·netScale) chứ không đứng lơ lửng bên
-  // cạnh — khung của c18 và c21 phải giữ được chính cái tay đang kéo.
-  // Đầu sợi **thẳng** (xích có nắm thẳng hai đầu) nên hạt cuối nằm đúng chỗ,
-  // tay nắm được vào một hạt, không nắm vào một khoảng không.
+  // tay kéo mạng ở c18–c21: tay **nắm đúng đầu mạng** chứ không đứng lơ
+  // lửng bên cạnh — khung của c18 và c21 phải giữ được chính cái tay đang
+  // kéo. Sợi thò ra khỏi mạng ở x = .43·netScale và **chui vào lòng bàn tay**:
+  // đầu ngón ở local (.180, −.071) × .72, xoay 180° quanh trục y → đầu ngón
+  // ở world (−.130, −.051) so với cổ tay, tức là **ngón nằm trước** đầu sợi
+  // ở local .13 (trong lòng bàn tay). Sợi chỉ chạm vào đầu ngón thì người
+  // xem thấy một cái nhặm, không thấy một cái nắm.
   handI.visible = k >= 18 && k <= 21;
   if (handI.visible) {
     // bàn tay trong N2 **nhỏ hơn** (0,72) để nó không nuốt cả khung: kích thước
     // bàn tay của rig là 22 cm, quá to so với hạt xích 2 cm trong khung.
-    // Tay nắm **đúng hạt ngoài cùng của sợi để nắm** (sợi thò ra khỏi mạng ở
-    // x = .48·netScale): ngón tay ở local (.180, −.071) × .72, xoay 180° quanh
-    // trục y → đầu ngón ở world (−.130, −.051) so với cổ tay. Không có sợi
-    // để nắm thì tay nắm lơ lửng trong khoảng không và nhát này không có gì
-    // để kéo.
-    handI.position.set(.48 * netScale + .1296, .1186, -.08);
+    handI.position.set(.43 * netScale + .0936, .1186, -.08);
     handI.rotation.set(0, Math.PI, 0);
     handI.pose(1.0, .30);
   }
@@ -278,7 +314,7 @@ function applyState(id, t) {
   D.wire.setLen(wireK2);
   D.wire.position.y = N3.TOP - N3.BAND * wireK2 / 2;
   D.wgt2.position.y = N3.TOP - N3.BAND * wireK2 - N3.DROP;
-  D.wgt2.visible = k >= 37 && k <= 38;
+  D.wgt2.visible = k >= 28 && k <= 38;
   // tay: giữ dây ở một vạch (c35–c36), kéo dây xuống (c37–c38), giật nhanh (c39–c41).
   // Tay đưa vào từ bên trái nên cẳng tay lùi ra ngoài khung, không che đồng hồ.
   // Bàn tay dài .27 m từ cổ tay: mu bàn tay ở +.11, ngón ở +.20…+.27 — nên cổ tay

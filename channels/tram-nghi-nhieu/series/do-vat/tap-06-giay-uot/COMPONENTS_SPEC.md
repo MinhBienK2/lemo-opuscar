@@ -13,20 +13,20 @@ Cự ly: **Cận** = máy phải thấy rõ chi tiết · **Vừa** = thấy hì
 
 | Tên linh kiện | Vai trò & xuất hiện ở shot | Cự ly | Trạng thái động | Hàm dựng |
 |---|---|---|---|---|
-| `paperSheet` | Tờ giấy ướt (c1–c5), tờ giấy khô (c3, c42, c43), tờ đã sấy (c39–c41) | Cận | `setWet` (vệt ẩm loang, giấy tối) · `setWrinkle` (nếp nhăn **nặn ra**, dựng lại mặt cong từ uv) · `setTear` (mở mép rách gấp khúc) | `paperSheet({w,h,tear,seed,wrinkle})` — `src/props.js:51` |
-| `waterBowl` | Bát nước ở bếp (c4) và bàn đo (c33) | Vừa | Tĩnh; mặt nước phẳng, viền đỏ | `waterBowl({R})` — `src/props.js:147` |
-| `dishTowel` | Khăn lau vắt trên miệng bát (c4, c33) | Vừa | Tĩnh | `dishTowel({w,drop,color})` — `src/props.js:172` |
-| `paperClamp` | Kẹp đầu trên của dải giấy thử (c25) | Vừa | Tĩnh | `paperClamp({})` — `src/props.js:250` |
-| `gaugeStand` | Giá đo, vạt ngang chìa tới kẹp (c24, c25) | Vừa | Tĩnh | `gaugeStand({H,color})` — `src/props.js:259` |
-| `dynamometer` | Đồng hồ đo lực treo ở đầu dải giấy (c25–c34) | Cận | `setLoad(k)` — kim chạy theo lực; `position.y` hạ/xoay theo tải | `dynamometer({R})` — `src/props.js:296` |
-| `hygrometer` | Đồng hồ độ ẩm trên bàn (c27–c31) | Cận | `setRH(k)` — kim chạy lên theo độ ẩm | `hygrometer({R})` — `src/props.js:315` |
-| `paperStrip` | Dải giấy thử treo thẳng, **mặt giấy quay về phía máy** (c25–c36) | Cận | `setWet(k)` (giấy sẫm, nhăn lên) · `setBreak(k)` (đoạn dưới gãy, quay về một bên) · `scale.x` giãn dài, `position.y` hạ theo độ giãn | `paperStrip({len,wid,seed})` — `src/props.js:336` |
-| `cutCorner` | Góc giấy khăn bị cắt vát, lộ móc nối nhựa màu hồng (c36–c38) | Cận | Tĩnh; các móc hồng **to và sáng**, xếp **ở mép cắt**, và **không** đổi màu khi nước tới | `cutCorner({w,h,seed})` — `src/props.js:382` |
-| `tissueStack` | Mẻ giấy khăn giấy (c38, c39) | Vừa | Tĩnh | `tissueStack({n,w,d,color})` — `src/props.js:405` |
-| `paperBag` | Túi giấy **bao bì dạng phẳng của ngành**: mép gấp kép, **không quai xách** (c36–c39) | Vừa | Tĩnh | `paperBag({w,h,d,color})` — `src/props.js:422` |
-| `ruler` | Thước gỗ kẻ vạch đứng dựng cạnh dải giấy thử, để đo độ giãn (c25, c30) | Vừa | Tĩnh | `ruler({len,wid})` — `src/props.js:448` |
-| `paperEdge` | Mặt cắt của tờ giấy: mép cắt thẳng với các đầu sợi chìa ra, quét ngang và **phủ kín** khung khi máy lui ra khỏi ruột tờ giấy (c23) | Cận | `position.x` quét từ phải sang trái theo câu 23 | `paperEdge({w,h,seed})` — `src/props.js:469` |
-| Bàn tay | Tay ướt (c1–c2), tay kéo mép (c5), tay khô (c3, c4, c42), tay kéo hai sợi (c19), tay kéo lực kế (c26, c31, c34), tay rót nước (c33), tay ấn giấy đã sấy (c41) | Cận | `pose(curl, spread)`; vị trí và góc đặt theo câu | `buildHand({size})` của rig — `src/acts.js:33–40` |
+| `paperSheet` | Tờ giấy ướt (c1–c5), tờ giấy khô (c3, c42, c43), tờ đã sấy (c39–c41) | Cận | `setWet` (vệt ẩm loang, giấy tối) · `setWrinkle` (nếp nhăn **nặn ra**, dựng lại mặt cong từ uv) · `setTear` (mở mép rách gấp khúc) · `setPress` (nếp hăn tỏa ra từ giữa tờ + vệt ẩm dưới ngón tay) | `paperSheet({w,h,tear,seed,wrinkle})` — `src/props.js:160` |
+| `waterBowl` | Bát nước ở bếp (c4, c6) và bàn đo (c32) | Vừa | Tĩnh; mặt nước phẳng, viền đỏ | `waterBowl({R})` — `src/props.js:367` |
+| `dishTowel` | Khăn lau vắt trên miệng bát (c4, c6) | Vừa | Tĩnh | `dishTowel({w,drop,color})` — `src/props.js:401` |
+| `paperClamp` | Kẹp đầu trên của dải giấy thử (c25) | Vừa | Tĩnh | `paperClamp({})` — `src/props.js:552` |
+| `gaugeStand` | Giá đo, vạt ngang chìa tới kẹp (c24, c25) | Vừa | Tĩnh | `gaugeStand({H,color})` — `src/props.js:561` |
+| `dynamometer` | Đồng hồ đo lực treo ở đầu dải giấy (c25–c35) | Cận | `setLoad(k)` — kim chạy theo lực; `position.y` hạ/xoay theo tải | `dynamometer({R})` — `src/props.js:619` |
+| `hygrometer` | Đồng hồ độ ẩm trên bàn (c27–c31) | Cận | `setRH(k)` — kim chạy lên theo độ ẩm | `hygrometer({R})` — `src/props.js:652` |
+| `paperStrip` | Dải giấy thử treo thẳng, **mặt giấy quay về phía máy** (c25–c35) | Cận | `setWet(k)` (giấy sẫm, nhăn lên) · `setBreak(k)` (đoạn dưới gãy, quay về một bên) · `scale.x` giãn dài, `position.y` hạ theo độ giãn | `paperStrip({len,wid,seed})` — `src/props.js:677` |
+| `cutCorner` | Góc giấy khăn bị cắt vát, lộ móc nối nhựa màu hồng (c36–c38) | Cận | Tĩnh; các móc hồng **to và sáng**, xếp **ở mép cắt**, và **không** đổi màu khi nước tới | `cutCorner({w,h,seed})` — `src/props.js:743` |
+| `tissueStack` | Mẻ giấy khăn giấy (c36, c38, c39) | Vừa | Tĩnh | `tissueStack({n,w,d,color})` — `src/props.js:766` |
+| `paperBag` | Túi giấy **bao bì dạng phẳng của ngành**: mép gấp kép, **không quai xách** (c36–c39) | Vừa | Tĩnh | `paperBag({w,h,d,color})` — `src/props.js:783` |
+| `ruler` | Thước gỗ kẻ vạch đứng dựng cạnh dải giấy thử, để đo độ giãn (c25, c30, c33, c34) | Vừa | Tĩnh | `ruler({len,wid})` — `src/props.js:811` |
+| `paperEdge` | Mặt cắt của tờ giấy: mép cắt thẳng với các đầu sợi chìa ra, quét ngang và **phủ kín** khung khi máy lui ra khỏi ruột tờ giấy (c23) | Cận | `position.x` quét từ phải sang trái theo câu 23 | `paperEdge({w,h,seed})` — `src/props.js:849` |
+| Bàn tay | Tay ướt (c1–c4), tay kéo mép (c5), tay khô (c3, c4, c42, c43), tay kéo hai sợi (c19), tay kéo lực kế (c26, c33, c34), tay rót nước (c32), tay ấn giấy đã sấy (c41) | Cận | `pose(curl, spread)`; vị trí và góc đặt theo câu | `buildHand({size})` của rig — `src/acts.js:33–40` |
 
 ## Nhóm 2 — Internal parts (ruột và cơ chế vi mô)
 
@@ -34,13 +34,13 @@ Cả nhóm này chỉ tồn tại **bên trong tờ giấy** (N2) và trên dả
 
 | Tên linh kiện | Vai trò & xuất hiện ở shot | Cự ly | Trạng thái động | Hàm dựng |
 |---|---|---|---|---|
-| `fibre` | Sợi cellulose: ba sợi tiền cảnh (c9–c22) và mạng sợi nền | Cận (tiền cảnh) · Nền | `setSwell(k)` — sợi phồng to ra, nhóm hydroxyl dãi xa nhau | `fibre({len,wid,color,seed,groups})` — `src/props.js:189` |
-| `bond` | Mối liên kết hydrogen ở chỗ hai sợi chạm nhau (c11, c14, c16) | Cận | `setWet(k)` — móc đổi từ vàng sang xanh khi nước chiếm chỗ bám | `bond({r,color})` — `src/props.js:217` |
+| `fibre` | Sợi cellulose: ba sợi tiền cảnh (c9–c22) và mạng sợi nền | Cận (tiền cảnh) · Nền | `setSwell(k)` — sợi phồng to ra, nhóm hydroxyl dãi xa nhau | `fibre({len,wid,color,seed,groups})` — `src/props.js:431` |
+| `bond` | Mối liên kết hydrogen ở chỗ hai sợi chạm nhau (c11, c14, c16) | Cận | `setWet(k)` — móc đổi từ vàng sang xanh khi nước chiếm chỗ bám | `bond({r,color})` — `src/props.js:493` |
 | `bond` (móc **xanh lam**) | Móc giữ **hai phân tử nước** với nhau (c14, c15) — màu khác móc vàng, và **không** đổi màu khi nước tới | Cận | Chỉ hiện ở câu 14–15; `visible` bật/tắt theo câu | `bond({r:.0050, color:'#5aa9ff'})` — `src/set.js` (`waterHook`) |
-| `waterMolecule` | Phân tử nước bay vào và chen vào chỗ các nhóm hydroxyl (c13, c15) | Cận | Vị trí nội suy từ điểm xuất phát tới đúng chỗ móc nối | `waterMolecule({R,color})` — `src/props.js:237` |
-| `crack` | Vệt nứt lan giữa hai sợi đã trượt ra (c20, c21) | Cận | `scale.y` mở dần theo `crackK` | `crack({len,w,seed})` — `src/props.js:131` |
-| `flow` (dòng nước rót) | Nước từ miệng bát xuống dải giấy thử (c33) | Vừa | `update(t, amt)` — dòng chảy chỉ tồn tại khi tay rót | `flow(from, to, {size,n,rate})` của rig — `src/set.js` (dòng nước từ bát xuống dải giấy) |
-| Nhóm hydroxyl (hạt trắng trên sợi) | Chỗ gắn nguyên tử hydro, mọc **hai bên** sợi (c10, c17) | Cận | Theo `setSwell` của sợi | là các hạt trong `fibre()` — `src/props.js:194–202` |
+| `waterMolecule` | Phân tử nước bay vào và chen vào chỗ các nhóm hydroxyl (c13, c15) | Cận | Vị trí nội suy từ điểm xuất phát tới đúng chỗ móc nối | `waterMolecule({R,color})` — `src/props.js:533` |
+| `crack` | Vệt nứt lan giữa hai sợi đã trượt ra (c20, c21) | Cận | `scale.y` mở dần theo `crackK` | `crack({len,w,seed})` — `src/props.js:308` |
+| `flow` (dòng nước rót) | Nước từ miệng bát xuống dải giấy thử (c32) | Vừa | `update(t, amt)` — dòng chảy chỉ tồn tại khi tay rót | `flow(from, to, {size,n,rate})` của rig — `src/set.js` (dòng nước từ bát xuống dải giấy) |
+| Nhóm hydroxyl (hạt trắng trên sợi) | Chỗ gắn nguyên tử hydro, mọc **hai bên** sợi (c10, c17) | Cận | Theo `setSwell` của sợi | là các hạt trong `fibre()` — `src/props.js:450–478` |
 
 ## Nhóm 3 — Set & Environment (bối cảnh)
 

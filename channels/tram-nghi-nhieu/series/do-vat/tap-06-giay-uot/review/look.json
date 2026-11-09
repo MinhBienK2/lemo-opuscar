@@ -1,0 +1,1259 @@
+{
+ "step": "look",
+ "round": 1,
+ "items": {
+  "t_102.0": {
+   "key": "",
+   "fp": "JxwcIzMqICAiIyRip6iXNScnKCgpKSkpKSkpKSkoKCgoJycnJiUkJCMiISAfHx4dJx0cITMvISEiJCVMoKqpSCgpKSkpKiopKikqKikpKSkpKSgoJycmJSQjIiEgIB8eJx8dHzE0JCIjJCY4jamxZCkpKioqKioqKioqKioqKioqKikpKCgnJiYlJCMhICAfJiAdHy45KCMkJSYvhauzgisqKioqKisrKysrKysrKysrKysqKikoKCcmJSQjIiEgJSAeHyo7LSQlJicqc62ynDErKysrKywsLCwrLCwsLCwsLCwrKyoqKSgnJiUkIyIhIyIfICY7NCUmJygpXqitrD0sLS4uLy8wLy8uLi0tLS0tLSwtLCwrKikoJycmJSQlIiQfICQ5OicnKCkpSZKCezwvMTI0NTY2NjU0MjEvLi4uLS0tLS0sKysqKSgnJSMiIiYjJCY2Py0qKywsQHJoUUE4OTs8Pj4+PTw7OTc1MzEwLy8uLi4tLSwrKikoJiMiIiclJScyQjUvMDE6iMeop4pSS01OT09OTUxKSEZDQD06NzU1NDMzMzIxMC8tKiUkHiUeHR8oQTowNDlXz+Cqv9WMV11WS0dHSVVbWFVSTkpGQT05NzU1NTQzMjIxLCgnGh4cHR4jPkA3PkRm2diOuOS/V1xHOjw+RWFmZWJgXFdTTUpEPTg2NTY1NTQ0MS0rGhocHR8jOkVES1JbrservMuxUWVjVVxsdoCBgH17eHNuaHeQg2tcWFZUT05PUEs9GRsdIio0PUZMVVtHYLLIx756YYF3boKRkpGRkY+Oi4aCfJDBtqOVkYiDfHdzcW5pISMnLjY+QkZOWVk+THN/j3pkeoh4fZSXmZmZmJiXlZGNiZrUzbmjqKikj4+YkYyGMyo2QkhOSUVOXVdGZXZacXhziol7hpWUlZWVlpeVk5GNiY3H1tC4vL+8q4COo6aiOy0/TlNWTUVNYlZWdn9yend7ioN/j5mZm5ubmpmWlJOQjIeOlZSgrKatva2jkpKUPC8/TlNXUUhKY1pthoqMn4F9gIGEj56ipKWjoJuXlJKOjImGg357eXd4hqDEyb26QjdHWF5iXVRHWVx5io+QpI6BhImPm621uru3sKiim5aSjouIg4B7eXd2eX+Yus3KQDhJXGVpYlZFR0tcc4uOjZCGjZeku9Xl7e7r4s+1paCbl5KPioWBfnt5e32CkK3DNDhASlVWRkFBR0pOTWB2gpWYnqe+5u3g1dDQ2+jbrpuVkY2Lh4OAfXx6enx/hIybNTtETVFAOzs9R0pGRleBlJicorHh4Mi9vL+yq7LM16STjIWBfHl1c3Fvbm5wc3Z5NDtETEE1NTlCRD9EWH+TlJmco7fhv7W+18+knqCo27iZk42JhYF+enh2dHJxcXBxNz5HUEEuNT1APz9ObHl6d36Km7TKs6/T5J+ImpuZvqiPioOAfHh1cnFubWxqaWdnNj5GSkdAQkVNV19lY2hmampug6qakp6tp5aOipCHkX+Hgn99eXh3dXJxb2tkX1xaNjo9QUxaY2lxd3x6bndweW53g4mCeYmUkIiOjINzZWyBf3t5fnF0cnBvbWhkYV5aNzM6RlFYYGZscnVybmRfaHR/kK2cYGmCjIqEgHJLQVJgVllocnNxb2xqZ2VgXFlWMjVDS1FYX2VqcHV6fm1dZH6JjpZwW1dZdXh3blBBQ0RFTktCWXRzcW1rZ2RhXFdS",
+   "verdict": "FAIL",
+   "fails": 1,
+   "round": 1,
+   "rows": {
+    "chu-the": [
+     "LỖI",
+     "Đồng hồ độ ẩm thứ hai (đĩa tròn viền navy) nằm ở góc phải dưới, tâm mặt thang nằm dưới mép khung: chỉ còn vài milimét vòng viền và một mảng mặt kem ở sát đáy, không đọc được kim; lực kế thì nhỏ, dồn ở góc trên trái (~14% bề ngang)",
+     "nâng máy lên và lùi ra để đồng hồ độ ẩm vào trong khung cạnh lực kế, mặt thang hướng về máy, hai thiết bị chiếm phần giữa khung"
+    ],
+    "dung-phong-cach": [
+     "ĐẠT",
+     "Toon 3D có bóng đổ thật trên mặt bàn gỗ, viền mực đen quanh vỏ đồng hồ và chân giá, nền navy–tím, kem/vàng nghệ theo bảng màu STYLE.md, vân gỗ trên bàn",
+     ""
+    ],
+    "vat-that": [
+     "ĐẠT",
+     "Lực kế là mặt thang tròn thật (vạch đen, kim đỏ, chữ \"N\"), cây thước gỗ có vạch, chân giá có đế tròn, mẻ giấy khăn có móc nối hồng; không có hộp hay tấm phẳng nào đứng thay vật",
+     ""
+    ],
+    "dep": [
+     "ĐẠT",
+     "Mặt thang lực kế dán thẳng lên mặt thước, không thấy chân đế hay kẹp nào giữ, đọc như một đĩa tròn dán trên ván; nửa dưới khung là bàn gỗ trống với vệt bóng lớn",
+     ""
+    ]
+   }
+  },
+  "t_104.7": {
+   "key": "",
+   "fp": "GRsdJj1GQkJUVFNWVTc1V1xdaneEeTEnJycnJycnJiYmJSUkIyMiISAfHh0dHBsaHiIfIzg6Mzk+QEFCQjU1QkRZfHaNhzQoKCgoKCgnJycnJyYlJSQiIiEgHx4dHBwbHSEfJywhISIjJCUmJjAyKCg7c3CIiTUoKCgoKCgoJycnJyYlJSQjIiIhIB8eHRwbIh4eKywiISIjJCUmJjI1KSgpPExYTy0oKCgoKCgoKCgnJycmJiUkIyMiIR8eHRwcGx0dISIiIiMkJSYmJzI2KSgoKD5bMSkpKSgpKSgoKCgoKCgnJiYlJCMiISAfHh0cGx0dHiEhIyQlJiYnJzI5KSkpKU5zNSkpKSkpKSkpKSgoKCgoJycmJSQjIiEgHx4dICIjIiUlIyQlJicnKDI7KikpKWF4MSkpKSkpKSkpKSkpKCgoJycmJSUjIiEgHx4dJCcpKy0rJCUmJicnKDM+KykpKWSMMikpKSkqKSkpKikpKSkoKCgnJiUkIyIhHx4dIiUpKy4sJSYmJygoKTVBLSkpKlebPyoqKSkqKioqKSkpKSkpKCgnJyYlJCIhIB8dIiQpKy8sJSYnKCgpKTNCLioqKkyiUioqKioqKioqKioqKikpKSgoJyYlJCIhIB8eIiQpKy8uKiorKioqKjBDLyoqKkWhWCorKysrKysqKioqKioqKSkoJyYlJCMiIB8eIiQoKy4uLS4vLzAwMDJENC0sK0CgWCssLCwsLCwsLS0uLS0sKyopKCcmJCMiIR8eJSUoKiwsLS4vMDExMTJFNzAyMkKbXjAwLy8vLzAyMzMzMzMxMC4sKigmJSMiIR8eJicoKissLi8wMCsoJy5EMycuQ01xWEFASldDPDw8PDs7Ojk4NjQyLispJiQiISAeJSYoKSssLi8wKSQkJShCNiZBYV5rcG56q6aKVU5NTExKR0RCPzs4NDEsKSYjIR8eKC47OTQxLi4vJiMkJSZAOipIWVlmamqgoaKXgm9nZ2FXUlNRTklFQTw3Mi0oJCEfN0FGR0lIRUA6NC4rKy1BRD9LYVpaX2Ojk5mIjYmIiYZyWEFLWVZRTEdBPDYxLCglREZISUpMTU5OTUtENzxFS01Uh6FfTE+HgHl+dnV4dnd0clBZXltXU09JRD44MiwoQEJGSUtNT1FSU1FJQVhQTlVaZJKZU01sgnFrZlljYWlkb3F4cmxkXFZPSUI9NzEtMzEyO0ZLTU9TVVVETVxTUFxlYlVlbnd+d2tubGphYl1OXX2Hgn14cmtiWE5FPjkvJCUnKTNITUtOUlNMYWdYUWZtXmtveYeEd4OGY2dtYFBTd5CPjImDfXZvaGBXWnFWJCUmKCkyPklKP0NNZnNeUm5ncYiMl4h6foqEeIaSjIeNk5SSj4yIg394cGhkhpKFLSclJykqLDE6P0lTWllPTU1afpGTpoSAgoJ/hpaUlJOPjouMjYyJhYB5dG+Cp5+RPy4lJygqLDI7Q1BbVU9QUlVXYIGIjIaEhYaDhYmMjYqKh4Z/goN/e3l4dnypsKSXPColJygpLjQ+S15oYWRnbG9sanqAi4OIio2PhoSCg4WEhXuCfn6DfXhybXirsKmfPTAlLjs9REVDS1JMPkJEQ0lacYuXnaa6z9vczrimkImNjIiDf359eXZ0b2d1g4+YPj05P0FFTE5ARFFfX1VSUFt2jpSapLzm7d7QsJ+pup2CiI6LhH56eHJuamZkYF5l",
+   "verdict": "FAIL",
+   "fails": 1,
+   "round": 1,
+   "rows": {
+    "chu-the": [
+     "LỖI",
+     "Vật lớn nhất và sáng nhất là ống tay áo xám–xanh và bàn tay nằm giữa khung; mặt thang lực kế (đĩa kem viền navy) bị ống tay áo che gần hết, chỉ lộ một mảng kem–tím, không đọc được kim; nửa phải khung là nền navy trống",
+     "dời cánh tay ra khỏi đường ngắm của lực kế hoặc xoay máy để mặt thang lực kế lộ ra, đưa bộ đo về giữa khung"
+    ],
+    "dung-phong-cach": [
+     "ĐẠT",
+     "Toon sắc nét, viền mực rõ ở bàn tay và thanh kẹp, vân gỗ, sáng ấm có bóng đổ trên bàn, nền navy viền tím, bảng màu kem/vàng/tím đúng STYLE.md",
+     ""
+    ],
+    "vat-that": [
+     "ĐẠT",
+     "Bàn tay đồ chơi có ngón, cổ tay và cổ tay áo; kẹp có núm cam; dải giấy treo và cây thước kẻ vạch là vật thật, không có vật thay thế",
+     ""
+    ],
+    "dep": [
+     "ĐẠT",
+     "Ống tay áo là một khối trơn một màu không vân ở tiền cảnh, chiếm gần 1/4 khung, và vệt bóng đen của chân giá đổ thành mảng nhòe ở góc trái dưới",
+     ""
+    ]
+   }
+  },
+  "t_108.1": {
+   "key": "",
+   "fp": "GBkaGxwdHh8fICEhIiMjJCQwQkE5J02CKiUlJSUqLEaNrm0xMCsiISAfHh8mMiIaGRobGx0eHx8gISIiIyQkJCQwQ0I7KE2AKiUlJiYrLUiJsW0yMSoiIiEgHyEoLR0bGRobHB0eHyAhIiIjIyQkJSUwREM8KFJ6KCYmJiYrLU2dtWszMikjIiIhICQoJxwbGhscHR4fICEiIiMkJCUlJicxRUQ9KmdmKCkpKSkrLk+ft2o0Mi0oJSMiISUpJBwcHR4fISMkJSYnKSorLC0tLS82RkZAOH5RMDEwMTEuLlGiuWg1Mi0sLCklIiUqIx0cIyIlJykqKywsLi8wMDM8QElJR0ZDWYY5MDEyMTEvLlKjuWY2My4tKysrKSgrIR0dIiQmKCsuMjU8QTQwMDlRU1RSR0dDcHMxLzAxMjExMFOhuWIyMC8uLSspKCksJSEdKi82PkJHSElPTzYwLzRCQUBDR0dIh00wMC8xMTExMlWnuV0vLS4uLS0sKSsrJiYlP0NIS0tLRUtMTjUxLzEyMTE5R0hXhzcwMC4xMTExMVeoulsxMC0tLi0sKiwrJiQjQ0ZJSkxNS1FUUDUxMDAyMjA2R0hseDk1MTAuMTExMFipuVgxMTAuLCwrKi0rKCYkRUZIS0xNTlJVTzMwMTAyMzE3R0l7YDg4PUU5LzAxMVepuVUwLiwqJyYmKi4oJyYlSlFYYWtsUFJUTDIxMjA1PTY3RkmBaltdV1RPNy8wMVSYtk4mIyIhICAhKywfHR4efoaNk5qYZFJUSDEwMTAxO0FBSEp/gmhvellUTDQuL1uqtUUiIiEhICAiLCkdGxoZi42MiH9zXUM6NC0vLy4xTldMSEpsfHBvalRQVUkzL1yss0EiIiEhICAgIiAcGxoZamBYVltoe2ZEOSwvLy0vSVhOSUpLU1NQUlNQUFVHMV6usj4hIiEhICAfHh0cGxoaVGJ0hJGboJplQC4vMC8xQlhPSlZ4RkdMSFRUUFBUQ2CusT0hISEhICAfHh0cGxoZhYySlZmcn6GJRDAwMjAyPFZRSmu7UERRR1FWVExQVGutsEAkIiEgHx8fHh0cGxoZiY2RlJeanaCgXjEwMjAyOFNSTnnDZUdaUE5XVFBPUnSwr0QsKycjIB8fHh0cGxoZiYuQlJaZm5qPaDQwMTAyNE5RTXbMfFBbWlJUVlNRT3OyrUQvLTEvLSonJSMhIB8fhoeHhH94bmJTOTEwMDAyM0pTTHHPj1FZXVJSU1JRTnCxrEQwMTY2NjYzNDQyMC4vY1xVS01OT1BMMzAwMC8xMUVVTGvHo1NWXVFSUFFLPWGorFc7Njg9PT09OTk6OTUyQ0REQklMSz81Ly4vMDEwLz9WTWS9vFhTXVJTSUA7PGyqqmNQQD09Q0NCQTw9Pjw6P0FERUVENSwtLS0uMDEwLzlVTlSMyGBPXFFHPD5JVG2Jm2pfUkZCQUhGRURAQEBAPEJEQTUtKissLC0tLzAvLzVXVUlSp2NUXVlPTVhdXk1okWdhVExJQ0JJSUdFQ0FBPUE7LCYoKSorKywtLz5cWWeEioB2k29sZ25pc25zYkJni1xRUE1OS0RFSUlHRUVCPDEmJCUnKSoqLE9iXoKWlparu6CZvXZLVU9SYVtdXENoglBTUFNOUExFRkZHSEVFLyQjIyQmKCkpN4SUpLC3tqu1xrmaqHhKU09Sa2FeVz9ofExTU1NVTVFLRUdDRkI0",
+   "verdict": "FAIL",
+   "fails": 1,
+   "round": 1,
+   "rows": {
+    "chu-the": [
+     "LỖI",
+     "Dải giấy ướt chỉ là một sợi trắng mảnh đi xuống qua vòng kẹp ở đỉnh khung; mặt thang lực kế bị xoay gần như sát ngang nên chỉ còn một vệt kem mỏng không đọc vạch lẫn kim, lại bị cột giá navy ở giữa che thêm",
+     "hạ và xoay máy để mặt thang lực kế và dải giấy ướt nằm chồng nhau ở giữa khung, đủ thấy vết nhăn và vết rạn"
+    ],
+    "dung-phong-cach": [
+     "ĐẠT",
+     "Toon, viền mực rõ quanh mặt thang và cây thước, vân gỗ, sáng ấm có bóng đổ, nền navy–tím đúng bảng màu",
+     ""
+    ],
+    "vat-that": [
+     "ĐẠT",
+     "Đồng hồ tròn có vạch và kim đỏ, cây thước gỗ kẻ vạch, vòng kẹp kim loại, chân giá có đế tròn; các vật đều dựng đúng hình dạng",
+     ""
+    ],
+    "goc-may": [
+     "ĐẠT",
+     "Góc nhìn sát ngang biến mặt thang lực kế thành một vệt dẹt, không có lý do nào đọc được số trên thang",
+     ""
+    ],
+    "dep": [
+     "ĐẠT",
+     "Quá nửa khung là mặt bàn gỗ trống chỉ có vệt sáng, nhánh sự kiện dồn sát mép phải",
+     ""
+    ]
+   }
+  },
+  "t_111.6": {
+   "key": "",
+   "fp": "GhscHR0eHy4/RUE3OTc1OEBAQkZpV0JDQ0IyMjtCQk96dHN0cnJgPSMfHh4dHBsaGxwcHR4fISYtQUI5Ojk3OUFCQ0dqWERDREIyMz1DQ1V7d3d2dHVcPSMgHx4dHBsbGxwdHh8gICEkOEA6PDo4OkNDREdqWERERUIyNEBFRF99eHh4d3dUPSQgIB8eHRwbHBwdHh8gICAkLDA7PTs5PERFRUhrWkVFRUIyNUFFRWt8enp5eHVMQCkkIR8eHRwcHB0eHyAiIiElJzI8Pjw7PUVFRklrWkZGR0MxOE5XXXt4ent7e3JGRkM+Oi8fHh0cHR0eICAjKCIjJC4+Pz08PUdJTFBtZV1hZFYzO11gZYJ8fX5/f2g6QUJCQjkhHx4dHR4fISEjJiMoKiw+QD48RUlVXlxbV1NOSD0yODo3ToB9fX5+fWEwLSwsLSggHx4dHR4fIiMjKDo/QDM+QT89Ojc3NzUzMTAvLi0yOi4sVX98e4KAf4M8JiUkIyEgHx4dHh4eHyEiJCszLC9AQj8+MysqKioqKSkpKCs0PikpZ398gpuOiJNFJiUkIyIgIB4dHh8gISEjJycrKTFAQkA+MigoKCgoKCgoKC04PygtcXt9gIqxsa1WJiUkIyIhIB8eHh8gISIiLS8lKDZBQ0A/MigoKCgoKCgoKTM7Oyg8gYWJinyFipNKJiUlJCIhIB8eHh8gISMiJCgnJS9BQ0FAMygoKCgoKCgoKjU+OChyqaSlopeho6pUJiYlJCMiIR8eHh8gISMkIiQmJS9BQ0FBMygoKCgoKCgoKzVANShiqKanpqalprJdJyYlJCMiIR8eHh8gIiMkJCMlJCxCREFANCgoKCgoKCgoLDVBMihHoKempaWlpa9mJiYlJCMhIB8eHh8gISIkJSYmJCtCREJBNCgoKCgoKCgoLTVCLykyjKenpqWmpq1rJiYlJCMhIB8eHh8gISYnKCorLDBCRUJCNSkoKCgoKCgoLzZDLSgpaqenpqempq5uJyYlJCMiIB8eHh8gIistLzIyMzZDRUJCNSkoKCgoKCgoMDZDKygoRJ2mp6ampq+BKiYlJCMiIR8eHh8gISUoKi8wMTVCRUNCNSgoKCgoKCgoMTdBKSgpLX2mp6ampK6kQyUkIyIhIB8eHR4fISQoKi8wMTVCRUNDNikoKCgoKCgoMzg9KCkoKE+hp6Wlpq6vdSckIyIhHx4dHB0eHyMnKS4wMDRCRUNDNykoKCgoKCgpNDg0KCgoKDCFpqWlp6+vnTsjIiEgHx4dGxweHyEnKC0vMDRCRUNDNykoKCgoKCgpNTYvKCgoKChWoaOjoquuq2MkIiEgHx4dGxwdHiAmKCwvMDRBRENDNykoKCgoKSgpMjQtKCgoKCgziqOioKSztJYvISAfHh0dGx0fISIlJysuLzNBREJDOi8sKikoKCgoLjQsKCgoKCgoYqGhn6C0ubFMISAfHh0cISMkJiUlJiotLjJEUlBLSD1AQDo5PDM2Pz45ODw3OjU4U5CMm5ypt7NxIiAeHRwbIiIkJSUkJiksLTJIam5iaGBZY1lfZVRYWlleVWBgYmZeaYeIk5mhsrGRKh8eHRwbISIjJCUlJikqLDA/QkJCOTAwMDAwLy8uMDUxLywqKCsnQIOXl5aZrq+hOh4dHBwbISEjJCUmJygpKS4+QUBBOC8vLy8vMDAuMDMuLzAwLywnPHyVlpSUqqymSR0cGxsa",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "chu-the": [
+     "ĐẠT",
+     "Vết rạn hình chữ V ở mép dải giấy (giữa-trái khung phải) đọc rõ, thẻ \"3–10 %\" chĩa đúng vào chỗ rạn, mặt giấy sáng và tách nền navy",
+     ""
+    ],
+    "dung-phong-cach": [
+     "ĐẠT",
+     "Toon, viền mực ở các nếp giấy, vân gỗ cây thước, sáng ấm, tông kem–tím–navy đúng STYLE.md, thẻ chữ kem viền mực chữ đỏ",
+     ""
+    ],
+    "vat-that": [
+     "ĐẠT",
+     "Dải giấy là tờ giấy thật có nếp và mép rạch, thẻ chữ là thẻ kem viền mực chữ đỏ, cây thước gỗ kẻ vạch",
+     ""
+    ],
+    "goc-may": [
+     "ĐẠT",
+     "Cận đúng vết rạn là hợp lý, nhưng 1/3 trái khung là cây xanh, chậu đỏ và bệ cửa sổ không liên quan câu chuyện",
+     ""
+    ],
+    "dep": [
+     "ĐẠT",
+     "Mặt giấy chiếm gần nửa khung dưới dạng một mảng kem lớn gần như không có nét",
+     ""
+    ]
+   }
+  },
+  "t_115.1": {
+   "key": "",
+   "fp": "GhscHR0eHyAkLjo7MTRyla65fignJycnJycnJycnJyYmJiUkJCMiISEfHh0dHBsaGxwcHR4fICIsPUZLTVBdeae8hionKCgoKCgoKCcnJycmJiYlJCQiIiEgHx4dHBwbGxwdHh4gITFIUUlBPkdOT2WhjiwoKCgoKCgoKCgoJycnJyYlJSQjIiIhIB8eHRwbHBwdHh8lSn2jsqCCZEY+R0xhcS4oKCgoKCgoKCgoKCcnJycmJiUkIyMiIR8eHRwcHB0eHyRYoszY29bEtIlTQkpSWTgoKCgoKCgoKCgoKCgoKCgnJiYlJCMiISAfHh0cHR4fIEynz9DEzMjY39uYU0hPWVQwKCgpKSkpKSkpKSgoKCgoJyYmJSQjIiEgHx4dHR4fMIS6v72rw7DIy+fXi0tLUltKKygpKCgoKCgoKCgoKCgoJycmJSQjIiEgHx4dHR4gWYV8przF2MbUsdXnw3RFTlVaOygoKCgoKCgoKCgoKCgnJycmJSUkIiEgHx4dHR4piqVwotHd2+Ti0tPL1qZWSFBaTywoKCgoKCgoKCgoKCgoJycnJiUkIyIgHx4dHh87rsN/iNjUx9nq68rA4c+KSE1WWDgoKCgoKCgoKCgoKCgoKCcnJiUkIyIhIB8eHh9TwM+gc7zIw8rl7OPp7Oy9VEpSWEYpKCgoKCgoKCgoKCgoKCcnJiUlJCIhIB8eHiBqxtDBeo+/w8Xe7OXk5u3acUZPVlEuKCgoKCgoKCgoKCgoKCcnJiYlJCMhIB8eHiJ2ytLTl3Sz1cvW5cPEvObojkdNVVU0KCgoKCgoKCgoKCgoKCcnJyYlJCMhIB8eHiN9zNHVtXCPw8nQ46u4vOnuqUtMU1U6KCgoKCgoKCgoKCgoKCgnJiYlJCMhIB8eISR9zNDKq1NESoXIw8vq7u7uv09JUlM+KCgoKCgoKCgoKCgoKCgnJyYlJCMhIB8fJSh3ysa6kzs4NVa/yNPn7u7uylVFUFI+KCgoKCgoKCgoKCgoKCcnJiYlJCMiISAfJSZqwba2nEE0MGDCyMjR5u/uzldBTlI+KSgoKCgoKCgoKCgoKCcnJiUlJCMjIiEgJCZVrrC0s4ZziK/Ex8jI0Ojuz1hATlE9KikoKCgoKCgoKCgoJycnJyYlJSUkIyMiIyI6mq+zt7u+u8HExsfIyNbryVZBTlE8MTEwLy4tKyopKSgoKCcnKCcnJiYmJSUkGxokfq6ztrm8nK/ExsfIyMrgu05BTk43MDAvMDExMTIyMTAuLSwrKiopKCgnJycmGBkcWqixtLi7t7vCxMXHyMjPn0dCT0o1MjIyMTIyMzMzNDU2Njc2NTQyLy0sKikoFxgaNJOvsra6vb7Aw8TGxsjAez9DTkQ0NDY4OTo7PD09Pj49PT08Ozs6OTg3NTIwFhcYHmWosLO3uby/wMPGx8asWDxESD44Oz0/QUNCQEBDSEhISEdFRENBPz07Ojg2FhcXGTOKrbCvo6GmrbK4tqmEUUZLUU5LTU5OT0ZAQUBEVlhXVVNSTElIR0ZDQT48GRkZGh1Nmq+sk5OWlpiWmIZlaWNpbm1kbm9iYFpwZ2Npa29uc3FsUk5NS0hGRUNBISEgICIqXJuusLKyt7q6qGwzNj5BTVJUVEs4MTE5SlhYWFdUVFJOS0lISElJSEZEIyEjIyImMFyUr7K1uLmodD4wPD5QU1NUSjUwMDZPW1tbW1paWFhWVFBMR0RCQUFB",
+   "verdict": "FAIL",
+   "fails": 1,
+   "round": 1,
+   "rows": {
+    "chu-the": [
+     "ĐẠT",
+     "Mặt thang tròn chiếm 2/3 bề ngang bên trái, mặt kem sáng tách nền navy, kim đỏ nằm rõ, thẻ \"15 %\" neo ngay trên mặt thang",
+     ""
+    ],
+    "dung-phong-cach": [
+     "ĐẠT",
+     "Toon, viền mực quanh vỏ đồng hồ, sáng ấm một nguồn, nền navy–tím, bảng màu đúng STYLE.md",
+     ""
+    ],
+    "vat-that": [
+     "LỖI",
+     "Kim đỏ nằm bên trái vạch đầu tiên, ngoài vùng có vạch trên mặt thang, không chỉ vào vạch nào; dải vạch chỉ kéo dài từ giữa sang phải",
+     "vẽ đủ dải vạch bao quanh vị trí kim và đặt kim đúng vào một vạch (vạch không/đầu thang)"
+    ],
+    "dep": [
+     "ĐẠT",
+     "Một vệt bóng nâu mờ kiểu bóng lá cây đè ngang mặt thang làm mặt đồng hồ bị bẩn, lạc giữa phong cách giấy in sạch",
+     ""
+    ]
+   }
+  },
+  "t_118.4": {
+   "key": "",
+   "fp": "Y2tucXN2dXR7goeIh4mHhYiRkIaNk5yhpKOhlpach2FCMCwsKysqKSgnJSQkIyIgaW1tcXR3fH18e3uBnrm5tcHQvYB+hYySmqGkpZ6Wmp6SeVY1LCooKCgoJyYkIyIhb21ub3J1d32AgoOAnNHZ2tzZzauLe3uCipGYn6Skm6CdlYZZRj43MSwpJyYkJCMfcnNzcXN2eHd7foKDhJK42NrXyru+q454en+HjpSbl4yFfndoYVxXU01FQjIlIyEdcXN1dnRzdXl7fH1/goSOr8HV0MjHxL1zZ252fYWLg3x4dXF7dW9pZWBaSi4qJyUibnFzdXd4dXV4en+AgIOHipOyxLOlnI9jX2p7dXZ7d3Fucn+PioJ8dnBhPzQwLSooYWpvcXR2eHl4en6Ah4yQlZyrzcnJv7V3b4ORi393eIeao6SfmJOMhHdPPjs3NDEuWl1kbHF0d3p+f4CGjZmot87r9enm4taZeYOOk5Slub66tK6oo52WiWFKRkI+OTYzZGFeYGt0eX2AhIiOmbPa8fn7/Pnz8eikeoOIkY+PprS6urWwqqSYa1FNSUdEQT04ZmlqZ2Jpd3+EiI2UpeD6+vr7+fby8OmneoKHjYdzbW98ipabmY1tWFRRTkpGQ0E/ZmlscHFsanWAiY2UpNDx9/v59fPx7+qrfISGh3psbm1qZGNlZV1UU1dVUU9MSERAXWdtcXV5dXJ3foeSnaq8ydzt7/Dw7umufoeHhW5nZ2ZnaWhjW1NXT09QUVFOS0hFU1tnbnZ7fn55fYSHjpiho6asr6+32NCbgIqHgl9dZWVkYWBjYl1eWlROSkhISUhGWFdebHB1fYKEgX6HioiKkZOTkYyHjo6DgY6JgFlPUlxkY2FcYWBeW1lWUk1IREFBXF1bY3N2d32EiIaAgIeJhYKEh4eLk5yXf5GLgFVLSUlPW19fXFtcXFpXU1FOSkZCX2FiYGt3e3p8goeIgX2ChYWBfHqSo6Obe4WOgVVLSEVCQU1bX1xYV1ZWVlRQS0lGX2NmZmxud319e36EhoB8f35+gH19jZyaf3GDhFZKSEVBPTtAT1lYVFFQUE9PTktHXmJla3FvbXZ9f316foJ9eHx8eXd5eYSSfntrg2FOR0VDPzs4NjtLVFFMSkhISEdGWWBobXBzcW53fn99enl7enR2enl1cnF4h5B7aWJJSERCPz06NS82SVRPTUhDQEBBXV5jaW5xc3Bud3t8fXp2dnd0cHR3dnJtcYOKZlhEQktHPjw6OkRMTVBLTkpJRD87XmBgYmlucXNubXV5enp6dXF1dG9tcXNzcG97fFRNXGBJPjxEVV9aU01KSUZHQ0NAXF9iY2JnbXBybGxzeHd4d3RvcXNvamtvb2tlcXJfU09aVldfYV9dWFFLRkVEQT8/WVxfYmRjZGtvb2lqcHV2dnVybW1yb2ppbm5rYmBNTlpgYmFhYF5cWVdQSkVAPz48UllcYGJkZGJocG5oZ21wc3Nyb2xqbWxrbmtsZ2JbXFlZX2FiY2NfWFZUUUpEPzw7T1BXXF5gZGVkd4F4cXRyeXF2dXpyfHtwdXNxeHRteHVsam1obnVsV1RTUU5KRT87UVFQVVpeYWNkZGNiZ2plYWRpa2hhYWVpaWZnZmVhX11XUE5OUFNVVVNRTkxKSUVAT1FSUFJaXV9hY2RjYWNnZmFgZ2RgYV9gZWdmZWVjYF5cV09LSk1PUlFPTUpJR0VD",
+   "verdict": "FAIL",
+   "fails": 1,
+   "round": 1,
+   "rows": {
+    "chu-the": [
+     "LỖI",
+     "Mẻ giấy khăn và dải móc nối hồng nằm ở góc trên trái, nhỏ, một phần bị cột kẹp ở giữa che; giữa khung là một khối kẹp gỗ lớn không liên quan câu chuyện, 40% khung dưới là bàn trống",
+     "đưa camera áp vào góc giấy bị cắt để móc hồng chiếm chính khung, đẩy kẹp gỗ ra rìa khung"
+    ],
+    "dung-phong-cach": [
+     "ĐẠT",
+     "Toon, viền mực rõ trên giấy khăn và gỗ, vân gỗ, sáng ấm có bóng đổ, tông kem–tím–navy đúng STYLE.md",
+     ""
+    ],
+    "vat-that": [
+     "ĐẠT",
+     "Kẹp gỗ có bàn đế, cột và thanh trên; giấy khăn có mép cắt rách, các móc hồng là hạt/móc thật nối trên sợi",
+     ""
+    ],
+    "dep": [
+     "ĐẠT",
+     "Mảng tím lớn ở góc phải là một tấm phẳng không độ dày, không mép gấp, đọc không ra là vật gì, lạc giữa cảnh",
+     ""
+    ]
+   }
+  },
+  "t_12.2": {
+   "key": "",
+   "fp": "NDg9QEJERkpOUVNTTEA1OERQW2JlZ2lqa2trbGtmVD80MzMzMzIxMTAuLi0sLCspNDY4PEFER0hLTlJVVldUUlNWW2JmZ2dlZGBZTEM/ODY2Nzc2NTQzMzIxMC8uLSsqMDU4OjxARklLTU9RVFhZW1tebHBkVVxVQzs2NTU1NTY3Nzc3Nzc2NTU0PEU+NjEuJywzOT0+QURJTVBRU1RWW3Wvw72xkIR8b2JURTs3Nzc2NjY3Nzc3OEZRXF9bV1JLOSsuNjg+QEJER01RVFVWbbC9mHZ+pKmpqammn45xUDs4OTk4NzY9TmBjYV9dW1hWVldcal0/QERERkhLT1RdobuLdoN8jZyYnaKnqaqspYhUOzo5OTpVZmJYXmBgXltZbIF9aWRgc1w+RUhJSkxxsphxjJWdop2NgHd9ipumqqumaTs5OTxMVl5dXFlXVlZXgIGFhXddU2M3O0NISk2IpXmGlZeZnqKgjH1ybG98laarsFU5OTc4Oj5DSlJWV1VRUFNebZeTRlNcQzo/RlOYn2qCiZGWmJeIgYJ8bW1ucoanvGw6OTk5ODc3Njc4PEJHSVlUUpSuYVVkYlJRTU+WklR4goSIj4mAg4uSkpOSjIWjumpHQDs6OTg3NTQzMjIxMUlMTHCpdWJpZ2VnXlKBiEtecH2Cg3+GnKWmpqenp6y0qI15aV1NQzs4NzY0MjEvJzE2OEh3iXlramxtbm1wc2hoaWpzfH+Qoaanp6mvtrGpp6eginVwamBSRTw1MDAvKDRBPDpIaISOhX11cG5xdW1tbm5xbnyUm6ewtbWuqKenp6enpJKKeHBtaF9RQTczNDFBR0hFTVxrfImSlpOQjoiHiYqTlqiurKmhmaOnqKinp6anpqKYjnNvbGpnYlhNUkY7OUFDR0tXYGVrb3R6gISGh4eGh4eBe3Z6kKKlp6iop6enpqKWk4ZvbGpnZWJfOjAuLS8xNUZUVFlhZ21vcHFxcnN1d3iAjYeRmZqbn6SnpqemppuYkJJ9bGpnZGJfKiorLC4wNUBET1NTVlpdYmdpbnFzdWuIl5WCi5KXmZqgn52coI6OloyKbWlnZWFfSkUyLS4uMDM2PEdVT01SVVdYWFlaWVSBmaFyZ3qFjIuVnpONl5KCj5KAZF9hYWFeWlAxLi8wMTE3VVBHREZEQkRGR0hKS0NylaB5OUZXYmeBl5F3ipeKgY6HZFlXVlhZWUwuLS8wMjMzPVtjZmxmWU9DNzQ9QDRajpqIOTEyNDdYhZd/coqUfH5/aWNbVVFQWE4xLS4wMjM1NjlKX2tuampqXk9ROjREgJyaQzIyNTo6X4aGT3SHd3R6aWZjX1pUWFY9Li4wMTM1NjY3OkROWFxcYGBPOzk7cqSpUjY0NTUyQXR/Q2B+cnB4aGVjYF5cVlhSOy8vMTI0NTY3ODo7Ozw9PTs7PT06WoeQVD48Ozk0PG59QVh6cmluZWRhX11bVVhaV0MzMDE3R0JBQkRKSEVES0pIR0VKSGBdSktGS0xHTmtuTV51ZF5gXV1eXVtZVFZZW1pQQjg9ZGdaaFxoaGxoaWZhZ2Vpa1tUaGVXaWFjYGtpb3JwXV9iX1pWVldXUFRXWlteX1pSSkU/Pz49PkJERkxTXlxJQkdLS0dBPT09PUtaVlljZWBcWlpZVlFPSVBWVlRYX2FjZGRiYWBgYWRna25wcnJsZ2ppaWxmXFJLS1tramloZmRgW1dUVFNR",
+   "verdict": "FAIL",
+   "fails": 1,
+   "round": 1,
+   "rows": {
+    "chu-the": [
+     "ĐẠT",
+     "Bát nước chiếm giữa khung, mặt nước xanh có gợn sóng đồng tâm, bàn tay ướt ở mép bát, cả khung nằm trong vệt sáng ấm",
+     ""
+    ],
+    "dung-phong-cach": [
+     "ĐẠT",
+     "Toon với viền mực, vân gỗ bàn, khăn sọc đỏ–trắng có texture, sáng ấm một nguồn và bóng đổ dài, màu kem/vàng/đỏ theo STYLE.md",
+     ""
+    ],
+    "vat-that": [
+     "LỖI",
+     "Ở mép bát có một vòng tròn trắng đứng một mình, một đầu cắt phẳng cắm xuống mặt nước, không gắn vào bát và không đọc ra là vật gì",
+     "bỏ vòng trắng hoặc thay bằng vật có nghĩa và gắn vào bát (khăn cuộn, quai bát, vòi nước)"
+    ],
+    "dep": [
+     "ĐẠT",
+     "Các ngón tay vẽ đè lên thành bát ở phía trước nên tay không có cảm giác chạm mặt nước; bàn tay là một khối tan không vân ở tiền cảnh",
+     ""
+    ]
+   }
+  },
+  "t_122.1": {
+   "key": "",
+   "fp": "lpqbnZ2dnJubm5uampuamY+JkpOTkI6Oi4aAf3+FiYSAfHdzb2toZWJeW1lWVFNQm56enp6cnZ2enp6enZ6dloSOnJ2dnJ2Yko2NjoyBlpOOioaBfXl1cm9rZ2ViXlxZnZ6enp6foKChoaGhoKGfn6GjpKSlpKWhnp6dn4ZlnKGdmJSPjImEgH15dnJuamZknp6foKGhoqKin5aXoJuYpaqrrKqqqaaoqaiommxknq2ppqKempaRjouHg356dXJuoKCho6SlpaWlkoeGiYmasLK0s7OwrbGxr6qQcWVmmLe0sa+rpqKdmZaSjYmEgHx4oqOlp6epqaqsrbCwr7O5u7u9vr26ubq5tZFua2pqjL++u7i1sa2opKCbl5OPioWBp6mqqqyurrC1t7q7vb/BwsPDwsDAw8PDr3dvbm5tgcPGwsG9urezrqqloZyXko2Jqq6vsbOqlqG/wMLDxcjKysC+xcfIycjFk3l4d3d2fb7NysfEwr65tLOuqaSemZSQpqqusY1paZ/BxcnMzM7Ny8vNzs3MzcyocnBwcXFyc6rU0c/MyMXCvLi0sKqkn5qWqq2wsZqYrcLGytDQ0M3O0NHS0cq2raGEfHt7eXh3dJLV1tXTz8zKxMC6trGrpqCdrbC0uLvCxsnN0NLT1NXW1dXSxZR2dXV2eXyEkqeVeX6609nY1NLOycXBvLexrKahrrGxpKS+x8zO0dTX2Nja2dfPqZWXmJmZsLW/yMjMmXyAjqG1w8rNzMrGwLy2sauliIh8bW6HrcLL0tfZ2tvd2tLJxcbAyMvHxczCwcjZ0Jl9eXd2eH6HjpeeoaOiop+caWtucXR4foiRn7DE09rZ0cayxM26ycy+v9DNzsPU3c2ch4SDgX16dnFsaGRgXVtZZ2tvcnV5fYCEh4mPqNjc2tje27vG4eDY2eLi4+He38qllIyLiYeEgX15dnFsZ2JeXWFlaW5zeHyBhYmNls3k4sfVta7c5+jo6Ojn5ubj49uwn5SNjImHhYB6d3NvamdjZWdqbG9xc3Z4e3+EiKPf6OC4sNns7Ozt7ezr6ufl5OPh4NzS0s/Nyb6vn5GEd2xlZWhscHN3en2Ag4eJjZPF6ejW4fDy3unw7+3s6+3x8PHz9PPy7+3p5eLc19HIvbGjWVtgZGhscHV5foKHjZOm4e/x9vf37/D19/f3+Pn49fb29vPz7+zp5eHb19LMx8K9XmFlaGxwdHh8gISKkJWdyvL5/P38+/v7/Pv6+fj39/f39vTy7+vo5OHb1tHLxsG8ZGdrb3J3en+DiIyRl52luev6/Pz8/Pz8/Pz7+fr6+ff39vLx7uzn5N/a1M/KxcC8ZGdscHR4fICGi4+UnKOsud75/Pv7/Pv7+/z7+/z7+fj29vPw7erm4d7Y087Jw766XWBjaG1xdXl+gomQlp+puM/1/Pv8+/v7/Pz7/Pv5+vn39vPw7enj3tvU0cvHwry4YWVobHB0eHyCgoSJj5ijrsDSx9rG4tDd2uLd09zS1OHi1dDPzdHd3dfT0MvFwLm2YmdscHN3fIGGg4SGiouUmKKoqaypr6uvrbCrrLGmqaeqqKyrn6DF2dTSzMbCvrm0W15jaG1zeX6DiI2SnaKuvNPs8fPz8vT09fPz9PTx8Orn6unk3Nna19LNx8K+vLayXmBiZGdrcHV7goqSm6Svvtfw9PT09vb29/f39fb08/Hv7evn4d7Z1c/Lxb+8t7Ov",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "chu-the": [
+     "ĐẠT",
+     "Dải móc nối hồng nằm ngang giữa khung, to, sáng, tách rõ nền kem giấy và nền gỗ vàng",
+     ""
+    ],
+    "dung-phong-cach": [
+     "ĐẠT",
+     "Toon, viền mực rõ quanh mép giấy rách, giấy có texture, sáng ấm và bóng đổ mềm, bảng màu đúng",
+     ""
+    ],
+    "vat-that": [
+     "ĐẠT",
+     "Mép giấy khăn rách có đầu sợi là các nêm nhỏ, móc nối hồng là các hạt thật xâu trên một sợi",
+     ""
+    ],
+    "dep": [
+     "ĐẠT",
+     "Móc hồng nằm trên que ngang trông như hạt xâu kẹp; dưới tờ giấy có hai vệt bóng tím mờ như vết bẩn",
+     ""
+    ]
+   }
+  },
+  "t_125.5": {
+   "key": "",
+   "fp": "HR4eHyAgISEiJCUmJycoKCkpKSoqKioqKiooJiYmKSooJyYmJB8fIiQmKCgoJy4vICEiIiIjIyMkJSYnJygpKSkqKiorKysrKyspJycnKispKCcmJSEfHx8hIiMlJisqJSUmJicnJycnKCgoKCkpKisrKyssLCwtLS0rKCgpKy0tLSwsKyUhHx4dHR0bGxoaKSorLC0tLi4uLi8uLy8wMTIzMzMzMzMzMzMvKSkqLTAyMjIxLiclIyAeHRsaGRgXNDU2Nzg5OTk5ODc2NTQzMzMzNDQ0NDQ0NDQwKikqSHd0cW9vbWpnZWE/IB0cGxoZPj9BQUJCQkJBQD89Ojk3NTU1NjY2NjU1NTY0KyorUZmem5mYlpOPjIl/PSYmJSMiRUZHSEhJSEdHRkdBPjw5NzY3PDs7PUBESU9TPjU1TH5/fHx6eHh2dHJsOCYmJCIhS01OUFJUVFRUXoZ0c3FhXWRhamlnZ2lsb3J1blNFSFhTT09UZ3Z2dXJMLSooJCMiXmBjZWdpaWlwmLGspqCWlJGMjJCPjY2NjY6QkYttUkxDPVVodouNjIRELy0oJSIhaGttb3BxcnWgxsO5sKigpqmmnYyvsK2sq6qqqaejf1hne4N5d4SGh4FKOjUwKyclcXN1d3l7faHO0crAtaasub29n3ioyMjGxMG+uLCkioKQj4p3eoOBfndQRkE8NzItdHZ5enyFq8vV1dPPurjJzMnJmpCXqrWzq56RhHhueJaUkY54foOCf3ZSS0dCPjk0dXd3eHiEtcrGwsrRw7rCytPGucnVtK62trWTc25rgJqXk495hIaEgXNOSUZEQj47bW5xdHZ2eYaBgIeTkoiFjKbE3/H19Pb08u7bpGxghZ2ZlY97iomGgmxOS0hGQ0FAc3R3eHl5enp7e3p7ent9gIae1/f7+/v39PDu6Jtdi52bmI99i4mFf2ZXVFJPTUtIbW9xcnR2eHl6eXp7fH+ChouUqdf6+/v59uvUxZZrjJuUjIB1f3tzbWBcWVZTT0xIbW9yc3V2dnd3eHl8fYCEh4uSnrbp8ubcyqqQh4J9hpiVk4h+gHhuYlZTUU5LSEVCbW9ydHV3eHp7fH1/g4WIi46SmqS4u7GnnJGIgn17eHl4dXFvbmplX1hWVVNRT01KcnN1d3h5enx9fn+Ag4aIio2OkZWXl5aQjYmEgoB9eXh3dXJwbGlnZmNfXFhUUE1Jb3Byc3V2dnd4eXl6e3x9fn6AgoWHiIiHh4WCgX99e3h2dHFwbWpnZWJcWFNPTElFZ2doZ2doaWprbG5wdXh9gYSHiYqMjIyMi4mGgoB+fHl4d3RycG5qZ15aV1RRT0xJXV5iZGZqbXF1eHp7f4CDhYeHh4aGhoWGhYaFg4OBfn17eXZzb2tmYl5eW1hUUExJZWdpa21vcXN1d3h6ent7enl5e3x+fn+AgIB+fXx5eHZ0c3Bua2llYV5bWFRQTUlGY2RlZ2doaWpra3Jvamhna2psbXFxbnFzdnh8eXd7e3p3d3Jxa2dlYl9dWlNPS0dEWltdXmBiZmlsbHh6cHZyeXV2fXl/fnp5eXp9f3t3eX55f4B5cHRlYV5aVlBPTEhFWVtfYmVobG1qampqbGxtam5vbnNycXNwcm50dHR0dHNyb21pZmJfW1dVUU5NSkZDXV5hYmVnaWhmaWtpbmpsamloaWloaGprbXV3dnZ1c3FvamZjYF9dW1hVUU1KR0NA",
+   "verdict": "FAIL",
+   "fails": 1,
+   "round": 1,
+   "rows": {
+    "chu-the": [
+     "LỖI",
+     "Vật được gọi tên chỉ là một dải giấy nhỏ ở giữa-trái với móc hồng cỡ 120×50 px; nửa phải khung bị một chiếc kẹp gỗ lớn chiếm mất, góc trên phải là một khối xanh đen tối bị cắt, 40% khung dưới là bàn trống",
+     "đưa mẻ giấy khăn và túi bao bì dạng phẳng vào giữa khung ở quy mô đọc được, đẩy kẹp gỗ và khối tối ra khỏi khung"
+    ],
+    "dung-phong-cach": [
+     "ĐẠT",
+     "Toon, viền mực rõ ở các tờ giấy và gỗ, vân gỗ trên bàn, sáng ấm có bóng, tông kem–tim–navy đúng STYLE.md",
+     ""
+    ],
+    "vat-that": [
+     "ĐẠT",
+     "Kẹp gỗ có bàn đế, thân, thanh trên và khe kẹp; các tờ giấy có mép rách, nếp và vệt, móc nối hồng là hạt thật",
+     ""
+    ],
+    "dep": [
+     "ĐẠT",
+     "Thân kẹp là một mảng carton tan không vân gỗ, lệch với chất liệu của cảnh; góc trên phải là khối tối không đọc ra hình dạng",
+     ""
+    ]
+   }
+  },
+  "t_128.4": {
+   "key": "",
+   "fp": "GhscHR0eHyAhIiMkJSYmJycoKCkpKSkpKiopKSkpKS0pKS0nJiUkIyIhKCsqKCYlGxscHR4fICEiIyQlJicnKCgpKSoqKisqKysrKyopKCgnJykpKCYlJCMiKSsqKCcmGxwdHR4gISIjJCUmJicoKSkqKisrKywsLCwsLCwqKSkoKCorKignJiUkJycmJCMiGxwdHh8gISIkJSUmJygpKisrKywsLC0tLS0tLi4sKyoqKiwtLCopKCcjISAeHRwbHB0eHyAhIiMlJicoKCkqKyssLC0tLS4uLi8vLy8tLCwsLC4vLiwqKSgjISAfHRwbHR4fICAiIiQlJicoKSorKywtLS4uLy8vLzAwMDAvLS0tLS8wLy0sKyomJCIhHx0cHx8gICEiIyQmJigoKSsrLCwtLi4vLzAwMDExMTEvLy8vLjEyMC8uLSwrKigmJCEfISIiIiMjJCUmJygpKissLS4uLy8wMTEyMjIyMjIxMDAwMDIzMzExMC8sKigmJSMiJCQlJSUmJycoKCorLC0uMDAxMjM0NTY2Nzc3ODgzMTExMTQ1ODc3NjQuKyknJSMiKywtLS4vLzAwMDEyMjM0NDU2Nzg4OTk5OTo6Ozo1MzIyMzU3Ojk5NzYxLispJyQjNjY3Nzg4ODc3NzY1NTU1NTc3ODk5Ojo7PD0+QUVLTkE4Nzk6Ozo5ODc1NDEvKyglPT4/Pj8/SVRAPj9BQDg3OD9DQVFVVFBSVVleY2drb3BpXVJKRkRDQUA+Ozk2NDEtREVGR0hKdpiEf4aJhW9tbnl9eHd8f3x7ent9f4KFiIuOj46GeGhcVVBNSkdEQT47VldZW2GKpKurqailoZmSlpaYlpGUmoeZoJ+foaOkpaanp6eoqKWek4V4Y1JPTElGX2FjZ4u1uL26trOvqaGcpKmrraynsIJ5mLK8v8C/v8DAvr28u7ewpJF3X1RPTElHZ2lvmLe9xcXCvr23op+gsri6vr63w551eYSYrLzFycvJwrquno+BdGpiV1hWU1BNcoGauMLJycXCxsfFt7bAwcDExcPHz8SMkJSMiIyTmJqamJKNin95dW9qZV9aVFNPpLe+wsG/wsTJysnGop/FysTMzc/V1MCwuMjRwKuuwdfi5OHf2bOMe3JpZF9bVlJOfZS3vrWyrqehtszJwb+1loaSm7S2xLu82eXq6+vw9vn6+fb18evdzL6ph2FQSkVEXFZ1enJxcXFyd4aFhYSAf3+AgYmYrbnG5u/2+fr6+vv7+/n48+/q5eHa0bVwSUVOXGRrbG5wc3V2eHl5enp7fHx8fHx+gYqgw+Lu9/r7+/r6+vj38/Hq5eDa08mBTkpbZmhqbG1vcHFzdHR1dnZ3eHp8gIKFiIqPmKq81O37+vn5+ff18/Dq49zCqJtxXlpbYmNlZmhpamxucXR3eXt9fn5/goOHiYyRlp2kscrm9vr4+fb18e3jzaaDdnFtaWViX2FkaGptb3BycnRycnJ1c3V6fH6DgoCGipCWlqapuc7P0szUxrawmod/enRvamViYGJkZWZmaGlsb3Z5c3l/fn17gIKDg4WGiYaIjImMj5adnZKWj4iWjYR+eHNuaGFaXl5gYmRmaWprbW5vcnV3eHx+gYSFiIuOkZOWmZ2hpamrrKagmZOOiIF6cmpjXlxcWFpdX2FkZ2psb3J1eHp8foGChIaHioyOkZOWl5qcn6Cgn5yXkY2GfnRtZ2VlZWRi",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "chu-the": [
+     "ĐẠT",
+     "Tờ đã sấy bên trái có nếp nhăn và vệt hằn rõ, tờ tươi bên phải phẳng và căng, cả hai đều nằm trong vệt sáng ấm",
+     ""
+    ],
+    "dung-phong-cach": [
+     "ĐẠT",
+     "Toon, viền mực ở mép giấy, giấy có texture, vân gỗ bàn, sáng ấm có bóng, nền navy–tím, bảng màu đúng",
+     ""
+    ],
+    "vat-that": [
+     "ĐẠT",
+     "Các tờ giấy có mép rách và nếp thật, bình chứa đựng đồ viết ở góc phải có bút chì thật, không có vật thay thế",
+     ""
+    ],
+    "goc-may": [
+     "ĐẠT",
+     "Máy hạ thấp quá nên ba tờ giấy chồng lên nhau, khó biết tờ nào là tờ đã sấy và tờ nào là tờ tươi; dải móc nối hồng của nhát trước vẫn nằm giữa khung và cạnh tranh chỗ chú ý",
+     ""
+    ],
+    "dep": [
+     "ĐẠT",
+     "Một phần ba dưới là mặt bàn trống, góc trên trái là mảng tường navy rỗng, bố cục lỏng",
+     ""
+    ]
+   }
+  },
+  "t_131.2": {
+   "key": "",
+   "fp": "HyIjJicpKywtLi8vLzAvLy8tLSwsKikoKCcnJycnJiYmJSUkIyIiISAfHh0cHBsaJCYnKSstLjAxMjMzMzQzMzIyMTAuLSwqKSgoKCcnJycmJiYlJCQiIiEgHx4dHBwbMDIzNTY3OTk6Ojo6OTo5ODg3NjQyMS8uLCsqKSgoKCgnJyYmJSUkIyIhIB8eHRwbOjs9PkBCQ0RFRkZGRkZFRURDQT89Ozk3NDIwLy0sKyoqKSgnJiYlJCMiISAeHR0cQT9BREVESUxOT1BPT05NTEpIRkRCQD89Ozk3NTQzMzIyMjEwLy4sKiknJSMhIB4dLCgpKywsMTU/T1ZWVlVVU1FQTktJRkNBPjs5NzUzMjExMTExMDAvLi0sKyopJyYlJSYnKCovNkZUWVpaWVlXVlRTUU5MSUdFQj89Ojg2NTQzMjIyMTAvLiwrKiknJSQjNjg6QU1aX2BhX15cW1taWVdUUk9NS0hGQ0E+PDo4NzY1NDQzMzIxMC8uLSsqKCYlWFleZmxucHFycXFxbmxqZmJdWlZVYVBIREE+Ozk3NTU1NTU1NDMzMjAvLiwqKCclam1wcnR2eHl6e318enl2c3BtaWeCoINpYFZJQT06NzU2NTQ0MzIyMTAvLi0rKignc3Z4e32AgYKCgX9+fXx7eXh3hJaysKigmZF7ZVlWUkRRVEdBPDo3NTMxLy0rKioodXh7fYCChIeHiIeHhYKAe32jwcK+uLKnoZqTjoaCf3JzcGplXllVUlBOS0lFQ0M+eHp9f4OFhoaHiIqKiYmLmLbP0MrBurSnr6GOmZOQioOGgX13cm1qZmNgXVtZVFFUenx+gIKFh4mKi4mJh4y12NnV0cnAubKWj5yhpKOelpKTlZCLhoF9eHNva2hlYV1rdHl/goWIiouMjJKptsrf4N3Y0MjAuKCOm6utrqyopoqTqKKemZSPioV/e3Zxbmlxbm5ub3J2e3+Cjcfg4uHj4t7Z0srEvbi0tru6uLSxknCetrKuqqSfmpWOiYR+eXFrdHd6fHx8enl6fqXb4uLh4NzZ1s+ttcfHx8fFxcKidnOnw7+7t7Gsp6GblY+KhHNhdnd4ent+gIKCgXmWoK+80dvZ2M+rwtLRz8jLzL2EdniyzsrGwLy2sayln5qTjXtja25zeHp7fYCCg4ODgoKBk77N1NLQ2NjW1tXMq5CEjIi41tLPycO+ubOsp6Cak42EbW1tb3J2eHt9fn+AgoKDhIeQmpmZus3Z3dK/trKyvryrx9HT0MrFv7qzraafmZOKamxvcXJ0dHZ3eXl7fX+AgYCAgYSHjJav2dDEysfO0dWmjZSfqbGysrGvq6ahnJd/Z2pucHF0dXd6fH18fHp6en1/goOGiYuTy9XL5ero5N64mIuGgX56dnJvbW1ubm1ZZmVmaGtucXN1dXZ6fYCCg4GBg4SHio2Vtuzz7/Pw7urm2su9qZWGfHNrZ2BaVE5Gamxtbm1sbW5ydHZ1cnJ4e317gYOHhY+Xo8/J5NrH1Mvby9LCz9nOw5JlY2BdWlZhZ2lsbW9wcnJycnOAd3l+gICCfoGHioKNl6WssayqrKiqnqagp8/X0axjW1hWU1ZvZGVoamtucHJ0dnd3eHl4e3+BhYaMkpuqv+Tz8/Ly8e7p4ePd2djU0MF7YVlUUl1xYmNmZ2lrbW9xc3Z4e35/gIGCh42Rlpyov+r39fb08/Dt6eTg2tfSzseYYlFISWNx",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "chu-the": [
+     "ĐẠT",
+     "Tờ giấy đã sấy nằm giữa khung, nếp nhăn và các vệt hằn rõ, thẻ \"1/2\" chĩa vào đúng vệt, tờ tươi phẳng ở bên phải",
+     ""
+    ],
+    "dung-phong-cach": [
+     "ĐẠT",
+     "Toon, viền mực quanh mép tờ, giấy có texture, vân gỗ bàn, sáng ấm có bóng, thẻ kem viền mực chữ đỏ đúng STYLE.md",
+     ""
+    ],
+    "vat-that": [
+     "ĐẠT",
+     "Tờ giấy có mép rách, nếp và vệt ẩm thật; thẻ chữ có mũi tên chỉ đúng vị trí",
+     ""
+    ],
+    "goc-may": [
+     "ĐẠT",
+     "Cận đúng tờ đã sấy, nhưng dải móc nối hồng của nhát trước vẫn nằm ở giữa dưới khung, cạnh tranh sự chú ý với tờ giấy",
+     ""
+    ]
+   }
+  },
+  "t_133.7": {
+   "key": "",
+   "fp": "Nzg5Ojs7PDw9PT49PT08Ozo5ODc3NjQzMjEwMDAvLy4uLSwsKyoqKSgnJiQkIyIhOjs8PD09Pj4+Pj8+Pj09PDs6OTg3NjUzMzIxMTAwMC8vLi4tLCsrKikoJyYlIyIhOzs8PD0+Pj4/P0A/Pj49PDs6OTc2NDMyMTAvLy4uLS0sLCsqKikoJyYlJCMiISAfPj9BQkNERUVGRUZaW0ZCQUA+PTs6ODc1NDMxMDAvLy4uLjAvLCsqKikoJyYkIyIiREVGR0hISUlKSlGKknVSSEtMSkxOSkE8Ozk4NzY1ODQyMjxTSkI8OTY1NDMzMzM0T1FSU1RVVVZWVnGjoJ+OeYeMioqLh3BORkZDQkZWaF1IQ0BXZWBcWVNQTktKR0ZEXFpZWVtcXF5eYZOppqejn52dmpeWlI+Cenh0cnZ6e3t2cWxpbmlmZF5bWFVST01LiId+cmZiY2RqgKqsra2qpqWjn52cm5eTjYqIhoSDgYCAe3d0c3VwbmtnY2BcWVdUkZOWl5GFiYmfp7G1tLOwrKqop6ShnpyZkpGQjo2Lh4eGgn17eHl+eXh0cGtnZGFelJeZm52clZaps7u5uLezr7CtqaakoZ6Tgo6Vk5KSkI+NiYaEgH6FiIV/e3dzb2tplpmbnaCdm5qfu8LAv7u2tLOvq6eko5+Ac4KYmpqZmZmXko+NiYiLjo6Lh4J+enZyl5qenp6am5eZrcTGwr25tbGvq6mnpaOSi5een56foaCfnZuYlpOWlIORkY2IhH97mZyenZqbnJCVnbjGwr26trOwraqopqWjoJ6foKGjpKOkpKOgnZmdnHRylZWRjIeDmJmZnJqZlJmbnq7Gw766uLWyrqunpKajnZ2ho6WnqKaoqKemop6joXpbdpmZk46KkJKUmZiPhZqgoKfDxMC9urezsKWKhY+Jf42kqKqqqqusrKyqp6OnpIVZWXeampWRiIiFiJWXjZ2ho8DJx8TBvrq2s5mAfn59foyprbCura+xsLKxraaqqJdiXFx5m5uWaG96gomVlpuywMvNycbEwr66tqWQi42Vnqmxs7O0s7S1t7a2tKuuraRnW1lYdpmZgqK3uZGNmqHLzc3MycjFw8C+ure1srOztLS0tbe6uLi6vL29ubK0s6xuYF5cW3aXp7a+wrmZlqLO0M/NzszHxMPAvry5uLi2uLi4uby9u77BwcDAvLa4tq50ZWJfXVxtrbW6v8TGxcvOz9DS1NHOysbEwb6ssbq8vb29vr7AwsPExMPBvrW6uLJvWlhVUk9NrLO4vcHGybjG0NHS09PSz8vJxKWHlb7Dw8TEwsXHx8bGxcPBv7e7urNvWFZUUlBPqau2ur7DxbrMz87O0dHS0dLOp3VwcZjGycrJyMrKyMjHx8bCwLi7urZ+ZWJfW1hTrK6vt7u7u7/HyszOzc/R0dDOh2JjY3PAzczMzczKy8rJycfFwri6ubeDV1VddoFhrbG0uLu+wcPGyMrLy8axssCwlnNxcZG9uqS3trm6t66zt8bDvbm7uLSeaHqZo52Vqq6ytbe6v8LEx8nKzMajm5+anJeZlpyboZyemJyfm52Wm727vb+8trOvmqSflpWSqKuusrS4vL7BxMbHyszJyczIycvLysrGycnKysnJyMfCwsPDwL66t7Svn5qTlZCJp6mtr7K1ubu9wMPEx8jKy83MzczMzczLzM3NzM3Ly8nIxsTCv725trKunpqPj46F",
+   "verdict": "FAIL",
+   "fails": 1,
+   "round": 1,
+   "rows": {
+    "chu-the": [
+     "LỖI",
+     "Lời kể nói ngón tay ấn làm giấy rạn, nhưng ngón tay nằm ở mép trái bị cắt cụt và mặt giấy dưới đầu ngón hoàn toàn phẳng, không có nếp hay vết rạn nào; lỗ rách duy nhất lại ở giữa dưới và bị phụ đề đè lên",
+     "đưa ngón tay vào giữa khung và thêm vết rạn/nếp nhăn lan ra từ đầu ngón, dời lỗ rách ra khỏi vùng phụ đề"
+    ],
+    "dung-phong-cach": [
+     "ĐẠT",
+     "Toon, viền mực rõ quanh mép tờ và ngón tay, giấy có texture, vân gỗ, sáng ấm và bóng mềm, bảng màu đúng STYLE.md",
+     ""
+    ],
+    "vat-that": [
+     "ĐẠT",
+     "Bàn tay đồ chơi có ngón và móng, tờ giấy có lỗ rách xuyên thật (thấy vân gỗ bàn qua lỗ) và mép rách thô",
+     ""
+    ],
+    "dep": [
+     "ĐẠT",
+     "Bàn tay là một khối tan lớn không vân chiếm 1/3 trái, phần còn lại là mảng giấy kem gần như trắng đục, thiếu tương phản để dẫn mắt",
+     ""
+    ]
+   }
+  },
+  "t_136.9": {
+   "key": "",
+   "fp": "UFNWWlc6NDVCY2hoamtsbWxZRkA/Pj09Pj48PD1BPjw8Ozo+RVFeX1xTPDg3Oj0+U1VXWEo0NDVEV1hYW2FlaGtsaGNgXVpXWlhAOzs6OTk4ODc2NkBZXVxXQzQuLCsrU1VXVj0zNTY4OTo6Oj1ARUtUXWNmZmdoamhLPz4+PT09PT5CS15hX1xZVEs8LywrQkRGQzIyMzpKPDc4OTo8PT4+QUhWZm1tbGxkXVhVUk5RU1VVVFBLR0I/OjYzLiwrLC0uMDEyMz9aW1JIQDw8PT0+Pj8/RVhdWldSUExKR0NBP0A/OTg3NjU0OT0zLi0rLS8wMjM1NjlCVV1ZUUVNTUdEQ0JBQEBAPz9AQkRFRktRV19aPDk4NjZVhpiDTj06MDEzNDU3ODk6Oz08Oz1gbWtoZWNiYWJjZ3eDjZOUkpWTdWxoXV1ZUFaEcn+ojU9JLzAwMTIzNDU2Nzg5OkFxd3NxcHBxcnF1jKOnpqeoqKinnYh8jY6amJWSg2uOol1HLS8wMjQ2ODk7PD0+PlCzuqqenZuaoaCQnKanpqeop6ioqKadkIyTl5WSkIR9pWtEMDI0NTY4Ojs8Pj9AQVm1wsTEwbqvnpKTl6Kmp6epp6eop6inm4yOkY+MioV6pnNFMTM1Nzg7QENFSU1PVF95foGAfHdzdIyQlpSgpKenp6enpqSgmIuEg4KAfnl3nGc/MjM0NTZHW2FkaGtucG1xcXBwcHBxc4qViYWbnZmen56dnJuYjoV8e3l3dGh6lFo9MTM0NjpaamxubmtlXG96dnV2eH6Hi5CGgZGPhomUlpaVkoyBf3doZWNhWFKIh0g7MjM0Nj5fY11VTUZDR6G8uLa5vcPJuH18k4t6cWRudXd0bn2aoJ6felJ5XmqHWzUyMzQ2OD1FQkA/QEBBULjNzc3Ozs7OxoR6hW9dV1FNTk9OTVZ0o8XHqltRXGRcNzEwMzU2Nzk7PD4/QUdObMXPz87Nzs3OyJJgcGZdWFNOTE1QVmNscqK1pG5KODpRVFNRMzQ2Nzk8QUhRWWBmh8vOz8/Ozc7Ox3dTYWNeaWplYmRobGxsbHNxbnlJNzVLXVpXMTIzOUlSW2Jna25xm83Nzc7Nzs3PypVnU1NebnFvbW1tbW1scJmNoLl8PTo8QDw4LS8ySmJlaGtsbW1tp83Nzc3Nzs/PxodtW19lcHFubG1tbWxui7/Bwb6qYk03MjM1Li8zTVpcXV5gYmVrs8zNzs3Ozs/OzbqUcXBvb21sbG1tbW6HusXDwL65jmRUSlFWLC44V15iZWhrbm97vsvNzs3Ozs/Ozs6ud29tbGxtbWxtd5W8xsbCv7y4q3FiX11bMDJFYGNmaGptb3CDxMrMzM7Nzs3Oz83Ir5WAd4KFgYmctcXGxcPBvbu2so9jXltZMDJOX2JjZWZnZ2iKxcnMzMzNz87Pzc3MzMrCvMPFxMfIysfGxMG+urizsKZvVlNQLTRQWVpcXmBkZmmRsbi4tLW7rbW0q7q5urKzt6uwrriutqaqv7+7uLSxr6uQWlNTKzpVWlxfY2Voam6YnZqalpqamJ2gl5mbnZqZoZSVmpqZmpORrLy5tbKwrKehdVRQLkRXWVtdX2BhY22vvb++vsPBw8XGwcbFxcXGxsDDwsLBvLu3uLi2s6+sp6Shk19TLEVPUFJUVlhaXHC1vr/Bw8bGx8bGx8fHyMjIxsfGxMPBv767uLazsayppaGem3xV",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "chu-the": [
+     "ĐẠT",
+     "Tay đồ chơi có ngón tay riêng + cổ tay áo trắng nằm ở nửa phải khung, đè lên tờ giấy sáng ở giữa; bóng tay đổ ngay dưới nên tay tách rõ khỏi nền quầy",
+     ""
+    ],
+    "dung-phong-cach": [
+     "ĐẠT",
+     "Toon sắc cạnh, viền mực mảnh ở ngón tay/cổ tay/mép giấy, bóng đổ thật (bóng tay + vệt song cửa sổ trên quầy), bảng màu kem/cam/navy đúng STYLE",
+     ""
+    ],
+    "vat-that": [
+     "ĐẠT",
+     "Tay có ngón, tay áo navy + cổ tay trắng, tờ giấy là tờ phẳng có mép, quầy có vân gỗ; không có hộp/tấm/chữ đứng thay vật",
+     ""
+    ],
+    "dep": [
+     "ĐẠT",
+     "Vùng sáng nhất là mặt tờ giấy, bóng tay lệch phải tạo chiều sâu và dẫn mắt vào chỗ ngón chạm giấy (điểm yếu nhỏ: bóng tay nhòe thành khối tròn, mất rõ ngón)",
+     ""
+    ]
+   }
+  },
+  "t_141.5": {
+   "key": "",
+   "fp": "NDU4Ojw/QkRHSk1PUlRWV1dYWVpbW1xcXFtaWlpaWFdXVVNSUE5MS0lGQ0E+Ozg1MTQ2OTxAREdLT1NWWVxeYGJkZmdoaWppamlqamloaGdmZWNhX11aWFZTUE5LR0RAIiQlJyksLzE0Njk7PkBCREdJS0xOT1FTVVZXWVlbW1xcXFtbWlpYVlVTUU9MSkdFIiMlJykrLS4wMjM1Njc4OTo6Ojo7Ozs7Ozs7Ozs7Ozs7Ozs6OTk4NzY1NDMyMC8tIiQlJykrLS8xMzQ1Njg5Ojo7PDw8PDw8PDw8PTw9PDw8PDs7OTg3NjUzMTAuLSspJCYoKiwuMDEzNTc3OTo7Ozs8PT09PT09PT09PT09PDw8Ozs6OTg3NjQzMTAvLSwqNjAqKy4wMjc+P0BAQUJBQUFBQUFBQEFBQEBBQEBAQEBAPz8+PT08Ojk3NTMxLy0sPS8rLjAyOlRlZmdnaGhoaGdlZGJhYF5cWVhWRkFOUU9OSUJAQUJCQUA9Ojg2NDEvJygrLS82VGRoamxub3BxcnFxcXJxcXJxcW9tS0NcZGpvZEtEQkRKWGBeXFpWU09MKCosLjA8VlldX2JjZGVmZ2hoaGlqaWhpaVFIP0BLQkNLWGBhXFZBPUJBQ0pWXVpVQT00LzEzNzo9P0FCRFtzb21oZ2doZ2VcWVA/Pj9LVUpCQENUZWZWSEE+Pj9OWlZCcnd1Tz09PT49PDs8PYOrmo+DgH10cnxiPj09PT09P0BZZFlSUVBUUktHR0RFRkZCVVlndWNlZmdnZWNhYqKsnaOyurq0tLmRT0xDP0NHRkV2lIl9dIKWlYt4YVFGVWtCVlllYWFnam1vcXJ0gbCkl52vvL6+vL2ocGdJQE5eW1d3gH16fYqXnZ2aiX6DfYdkXWdoVV1hY2VnaGlrirSnnaKwvL6+vLytXEpCQUhNT1Smwru2iH92dYOGfnB0dIJdZGBVQ2Noam1vcHFzpLmwqq22vLy9u7uzcVk/PlpqbHK2zc7IfGRbTE5rhXxdWnBER0xCRGBkZWhpamx4sry6uby8vL29vLq0gV5AQWJwcHW5zs3GgVxkX1pddJNkSUUzRj8+W2RmaWttb3ByboiRoKOhmp2gn49/cFM+QmVxcXi8zs7NtYNybGpxkKCHPURKMj5WX2FkZmlsb3BpSV1sdXZ2dXZ2dnZ0ck9BRmxzcXi6zs3MycG1raivt7SoaEpITVldYGNlZ2lqbG1saGxvcXFyc3Nzc3N0bkhBSG50dHWHo7W+w8TDwL65trKth1tYWFteYGNmaGttb3BxcnJzc3NzcnJycnJyZ0NASm9zc3Jyc3V8g4yTm6GkpaOfj2BYVVdbXWBjZWdqbW5vcXJ0dHV1dnV1dXR0YEJBTnFycXFxcnFwb25ta2tqamlnYVtZVFZYW15fYmRmZ2lra21ub29wcXFycnNzWEFBVXV0dHRzc3Fwb21raGdkYmBdW1lXVVdaXWBiZGZpamxtcHBucXFwb29xcW9rUUhMV29wcXJ0cXFvb25raWdlZGJfXFlXUFJVV1lbXmFjZWdocnd3aW9zb3l0d3hsXGhqYXF3eXx3d3JsZmZmZGNiYV9dW1lWU1RXWVteYGJkZmhpamtsbW5tbm9vbm5lQj4/XG5tbGtqaWhmZWNgXltZV1VUU1FQUFJVV1pdX2FjZWdpa2xtb3BwcXFxcnJhQUBBY3JxcXBvbm1raWhmZGJgXVpYVVJP",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "chu-the": [
+     "ĐẠT",
+     "Hai tờ giấy cạnh nhau ở giữa và bên phải (một tờ nhăn, một tờ phẳng có tay đặt lên), bát nước ở mép trái; các vật tách bạch trên quầy sáng",
+     ""
+    ],
+    "dung-phong-cach": [
+     "ĐẠT",
+     "Viền mực ở mép hai tờ, bóng song cửa sổ dạng sọc trên quầy, bóng tay đổ, bảng màu kem/cam/navy/xanh đúng",
+     ""
+    ],
+    "vat-that": [
+     "ĐẠT",
+     "Bát có vành kem + sọc đỏ + mặt nước xanh có nét vòng; tờ nhăn và tờ phẳng là hai tờ riêng; tay có ngón",
+     ""
+    ],
+    "dep": [
+     "LỖI",
+     "Vệt ẩm trên tờ nhăn (x≈560–700, y≈470–650) là một vệt xanh tím nhạt như mực loang, không phải chỗ ướt; LOOK vòng 2 đã chốt vệt ẩm phải sẫm hơn, viền mờ, không xanh lét",
+     "đổi vệt ẩm sang nâu sẫm, viền mờ bám theo nếp giấy"
+    ]
+   }
+  },
+  "t_16.2": {
+   "key": "",
+   "fp": "bmUtKiwtOkNERUdISElKSkxTVVRUVFE8Ozw8QEFGZGxnY2FZYWlnYmFhW1hUUFJRaWc4KywtOENFR0hJSUpLS01VVlVVVVM9ODo9RVhIR19samViW15maGNfX1hTU1BPZls+LC0vNUNHSEpLS0tLTE5VV1ZVVVNBOzlDX2hhS0Raa2tnY11ZYmdjW1pWUlNRRlFILi4vM0BISUtMTExNTk9VWFdVVVRCP1hnaGhoZVREUmltamNdWFxgX1lXVVFRS0AzLy8wMjxJS0xNTk1OTk5VWVhWVVVNfLCQamlpaWdYRU1kbGxkW1RUWV1ZVVVRMjE/PTAxMjlITE1OTk5OTk5UWVhWVleNvL6uenFva2loXElJYGtpYVhTU1VaWVRUOElYSjEyMzdHTE5OT09OTk9TWVhWVleVuba1nIJ+d2xpaGNQRVNjZWJYU1NRVVdTWFlbVzczNDZETU5OT09PT1BSWVlXVleUr6ytq5SCfnFqaWhjSz5JXmRjWlJSUE9UXV5bYEMzNDZATU5QUFBQUE9RWVpXVlyeqKeoqqWIfXBqamllT0lBQ1hhY1xRUFFMXmBgX1A1NTY9TFBQUFBPT09RWFpXVm2ooqOnq6+ceWtqaWpkT0pKRENQXGFdUk1SX2FjYVo8NTY6Sk9QUFBPT09QV1lXXJ2knqGmrLS2mnFpaWVUS0tKSEZBTlhfXVNKX2JlZWFSNzY4R09QUVBQT09PVlldjq6Zm6CosLW9vqZyX1JNTEtKSUhGREtRWlxXX2JlZ2hkUDk3Q09QUFBQT09PVmWatJuYm6Kqsrm/wL6jaU1MTEtKSUhHRURHUVheXmJkZ2pqZ1tGQk5QUVFPT1JdhrGwmpiZoKattb3Bwb+2p2RMTEtLSUhIUlVYWFZTWWFlZ2psbGlsaHd6bnN3hKCwtKGRlZqfpquxuL/AwL62tJRXTEtJSEdSXV5bWVBLWV9lZ2ptb3GJkIqfpaurqaCcmJWSlaGnrbK2vcC/u7e2tbONWEhGR1JeXVxaUzk0XFxkZ2pseZ61qmRfY2VthIiWmZaUmaWutLm9v725tbW0tbSyllpKVV9fXVpXPy8zXlxhZmyGp7O3tHNaXFxlgoiTmpaUmqivtL2+vLa1tbW1tbW1tqN6Z2FeXFlGNTMwXV5dcJWqsLS3upVeW1xigYeQmpOTlqmxtb69t7a0tLW2tbS6vbqyn4FlW0s1MTIxWF9cbJmprrG1uLF0W1thgIeNlJSWmK6ztru2tbSztLW0tLW8u7m2s6+TVDg2MjAwVVxfXW2aq6+zt6xpW1tmiI6Tl5aWm7W0tba0s7S1tbOytLm7ubi1s6+FOzU3NTEvWFhgVD9en62xpoNZW11/mZqZl5WVoLm3tbW1tLW1s7Gzuru6uLa0sJBEMzM2NTIwWVZdXEtAbKOWYlRRVWmTmZmZl5WarrW1tbW0tbWzs7S5vLq5t7SxnGVFOjYzMzIxWVdZYFxWU3prWltYYHeGjoyMiYuTp5ycoqOlpqimoayvoK6toqCcdWFZSDk1MTAxWFlWXV5VTVRUZnB4hIiFhomBg4WPkpaSk46QlJOSlI+WlJCRkIdsZGZeVkM2My8uV1hXWFtMS0xQU2uFh4+PkpKPkKatra6vr62vtLi3trW0sq+tnnVpZWFjWVFDNTEuVlhZVVhLTE1OU3B0fo6QkpCKoa6usK+vr6+1ubq5t7a1s7KofGtpZ19fX1VQQDEv",
+   "verdict": "FAIL",
+   "fails": 1,
+   "round": 1,
+   "rows": {
+    "chu-the": [
+     "LỖI",
+     "Không có gì đọc ra là \"tờ ướt đang bị kéo rách\": tờ giấy trải ngang là một mảng trắng phẳng, mép cắt ở góc trên-trái (x≈850–1150, y≈20–260) thẳng và sắc, không vết rách không nếp; vật lớn nhất khung là ống tay navy chiếm ~1/4 khung",
+     "đưa máy áp sát mép rách, thu ống tay ra rìa khung"
+    ],
+    "dung-phong-cach": [
+     "ĐẠT",
+     "Toon, viền mực ở mép giấy/cổ tay, bóng cửa sổ trên quầy, màu kem/cam/navy đúng bảng",
+     ""
+    ],
+    "vat-that": [
+     "LỖI",
+     "Tay chỉ là một khối hình tròn màu da không có ngón, không có cách nắm (vùng x≈250–900, y≈560–1080), và tờ giấy không có nếp nhăn hay vết rách dù lời kể nói \"mềm, nhăn\"",
+     "dựng bàn tay có ngón bấm chặp mép giấy, làm mép giấy nhăn và xé"
+    ],
+    "dep": [
+     "LỖI",
+     "Các vệt ẩm trên tờ là những quầng tròn xanh tím mờ như bokeh ống kính, không phải vệt nước",
+     "cho vệt ẩm sắc nét vừa, viền mờ, sẫm hơn"
+    ]
+   }
+  },
+  "t_20.0": {
+   "key": "",
+   "fp": "T1FTVVdZW11fYGJjZGRjYl9cWVRQSkVBPTk3NjY1NTQzMjEwMTM3OTQwLCglIyIhUFJUVVZWV1ZUUlBNSkdEQkA+PT08PD08PDw8PDw8PUBESU9VWFdVUkpDPC4pJyYoQT89Ozo5ODg4ODk6Ojs7PD09Pj4/P0BBQkVITFFZX2FfXl5eXVFITE1BOzk4PkdMLC4wMTM0NTY4ODo7PD4/QEFCQkVKT1deW1NSUVJVWVJLR0lQXWJvdmRfcJKNg3VoLS4wMjM1Nzk7PT4/QURJTlFNTFNcaGxhWFJPTkxLS0pIQ0ROXoCWc2Jnkq6rpqKfMDI0Njc5Oz5DSVFaYmlucXJwbGZfZGZZTk5RVktCPz9AQ0pUYGpeRENRdYGFio2OMzY7QEhRWWFoa2tub3BvbWtqaWlpaWhnZmaCp6GTiYiJiIZ8dWdMRkhhaWRjZl5bT1ZbYGRnaGptbGdlZ2lpa29tbGxrbnuGhZu3vr6+v76+vbq1rKGbnJ+hm5iXiV9ZW11gY2VnZ2ZlZmhoY15mbnN+j5OTnqy0tLW2tra4t7q8vLu6uLe4tbOvrKehb0BCXmFjZWhrb3NzbGJWSkA7PkFJWW6Il5iUlJ6np6epq66ysrS0tLa3s7CsqKKKY1VQh4uPlZqeoqWoq66rpp+UiHlkWlpgaG50eoKMmaOmpqOjn5yho6usqaWdlY1wZWJgiYyQkpSYmqKstrq8vb2/v727tq6ei354eHd2dHBvcXZ6eXh5eHZ2eXx2cm1oZWNfiY2OeoebprK4u7u8vL2/vbu6uru+v7iefWpnZmhvdXd4d3dza2lvcnJwbWpoZmFbhIV5Y4KVmp6gpKessra5vb27u7u7ubrAu4lnbHN1dXRzcGllanBycW9tamloY11dXmtqVWRmaGlrbG5ydnqBjZ6rtbq6uri4w8iwg3h2dXJoXFdaXF5fYGBaTl5jX2BeX3ljXGBiZWZoam1tbG5wcHByfJGqt7vDycnLuIBzb2xsb3NwamJZUk5HQ1tkY11aYn5eXmBiZGVnbGtscHFubW1tbnB2irTJysnJzZ9ubW1yd3d3d3VzcmxkX2VkXl1eaHdaX19hY2VnbGptc21tbm5xcW5tbXejxsnIy7t2b3R3d3d3dXRybWlqamRgYmFec2pcXV5gYmVmbG5wdG9wbnBzbW1tbW1wn8fIy8N8dXd3d3Z2dXBra21pZGNlY2FeeWNcXFxWX2RnaWttc3Zxb3F1cnBubm9webPIy7l3dnZ3d3Z0bmtubmlkZ2dkYmBddWBhVUJBW2NoZ2hqbnZ4d3d6e3Z0dHNycZDGyqdvdnV2dXBsbnFuZ2dpaGVjYV9daFlgQDFCW2JqamprbWtubm9xdHJxcXFycHu4woZsdXVzbm1xcWxnaWtpZmRiYF1bVFREMTJKXmRmZ2lraWpsbm5ubm9xcXFydH26pXBudHBscHJxamdra2pnZWNhXlxaUVVEMTtWYV9hY2pmaWprbGlramtsbGptbJepfmtvcGpwb21paG1qamdmZGJgXVpYVFdOQFFdXF5hZXZxe3l2e25zd254eW2BjY57dXh0fXV3dHF3b3lraGZlYmBeXFlXVFVRUltcXmFjZmlrbW1sbXNuaWhoaH2sq4NrX2hvcW9pZWpramloZmRiYF5cW1hWU09RVl1dXVxcXmdmYmZnZmxycGtog7WmhW9dXXBxb2dma21raWhmZWNhXlxaWFZV",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "chu-the": [
+     "ĐẠT",
+     "Bát nước ở tiền cảng (mặt nước xanh có nét vòng, góc trái dưới) và tờ giấy ở giữa khung, cả hai ở vùng sáng và tách bạch",
+     ""
+    ],
+    "dung-phong-cach": [
+     "ĐẠT",
+     "Viền mực ở mép tờ và vành bát, bóng đổ thật (bóng tờ trên quầy), bảng màu cam/kem/navy/cyan đúng",
+     ""
+    ],
+    "vat-that": [
+     "ĐẠT",
+     "Bát có vành kem + sọc đỏ + mặt nước có nét vòng; tờ giấy có nếp gấp và bóng riêng",
+     ""
+    ],
+    "goc-may": [
+     "LỖI",
+     "Dàn ý nói máy đứng sau bát nhìn ra tờ giấy, nhưng ở đây máy cao bên trái nhìn thẳng xuống mặt nước — nước chiếm ~30% góc trái dưới, tờ giấy bị đẩy sát mép trên",
+     "hạ máy xuống thấp, đẩy bát xuống rìa dưới làm tiền cảnh, đưa tờ giấy vào giữa khung"
+    ],
+    "dep": [
+     "LỖI",
+     "Quầy gỗ trống chiếm hơn nửa khung, góc phải dưới rỗng, không có lớp tiền cảnh cắt mép",
+     "cho một vật cắt mép (bát/tay) vào rìa dưới và giảm mảng quầy trống"
+    ]
+   }
+  },
+  "t_22.6": {
+   "key": "",
+   "fp": "MzY5PkJGS09SV1pdX2FiZGVmaGprbGxtbWtraWpqaWdmZWJeWVdXWlZVUj0yNjs/LC4vMTI0Njc5Oz0/SmJkZGVmZ2doaWlpaWlpaWhoaGdnZ2ZiYF9dXFhaWUMyLy4tKywuLzEyNDU3ODk6VGtlZmdpbG5saWlpaWlpaWloZ2dnZmVkYmFfXVpUUk8/MS8uKywtLi8xMjM0NTY5gqSQeXR4fH18dW1qamppaWlpaWhoZ2ZlYmBfXVtTPDg2MzEwKy0vLzAxMzQ1NTZBobu7saOVjIeDf3ltaWlpaWlpaWhpaGhmYmFfXVtZRTQyMS8uLi8tMDQ2NTU4OzxZtLy5s6+rqKSbjIF1bGxqZ2lramlpaWdlY2JgXl1bVTsyMS8uNzk2NTc6NzY4Ojlxu7u2sKuop6iqqqekpqehl5ygloBxamhmZWRkaHWDhW45MzIwT1FSUlFUVVNSUlKTu7m1sKynpKSmq7C3u77AwMDAwLuvoJuZmJSXpK2tqqBXNTMyXV1dXV5gYGFhYWeru7i1r6ikoaGip6yyt73AwMDBwMDBwL+9vLq5trOvq6eDOzMxXmFkZmhpamppaXi2ureyqqWhnZydoqats7m+wMDBv7/BwMC/vbu6trOvrKihYzs4X2FkZ2psb3Byc466ubawqaWemZiYnaOqsLW4vsDAv7/BwcHAvbu5tbOwrammlWBQX2JlZ2psbnFyc6G8uLOvqaKblpeXmqGnrbK2vb7AwcDBwMDAvrq5trWyrqumootiYGNlZ2ttb3FzerG7t7Kup6Gal5eXmZ+mq7Czur2/v7+/v8C/vbu6uLWyrqqmo52BYGJlZ2ptb3Fzhbm7t7Krp6Gal5eYmJ6kqq+0ur6/wMDAvr+/vry6uLWyrqqmop6ZXGBjZmlsb3FzlLu6tbCsp6GbmJeXmJ2jqq20ub6+v8HBwL+/v726t7Wxr6ulop6cVFdbXmFkaGtuoLy6trKtqKOdmZeXmJ6jqqyzub29v8HBwMDAv726uLWxrqqmop6aUFJVV1peYGNqqbq6trKuqqWfm5iYmp6lqq6yubu9v8DAwL+/v7y6uLSxrammopyZUFJUVldYWlxusrq4trOuqqainpubnaCkqa2vtbu/v8DAwMC/vby5t7WvrKmloZ2ZW1xdXl9gYGF/ubu4trOvq6ekoZ+en6Kkqq2xtbu/vsDBwb+/vbq4trOvq6ejoJyYXV9iZGdqa2yXuLm4trOuramnpKOioqOmq62rtbm9vr/AwL++vLq3tLOuqqainpuYXF5hZGZpa3Gnt7i3s7Ctrquop6akpKWoq62qsbi8vr2+v7y8urq2tLGsqKSgnZqXXF5hY2VoaXyvtbe1tLCwrq2qqaenqKeqqq6usbi8vby8vby7ube0sK+qpqKgm5eVWlxfYWRmaI+vsbS0sq6xsK2pqqmqqamqqrCztLm8vb27vLq6uLWxrqunpKCdmpaTWVxeYWNla56tr7GysamdoKCYk5aal6GYnKSoqq+upKyfpLa2tbOvrKelo6CcmJORV1ldX2BidqarrrCxsKWNkpCOjYyPkZKTlZOTlpWXlJaQkKmzsa+tqKWkoJyZlpOPUFJWWVxfhqWorK6vr66rq6yqqaurq62wsbG1t7a1trKysLOxr62qp6OgnJmXlJCNTE1QUlRZkaKlqautr62sra6tq6utr7GytLW4ubq5t7a0s7GvrKyppqKempeUkY6L",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "chu-the": [
+     "ĐẠT",
+     "Mặt tờ giấy chiếm gần hết khung, mép giấy có viền mực ở góc trên-trái, vùng sáng nằm trên chính tờ",
+     ""
+    ],
+    "dung-phong-cach": [
+     "ĐẠT",
+     "Toon, viền mực, bóng song cửa sổ đổ xiên trên mặt giấy, bảng màu kem/cam/tím đúng",
+     ""
+    ],
+    "vat-that": [
+     "ĐẠT",
+     "Tờ giấy là tờ giấy thật (mép cắt gợn, có nếp), quầy có vân gỗ",
+     ""
+    ],
+    "dep": [
+     "LỖI",
+     "~70% khung là một mảng kem trống không texture; không thấy đầu sợi hay mặt cắt nào dù câu nói hứa \"bên trong tờ giấy\"",
+     "để lộ vài đầu sợi ở mép cắt/nếp gấp gần máy để có chi tiết dẫn mắt"
+    ]
+   }
+  },
+  "t_24.7": {
+   "key": "",
+   "fp": "goiLj5KUl5ueoaSlqKurq62vs7S3tre3uLi4ubm4t7a0s6+urKqopqOfm5iVk5GNhYmMj5KVmZyfoqWnqKyur7Cys7O0tri3ubm6u7q6uri3trSxrqyqqaWhnpuYlJGPhomLj5OXmp2go6alpaiqrrKysq+wsLO2uLm6u7u6ubm5uLWzsrCrqKikoZ+alpOQhYiMj5SXm52ho6anp6ipr7OzsrCvr7Cytbm5urq6urq5ubi2tLKvrKqnpKCcl5SRhYiMj5OWmp2ho6aoq6yusLGysrOyr6+vsbW3uLi6ubi6ubq5trSxrqyopaKempaThomNkJOWmZygo6apqq2tra6wsbGysrKysrW2t7i4uLe5uLi5uLazsK2opqOgnJiVhYmMj5OWmJygoqanqKurq62urq+wsbKys7O1tbe2uLi3s7O1tre0sK6qqKWgnJmWhYmLj5KWmZufoaOkp6qrrK2srK2usLCxsbKztLS1tre3trOytbWzsa+rqaajnpqXhIiLjpKWmZyeoKKlpqiqq6qrrKysra6vrrCwsbK0tLW2t7e2trW1s7Gtqqain5qXg4eLjpGVmZyeoKOkpaenpqepqqqqq6urra6vsLCysrO2tba3trW0sbCsqaejoJyZg4aJjZCUl5qdn6Cho6Wlpaenp6eoqaqrrKytrrCxsbGztba2tLSyr66rqaajoJyZgoWJi4+SlZianZ6hoqKkpKSlpKWnqKmpqaqsra2vr62trbGzs7Gwr62sqaagnZqWgYWHi4+RlJaZm52fn6CioaKio6SlpqeoqKmqq6utrqyrqqurrrCwr6yqp6OcmZSSgYOGiYyQk5WXmpudnp6en6ChoqOkpKamp6eoqKusra2sqamqqq2uqqalo6GemZWRf4GEh4qNkZOWmJibmpudnZ6foKGioaOjpaWmqKmpqqysrKusrK2sqaWin5ybm5eVfYCDhomMjpGTlZeYmZqbm5ydnZ6foKCho6SlpqenqKqrq6ysrKuqqaejoZ2bmZaTfH+ChYiKjI6RkpSWl5eZmpubm5ydnp6hoqOjpaSlpqioqqqqq6mopqWjoJ2bmJOQe36BhIWIio2QkpOUlpeXl5iYmZqcnJ2en6ChoqOlpaanqKipqKempKOgnpyZlpKOe3yAg4WIio2Qk5SUlpeXl5eXl5mam5ybnZ6foKOjo6WmpqanpqSjoqCdm5iWk5CKeXt+gISHioyPkZKUlZaXl5eYl5iYmJmanJydnp+goaOkpaSlpKKhn56bmJWSkI6KeHp9gIKFiIuOkJGTlJWWl5eXl5iXl5iYmZqbm52foKChoqGioKCfnZuZlpOQjouJeHp9foGEhomNj5CRlJSVlpeXl5eXmJeXl5iZmpydnZ2eoJ+fnp2cmpmWk5GPjImGdnh6fYCChYiKjI6RkpOVlpaWmJeYl5aXl5eXmZqam5ycnp2dnJqYlpWSkY6MiYaDdnh6fX+Bg4aJioyOkY+NjIyKjZGLj4+Qj4uQjI2Mh5CUlpeZmZiVk5GQj42KhoOAdXd6fH1+goSHiYuNj4uIhYOFhoiHiIqJh4eJhoaJhoSJh4uUlJOTkI6NioiGhIF+dHV4enx+gYKEh4mLjY6NjpGQkZKRkpGSlJOTk5KRkJGRkZKSkZCPjYuJhoSCgn58dHV4eXt9f4GChYeJi4yNj5GRkpKSk5SUlJSUk5OSkZCQkJCPjY2Mi4iHhIGAfnx6",
+   "verdict": "FAIL",
+   "fails": 1,
+   "round": 1,
+   "rows": {
+    "chu-the": [
+     "LỖI",
+     "Toàn khung là một dải gradient tím-hồng loang, không có vật nào đọc ra: không thấy mặt cắt tờ giấy, không thấy sợi",
+     "cho mặt cắt giấy (đầu sợi chìa xếp chồng) và bản sáng tờ chạy qua khung khi đi xuyên"
+    ],
+    "dung-phong-cach": [
+     "ĐẠT",
+     "Grain giấy và grade mực–giấy đúng chất, tông tím/hồng nhạt nằm trong bảng màu; đây là nhát chuyển cảnh nên không cần diorama",
+     ""
+    ],
+    "vat-that": [
+     "LỖI",
+     "Nhát \"thò máy quay vào tờ giấy\" không dựng vật nào: không có mặt cắt tờ giấy, không có sợi nào trong khung",
+     "dựng mép cắt tờ giấy với các đầu sợi xếp chồng chạy ngang khung"
+    ],
+    "dep": [
+     "LỖI",
+     "Khung trống hoàn toàn, không có điểm nhìn",
+     "giữ một chi tiết sáng (mép cắt sợi) ở rìa khi chuyển cảnh"
+    ]
+   }
+  },
+  "t_28.2": {
+   "key": "",
+   "fp": "KywwNTY3OTo7PT05OTo6Ozs8PD0+PkNFRURERERDQ0NGQ0A/Pj08NjQyMTM1NDMxLC0yNTc4Ojs8Pj88Ojs8PkE+PT4+P0VHRkdRTUlGRURHREJAPz89ODUzMzU2NDMyLTA1Njg5OzxDTFBTUVdYWl1DPj4/QkpiY2ZzeHZwaGNdVk9CQUA+PTo3ODg2NTQzMjQ2Nzk7PD1GT01MSUVCQUA/Pz9CRkZJS09OUVFUVlZXVVJEQkE/Pj48Ozk3NjUzNDU3ODo8PT4/QEVNUFFRUFFLQUNGRkhPUlNST0hGRkVFRUVEQ0JAPz49Ozo4NzU0NTY4OTs8PT9AQUxdXV5fX15URkZGSFBUVFVVVFBIRkZGRUVFRENBQD89PDs6ODY1NTc4Ojs9Pj9BQkRERUVGRUZGRkZHTVRVWFlWVFRMRkZGRUVFRERCQT8+PTw6ODc1Njc4Ojw+P0JFRkdISUlKSkpHRkZIUlRWbYBZVVRORkZGRkVFRENCQUA/Pjw6OTc2Ozg5Oz0+QVhgYmNnZ2ZtcWtRUFBSVVRVXmVXVFRORkZGRkZFRUREQkE/Pjw7OTc2Pjk6PD0/QENERkdHR0hTY2FfYWBgWFRVVVVWVFNLRUZGRkZGRUREQkE/Pj08Ojg3Ozg6PD0/QEJDREVFRkZGRkdGRkdJYWZoaWdqZWZgVUZGRkZGRkhGQ0FAPz08Ojg3Nzk7PD4/QEJDREVGRkZHRklHSEtJU1JbZHBuXVNUUEZGRkZKT1BPTERBPz48Ozk3P0NHSVJUXF1ranV0ZnOBfpCSm6WlsK6lrL63d1pZWFd0goSPf1RRUExCPz48Ozk3TU5TfZ6nrbO8wMTIyMi/usfEwbu3s6WZq5+RjH+BhoeWpJKOhHt/b1NEPz48Ojk3Nzk8fqWknLXAxsbDupB1n8fLy8rLyciftcjIysnIx6yxxsnJyMfGtV5FPz48Ozk3Nzk7Q0pLRniOk4p7bINxe4J5c3F6bGpjcWprdGpqbnBrant5dXh8bVJDQD89PDk3NzhBU1FYVVxcY19lZmZNSEhHRkZGRkZOVkdHR0ZGRkZGRklRWGxramVdXVpYWD82Nzg/SkdKSEtKTEpLSklHR0dGRkZHRkdJTEZGRkZGRkZGRkZJTlFPS0dFREJAPzk2Njc6Oz0+P0FCREVFRkZGRkZGRkdHR0tOVFBGRkdGRkZGRkZGRUVEQkE/Pj07OTg2Njc5Ojw+P0BCQ0RFRkdISk5QWFpjY2VeXFFGRkZGRkZGRkZFRURDQUE/Pjw6OTc2NTY4Ojs9P0BBQ0NFWGdkZmVdY19ZTEhGRkZPW1RRSkhGRkVFRERCQUA+PTs6ODc2NTY4OUJVVldXWFZWXE1IR0dIUlNTTUZHR0dNXF9qaWpfW05JRENBQD8+PDs5ODY1NDU3ODxBQkZKTk9PT0ZFRkVIU1dcVVZmcG1vcXJpZmhoXVxkXlxRQ0A9PDo4NzU0MzU2ODk7PD0/P0NWUE1NT1JncHJvXWBbYl1cV1VXT0tQS09PTE5XVVhRPzo4NjUzMjQ1Nzg5Ozw+P0ZiZ2NhYmdnbmxxZWlfa21qa2FtaF1sXmhrXUA/PkJGPjg3NTQzMjM0Njc4Ojs9Pj9AQUJCQkRDRERHRUVFRUVFRUVERENDQkFAPz4+PTs6ODc2NTMyMTI0NTY3OTo7PT4/QEBBQkNDRERERERERUREREREQ0JCQUBAPj49PDo5NzY1MzIx",
+   "verdict": "FAIL",
+   "fails": 1,
+   "round": 1,
+   "rows": {
+    "chu-the": [
+     "ĐẠT",
+     "Mạng sợi chiếm khung, ba sợi kem sáng ở giữa, thẻ \"sợi cellulose\" trỏ đúng vào một sợi",
+     ""
+    ],
+    "dung-phong-cach": [
+     "ĐẠT",
+     "Toon, viền mực mảnh quanh sợi và các quả cầu, bóng sợi trước đổ lên sợi sau, nền navy–tím đúng bảng",
+     ""
+    ],
+    "vat-that": [
+     "LỖI",
+     "Sợi là thanh băng phẳng đầu cắt thẳng vuông (sợi nền x≈1240–1390, y≈85–130), có một mảng chữ nhật sắc cạnh cắt vào sợi kem ở x≈980–1090, y≈480–530, và một cột quả cầu trắng lửng xuống nền tím tại x≈960, y≈470–690 kèm một sợi nhìn cạnh nhỏ xuống dưới",
+     "dựng sợi thuôn vát hai đầu, bỏ mảng chữ nhật và cột quả cầu lơ lửng"
+    ],
+    "dep": [
+     "LỖI",
+     "Quả cầu vàng có vành ở (1005,300) trông như hành tinh có vành/flare ống kính và là điểm sáng mạnh nhất nằm giữa một vùng trống",
+     "bỏ vòng quầng sáng, giảm bloom, dồn sáng về ba sợi sáng"
+    ]
+   }
+  },
+  "t_31.0": {
+   "key": "",
+   "fp": "MDIzNTY3OTo9RklKTE1OTk9PUFFRSkVFRUVERUVEREREQ0NERERCQD06OTc2NDMxMTM0Njc4OjtCSUtMTU5PT1BRUVJSTkZFRkVGRkVFRkVFRUZHS1BJQz87OTg3NTQyMzQ4ODg5Oz1GS0xNTk9PUFFSUlJTT0ZGRkZGRkZGRkZGRkZKaaBoRUE9Ozk3NjQzVFZfX007PD5ITE1OT1BRUlNTU1NTUEdGR0dHR0dHR0ZHRkhLaZ1mR0E+PDo4NzUzVFljY1tVVl1eaFRPUFFTU1NTU1RUTkZGR0dHR0dHR0dHR0lLTlJLRUI/PTs5NzY0VFdaWVxcWl9bZlRQUVJTU1NUVFRUTEdHR0dHR0dHR0dHR0hJSUlHREE/Pjw6ODY1Njc6Ojw+PkBBSFFdYlxiYFxhX1teVU9VU01RTklHR0hKSUhHR0ZFQ0JAPz07OTc2Njg5Ozw+P0BCQ0tlc210dHB2dW5zcm13dXB4dVdITFFTU1BLRkVEQ0JBPz07OTg2Njg6Oz0/QEFCQ0RHT1JWVlRVU0tLTk1OTUtQUEpMU1RVVVRSSkZFRENBPz48Ojg2Nzg6PD0/QEJDREVGRkhKTEtJSElNVFdNSUpLYmleV1pbYFpWUEdGRENBQD48Ozg3Nzg6PD4/QUJDRUVGRkdHR0dHSGN4cnJ5cXJ3l6eZlZKcr4dhUkhGRENBQD49Ozk3ODo7PT5BQUNEREVHR0dHR0dIR0xZV09giW6DtsK2rLi8u5VjU0lGRENCQD89Ozk3VVlSX1dlXF1eWltJR0hISEpiT1B6mpKux8nQ0tLCpqOamZJkZFdMRURDSFhDQ0NETllUZF5rZ2dtb3RPSWBRTF2moLLG0NPT0svIu5R4hKSrp6aZo5iNhIqPmKeZmZubODo8Pz5BQ0VRT0xJVKCdp8DP09LS0cy8upuyqqGotq2ntLKysbG0uLy+wL23s6+sODo8PUNEQUWMi3WYtsvT1NPR0M3IzM7Jz9DS0tPR0pusw8G3sq+sqqenqaymqZJ2OEl4TnN3aYiwxMvR0tPUzri9x8/Q0NHT09PS0MvFu32eoKqao5qmqKajnpqXlndSWYepnKi1vsTIy87PzsupfIfA0dHPx76ypZundmhfVlNaTVJTYVVoiaWkoZ6al5KLmqivtbm9wcXIysO1f4SZsrmkkY+OYVZOSkpUR0dHR0hJSUlJSEZFTot0iJeZlpKOp6qvs7i8u7OzsG5jWWeNu3ZWUU5OSEdHR0dHR0dHR0dHSEdHRkVEREdBRFRwkZCNpamtqqKWZFJaY0ZGS1FcbGt6bk5ISEdHR0dHRkdHR0dHR0ZGRUVDQkE/PjxEfWJyk4agckhKPkBCQ0RJV2N3dWJYTEhISEdHR0dHR0dHRkZGRkZFRERCQUA+PTw7PDg/QTpbSjs+QkVJTllsdV9TTEhISUhIUVxcXFdXUU5OSUhIRkVFRENBQD89PDs5NzY7NDY3OD5NUVxtdXNkUk9MTk9TUk9QZXl6fHt4eHJybWptW1xVUUpIRT89PDo4NjU2OztAS11uZl9YVmlrXWtcZWRvdHp3fHlrcXhubGVtbWRqaW1vb2NoaF1aSj03NjQzXl1ZU1BSR0dISkNBQkRLZmtocmhiV19bZXhjR0VFRENDQkJDQEJHSEdUT0I2NTQyTkI3Nj1CREZHRkA/QUFHV1RMVGpqdIBtYFtJRUREQ0NCQUFAPz49PDs5NzY1NDIx",
+   "verdict": "FAIL",
+   "fails": 1,
+   "round": 1,
+   "rows": {
+    "chu-the": [
+     "ĐẠT",
+     "Sợi kem tiền cảnh chạy chéo qua khung, các quả cầu trắng mọc hai mép, thẻ \"nhóm hydroxyl\" trỏ đúng chỗ",
+     ""
+    ],
+    "dung-phong-cach": [
+     "ĐẠT",
+     "Toon, viền mực, bóng đổ thật giữa các sợi, bảng màu tím/kem/vàng đúng",
+     ""
+    ],
+    "vat-that": [
+     "LỖI",
+     "Nhiều quả cầu trắng rơi lơ lửng trong nền tím, không dính sợi nào (x≈545,y≈580; x≈845,y≈490; x≈1000,y≈465), nên \"nhóm hydroxyl\" không được dựng thành bộ phận dính hai bên của sợi",
+     "dán các quả cầu vào mặt sợi, xoá các quả lơ lửng"
+    ],
+    "goc-may": [
+     "ĐẠT",
+     "Cận đúng một sợi để thấy nhóm hydroxyl ở cả hai mép — góc máy có lý do",
+     ""
+    ],
+    "cho-chu": [
+     "LỖI",
+     "Thẻ \"nhóm hydroxyl\" đặt đè lên chính sợi và mũi tên dài cắt ngang sợi; bóng của mũi tên đổ xuống thành một vệt nâu nhòe trên mặt sợi",
+     "đặt thẻ lên nền tím trống bên phải, rút ngắn mũi tên"
+    ],
+    "dep": [
+     "LỖI",
+     "Quả cầu vàng có vành ở góc trên-phải (1465,115) là vùng sáng mạnh nhất khung nên kéo mắt ra khỏi sợi; sợi tiền cảnh là dải kem phẳng không texture",
+     "bỏ vòng quầng sáng, dồn sáng vào sợi, thêm texture cho sợi"
+    ]
+   }
+  },
+  "t_35.0": {
+   "key": "",
+   "fp": "MDEzNDY3ODk7PD0+P0BBQUJCQ0RERERERERERERDREdJTVRVSkpSXk5OU2NPUlZmMTM0NTY4OTs8PT4/QEFCQkNERERFRUVFRUVFRURERERESEtLS0pJSEZEQD02NTZIOTw+TkVCOzw9PkBBQUNDQ0RFRUVFRUZGRkZGRkVFRUVFTkZERUdFQUFVRDk3NTQzXV9hbGdZPT0+P0BBQkNERUZGRkVGRkZGRkdGRkZGRlJRlWRDQkFAQ0ZcRjs4OzYzOjo7RD89PD4/QVpSS0dHSE5HRkZGRkZHWmBHR0pQSZSftm5FQ0JAWnJ6bGZhZlhONDY3OTo8UHJFQmx9cnFqcLFfWlFOUE1IhaNiY4StfqvEyZuPhEhBRUpZTU5RYlhYNzs/REpQd7Jta4GSoqiwtse0trGztpxtscfLx87Qz9HQz8/OrUtCQUA+PTw6Ojc1hI6Vnqavtr3BxcnLztDR0tPS0dHS08/G0MvKy9LS0tLS0M/OqklCQUA/PTw6ODc1p6uwtLm+wcTHyczPz9HT09LS09PS0tnZwsC/ytHS0dHS0M3JoEhEQkE/Pjw6OTc2qKyytbq+w8bJzM/P0NLS0NDR0M7LyMXIvsDAxbShmJS7qnJqWkZEQkE/Pj07Ojc2qq2xtbi7vMS+urjSrZuSk8yPd5SIdKrAwcHBvotkSUhsaEdITEdEQkFAPz08Ojg2qqymnZyenMmnmp3Ihm9tcp91bsrKqMHBwcC8jWJjS0lIR0dXq2ZEQ0JAPz08Ojg2q7Czt73Aw8XIy83Ozc3PzMvKycTCwsLCwcrHtq+sp6GblI6Rw5Bya2RdV1FLRkE9rK+zuLzBxcjKzs7Q0tLR0tLSy8DCwsTDxdLS0tPT09LS0NDQz83LxsK9tq+ooJmRq6+0uLzAxcjMzs7R0NHS2OHOwMHCw8bCxsPBwL+9usrS0dDR0M/MysfDwLy2s66rqq+0t7zAxMjLzc/R0tLS2unLwMHCw8HbvK2lpaKgnsDT0dLR0M7MysfDwLy3sq6pkoOHjJGWmZ6ipavJwbS3uLzBwcHCtLbfs7jCw8THytHR0tHR0c7LycbCv7u3sqyoWTk7Pj9BQ0VHSU+kgVBServBwcGvdJHKwpiEgoaPlJuiq7q/zb29vr+9vLq2sa2oNzg6PD0+QEJER0hQTEhjsMHBwcKnWl96fGJWUlRtYmdweoqav2JXW2BjaW5zeX2ANjc5Oz0+QEJES2JkS1qnwcHCwK6xX2FsgoJ9fn6IeG9nY2lXWEVDQUA+PTw6ODc3Ojc5Ojw+QUdZas3VgJq/wcHBspGKgoOBhnlpYFVXS0dGRURFRERCQUA+PTs5ODY1Xk1URERcbXSEk93iwru/v8G3enRjXlxZW1lXVlFJR0ZGRUNEQ0NBQD8+PDo5NzY0UFBkYmh1d3yJb4W2u7y/v76LTEpKUlZWVlZWVlJIR0ZGRUREQ0JFQkY9Ozs5NzU0MzU7O0FKRlJfT2mdq6qtrK1xUVJRUlpZXVxZXFhPUlJOUk5MTk1sb3JTRlBVVTw0MjQ2Nzg5PFVqdouSlJGUlJJ/Ym9qXm5nbXJsb25xZ3RufGNtdWl5cW5pbGprcFxQMjM0Njc5Oz5mpKyusbKyjm1YRUZGRkdLT09NSEZIRVl1fG9udWxoZnBhYmlta2NgMTI0NTY4OlibqayvsrOqXUREREVFRUVFRkZGRUVERERITklLV1BMT1VJSFFQTU1b",
+   "verdict": "FAIL",
+   "fails": 1,
+   "round": 1,
+   "rows": {
+    "chu-the": [
+     "ĐẠT",
+     "Chỗ hai sợi chạm nhau ở giữa khung, quả cầu vàng sáng là điểm nhìn, có thẻ \"liên kết hydrogen\" trỏ vào",
+     ""
+    ],
+    "dung-phong-cach": [
+     "ĐẠT",
+     "Toon, viền mực mảnh trên mép sợi, bóng sợi trước đổ lên sợi sau, bảng màu tím/kem/vàng đúng",
+     ""
+    ],
+    "vat-that": [
+     "LỖI",
+     "Sợi là dải phẳng có mép cắt vuông 90° (mảng chữ nhật ở x≈900–1100, y≈120–270; bậc cắt ở x≈1090–1160, y≈360–450), \"liên kết hydrogen\" chỉ là một đĩa cầu vàng trơn chứ không có móc nối hai nhóm hydroxyl, và có quả cầu trắng lơ lửng trong nền tím ở (290,240)",
+     "dựng sợi có mép bẻ gấp, dựng móc sáng nối thật hai nhóm hydroxyl, bỏ quả cầu lơ lửng"
+    ],
+    "dep": [
+     "LỖI",
+     "Mép sợi bị cắt bậc vuông 90° giữa khung và các mảng nâu loang trên nền tím trông như vết bẩn",
+     "bo/bẻ gấp mép sợi, dọn vệt nền"
+    ]
+   }
+  },
+  "t_38.5": {
+   "key": "",
+   "fp": "KiwtMzU3ODk7PD06ODk6Ojs7PDw9PUJERERDQ0NDQ0NIQ0A/Pj05NDMyMTQ0MzIwKy0vNDY3OTo8PT49OTs8P0Q+PD09P0VIR0lUUEpGRURIREFAPz48NjQyNDY1NDIxLS4zNTc5Ojw/TFJUVFhXWVtEPT4+QUlhYmZxd3VxamRgV0xBQD8+Ozk4OTg2NDMyMjM1Nzg6OzxAS0pIR0M/Pz8+Pj5BRUZHSk1MTU1PUVFSUExCQUA/Pj08Ojg3NTQzMzU2ODk7PD0/QENQVFdYV1dRQUNFRUhPUlNST0dGRUVFRERDQkE/Pj48Ozk4NjUzNDY3OTo8PT4/QUVWVldYV1dRRkZGR1BUVFRUU09HRkVFRUREQ0JAPz49PDo5NzU0NTY4OTs8PT9AQUNDREVFRUVFRUVGTVNVWl1WU1NKRkZFRUVEQ0NCQD8+PDs5NzY1OTc4Ojs9PkNLS0xOTk9RUFBHRUZHUlNVbYRYVFNMRkZGRURERENCQUA+PTs6ODY1Pzs5Ojw+P0tcWl1hX2Boc3FaV1dZV1RUWVxWVFNLRUZGRUVERENDQUA/PTw6ODc1QDw5Ozw+P0FCQ0RFRUVJV1hWV1dXWVdXV1ZXVVNKRUVGRUVFRERDQkA/Pjw7OTc2PDk5Oz0+QEFCRERERUVFRUZGRUZHW2JnaWdraGdlVkVGRkZHSUpHQ0A/Pj07Ojg2Nzg6Oz0/QUNFRklIRUdHRktITFFPWlZdanx2W0pLSUZGRUhPUlBPS0NAPj08Ojg2SklRU2FeZW93doOCc4SPkaOirLOzu7ius762e2JhYl9hXGVjY1RST0hAPj07Ojg2SERjlKWkrba9wcXKzMa1tMXBvbu1sqSWqp6UkYaFiZCIh5OPi4SNgFhBPj08Ojg2Njhdn6aZmbi/xsXAr4N1qcjJycjJxsWas8TEyMbFxsjGxsjHxcTEumZAPz07Ojg3Njg9RlFGTXyKi4J2bohrbnZqZmVsYF5ea19dZ15eYWdfX25ucHV6bFZIR0dFQTg2Njg8U1laWl1eYFxgW11MR0ZGRkZGRkZNVkdGRkVFRUVFRUhPWWJiXV1ZV1dTSzg2Njc5PT4/P0FCQ0RFRkZGRkZGRkZGRkZKUEZGRUVGRUVFRUVHSElFQkE/Pj07OTc2Njc5Ozw9P0BCQ0RERUVGRkZFR0hOUVlbYldGRkZGRUVGRUVFRENCQUA+PTw6OTc2NTY4Ojw9PkBBQkNESVJUV15eZ2dnW1VOS0dHSUZGRUVFRUVERENCQEA+PTs6ODc1NTY4OTtFSUtKSUhJV2FbV1VPVFRTTEZFRUZTZmFhWFNLSEREQ0NBQD8+PDs5NzY1NDU3OTtKT1FXW1xdX0xFRUVGUFJTTkhSW1tdY2hqa3JqZltYTUlCPz49Ozo5NzU0MzQ2Nzk7PD0/QEFCQ0RFRUVPW2JqXmFocWpsZ2ZWTk9MSk5XWGFYTUg/Ozk4NjU0MzQ1Nzk6Ozw+PkBLT01MUU9jaFxbUFJOU0tPT0xRTktNS01KQkJESVROPDk3NTQzMjM1Njc4Ojw9Pj9XaWFhaWZxZ2JoXmZwcGFjbGFubVxpXmdlRz8+PDw7OTc2NTMyMTI0NTY4Ojs8PT4/QEFBQkNFQ0RERERHRUVERERDREJCQUFAPj49PDo5NzY1NDMxMDEzNDU3ODk6PD0+Pz9AQUJCQ0NDQ0REREREQ0NDQkJBQEA/Pj08Ozk4NjU0MzIw",
+   "verdict": "FAIL",
+   "fails": 1,
+   "round": 1,
+   "rows": {
+    "chu-the": [
+     "ĐẠT",
+     "Ba sợi kem sáng chạy ngang giữa khung, tách bạch với nền tím, chỗ móc vàng nằm đúng điểm giao",
+     ""
+    ],
+    "dung-phong-cach": [
+     "ĐẠT",
+     "Toon, viền mực, bóng sợi trước đổ lên sợi sau, bảng màu tím/kem/vàng đúng",
+     ""
+    ],
+    "vat-that": [
+     "LỖI",
+     "Ở điểm giao giữa các sợi (x≈940–1100, y≈460–700) có một mảng chữ nhật sắc cạnh cắt vào sợi kem và một cột quả cầu trắng lửng xuống dưới kèm sợi nhìn cạnh nhỏ — đọc ra là lỗi hình học chứ không phải mạng sợi",
+     "dựng lại mẫu sợi, bỏ cột quả cầu treo"
+    ],
+    "goc-may": [
+     "LỖI",
+     "Máy lùi quá xa: móc vàng — vật chính của nhát — chỉ khoảng 30px trên khung 1920px, nhát không dẫn được mắt",
+     "lùi vừa đủ để thấy ba sợi nhưng để móc ở cỡ 150–200px"
+    ],
+    "dep": [
+     "LỖI",
+     "Các sợi nền đều nằm song song và không sợi nào chạm sợi nào nên không đọc ra là \"mạng đan\"; quả cầu vàng có vành ở (1005,300) như một hành tinh",
+     "cho các sợi nền đan qua nhau, bỏ vòng quầng sáng"
+    ]
+   }
+  },
+  "t_4.6": {
+   "key": "",
+   "fp": "T1JVVlJEMy0vMTM0NTc4OTk6Ozw9PT09PDs7Ozs6OTk5ODg3NzY2NTQzMjEwLy4sTlBKQToxLzEyNDY3ODxLTEdEQUA/P0BAQUFBQUBAPz49PTw6OTc2NTQyMTAvLi0tOzMrKSstLzEzNTc7Sl5sbm5saWVfWFJMSEVDQkFCQUFBQD8/Pj07Ojk3NTMxLy4sJygpKy0vMDEzNT1Vam5wcXNycnJzc3RzcW5pY1xUTklFQkE/Pz49PDs5ODc1MzIxJykrLS8wMjQ2Pl9mYmpucXJ0dHV1dHRzc3NzdHV1dHBtaGFaUktFQD06OTc2NDIxKykrLS8xMzU3QlRgY2doaGhpa21vcXN0dXV1dHR0c3Nzc3N0cm9rZl9YUElCPTczbUovLzEyMzU2ODs+Q0pRWGBlaWprampra21vcHJzdHRzcnJxcXBvbGtqaGViXlc9g4hIODY1NTY4OTo6Oz0+P0FESFNpaWhqa21ta2ppampsbW5ubm5tbWxpZ2ViYFo8YoZmXVtVTEVAPTw9PDw9PDw8P1pra2hmYmFjaGxvb25ubGpoZ2doZ2ZlY2FgX1c4ZXtfYGVqbGxpZFxSRkE/PD08V56GcWxsbGxsa2ttc3Vzb21rZ2ZraWZjVkVKUUw0emleYmVrbm9ydHR0cGdeVU9MlcS/qY6BdW5tbXGInqOhmop3al5XXGBiVTo2NjYxbl1ZX2RrbXBxc3R2d3d2cWyEvsPAurewo5SFeZGoq6urqqqik3VCP0FERj04NzUzV0lTVVtiaG1xdHV2d3d4d36xw8C5s7K1u8CvkZmmq6qrqqqpqJdOT1hBOTg3Nzc0TDxbYGFgYGFla290dnd3eZ7Dwry0raywuLSRjJaapaiqqamqqaZ/fZyHY0I4WnBDSTdeZmlrbGtoZmVnaW1xib7DvrauqKista+Mg3SCmZ+hoqOlpqWaj5mamYBWbZ1TM0RjZmlsbnFycnFuamhuq8XBurKrp6ettrKDbWFhdYqUmJqbm5mKi5KSkZGIgZNFNlNeYmdrbXByc3V3d3WUw8W/uLGrqKmxuLmFbHJYT1hndoKGiYV6g4SFiImJlX43UFpdYGFjZmpucnR1d4e6xMS+uLKurK+zup9hVWBfU0xKc6GsspprcXd6fH1/mWMvXV1eYGJlZ2lpa25xfK/ExMO9uLWysbO1vKVuYmhsaF9VbZe5vKNnX19jam59iUQtXV9iZGVmZmhqa2ttncLFxcO/u7e2tra6wKBva2xsa2poaXmWmYxzb2RfXF2EbjIsW15hZGZpa21ub2+KvcLExcTAvbq7vL7CxMGfenBqaWlpaGhxip1va11pZXh+SC0sVlleYmVoamxvcYGywMHDw8XDwb7Aw8PDw8TCvK2QgHt7gpOtuqtOREFNQltQMCsrWFpaXGBkaGttcZ25vL7BwsLDxMPEw8PDw8TDxMPAvry7vb6+vK9aQjs3NDMuKykoU1ZbX19fYmZrbXWDm6ivq7SstLS4sLW2rbStq6Sxq7atpKmftrJ5aGJaRzQwLy4sV1dYWV1hY2NkaGpjbnVydH1+joSMi42XjJSNh4OPh5KJgo6Bm7B8amhnYUY1MC4sV1hbXFtcX2RnZWJmam9xcXN4gYeVoqmyt7u8ubm8uri0s7Wurq98ZmVkYlxEMzEwVldaXF5fX15gZmlpZ2dscXNzdHR0dnl8g42bqLO7vLq5uLa0sK5+YV5cXFtDMjEw",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "chu-the": [
+     "ĐẠT",
+     "Tay ướt đè lên tờ giấy sáng ở giữa khung, có giọt nước cyan nhỏ (x≈1426, y≈424) cạnh ngón tay, bóng tay rõ nên tay tách bạch khỏi nền quầy",
+     ""
+    ],
+    "dung-phong-cach": [
+     "ĐẠT",
+     "Toon, viền mực trên ngón tay/cổ tay/mép giấy, bóng cửa sổ dạng sọc trên quầy, bảng màu kem/cam/navy/cyan đúng",
+     ""
+    ],
+    "vat-that": [
+     "ĐẠT",
+     "Tay có ngón, áo có cổ tay trắng, bát nước ở mép trái có vành kem + sọc đỏ + mặt nước xanh có nét vòng, tờ giấy có mép gấp",
+     ""
+    ],
+    "dep": [
+     "LỖI",
+     "Vệt ẩm trên tờ (x≈880–1010, y≈395–455) là một quầng tròn xanh xám mờ, đọc như vết bóng loang chứ không phải chỗ ướt; LOOK vòng 2 đã chốt vệt ẩm phải sẫm hơn, viền mờ, không xanh lét",
+     "đổi vệt ẩm sang nâu sẫm, viền mờ"
+    ],
+    "cho-chu": [
+     "ĐẠT",
+     "Dải phụ đề đáy khung nằm trên mảng quầy trống bên trái, không che chi tiết quan trọng",
+     ""
+    ]
+   }
+  },
+  "t_41.4": {
+   "key": "",
+   "fp": "YlpbbGFfaGxQNjc4OTk7P0JCQ0REREVHSk1PUE9MSGK3xqxNPj08Ozo4NzU0MzIxPjIyQDUzOj41Njg5Oj1AQkNERERFRk1QUVFSUlFRUFJug314fm9RPjs5ODc1NDMxMjM0NTU1NTU3Ojw/QEJCQ0RFRUVGTFJSU1NTU1JSUVFimbe7ubSkdUM7OTg2NTMyMzQ1Nzk6Ozw+P0FBQkNERUZGRkZNUlNTU1RTU1NTU16jwsG9urezrXg/Ozk3NTQzNDU2ODo8PT5AQEJDREVFRkZGRk1TU1NTU1NTVFNUVIi5w8K/u7m0r6NVOzo4NzU0NDY3OTs9Pj9BQkNERUZGRkZGSVJTU1NUVFRUVFRUXaW2u7/Avrq0sa1zPTs6ODY1NTY4Ojw+P0BCQ0RFRUZGRkZERlJTU1RUVFRVVFVUY6q2s7W7vLq2sq9/Pjw6ODc1OTk6P0xBQUFDREVFRkdHR0c/NFFTVFRUVFRVVVZWY5+0s7Cwr6+vrad3Pjw7OTc2ZGRnbXpvYERFR0hKSUhISEdHSlNTVFRUU1RVVllcYZKlrbGvqqinpaBiPz07OTg2XFlcYnRiWEZKTlBPTElIR0hSVFRTU1NTU1RVWF1od4eenKOnqKinoodJPz48Ojg3ODtJSEtSS01gZ35xUlNQSlZWU1NTU1RUVFVVWGGg38mQlJmWlZeVg1RBQD49Ozk4N1R0c3B9eXuPv+nYkoSCe4Z3VlNUVFRUVVRVWGXO9vGba4CIiYJwUENCQUA+PDo4N0FWUk1fV1d91+/tn2ZlWmteVFNUVFVVVVRVWF6p3NeDV1lcV05FQkNCQUA/PTs5Nzk7PT9BUWZYoNLLc0lHR0dNXmVZYn9nWFhbbFxng4JsW3RxYFlKSEdVUkRaXD46Nzg7PT5HptWbd4tzTEdHR0degYV9qOe0fHx9h358fIGFhca/mIR4dnR6d3CotE87Nzk8PkBLq8O/v76ziVhTVFRcb35ymtSse3yCmIOEhoN1bqa3zbWbm52bmpilqH93eH6Eio+Prbu+v8DDwrC1u7y9v8HDxszKyMnKzcrLzLBgdsTP0s/UzczEv7u4s66qqK2xtrKwtrm7vb/Aw8LF0dLS0tHS0tLR0tHR0dLT0s2uutHRzczQyODSv7u3s7CtqKuwtKivtbe6vr++vr++y9HR0dLS0tLQ0tLR0tPT0dLS0tHRz8Svm8/Ovrm1srS9pqqusKGqsrW4urq8vr64xdHS0tPS0tHR09LR0dHR0dLS0MzQzsiupKivt7ezr7vEpKitr5+hqrO1t7i6vLiwxdHS0tLS0tLS0tLRz9HR0dDRwrfOzMiup6OhoaWqqbG5o6asr5+cn6assbOzsqysyNHR0tHQ0dHS0dLR0dLR0M/Op6fKyMOro6GdmJWTkZKhoKSoraCSnJ2foaSmp6i10NDR0tG/qMvKw763sqqgl46CbLLBq8KtoZ+bmJWQjYmHn6OnrKmHjpWbmJSTmJG62bOelY5xeMGeY11XVVdRUFJQV6ajnsvFo52amZWQjImHk5OSjoRef4aIh4aFhXSYuINla3JjcYp7ZmhdY2lma3lygIKChYGkn5mXlI+NioeEYF5fYGJrrJWBb4qdq5ewv6ago6eprrJwRENDQ0JDcrO4ubiwa2SupZeVkI2LiYaDlZmeoaWppnR8aKa9wcPFx8nJy8vLzMiFRUJCQkJHksbHxcOuV2KwppaTj4yKh4SC",
+   "verdict": "FAIL",
+   "fails": 1,
+   "round": 1,
+   "rows": {
+    "chu-the": [
+     "ĐẠT",
+     "Hai quả cầu cyan lớn ở góc phải trên (x≈1435, y≈255) và góc trái dưới (x≈395, y≈775), nằm trong vùng sáng và tách bạch với nền tím",
+     ""
+    ],
+    "dung-phong-cach": [
+     "ĐẠT",
+     "Toon, viền mực mảnh quanh quả cầu cyan, bóng đổ thật trên mặt sợi, bảng màu tím/kem/cyan đúng",
+     ""
+    ],
+    "vat-that": [
+     "LỖI",
+     "\"Phân tử nước\" chỉ là hai quả cầu cyan trơn, không có oxy và hai nguyên tử H, và không có móc xanh lam nào nối hai phân tử — khoảng trống giữa khung (x 700–1200, y 150–500) trống trơn, trong khi lời kể nói nước cũng tạo ra liên kết hydrogen",
+     "dựng móc xanh lam nối hai phân tử và cho phân tử có O + 2H"
+    ],
+    "goc-may": [
+     "LỖI",
+     "Hai phân tử bị đẩy ra hai góc đối diện, giữa khung trống, không có chỗ đứng cho \"nước tới và ghép vào nhau\"",
+     "đưa hai phân tử vào cùng một cụm giữa khung với móc ở giữa"
+    ],
+    "dep": [
+     "LỖI",
+     "Nửa dưới khung là một mảng kem phẳng không texture chiếm ~45%, trên đó các vệt bóng nhoè trông như vết bẩn (x≈1300,y≈650; x≈1050,y≈830), góc phải có nét mực rối (vòng tròn ở 1780,860)",
+     "thêm texture cho mặt sợi, sửa bóng đổ, dọn nét mực thừa"
+    ]
+   }
+  },
+  "t_44.5": {
+   "key": "",
+   "fp": "MTIzNTY3O0ZFQ09FTU1MVEpVUWBzZV1cW1xaXFpcV09OTUxLSkhHRkVDQUA/PToxMjM0Njc4Ojs8Pj9AQEJCQ0NER2lzcnNzcnNxc29yZ1BPT05MS0pIR0ZEQkFAPjgxMzQ1Njg5Ozw+P0BBQkNDREVFRUdIR0hISUlJSUdISVBQUk9NTkxKSEhGRENAPjYyMzU2ODk7PD4/QEFCQ0RERUZGRkZGRkdHSEpJSEdKbHRsdGljamJZWWBQTVNJPjk+NDY3OTo8PT9AQUJDREVGRkZGRkdGRkdIS29rSUdIVVxYaWZncGxoa3BoZ29lX15jNjc4Ojs9Pj9BQkRERUZGRkZGR0dHR0dIT5qWSUdHR0ZGRklOUlBOT1FKSVBFQ0xWOUA9P0hLSU9ZU1ZiWkxHR0dHR0dHR0lxop5jSEhHR0dGRkZITklKSERGSzw6ODc2XWlhY2tsZ2lzaWhyaFBJSUpMR0dHR1ezxMORS0lJSEdHR1hmiUdDQkpUVUM/QTg2QUhBQURFQkRIREVIR0lNX19yZV1SVHO1vLyZVEx+Y0tkZIOwqFdWSl5wb2dmbF5ZQTs8Pj9AQmOJS0xPU1lww42Hk5iYnq+vqKq1p2aqrqi+wMHKxru5ZUJEQ0FDS0RGcFRcZnB7hp+4payyubu9y8nLxLzD0NHMwcTPzcDOycvT09PSz87GY0FAPz08Ojg2pKivtLrAw8jJzM3Qz8TGw8PRzsnP0tPT09LTy83EwMXRz87OysCzW0JBPz48Ozg3rLC0uL3BxMfKzc/Qyr/Dv7TFy8q9uca/q6iqoLnBwcCZeHGOlVtVR0JBPz08Ozg3rbCztba2tbfIy87KvbCxsqiPp6ZxbJF3TXW9nb/BwKd1V0hNT0ZRa0ZBPz48Ojg3q4xyZ15bb6HKy87Qz8i4q8itzb6Iu8JuSF2xwsPAx7Kfl4+Hf3eEtGdYUUtGQT05hlRHRFCCtMbJzM/R0dLBZmJxy7VqvtCcXXa7w8TG09TU0tLS0M3Jx8C4sqqhl46FfGBLX6C9w8bJy83Q0dGzUEdix828z9DcyLbDxcrV1dTS0tHR0c7LycbCv7u3sqyototVWHl/g4ePuaSaoKOUT0ZluMe8v8HCxcDCudfl2tTT09LRz83LyMbBvru2sa2oiWJKREJCQ0NGclVHSElKR0dKaohWWFyKv8GxhMTQpJido6q0ubvCxL69vLi0sKyoUEtGQkJCQkNDREVGRkdHR0dISk1NSmCwwsCxZXl2ZGVtaG58gXePmGJmbXR7goeKQ0JBRlZQUEhHRERFRkdKTklLTW6sd5vAwbCigIh/e3dzY1xdV01MS0A+PTs6OTk6PT4+RVtdZmdvYWBRWm95f3V2d6jsy7zAuYBpZmhbVkxKSEdERENCQD8+PDs5NzY0Ojs8PT4/QUNOVGdndniCfldSUWCnwb/Al1dVVlZVVExISEZFREJBQD8+PDo4NzU0ODk6Ozw9Pj9AR1VMUk5XWFJRT1mXpqitjlZbWlxaWFFSTU9PSU1DXGJZQkZGQjUzNjc5OTo7PD4/T29qbWdqZWZqaJCVlJaHfGBuZW1pY2htaHx4ZG5LTGNuZmdqZk1ANDU2ODg6Ozw9Pz9AQ0RDQ0RHf7e4t7BjSUZHSUpIRkVETWVoY2tnYWhjXmdqaGJeMjQ1Njc4Ojs8PT4/QEFCQkRosbq6u5NJRkdLR0ZGUEZDQkpDQERCQERBPkREQ0xM",
+   "verdict": "FAIL",
+   "fails": 1,
+   "round": 1,
+   "rows": {
+    "chu-the": [
+     "LỖI",
+     "Câu nói mối liên kết giữa hai sợi bị nước phá vỡ, nhưng trong khung không có móc nào nối hai sợi: chỉ có một quả cầu vàng trơn (1120-1210 × 675-750) nằm lọt ở chỗ hai dải tan giao nhau; \"móc xanh lam\" của hai phân tử nước là một vệt xanh dẹt nằm trên mặt dải (740-820 × 395-450), tách rời hẳn khỏi mọi quả cầu nước, nên không đọc ra được \"nước phá mối nối\"",
+     "dựng móc thật (còng cong, có độ dày) nối hai nhóm hydroxyl đúng chỗ hai sợi chạm, và dựng móc xanh lam nối hai phân tử nước ngay cạnh móc vàng, đặt cả hai ở giữa khung chỗ sáng."
+    ],
+    "dung-phong-cach": [
+     "LỖI",
+     "Không có viền mực vẽ tay như ref: các dải nâu chỉ có đường 1 px ở mép, quả cầu trắng có viền mảnh, quả cầu xanh không có nét mực nào; nền tím là một mảng phẳng không lớp sâu; trên dải nâu có bóng đen méo cứng không thuộc vật nào (590-700 × 570-700 và 780-860 × 570-660)",
+     "chạy pass viền mực đậm méo tay cho cảnh N2, thêm fog và sợi nền tối để có 3 lớp sâu, và loại các bóng đen lệch hình."
+    ],
+    "vat-that": [
+     "LỖI",
+     "\"Sợi cellulose\" là dải nâu phẳng không dày (0-530 × 255-330), nhìn như băng keo; \"phân tử nước\" là quả cầu xanh trơn không có O và2 H; mối liên kết xanh là một mảng dẹt trong suốt nằm trên mặt dải thay cho một mối nối vật lý",
+     "dựng sợi có thể tích (bó sợi có vân), phân tử nước = O + 2 H, và mối nối là vật thể có khối nối hai đầu."
+    ]
+   }
+  },
+  "t_48.1": {
+   "key": "",
+   "fp": "MDEzNz9BQj07PD0+P0BAQUFCQ0NERERERERDQ0NDQkJBQD8/Pj08Ozo4Njo+PTw6MTM0OkFCREM8PT4/QEdTTUlTS0lQRktIRUhFRUVFQ0NCQkFAPz49PDs5OD4/Pjw7MjM0PEJERUY/Pj9AQWJ8eXeDfXuEdn52bXppY21nVERDQ0JAQD8+PTw6OT9APj08MjQ1PENFR0Y/P0BBQkZRUE5aVVdnXG1ta393eY6OemBQWFJOV0lRS0dOPj5BPz49MzU2OUJGR0U/QEFCQ0RFRUVGRkZGRkdHRktHTHiCe4N4gXx5f3N5c3B2Vj1CQD8+NDY3OTxCQ0A/QUJDREVFRUVGRkZGRkZGRkZGRkpNSlFKUk1NUkhOSUdOQDxBQkA+NTY4OTs9PT9AQUNDREVFRUZGRkZISEhIR0ZGRkZGRkZFRUVEQ0NCQD8+Pjs7QEA/NTc4Ojs9Pj9BQkNDREVGRkZGRkdJS0tLSUdGRkZGRkZGRUVERENCQURaXkNARj4/NTc5Ojw+P0BBQkNFRUVGRkZGR0hKV3dcSUdGRkZGRUVGRUVFRENDQkVkc2hmaFRPNjc5Ozw+QEFCQ0RFRUZGRkZGR0hLduCVSUdHRkZGRUVGRUVFRURDQkBDSUVQYVVaOTo/RkFDSVBLTlZcVVdiYVtbaV9VXaB9Y1dIRkZGRkVGRkZFRURDQkA/Pj08PDg4YGNpcmtudH10dXp/dXR8enJzfXZhSnKxv7F1SEZGRkZGRUZFRURDQkFAPj08Ojg2QkRIUkhJTFJJSUtOSEdLSkdHTEpJWLHGxMOyWkZGRkZGRUVFRUREQ0JAPj08Ojg2Nzg6PD0/QEJDRERFRkZGRkZHSElKar/Dwr+2a0ZGRkZGRUVFRUREQ0FAPz08Ojg2Nzg6PD0/QEJDRERFRUVGRkZHSEpRcbO7u7apf19kSUtHRUVFRUVEQkFAPz07Ojg3Njg6PD0/QEFDREVFRkZGR0dHSEt1zqylq6KBfH6MdXlWVEZFRURDQ0JAPz08Ojg2Njg6PD0/QEFCQ0RFRkZGR0dHSEtwxHpga15LSktjXn18eUlFRURDQkFAPj08Ojc2Njg5O0BOXE1LU0lGSkdGR0dHSElMVExIR0ZGRkZGRlJYd0xFRURDQkFAPz07OTg2Njc5O0Nhc21wf3VxeWphZmFWVmNUU1hZTkdGRkdGRkZHTEZFRURDQkFgXkM7OTc2NTc4Ojw+REJFUVBUaGdreHp2eIZ5eX6CcEpGRkZGRkZGRkVFRERDQUJ7o1U6ODc1NTY4Ojs9Pj9BQkNERkZHSktJSlNLS1BSTEdGRUZGRkZGRkVFREhxV26eolE5ODY1NTY3OTo8PT9AQkNDRUVHR0hISEdHSEdHRkdGRkZGRUVFRkVEREuhpayrnUs5NzU0NDU2ODo7PT4/QUJDREVISUlKSklIR0dHR0ZGR0dGRkZFSlZHVoSpr62mcj04NjU0NjY2Nzk6PERLS1FQT01RUVRSU2RRTE9NU09NUVtPTkpQaKp0l6mmoJWPUzk3NTQzdGA2Nzg6Pk9od4t3d2x1eZaHd5N8dIFwcGxrY319f3B9iZGQk5aRiHBfQTc2NTMykIBpcXqEjJKYpbKrr7Sys9zRusbAv8GlVktGRH+/vr28vr28ubi2sa6hSTY1NDMxmJygo6aqr7K0uLy+wcK6vsS/usnLzc3FpodJUpbLwsbHxcPBvby4trKfRTU0MzIw",
+   "verdict": "FAIL",
+   "fails": 1,
+   "round": 1,
+   "rows": {
+    "chu-the": [
+     "ĐẠT",
+     "Quả cầu nước màu xanh lam là vật sáng và lớn nhất khung (860-1100 × 430-660), nằm giữa khung, được hai quả cầu trắng (nhóm hydroxyl) ôm hai bên 840-920 × 330-430 và 820-900 × 600-670, tách rõ khỏi nền tím.",
+     ""
+    ],
+    "dung-phong-cach": [
+     "LỖI",
+     "Không có viền mực vẽ tay: quả cầu xanh chỉ có mép tô đậm hơn, dải nâu chỉ có đường 1 px; nền tím phẳng trơn không có fog/lớp sâu như ref; khối tối ở đáy khung (940-1200 × 970-1080) không theo hình vật nào, không có bóng đổ nào kể nguồn sáng",
+     "viền mực đậm cho toàn cảnh N2, thêm sợi nền mờ ở xa và một bóng có hình để chỉ nguồn sáng."
+    ],
+    "vat-that": [
+     "LỖI",
+     "Dải nâu là que dẻ: phẳng, đều bề ngang, mép cắt thẳng, không có thể tích; \"phân tử nước\" là quả cầu xanh trơn không có O-H-H, \"nhóm hydroxyl\" là quả cầu trắng trơn",
+     "dựng sợi có thể tích và đầu nhọn, phân tử nước = O đỏ + 2 H trắng, nhóm hydroxyl = O-H."
+    ]
+   }
+  },
+  "t_51.6": {
+   "key": "",
+   "fp": "X2hjXTw3ODo7PT4/QEJDcqqwtLa0rYpIRUVGVnpURERERkRFmJ5+tVk5NzY3Nj81OEc/aVs5Ojs8TkpHQkRFYqSqq6yro2lGRkZHaZd7SUpPkIVThq2ru3RXWFxlX2ZZMjRFqJlCP0JGbnZ7XHdoeq2ioJ+dmoZ3S0VFSXaopKquxsOzvb+6t7Kvrap5UWNWZGx4nJ6Plpykr7m8vsTFzdzStq+9zdHAYUZGSI+qzs7OzcvJx8TAvru4tK5oNjo0l5uhq7K1ub3Bw8bJzM7R2fHu1NPS0dLPmldOZLbAx8bPz87MycbCv725ta9hNzU0mp2go7C3ur/CxsnLzc/R0dva0dPS0tLSyba+scbAvsbQz87OzMnFwr+6t7FdODY1mp2hoKe5vMDEx8vMztDR0c3N0tLS0tPTysHjv8DAwMjRz8/Ny8jGwbaupplSODc1mZyenZ66vsLGyMvMztDS09TS0M/OzcrHwr6/wMDAwcS9ko2EiHaswWFQSkU9OTg2mJucl5u2t7e608itpZ+ZndW3fHZ8oY9jdrLAwMDBwMCvZlVGRkVyhUZAPz49Ozg2kJKTkKyFaXWJ1K9UTk1LWLGQS0qE6tyGrL/BwMDBv7OAgmNHRkVFQ0FAP0BfbT83hYZ+b5GiqrW6xbqrqqimo4dPRkd32du/wMDBwMDBuIJhYFpVUU1KR0RCQESgwFk3k5BkSFdYfbnJy87Q0dHT0r5kRUZLf7zBwcDBwMfQ0MnHw8C8t7Cqo52Vi4SeqnJgq66UST0+RYrHzc/Q0dHU0s2JSUZWo8HBwcDAv8nU1dTU0tHR0M7Ny8jEwLu3s66oq6+TRT0+QGW/zs7R0tLR09O6bVWXv8HBwcC/wNHX4eDV0tDR0M/NysfEwLy3sq6qqq6HPzw+QFS3zs7R0NHU3eTIiZ29wMC/wL28w8rT7/DW09HR0M/MysfDwLy2s66rqqx5PT0+P1i6zM/R0dPW7/PimrvAv8C/v7zEx8fG1dvU09LS0c7MysfDwLy3sq6pnY1OOz0+P2q8yczO0NHS6e7kwcDAwL/AuJ69xcTEtcfS09HR0c7MycbDv7u3sqyoSEU7PD0+QFBln9OFeH1/mMDFv8DBwMC5roy7w8LBl6jP0NHRz83KyMbBvru2sa2oNzg6PD4/QEJDeqpVR0dHT5e+wMHBwb+Hj4a7wcK8g3Cdjpyqra6vrqulqK61rKelNzg6Oz0/QEJDRkpGR0dJfLvBwMHBwKZcaH+wtrWqjoiOgHlxaHFkU05HSX3FiFRXNzg6Oz0/RUdDREVHSVl4tMDAwcHAwcKMhYWbmZqceWBmTEhGREVDQUA/PVaPWzc2Rzk7RlFWaXJma290eYm0vsC/wL+/veCKZF9sZZrpoU9JR0ZFQ0BCQD8+PDs8ODY1a15ccXl8god8cG5scKO+v76/wcCufY9bVFVXXI7ZnE9JR0VFQ0JAPz49PDo4NzU0UElSaGJmdXpgSFRQdqanr6CwsaJ6TlVWW1dcXWFxY1ZQUE9NTElAPj08P0A6QDUzNTc8Q0RKUkxFTHB/j5SUkpaWloRpYWtgcF5qb2lwZmpraGVgZl1BPTw7TGtja0c7NTc8RFyOo3lLQ1mgsbO0tbe2sGxFRUZKUVFSUlJOR0RFQ0tOV0NAPkQ8PUpdcmViNTg+UJ7IzsmLTI2vsbO0tri4nExERUVFSExQTkxHRENDQmN7gG9oYm1bU1BeZVFW",
+   "verdict": "FAIL",
+   "fails": 1,
+   "round": 1,
+   "rows": {
+    "chu-the": [
+     "LỖI",
+     "Câu nói nước nằm giữa các sợi như một lớp bôi trơn, nhưng không có lớp nước nàoở giữa hai dải: ba quả cầu xanh đều nằm ngoài hoặc trên dải (quả lớn 960-1230 × 570-830 còn cắt vào dải ở 960-1100 × 600-700), và móc xanh láở chỗ hai sợi bám cũng không có",
+     "dựng màng nước mỏng kẹp giữa hai dải đang chạm, kèm móc chuyển vàng sang xanh lá ở đúng chỗ bám."
+    ],
+    "dung-phong-cach": [
+     "LỖI",
+     "Bóng đen trên dải có hình như người đứng (850-1150 × 90-350) không thuộc vật nào trong khung; các dải nâu trơn, không có viền mực vẽ tay đậm như ref; nền tím có mảng đa giác sáng ở đáy (900-1400 × 700-1080)",
+     "dọn bóng lệch hình, thêm viền mực vẽ tay và dựng lại nền có chiều sâu."
+    ],
+    "vat-that": [
+     "LỖI",
+     "Vật \"lớp bôi trơn\" của câu không được dựng thành vật thể nào; dải nâu có bậc chữa hình chữ nhật ở chỗ giao (1130-1300 × 280-440) như tấm bìa dán; nước là quả cầu trơn",
+     "dựng lớp nước như màng/miếng mềm nằm giữa hai sợi, và làm sợi có bề dày thay vì dải phẳng."
+    ]
+   }
+  },
+  "t_54.8": {
+   "key": "",
+   "fp": "MDWDo6eqrrG1uLy9wcPFxsfIysvNzc3NzczLzMvKycjGxcLAsohSOzk8ZqWBMzZJMTaBpamssbS3u77Bw8bIyMrLzM3Oz9DOz87Oz83NzMrJyMOreEs+S1hLVHdNQmmIMjV/p6uwtLe7v8LExcnJys3Oz87Pz9DP0NDQ0M/Pzc3Mw5xhREFqk3ZZVU9Yg5qdMzV/qq+zt7q+wMTGyMrMztHR0NDQ0NHR0dLR0NHQ0My7i1VCQF6WbF16mZmXpKKfVECArbK1ubzBw8bIy83P0NDR0dLR0NHR0dHCrcnRyqhwSkNCQnlvX46qqKKeqKWhbmmPsLO3u77CxcnLzM/Q0NDR0tLR0dHS0c+UX67Aj1pFQ0NCRGdfiKmrp6Sfq6ejW0R8sLW5vMDEx8vLzdDQz9DS0dHR0dLS0cx8SYV4TEREQ0RDQ1JzoaOhoJyhramlNjdysra7vsHGyMrMztDR0tPS0dHR0tHS0c6MSU5HRERFRUVFUnaFlpubmp6xsKqmNTdsr7O4ury+v8HExMfFxMG/v7++u7nAtqZ9U0ZEQ0RGVl5Pa4Z3dX+AerDGhWljNjdHWltdXV1eXl9fdMSiXVdWVlZWUlFbUUtWWEdGRUZKkZFaRkVFRUpLX8TPczw4Njc5Oz0+QEFCRERFeebOVkZFRUVFRUVFRUVGRUZGRkZJaqJsRkVEQ0NES3yHTjw4Njg6Oz0+P0FCQ0RGU419SUVFRUVFRUZFRUVGRkVGRkZHSldKRkVEQ0NDQ0JBPjo4Nzg6Oz0/QEFCRERFRUZGRUVFRUVFRkZGRkVFRUVGRkZGRkZGRkVFRENCQD89PDk4Nzg6PD0/QEFCRERFRUVFRUVFRUVGRUZFRkVFRUZGRkZGRUVGRUVFREJBQD49Ozk4Njg9Pj0+QU5NSEZFRUVFRUVFRUVFRUVFRUVFRkZFRUZGRkVGRUVEQ0JBQD48Ozk4RUpeZV1ka3x+elVFRUVGRkVFRUVFRUVFRUVFRUZFRUZGRkZGRUVEQ0JAPz48Ojk3amxzdm1rZ3JrW0pFRUVFRkZFRUVFRUVFRkZFRkVFRUZFRkVFRURDQ0FAPz08Ojg2Pz9HSj4+P0NEQ0RERUVFRUVFRUVGRUVFRUVFRUVGRUVGRkZFRURDQkE/Pj07Ojg2Njc5Ozw9PkBBQ0RERUVFRUVFRUZFRUZFRUVFRUZGRUZGRkVFRURDQUA/Pjw7OTc2NTY4Ojs9PkBBQkNEREVFRUVFRUZGRUVFRkVFRUVFRUZGRkVFRENCQUA+PTw6ODc2NTY3OTs8Pj9AQkJDRERFRUVFRUZFRUVFRkZFRUVGRUVFRUVEQ0RFQUA+PTs5ODY1NDU3ODo8PT5AQUJCRERFRUVFRUVFRkVFRUZFRUZGRUVFSUpGSVFxYV0/PDo5NzY1MzQ2Nzk7PD0/P0FCQkRERUVFRkVFRUVFRUVFRkZMR0lQZ3t1enqAa1k+Ozk4NjU0MzQ1Nzg6Ozw+S0xITExKUVFNTlFOUk5PTk5RS1B4b3R8h31qX1VTQDw8Ozk3NjQzMTM1Njc4Ojw9XGpaaG5pbWxvam1kb2d3e3+Dc3Z/b2dpa3BiY2dMPTw7OTc2NTQyMTI0NTY4Ojs8PUBEQENERElUemNtdn+FjH1wYVNbR0JCQUFAPz49PDs5NzY1NTM3MDEzNDU2ODk7PEhzU1xncXqBiomEfHFne1RGQ0RDQkA+QEA/Pj08Ozo4NjU7UEtd",
+   "verdict": "FAIL",
+   "fails": 1,
+   "round": 1,
+   "rows": {
+    "chu-the": [
+     "LỖI",
+     "Vật chính của câu là sợi phồng lên, nhưng sợi là một dải nâu thẳng bị cắt cụt ở mép trên khung (0-1920 × 0-260), không có chỗ phồng, không có dấu hiệu mềm; hơn nửa khung (y 400-1080) là nền tím trống chỉ có hai dải mảnh ở xa",
+     "đưa sợi phồng vào giữa khung theo cận cảnh, thể hiện sợi to ra và mềm uốn cong so với sợi khô."
+    ],
+    "dung-phong-cach": [
+     "LỖI",
+     "Trên dải nâu có bóng đen hình dấu hỏi, khoắc (1000-1130 × 120-300), không thuộc vật nào trong khung; không có viền mực vẽ tay (dải chỉ có mép mảnh); nền tím phẳng không có lớp sâu",
+     "loại bóng lệch hình, thêm viền mực vẽ tay và lớp sợi nền tối."
+    ],
+    "vat-that": [
+     "LỖI",
+     "\"Sợi\" là một dải nâu thẳng, phẳng, đều bề ngang, mép cắt thẳng, không có thể tích hay đầu nhọn nên không nhìn ra là sợi cellulose",
+     "dựng sợi có bề dày, đầu nhọn, vân sợi và bề mặt phồng."
+    ]
+   }
+  },
+  "t_58.0": {
+   "key": "",
+   "fp": "MTI0NTY3OTo8PT9AV3t+YqTYb0dJSEZKRElFRkhDSENGTUxLSkhHRkVDQUA/PTw7MjQ1Njc4Ojs9PkBcpbq7qn1+UEdGRkZFRUVFRURES2NeWGJfU1FcU0tITk1CQEFJMzQ2Nzg6Oz0+P0OMuLu5u5JKR0dGRkZGRkZFRUVFVHl4cnl4cnF2cGxqbGlgXV5lNDY4OTo7PT4/QEaTt7m5t5pOR0dHRkZHSUZGRkVFRk5OUFRUU1RkWVRTYF1TUlpjNjo7QW5PPT5AQUN4qq6vq4FLSEdHRkZgk1BGRkVGRUVlrlVgW01MS0lISEdFQ0NCRmBjXq55VFtfX2NwmZ+foIR3eHhaRUVOi4yIiYyOkJKhwp+4sX5HSElIR0ZHVEM4lLC1pbGxsri9wMTGxry8193Q0M2CRURGl83S0dLR0tLRz8/OzJdDQUFBQT9BXUQ3nKCgr7a7v8LGyMrMztHS3NzR0tGpVEZNqbzUzdHS0tLS0M/OzZFCQUA/Pk5cZlNKnaCipri+wcTHyczPz9HT0M7S09PIwH18vr2/wtDS0dHS0tDPzY1DQkE/Pk1ebGFgm56fm7a/w8bIy83NzM3Qz9DJx8mswbm3vr/Awsq1qsDN0ba1nGdEQkE/Pz08Pzk4l5eUhauugn6msnhyb2+71+OLaI6ot7/AwMDAwL53SoOwwF9aT0VEQkFAPz08Ojg3iYyKZIyNTUyLnk5KSUlrnNGkpLvAwMHAwL/AwL5+T0tUa0tliU1EQkFAPz48Ojk3lp26rqaWnquwsKqopKCHhba+v8DAwMHAv7+/uZJ9h1BMSkl/w1pEQ0JAPz08Ojg3rLC6sHxQZq3X5dLPy8G7vr/AwMDAwMG/y87NysLAvrWwqaOipY+EenFpYVpTTEZCqq6ym0o/QYDV4sy/vb7Av8DAwMC/vr2+zdDR0tPR0dLS0dDR0M/MycXAu7Wtpp+Yqq+zjEA+QGy6uLu+v8DBwMC/wL+7v7C/0dLR0tLQ0dLT0dLR0M7MysfDwLy3sq6pqa6ziUA/S3+0uby+v7/AwcHAv7e3xMHA0NLR0tDQ0NHR0tHQ0M7LycbCv7u3sqyoqK2xn1RrmrG3ubu8v7+/v8C/u6SxwsCuttHR0dHS0dHS0tHRzs3KyMbBvru2sa2oqKurpZuqsLS3ury8vr+/v7+/wZauvbiOh8/R0tPS0dLS0tDRzszJx8TAvbi0sKynoZ6doqesr7K1uLq8vr6/vczT0KGgqZddcs3R0dDQ0dHR0tDPzcvIxcS/u7eyrqqnlJmeoqWqrbG0t7m6vLy2ssLMzb2wZ1BFe8/Rz9DR0dDQ0M7Ny8vHxcK+ubWxrammlZidoKSoq6+ztbe4uJBhY2dxc2dhTVdIgre9w8nMzc/Pz87MysjGwsC7t7Owq6ajk5aanqKlqaywsrWve0tFRUZIR0ZHY51YTVVedYuHlaSqr7C/ubW4uLm2tbGtqaWikZWYnaCkp6qur6mLUlNSU1pwWlpga4p3dXx+gIR+em9ubmGynlNWWmFpc3yDiIuPj5OXmp2gpKirsLaLdXRvb3Z6bW5ranJybG10aHBwcnNmaG1/ZD88PTw7OTg4OTs9jpCUl5qeo6OStMqQd1ZFREZPREREREVFRUxRUVBQT1BLQkJCPz48PDs5ODY1NDMxjI+TlZibnnhJfH1RUERAQUJCQ0NDREREREpRUFBQT05LQUA/Pj08Ozo6Ojg6MzIw",
+   "verdict": "FAIL",
+   "fails": 1,
+   "round": 1,
+   "rows": {
+    "chu-the": [
+     "LỖI",
+     "Câu nói hai sợi bám lỏng và chỗ chạm mở thành khoảng trống, nhưng chỗ \"mở\" duy nhất thấy được là một bậc chữa hình chữ nhật ở mép dải (1100-1250 × 300-400), không phải hai sợi đang tách ra; không có móc nào ở chỗ chạm",
+     "dựng hai sợi cong tách đôi với khe hở rõ rệt ở giữa khung, có móc lỏng lẻo ở mép."
+    ],
+    "dung-phong-cach": [
+     "LỖI",
+     "Dải nâu có cạnh thẳng và bậc chữa vuông, không có viền mực vẽ tay; bóng trên dải có hình móc câu không ứng với vật nào (800-950 × 230-330); các quả cầu trắng lộ rõ mặt phẳng low-poly",
+     "thêm viền mực vẽ tay, dọn bóng lệch hình, làm lại các quả cầu trơn toon."
+    ],
+    "vat-that": [
+     "LỖI",
+     "\"Hai sợi\" là hai dải nâu phẳng không dày, chồng lên nhau bằng bậc chữa vuông (1100-1250 × 300-400), tức là tấm phẳng đặt vào chỗ sợi; quả nước ở giữa (800-950 × 600-830) là khối lệch hình không có cấu trúc phân tử",
+     "dựng sợi có thể tích và có móc nối thật, dựng nước = O + 2 H."
+    ]
+   }
+  },
+  "t_61.4": {
+   "key": "",
+   "fp": "MDEzPmONmpyeoaSmqaudhJqal5J9bGVWVE1TTVNKTk5NTUxLSkhHRkVDQT8+ODIwMTRPfZOYm56go6epq66rrbGxsrOzsrGmjXF6cXhWT09PTk5MS0pIR0ZEQkE/NjIuN1yJlJaanaCjp6qrrbCqr7Gwsa+osLKxkk1NSU1LTVNQT09NTUxKSEhGREI+NTMxZIuSlZmcoKKmqKutr7GtpamupqB0kqSidkdFRl50aHJpZG9gXGVZU1tTS01DNzQzjJCTl5ufoaSoq62vsbGzrbLLoIZqXntxTUVFRlNmWGdiZ3VranVsanNuaGtmSzUzj5KWnKOgo6eqra+wsLKzssC+r25SS1eCWlpbXXyNYmBKS1JRUFVQUFZORU9MPzU0lJmeo6ywtLm4rq+vsLKzra+xqaOJe42stLzExMnKycF0RUdJTE5NXU9BPTs5NzY1pautsra7v8a6rK2vsbO0s6uvsKl3WIC1tbzJ0dHS0sqMRkVEREVNYVlIRUU8OTk2p6uwtLi+wcC2tq+xsrO1trjDsbOupLOvscC8sbDKxMCFRkVFRERbc3NsbXBjX2JXlYx+gbCws7C2ua+vsrS0s6l4e7Cmp7uxu76+lGKxrZdjRUZFRURERkZDRkpFR1NNeUU/ZqGnqaimpImNr7S0snpHhMOvt7/AwMC/sGBuakpIRkZGRUVEQkFAPz07Ojg2XD9kl6Omp7G9mE9ImbO1t7Bfk7rAwcfCwLB+dVdGS0ZGRUZGRUREQ0FAPz08Ojg2Y4yjoaKlqKywmEU/jLO1sr2yvcDAv8ays51UTUtRj1FGRUVFRURFYk5APz08Ojg2mK6ypaGkqKutplpuvLKxt73AwMDAu66dy8S2sa2ospyRh394cWpllW1QSkVBPTo3qq6zrqGkqKuurYGpzba9v7/AwL6osqaj0dDR0tPR0dLS0dDPzcrFwLmxqqKYj4Z+qa+ztaehp6qtqoWuvMDBwMC/vb2fjKCZ0dLR0tLQ0dLT0dLR0M7MysfDwLy3sq6pqa6zt7m2n6Korba+v7/AwcC/ycylT2ON0dLR0tDQ0NHR0tHR0M7LycbCv7u3sqyoeIKep7nLoqOyubu8v7+/vMHKz86JSnC+0dHQ0dHS0dHS0tHRzs3KyMbBvru2sa2oNjtliZWnrbS3ury8vr+4p62ysH1eXY6QmqOrs7vDy83Q0dDRzszKx8TAvbi0sKynNkmBmKWrr7K1uLq8vbKkpq6rm1A9VWhNUVltanSJtJKSlpeUmKCquLKys7OwrqqmXIqdoqWprbG0t7m4vqagloKKiHVxdYF1dHV7aWReYU1KS0lFREZak1RSV11jaXF2bpidoKSoq6+zta6Yr45wVkZaYlZTUVZKT1RVU1NRR0VFRUJDQ0JDSEA9PDo5NzU1Y5WanqKlqayto5eUiXdNP0NFRkVGRUVFTlNTU1NRSUVERUNDRlFSRD49PDo4NjU0WpSYnaCkppt0aWloZ2JLQ01QTEpLUU1QVldcV1hYUUZERUNCR2V4bFxWXlE8NjQzUZCXmpyfilE+Pj9AQUJDQ1traVxic2BncGBwamdsZ05falhTVUtWWltlcmdeVElCSYuUl5GpmEA8PT4/QEFBQkNDRURHRURFTEZJTlJHRkdXYFtga2BjZ19haWNmaWVeQ4iRdVKPeDw7PD0+P0BAQUJCTVhrRUJmfHJ1bGN2dXR5aWRhalRRUV1MRDxDTUpQ",
+   "verdict": "FAIL",
+   "fails": 1,
+   "round": 1,
+   "rows": {
+    "chu-the": [
+     "LỖI",
+     "Câu nói tay kéo mạnh làm sợi tuột khỏi mạng, nhưng nửa trái khung (0-560 × 0-1080) là một mảng hồng phẳng không có ngón tay nào nắm sợi; không có cặp sợi nào đang bị kéo ra khỏi mạng, chỉ là các dải nâu chồng nhau",
+     "dựng bàn tay nắm chặt hai đầu sợi và kéo, đặt vào giữa khung để thấy sợi trượt khỏi chỗ bám."
+    ],
+    "dung-phong-cach": [
+     "LỖI",
+     "Trên dải nâu có bóng đen méo cứng có hình đầu người (400-520 × 440-590) và một bóng hình cánh tay (1200-1300 × 100-250), không thuộc vật nào trong khung; mặt hồng và dải nâu đều trơn, không có viền mực vẽ tay đậm như ref",
+     "loại bóng lệch hình, thêm viền mực vẽ tay và vân bề mặt."
+    ],
+    "vat-that": [
+     "LỖI",
+     "Vật \"tay\" chỉ là một mảng hồng phẳng không có ngón tay (0-560 × 0-1080), tức tấm phẳng thay cho bàn tay; sợi là dải phẳng cắt thẳng có cạnh cứng",
+     "dựng bàn tay đồ chơi có ngón rõ, đang nắm dải sợi, thay cho mảng hồng phẳng."
+    ]
+   }
+  },
+  "t_64.4": {
+   "key": "",
+   "fp": "Rk13XlxEQDo8PT4/QEFSX0ZHWpmurautrKZvUVBQT09OTk1PTElGMDc4NzU1MzIxOGGwgkhRUklYU0xdUVCexmtfWX2gp6qop6erZlFRUVBPT1OShkxGOzs5ODc1NDMxd4SdlY6SlJWZmpufnJ6xwKailIyclZWUhH+YiHl3dXRzcXKvpmphWEM6Ojg2NTMyrLasq7Czt7q+wcTGyMrMztHR09rXr25bTV27z87NzMrKyMbFwr66sVk6Ozk3NjQzrbqtq7K2ub3Bw8bJy83Q0NHS1OryvFVGRUqc0NHR0c/Qz87MycfDuWFWUkA7NzU0mqCipaq1u7/CxcnLzc/Q0NHS09LYsFJGRUZhvNLT0tHRz87OzMnFvYN2c21SODY1m6CjpamtusHEx8vLzdDQ0NHS0s7LwGBGRUVRrNPT09jS0NDPzMvIvG1tZ1hIOTc2naCipairs8LGyMrMztDR0tLQz8/OynxHRk+LvcfK5ebUzMHMwa6onFNGQz07OTg2nKCipampl4+Ni4qJhYOu2Y53dXNwbl1LT3WgfGl2zPDjxKPQn09MSUVCQT88Ojg3lJugoqOgbkNDREVFRkeGw2NHR0dHR0dHSWeNXFRWjtHGy+7rnkpISEhGREE+Ozg3jpCUmJqRVEJDREVFRkZLVUhGRkdHR0dHR0hJSUtLVZ6m0e/uxVVZTk9SUEs/PDk4doeLjIRhQkJDREVGRkZGRkZGRkZHR0dHR0dISEhJUp+yvtXWsX+JfpKxsppnW1ZSgaqUeldMX0dIWUZLTEZHRkZGRkZGRkdHRUJGSEpMVaGxrKuof2V6htro4Na4dWVlea2efnl8hXdygmt2cEpGRkZGRkZGRkZBODU5RExQX6SvrbCxqolhmeLk3tjQeDs6OEpOaVNQTEtjh3WBg1NFPzs7QkZGRj41NDQ0N0Rapbusrq2tsLCitNra29bOgDk4KSswNDAuLi85cUxaY0g9MzIyNDs9OjQzNDQ1NjlYyr2ws7Kwra+trsbPzcm8WC8yKCgqKywtLi8wNDpCQTkzMjIyMjIyMjMzNDQ1N0NMd6Oxs7KxsKqqpqWxqatyMCkoKigpKywtLS4vMDEzMzIyMjIyMjIzMzMzNDQ1VZuHnaizs7Kyr66ppqWelJNcMCgnLicpKissLS4vMDAxMTIyMjIyMjMzMzMzNDQ7msKTu7m0s7GxsK2rqaaioJyVcTwoMScoKSssLS4vLzAwMTEyMjIyMjMyMzMzNDVAoLSCwsqzs7Gwr6yqp6WhnpuXk4JUMyYnKCorLC0uLy8xMTExMjIyMjIyMzMzNDQ3eZdz09rAsK+vrayppqSgnJmVko+KNyUnKCkrKywuLjVmVzMxMTIyMjIyMzMzNDQ1PVJanqy3qq+trKikoKGem5eVkIyKOiUmKCkqKywtMUBeUT41MTEyMjQ1NDMzNDQ1MS9Pm59Ugq6tqKWkoZyZmZaSjomGPSwwMzMtKywwO0BLS1BKQz1FQkhOS0VCPkRGOT54sahNWpaVmqajoJyYlZOPiYWEYVk0NTY2NjY6PUFeWmxeZGtuZmVnZWpoamNlVmRpbHFjdX2QjJ+hnZqZk42MioiFlmw1PD05ODk6QFdyXERAQURCQ0NDQkNDQTk/REZHR0lUos2xnqCenJiWkY6MioaDmW9NeX1gPzg8aKG2pm5DQEFBQkJCQkNDQ0NEREVFRUdk1tPHn5+cmpaTj4yJh4SB",
+   "verdict": "FAIL",
+   "fails": 1,
+   "round": 1,
+   "rows": {
+    "chu-the": [
+     "LỖI",
+     "Nhát này phải áp vào vệt nứt đang lan, nhưng trên dải nâu (0-1000 × 0-250) không có vết nứt nào, mặt dải trơn; khối tối ở giữa khung là bóng méo cứng, không phải nứt",
+     "dựng vệt nứt răng cưa lan ra trên dải với hai mép lệch nhau, đặt vào vùng sáng."
+    ],
+    "dung-phong-cach": [
+     "LỖI",
+     "Các mảng tối có cạnh đa giác thẳng cắt (350-700 × 380-540, 900-1250 × 480-720) trông như lỗi hình học chứ không phải bóng; vùng dưới phải là mảng hồng phẳng có vài nét mực rời rạc vẽ trên (1150-1900 × 450-1000), lệch hẳn phong cách ref",
+     "sửa bóng đổ cho mềm và đúng hình vật, bỏ nét mực rời rạc, thêm viền mực vẽ tay đúng cách."
+    ],
+    "vat-that": [
+     "LỖI",
+     "\"Bàn tay\" ở góc phải dưới là một mặt phẳng màu hồng phẳng, chỉ có vài nét mực vẽ vô nghĩa, không có ngón tay hay khối; sợi là dải phẳng không dày",
+     "dựng bàn tay có ngón và thể tích, đặt vào đúng vị trí nắm/kéo sợi."
+    ]
+   }
+  },
+  "t_67.4": {
+   "key": "",
+   "fp": "MzM1NkBEPEFde3tPQkBBQUJCQ0N35OfUX0RESlWCsqSbqbCwraqnpqOel22QkpGNWVpcX2htaXq+1dixaUJCQkNDQ0Rfv9O3bnaNoK21ubm4t7WysK6qqKWhnYuVlJGOV1JTU1xlV4/X2t3VdkNCQ0RGTllumrW2ub6/v76+vLy6ube0s7GtqqiloZ2ZlpKQNTQ1Nzs+PHnQ1dbKaEVOXXSPp7O8vr+/v8C/v7++vry8u7q4trOwrauopKCcl5SQMzU2ODo7PE6bvMCsgJGotr2/v8C/vr+/v7+/wL+/v729vby6t7Wyr6yppaGajpN9MzU2ODo/SVp8pa60ur2+vr6/wcDAwMDAv8DAwMDAv76+vby8uri0sa2opXpXSWVuKC06UG2Im6qztrm6vL6+vr/Av7/Av8DAv7/Av8DAwMC/vb28urmulnaHu145Nzo4YnqPnqarrrG1t7m6vL6/wMHAv7/AwMDAwMDAv7uqi3qLm6e1vqNcR0BQckY6ODY1mZygpKmtsbO2uLq9vb/BwcC/wMHAwMC/v7+/smVCNDEzOD9brbhLQkA/PTw6ODc1mp2ipqqusrW3ur29vsDAvr/AwMDAwL++v7/Aqj8xMTExMTExRFxDQUA/Pjw7OTc2m56ip6uvs7W4u7y9vr+/v8DAv8C/wMDAwMDAqT4xMTExMTExMDE1PD8/Pj07OTYym5+kpquvsra3ury+v7/AwL+/vr/AwMHAwL+5izkxMTExMTExMTAvMDI2Ojs3MSsnnKCjp6yws7a4u72+v7/Bv7+/v7/AwMDBv7NhNjExMTExMTExMTAwLy4tLS4rKScmnJ+jqKuwtLa4vL2/v7+/v7/AwMDAwMCtqbBCLjExMTExMTExMDAwLy4tLCsqKCcmm5+kqKuvtLe6vLy/vr+/v7/AwMC/vc+umJo2MDExMTExMTExMTAvLy4tLCsqKCcmm5+kp6uvs7a5u72/v8DBwMC/wLmnuuXahE8pMDExMTExMTExMTAvLy4tLCsqKCcmmp6jp6uvsbS3ubu+v7/AwcG+pWVHgNGoNiMqMTExMTExMTExMTAvLy4tLCsqKCYlmp6ipqmtsLO2ubu8v7+/v7WBRDIxPl5BKiYpMDExMTExMTExMDAxOkhYbGQ4KSYlmZyhpaissLS3ury8vr+8nFo1MTIzPUpCQT89OzUyMTExMTExMTRDaI6ns6d8OiglmJufo6err7K1uLq8vbF8QjI0NzxAQ0NDQ0NDQ0E8NTMzMzM2PEBBQ01ea1tJOTIrlpmeoqWprbG0t7m5tItaRD9BQ0NDQ0NDQ0NDQkNDQkBAQD9BQUFAPz49PDk4NjUzlZidoKSoq6+ztbjIxcKqa0hDQ0NDQ0NDQ0NDQ0NDQ0NCQkJBQUA/Pj08Ojg3NTQzk5aanqKlqayurdLm08rNuYJRRUNDQ0NESldKRUpFQ0NCQkFBQD8/Pz09PTg2NTMykZWYnaCkpqaur9vHtLWzt7KQZE9NUVNhgI9bXX1mUkxNSU9LRkpjc2t3d1c+NTIxj5KXmpyeoq+hltCnl5mYm56blI6Qk5ecnINtfJaWj3+Bbnl2dpStsq6wq5h4UjcxjpCUlodnZYKKhaWkr7u+wsXHx8jHycrMx3lKmMjJxLuxpaWmtLu7uLSxrKihjmZHjI+Rc0Q3PpOcV1d2bnqMlI+ElKSywMrNwWVUsszLysjGxMLAvbu4trGuqaWjnpV/",
+   "verdict": "FAIL",
+   "fails": 1,
+   "round": 1,
+   "rows": {
+    "chu-the": [
+     "LỖI",
+     "Vệt nứt đang lan phải là vật chính của khung, nhưng nó là một khối tối đa giác có cạnh thẳng (1110-1920 × 300-780), trông như lỗ hổng chứ không phải vết nứt; dải nâu chiếm hơn nửa khung thì trơn không nứt",
+     "dựng vết xé răng cưa vào tờ giấy với hai mép bị kéo lệch, đặt ngay giữa khung."
+    ],
+    "dung-phong-cach": [
+     "LỖI",
+     "Dải nâu là mặt phẳng màu đồng nhất không vân, không viền mực; khối tối có cạnh đa giác thẳng; chỉ góc dưới phải mới có bóng mềm đúng kiểu ref",
+     "thêm vân và viền mực vẽ tay cho dải giấy, bo bóng cho khối tối."
+    ],
+    "vat-that": [
+     "LỖI",
+     "Tờ giấy là một mặt phẳng tan không dày, mép cắt thẳng, không có cấu trúc sợi; \"vệt nứt\" là một mảng tối phẳng dán lên chứ không phải khoảng xé trong vật liệu",
+     "dựng vết xé thật sâu vào tờ, có hai mép giấy lệch nhau và đầu sợi lộ ra."
+    ]
+   }
+  },
+  "t_7.1": {
+   "key": "",
+   "fp": "KywuLzEyNDU9WF1eYGJjZGRlZmdoZ2hoaGdnZ2dmZmVkY2JhX15cW1lVUlRUU1JQKiwtLjAxMzRHYF9gYmRmamxtamhoaWloaGhoaWhoZ2dyeHN0cm5nYVtXVEVBQkRDKiorLC4vMDN4k4d5bG90eXx8eXJraWlpaWpqaWlpaoGcoJ2cm5mTi390ZUc3MzEwKy0vMTIyNEefsLKtoI+HhoWCgH12a2pqamppampshqKlpKSioJ6cmpeTinlxYTouLTAxMDA0N2+vsrKwrqunpKGWiYJ8cGloaWdnaG6Koqanp6alo6Gem5mWk4+LhmMxNTc6OTU1PpSxsrGuqaenp6mrqaOblJGQjYqGgIybpqiop6enpqOgnZuXlZKPi4JiT09RUVJRZaqzsbGsqaimpaaprLC1ub2+v76xnJaaoKWop6inpqWin52al5OQjImFVldYWlpchLCysK6qp6ako6SlqK2ytru/v7aalZmTl6Spqainp6WjoZ+bmJSRjYqHXmBhYmJmnrKxr62rpqSioJ+hpaqutLm8vauUl4+JlqCkpqmop6WloqCcmZWRjoqHX2JlZ2l6rrOxsK6ppaKempqdoaarsLW4r52WjIWDlqGln6GmpqaloqCdmpeTkIuJYGJkaGqSsbGwr6umo5+al5iZnaKnrbG0nJGKgoaXl5WYl5uenZ6dnJyamJWRjoqHYGNmZ3GmsLCurKimoZuZmJeXmaCmq7GzlIF+jJiTjIeGiZmdnJqZl5aTkI6Kh4N/YGNlZ4aur66tq6ikn5qZl5eXmZ+lqq+zpnyQl46JgHVqd4mRlpiZmJaTkIyJh4J/YWNlapuurq6sqqakn5qXl5eYmZ+lqa+ztZaRioR5b2dMVG19hYmMjY2Ni4mGgn56XWBkdKetrq2sqaajnpmXl5iYmp+lqa2yspyAfnNnYnRPVX19cnV6fX9+fXt4dXFuVllbgqqsrayrqKakn5uZmJiYm6Cmqayws6JzdXxtd2dQXJWtoY6AdXFua2tram1xUVRalausq6qqp6akoZyamZmZnKGmqq2tnXxcbHZoc394V3yrsamvqaKZdn+Xl5iYT1Fioamqqqmpp6ajop+bmZqbnqKnq6+rlndaV2dsZ21qVVmFrLGvraujh5CkoZ2ZVlZ6paipqaqpqaeko6CenJydoKSnq6+wsKGDXlxeWl1fZWFjgKOtrKiknJyfnZyYXmGRo6eoqKmoqKalpKKhoJ+goqaoq66xtZ+KbmtraGdpamlpaXWRoqilpKKgnpuYXG6coqWmp6ilpqalpaOjoqKipKeprK2ssY52aWhpampqaWloZ2dobnV0cnJ5fX93W4SdoaOlo6SjpqakpaSkpKSkpqeprayrsp99a2dnZ2hpaWhnZ2VjYV9cWVdWVFJQZ5Gan6KioqKipaWlpKWmpqWmqamrrK2vsrWhgm9nZmZnaWhnZmJfXlxaWFZUUlFbgpWZnZ+goJ2ho6SkoqSmpqablZycnqKeoaumpItzaW5yaWZlY2BeXFpZV1VUVGN+jpOXmpycnp6ho6OjoaGkp6aTiYyLj46RkJSWlZOSjKSrlHdoYF9dWllbXGFufIuPjpCUl5mbnZ2foqOioaCjpainp6inrbGzt7e5uri3t7i3ta6cg3NxcHiFi4+UlJGNjY+TlZiZm5qbn6ChoqKkpqmpq62usrS2uru7urq5uLa1tLKvqqShn56empeVkY6M",
+   "verdict": "FAIL",
+   "fails": 1,
+   "round": 1,
+   "rows": {
+    "chu-the": [
+     "LỖI",
+     "Dưới ba ngón tay hồng ở góc phải (1000-1350 × 350-750) mặt tờ giấy kem phẳng lì, không có vết rách nào; mảng xanh lam duy nhất (1660-1695 × 75-105) bị khuất sau mép tờ, nên câu \"chỉ một chút nước thôi\" không có gì để đọc",
+     "dựng vết rách ẩm ngay dưới đầu ngón tay (nứt răng cưa, mép giấy ướt sẫm, một giọt nước nhỏ) và đưa vào vùng sáng giữa khung."
+    ],
+    "dung-phong-cach": [
+     "ĐẠT",
+     "Tay đồ chơi có dải sáng toon rõ ở từng ngón (990-1400 × 60-740) và viền mực mảnh quanh ngón, bóng đổ mềm có hình nằm trên tờ, vân gỗ ở góc trái, hạt giấy trên mặt tờ.",
+     ""
+    ],
+    "vat-that": [
+     "ĐẠT",
+     "Tay có ba ngón rõ ràng có khối và có bóng đổ riêng, tờ giấy có mép và bề dày, mặt bàn gỗ có vân — không có hộp, tấm phẳng hay chữ đứng thay cho vật thật.",
+     ""
+    ]
+   }
+  },
+  "t_70.3": {
+   "key": "",
+   "fp": "MDEzNDU2Nzg5O0JIRz8/QENXW19dYn2ynF1eVUNBQUA/Pz4+RkdFRUNBQD49PDs5MTM0NTY3OTo7PEZKSkNAQURYW19eZo2AcGN0bldSUVNPT1BER0hHRkRCQT8+PDs6MjM0NTc5Ojw9PkdMS0RBQkNDQ0NEREtGRUVcZWhmZGhjY2VMR0pIR0ZEQ0E/PTw7MzQ1Njg6Oz0+P0NKSUNCQ0RERERERERERERERERERERDQ05MTE5NS0dIREJAPj07MzU2ODk7PD0/QEFCQ0RFRUREREVFRERERERERERERENDRF1ma2ZoZ2BlWFlTSUw+NDZFPjs8PlNIREdMZE1NTmFfUVtla1BOSWRaUFBZalBJQ0RER0VJUFJaVV5dXGFMaXCLg4KKj6WhoKaqurGys7y9trGzuLiwbZ67t7m7wbhwRE1EQkJAQEFDSE8/Oz02pquusra7vsHFxsfIy8vPy8zLxLKwu8alUXLGx8bGysebbpRXQkJAPz8+SVxKQD44gICLjn17eIqEcG5ujG+Vnn52YW2HfWBWWW6MmY6XorC7u7RcQ0JBQD8+R1tbWGBYNzlBRTw+P0VGQ0RFSEmTtWdGRkxUSEpGY4SJsLi9t7m1mIJKQ0JCQD8+PTw6OTw6Njc5PT8+QEFORjs/PlOKelJGSUdEVo6EqLzAv7uunG5lSkdEQ0NCQD8+PTw6ODc1Nj1bYVo/P1iHVDUyMjpcVz07ZYNpmbu/sa2qoG9VVEVFRUREREJCQUA/PTw6OTc1N0ObjFBEZZirklU9MzE5STZIfLW8wMCzWENGTEZAPUBEREE9PkJCQUA/PTw6OTc1Nz1rTEyMvMG6vLOqkGthpo2vvsDAua50NTExNDUzMjI2NjMxMjY9Pj8/PTw7OTc1Njg6Uoy8xMjLzczOyLqtur/AwLyXXFw9NjIzOT0yMTExMTExMTExMj4/PkE8OTc2Njg6TXJvfYuhvb++vr/BwMC+vL6jXkVJR0FBREo9NTU2MzIxMTEwOWliVnNUOzg1MjY6PEA+Rl+Mr7m+v7/AvqyZp6++tZeef5NwgZ6EUENGQzgzMjQ2T7i9tKydjHlqMDI3Ozw+aq22ubu8v7ynp2Nec3eAjI+Dgpyis8LIsJeim2lFQElUcsLBvru2sa2nMDE0Ojw9aLK3uru4onZRWUlFR05XXGVOT0lJUFt5iJWqubiakKq4t8PAvbm0sKyoLzAyOTs9X6+1tqpwTkVFRUVFRUZFRUVFRkVFRUVLS1BWXGZ7kZKjsLy8u7eyr6unLzAyODs8VqGNfpNIRERFRUVFRUVFRUVFRUVFRUVGRkpRUlFQUk5LT2uJlqCcoaKiMjE0ODo8Q1JDQ0dCRERFRUVFRUVFRkVFR1NcU1JaUk5ST0xITGZlXl5aZXBvbW1pMzQ2Nzk7PD0+P0FCQkRERUVFRUVFRUVFSWBxaWlya2pqX2twaV5cYFdTYFhfcHRpMzQ1Nzg6Ozw+P0ZPTktPUE5LTVFRUUtPSk1PUE5ST0xRVVNaWlVdZmBha15HZYxnMjM1Njc4Ojw9Pk5ta19mamxsY2ZoaV1sV2ZfbmRnbGpiaGZsYkM/Pz0/RUE/dpeJMTI0NTY4Ojs8PT4/QEFBQkNFQ0RERERFREREREREREVCQUFAPz4+PTs6OTpQeHlqMDEzNDU3ODk6PD0+Pz9AQUJCQ0NDQ0REREREQ0NDQkJBQUA/Pj49PDo5ODhGUjs2",
+   "verdict": "FAIL",
+   "fails": 1,
+   "round": 1,
+   "rows": {
+    "chu-the": [
+     "LỖI",
+     "Câu nói chỗ bám đã lỏng, nhưng trong khung không có móc hay mối nối nào: các mảng tối méo cứng (400-700 × 400-540, 950-1600 × 470-720) là bóng chứ không phải chỗ bám, và không có dấu hiệu mối nối còn hay mất",
+     "đặt móc (và bản sao đã lỏng, rơi ra) ngay tại chỗ hai sợi chạm, trong vùng sáng."
+    ],
+    "dung-phong-cach": [
+     "LỖI",
+     "Bóng đen có cạnh răng cưa đa giác (950-1600 × 470-720) như lỗi bóng đổ; các dải nâu không có viền mực vẽ tay; nền tím có mảng đa giác sáng ở đáy, không có chiều sâu",
+     "sửa bóng đổ cho đúng hình vật, thêm viền mực vẽ tay, dựng lại nền có lớp sâu."
+    ],
+    "vat-that": [
+     "LỖI",
+     "Sợi là dải nâu phẳng không dày, mép cắt thẳng; các quả cầu trắng là những hạt giống hệt nhau trôi lơ lửng, không hạt nào bám vào sợi",
+     "dựng sợi có thể tích và cho nhóm hydroxyl bám thật lên mặt sợi."
+    ]
+   }
+  },
+  "t_73.3": {
+   "key": "",
+   "fp": "LjAxMC4vMDU5Ojw8PDk4U8TR09XW1dbW19bU1dTS0tHPzcvJxcK/vbq1sa2qp6WhLzEyMC8wMTU6Ozw9Pj47VsPU1dfY2NnX2NfX2NbW1dTS0c/MycbCwL24tLGtqaWiMTIzMjAxMjY7PT4+P0A9V8TX2NjZ2NnZ2dnZ2djY1tbV09HOzcrGwsC8uLSvq6ekMTI0NTQzNjo8PT4/REhHUcHa2tnZ2dra29vb29ra2dfX1tTRz8zIxsPAvLeyrammMjM1Njg5Ojw9Pj9ASFBRWb7b29va2dvb29ra29rb2tjY2NfV0c/Lx8XBvbm1sKyoMzQ2Nzk6Oz0+P0FBQkNHULjb3Nvb29vb29vc29vc2tnZ2NfW1dLOysfDwLy4s66qMzU2Nzo7PD0/QEFCQkNOWLXb29rb29vc29vc2tzb29za2NjX1dTRzMnFwr65tLCsNDU2OUBEQD4/QEFCQ0RESK/b29rb3Nvc2tvb29vb3Nvb2tjX1tTRzszHw7+6trKtNDU3OkRIRT9AQEJGV1hZW6/b3Nzb29vb2trb2tvb29vc29rY1tTU0c7JxcC7t7KuNDY4OT9FQj9AQkNDRUZGSKPb3Nzb29ra2trc29rc2trc29va2NbV0c7JxsK9ubOwNTY4Ojs9Pj9BQkJDQ0RERJ7b29vb29vb29vc29vb2trc3Nzb2NjV0c7LyMO/uraxNTY4Ojs9P0NFSUxRVFVURpfa2drb29zc3Nvc3Nrb3Nvb29zb2tbV0tDMx8XAvLexNTc4Ojw9SVNSUU9NSkdGRJHa2tvb3Nzd3Nvb29rb3Nvb2tva2tfW09HNyMPAvLaxNTc4Ojw9P0BBQkNERERFS5Pb29vc29zc3Nva29vc3Nvb2dna2djX09DNyMPAurayNTY5Ojs9P0BDVFZXbImRmLHb3Nvb29va29ra29za29zb29na2tnW09DMycS/u7azNTc4Ojs9PkBCRkZGYHl0XIzd3tzb2tra3Nvb29va29zc29va2djV09DMyMTAuraxNTY4Ojs9Pj9AQUJDREl0eLTd3t/f3drb3Nzb3NrZ2tvb29va2dfV0s/Lx8O/urSvNDY4Ojs8PT5AQUtRUU9Tbpvd39/g393a29ra2tvc29vb29va2NbT0c/JxsO+ubWvNDU3OTo8PT9AQkZISkxNTXzc3+Df39/a3Nvb3N3c29zc3NrZ19XT0M3IxsG8uLSvNDU2ODo7PT4/QUFCQ0NERHbc3+Df3t7d3Nvb29ra29vb29nY19TSzs3HxMC6t7KuMzQ2ODk7PD0/QEFCQ0NDRHPb3+Df39/f3Nzb2drb29ra2tfX1dTQzsrGwr25tbGtMzQ2Nzk6Oz0+P0BBQkJDQ2/Z397e4N7f3Nzb2tzb2dnZ2dfV09HOysjEv7u4s66rMjM0Njg5Ozw9Pj9AQUJDQ2vY4N7f3t7e3dva29vZ2trY2NbV0s/LyMXAvbm1sa2pMTM0NTc5Ojs8PT4/QEFLUWfCtMHLzcW5v7/AvMLGtMa/0dTR0M7JxsG/vLi0rqmmMDIzNDY3OTo8PT0+QEBXcGuNkJSYmZKNkJGZjZGRjZONob26uLa0sK2rp6KfnJiVLzEyMzU2ODk6PD09PkBAQViDhYeFhoWDh4eHhYWEgYKAfoF/fHp5d3NvbWxpY2NiLzAyMjQ1Nzg5Ojw8PT4/QFR+fXdyfnx6f4F9gIJ+e39+fXx5dnFwb3V8bGVjWVpV",
+   "verdict": "FAIL",
+   "fails": 1,
+   "round": 1,
+   "rows": {
+    "chu-the": [
+     "LỖI",
+     "Nhát phải cho mặt cắt tờ giấy quét ngang phủ khung, nhưng 2/3 khung là một mảng kem trống không có gì (660-1920 × 0-1010); mép cắt dọc ở x≈660 là đường thẳng trơn, không có đầu sợi nào chìa ra; các que trắng có viền mực chỉ ló ở mép dưới phải (760-1920 × 1010-1080) và bị cắt cụt",
+     "dựng lớp đầu sợi xếp chồng dọc theo mép cắt, đưa mép cắt vào giữa khung và cho nó chiếm phần lớn khung."
+    ],
+    "dung-phong-cach": [
+     "ĐẠT",
+     "Các đầu sợi ở đáy có viền mực vẽ tay rõ (760-1920 × 1010-1080), mặt giấy có vân sợi nhỏ, tông kem/tím/tan đúng bảng màu STYLE.",
+     ""
+    ],
+    "vat-that": [
+     "LỖI",
+     "Mặt cắt của tờ giấy là một mặt phẳng kem trơn không có cấu trúc cắt ngang (660-1920 × 0-1010); các đầu sợi lại nằm rơi rải rác trên mặt quầy ở đáy khung như que diêm, không gắn với mép cắt",
+     "dựng mặt cắt có lớp đầu sợi chìa ra xếp chồng dọc mép, kèm bề dày của tờ."
+    ]
+   }
+  },
+  "t_77.3": {
+   "key": "",
+   "fp": "GhwmIh4fKiYiIyRCRSYnJycnKCgpKSkpKSkpKSgoKCgnJyYlJCQjIyIgHx4dHBwbGxwmIx8fKSsjJCtfXygnKCgoKSkpKSkpKSkpKSkpKSgoJycmJSQkJSYgHx8eHRwbHBwlJR8gKDAkJTaNeisoKCkpKSkqKioqKioqKioqKSkpKCcnJiYlJyciISAeHh0cHB0lJyAhJjQmJS2FkDEoKSoqKioqKioqKioqKioqKikpKSgnJyYmKCciISAfICMkHB0kJiEiJTUpJihsmjgpKioqKiorKioqKioqKioqKioqKSkoKCcnKCcjIiEfHh8iHR4hJiEjJDUsJyhXlj4qKistLi8vLy4tLCsrKysrKyoqKiopKSgqKikkIyEhIh4cHh8hJiMkJDMyJyhFaEQuLjE0Njc3NzY0MS8tLCwsLCwrKysqKignKCglIyIiKCUfIyQlKCcoKTI5LTKEq65aPUBCQ0REQ0FAPDk1MjAvLy8vLi4uLSkmKCknJSMeISUnIiEgJSEhIy49MkCwpcqWU1dYUk9OUFZUUEtGQTw4NTU1NTU0MywoKi0tKyggHR8hGhscHx4fISlAQEl6tb2AW1dZQ0NHWmdlYV1XUFJIPTk5ODg4ODAqO0U+ODImHhwbGRobHR8kLTpET1NBYm9tXmNxZHaBh4eFgX12eKSagnVvamRjY1g9WHh0b2tTIyAhKCgqKSw3QUlGUlBJY294cIJ9iJaYl5eUkYyJrNLAqq6nlqeim5N6U09abnBNKiQlQEJDPTlPVlJKUlRqfo98gYSNm52bmZaUj4uHnbC2tL69obS6sJ+Sfn9yeHdLOTAqREdJST5VYF5VTl6Ai5eChZKpwMO8p5mTj4uHg4CAgYen3efiz5NsjIt3e3BNRD44QUNFR0FWZlpKRU5ceoaRn8vY08vLxqCWko2Kh4SAgYeRt+Xk07JyjYd3e2pMRkM/Ky4yN0BOUjw9Q0VUepGdrri3uJibko2QjIeDf317fYKJkZ2ajYB2eHRsaFhSTktHJictOENOUElQWFxocXKAmIKNjYJ1aGp4hoOAf318enp8gYSGhX95c21nYVpVUEtHJis8S0lGVmRveXloZHOAlmVbYlpnlIltfIB/fn58dnNxcnV4e3t3c25nYlxXUUxHLkBHS01MWl1lb2tVZHt7cWxcWVhpaFJZe4B/f39+end0cXByc3JwbWlkYFtVT0pFQEVITFFXXFpSVEZFX25wcnV2dnhqQDlHcnx6enl4d3Z0cm9saWZkYmBbV1NOSUQ/QD8+PT5CR0EyMzQ2SGxxc3Z4eXp2ZFZZcXl4dnZ1dHJwbmtoY2BbV1NOSUVBPDg0KSgrMjxHTUIvMDI1VGhsb3FydHR1dnV1dXV0c3Jxb21ramdkYFxYU05JQz46NTAsMTc9REpPUUUtL0JLWF9jZ2lrbm5vb3BwcHBvb25sbGpoZmNgXFhUT0tFQTw3My4qOjw+QUZKS0IuNVJdW1thYGJjY2hmaGhoaWtnZmhpZmNjYWFeXFFMSERBPTk1MCwpPT5AQkRHS0g6PllvbWRyanJ0cnFtbXNzbHJhamtzcm9uaW5pa1BIQ0A9ODQwLSkmP0BCQ0VITEs7PUFFSUxOUFJUVldXV1hZWVhZWFdVU1FNS0hGREJAPTk2Mi8tKiclPkBCQ0VIS0k3ODs/QkVJTE9RU1RVV1hYWFhYV1dWVFNQTktIRUE+OzczLywqJyQi",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "chu-the": [
+     "ĐẠT",
+     "Đồng hồ độ ẩm (mặt tròn, kim xanh) nằm rõ ở tiền cảnh giữa khung (815-960 × 645-790), lực kế (mặt tròn chữ \"N\", kim đỏ) ở bên trái (445-600 × 265-420), bàn gỗ và dụng cụ đo chiếm cả khung — người xem tắt tiếng cũng đọc ra đây là bàn phép đo.",
+     ""
+    ],
+    "dung-phong-cach": [
+     "ĐẠT",
+     "Viền mực vẽ tay rõ ở mặt thang, thước gỗ kẻ vạch, túi giấy mép gấp và cốc bút; mặt bàn gỗ có vân và các vòng sắc; bóng đổ dài có hình trên mặt bàn; tông navy + gỗ ấm + kem + teal đúng bảng màu.",
+     ""
+    ],
+    "vat-that": [
+     "ĐẠT",
+     "Mặt thang có vạch và kim, thước gỗ kẻ vạch, túi bao bì dạng phẳng mép gấp kép không quai, mẻ giấy khăn nhăn, bát nước có mặt nước — không có hộp, tấm phẳng hay chữ đứng thay cho vật thật.",
+     ""
+    ]
+   }
+  },
+  "t_80.5": {
+   "key": "",
+   "fp": "MTxJNDU3ODk6PD0zNTorMTM0MjU3OTs7MionJycnJyYmJiUlIyIiISAfHh0dHBwbMjxMNTY4OTo8PTwvODosMjY2LC0vUWBbcGw2KCgnJycmJiYlJCQiIiEgHx4dHBsbMztONzc5Ozw9Pz0vOzswPEA9KCgzcX55k5A/KCgoJycnJiYlJSQjIiIhIB8eHRwbNjxSQ0ZIS01QUkwxTVE2PUJBMC05eoJ6lJRAKCgoKCgnJycmJiUkIyMhIR8eHRwcOURKS05PUFFSU0oyS046OTxDSUYzbXtskZJAKSgpKCgoKCgnJiYlJCMiISAfHh0cIiQlJicnKCkqKyswLi45NCwuMDArR1hUYVExKCgpKCgoKCcnJyYlJSMiISEgHh0cHR4fICEiIyQlJigyKyo6NCgoKCgoKDtfVCooKCgoKCgoKCgnJycmJSQjIiEgHx4dHR4fICEjJCUmJiw2Kio8NikoKCgoKEaEaiooKCgoKCgoKCgnJycmJiUkIyEgHx4dHR4fISIjJCUmJjE4Kio9NykoKSkoMVWKbCooKCgpKCgoKCgoJycnJiUkIyIgHx4dHh8gISIkJSYmJzM4KSs9OCgoKCgoXZindikoKCgpKCgpKCgoKCcnJiYkJCIhIB8eHh8gISIkJSYmKDQ2KCo+OikoKCgoYqyyfSkoKCgoKCgoKCkoKCgnJiUkJCIhIB8eHh8gISMkJSYmKDQ2KCo+OykoKCgpXrK2gyopKSgpKSkpKSkoKCcnJiYlJCMiIR8eHh8gISMkJSYmKTU0KCo/PCkoKCgoU6q3hiooKCgoKSgoKCgoKCgnJyYlJCMiIR8eHh8gIiMkJSYmKjUwKCo+PikoKCgoRpm2hiooKCgoKCgoKCgoKCcnJyYlJCMiIB8eHh8gIiMkJSYnKjMsKCk+PyooKCgoQ5u1gikoKCgoKCgoKCgoKCgnJiYlJCMhIB8eHh8hISMkJSYnKDArKCo/QCooKCgoPZa1fikoKCgoKCgoKCgoKCcnJiYlJCMhIB8eICAhIiMkJSUmKC8qKCk+QSsoKCgoOZCxeykoKCgoKCkpKSkpKSgnJyYlJCIhIB8eJCUmJygoKCkpKS8qKSk+QisoKCgoNXV1VCkoKCkqKissLC0tLCsqKSgmJCMhIB8eJSYnKCkqKywtLTEvLzA/RC8sKyosSGpiTzwsKiwtLi8wMTExMC8uLSsoJyQiIB8eIyQmJykqKyoqKi8pKSs+RTMxMDFSqrmysnZCMTEyMzQ1NjY2NTQyMC8sKiclIiAeJCUmJyYjICAgJishISI6RjQxMTWavLPE0MxnQ0FCQkFBQD49Ozo3NTMwLisoJiMhIyQmJh8dHR4fISIgISI5RjMxNEC925ur2uycTU9PT09OTkxLSUdDQD05NTIvKyckIyQlIhobHB0eHx8gISI5Rzk7P0itzKF8yd+0UllZW1tYUE9OS05MSkdDQDw4NDAtISIjIRsaGxwdHR4gIic6R0NQVlSCtbOvubKYV11eW1pIMjExMTU2P05MSUVAPDczMjAtKSYjIiIiJCcsMjk/SExsdmtrfZefoYxrcWJmYFg7NjU0MjEzR1BOTEhFQT05Ojs8PDw7ODQtKy80OkFBR09VWVc5QHOSj2ZeY0hJZmxcSklOUE1bYl5ZU01JRUE9PD4/Pz8/QkIzM0dISEdBRk5UWEczSlVjaW51Y1ZoenVfWl5wc3BwbmpmYl1YUk1I",
+   "verdict": "FAIL",
+   "fails": 1,
+   "round": 1,
+   "rows": {
+    "chu-the": [
+     "ĐẠT",
+     "Lực kế nằm ở giữa dưới khung, mặt thang kem sáng với kim đỏ, chữ N và các vạch mực đọc được, chiếm ~1/4 chiều cao khung, tách rõ khỏi nền navy; cây thước gỗ và dải giấy kem đứng thẳng ngay phía trên nó",
+     ""
+    ],
+    "dung-phong-cach": [
+     "ĐẠT",
+     "Toon bậc sáng, viền mực vẽ tay quanh núm vàng của kẹp và quanh vỏ lực kế, bóng đổ có hình (vệt sáng song cửa trên mặt bàn, bóng của dải giấy trên mặt thang), vân gỗ, bảng màu navy/kem/vàng-nghệ/đỏ của STYLE.md",
+     ""
+    ],
+    "vat-that": [
+     "LỖI",
+     "Đầu dải giấy cuộn thành trục màu xám (x≈935, y≈690) nằm ngay trên vỏ lực kế chứ không móc vào vòng treo; vòng treo màu vàng lại nằm ở đáy lực kế (x≈930, y≈1045) — \"đầu kia treo vào lực kế\" không thấy được trong hình; cây thước gỗ thấp hơn dải giấy và bị dải giấy che gần hết, chỉ còn một dải vạch mỏng bên trái",
+     "đưa vòng treo lên đỉnh lực kế và móc đầu dải giấy vào đó; đặt cây thước đứng sát dải, cao hơn dải và lộ hết vạch"
+    ],
+    "cho-chu": [
+     "ĐẠT",
+     "Nửa phải khung là nền navy trống, có chỗ đặt thẻ nhãn mà không lên bất kỳ vật quan trọng nào; phụ đề nằm ở dải bàn dưới cùng",
+     ""
+    ]
+   }
+  },
+  "t_83.8": {
+   "key": "",
+   "fp": "GBkaGxwdHh8fICEhIiMjJCQ1REVXhSolJSUlJSUkJCkrM3WhrHMvKSAfHh0dHB0hGRoaGx0eHx8gISIiIyQkJCU2RUZZiDErKSYmJiYmJiksNXikr3EwKiMgHx4dHB4iHB0dHiAiIyQlJigoKSoqKys5RlBwl3FsaU0wLy8vLy0tN32osm4wKykoJSEeHR8kIiMiJScpKSsrLC4uLzAwOj1FR1ZzjIuKgVwyMTEwMS4tN3aktGsxKyooKCclIiIlIiIkJyotMDQ3PkM1MC80TlJOSEpKU1pVQzMvMTExMTAvOnihtWUuLCsqKCYlJCQnLDE3PkNGSEdKTlA3MC8yPT1BSElFSEtCMzAvMDExMTExO4ezt18rKysqKSknJCYoP0JGSUtLSUZNTk80MS8wMjE6SExBQ0lQQjUwLjExMTExPYm0tlwuKyoqKikoJScoQUVHSUtNTE1TVEwyMDAwMjM5SIBTQk9fSz4yMS4xMTExPoy1tVcvLiwpKCgnJiknQ0ZITFBUUU5TVEcxMDEwMzY7S6pzTVNhVk1HSTcvMDExP4+3tFEqJyUiISAgJikjYWt1f4eOb1BUVkMwMTIwMzo9Uq2IUFJfW1JSVEw2Ly8xQpC5s0YhIB8eHh0eJygcio2QlJORfVFOSTcvMDAvMkZMYKSaU1JdXlNRUlVLNC4vQ4+7sEEhIB8fHh0fJiUafXdvZV5dYFg4Ni4tLy4tM1FUWqirWFJbX1RSUFBWSzQuRJa8rjwhICAfHh0cHBsZUFVebX+NmJhiSjEuLy8uMkxUV6q3XlBZYFNQUlBQVUoyRZe8qzghICAfHh0cGxoZfoePlpmdoKOLTzIvMTEvMkdVV6rDZVBWX1VQVFRQUFVISZi9qDUhIB8eHh0cGxoaio6SlpmcoaOiZDIwMjEwMkJVVqfEa05UXlZOVVZTTFBWXZq9pTYjIB8eHR0cGxoaio6SlZmdoKKgfTcwMjAyMj1TVqDOeEtRXFZMUVdTT09RYpG9ojkrKyYiHx4dGxsaiYyPkI+MhXZhRzQwMTAyMjpRUGi4hEtQW1ZMUFVUUlFPYo+2njksLzAuLSkmJSIgb2tjW1lWVFJHMTEwMTAxMjZPQD2ikUtPWlVMT1JSUlFKXYSTkDkwMjY1NDQxMDEwR0ZCRk1PTkk9MDNGTElQUlhhRzuXm0tNWVVMUFNRTUM5SFKFkEc4NTg8Ozo6NjU2QkRERUpHRFRJT3GVnp+jo62tkIazoUtNWFVMUE4/OzxBQUiGj1pIPjs7QT8+Pjo4QkVGPzk3e5ier7vBxsfJysvKrZyqnktNVVVMRz48RVJYRkiGjWNZS0M/PkRDQUE9Q0E3KipInrO8wMPEyMnMzM7NyKqfkUpKU1RJR0pPWFheSEqFhWNaTUtHQD9FRUJCNiwlJTaLsba6vcHExsjMzczNz8m9iEdHUlNFUGBZWlteSU2Ge1NQTktMSEFBREZDJCQkJ2iosLS5u77BxMfKy8q8trm9kk5JWFhKWGpkXV9fR06FclJQUVBLTklCQkJEIiMjLYakrrO3ur3AwsPExcannp2YlYqIj39gcHJ7ZFxXQk+DbExWT1NRSk1JQURAIiMiMYuhqrC0uLm4usDCw8XAv8LBwr3KxLJzWnJsXVVSP1CDbU1SVVBVUEpMSUBDKC4mLICepKuxsa+4vsDCxMfFwr3Bxb/IyMacXWllYV9YPE6CbVlTVVNTVk9KQzUo",
+   "verdict": "FAIL",
+   "fails": 1,
+   "round": 1,
+   "rows": {
+    "chu-the": [
+     "LỖI",
+     "Mặt thang lực kế bị xoay gần như song song tầm nhìn nên chỉ còn một mảng mỏng (x 740–860, y 250–800), không đọc nổi vạch hay kim; khối hồng không có ngón ở góc dưới-trái (x 100–700, y 730–1080) lại là vệt sáng lớn nhất khung, mắt dừng ở đó chứ không ở lực kế",
+     "xoay máy để mặt thang nghiêng về người xem và dựng bàn tay có ngón nắm lực kế"
+    ],
+    "dung-phong-cach": [
+     "ĐẠT",
+     "Toon, viền mực ở cây thước gỗ và vỏ lực kế, vệt sáng song cửa đổ lên mặt bàn có bóng rõ, vân gỗ, bảng màu navy/kem/đỏ/vàng gỗ",
+     ""
+    ],
+    "vat-that": [
+     "LỖI",
+     "Kim đỏ là một thanh bo tròn đứng sát bên trái mặt thang (x 730–780, y 380–690) không có trục ở tâm, nên đọc ra là thanh kẹp đỏ chứ không phải kim của lực kế; khối hồng ở góc dưới-trái là một khối trơn không có ngón, không đọc ra là bàn tay đang nắm lực kế",
+     "dựng kim có trục ở tâm mặt thang; dựng bàn tay đồ chơi có ngón ôm thân lực kế"
+    ],
+    "goc-may": [
+     "LỖI",
+     "Cận cảnh đặt đúng trong mặt phẳng mặt thang nên không thấy kim chạy; lý do của nhát là \"đọc lực ngay lúc đó\" mà không đọc được con số nào",
+     "đặt máy lệch 30–45° về phía mặt thang để thấy trọn vòng vạch và kim"
+    ],
+    "dep": [
+     "LỖI",
+     "Khối hồng trơn chiếm gần 1/3 khung dưới-trái và một tấm trắng dẹt với sọc tím nằm vứt bên trái (x 0–400, y 340–670) làm khung lộn xộn, không dẫn mắt tới lực kế",
+     "bỏ tấm trắng vứt vặt, thu nhỏ bàn tay và để vùng sáng chính là mặt thang lực kế"
+    ]
+   }
+  },
+  "t_87.7": {
+   "key": "",
+   "fp": "GhscIyohICEwNyYlJidLoax7KikqKioqKioqKioqKSkpKSgoJyYlJSQiISAgHx4dGxwcIyohISIuOigmJyhCmaSILCoqKisqKioqKyoqKioqKSkoKCcmJSUjIiEgHx8eGxwdISghISMsPisnJyg3dmJILSorKysrKysrKysrKysrKiopKSgnJiYlJCIhIB8fHB0eHyYjIiQqPy4oKCpRnZl1Ri0rKywsLCwsLCwsLCsrKysqKikoKCcmJSMiISAfHB0eICckIyQpPzMoKTWr2bmumDwtLi8wMDEwMC8uLS0sLCwsKyopKCgnJiQjIiEgHR4fISclJCUoPjgpKkPN1pvO1lczNDY3Nzg4NzY0MjAvLSwsLCsqKSkoJyYlJCMiIiQlJSgoJykrPD4uLj2uw6LHyV49PkBBQUFBPz48Ojc0MS8tLCwrKiopKCcmJiUkISAeHiUiICEkN0IzNDltvMnIm1NTVVVTUlJSUVBNSkZDPjo2MzEwMC8uLi0sKyopGRobHB4fICEiMkY9QkhDXouGYl5dYVNFRUZJXGJfW1hUTklDPTg1MzIyMjEwMC8uGBkaHB0fIicvO0lNU1I6RldobF9Sa2BVXWZwe3p4dHBsZV9XZGRWRTw7Ojk3NjU1JiYmJycrMjpDR0hUXEhCYVt4d2Z1hXd6jpSUlJORjoqHgn13n7Wljn55cGtiW1hWPkBBQDI+TVNTTkhXXEhjdnSBd3eMhYGTnZ2fnpuamJWSjouJwc/Dqp2hnJV+hYV/REZHRzdEVVpZVEhZW2F+hJCWd4WNiZOlp6elop6cmJOQjImEnbe2tbC1tLGRe4uYQ0ZIST9OYGlmYkxQV3KHj5OggIaNma/H0dLOw7OjmpSRjIqHg4F+gYaChpuiqqSUQEM7OD5HVF1VS0NJS1NkhYORipCl0err5+Pj6OjNqJyWkIyJhYF9eXd0dHaBpsPKKjA1OUJMVUo9PUFISEhNb4eVm6PJ483Dyrqys73UyJyWkpCOioaCf3x5eHh6gJSyJywzPEZRVz43P0REQlNyio6SmrG+trLDz5uSnpyotJiQi4SBgHx5d3V0dHV3en6FLTU7QEVLUFNWWV5lZGRqa2xweZScjKGmpJSUlJKEd3V3iqingoB8eXd0c3JxcXJyQ0hNST9JVmJsdHuAfHBpZmpudJagdHKChIB9dXNXZHRrZZWEd3t5dnRycG1qaGhoQkVJRUJSXmBpcHd8goFvYW2Ei5+XXlVaZV9ZXmB1o5eTe1x6fXt5eHd0cGpmYl9dQkVLSUdWYFpdZWxyblxUYXl/f29nZ1dRWFlVTUqXond3jWl3fXx5d3RxbmljYF1bPD5BREhOU1dcYmZeSkVOa3J0dXd7fnZoXVpYW2J8XUpJTFl7fHt5dnVyb2xoY15aKCwxNz1CSU5JRkxCP0FYaGxtbW1wcXJzdXh4e3dSQkRDSGt5d3Z0cXBta2lmZGFfLTI3PkRLUD8wMDIzNTlJWWlyb3JydHd4d3Z2dGtPRj5EQUlsdXRwbmtpZ2RhXVpYQERJTlJVTzMtLi8wMThfc3F4dnR5dn58dHp2fHx4d2dpVDdTb29ua2lpZmNhXlxZP0JHTFBNRzAsLS4vMDE0V2hpbG5ub3BwcnBzdHV1c25lX2BsbmxqaGVjX1xaWFVTPkBCREZFQi0rLC0uLy8+X2VnamttbnBxcnJycXJxcHBwcHBubGpoZmRiYF1bWVZU",
+   "verdict": "FAIL",
+   "fails": 1,
+   "round": 1,
+   "rows": {
+    "chu-the": [
+     "LỖI",
+     "Đồng hồ độ ẩm — vật mang thẻ \"50 %\" — nhỏ và nằm ở góc phải dưới (x 1150–1300, y 780–960) trong khi bát nước trắng viền đỏ chiếm giữa khung và là vệt sáng lớn nhất; lực kế cũng nhỏ ở góc trái trên",
+     "đẩy máy sát đồng hồ độ ẩm để nó chiếm nửa khung, đẩy bát nước ra khỏi tâm khung"
+    ],
+    "dung-phong-cach": [
+     "ĐẠT",
+     "Toon, viền mực vẽ tay quanh vỏ đồng hồ và các vạch thang, thẻ nhãn kem viền mực chữ đỏ đúng kiểu kênh, bóng đổ có hình trên mặt bàn, vân gỗ, bảng màu navy/kem/đỏ/vàng",
+     ""
+    ],
+    "vat-that": [
+     "LỖI",
+     "Giữa bàn đo có bát nước enamel trắng viền đỏ với khăn sọc đỏ-vàng vắt qua miệng bát và một mảnh khăn sọc gấp trong nước (x 780–1100, y 660–900), cùng mẩu khăn giấy bẩn bên phải (x 1300–1520, y 690–900) — đồ của bếp buổi sáng, không thuộc bộ thiết bị bàn đo (giá, kẹp, lực kế, đồng hồ độ ẩm, dải giấy, thước)",
+     "bỏ bát nước và khăn ra khỏi bàn đo, chỉ để bộ thiết bị đo"
+    ],
+    "dep": [
+     "LỖI",
+     "Mặt bàn sáng bằng vệt nắng cửa sổ ban ngày (dải sáng xiên giữa khung) chứ không phải đèn bàn ban đêm, và tâm khung lại là vật lạ chứ không phải đồng hồ độ ẩm",
+     "dùng đèn bàn làm nguồn chính, gom vệt sáng phụ quanh bộ kẹp, giữ nền tối"
+    ],
+    "cho-chu": [
+     "ĐẠT",
+     "Thẻ \"50 %\" nằm ở khoảng trống bên phải mặt thang, đầu chỉ chạm viền thang, không che vạch hay kim; phụ đề nằm trên mặt bàn trống",
+     ""
+    ]
+   }
+  },
+  "t_9.3": {
+   "key": "",
+   "fp": "iI2SlpmcoKKimo1+a0s8Ozo8PD0+QElaZk88PD08PD9EQjw/UGFnZl1OQDczMjAvjZGUl5qbmo57b21ramdbS0E/Pz8+PT5ARkJAPz09QFhaQTw8PEBSZWZkX1dMPTMwiIZ/eHNmZmlra2ZdVl9oaFpGQkFBQD89PT9BQkZCS2hkQTs6Ojs8TmFiYmFUPTUxWlxeYGNfV11nalpHQUNITUdCQkpQYGtub15PW2lYU2ZoSj4+PDk3OlhkYV5VOzMyUlZaYGVnYldVUk5FQkJERERIa5WdpampqaWbj3pxXUlQVUM9PD08OUVbXmBeVkQ2WFZYVVNOR0E6Oj5CS1lkXW2KoKqqqqqrqqqpp51/c2ZOQ0FCQD06O05jXVhYWlpUSUE6OTg5PkRNUlpobG97fISWoqiqqqurqqqrqKiekYZwXEdAQEBBSlxiZWNdVlJRNDY3O0dSWmZwdnmGn7K6hWuMnaClqaqrqqurqKSioJx9cmtYRD0+RlNdX11eX1xVRVBbYGp7hZSntcLLztDMiWN6kpyeoKOmqKqqoqSqqaOGdHNxalZDOzs/SFRZWFdZh5Cao6y3wMXHys7OztDPmWVwdYiTmZydn6Kjnp6lqaqljHiHoaKDWUM5NzlASlNVqaywtbm/wsXJzMzNz9DQuG2AcGR3hI2TmJmSmZ2eoairqbPHpn9xZ2NZRzs2NTk/qK2ytbq+wsbIyszP0M/RxoJfZVNeX2t2fIGLjZScn6Cpvb2DZGBfXF1hY15TQDIwlq2wtbu/wsbIy83Pz83Dm3BdWFxiW1ZZW2mBiYuSm5+6tXJfYWBfXlxaWlhFNjIwd6iwtbm9wsXHy8zOzql9dXBmY3BzcFxSUldufIiLkLC7dVpbXF9gXl1bWFA+NTQxZJSxtbi9wsXIy8vOypFwb3FxcnJycWNQTk1UZ3eDk7WFXFpaWltdXl1bWVdRRDczYHWrtLm9wcTHyczOzbGCcG9vcG9vb25jVlBOUGBynZVZWFtbWllZWlxaWVdVUUo8YGSStLm9v8PGyMrOzs2ue3Bvb29vb29vbWdgW2uJpW1RUldaWllYV1dYWFZVUk9LX2Jzq7a7vsHFx8rLzs/MtpJ9c3BwcHBvb291jLa4mVdRUVFVWFlYVlVTVFZUUlBNX2Flj7W6vcHFycrLzc7OzsvBsqWclpORfXCCs7+ddk1RUVBRUlZXVlRSUVFSUU9NXGBjb6m5vMDDxsjKzc3Oz87Qz9DPzs3EpolmWF1sYEVKUFBQT09TVFRSUE5NTk5NVV5iZYi1ur7CxcfJy8zOz87Pz9DPzsiuhF1HQD9ETz9DSE1PTk5NT1JRT01LSkpLVlhhZGyjuLzBxMXGysrNzc7Oz8i5o4hsTkVEQ0I/Q0Q8QkVLTk1MSkxOTkxLSUdGWVZaYWV9sbq9wMPGx8rNzMS2oop9eHd2bl1LRURCP0A4Nz9DSExLSUhHSktKSEZEWlpXXWNok7a7r62xrK6pln9xcXZ1dHRyc3FpWU9PTklERURFSE1KSEZFREZIR0RDWFpbV15jb6KzmX9/fHtyeHxxdXl5eYF+eYBwZWtlZW91dnRtYWVJREVEQ0FBRERCV1lbWldgZXB2cGxtbm9qaXBvaWlvdHV1dnNdQz8+QlZtbmhhRjc7PUFDQT8+PkBBV1hbXFhZYmVmaWtsbm9vamtxb2hocHV1dXVvXEc9PUFSbG5nXkc0OTo+Pz49Ozo8",
+   "verdict": "FAIL",
+   "fails": 1,
+   "round": 1,
+   "rows": {
+    "chu-the": [
+     "ĐẠT",
+     "Bàn tay đồ chơi có ngón nằm giữa khung (x 600–1300, y 150–500) đè lên tờ giấy kem phẳng trải trên mặt quầy; tờ giấy là vệt sáng lớn nhất, tách bạch với nền gỗ, bóng tay đổ ngay trên giấy",
+     ""
+    ],
+    "dung-phong-cach": [
+     "ĐẠT",
+     "Toon, viền mực vẽ tay quanh bàn tay và mép tờ giấy, bóng đổ thật (bóng tay trên mặt giấy, bóng song cửa trên quầy), vân gỗ, bảng màu kem/tím navy/cam gỗ",
+     ""
+    ],
+    "vat-that": [
+     "LỖI",
+     "Phía sau bàn tay, tờ giấy ướt là một mảng phẳng tím-xanh (x 1090–1800, y 110–520) không có nếp nhăn, không có vệt nước, không có viền mực — đọc như một tấm bìa tím chứ không đọc ra là tờ giấy ướt; lỗi \"tờ giấy chết màu xanh tím\" mà LOOK ghi là đã sửa vẫn còn",
+     "dựng lại tờ giấy ướt có nếp nhăn và vệt ẩm, màu kem như tờ khô; lùi máy để tờ ướt không lọt vào khung này"
+    ],
+    "cho-chu": [
+     "ĐẠT",
+     "Phụ đề nằm trên phần quầy trống dưới tờ giấy, không lên bàn tay hay lên tờ giấy",
+     ""
+    ]
+   }
+  },
+  "t_91.3": {
+   "key": "",
+   "fp": "WF9mbHFzdXqEnLzRysbO1Nnb4OHj4+He3drY2NfSzMO3rKKZkIyIh4aBfHd0cW9qZoKRhHt3hJmwxNjj5ent7/L09fb19PT09/f39/Tx7eXbz8GzqaGYkoyGgn56dXJuiZSLfKiltc7d5Ons7fLy9Pf39enYzsvU6ff7+/n59/f18uvgy7GdkYqEgH16d3VzobCnb42qxtnk5+zu8fLz9fXs2srCure6vdv1+Pn5+fj39vTy7NiumI+Ig314cm9slaemgriio8Te5eXj4d/e2c3BqpqOh4aLk6K70Nzj6O3z9vf18ey8mpGLhYB8d3Rxa3eEesHLsqO8zMXDw8G6trylg3p2dXZ5fIKJk6e/x8vT3un08t2rmZGKhoJ+enZyeG9tYoyzxsKtqaiopqmur5d4eICHhn95dnZ2eH+NrcXP2eXl0K+im5OMh4J9eHVxhIqBYWWGk6GutLe3u7y7nXaHn6+0ta6gindxcG90ib/LwreroKOkn5qUjoiCfHdzbnqKfVh8kIuKjZOdpKqof42wvLq5ubi7tJ19bGxqbnuUm56gn6Wjn5uVkYyHg356aWl1gXprf46SkpKOi4x9gq+5s6OrqqKttranfmZlYmZ4nZ+Zl5mZl5aTkIyIhH98o5F/eHx3cHR3fYKHi416oLakqaasr6aqoaq2pXZeXFpec32Lk5WUjomFg4GBf317r7e7sKWThnJlbm9wb2t9sLSjp7S1tbORhaeptZtnV1NTWnqKiIaHi42KhH94dHBtkaW9zMCPclZVX2RnaGSNs7OzsrS0taZve62pn7CHVlBMTlNjfYaFhIiNioR/e3RvgZKpr3NSTk5OVVlZWVqXs7O0tLS0s4tilbOZobOmaE1KSEhETG2Dgn+EioaDf3t3T1JhZVVWTkFASU5WVlacs7OztLOzqXBrrLKxsrOwg05JRUVBP0Zxf35+h4WAfXl3SExOT1FVV0M+TF9cXF2cs7Oys7KxkF6EsLKysrKxnFdGQkNAPDtXdnZ4f399end0YmJcSUtNTkxAP1h5gW+Vs7OysKKJbFJqgZOjr7Cwp2dBP0E/PDtddnZ6eXVycGxqbWhhTURITElLRD9GW2SFsbKujmhZWUpPUVZjhKWxrnNCPD8+OkhyfYF/e3hzbmpnaGRrZEdCSkdHT0xGQD9sra+OWk5PTExNTk1NUmyXrXxCOTo+T3SCgX15eHZ1cm9rY2dramFVSUJDSktMTEpXoJ9gTExMS0tMTExLS0xbkHxANjVQf4F+fHt5d3Nua2loV15lam5uYlhPSUZHSEhJfn5NS0tLSEVLS0tKSUpKWF49MTJZhISBfnp1cG5ta2llTVFXXWRrcXZ3cWddVU9MVFVJSUlJSUdJSUlJSUlJRzw1LTBkgoB+fHp3c29rZmJhWVdVWF1jaW90eHp8fHt6bEJGSEhISEhISEhISEhHQzIuKDZzf317eHZzcW5saWZiXV9eXVtdYGNnam5zd3t+fVpITVBVTFNPVExQTFFNSTcpJkd6fHp4dXNxb21qZmNhW11gYmFgYGJmamtrbG5wc3RwamdwX2tlbV5oZW1dY1MpLWd5eHd1cnBvbGlnZWJfWFtdYGJlZmRjZGhtcXJlVlZJPjhBQ0RERURERUAzJiMlT3d3dXNycG1raGZkY2BdU1dcXmBjZmhoZ2VkaF07MzArMjAwO0JDQ0NDPTElISFAcnZ1cnJwbmtpZmRiYF5c",
+   "verdict": "FAIL",
+   "fails": 1,
+   "round": 1,
+   "rows": {
+    "chu-the": [
+     "ĐẠT",
+     "Đồng hồ độ ẩm chiếm gần nửa khung, mặt thang kem với các vạch mực, kim xanh teal chĩa lên vạch cao và chữ % đọc được, tách rõ khỏi nền tối",
+     ""
+    ],
+    "dung-phong-cach": [
+     "ĐẠT",
+     "Toon, viền mực quanh vỏ đồng hồ, các vạch thang vẽ bằng nét mực, bóng đổ mềm có hình trên mặt bàn, bảng màu kem/tím/cyan/đỏ",
+     ""
+    ],
+    "vat-that": [
+     "LỖI",
+     "Kim xanh teal không có trục ở tâm mặt thang — đầu dưới của kim bị cắt cụt lơ lửng giữa mặt thang (x 570, y 480) chứ không chạm tâm/quạt nên đồng hồ không đọc ra là một chiếc đồng hồ có kim quay; thêm nữa góc trên-trái là bát nước viền đỏ có khăn sọc vắt trên miệng bát (x 0–330, y 250–560) — đồ của bếp buổi sáng lọt vào cảnh bàn đo ban đêm",
+     "dựng trục kim ở tâm mặt thang; bỏ bát nước và khăn sọc khỏi bàn đo"
+    ],
+    "dep": [
+     "LỖI",
+     "Một vệt tối tím phẳng phủ mất nửa dưới mặt thang (bao gồm chữ %) làm mặt thang như bị đổ mực; vùng sáng nhất khung lại là miệng bát ở đỉnh, không phải đồng hồ",
+     "dời nguồn sáng phụ để toàn bộ mặt thang đồng hồ là vùng sáng nhất khung"
+    ]
+   }
+  },
+  "t_95.4": {
+   "key": "",
+   "fp": "IiUnJyswMTQ7Pzk0MTI+TD4rLC0uLy8xSXY4MTEyOTk4NzY1NDMxMC4rKCYlJCMjJikvMzxCRkhKS0xKR0FDTUEuLi8wMTI0Snk+NjY5PT4+Pj49PDs6OTg1NDIwLiwqICk5QEFGSkxOT1FSUlNNTk1DOzo7PUBCUH9STE9RUlNST0lCPj9ESUlHRUM/PTo4IiMnLTE3RkxOT1JUVldRUVJNTVdXVFRZZIZoZGVlYltTTExSWFtaWFVST0xKSEZEJCUmKCorOktRT05VWlxVUlVbZGhqaGZpgI9za2ZfWlxka29vbGpmY1xSRkFFSkhBKiYnKCorLTZGT0dHT1NWVF1ubWtrbnN2lqx0a292e3+AgICAfXZqXlRPUFRYU0I1JicoKCouMDU6QUdOUFFVVV1naXF7fHt5mbyQjJKUlZOQioR9dXNzdXh3cmpgVk1HKy0rLi8zOUFKUE9IR0pNVltVWmRwgZGbqcatqKainpqTjYqKjYuGgXlwamdlZWVmPkRFSklBRk9XW0hFSU1SWV1gZ251i6+3vdS/uLWyqqShoaCdlYqCe3h2d3p8e3h1REVLSUZGTVVbWkhJTExSZmpob3yTttbh6PHs6ebj3NPIuauflZCPjo2KhoF7d3Z3R0NCTVRbYGdxdm1gWVZ3rKWVpc3p9/v7+/v6+vv7+/n48OHIrqigl5KOiYR/e3ZxRUxSVlxka3B0e4ODdIC51KHA5fX08Ovl4t7a3OHm7PH3+vv348Kpm5KNiYeCfXh1WFdRU2JqcHd8f4N1aXOSqs3Mv82/vsC+tbCwtru/xsrS3e74+eu/pJeOiYSAfnp3UFRWVV9tdHl+g4V4Z2yLodris6mjpKmnrLSwpK23ubO0ucTb8/fOqJyVjYWAfHh0TVVbXFRbYWJiZGZmaniQmK7LpJqWmJ+imoaDi5ilp6aoqrC71+2+p56Xko2Ffnh1OkVEQz89RU5WXWVtd4utzbqnsKWblpiclYuJh4yWnqGjpa/A1L2ioJyWko6JhH94LDE2PUFIV2NyeHt+gIOTtteih46MkJumnp6eo5+ip7K5xMm+pZSYkY2Pj4yIhH97Ki87V1tfYGVueXt6dmdka39mXk9LUGJ/lp+jp6eoqaynoZuPiIiFjY2EgIKEgn56KSs1V19hYmFjbn16dmliW1peZW1YTElOYH+Fh4uMjY6Oin1bXYCEgoiHgXl0dXh4MTxPYGJfY2RhY3J7f396XVRkn6iYY0pGWIORb2VkY2BcbndIRWOBf4WKhH12bmprUlVXYGVjYWVnZGZ2fYB4VVB7pp+gml1IXqWPU0dHR0liglo/P1F9fYGIhYF8dW1lVVdYW2JoZ2RoamRod319WU2FrqyqpItMQE5GR0pPX3Z5W0A7OlB3eoKEgX57d3NvVFdZWmBjaWtrampjaXd9cU2Dsa+slqBrQkFGYnJsYlREPDo6QGVydXt8fXp3dHFuU1dZWV9jZGlubm5rZGp3eWp8oJaKa4iFUkdNSkpFR0tHQkVDY3l3d3RycnNzcW1rUlVZWVtiZGl2cHt5dnJ7eHmCiHNxe4yOcF1mXGtla21ranxygYF6enBxbWlnaGloUlRXWFlgZGVkam5xcmtqbXR3bEpHUYCndkA8P0lRV2Bwe355d3l0cnRzbWhkYl9eUVNXWFddYmVmZmtvcnBqb29rTkZERlGPiD86PWV8f4GBgH99dnN2c2xubWpmYFxa",
+   "verdict": "FAIL",
+   "fails": 1,
+   "round": 1,
+   "rows": {
+    "chu-the": [
+     "LỖI",
+     "Đồng hồ độ ẩm — vật mang thẻ \"90 %\" — bị cắt cụt bởi mép dưới khung, chỉ còn nửa trên mặt thang (x 700–1050, y 700–1080), chữ % và chỗ kim bắt trục đều nằm ngoài khung; lực kế mà câu \"sáu phẩy sáu newton\" nói tới hoàn toàn không có trong hình; giữa khung là bát nước sáng nhất",
+     "nâng máy lên và lùi lại để trọn mặt đồng hồ độ ẩm (kim ở chín mươi phần trăm) cùng mặt lực kế kim đỏ tụt thấp nằm trong khung"
+    ],
+    "dung-phong-cach": [
+     "ĐẠT",
+     "Toon, viền mực quanh vỏ đồng hồ và vạch thang, thẻ nhãn kem viền mực chữ đỏ đúng kiểu kênh, bóng đổ có hình trên mặt bàn, vân gỗ, bảng màu navy/kem/đỏ/cyan",
+     ""
+    ],
+    "vat-that": [
+     "LỖI",
+     "Bát nước trắng viền đỏ với khăn sọc đỏ-vàng vắt qua miệng bát và một mảnh khăn sọc gấp trong nước chiếm trọn tâm khung (x 700–1350, y 560–950) — đồ của bếp buổi sáng nằm trên bàn đo ban đêm, đúng chỗ lẽ ra phải có lực kế và dải giấy",
+     "bỏ bát nước và khăn, dựng lại bàn đo với lực kế, đồng hồ độ ẩm, dải giấy và cây thước"
+    ],
+    "goc-may": [
+     "LỖI",
+     "Máy dừng lại ở bát nước thay vì trượt từ đồng hồ độ ẩm sang lực kế, nên không có lý do để nhát dừng giữa bàn và không có lực kế để đọc con số 6,6 newton",
+     "cho máy trượt từ mặt đồng hồ độ ẩm sang mặt lực kế trong cùng một nhát"
+    ],
+    "cho-chu": [
+     "ĐẠT",
+     "Thẻ \"90 %\" nằm trên nền bàn trống, đầu chỉ chạm viền mặt thang, không che vạch hay kim",
+     ""
+    ]
+   }
+  },
+  "t_99.3": {
+   "key": "",
+   "fp": "LzEpHR0eHyAhIiMjVaCxqD4mJycnMJaztLdpJycnJiYmJSUkIyIhISAfHh0dHBsaMDIrHh4fICEiIiQkTqGzrkYnJycoK4u0tbp/KCcnJycmJiYlJCMiIiEgHx4dHBsbMTMtHx4gICEjJCQlRJCks08nKCgoKHm2t7yYKygoJycnJiYlJSQjIiIhIB8eHRwbMjQwICAhIiMkJSUmPYGUtlsoKCgoKGS2t7usMigoKCcnJycmJiUkJCMhIR8eHRwcMzUyISAhIiMkJSYmOH2SuGYoKCgoKFCyt7i6PygoKCgoKCcnJiYlJCMiISAfHh0cMzY0IyAhIiQlJSYnNIGfunEoKCgoKD+pt7jFUigoKCgoKCcnJyYlJCQiISEgHx0dNDc2JCEiIyQlJicnMHyduH4pKCgoKDOcuLfIaykoKCkoKCgoJycmJSQjIiEgHx4dNTg3JiIjJCUmJicnLXacuYsqKCgpKSyKuLjGiCkoKSkoKCgoJycmJiUkIyIgHx4dNTg5KCIjJCUmJicoKm6Ut5QsKCgoKClxt7fBoiwoKCgoKCgoJycnJiUkIyIgHx4dNTk6KSIjJSUmJycoKGeYspwvKCgoKChbtbe/tjQoKCgoKCgoKCcnJiUkIyIhIB4eNTk6KyIkJSYmJycoKF6XsaY0KCgoKChJsLi8wkAoKCgoKCgoKCcnJiUlJCIhIB8eNjk8LSIkJSYmJycoKFSWrqw5KCgoMVRknquknD4oKCgoKCgoKCcnJiYlJCMhIB8eNjo8MCMkJSYmJygoKEuHmLBAKCkoM11iWUw4LikoKCgoKCgoKCcnJyYlJCIhIB8eNjo8MiMkJSYnKCgpKkWMprdJKyswO0ZDPjo1LikpKSgoKCgoKCgnJyYlJCMhIB8eNTo8NCMkJicoKSorLEGMprtUMT9MTFFUVlJIRjsqKCgoKCgoKCgnJiYlJCMhIB8eNDo9NSQlJygqKy0uLz+Jpb1jSExZi7u+uLWjfFo+KigoKCgoKCcnJiYlJCMiISAfMzk8NyYnKSstLzEyND6Dn7ZrTG6/39q8lqm4wrFkNioqKiorKysrKysrKikoJyUkMzk8OSgoKy0wMjQ2OD5+nYhObcvhxtPGiKSostm2UjUzMjExMC8uLi0rKikoJyYkMjg8OiwtMDM2OTw9QEV6j1tWveLE3+bThrDHud/mg0A7OTY1MjAvLi0sKyopKCYlMDc7OjY4PD9CRUhJTE55eUuJ4+vi6eHDg7zi6OztsUxHREE+OjYzMC4rKignJiQjLzc7Ozs/QkZKTVBTVVd0Y0+56uvr6tbFhcDn6u3uylZPTEpHREE8QTw7OjEvMzQ7LjY7O0FGSk1RVFZYW1hjW1rQ6enm3cqIWqvO1+bty2BgYF5cWldUYIWFf3FpZ2RgLTQ5OkNLTlBSVFdYWFdbWWDW6t/QyMRvPYfIyc3cwG52dXNxbmpmYHCPm5SHeXh1LDM5OkFITE9SVFJPTVxjW1mnvrGvua2Xe6a3ta22k3N6dXp5d3RwbWl3n6edkIF1KzI4OUNPU1ZZWT0yNFx9bGWNl5SboZ2Sl5mbmJmQfH6GfXyCgH56dXFucZmqpZeJKzA3OEJQU1VYXEo4PU9rQz91uL7BwsLCw8HCwb2KfYqJh4eFgX58eXVybnCAl6OhKi82N0FRVVhaXVdARE1qQjdLnsHBw8PDxMPEwZ52jI2Mi4iGhIOAfnl0bWZdYomi",
+   "verdict": "FAIL",
+   "fails": 1,
+   "round": 1,
+   "rows": {
+    "chu-the": [
+     "LỖI",
+     "Nhát này cần đầu dải giấy đi xuống qua từng vạch của cây thước, nhưng dải giấy dừng lại ở một đĩa màu xám lơ lửng (x 870–1000, y 460–510), không chạm cây thước và không nối vào lực kế; ngược lại mặt thang lực kế chiếm trọn giữa khung",
+     "kéo dài dải giấy xuống song song cây thước sao cho đầu dải đi qua từng vạch, và đổi góc máy sang mối dải–thước"
+    ],
+    "dung-phong-cach": [
+     "ĐẠT",
+     "Toon, viền mực quanh vỏ lực kế, các vạch thang vẽ bằng nét mực, bóng đổ của cây thước trên nền, vân gỗ, bảng màu kem/đỏ/navy/gỗ",
+     ""
+    ],
+    "vat-that": [
+     "LỖI",
+     "Đầu dải giấy là một mảng phẳng kem kết thúc bằng đĩa xám tròn, không được kẹp, không móc vào vòng treo của lực kế, nên bộ thiết bị không khép lại thành một hệ; cây thước gỗ lại nghiêng chéo thay vì đứng thẳng",
+     "cho đầu dải giấy móc vào vòng treo của lực kế, đặt cây thước đứng thẳng sát dải giấy và cao hơn dải"
+    ],
+    "goc-may": [
+     "LỖI",
+     "Cận cảnh dồn vào mặt thang lực kế thay vì vào chỗ dải giấy đi qua vạch thước — lý do của nhát là đo độ giãn mà trong khung không có chỗ nào để đọc độ giãn",
+     "đặt máy sát đầu dải giấy và cây thước, để đầu dải chạy qua các vạch trong khung"
+    ],
+    "dep": [
+     "LỖI",
+     "Nửa phải khung là nền navy trống trơn, còn khung còn lại là mặt thang lớn nhưng bị cắt cụt ở đáy; chiếc giấy rách bên phải (x 1520–1920, y 800–1080) lại là mảnh vô nghĩa không liên quan",
+     "đưa đầu dải giấy và cây thước vào tâm khung, thu gọn phần nền trống và bỏ mảnh giấy vô nghĩa"
+    ]
+   }
+  }
+ },
+ "closed": false
+}
