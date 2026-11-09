@@ -248,7 +248,14 @@ if ! mkdir "$LOCK" 2>/dev/null; then
 fi
 echo $$ > "$LOCK/pid"
 W=$(mktemp -d "${TMPDIR:-/tmp}/lemo-review-XXXXXX")   # outside the repository: the reviewer is not shown the code
-trap 'cd /; rm -rf "$W" "$LOCK"' EXIT
+# A round that dies must leave a trace. A silent death reads like "nobody has reviewed this yet": the producer
+# waits for a verdict that was never written, or opens a second round on top of a half-finished one (N106).
+DIED="$EP/review/.round-$SCOPE_ID.died"
+RUNNING="$EP/review/.round-$SCOPE_ID.running"
+mkdir -p "$EP/review"
+rm -f "$DIED"
+printf 'bắt đầu %s · pid %s\n' "$(date '+%H:%M:%S')" "$$" > "$RUNNING"
+trap 'rc=$?; cd /; rm -rf "$W" "$LOCK"; rm -f "$RUNNING"; if [ "$rc" -ne 0 ]; then printf "vòng chấm chết (exit %s) lúc %s\n" "$rc" "$(date "+%H:%M:%S")" > "$DIED"; fi' EXIT
 CHID=""
 if [ -n "$CHAPTER" ]; then
   R=$($GATE chapter "$EP" "$CHAPTER") || exit 2

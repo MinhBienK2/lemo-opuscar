@@ -268,6 +268,23 @@ def kind_ok(ep, kind):
 NEEDS = {'voice': ('outline', 'script'), 'render': ('outline', 'script', 'props', 'storyboard', 'picture')}
 
 
+def dead_rounds(ep):
+    """The review rounds that died without leaving a verdict (N106).
+
+    A round that dies quietly is the worst kind of failure: the gate says "chưa có PASS", which reads like
+    "nobody has reviewed this yet", and the producer either waits for a verdict nobody wrote or opens a second
+    round on top of a half-finished one. The round itself writes the marker, so this only reports it."""
+    out = []
+    for m in sorted(glob.glob(os.path.join(ep, 'review', '.round-*.died'))):
+        scope = os.path.basename(m)[len('.round-'):-len('.died')]
+        try:
+            txt = open(m, encoding='utf-8', errors='replace').read().strip()
+        except OSError:
+            txt = ''
+        out.append((scope, txt))
+    return out
+
+
 def status(ep):
     """where the episode stands: every stamp, whether it still holds, and the last verdict"""
     for kind in ('outline', 'script', 'props', 'storyboard', 'assets', 'picture', 'final'):
@@ -287,6 +304,8 @@ def status(ep):
             continue
         why = valid(ep, kind)
         print(f'{kind:<11} {"PASS còn hiệu lực" if why is None else "PASS đã hết hiệu lực: " + why}')
+    for scope, txt in dead_rounds(ep):
+        print(f'vòng chấm ĐÃ CHẾT: {scope} — {txt} — đọc log của job nền rồi chạy lại, đừng mở vòng thứ hai')
     reports = sorted(glob.glob(os.path.join(ep, 'review', '*REVIEW*.md')) + glob.glob(os.path.join(ep, 'review', 'REVIEW*.md')),
                      key=os.path.getmtime)
     if reports:
