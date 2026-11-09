@@ -1409,6 +1409,37 @@ sự lệch mới lộ ra. Đó là lý do `check_voice_facts.py` đọc `FACTS.
 
 **Đã sửa.** Hai bài kiểm tra trên; cổng dàn ý và cổng lời kể chạy chúng trước khi tốn một vòng chấm.
 
+## N51 — medium — Hai trong bảy bước của kênh không có công cụ: bản chấm viết ra không ai đọc
+
+**Bằng chứng.** Bảy bước của kênh, bảy mẫu người chấm trong `.agents/skills/tram-nghi-nhieu/step*/`:
+mỗi mẫu khai báo tên tệp bản chấm của nó. Năm bước có công cụ — `review.sh` có chế độ
+(`--outline`, `--script`, `--props`, `--storyboard`, chế độ hình), `gate.py` có tem, và tên tệp
+mẫu khai báo trùng đúng tên công cụ đọc.
+
+Hai bước thì không:
+
+| Bước | Mẫu khai báo | `review.sh` | `gate.py` |
+|---|---|---|---|
+| 4 — rà soát chéo kịch bản | `ASSET-AUDIT-REPORT.md` | không có chế độ | không có tem |
+| 7 — nghiệm thu video cuối | `FINAL-QA-REPORT.md` | không có chế độ | không có tem |
+
+Hai bước đó chạy bằng subagent, người chấm viết báo cáo ra, rồi **báo cáo đó nằm đó**: không ai
+đếm vòng, không ai chữ ký nó vào một tem, không ai hỏi "bước này đã qua chưa". Đúng cái hình
+dạng của N4 (bước 3 hồi đó không có tem, không có công cụ, không ai ký) — chỉ khác chỗ: bước 3
+là *cổng chặn phim tệ*, còn bước 4 và 7 là *rà soát chéo*, nên thiếu chúng là mất lớp phủ, không
+phải mất chặn. Vì vậy mức này là medium, không phải high.
+
+Bằng chứng phụ: `review/ASSET-AUDIT-DIRECTORS-CUT.md` của tập 01 kết thúc bằng văn xuôi, không
+có `VERDICT: PASS` — khác hai bản cắt anh em (`PROPS-DIRECTORS-CUT.md`, `STORYBOARD-DIRECTORS-CUT.md`)
+đều kết thúc bằng `## VERDICT: PASS`. Không phải vì người viết sai: **không ai đọc tệp đó**, nên
+cách viết của nó không quan trọng. Đó chính là hệ quả của việc thiếu công cụ.
+
+**Guard đã có.** `channels/tram-nghi-nhieu/tools/check_reports.py` đi dọc bảy mẫu và mọi bản
+chấm đã sinh, rồi nói ba điều: mẫu của bước có công cụ có nêu đúng tên tệp công cụ đọc không;
+mọi bản chấm mà công cụ sẽ đọc có phán quyết mà công cụ đọc được không; và **bước nào chưa có
+công cụ** — hai bước 4 và 7 được nêu tên ngay trong đầu ra, và bài kiểm tra sẽ tự im đi khi
+kênh thêm chế độ cho chúng.
+
 ---
 
 ## Các guard đã bắt được gì (tính từ 08:00, hai tập còn chạy)
@@ -1431,6 +1462,7 @@ phiên chấp nhận và dùng:
 | `PROGRESS.md` (vòng sau đọc vòng trước) | vòng 4 của tập 01 còn sót một lỗi CHẶN đã sửa ở vòng 3, vì người chấm không thấy bản so sánh | sửa xong: `review.sh` ghi `PROGRESS.md` vào thư mục làm việc của người chấm (N40) |
 | `check_storyboard.py` (dàn ý khớp lời kể) | tập 02: `LOOK.md` còn ba dòng dán câu lời kể **đã bị viết lại** — dàn ý mô tả phim cũ | phiên tập 02 đã sửa `LOOK.md` (dòng 20, 76, 84) và bỏ nhãn `CHỖ NÓNG NHẤT` (N48) |
 | `check_timing.py` (nói thật) | cổng bàn giao in *"gates verified"* cho một phim 3D mà bài kiểm tra **chưa từng mở** | sửa xong: bài kiểm tra nói "COULD NOT RUN — không luật nịp nào được áp dụng", thoát mã 2 (N41) |
+| `check_reports.py` (bản chấm đọc được) | 5 mẫu trong 7 mẫu của kênh có tên công cụ đọc; **2 bước không có công cụ** (bước 4, bước 7) — bản chấm của chúng không ai đọc, không ai đếm | nêu tên trong đầu ra của bài kiểm tra; chờ kênh thêm chế độ (N51) |
 
 Bốn trong bảy dòng trên là lỗi **đã** bị bắt và **đã** được sửa trong lúc hai phiên còn chạy. Đó là câu trả lời
 cho câu hỏi lớn nhất của đợt đúc kết này: các guard có tác dụng thật, khi chúng nằm **trước** bước tốn
@@ -1489,8 +1521,9 @@ tiền (trước vòng chấm, trước lúc dựng, trước lúc bàn giao), c
 | 45 | Lời kể không được nói câu mà file nghiên cứu cấm (N42) | `channels/tram-nghi-nhieu/tools/check_voice_facts.py` | **xong** — cổng lời kể chạy nó trước mỗi vòng |
 | 46 | Cổng dàn ý phải hỏi xem dàn ý còn khớp với lời kể và mã không (N43) | `channels/tram-nghi-nhieu/tools/check_voice_facts.py`, `channels/tram-nghi-nhieu/tools/review.sh` | **xong** — `check_voice_facts.py` đọc cả `TREATMENT.md` |
 | 47 | Dàn ý hình (`LOOK.md`) phải khớp lời kể: nó trích nguyên văn từng câu (N48) | `channels/tram-nghi-nhieu/tools/check_storyboard.py`, `channels/tram-nghi-nhieu/tools/review.sh` | **xong** |
-| 48 | Một cách viết lệch lệch phải lộ ra, chứ không phải khi nó làm mất một vòng chấm (N49) | `tools/check_doc_links.py` hoặc một bài kiểm tra mới đọc mẫu và bản chấm | **chưa làm** |
+| 48 | Một cách viết lệch lệch phải lộ ra, chứ không phải khi nó làm mất một vòng chấm (N49) | `channels/tram-nghi-nhieu/tools/check_reports.py` | **xong** — bài kiểm tra đi dọc mẫu và bản chấm, nói cách viết nào công cụ không đọc; 27/27 selftest |
 | 49 | Một tài liệu cũ không tự nói là cũ; phải có bài kiểm tra đọc nó cùng tài liệu nó phải khớp (N50) | `channels/tram-nghi-nhieu/tools/check_storyboard.py`, `check_voice_facts.py` | **xong** |
+| 50 | Hai bước không có công cụ: bản chấm viết ra không ai đọc, không ai đếm (N51) | `channels/tram-nghi-nhieu/tools/check_reports.py` | **một nửa** — bài kiểm tra đã nêu tên hai bước đó; thêm chế độ cho chúng trong `tools/review.sh` thì còn lại nửa kia |
 
 ### Mỗi phát hiện đã có dòng riêng trong `improvements/lessons.md`
 
