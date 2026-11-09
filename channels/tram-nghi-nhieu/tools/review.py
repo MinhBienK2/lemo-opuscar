@@ -169,7 +169,7 @@ def scope(st, items, again=()):
 def previous_rows(st, batch):
     rows = []
     for it in batch:
-        for c, (v, seen, fix) in (st['items'].get(it['id'], {}).get('rows') or {}).items():
+        for c, (v, seen, fix) in rows_of(st['items'].get(it['id'], {})).items():
             if v == 'LỖI': rows.append(f"{it['id']} | {c} | LỖI | {seen} | SỬA: {fix}")
     return rows
 
@@ -219,6 +219,12 @@ def run(ep, step, items, crit, ask, again=(), report=None):
 
 # ——— reports ———
 
+def rows_of(rec):
+    """{criterion: (verdict, seen, fix)} — an item migrated from the old stamp has rows as a list"""
+    v = rec.get('rows')
+    return v if isinstance(v, dict) else {}
+
+
 def write_reports(ep, step, crit, st, judged, missing):
     kinds = {c: k for c, k, _ in crit}
     rnd = st['round']
@@ -229,7 +235,7 @@ def write_reports(ep, step, crit, st, judged, missing):
         if not rec or it in missing:
             R.append(f"## {it['id']} — người chấm chưa trả lời đủ"); R.append(''); continue
         R.append(f"## {it['id']} — {rec['verdict']}" + (f" ({rec['name']})" if rec.get('name') else ''))
-        for c, (v, seen, fix) in rec['rows'].items():
+        for c, (v, seen, fix) in rows_of(rec).items():
             R.append(f"- {c} [{kinds.get(c, '?')}] {v}: {seen}" + (f' → SỬA: {fix}' if fix else ''))
         R.append('')
     open(os.path.join(ep, 'review', f'{step}-{rnd}.md'), 'w', encoding='utf-8').write('\n'.join(R))
@@ -245,7 +251,7 @@ def summary(ep, step, crit, st):
 
     def rows(r, want):
         return [f"  - {c}: {seen}" + (f' → SỬA: {fix}' if fix else '')
-                for c, (v, seen, fix) in r.get('rows', {}).items() if want(c, v)]
+                for c, (v, seen, fix) in rows_of(r).items() if want(c, v)]
     if by['FAIL']:
         S += ['## Phải sửa (lỗi CHẶN)']
         for k, r in by['FAIL']:
@@ -258,7 +264,7 @@ def summary(ep, step, crit, st):
             S += [f"- {k}" + (f" ({r['name']})" if r.get('name') else '')] + rows(r, lambda c, v: v == 'LỖI')
         S.append('')
     advice = [(k, r) for k, r in st['items'].items()
-              if any(v == 'LỖI' and kinds.get(c) != 'CHẶN' for c, (v, _, _) in r.get('rows', {}).items())]
+              if any(v == 'LỖI' and kinds.get(c) != 'CHẶN' for c, (v, _, _) in rows_of(r).items())]
     if advice:
         S += ['## Góp ý (không chặn)']
         for k, r in advice:
