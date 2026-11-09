@@ -87,7 +87,7 @@ case "$FOLDER" in */films/*|films/*|*/channels/*|channels/*) BAND="--band 880";;
 # default is looser), and the delivery review passes them to the check — so the rule a channel writes down is
 # the rule the gate keeps. It also says how the reading check must draw: a channel that draws at 2× on a small
 # GPU loses the browser halfway through the film, and the check that never finished says nothing about the film.
-NUMOPT=""; QOPT=""
+NUMOPT=""; QOPT=""; MOTION=0
 # The walk starts inside the folder, so the path it compares is absolute: a relative folder turns into "." and
 # dirname(".") is "." forever, and the gate then spins without printing a line until it is killed.
 _d=$(cd "$FOLDER" 2>/dev/null && while [ ! -f CHANNEL.md ] && [ "$PWD" != / ]; do cd ..; done && pwd)
@@ -96,6 +96,11 @@ if [ -f "$_d/CHANNEL.md" ] && [ -f "$_d/scene_rules.json" ]; then
   [ -n "$N" ] && NUMOPT="--numbers-per-20s $N"
   Q=$(python3 -c "import json,sys;print(json.load(open(sys.argv[1])).get('readcheckQ',''))" "$_d/scene_rules.json" 2>/dev/null || true)
   [ -n "$Q" ] && QOPT="$Q"
+  # A channel that asks for the motion check gets it, even when it has no board.json: the check asks whether
+  # the picture moves and whether each beat changes its own part of the frame — the two things a reviewer of a
+  # diorama keeps saying out loud ("the props stand still", "the camera drifts").
+  M=$(python3 -c "import json,sys;print(1 if json.load(open(sys.argv[1])).get('checkMotion') else 0)" "$_d/scene_rules.json" 2>/dev/null || echo 0)
+  [ "$M" = "1" ] && MOTION=1
 fi
 if [ -n "$QOPT" ]; then
   run readcheck node "$HERE/core/render/readcheck.mjs" "$FOLDER" $BAND --q "$QOPT"
@@ -328,7 +333,7 @@ PY
   esac
 
   # a film directed from a board must move: actions over time, not props switched on
-  if [ -f "$FOLDER/board.json" ] || [ -f "$BCH/board_rules.json" ]; then
+  if [ -f "$FOLDER/board.json" ] || [ -f "$BCH/board_rules.json" ] || [ "$MOTION" = "1" ]; then
     run motion "$PY" "$HERE/tools/check_motion.py" "$FOLDER" --mp4 "$MP4"
   fi
   echo "--- black frames: $MP4"
