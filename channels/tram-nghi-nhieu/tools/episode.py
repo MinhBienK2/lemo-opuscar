@@ -66,8 +66,11 @@ def next_leg(ep, start=None):
 def prompt(ep, leg, question):
     rel = os.path.relpath(ep, LIB)
     n, step, what, crit = leg
-    first = '' if os.path.isdir(ep) else (
-        f'Thư mục tập chưa có: tạo nó theo bước 1 của skill, với câu hỏi "{question}".\n')
+    first = ''
+    if not os.path.isdir(ep):
+        ep_rel = os.path.relpath(ep, os.path.join(LIB, 'channels', 'tram-nghi-nhieu'))
+        first = (f'Thư mục tập chưa có: tạo nó bằng scaffold trước, rồi làm bước 1.\n'
+                 f'  sh core/render/new_episode.sh tram-nghi-nhieu {ep_rel} "{question}"\n')
     return (f'Dùng skill `tram-nghi-nhieu`. Tập: `{rel}`' + (f' — câu hỏi: "{question}"' if question else '') + '.\n'
             + first +
             f'Phiên này làm đúng một chặng: {what}. '
