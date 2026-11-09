@@ -122,12 +122,18 @@ def critic_id():
                                                                     if os.environ.get('LEMO_CRITIC_MODEL') else '')
 
 
+BAR = ('## Chuẩn chấm\n'
+       'Người xem của kênh xem một lần, trên điện thoại. Câu CHẶN là LỖI khi bạn chỉ ra được một chỗ cụ thể làm người '
+       'xem đó không thấy, đọc sai, hay hiểu sai điều mục này phải nói. Một chỗ có thể làm đẹp hơn mà người xem vẫn '
+       'thấy và hiểu đúng thì câu CHẶN là ĐẠT, và điều đó ghi ở GÓP Ý.')
+
+
 def prompt_for(rubric_text, crit, batch, prev, cwd, extra=''):
     must = [c for c, k, _ in crit if k == 'CHẶN']
     advice = [c for c, k, _ in crit if k != 'CHẶN']
     T = [f"Bạn là người chấm độc lập cho một tập của kênh Trạm Nghĩ Nhiều: phim giải thích khoa học bằng diorama 3D "
          f"toon. Bạn chưa từng thấy mã nguồn hay ghi chú của người làm phim. Mọi thứ bạn cần nằm trong thư mục làm việc "
-         f"{cwd}; đừng tìm tệp ở nơi khác.", '', rubric_text.strip(), '']
+         f"{cwd}; đừng tìm tệp ở nơi khác.", '', rubric_text.strip(), '', BAR, '']
     if extra: T += [extra.strip(), '']
     T += [f'## MỤC cần chấm ({len(batch)})'] + [it['label'] for it in batch] + ['']
     if prev:

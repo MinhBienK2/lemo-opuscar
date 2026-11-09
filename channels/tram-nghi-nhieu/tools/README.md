@@ -32,6 +32,13 @@ Mỗi bước chạy các kiểm tra máy trước người chấm; lỗi máy d
 | `picture` | `check_labels.py`, `check_label_anchors.py`, `check_shots.py --note`, `check_props_used.py` | khung của từng câu trong tờ nhịp `review/beatsheet/` |
 | `final` | — | một khung mỗi câu cắt từ tệp mp4 |
 
+## Sửa và chạy cả tập
+
+| Lệnh | Nó làm gì |
+|---|---|
+| `python3 channels/tram-nghi-nhieu/tools/fixbrief.py <tập> look\|props\|picture [mã…]` | bản giao việc cho subagent sửa các mục phải sửa: lời người chấm, câu phải ĐẠT, tệp được sửa (kèm `tệp:dòng` của câu trong mã và `LOOK.md`), lệnh dựng lại, mẫu trả lời. Props: một bản mỗi vật (`=== BRIEF <mã> ===`); look/picture: tối đa 8 mục một bản, dòng `=== CÒN …` là bản kế |
+| `python3 channels/tram-nghi-nhieu/tools/episode.py <tập> ["Câu hỏi?"]` | làm cả tập, mỗi chặng (1, 2, 3, 4–5, 6, 7) trong một phiên `claude -p` mới; chặng xong theo cổng; mỗi chặng tối đa 2 phiên; chi phí từng phiên vào `out/sessions.jsonl`. `--dry-run` in prompt của chặng kế; `--from <chặng>` |
+
 ## Công cụ khác
 
 | Lệnh | Nó làm gì |

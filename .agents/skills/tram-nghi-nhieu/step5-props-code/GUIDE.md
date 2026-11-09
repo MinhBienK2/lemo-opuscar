@@ -32,6 +32,8 @@ Dựa trên `COMPONENTS_SPEC.md` của Bước 4, dựng mọi vật, bộ phậ
 3. **Chấm:** `sh channels/tram-nghi-nhieu/tools/review.sh <tập> props`. Công cụ kiểm danh mục
    (`props_catalog.py --check`), dựng ảnh của những vật mới hay vừa đổi, cho một người gọi tên mù (không biết tên định
    dựng), rồi người chấm chấm từng vật theo `step5-props-code/RUBRIC.md`. Vật phải sửa nằm trong `review/PROPS.md`.
-   Sửa đúng tệp của vật đó rồi chạy lại: vật không đổi không được chấm lại.
-4. **Người gọi tên mù có thể đọc sai** (một bàn tay bị gọi là "bàn chân"). Câu `dung-vat` vẫn ĐẠT khi ảnh có đủ bộ
-   phận đặc trưng của vật. Trước khi sửa một vật theo bản chấm, mở ảnh của nó và tự nhìn.
+   Vật không đổi không được chấm lại.
+4. **Sửa:** `fixbrief.py <tập> props` in một bản giao việc cho mỗi vật phải sửa; mỗi bản một subagent, chạy song song
+   (SKILL, "Sửa sau vòng chấm"). Khi các người sửa trả lời xong, chạy lại bước 3.
+5. **Người gọi tên mù có thể đọc sai** (một bàn tay bị gọi là "bàn chân"). Câu `dung-vat` vẫn ĐẠT khi ảnh có đủ bộ
+   phận đặc trưng của vật; người sửa nhìn ảnh và trả lời `NGƯỜI CHẤM SAI` cho trường hợp đó.
