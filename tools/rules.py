@@ -12,6 +12,7 @@ The rules (R1–R5, R9–R12 of CODING_STANDARDS.md):
   R3  every file staged on a dirty tree
   R5  a long job polled with `sleep`
   R9  the same command five times over — a poll, not work
+      (and reading a background job's output file over and over is the same poll in another shape)
   R10 a hand-rolled ffmpeg montage (the library has core/render/sheet.py)
   R11 the same big file read again and again
   R12 the same frame opened again and again
@@ -30,6 +31,8 @@ sys.path.insert(0, HERE)
 import transcript  # noqa: E402  (the path is set above)
 
 REPO_FILE = r"[\w./-]+\.(?:md|js|mjs|py|json|sh|html|txt|css|yml|yaml|toml|mp4|srt)\b"
+# the output file of a background job: reading it again while the job runs is a poll (R9)
+JOB_OUT = re.compile(r"([\w.-]+\.output)\b")
 SRC_EXT = r"\.(?:md|js|mjs|py|json|sh|html|txt|css|yml|yaml|toml)\b"
 
 
@@ -215,6 +218,7 @@ def rules(session, film='', lib=''):
     r10_n = 0
     r1_via_tool = 0      # a command that writes through tools/replace.py: safe, but wrapped in a program
     reread = {}          # how often a project file is read (R11)
+    jobout = {}          # how often the output of a background job is read (R9: a poll in another shape)
     imgread = {}         # every look at a frame, with the time (R12)
     writes = {}          # when a project file was written (the versions a look can see)
     renders = []         # (kind, time): when a frame was rendered again — a beat sheet and a prop sheet
@@ -228,9 +232,14 @@ def rules(session, film='', lib=''):
             if p.lower().endswith(('.jpg', '.jpeg', '.png', '.webp')):
                 # by name, not by path: the same frame is looked at from a different scratch folder each time
                 imgread.setdefault(os.path.basename(p), []).append((when, p))
+            elif p and JOB_OUT.search(p):
+                # the output of a background job: reading it again while the job runs is polling
+                jobout.setdefault(os.path.basename(p), []).append((when, p))
             elif p and not p.startswith("/tmp/"):
                 reread.setdefault(p, []).append((when, p))
         if tool == "bash":
+            for m in JOB_OUT.finditer(cmd):
+                jobout.setdefault(m.group(1), []).append((when, m.group(0)))
             if when is not None:
                 if re.search(r'beatsheet\.mjs|still\.mjs|sheet\.py|render\.mjs|build\.sh', cmd):
                     renders.append(('film', when))
@@ -344,6 +353,14 @@ def rules(session, film='', lib=''):
             same, changed = versions(reads, ch)
             out.append(f"R11 {n} lần đọc lại {f} (ít nhất {same} lần đọc đúng nội dung cũ, {changed} lần đọc sau một lần sửa) — đọc cả tệp để tìm một chỗ sửa: grep tên rồi đọc đoạn (`offset`, `limit`), "
                        f"và giữ một bản đồ mã (tên hàm → dòng) bên cạnh mã nguồn.")
+    # R9 (hình khác): đọc output của một job nền đang chạy, lặp lại, là vòng dò — cùng một việc như
+    # R9, chỉ khác hình dạng: lệnh `cat` có thể khác nhau (`tail -n 20` rồi `tail -n 50`) nên bộ đếm
+    # "cùng một lệnh" không bắt được, và lệnh `Read` của công cụ thì không đi qua bộ đếm đó.
+    for f, reads in sorted(jobout.items(), key=lambda kv: -len(kv[1])):
+        if len(reads) >= 5:
+            out.append(f"R9 {len(reads)} lần đọc lại output của job nền {f} — đọc output của một job đang "
+                       f"chạy là vòng dò, không phải việc: đợi job xong rồi đọc một lần (job dài thì để job "
+                       f"tự in kết quả vào tệp, rồi đọc tệp đó một lần).")
     # R12: the same frame looked at again and again. An image is a megabyte of context, so a session that opens one
     # frame twenty times pays for that picture twenty times; the sheet of twelve frames would have shown it once.
     # A frame that was rendered again in between is a different picture: looking at it again is work, not waste.
@@ -435,6 +452,12 @@ def selftest():
         _fake_transcript(session, ['until ! pgrep -f "[e]pisodes/tap-01/build.sh"; do sleep 15; done'])
         got = '\n'.join(rules(session))
         cases.append(('mẫu không tự khớp thì không báo R14', 'R14 ' not in got, got, ''))
+
+        # reading a background job's output again and again is a poll in another shape
+        job = '/tmp/claude-1000/-x/tasks/abc123.output'
+        _fake_transcript(session, ['cat %s' % job] * 5)
+        got = '\n'.join(rules(session))
+        cases.append(('đọc lại output của job nền nhiều lần thì báo R9', 'R9 ' in got and 'job nền' in got, got, ''))
 
         # a scratch file under /tmp is not a project file
         _fake_transcript(session, ["cat > /tmp/scratch.py <<'EOF'\nx=1\nEOF"])

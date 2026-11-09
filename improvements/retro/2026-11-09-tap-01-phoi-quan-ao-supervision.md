@@ -2944,7 +2944,10 @@ Tôi đã báo quyết định này cho phiên của tập 01, kèm lý do và c
   53 lần sửa an toàn qua `tools/replace.py` và 13 lần "R1?" mà máy không đoán. Trước đây báo cáo nói 34
   — lệch một bậc với transcript. Số lớn nhất trong báo cáo: `src/film.js` 166 lần (90 viết bằng đường
   dẫn tương đối + 76 bằng đường dẫn đầy đủ — cùng một tệp, hai cách gọi, phải tính một).
-- **[ ]** N76: `tools/supervise.sh` đếm lượt đọc `tasks/*.output`; R9 nói thêm về output của lệnh nền.
+- **[x]** N76: `tools/rules.py` đếm cả lượt đọc **output của job nền** (`tasks/*.output`) — đọc lại
+  output của một job đang chạy là vòng dò, đúng như R9, nhưng lệnh `cat` có thể khác nhau (`tail -n 20`
+  rồi `tail -n 50`) nên bộ đếm "cùng một lệnh" không bắt được, và lệnh `Read` của công cụ thì không đi qua
+  bộ đếm đó. Có ca selftest.
 - **[x]** N81: `beatsheet.mjs` ghi tệp khoá `out/beats/beats.lock` với pid của nó (12:47), và lời của R14
   trong `CODING_STANDARDS.md` nói rõ giết job bằng pid đọc từ tệp khoá, không `pkill` theo mẫu chung.
   `lessons.md` đã có một dòng về lệnh giết theo tên.
