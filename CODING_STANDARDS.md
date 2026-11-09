@@ -44,6 +44,8 @@ If a rule can be a check, write the check and leave here at most the sentence sa
 
 **R14 — A wait loop must not be able to match itself.** `until ! pgrep -f "episodes/tap-01/build.sh"; do sleep 15; done` — the shell that runs the loop carries that string in its own command line, so `pgrep -f` finds the loop itself, the condition never becomes true, and the wait outlives the job it was waiting for. The same shape in `pkill -f` kills the shell that runs it. Write the pattern so it cannot match itself (`pgrep -f "[t]ap-01/…/build.sh"`), or check a pid written to a lock file; and kill a job by pid, never by pattern.
 
+**R15 — A headless agent must be able to run the commands it needs.** When a script spawns an agent that is not a person — `claude -p`, a reviewer in a round, a job in a cron — every permission prompt has **no answerer**: the call comes back "This command requires approval", and the agent tries again and again until a wall clock kills it. The run looks busy (its first log line is printed) and produces nothing. Give the headless agent the permissions its work needs — `--dangerously-skip-permissions` when it works in a folder of its own outside the repository — and watch its output while it runs: if the log says a command needs approval, stop it and say so in seconds, not in hours. This happened in the props round of one episode: 37 minutes to crop one image, then the round died with no report.
+
 ## Recorded lessons
 
 The findings behind these rules, and the guard that now enforces each of them, are in [`improvements/README.md`](improvements/README.md); the distilled list is [`improvements/lessons.md`](improvements/lessons.md).

@@ -3105,6 +3105,49 @@ sách của phiên tập 01 là **nhìn**, không phải **làm**.
 báo sẽ giúp người giám sát chỉ đúng chỗ — nhưng nguyên nhân gốc đã ở trên: nếu job chạy bằng công cụ
 nền của harness thì không còn gì để dò.
 
+## N100 — high — Người chấm chạy không có ai trả lời câu hỏi quyền: vòng chấm treo ba giờ, và không phải vì phim
+
+**Bằng chứng.** 13:31: tập 02 đang ở vòng chấm vật dựng (props) suốt 44 phút. Vòng đó đã qua pha
+"gọi tên mù" lúc 12:54 và đang ở pha "gọi tên mù lần hai" (7 ảnh mà lần đầu không chắc). Transcript
+của người chấm lần hai (pid 3152274, `/tmp/lemo-review-XetOlj/blind2`) cho thấy nó **không làm được
+gì cả**:
+
+```
+TOOL Bash    cp p_10.jpg /tmp/x.jpg                    → RES: This command requires approval
+TOOL Bash    ffmpeg … crop=800:450:800:0 … (lần 1)     → RES: This command requires approval
+TOOL Bash    ffmpeg … (lần 2, khác cấu trúc lệnh)      → RES: This command requires approval
+TOOL ToolSearch  crop resize image edit                 → RES: (rỗng)
+TOOL Bash    ffmpeg … (lần 3)                          → RES: This command requires approval
+TOOL Agent   Zoom image panels                         (subagent cũng bị chặn, vì cùng chế độ quyền)
+```
+
+37 phút trôi qua, hết thời gian của nó, chỉ để **cắt một tấm ảnh**. Người chấm không hỏi quyền được —
+nó **không có ai để hỏi**: `review.sh` gọi người chấm bằng `claude -p --permission-mode acceptEdits`,
+mà ở chế độ không tương tác thì không có ai trả lời câu hỏi quyền, nên **mọi** lệnh đều thành
+"This command requires approval" và người chấm thử lại cho tới khi đồng hồ giết nó.
+
+**Vì sao quan trọng.** Vòng chấm treu một cách **âm thầm**: log của vòng vẫn in dòng đầu tiên
+("review --props: three views of every object…"), nên người đọc log tưởng nó đang làm việc; còn
+đồng hồ của vòng là 3 giờ (`CRITIC_TIMEOUT=10800`), nên nó đốt 3 giờ rồi chết **không có bản chấm
+nào** — và số vòng thì đã bị tính. Tập 03 đang ở đúng cái trạng thái đó (vòng props lúc 12:57).
+
+**Guard đã có (13:35).** `channels/tram-nghi-nhieu/tools/review.sh`:
+- gọi người chấm bằng `--dangerously-skip-permissions` thay cho `--permission-mode acceptEdits` —
+  người chấm làm việc trong thư mục tạm **của riêng nó, ngoài kho**, và chỉ ghi bản trả lời của mình
+  vào đó (đúng như các phiên làm phim của kênh vốn chạy với cờ đó);
+- có **con chó canh**: trong khi người chấm chạy, nếu `out.txt` hiện "requires approval" thì nó bị
+  dừng ngay, và vòng chấm thoát mã 2 với câu *"người chấm không chạy được lệnh nào"* — **vài giây**
+  thay vì ba giờ;
+- `out.txt` còn câu đó sau khi kết thúc thì cũng là mã 2 (vòng chấm không có kết quả ≠ phán quyết
+  về phim).
+
+Đã thử, không tốn GPU: `claude -p --dangerously-skip-permissions` chạy được lệnh và ghi được tệp
+trong thư mục tạm (trước đây là "requires approval"); con chó canh dừng được một người chấm bị chặn
+trong ~10 s (kiểm bằng một reviewer giả).
+
+**Còn lại.** Hai vòng đang chạy (tập 02, tập 03) phải dừng và chạy lại với `review.sh` đã sửa; người
+làm phim không tự dừng được nên tôi đã nhắn cho cả hai phiên.
+
 ## Còn lại
 
 - **[x]** N72: `core/render/still.mjs` chờ hai khung hình rồi mới chụp (12:47) — ảnh là của khung vừa dựng,
@@ -3160,6 +3203,11 @@ nền của harness thì không còn gì để dò.
 - **[x]** N97: mở phiên mới từ trong một phiên khác thì **gỡ `CLAUDE_CODE_SESSION_ID` và
   `CLAUDE_CODE_CHILD_SESSION`** — nếu không, phiên con (chế độ tương tác) không để lại transcript
   riêng, không đo được bằng `tools/rules.py`, và không nhắn tin cho nó được. Đã thử cả hai đường.
+- **[x]** N100: người chấm chạy bằng `--dangerously-skip-permissions` (thay cho
+  `--permission-mode acceptEdits`, vốn biến **mọi** lệnh của người chấm thành "This command requires
+  approval" — 37 phút để cắt một tấm ảnh, rồi vòng chấm chết mà không có bản chấm); `review.sh` có
+  con chó canh dừng người chấm ngay khi log hiện câu đó. Hai vòng đang chạy (tập 02, tập 03) cần chạy
+  lại với `review.sh` đã sửa.
 
 **Đã xong trong đợt này:** N77 (`check_shots.py` phân biệt *chưa đo* với *đo được 0 %*; `review.sh` không
 dùng lại tờ sheet nửa vời cho vòng chấm cả phim) — commit `c8856c6`.

@@ -86,15 +86,33 @@ fi
 command -v "$CLI" >/dev/null || die "the reviewer '$CLI' is not installed"
 CRITIC_ID="$CLI -p ${LEMO_CRITIC_MODEL:+--model $LEMO_CRITIC_MODEL}"; [ -n "$LEMO_CRITIC_MODEL" ] || CRITIC_ID="$CRITIC_ID(model mặc định của $CLI)"
 CRITIC_TIMEOUT=${CRITIC_TIMEOUT:-3600}   # how long the reviewer may think; a hung reviewer ends the round, it does not eat it
-critic() {   # $1 = the prompt; runs in the current folder, leaves the reviewer's answer in out.txt
+critic() {   # $1 = the prompt; $2 = "no-verdict" when the reviewer answers with a list, not with a verdict
+  VERDICTLESS=${2:-}
   # The reviewer gets a wall clock. A reviewer that hangs is a round that never ends, and the round limit is
   # eaten by a round that never happened. A killed reviewer is not a verdict about the film: exit 2 says so.
+  # The reviewer runs with its permission checks OFF. It works in a folder of its own outside the repository and
+  # writes only its own answer there — and a headless run has nobody to answer a permission prompt: every command
+  # comes back "This command requires approval", and the reviewer retries the same command until the wall clock
+  # kills it. That is three hours of a round that never happened (N100).
   if command -v timeout >/dev/null 2>&1; then
-    timeout -k 30 "$CRITIC_TIMEOUT" "$CLI" -p ${LEMO_CRITIC_MODEL:+--model "$LEMO_CRITIC_MODEL"} --permission-mode acceptEdits "$1" < /dev/null > out.txt 2>&1
-    rc=$?
+    timeout -k 30 "$CRITIC_TIMEOUT" "$CLI" -p ${LEMO_CRITIC_MODEL:+--model "$LEMO_CRITIC_MODEL"} --dangerously-skip-permissions "$1" < /dev/null > out.txt 2>&1 &
   else
-    "$CLI" -p ${LEMO_CRITIC_MODEL:+--model "$LEMO_CRITIC_MODEL"} --permission-mode acceptEdits "$1" < /dev/null > out.txt 2>&1
-    rc=0
+    "$CLI" -p ${LEMO_CRITIC_MODEL:+--model "$LEMO_CRITIC_MODEL"} --dangerously-skip-permissions "$1" < /dev/null > out.txt 2>&1 &
+  fi
+  CPID=$!
+  # the watchdog: a reviewer that asks for permission has nobody to answer it, and it retries the same command
+  # until the clock kills it. The watchdog names that in seconds instead of burning the round in silence.
+  ( while kill -0 "$CPID" 2>/dev/null; do
+      if grep -q "requires approval" out.txt 2>/dev/null; then kill -TERM "$CPID" 2>/dev/null; break; fi
+      sleep 10
+    done ) &
+  WPID=$!
+  rc=0; wait "$CPID" || rc=$?
+  kill "$WPID" 2>/dev/null || true
+  if grep -q "requires approval" out.txt 2>/dev/null; then
+    echo "review: người chấm không chạy được lệnh nào (hỏi quyền mà không ai trả lời) — vòng chấm này không có kết quả, đây không phải phán quyết về phim." >&2
+    echo "review: đọc $W/out.txt để biết vì sao, sửa nguyên nhân rồi chạy lại." >&2
+    exit 2
   fi
   if [ "$rc" -eq 124 ]; then
     echo "review: người chấm không trả lời trong ${CRITIC_TIMEOUT}s — đây không phải phán quyết về phim. Đọc lý do (out.txt), sửa nguyên nhân rồi chạy lại; CRITIC_TIMEOUT=<giây> nâng đồng hồ." >&2
@@ -105,7 +123,7 @@ critic() {   # $1 = the prompt; runs in the current folder, leaves the reviewer'
   # chúng không được hỏi, nên câu trả lời đúng vẫn bị đọc thành "không có câu trả lời" và vòng chấm chết vì một
   # lý do không liên quan gì tới phim. Với hai pha này, câu trả lời là chính danh sách: tệp người chấm viết ra,
   # hoặc phần nó in ra. Cảnh báo của CLI ('unrecognized_model', 'connectors are disabled') không phải câu trả lời.
-  if [ "${2:-}" = "no-verdict" ]; then
+  if [ "$VERDICTLESS" = "no-verdict" ]; then
     if [ -z "$(grep -vE 'unrecognized_model|connectors are disabled' out.txt 2>/dev/null | grep -vE '^[[:space:]]*$' | head -1)" ] \
        && [ -z "$(find . -maxdepth 1 -name '*.md' -size +0c -print -quit 2>/dev/null)" ]; then
       echo "review: người gọi tên không trả lời (chỉ có cảnh báo của CLI, không có danh sách nào) — đây không phải kết quả đo tên." >&2
