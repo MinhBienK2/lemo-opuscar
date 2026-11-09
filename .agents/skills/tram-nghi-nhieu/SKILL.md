@@ -86,6 +86,9 @@ Trước khi dựng, đọc `improvements/lessons.md` ở gốc thư viện — 
   khớp với *"chỗ nóng nhất trong máy"*). Viết `FACTS.md` thì viết rõ cái phim **không** được nói — rồi đừng nói.
 - **Dàn ý phải khớp với lời kể:** `TREATMENT.md` là cái cổng dàn ý chấm. Sửa lời kể mà để nguyên dàn ý cũ
   thì cổng trả tập về vì một tài liệu lỗi thời trong khi phim đã đúng.
+- **Sửa lời kể xong thì sửa cả hai bản dàn ý.** `TREATMENT.md` *và* `LOOK.md` đều trích lời kể. Sửa lời
+  kể mà không sửa chúng thì hai tài liệu đó mô tả một phim không còn tồn tại — và chúng trông vẫn
+  đúng, nên không ai tự thấy.
 - **Review độc lập:** Dùng prompt `step2-script/PROMPT_CRITIC.md` để bắt lỗi cờ `DIGIT`, `LONG`, `NOFACTS`.
 - **Vòng lặp:** Đạo diễn hiệu chỉnh câu văn hoặc phản biện từ ngữ chuyên môn. Sau khi `PASS`, chạy `tts_vi.py` sinh `src/timeline.js`.
 
@@ -94,6 +97,11 @@ Trước khi dựng, đọc `improvements/lessons.md` ở gốc thư viện — 
 - **Review độc lập:** Dùng prompt `step3-storyboard/PROMPT_CRITIC.md` thẩm định độ tương phản, góc đặt ống kính.
 - **Nhãn nằm đúng câu:** mỗi nhãn trong `src/film.js` gắn với câu lời kể gọi tên nó. `review.sh --storyboard` kiểm
   bằng máy (`tools/check_labels.py`) và dừng trước khi tốn một vòng chấm nếu có nhãn lệch câu.
+- **Dàn ý hình phải khớp lời kể:** `LOOK.md` trích nguyên văn từng câu lời kể trong dấu nháy. Khi lời kể
+  được viết lại, dàn ý phải theo. Cổng dàn ý chạy `tools/check_storyboard.py`: nó bắt một trích dẫn mà
+  **không câu nào trong `voice/lines.json` nói** (dàn ý mô tả phim cũ), một trích dẫn dán nhầm dòng, và
+  một trích dẫn chứa cụm mà `FACTS.md` cấm. Nhắc trước câu kế tiếp thì được phép — đó là cách viết dàn
+  ý hợp lệ, không phải lỗi.
 - **Mỗi câu một nhát, đúng thứ tự của lời:** `tools/check_shots.py` kiểm tra rằng mỗi câu lời kể có đúng một
   nhát hình, mỗi nhát gọi đúng câu, và các nhát không lùi về sau. Một câu không có hình nghĩa là người xem
   nhìn một khung đứng yên trong lúc người kể vẫn nói.

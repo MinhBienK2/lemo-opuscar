@@ -1334,6 +1334,83 @@ chấm phải soi, và người chấm chỉ cần mở ảnh riêng cho câu th
 
 ---
 
+## N48 — high — Dàn ý trích nguyên văn lời kể, nên khi lời kể viết lại, dàn ý mô tả một phim không còn tồn tại
+
+**Bằng chứng.** Tập 02 viết lại lời kể sau khi `research/FACTS.md` cấm "chỗ nóng nhất trong máy".
+`LOOK.md` — bản dàn ý của tập — **trích nguyên văn** từng câu lời kể trong dấu nháy, và nó vẫn còn
+những dòng dán câu cũ:
+
+| dòng `LOOK.md` | dòng dán | trích dẫn còn nằm trong `LOOK.md` | lời kể bây giờ |
+|---|---|---|---|
+| 20 | (nhãn) | `chỗ nóng nhất (c42–c52)` | c42: *"Ngoài hai chỗ ấy, còn một chỗ nữa: chính là túi pin."* |
+| 76 | c42 | *"chỗ nóng nhất không nằm ở bo mạch"* | c42: *"Ngoài hai chỗ ấy, còn một chỗ nữa…"* |
+| 84 | c50 | *"chỗ nóng nhất trong cả cái máy"*, nhãn `CHỖ NÓNG NHẤT` | c50: *"Giờ gom lại: mạch sạc, cục pin, và con chip."* |
+
+Dàn ý trông vẫn đầy đặn, vẫn đúng về hình — nó chỉ nói về **những câu mà phim không còn nói**. Đây là
+cùng một lớp lỗi với N43, ở tầng khác: N43 là dàn ý (`TREATMENT.md`) bị bỏ lại; đây là **bản dàn ý
+hình** (`LOOK.md`) bị bỏ lại. Cả hai đều là tài liệu mô tả phim, và cả hai đều im lặng.
+
+**Đã sửa.** `channels/tram-nghi-nhieu/tools/check_storyboard.py` đọc `LOOK.md` + `voice/lines.json` và
+bắt ba loại lệch:
+
+1. **Câu không còn ai nói** — trích dẫn khớp **không câu nào** trong `voice/lines.json`: dàn ý mô tả
+   phim cũ;
+2. **Dán nhầm câu** — trích dẫn là câu của một dòng khác (không phải dòng kế tiếp);
+3. **Câu bị cấm** — trích dẫn chứa cụm mà `FACTS.md` cấm (dùng lại đúng luật của `check_voice_facts.py`).
+
+Chỉ phần **trong dấu nháy** được so, và **trích dẫn của câu kế tiếp được phép** — dàn ý hay nhắc
+trước một câu sắp tới (*"câu này chưa xảy ra, nên phải có một động tác nhỏ trước nó"*). Hai lỗi đó
+đều sẽ là **bằng chứng giả** nếu không có ngoại lệ: đo trên hai tập thật, 163 dòng dàn ý, có đúng
+**một** dòng nhắc câu kế tiếp (tập 02, dòng 37) — và nó đúng, không phải lỗi.
+
+Cổng dàn ý (`review.sh --storyboard`) chạy bài này **trước khi** tốn một vòng chấm, cùng với
+`check_labels.py`. Tập 01 và tập 02 đều xanh.
+
+---
+
+## N49 — medium — Cùng một cách sửa một file, và cách nó làm hỏng tiếng Việt, xuất hiện ở ba nơi khác nhau
+
+**Bằng chứng.** Ba sự cố trong đợt này đều có cùng một dạng: **một con trỏ hỏng trong tài liệu** —
+công cụ và tài liệu dùng hai cách viết khác nhau cho cùng một thứ, và công cụ im lặng.
+
+| Nơi | Hai cách viết | Hậu quả |
+|---|---|---|
+| bản chấm hình | người chấm ghi `SCENE-REVIEW.md`, công cụ đọc `REVIEW.md` | bản chấm rơi vào một tệp cảnh báo; **một vòng chấm bị ném đi** (N44) |
+| phán quyết | người chấm viết `**VERDICT: PASS**`, công cụ đọc `VERDICT: PASS` | phán quyết không đọc được; **một vòng chấm bị ném đi** (N46) |
+| số trong nhãn | nhãn viết `45 °C`, bài kiểm tra đọc "45" thành *"bốn mươi năm"* | **một tập đúng bị chặn oan** (N45) |
+
+Cái thứ ba đáng chú ý nhất: **nguyên nhân là ngôn ngữ**, không phải lỗi logic. "45" đọc thành
+"bốn mươi lăm" trong tiếng Việt (số ghép dùng "lăm"), còn "bốn mươi năm" là năm mươi. Bài kiểm tra
+viết đúng logic, sai ngôn ngữ, và **chặn một tập đúng**.
+
+**Đã sửa.** Cả ba đã sửa, và cả ba theo cùng một nguyên tắc: **công cụ phải đọc được mọi cách
+người viết**, không chỉ cách mình thích. `gate.py` và `review.sh` giờ chấp nhận phán quyết có dấu
+`**`, có dấu `#`, không phải; `check_labels.py` có `number_words()` riêng cho số ghép tiếng Việt.
+
+**Còn phải làm.** Nên có **một** bài kiểm tra đi dọc cả kênh, đọc tất cả mẫu `PROMPT_CRITIC.md` và
+tất cả bản chấm đã sinh, rồi báo những cách viết mà công cụ không đọc được — vì hiện tại, mỗi cách
+viết lệch lệch chỉ lộ ra **khi nó làm mất một vòng chấm**.
+
+---
+
+## N50 — medium — Tài liệu của kênh là nơi lỗi tích tụ, và nó không tự nói ra
+
+**Bằng chứng.** Ba tài liệu của kênh — `TREATMENT.md`, `LOOK.md`, `research/FACTS.md` — là nơi
+hai phiên đã đẩy mọi thứ vào. Và mỗi tài liệu có một cách đi lệch riêng:
+
+- `TREATMENT.md` bị bỏ lại khi lời kể viết lại (N43);
+- `LOOK.md` bị bỏ lại khi lời kể viết lại (N48);
+- `FACTS.md` **sinh ra** lệnh cấm mà lời kể không làm theo (N42).
+
+Điểm chung: **một tài liệu cũ không tự báo là cũ.** Nó vẫn in ra, vẫn đúng về hình, vẫn đọc được —
+nên người đọc tin nó. Chỉ khi một bài kiểm tra đọc nó **cùng lúc với** tài liệu nó phải khớp thì
+sự lệch mới lộ ra. Đó là lý do `check_voice_facts.py` đọc `FACTS.md` **và** `lines.json`, và
+`check_storyboard.py` đọc `LOOK.md` **và** `lines.json`: hai tài liệu, một lần đọc, so với nhau.
+
+**Đã sửa.** Hai bài kiểm tra trên; cổng dàn ý và cổng lời kể chạy chúng trước khi tốn một vòng chấm.
+
+---
+
 ## Các guard đã bắt được gì (tính từ 08:00, hai tập còn chạy)
 
 Đây là bằng chứng rằng các guard không phải lý thuyết — mỗi cái đã bắt một lỗi thật, hoặc đã được một
@@ -1352,6 +1429,8 @@ phiên chấp nhận và dùng:
 | `check_voice_facts.py` (câu bị cấm) | tập 02 nói "chỗ nóng nhất trong cả cái máy" — đúng câu `FACTS.md` cấm; máy chỉ canh con số nên không thấy | phiên tập 02 đã bỏ khỏi lời kể, dàn ý thì người giám sát báo lại (N42, N43) |
 | `check_shots.py` (mỗi câu một nhát) | một câu lời kể không có nhát nào — người xem nhìn một khung đứng yên trong lúc người kể vẫn nói | hai tập đều hợp lệ: 60 câu, 60 nhát (N41) |
 | `PROGRESS.md` (vòng sau đọc vòng trước) | vòng 4 của tập 01 còn sót một lỗi CHẶN đã sửa ở vòng 3, vì người chấm không thấy bản so sánh | sửa xong: `review.sh` ghi `PROGRESS.md` vào thư mục làm việc của người chấm (N40) |
+| `check_storyboard.py` (dàn ý khớp lời kể) | tập 02: `LOOK.md` còn ba dòng dán câu lời kể **đã bị viết lại** — dàn ý mô tả phim cũ | phiên tập 02 đã sửa `LOOK.md` (dòng 20, 76, 84) và bỏ nhãn `CHỖ NÓNG NHẤT` (N48) |
+| `check_timing.py` (nói thật) | cổng bàn giao in *"gates verified"* cho một phim 3D mà bài kiểm tra **chưa từng mở** | sửa xong: bài kiểm tra nói "COULD NOT RUN — không luật nịp nào được áp dụng", thoát mã 2 (N41) |
 
 Bốn trong bảy dòng trên là lỗi **đã** bị bắt và **đã** được sửa trong lúc hai phiên còn chạy. Đó là câu trả lời
 cho câu hỏi lớn nhất của đợt đúc kết này: các guard có tác dụng thật, khi chúng nằm **trước** bước tốn
@@ -1406,9 +1485,12 @@ tiền (trước vòng chấm, trước lúc dựng, trước lúc bàn giao), c
 | 41 | Bản so sánh hai vòng phải nói được phần điểm; lớp ký tự ASCII viết tay cắt mất tiếng Việt (N39) | `channels/tram-nghi-nhieu/tools/check_progress.py` | **xong** |
 | 42 | Mọi bài kiểm tra phải có ví dụ nó phải bắt — và phải có ai chạy ví dụ đó | `tools/run_selftests.sh`, `.github/workflows/films.yml`, `tools/check_*.py` | **đang làm** — 18 bài đã có `--selftest`; `check_motion`, `check_script`, `check_timing` vừa có |
 | 43 | Người chấm hình phải đọc bản so sánh hai vòng trước khi chấm (N40) | `channels/tram-nghi-nhieu/tools/review.sh` | **xong** — `PROGRESS.md` nằm trong thư mục làm việc của người chấm |
-| 44 | Bài kiểm tra nhịp không được nói "verified" về phim nó chưa mở; kênh có bài riêng cho định dạng 3D (N41) | `tools/check_timing.py`, `channels/tram-nghi-nhieu/tools/check_shots.py`, `core/render/review.sh` | **đang làm** |
-| 45 | Lời kể không được nói câu mà file nghiên cứu cấm (N42) | `channels/tram-nghi-nhieu/tools/check_voice_facts.py` | **đang làm** |
-| 46 | Cổng dàn ý phải hỏi xem dàn ý còn khớp với lời kể và mã không (N43) | `channels/tram-nghi-nhieu/tools/check_voice_facts.py`, `channels/tram-nghi-nhieu/tools/review.sh` | **chưa làm** — hiện người giám sát phải báo tay |
+| 44 | Bài kiểm tra nhịp không được nói "verified" về phim nó chưa mở; kênh có bài riêng cho định dạng 3D (N41) | `tools/check_timing.py`, `channels/tram-nghi-nhieu/tools/check_shots.py`, `core/render/review.sh` | **xong** |
+| 45 | Lời kể không được nói câu mà file nghiên cứu cấm (N42) | `channels/tram-nghi-nhieu/tools/check_voice_facts.py` | **xong** — cổng lời kể chạy nó trước mỗi vòng |
+| 46 | Cổng dàn ý phải hỏi xem dàn ý còn khớp với lời kể và mã không (N43) | `channels/tram-nghi-nhieu/tools/check_voice_facts.py`, `channels/tram-nghi-nhieu/tools/review.sh` | **xong** — `check_voice_facts.py` đọc cả `TREATMENT.md` |
+| 47 | Dàn ý hình (`LOOK.md`) phải khớp lời kể: nó trích nguyên văn từng câu (N48) | `channels/tram-nghi-nhieu/tools/check_storyboard.py`, `channels/tram-nghi-nhieu/tools/review.sh` | **xong** |
+| 48 | Một cách viết lệch lệch phải lộ ra, chứ không phải khi nó làm mất một vòng chấm (N49) | `tools/check_doc_links.py` hoặc một bài kiểm tra mới đọc mẫu và bản chấm | **chưa làm** |
+| 49 | Một tài liệu cũ không tự nói là cũ; phải có bài kiểm tra đọc nó cùng tài liệu nó phải khớp (N50) | `channels/tram-nghi-nhieu/tools/check_storyboard.py`, `check_voice_facts.py` | **xong** |
 
 ### Mỗi phát hiện đã có dòng riêng trong `improvements/lessons.md`
 
