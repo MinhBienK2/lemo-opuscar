@@ -3987,3 +3987,25 @@ nghĩ tới bóng đổ, nghĩa là thứ đang đứng ngoài khung — hãy d�
 nào có hình dáng khớp với bóng đó, thay vì tìm "vật thể lạ" trong khung. Đồng thời thêm vào
 `step6-assembly/GUIDE.md`: **không để bóng cứng của vật ngoài khung rơi vào giữa khung** — nó đọc như
 một lỗ hình, và người xem tưởng phim hỏng.
+
+## N126 — high — Vòng chấm bị **giết giữa chừng** không để lại dấu vết nào
+
+**Bằng chứng.** Hai vòng chấm của tập 03 — `--props` lúc 16:27:33 và `--storyboard` lúc 16:27:44 —
+biến mất giữa chừng: không có bản chấm, không có tệp `.died`, mà `trap` của `review.sh` (viết
+`.round-<phần>.died` khi vòng thoát với mã khác 0) **không chạy**. Không chạy trap nghĩa là tiến trình
+bị tín hiệu giết (SIGKILL), không phải thoát bình thường — đúng cơ chế của hệ điều hành khi swap
+đã hết. Cổng lúc đó chỉ nói "chưa có PASS", tức **đọc như thể chưa ai chấm**: người làm không biết
+đã có hai vòng bị giết, và không biết vì sao.
+
+**Vì sao đáng ghi.** N120 đã dạy phân biệt "vòng chấm **có phán quyết**" với "vòng chấm **chết**".
+Nhưng còn một loại thứ ba, loại nguy hiểm nhất vì nó **im lặng**: vòng bị giết. Không có tệp `.died`
+(thứ mà cổng đọc), không có phán quyết (thứ mà người làm cần), không có dòng nào trong log (vì log
+cũng bị giết theo). Ba phiên khác nhau đã gặp loại này mà không ai nhận ra.
+
+**Đã làm.** `gate.py` đọc thêm tệp `.round-<phần>.running` (tệp này ghi pid của vòng): **pid đã chết
+thì vòng đó đã bị giết**, và cổng in ra "vòng chấm bị GIẾT giữa chừng (không có phán quyết)" kèm lời
+dặn chạy lại chính vòng đó. Hai ca selftest mới (29/29). Đây là dấu vết còn lại duy nhất của một vòng
+bị giết — và nó đủ để nói lên sự thật.
+
+**Còn lại.** Tệp `.round-<phần>.running` của một vòng đã chết nên được dọn khi vòng sau mở; hiện
+khoá đã tự dọn (theo pid) nhưng tệp `.running` thì chưa.

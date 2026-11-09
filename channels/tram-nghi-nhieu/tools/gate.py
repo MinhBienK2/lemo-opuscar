@@ -285,6 +285,30 @@ def dead_rounds(ep):
     return out
 
 
+def killed_rounds(ep):
+    """Các vòng chấm bị giết giữa chừng: không có phán quyết, không có dấu vết (N126).
+
+    Một vòng chấm bị tín hiệu giết (hệ điều hành giết tiến trình khi máy hết swap) không chạy
+    được cái trap, nên không viết được tệp `.died` — và tập trông như chưa ai chấm: cổng chỉ
+    nói "chưa có PASS", không nói rằng đã có một vòng chấm bị giết. Dấu vết còn lại là tệp
+    `.round-<phần>.running`, trong đó ghi pid của vòng; pid đã chết thì vòng đó đã bị giết.
+    """
+    out = []
+    for m in sorted(glob.glob(os.path.join(ep, 'review', '.round-*.running'))):
+        scope = os.path.basename(m)[len('.round-'):-len('.running')]
+        try:
+            txt = open(m, encoding='utf-8', errors='replace').read().strip()
+        except OSError:
+            txt = ''
+        pm = re.search(r'pid (\d+)', txt)
+        if not pm:
+            continue
+        if os.path.isdir('/proc/%d' % int(pm.group(1))):
+            continue                       # vòng vẫn sống: không phải vòng bị giết
+        out.append((scope, txt))
+    return out
+
+
 def status(ep):
     """where the episode stands: every stamp, whether it still holds, and the last verdict"""
     for kind in ('outline', 'script', 'props', 'storyboard', 'assets', 'picture', 'final'):
@@ -318,6 +342,12 @@ def status(ep):
                   f'{ep}/review/ và lời nhắc của công cụ, sửa rồi chạy vòng kế tiếp')
         else:
             print(f'vòng chấm ĐÃ CHẾT: {scope} — {txt} — đọc log của job nền rồi chạy lại, đừng mở vòng thứ hai')
+    for scope, txt in killed_rounds(ep):
+        # A round killed by a signal never ran its trap, so it left no `.died` file: the episode reads as
+        # "nobody reviewed this yet" instead of "a round was killed half-way". The pid in the `.running`
+        # marker says which one it was (N126).
+        print(f'vòng chấm bị GIẾT giữa chừng (không có phán quyết): {scope} — {txt} — chạy lại vòng này; '
+              'máy hết swap thì đó là nguyên nhân, đừng mở vòng thứ hai cùng lúc')
     reports = sorted(glob.glob(os.path.join(ep, 'review', '*REVIEW*.md')) + glob.glob(os.path.join(ep, 'review', 'REVIEW*.md')),
                      key=os.path.getmtime)
     if reports:
@@ -572,6 +602,25 @@ def selftest():
             txt = buf.getvalue()
             cases.append((label, want in txt and unwanted not in txt,
                           [l for l in txt.split('\n') if 'vòng chấm' in l], ''))
+            os.unlink(mp)
+
+        # — một vòng chấm bị giết giữa chừng thì cổng phải nói ra, không im —
+        # Hai vòng của tập 03 (props và storyboard, 16:27) bị hệ điều hành giết khi máy hết swap:
+        # không có phán quyết, không có tệp `.died` (cái trap không chạy khi bị SIGKILL), nên cổng
+        # chỉ nói "chưa có PASS" — đọc như thể chưa ai chấm. Dấu vết còn lại là `.round-*.running`
+        # với pid của vòng; pid đã chết thì vòng đó đã bị giết.
+        for label, pid, want in (('vòng bị giết thì cổng nói ra', 999999, 'GIẾT'),
+                                 ('vòng còn sống thì cổng không nói là đã chết', os.getpid(), None)):
+            mp = os.path.join(ep2, 'review/.round-props.running')
+            open(mp, 'w', encoding='utf-8').write('bắt đầu 16:27:33 · pid %d\n' % pid)
+            buf = io.StringIO()
+            with contextlib.redirect_stdout(buf), contextlib.redirect_stderr(io.StringIO()):
+                status(ep2)
+            txt = buf.getvalue()
+            if want:
+                cases.append((label, want in txt, [l for l in txt.split('\n') if 'GIẾT' in l], ''))
+            else:
+                cases.append((label, 'GIẾT' not in txt, [l for l in txt.split('\n') if 'GIẾT' in l], ''))
             os.unlink(mp)
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
