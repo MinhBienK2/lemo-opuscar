@@ -46,6 +46,22 @@ function placeholderIn(text) {
   return null;
 }
 
+// The heading of a treatment may carry a label before the question: "# TREATMENT — Vì sao …", "# Dàn ý — Vì sao …".
+// The film carries the question as its title, so the label is a candidate too: a check that trips on the wording of a
+// heading sends the next session rewriting a heading that was already right. A dash inside the question ("Vì sao A — và B?")
+// is not a label: the remainder must start with a capital, or nothing is stripped.
+function headingTitles(text) {
+  const firstLine = (text.split('\n')[0] || '').trim();
+  const m = /^#\s*(.*)$/.exec(firstLine);
+  if (!m) return [];
+  const head = m[1].trim();
+  if (!head) return [];
+  const out = [head];
+  const cut = /^([^—–?]{1,40})\s*[—–]\s+(\S.*)$/.exec(head);
+  if (cut && /^\p{Lu}/u.test(cut[2])) out.push(cut[2].trim());
+  return out;
+}
+
 // The check proves itself: a written file that merely names a placeholder is not a scaffold, and a scaffold is.
 function selftest() {
   const cases = [
@@ -59,10 +75,24 @@ function selftest() {
      '## Câu hỏi\n- Câu hỏi: <viết: câu hỏi>\n', '<viết:'],
     ['a written file is not a scaffold', '# Facts\n\n## 1. Nhiệt của pin khi sạc nhanh\n\n- 45 °C\n', null],
   ];
+  const headCases = [
+    ['the question alone is the heading', '# Vì sao X?\n', ['Vì sao X?']],
+    ['a label before a dash is stripped, and the whole heading stays a candidate',
+     '# Dàn ý — Vì sao X?\n', ['Dàn ý — Vì sao X?', 'Vì sao X?']],
+    ['a dash inside the question is not a label', '# Vì sao A — và B?\n', ['Vì sao A — và B?']],
+    ['a line that is not a heading gives no candidate', 'not a heading\n', []],
+  ];
   let bad = 0;
   for (const [name, text, want] of cases) {
     const got = placeholderIn(text);
     const good = got === want;
+    if (!good) bad++;
+    console.log(`${good ? 'ok  ' : 'FAIL'} ${name}`);
+    if (!good) console.log(`       got ${JSON.stringify(got)}, want ${JSON.stringify(want)}`);
+  }
+  for (const [name, text, want] of headCases) {
+    const got = headingTitles(text);
+    const good = JSON.stringify(got) === JSON.stringify(want);
     if (!good) bad++;
     console.log(`${good ? 'ok  ' : 'FAIL'} ${name}`);
     if (!good) console.log(`       got ${JSON.stringify(got)}, want ${JSON.stringify(want)}`);
@@ -241,10 +271,10 @@ for (const arg of args) {
       }
       const treatmentText = read(path.join(folder, 'TREATMENT.md'));
       if (treatmentText && fj.title) {
-        const firstLine = treatmentText.split('\n')[0] || '';
-        const tm = /^#\s*(?:TREATMENT\s*[—–-]\s*)?(.*)/.exec(firstLine);
-        if (tm && tm[1].trim() && tm[1].trim() !== fj.title.trim()) {
-          fail(name, `film.json title "${fj.title}" does not match TREATMENT.md heading "${tm[1].trim()}"`);
+        const cands = headingTitles(treatmentText);
+        const want = String(fj.title).trim();
+        if (cands.length && !cands.includes(want)) {
+          fail(name, `film.json title "${fj.title}" does not match TREATMENT.md heading "${cands[0]}"`);
         }
       }
       const factsText = read(path.join(folder, 'research/FACTS.md'));
