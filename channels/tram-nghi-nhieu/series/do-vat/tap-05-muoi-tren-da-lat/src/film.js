@@ -67,19 +67,29 @@ const SHOTS = [
   { ids: ['c3'], s: 'K', pos: [-.10, .72, 1.90], look: [-.80, .10, .78], fov: 40, d: [-.02, 0, .04] },
   { ids: ['c4'], s: 'K', pos: [-.20, .36, 1.24], look: [-.66, .09, .82], fov: 30, d: [.006, -.012, -.008] },
   // Cận mặt đá: máy lùi ra cho cả viên đá lọt khung, lấy cả mép dưới để
-  // thấy dòng nước mủng chảy; que nhiệt kế đứng bên trái.
-  { ids: ['c5'], s: 'K', pos: [-.58, .30, .93], look: [-.88, .07, .74], fov: 30, d: [.008, -.010, -.014] },
+  // thấy dòng nước mủng chảy; que nhiệt kế đứng bên trái. Nhìn **thấp hơn**
+  // (look ở y = 0,055) để viên đá dâng lên nửa trên khung, chừa dải phụ đề
+  // dưới cho trống (vòng chấm hình ảnh 3 ở c5: dải phụ đề nằm ngay trên
+  // mép dưới của viên đá).
+  { ids: ['c5'], s: 'K', pos: [-.57, .33, .94], look: [-.88, .055, .74], fov: 30, d: [.008, -.010, -.014] },
   // Hai ly: máy ở gần, tiêu cự hẹp, lấy đúng hai ly và **hai cột đỏ**; ấm
   // nước nằm ngoài khung. Cảnh này sáng hơn (l: nâng key).
   { ids: ['c6'], s: 'K', pos: [-.10, .34, 1.34], look: [.23, .11, .78], fov: 25, d: [-.02, 0, -.03], l: 1.35 },
-  { ids: ['c7'], s: 'K', pos: [-.44, .30, .96], look: [-.55, .165, .74], fov: 26, d: [.006, .028, -.012] },
+  // Mặt đá đối chứng với lớp băng mờ: máy **áp sát mặt trên** viên đá, để
+  // lưới tinh thể chiếm gần hết khung — một khung rộng để lưới tinh thể
+  // nhỏ trên mặt đá trắng thì đọc ra là mặt bàn trống (vòng chấm hình ảnh 3
+  // ở c7: "khung gần như trống").
+  { ids: ['c7'], s: 'K', pos: [-.40, .30, .87], look: [-.545, .160, .745], fov: 30, d: [.004, .022, -.010] },
   // ── L: bàn thí nghiệm ──
   // c8 mở toàn cảnh rồi đi vào bình nước sạch — bằng chứng phải đọc được
   // trong chính nhát này, không ở một nhát nữa không ai nhớ. Máy đi vào từ
   // **bên trái** hàng chéo, nên ba bình kia nằm sau bình nước sạch và
   // không chồng lên nó (vòng chấm hình ảnh 2: cảnh chui vào bình quá gần,
-  // bình thành một mảng thuỷ tinh trừu tượng).
-  { ids: ['c8'], s: 'L', pos: [.30, .50, 1.50], look: [-.30, .14, .78], fov: 34, fov2: 21, d: [-.98, -.14, -.58], dLook: [-.25, .07, -.11] },
+  // bình thành một mảng thuỷ tinh trừu tượng). Cuối nhát máy **hạ xuống
+  // sát miệng bình và ngả nhìn xuống lớp băng**, để lớp băng chiếm phần
+  // lớn khung thay vì một khối tròn nhạt ở đáy khung (vòng chấm hình ảnh 3
+  // ở c8).
+  { ids: ['c8'], s: 'L', pos: [.30, .50, 1.50], look: [-.30, .14, .78], fov: 34, fov2: 23, d: [-.93, -.12, -.65], dLook: [-.25, .028, -.12] },
   { ids: ['c9'], s: 'L', pos: [.25, .50, 1.45], look: [-.40, .25, .74], fov: 28, d: [.03, -.01, -.05], l: 1.2 },
   // ── K: quay lại vũng nước quanh viên đá ──
   { ids: ['c10'], s: 'K', pos: [-.40, .38, 1.34], look: [-.78, .11, .78], fov: 34, d: [.02, 0, .03] },
@@ -122,8 +132,8 @@ const SHOTS = [
   { ids: ['c22'], s: 'L', pos: [-.02, .30, 1.06], look: [-.19, .17, .87], fov: 24, d: [.008, 0, -.008] },
   // ── K2: bếp buổi chiều ──
   { ids: ['c23'], s: 'K2', pos: [.48, .52, 2.05], look: [.00, .10, 1.05], fov: 30, d: [-.03, 0, .04] },
-  { ids: ['c24'], s: 'K2', pos: [-1.26, .32, 1.42], look: [-1.46, .15, 1.06], fov: 32, d: [.01, -.008, -.02] },
-  { ids: ['c25'], s: 'K2', pos: [-.58, .50, 1.70], look: [-.66, .08, .86], fov: 38, d: [-.02, 0, .05] },
+  { ids: ['c24'], s: 'K2', pos: [-1.30, .30, 1.36], look: [-1.45, .13, 1.07], fov: 30, d: [.01, -.008, -.02] },
+  { ids: ['c25'], s: 'K2', pos: [-.62, .34, 1.28], look: [-.70, .10, .80], fov: 38, d: [-.02, 0, .04] },
 ];
 
 // ── thời gian ───────────────────────────────────────────────────────────
@@ -324,6 +334,7 @@ function applyState(id, t, sc) {
     // c11 và c12, ở c17 chỉ hạt muối và dải nhiệt là chủ thể. Ở c12 chúng
     // cũng lùi: chủ thể của c12 là mảnh đá đang rã.
     PP.dots.visible = k !== 17;
+    PP.dots.update(t, camera);
     PP.mols.forEach(m => { m.visible = k !== 17 && k !== 12; });
     PP.mols.forEach((m, i) => { m.rotation.y = t * .4 + i; m.rotation.x = t * .22 + i; });
     // hạt muối: rơi rồi tan, ở c11 (muối tan ra thành hai ion) và ở c17

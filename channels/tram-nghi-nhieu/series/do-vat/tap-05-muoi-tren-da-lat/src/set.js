@@ -67,8 +67,17 @@ export function buildKitchen(scene, { time = 'morning', bagAt = 'back' } = {}) {
   // fill lên cho tường không bị tím đặc.
   if (time === 'evening') {
     S.key.color.set('#f2c9a2');
-    S.amb.hemi.intensity = .62;
+    S.amb.hemi.intensity = .74;
     S.amb.rim.intensity = .55;
+    // nêm sáng riêng cho túi sữa trong bát đá (c24): không có nó, túi sữa
+    // chìm trong bóng tím của buổi chiều, và vùng sáng nhất của khung là
+    // vệt nắng trên mặt bàn chứ không phải chủ thể (vòng chấm hình ảnh 3
+    // ở c24: "mắt không dẫn vào chủ thể").
+    pool(scene, {
+      from: new THREE.Vector3(KL.bowl[0] - .12, .92, KL.bowl[1] + .46),
+      to: new THREE.Vector3(KL.bowl[0], .10, KL.bowl[1]),
+      color: '#ffe9c4', intensity: 2.6, angle: .46,
+    });
   }
 
   // khay inox: đáy ở y = 0, thành cao .055
@@ -95,7 +104,7 @@ export function buildKitchen(scene, { time = 'morning', bagAt = 'back' } = {}) {
   patch.position.set(KL.salt[0], .164, KL.salt[1]);
   scene.add(patch);
   // lớp băng mờ trên mặt viên đá đối chứng (mọc dần ở c7)
-  const frost = frostPatch({ s: .085 });
+  const frost = frostPatch({ s: .115 });
   frost.position.set(KL.ctrl[0], .164, KL.ctrl[1]);
   scene.add(frost);
   // Giọt nước mủng rơi từ mặt viên đá có muối xuống vũng (c5). Nó là **con
@@ -168,7 +177,10 @@ export function buildKitchen(scene, { time = 'morning', bagAt = 'back' } = {}) {
   const bowl = bowlOfIce({ R: .17, h: .09, seed: 29 });
   bowl.position.set(KL.bowl[0], 0, KL.bowl[1]);
   scene.add(bowl);
-  const zip = zipBag({ w: .15, h: .2, d: .05 });
+  // Túi sữa **nhỏ hơn bát**: một túi cao hơn miệng bát quá nhiều thì đọc ra
+  // là một hộp đứng trong bát, không phải túi sữa nằm trong đá (vòng chấm
+  // hình ảnh 2 ở c24: "túi đọc ra là hộp carton").
+  const zip = zipBag({ w: .13, h: .14, d: .045 });
   zip.position.set(KL.bowl[0], .045, KL.bowl[1]);
   zip.rotation.y = .3;
   scene.add(zip);
@@ -236,7 +248,11 @@ export function buildLab(scene) {
   const BX = [-.55, -.43, -.31, -.19];
   const BZ = [.66, .73, .80, .87];
   const bk = BX.map((x, i) => {
-    const b = beaker({ h: .18, r: .05 });
+    // Bình nước sạch đóng cứng **hoàn toàn** → băng của nó là một khối đặc
+    // mà nhìn xuyên miệng bình phải thấy (vòng chấm hình ảnh 3 ở c8: "khối
+    // băng chỉ là một khối tròn nhạt ở đáy khung"). Ba bình kia có que nhiệt
+    // kế nên băng vẫn là lớp bám mỏng để cột đỏ đọc được qua nó.
+    const b = beaker({ h: .18, r: .05, solid: i === 0 });
     b.position.set(x, .045, BZ[i]);
     scene.add(b);
     return b;
@@ -369,22 +385,18 @@ export function buildPuddle(scene) {
   ion.scale.setScalar(.45);
   scene.add(ion);
 
-  // hạt phân tử nước trôi quanh: những chấm trắng nhỏ
-  const dots = glowDots(30, .0035, '#e8f6ff', .55);
-  const r = mulberry(19);
-  for (let i = 0; i < 30; i++) {
-    const a = r() * Math.PI * 2, rad = .06 + Math.sqrt(r()) * .30;
-    setDot(dots, i, new THREE.Vector3(Math.cos(a) * rad, .004 + r() * .07, Math.sin(a) * rad), .6 + r() * .8);
-  }
-  dots.count = 30;
-  dots.instanceMatrix.needsUpdate = true;
+  // hạt phân tử nước trôi quanh: **phân tử thật** (O đỏ + hai H trắng), có
+  // viền mực và sắc độ toon. Một đám chấm trắng trơn đọc ra là "quầng sáng
+  // cháy trắng", không phải nước (vòng chấm hình ảnh 3 ở c11 và c12).
+  const dots = molecules({ n: 20, s: .24, seed: 41, y0: .012, dy: .07 });
+  dots.scale.setScalar(1.3);
   scene.add(dots);
 
   // vài phân tử nước **có hình dạng** (ba quả cầu): một chấm tròn trắng không
   // đọc ra là phân tử (vòng chấm hình ảnh 2 ở c11)
   const mols = [];
   for (let i = 0; i < 7; i++) {
-    const m = molCluster({ r: .009 });
+    const m = molCluster({ r: .006 });
     const a = (i / 7) * 6.28 + .4, rad = .07 + (i % 3) * .07;
     m.position.set(Math.cos(a) * rad, .012 + (i % 4) * .022, Math.sin(a) * rad);
     m.rotation.set(i * .7, i * 1.3, i * .4);
@@ -467,8 +479,10 @@ export function buildNano(scene) {
   mol.position.set(-.03, 0, -.03);
   scene.add(mol);
 
-  // ion của muối nằm ngay tại mặt đá, dưới lớp nước mỏng
-  const ion = ions({ n: 16, s: .5, seed: 71, band: [.012, .04] });
+  // ion của muối nằm ngay tại mặt đá, **chen vào** băng: cành nối xuống
+  // mặt đá và bán kính tải ra hẹp, để không có cầu nào lơ lửng giữa
+  // trời như một đĩa trơn (vòng chấm hình ảnh 3 ở c15).
+  const ion = ions({ n: 16, seed: 71, band: [.010, .030], rmax: .125, stem: true });
   ion.scale.setScalar(.85);
   scene.add(ion);
 

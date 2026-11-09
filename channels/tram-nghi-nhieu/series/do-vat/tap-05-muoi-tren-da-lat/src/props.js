@@ -20,12 +20,19 @@ function iceTex(seed = 7) {
   return canvasTex(256, 256, (g, w, h) => {
     const r = mulberry(seed);
     g.fillStyle = '#e7f3fc'; g.fillRect(0, 0, w, h);
-    // Vết nứt rải khắp texture: không lộ ranh giới nào.
-    g.strokeStyle = 'rgba(120,170,205,.55)'; g.lineWidth = 2;
-    for (let k = 0; k < 14; k++) {
+    // Vết nứt rải khắp texture: không lộ ranh giới nào. Vết **mờ, thẳng và
+    // dài** như đường nứt trong băng; vết góc gấp kiểu chữ viết tay đọc ra là
+    // nét vẽ trên đá (vòng chấm hình ảnh 3 ở c5 và c25).
+    g.strokeStyle = 'rgba(120,166,200,.20)'; g.lineWidth = 1.2;
+    for (let k = 0; k < 9; k++) {
       let x = r() * w, y = r() * h;
+      const a0 = r() * 6.28;
       g.beginPath(); g.moveTo(x, y);
-      for (let s = 0; s < 5; s++) { x += (r() - .5) * 60; y += (r() - .5) * 60; g.lineTo(x, y); }
+      for (let s = 0; s < 3; s++) {
+        const a = a0 + (r() - .5) * .5;
+        x += Math.cos(a) * (40 + r() * 70); y += Math.sin(a) * (40 + r() * 70);
+        g.lineTo(x, y);
+      }
       g.stroke();
     }
   });
@@ -41,30 +48,54 @@ const ICE_MAT = () => {
 };
 
 // texture: mặt tinh thể — lưới phân tử
+// Lưới phân tử của băng: các **nút** (nguyên tử nước) nối với nhau bằng
+// cạnh, trên một nền tinh thể có sắc độ. Một lưới sóng uốn lượn là caustics
+// của hồ bơi chứ không phải mặt đá ở cấp nano (vòng chấm hình ảnh 3 ở c13–c16:
+// "mảng xanh nhạt ... đọc ra là mặt hồ bơi").
 function latticeTex(seed = 11) {
   return canvasTex(512, 512, (g, w, h) => {
     const r = mulberry(seed);
-    g.fillStyle = '#9fd4ef'; g.fillRect(0, 0, w, h);
-    const gr = g.createRadialGradient(w / 2, h / 2, 10, w / 2, h / 2, w * .7);
-    gr.addColorStop(0, 'rgba(235,250,255,.85)'); gr.addColorStop(1, 'rgba(60,140,190,.35)');
+    // nền: một mặt tinh thể có sắc độ, không phải một dải xanh trơn
+    const gr = g.createLinearGradient(0, 0, w, h);
+    gr.addColorStop(0, 'rgba(226,246,255,.96)');
+    gr.addColorStop(.5, 'rgba(148,199,229,.95)');
+    gr.addColorStop(1, 'rgba(84,146,193,.95)');
     g.fillStyle = gr; g.fillRect(0, 0, w, h);
-    g.strokeStyle = 'rgba(255,255,255,.85)'; g.lineWidth = 4;
-    for (let y = 0; y < h; y += 32) {
+    // vài mặt tinh thể lớn, sáng và tối, để mặt đá có chiều sâu
+    for (let k = 0; k < 8; k++) {
+      const cx = r() * w, cy = r() * h, n = 5 + Math.floor(r() * 3);
       g.beginPath();
-      for (let x = 0; x <= w; x += 16) {
-        const yy = y + Math.sin(x * .05 + y) * 5 + (r() - .5) * 2;
-        x ? g.lineTo(x, yy) : g.moveTo(x, yy);
+      for (let i = 0; i <= n; i++) {
+        const a = (i / n) * 6.28 + r() * .2, rr = 40 + r() * 95;
+        const x = cx + Math.cos(a) * rr, y = cy + Math.sin(a) * rr;
+        i ? g.lineTo(x, y) : g.moveTo(x, y);
       }
-      g.stroke();
+      g.closePath();
+      g.fillStyle = r() < .5 ? 'rgba(255,255,255,.12)' : 'rgba(38,88,128,.12)';
+      g.fill();
     }
-    g.strokeStyle = 'rgba(255,255,255,.4)'; g.lineWidth = 2;
-    for (let x = 0; x < w; x += 30) {
-      g.beginPath();
-      for (let y = 0; y <= h; y += 16) {
-        const xx = x + Math.cos(y * .06 + x) * 5;
-        y ? g.lineTo(xx, y) : g.moveTo(xx, y);
+    // lưới phân tử: các nút tròn nối bằng cạnh
+    const step = 46, nodes = [];
+    for (let row = 0; row * step * .87 < h + step; row++) {
+      const y = row * step * .87 + step * .5;
+      for (let col = 0; col * step < w + step; col++) {
+        const x = col * step + step * .5 + (row % 2 ? step * .5 : 0);
+        nodes.push([x, y]);
       }
-      g.stroke();
+    }
+    g.strokeStyle = 'rgba(255,255,255,.62)'; g.lineWidth = 3;
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i + 1; j < nodes.length; j++) {
+        const dx = nodes[i][0] - nodes[j][0], dy = nodes[i][1] - nodes[j][1];
+        if (dx * dx + dy * dy < step * step * 1.15) {
+          g.beginPath(); g.moveTo(nodes[i][0], nodes[i][1]); g.lineTo(nodes[j][0], nodes[j][1]); g.stroke();
+        }
+      }
+    }
+    for (const [x, y] of nodes) {
+      g.beginPath(); g.arc(x, y, 7.6, 0, 6.29);
+      g.fillStyle = 'rgba(246,253,255,.95)'; g.fill();
+      g.strokeStyle = 'rgba(64,132,178,.6)'; g.lineWidth = 1.7; g.stroke();
     }
   });
 }
@@ -117,8 +148,14 @@ export function iceCube({ s = .15, seed = 7, shadow = false } = {}) {
   // tấm bảng trắng chứ không phải viên đá.
   m.rotation.set(.04, ((seed % 7) * .08) - .24, .03);
   g.add(m);
-  // lớp nước bám quanh đáy viên đá
-  const film = mesh(new THREE.CylinderGeometry(s * .58, s * .62, s * .12, 22), toon('#d7f0ff'), [0, s * .04, 0]);
+  // lớp nước bám quanh đáy viên đá: một **vòng mỏng** ướt, không phải một
+  // đĩa. Một hình trụ đặc có mép dày đọc ra là cái đĩa lót trắng dưới
+  // viên đá (vòng chấm hình ảnh 3 ở c10 và c25: "một đĩa trắng phẳng có
+  // mép dày, viền mực rõ"). Vòng nước này **không có viền mực**.
+  const film = mesh(new THREE.CylinderGeometry(s * .64, s * .70, s * .05, 26), toon('#cbe9ff', {
+    transparent: true, opacity: .55, depthWrite: false,
+  }), [0, s * .022, 0]);
+  fxLayer(film);
   g.add(film);
   g.userData.cube = m;
   g.setMelt = k => {
@@ -127,7 +164,7 @@ export function iceCube({ s = .15, seed = 7, shadow = false } = {}) {
     m.scale.set(sc, sc, sc);
     m.position.y = s * sc * .5;
     film.scale.setScalar(1 + .35 * kk);
-    film.material.opacity = 1;
+    film.material.opacity = .45 + .25 * kk;
   };
   g.setMelt(0);
   return g;
@@ -141,6 +178,12 @@ export function iceCube({ s = .15, seed = 7, shadow = false } = {}) {
 export function puddle({ R = .16, h = .0035 } = {}) {
   const g = new THREE.Group();
   const m = mesh(waterFilm(R, h), toon('#ffffff', { map: puddleTex(), transparent: true, opacity: .92, depthWrite: false }), [0, 0, 0], { rot: [-Math.PI / 2, 0, 0] });
+  // Màng nước **không có viền mực**. Mặt khay nằm ở y = 0,012 còn màng nước
+  // ở 0,014: lệch hai milimét, đủ để đường viền mực vẽ thành một vòng đen
+  // quanh vũng — đọc ra là cái đĩa lót trắng, không phải nước (vòng chấm
+  // hình ảnh 3 ở c5 và c25). Lớp hiệu ứng vẽ sau lớp mực nên màng nước chỉ
+  // còn là nước: loé sáng và màu xanh mờ để nền inox lóe lên qua.
+  fxLayer(m);
   g.add(m);
   g.userData.water = m;
   g.setLevel = k => {
@@ -172,19 +215,27 @@ function puddleTex(seed = 5) {
     const r = mulberry(seed);
     g.clearRect(0, 0, w, h);
     const c = w / 2;
+    // nền: xanh mờ, **không phải trắng**. Một đĩa trắng đục đọc ra là sứ;
+    // nước trên inox là một lớp xanh nhạt mà inox lóe lên qua.
     const gr = g.createRadialGradient(c, c, 0, c, c, w * .5);
-    gr.addColorStop(0, 'rgba(140,195,228,.42)');
-    gr.addColorStop(.55, 'rgba(120,180,220,.34)');
-    gr.addColorStop(.84, 'rgba(228,246,255,.78)');
-    gr.addColorStop(.94, 'rgba(240,252,255,.45)');
+    gr.addColorStop(0, 'rgba(146,203,235,.52)');
+    gr.addColorStop(.55, 'rgba(116,182,222,.42)');
+    gr.addColorStop(.86, 'rgba(176,224,247,.30)');
     gr.addColorStop(1, 'rgba(255,255,255,0)');
     g.fillStyle = gr; g.fillRect(0, 0, w, h);
-    // vài vệt loé nhỏ trên mặt nước
-    g.strokeStyle = 'rgba(255,255,255,.5)'; g.lineWidth = 2;
+    // vệt loé: nước phản chiếu ánh sáng, là thứ làm ta đọc ra "mặt nước"
+    g.strokeStyle = 'rgba(255,255,255,.70)'; g.lineWidth = 2.5;
     for (let k = 0; k < 7; k++) {
-      const a = r() * 6.28, rad = w * (.18 + r() * .26);
+      const a = r() * 6.28, rad = w * (.16 + r() * .26);
       g.beginPath();
       g.arc(c, c, rad, a, a + .6 + r() * .9);
+      g.stroke();
+    }
+    g.strokeStyle = 'rgba(255,255,255,.34)'; g.lineWidth = 1.5;
+    for (let k = 0; k < 5; k++) {
+      const a = r() * 6.28, rad = w * (.30 + r() * .16);
+      g.beginPath();
+      g.arc(c, c, rad, a, a + .4 + r() * .7);
       g.stroke();
     }
   });
@@ -469,7 +520,7 @@ export function stirRod({ len = .26 } = {}) {
 // ── bình thuỷ tinh ──────────────────────────────────────────────────────
 // Bình có miệng, vạch chia, nước bên trong, và lớp băng mọc từ thành vào.
 // freeze(k): k = 0 là nước trong, k = 1 là bình đầy băng trong suốt.
-export function beaker({ h = .2, r = .05, liquid = '#cfe9f7' } = {}) {
+export function beaker({ h = .2, r = .05, liquid = '#cfe9f7', solid = false } = {}) {
   const g = new THREE.Group();
   // thành bình trong suốt: que nhiệt kế cắm trong bình phải đọc được qua thành
   const glass = toon('#d8e8f4', { transparent: true, opacity: .28, depthWrite: false });
@@ -488,8 +539,18 @@ export function beaker({ h = .2, r = .05, liquid = '#cfe9f7' } = {}) {
   // lớp băng bám thành. Nó phải **trắng** chứ không tím: đèn bàn thí nghiệm
   // xanh, một lớp băng chỉ hơi phát sáng mới đọc ra là "đông cứng" (vòng
   // chấm hình ảnh 2: bình nước sạch đọc ra là khối tím-xanh đục).
-  const frost = mesh(new THREE.CylinderGeometry(r * .99, r * .99, h * .72, 28, 1, true),
-    toon('#f4fcff', { transparent: true, opacity: .72, emissive: '#7fb4dd', emissiveIntensity: .45, depthWrite: false }), [0, h * .36, 0]);
+  //
+  // `solid`: bình nước sạch đóng cứng **hoàn toàn**, nên băng của nó là một
+  // khối đặc chứ không phải một vỏ rỗng — nhìn xuyên miệng bình phải thấy
+  // một khối băng trắng lấp đầy bình, không phải một đĩa mờ ở đáy khung
+  // (vòng chấm hình ảnh 3 ở c8). Các bình có que nhiệt kế vẫn giữ vỏ để
+  // cột đỏ đọc được qua lớp băng.
+  const frost = mesh(
+    solid ? new THREE.CylinderGeometry(r * .95, r * .92, h * .72, 28) : new THREE.CylinderGeometry(r * .99, r * .99, h * .72, 28, 1, true),
+    toon(solid ? '#dff0fb' : '#f4fcff', {
+      map: solid ? iceTex(11) : null, transparent: true, opacity: .72,
+      emissive: '#7fb4dd', emissiveIntensity: solid ? .14 : .45, depthWrite: false,
+    }), [0, h * .36, 0]);
   frost.scale.y = .001;
   g.add(frost);
   g.userData.frost = frost;
@@ -573,49 +634,70 @@ export function bowlOfIce({ R = .17, h = .09, seed = 29 } = {}) {
 // không có gì cả (vòng chấm hình ảnh 2).
 export function zipBag({ w = .15, h = .2, d = .05 } = {}) {
   const g = new THREE.Group();
-  // sữa đặc: một **khối** có mặt trên phẳng, đứng ở nửa dưới túi. Nó phải
-  // là một khối sữa có thể đổ, không phải một quả bóng hay một tấm bìa
-  // carton dán vào khung (vòng chấm hình ảnh 2 ở c24: "sữa đọc ra là một
-  // quả bóng", "túi đọc ra là hộp carton").
-  const milk = mesh(rbox(w * .62, h * .40, d * .58, .022),
-    toon('#fffaf0', { emissive: '#6b6a5e', emissiveIntensity: .14 }), [0, h * .21, 0]);
+  // Túi sữa đông là một **gối mềm**, không phải một hộp. Một hộp có cạnh
+  // vuông, viền mực và nhãn dán đọc ra là hộp carton (vòng chấm hình ảnh 3
+  // ở c24). Ở đây thân túi là một khối cầu dẹt: sữa đông đầy túi, bề mặt
+  // mềm, miệng túi gập lại có dải kéo khóa.
+  const milk = mesh(new THREE.SphereGeometry(1, 22, 16),
+    toon('#fff3d8', { emissive: '#6b6a5e', emissiveIntensity: .12 }), [0, h * .46, 0]);
+  milk.scale.set(w * .48, h * .44, d * .46);
   g.add(milk);
-  // mặt sữa phẳng ở trên: một miếng trắng mỏng hơn, đọc ra là mặt chất lỏng
-  const milkTop = mesh(rbox(w * .58, .006, d * .52, .01),
-    toon('#fffdf6', { emissive: '#8a8a7c', emissiveIntensity: .2 }), [0, h * .41, 0]);
-  g.add(milkTop);
-  // lớp nylon: trong, không ghi đè chiều sâu, để sữa không bị nuốt
-  const bag = mesh(rbox(w, h, d, d * .35), toon('#eef7ff', { transparent: true, opacity: .38, depthWrite: false }), [0, h / 2, 0]);
+  // vỏ nylon: một lớp trong mỏng bọc ngoài khối sữa, không có viền mực
+  const bag = mesh(new THREE.SphereGeometry(1, 22, 16),
+    toon('#eef7ff', { transparent: true, opacity: .30, depthWrite: false }), [0, h * .46, 0]);
+  bag.scale.set(w * .50, h * .46, d * .48);
+  fxLayer(bag);
   g.add(bag);
   // dải kéo khóa: một thanh ngang miệng túi, có răng cưa
-  const zip = mesh(rbox(w * .96, .018, .018, .006), toon('#8fa6bd'), [0, h * .97, 0]);
+  const zip = mesh(rbox(w * .90, .016, .016, .006), toon('#8fa6bd'), [0, h * .88, 0]);
   g.add(zip);
   for (let i = 0; i < 9; i++) {
-    g.add(mesh(rbox(.011, .009, .022, .002), toon('#6f869e'), [-w * .42 + i * w * .105, h * .985, 0]));
+    g.add(mesh(rbox(.010, .008, .020, .002), toon('#6f869e'), [-w * .38 + i * w * .095, h * .895, 0]));
   }
   // hai mép túi gấp lên ở miệng
-  g.add(mesh(rbox(w * .92, .022, .006, .003), toon('#dbe8f4', { transparent: true, opacity: .8, depthWrite: false }), [0, h * .90, d * .46]));
-  g.add(mesh(rbox(w * .92, .022, .006, .003), toon('#dbe8f4', { transparent: true, opacity: .8, depthWrite: false }), [0, h * .90, -d * .46]));
-  // nhãn trên túi: một mảng trắng có sọc xanh ở nửa trên túi. Đây là thứ
-  // biến một cái túi trong suốt thành **túi sữa** (vòng chấm hình ảnh 2 ở
-  // c24: "túi đọc ra là hộp carton").
-  g.add(mesh(rbox(w * .58, h * .17, .004, .004), toon('#fbfdff'), [0, h * .62, d * .47]));
-  g.add(mesh(rbox(w * .58, h * .032, .005, .003), toon('#4f8fd6'), [0, h * .545, d * .48]));
-  // vỏ sương: mọc từ đáy lên, **ở mặt trước của túi** — nơi máy quay
-  // nhìn thấy. Vỏ sương ẩn sau khối sữa thì người xem không thấy gì đông
-  // (vòng chấm hình ảnh 2 ở c24: trong túi không có vỏ sương nào).
+  g.add(mesh(rbox(w * .86, .020, .006, .003), toon('#dbe8f4', { transparent: true, opacity: .8, depthWrite: false }), [0, h * .82, d * .40]));
+  g.add(mesh(rbox(w * .86, .020, .006, .003), toon('#dbe8f4', { transparent: true, opacity: .8, depthWrite: false }), [0, h * .82, -d * .40]));
+  // nhãn trên túi: một mảng trắng **nhỏ**, không có sọc xanh. Một sọc xanh
+  // đậm trên nền tím của khung chiều tối đọc ra là **bìa sách** dán trong
+  // túi (vòng chấm hình ảnh 3 ở c24: "một tấm xanh tím có dải xanh đậm đọc
+  // như hộp/bìa sách"). Miếng dán trắng nhỏ ở mép trên là nhãn túi sữa.
+  g.add(mesh(rbox(w * .34, h * .09, .004, .004), toon('#fbfdff'), [0, h * .62, d * .45]));
+  // vỏ sương: mọc từ đáy lên, **bám vào vỏ nylon** ở mặt trước của túi —
+  // nơi máy quay nhìn thấy. Vỏ sương ẩn sau khối sữa thì người xem không
+  // thấy gì đông (vòng chấm hình ảnh 2 ở c24: trong túi không có vỏ sương
+  // nào), và nó phải **dính vào vỏ túi**, không lơ lửng trong thể tích túi
+  // như một đám cube rời (vòng chấm hình ảnh 3 ở c24).
   const frost = new THREE.Group();
   const frostMat = toon('#f2fbff', { transparent: true, opacity: .92, depthWrite: false, emissive: '#7fa8cc', emissiveIntensity: .22 });
+  // màng sương mọc trên mặt trước: một lớp mỏng phủ từ đáy lên
+  const rime = mesh(new THREE.PlaneGeometry(w * .70, h * .46), toon('#eaf8ff', {
+    map: frostTex(37), transparent: true, opacity: .8, depthWrite: false,
+    emissive: '#7fa8cc', emissiveIntensity: .2,
+  }), [0, h * .23, d * .44]);
+  fxLayer(rime);
+  frost.add(rime);
   const cr = mulberry(37);
   const crystals = [];
   for (let i = 0; i < 44; i++) {
-    const a = cr() * 6.28, rad = cr() * w * .34;
     const s = w * (.06 + cr() * .055);
-    // tinh thể, không phải bong bóng: một mảnh nhỏ có cạnh
-    // đá bùng **từ đáy lên**: càng xuống đáy càng nhiều tinh thể
-    const c = mesh(rbox(s, s * .8, s * .9, s * .18, 1), frostMat,
-      [Math.cos(a) * rad, h * .07 + Math.pow(cr(), 1.9) * h * .30, d * .30 + (cr() - .5) * d * .18]);
-    c.rotation.set((cr() - .5) * .8, cr() * 3, (cr() - .5) * .8);
+    // tinh thể, không phải bong bóng: một mảnh nhỏ có cạnh, **áp vào vỏ túi**
+    const onWall = cr();
+    let x, y, z;
+    if (onWall < .72) {
+      // mặt trước: sương bám thành một lớp, càng xuống đáy càng dày
+      x = (cr() - .5) * w * .66;
+      y = h * .04 + Math.pow(cr(), 1.9) * h * .34;
+      z = d * .43;
+    } else {
+      // hai hông túi
+      const side = cr() < .5 ? -1 : 1;
+      x = side * w * .44;
+      y = h * .04 + Math.pow(cr(), 1.9) * h * .24;
+      z = (cr() - .5) * d * .60;
+    }
+    const c = mesh(rbox(s, s * .8, s * .16, s * .18, 1), frostMat, [x, y, z]);
+    c.rotation.set((cr() - .5) * .5, cr() * 3, (cr() - .5) * .5);
+    fxLayer(c);
     frost.add(c);
     crystals.push({ c, s, th: cr() * .5 });
   }
@@ -625,9 +707,12 @@ export function zipBag({ w = .15, h = .2, d = .05 } = {}) {
   g.userData.frost = frost;
   g.setFrozen = k => {
     const kk = clamp(k);
-    milk.material.color.setStyle(kk > .5 ? '#f4f0e4' : '#fffaf0');
-    milkTop.material.color.setStyle(kk > .5 ? '#efeade' : '#fffdf6');
+    milk.material.color.setStyle(kk > .5 ? '#f6efe0' : '#fff6e4');
     frost.visible = kk > .02;
+    // màng sương trên mặt trước túi mọc lên cùng lúc với các tinh thể
+    rime.material.opacity = Math.min(.85, .9 * kk);
+    rime.scale.set(1, Math.max(.01, kk), 1);
+    rime.position.y = h * .23 * Math.max(.01, kk);
     // mỗi tinh thể sương có ngày "sinh" riêng: đá bùng lên dần, không bật
     // ra cả túi một lúc
     for (const it of crystals) {
@@ -642,10 +727,24 @@ export function zipBag({ w = .15, h = .2, d = .05 } = {}) {
 
 // ── mặt đá ở cấp nano ───────────────────────────────────────────────────
 // Mặt phẳng tinh thể: một mặt phẳng có lưới phân tử, và lớp nước trên nó.
-export function iceFace({ s = .5 } = {}) {
+export function iceFace({ s = .5, seed = 29 } = {}) {
   const g = new THREE.Group();
   const face = mesh(rbox(s, .02, s, .004), toon('#a8cfe6', { map: latticeTex(), emissive: '#8fd0f2', emissiveIntensity: .10 }), [0, 0, 0]);
   g.add(face);
+  // Vài mảng tinh thể **nổi lên** ở rìa mặt đá: chúng có viền mực và đổ
+  // bóng, nên bề mặt đá đọc ra là một mặt có chiều sâu chứ không phải một
+  // tấm ảnh phẳng dán xuống (vòng chấm hình ảnh 3 ở c13–c16: "mặt đá
+  // không có viền mực"). Chúng nằm ở **rìa**, chỗ không có phân tử và ion.
+  const rc = mulberry(seed);
+  for (let i = 0; i < 5; i++) {
+    const a = rc() * 6.28, rad = s * (.32 + rc() * .16);
+    const w = s * (.10 + rc() * .13), d = s * (.08 + rc() * .11), h = s * (.018 + rc() * .026);
+    const b = mesh(rbox(w, h, d, h * .34),
+      toon('#b6dcee', { map: latticeTex(seed + 3), emissive: '#8fd0f2', emissiveIntensity: .06 }),
+      [Math.cos(a) * rad, .008 + h * .5, Math.sin(a) * rad]);
+    b.rotation.set((rc() - .5) * .18, (rc() - .5) * .7, (rc() - .5) * .18);
+    g.add(b);
+  }
   // lớp nước trên mặt đá: một tấm mỏng, mờ dần đi. Nó phải mỏng đủ để
   // lưới tinh thể bên dưới còn thấy — lớp nước là lớp phủ, không phải tường.
   const layer = mesh(rbox(s * .99, .008, s * .99, .003), toon('#bfe6ff', { transparent: true, opacity: .40 }), [0, .014, 0]);
@@ -671,15 +770,18 @@ export function iceFace({ s = .5 } = {}) {
 
 // ── phân tử nước ───────────────────────────────────────────────────────
 // Hạt trắng bay tới mặt đá rồi dính vào. Bay(cycle): hạt đi từ xa tới mặt đá.
-export function molecules({ n = 34, s = .5, seed = 41 } = {}) {
+export function molecules({ n = 34, s = .5, seed = 41, y0 = .12, dy = .3 } = {}) {
   const g = new THREE.Group();
   const r = mulberry(seed);
   const dots = [];
   for (let i = 0; i < n; i++) {
-    const d = mesh(new THREE.SphereGeometry(.006, 10, 8), glowMat('#ffffff', 1.1), [0, 0, 0], { cast: false });
-    fxLayer(d);
+    // Một **phân tử nước thật**: một nguyên tử O đỏ và hai H trắng nối bằng
+    // que, có viền mực và sắc độ toon như mọi vật khác. Một quả cầu trắng
+    // trơn, không viền, cháy bloom đọc ra là "quầng sáng", không phải phân
+    // tử (vòng chấm hình ảnh 3 ở c11, c13 và c14).
+    const d = molCluster({ r: .0075 });
     d.userData = {
-      from: new THREE.Vector3((r() - .5) * s * 1.6, .12 + r() * .3, (r() - .5) * s * 1.6),
+      from: new THREE.Vector3((r() - .5) * s * 1.6, y0 + r() * dy, (r() - .5) * s * 1.6),
       to: new THREE.Vector3((r() - .5) * s * .8, .02, (r() - .5) * s * .8),
       t0: r() * 3, sp: .5 + r() * .5,
     };
@@ -712,42 +814,55 @@ export function molecules({ n = 34, s = .5, seed = 41 } = {}) {
 
 // ── ion của muối ────────────────────────────────────────────────────────
 // Cầu tím (Na⁺) và cầu xanh (Cl⁻), trôi lơ lổi; ion clorua nằm sâu hơn.
-export function ions({ n = 16, s = .5, seed = 53, band = null } = {}) {
+export function ions({ n = 16, s = .5, seed = 53, band = null, rmax = null, stem = false } = {}) {
   const g = new THREE.Group();
   const r = mulberry(seed);
   const list = [];
   for (let i = 0; i < n; i++) {
     const cl = i % 2 === 0;
-    const m = mesh(new THREE.SphereGeometry(.026, 14, 10),
-      glowMat(cl ? '#67e8f9' : '#c08bff', .55), [0, 0, 0], { cast: false });
-    fxLayer(m);
-    // dấu điện tích: một vành nhỏ quanh cầu. Vành phải **nhìn thẳng vào
-    // máy quay** và mảnh hơn cầu, nếu không nó đọc thành sợi dây (vòng chấm
-    // hình ảnh 2: cầu ion dựng thành vòng mảnh dẹt, trông như sợi dây).
-    const ring = mesh(new THREE.TorusGeometry(.030, .0026, 6, 18),
-      glowMat(cl ? '#67e8f9' : '#c08bff', .38), [0, 0, 0], { cast: false });
-    fxLayer(ring);
-    g.add(m); g.add(ring);
-    list.push({ m, ring, ph: r() * 6.28, sp: .2 + r() * .3, rad: .12 + r() * s * .5, y: band ? band[0] + r() * band[1] : .04 + r() * .3 });
+    const col = cl ? '#4fc9e8' : '#b985f0';
+    const it = new THREE.Group();
+    // Cầu ion có **thể tích và sắc độ toon**, có viền mực. Một đĩa tròn
+    // phẳng kèm một vành lệch tâm là "vòng tròn đồng tâm" — đúng cái mà
+    // STYLE.md cấm cho cơ chế vô hình (vòng chấm hình ảnh 3 ở c11, c15).
+    const m = mesh(new THREE.SphereGeometry(.026, 16, 12),
+      toon(col, { emissive: cl ? '#0d4a5e' : '#3d1a5e', emissiveIntensity: .30 }), [0, 0, 0]);
+    it.add(m);
+    // dấu điện tích: hai que nhỏ có thể tích, quay mặt về máy quay —
+    // một vạch ngang cho Cl⁻, một chữ thập cho Na⁺.
+    const sign = new THREE.Group();
+    const white = toon('#ffffff', { emissive: '#9fc4dd', emissiveIntensity: .5 });
+    sign.add(mesh(rbox(.021, .005, .005, .0015), white, [0, 0, 0]));
+    if (!cl) sign.add(mesh(rbox(.005, .021, .005, .0015), white, [0, 0, 0]));
+    sign.position.z = .024;
+    it.add(sign);
+    // cành nối xuống mặt đá: ion của muối **chen vào** băng chứ không lơ lửng
+    // giữa chừng (vòng chấm hình ảnh 3 ở c15).
+    if (stem) {
+      const st = mesh(new THREE.CylinderGeometry(.005, .003, .034, 8),
+        toon('#8fd8ee', { emissive: '#1d5a70', emissiveIntensity: .3 }), [0, -.026, 0]);
+      it.add(st);
+    }
+    g.add(it);
+    const rad = rmax ? rmax * (.12 + .88 * Math.sqrt(r())) : (.12 + r() * s * .5);
+    list.push({ it, m, sign, ph: r() * 6.28, sp: .2 + r() * .3, rad, y: band ? band[0] + r() * band[1] : .04 + r() * .3 });
   }
   g.update = (t, cam = null) => {
     for (const it of list) {
       const a = it.ph + t * it.sp;
-      it.m.position.set(Math.cos(a) * it.rad, it.y + Math.sin(t * .5 + it.ph) * .03, Math.sin(a) * it.rad);
-      it.ring.position.copy(it.m.position);
-      // vành điện tích quay mặt về máy quay: nhìn nghiêng nó là một sợi dây
-      if (cam) it.ring.lookAt(cam.position);
+      it.it.position.set(Math.cos(a) * it.rad, it.y + Math.sin(t * .5 + it.ph) * .03, Math.sin(a) * it.rad);
+      // dấu điện tích và cành nối luôn quay mặt về máy quay
+      if (cam) it.sign.lookAt(cam.position);
       // Vùng trống trước ống kính: một cầu ion chỉ cách máy vài centimet
       // biến thành một quả bóng khổng lồ ở giữa khung, che mất chủ thể
       // (vòng chấm hình ảnh 2 ở c12 và c16). Ion quá gần máy thì **không vẽ**.
       const cl = g.userData.clear;
       let vis = 1;
       if (cl && cam) {
-        const d = it.m.position.distanceTo(cam.position);
+        const d = it.it.position.distanceTo(cam.position);
         if (d < cl.minD) vis = Math.max(0, (d - cl.minD * .55) / (cl.minD * .45));
       }
-      it.m.scale.setScalar(vis);
-      it.ring.scale.setScalar(vis);
+      it.it.scale.setScalar(vis);
     }
   };
   // đặt vùng trống trước ống kính (bán kính tính từ vị trí máy)
@@ -839,11 +954,21 @@ export function saltFall({ n = 26, from = [0, .24, 0], to = [0, .17, 0], size = 
 // không đọc ra là phân tử (vòng chấm hình ảnh 2).
 export function molCluster({ r = .006 } = {}) {
   const g = new THREE.Group();
-  const mat = glowMat('#eaf7ff', .7);
-  g.add(mesh(new THREE.SphereGeometry(r * 1.35, 12, 10), mat, [0, 0, 0], { cast: false }));
-  g.add(mesh(new THREE.SphereGeometry(r * .7, 10, 8), mat, [r * 2.1, r * .7, 0], { cast: false }));
-  g.add(mesh(new THREE.SphereGeometry(r * .7, 10, 8), mat, [-r * 2.1, r * .7, 0], { cast: false }));
-  fxLayer(g);
+  // phân tử nước: một nguyên tử O đỏ, hai nguyên tử H trắng, hai que nối.
+  // Cả ba có **viền mực và sắc độ toon**: cơ chế vô hình phải là vật thể,
+  // không phải quầng sáng trơn (vòng chấm hình ảnh 3 ở c11–c14).
+  const O = toon('#e05a46', { emissive: '#5a1c14', emissiveIntensity: .20 });
+  const H = toon('#f4fbff', { emissive: '#5f7f95', emissiveIntensity: .16 });
+  const bond = toon('#cfe4f2', { emissive: '#3d5a70', emissiveIntensity: .12 });
+  g.add(mesh(new THREE.SphereGeometry(r * 1.3, 12, 10), O, [0, 0, 0]));
+  g.add(mesh(new THREE.SphereGeometry(r * .68, 10, 8), H, [r * 2.0, r * .62, 0]));
+  g.add(mesh(new THREE.SphereGeometry(r * .68, 10, 8), H, [-r * 2.0, r * .62, 0]));
+  for (const sgn of [1, -1]) {
+    const b = mesh(new THREE.CylinderGeometry(r * .13, r * .13, r * 2.09, 6), bond,
+      [sgn * r * 1.0, r * .31, 0]);
+    b.rotation.z = -sgn * 1.269;
+    g.add(b);
+  }
   return g;
 }
 
@@ -877,8 +1002,8 @@ export const PROPS = {
   'tinh thể muối hai nước trong suốt, dạng lăng trụ và mảnh': () => hydrate({ n: 9, seed: 67 }),
   // ── thêm ở vòng 2, luôn nối vào CUỐI danh mục để số của vật cũ không dịch ──
   'vệt muối trắng nằm trên mặt viên đá, tan dần suốt phim': () => saltPatch({ w: .075, d: .062 }),
-  'lớp băng mờ đục trên mặt viên đá đối chứng, mọc thành lưới tinh thể': () => frostPatch({ s: .085 }),
-  'dòng nước nhỏ chảy xuống mép viên đá đang tan': () => meltStream({ len: .075 }),
+  'lớp băng mờ đục trên mặt viên đá đối chứng, mọc thành mảng có kim băng nhọn': () => frostPatch({ s: .115 }),
+  'giọt nước mủng rơi từ mặt viên đá đang tan': () => meltStream({ len: .15 }),
   'vệt muối trong ly nước muối ở bếp, tan dần khi que khuấy quay': () => saltPatch({ w: .03, d: .03 }),
   'túi zip có sữa đã đông cứng, vỏ sương trắng phủ quanh túi': () => { const g = zipBag({ w: .15, h: .2, d: .05 }); g.setFrozen(1); return g; },
   // ── thêm ở vòng 3, luôn nối vào CUỐI danh mục để số của vật cũ không dịch ──
@@ -934,68 +1059,185 @@ export function saltPatch({ w = .075, d = .062, n = 46, seed = 23 } = {}) {
 // Giọt nước trên mặt đá đối chứng đóng băng thành lưới tinh thể mờ.
 // setGrow(k): k = 0 là mặt đá trơn, k = 1 là lưới tinh thể đã phủ.
 //
-// Lớp băng là **những mảnh tinh thể nhỏ mọc lên**, không phải một ô lưới vuông
-// có cạnh sắc áp lên đá (vòng chấm hình ảnh 2).
-export function frostPatch({ s = .085, n = 30, seed = 19 } = {}) {
+// Lớp băng là **một mảng liền mạch có kim băng mọc lên**, KHÔNG phải một
+// đám cube rời rạc: cube trắng rời rạc là đúng ngôn ngữ hình của hạt muối,
+// nên người xem không phân biệt được lớp băng với hạt muối (vòng chấm hình
+// ảnh 3 ở c7, c10 và c25: "đống hạt xám tro", "đọc ra là sỏi"). Kim băng là
+// sợi mảnh nhọn mọc lên — hình dáng khác hẳn hạt muối vuông.
+export function frostPatch({ s = .085, n = 34, seed = 19 } = {}) {
   const g = new THREE.Group();
   const rs = mulberry(seed);
-  const mat = toon('#e8f7ff', { map: latticeTex(19), transparent: true, opacity: 1 });
-  const chips = [];
+  // nền băng: một mảng mỏng mép run, không có viền mực. Màu **xanh lạnh**
+  // đậm hơn mặt đá: băng trắng trên đá trắng thì không đọc ra (vòng chấm
+  // hình ảnh 3 ở c7 và c25: lớp băng "không có bằng chứng trong hình").
+  const sheet = mesh(frostSheet(s * .56), toon('#9fd0ea', {
+    map: frostTex(21), transparent: true, opacity: 1, depthWrite: false,
+    emissive: '#4d84a8', emissiveIntensity: .16,
+  }), [0, .0014, 0], { rot: [-Math.PI / 2, 0, 0] });
+  fxLayer(sheet);
+  g.add(sheet);
+  // kim băng: những sợi mảnh mọc lên từ nền, chúc ra ngoài
+  const mat = toon('#b6ddf2', {
+    transparent: true, opacity: .92, depthWrite: false,
+    emissive: '#4d84a8', emissiveIntensity: .18,
+  });
+  const needles = [];
   for (let i = 0; i < n; i++) {
-    const a = rs() * 6.28, rad = Math.sqrt(rs()) * s * .42;
-    const c = .006 + rs() * .008;
-    const m = mesh(rbox(c, c * .5, c, c * .16, 1), mat,
-      [Math.cos(a) * rad, c * .25, Math.sin(a) * rad]);
-    m.rotation.set((rs() - .5) * .3, rs() * 3, (rs() - .5) * .3);
+    const a = rs() * 6.28, rad = Math.sqrt(rs()) * s * .46;
+    const len = .006 + rs() * .015;
+    const m = mesh(new THREE.ConeGeometry(.0016, len, 4), mat,
+      [Math.cos(a) * rad, len * .5, Math.sin(a) * rad]);
+    m.rotation.set((rs() - .5) * .8, rs() * 3, (rs() - .5) * .8);
+    fxLayer(m);
     g.add(m);
-    chips.push({ m, c });
+    needles.push({ m, len, k0: rs() * .5 });
   }
   g.userData.frost = g;
   g.setGrow = k => {
     const kk = clamp(k);
-    for (const ch of chips) {
-      const sc = Math.max(.001, kk * (1.25 - .5 * (ch.c / .014)));
-      ch.m.scale.setScalar(sc);
-      ch.m.position.y = ch.c * .25 * sc;
+    sheet.material.opacity = Math.min(1, .1 + .78 * kk);
+    sheet.scale.setScalar(.45 + .55 * kk);
+    for (const nd of needles) {
+      // mỗi sợi mọc lên ở một thời điểm khác nhau, không bật cùng một lúc
+      const gk = clamp((kk - nd.k0 * .55) / .45);
+      nd.m.scale.set(1, Math.max(.001, gk), 1);
+      nd.m.position.y = nd.len * .5 * Math.max(.001, gk);
+      nd.m.visible = gk > .02;
     }
-    mat.opacity = Math.min(1, .25 + .75 * kk);
+    mat.opacity = Math.min(1, .18 + .76 * kk);
   };
   g.setGrow(0);
   return g;
 }
 
+// nền băng: một đĩa mép run, không phải hình tròn có cạnh sắc
+function frostSheet(R) {
+  const geo = new THREE.CircleGeometry(R, 44);
+  const p = geo.attributes.position;
+  for (let i = 1; i < p.count; i++) {
+    const x = p.getX(i), y = p.getY(i);
+    const a = Math.atan2(y, x);
+    const k = 1 + .18 * Math.sin(a * 5 + 1.1) + .11 * Math.sin(a * 9 - .4);
+    p.setXY(i, x * k, y * k);
+  }
+  geo.computeVertexNormals();
+  return geo;
+}
+
+// texture băng: những vệt lông vũ toả ra từ tâm. Băng phải có **vân** thì
+// mới đọc ra là băng; một miếng trắng phẳng trên mặt đá trắng thì không.
+function frostTex(seed = 21) {
+  return canvasTex(256, 256, (g, w, h) => {
+    const r = mulberry(seed);
+    g.clearRect(0, 0, w, h);
+    // nền sương: một lớp sữa mỏng, đủ để lớp băng **che** vết nứt của mặt
+    // đá chứ không phải một lớp trong suốt để đá lóe lên qua
+    const bg = g.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, w * .5);
+    bg.addColorStop(0, 'rgba(238,250,255,.92)');
+    bg.addColorStop(.62, 'rgba(226,244,255,.78)');
+    bg.addColorStop(1, 'rgba(214,238,252,.35)');
+    g.fillStyle = bg; g.fillRect(0, 0, w, h);
+    for (let i = 0; i < 110; i++) {
+      const a = r() * 6.28;
+      const x0 = w / 2 + Math.cos(a) * (w * .03 + r() * w * .10);
+      const y0 = h / 2 + Math.sin(a) * (h * .03 + r() * h * .10);
+      const len = w * (.10 + r() * .30);
+      g.strokeStyle = 'rgba(255,255,255,' + (.22 + r() * .5).toFixed(2) + ')';
+      g.lineWidth = 1 + r() * 3.2;
+      g.beginPath(); g.moveTo(x0, y0);
+      let x = x0, y = y0;
+      for (let k = 0; k < 5; k++) {
+        x += Math.cos(a + (r() - .5) * 1.0) * len / 5;
+        y += Math.sin(a + (r() - .5) * 1.0) * len / 5;
+        g.lineTo(x, y);
+      }
+      g.stroke();
+    }
+    // vài tia dài làm mạch
+    g.strokeStyle = 'rgba(255,255,255,.75)'; g.lineWidth = 1.6;
+    for (let i = 0; i < 14; i++) {
+      const a = r() * 6.28, x0 = w / 2, y0 = h / 2;
+      g.beginPath(); g.moveTo(x0, y0);
+      g.lineTo(x0 + Math.cos(a) * w * .46, y0 + Math.sin(a) * w * .46);
+      g.stroke();
+    }
+  });
+}
+
 // ── nước mủng chảy xuống mép đá ─────────────────────────────────────────
 // Nước mủng từ mặt đá chảy thành giọt rơi xuống vũng quanh chân đá.
 // setFlow(k, t): k = 0 là khô, k = 1 là nước mủng đầy; t là thời điểm để
-// giọt rơi.
+// giọt trượt.
 //
-// **Không dán một mảnh phẳng lên mặt đá.** Một mảnh rộng, viền sắc, bám
+// **Không dán một mảnh phẳng lên mặt đá.** Một mảng rộng, viền sắc, bám
 // mặt đá đọc ra là một tấm bìa dán (vòng chấm hình ảnh 2 ở c5), không phải
 // nước. Giọt tròn, xanh, rơi từ trên xuống thì đọc ra là nước ngay.
+//
+// Giọt phải có **thể tích**: hình giọt nhọn trên, tròn dưới, trượt dọc
+// mặt đá và nhỏ dần khi hòa vào vũng — không phải hai elip xanh dán thẳng
+// vào mặt đá (vòng chấm hình ảnh 3 ở c5).
 export function meltStream({ len = .15 } = {}) {
   const g = new THREE.Group();
-  const drops = [];
-  for (let i = 0; i < 2; i++) {
-    const d = mesh(new THREE.SphereGeometry(.007 - i * .0015, 14, 10), toon(i ? '#7fc6ea' : '#9fdcf5'), [0, 0, 0]);
-    d.scale.set(1, 1.35, 1);
-    g.add(d); drops.push(d);
-  }
+  // vệt nước chảy dọc mặt đá: một dải mỏng, không viền mực.
+  // Nhóm này được gắn vào khối đá tại góc trên của mặt +x, nên toạ độ bên
+  // dưới là toạ độ **của khối đá**: dải nước chạy từ mép trên xuống mép
+  // dưới, và giọt trượt theo nó.
+  const run = mesh(runnelGeo(.020, len * .92), toon('#bfe4fb', {
+    transparent: true, opacity: .5, depthWrite: false,
+    emissive: '#5f93b4', emissiveIntensity: .10,
+  }), [0, -.075, 0], { rot: [0, Math.PI / 2, 0] });
+  fxLayer(run);
+  g.add(run);
+  // giọt nướt: hình giọt có thể tích, nhọn ở đỉnh, tròn ở đáy
+  const bead = mesh(dropGeo(.0075, .021), toon('#a9dcf5', {
+    emissive: '#3d7ea4', emissiveIntensity: .16,
+  }), [0, 0, 0]);
+  fxLayer(bead);
+  g.add(bead);
+  g.userData.bead = bead;
   g.setFlow = (k, t = 0) => {
     const kk = clamp(k);
     g.visible = kk > .05;
     if (!g.visible) return;
-    drops.forEach((d, i) => {
-      const p = ((t * .42 + i * .5) % 1 + 1) % 1;
-      // rơi nhanh dần; ở cuối hành trình thì giọt tan vào vũng
-      const f = p < .88 ? (p / .88) ** 1.8 : 1;
-      d.position.set(0, -len * f, 0);
-      const gone = p > .9;
-      d.scale.set(gone ? 0 : 1, gone ? 0 : 1.35, gone ? 0 : 1);
-      d.visible = !gone;
-    });
+    run.material.opacity = .45 + .35 * kk;
+    // một vòng trượt dọc mặt đá, rồi giọt hòa vào vũng ở mép dưới
+    const cyc = ((t * .16) % 1 + 1) % 1;
+    const f = cyc < .80 ? Math.pow(cyc / .80, 1.5) : 1;
+    bead.position.set(-.005, lerp(-.020, -.134, f), 0);
+    const gone = cyc > .84;
+    bead.visible = !gone;
+    bead.scale.setScalar(gone ? .01 : 1);
   };
   g.setFlow(0);
   return g;
+}
+
+// dải nước chảy dọc mặt đá: một dải mỏng, rộng ở trên, hẹp ở dưới
+function runnelGeo(w = .015, h = .13) {
+  const geo = new THREE.PlaneGeometry(w, h, 1, 14);
+  const p = geo.attributes.position;
+  for (let i = 0; i < p.count; i++) {
+    const u = (p.getY(i) + h / 2) / h;          // 0 đáy .. 1 đỉnh
+    p.setX(i, p.getX(i) * (.35 + .65 * u));
+  }
+  geo.computeVertexNormals();
+  return geo;
+}
+
+// hình giọt: đáy tròn, đỉnh nhọn — có khối lượng
+function dropGeo(R = .0075, h = .021) {
+  const pts = [];
+  for (let i = 0; i <= 8; i++) {                 // đáy tròn
+    const a = (i / 8) * Math.PI / 2;
+    pts.push(new THREE.Vector2(Math.max(1e-4, R * Math.sin(a)), R * (1 - Math.cos(a))));
+  }
+  for (let i = 1; i <= 6; i++) {                  // nón nhọn lên trên
+    const u = i / 6;
+    pts.push(new THREE.Vector2(Math.max(1e-4, R * Math.pow(1 - u, .9)), R + (h - R) * u));
+  }
+  const geo = new THREE.LatheGeometry(pts, 16);
+  geo.computeVertexNormals();
+  return geo;
 }
 
 // ── lớp nước phủ trên mặt đá (cỡ nano) ──────────────────────────────────
