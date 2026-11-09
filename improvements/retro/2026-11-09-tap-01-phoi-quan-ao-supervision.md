@@ -3527,6 +3527,30 @@ tuyệt đối không so được. Cái so được là **cơ chế**: hai hook 
 là cái **chặn**, không phải lời nhắc — nên phiên mới không cần phải "nhớ luật" mới không phạm;
 và `tools/rules.py` đo được việc phạm luật **vì nó đo transcript**, chứ không phải vì nó đo ý chí.
 
+## N112 — high — Luật "phim cũ hơn mã" so sánh mốc thời gian, nên một sửa giữa lúc dựng là vô hình
+
+**Bằng chứng.** Lượt dựng của tập 01: `build.sh` bắt đầu **14:09:17**; trình dựng viết `out/video.mp4`
+lúc **14:23**; `src/film.js` bị sửa lúc **14:39** (đổi khối tính cửa sổ thẻ sang `cardWindow()` của
+rig); mux xong **14:51**, ra `tram-nghi-nhieu-series-do-vat-tap-01-phoi-quan-ao.mp4` (254 MB).
+
+Luật cũ ở `core/render/review.sh:245-249` so sánh **mốc thời gian**: `if [ "$src" -nt "$MP4" ]` →
+báo "phim cũ hơn mã". Ở đây `film.js` (14:39) **không** mới hơn mp4 (14:51), nên phim **được coi là
+tươi** — dù các khung hình của nó được dựng lúc 14:09–14:23, tức từ mã **trước** lần sửa 14:39.
+
+`core/render/video.mjs` **không** lấy vân tay mã nguồn: `core/render/sourcewatch.mjs` chỉ được
+`readcheck.mjs` và `scenecheck.mjs` import, và hai bài đó so trước–sau *chính lượt chạy của chúng*,
+không so với lúc khung hình được dựng.
+
+**Vì sao quan trọng.** Đây là hình dạng im lặng của một phim cũ: mọi cổng đều xanh, tệp phim có
+mốc mới nhất, mà nội dung phim là của mã cũ. Ở tập này, chính phiên làm phim biết (nó tự nói: *"mã đổi
+sau khi render bắt đầu… tôi sẽ dựng lại một lượt nữa"*) — nhưng nó biết **từ trí nhớ về luật**, không
+phải từ một báo cáo của cổng. Lần sau sẽ không có ai nhớ.
+
+**Guard đã có.** Chưa có. **Đề xuất:** `core/render/video.mjs` lấy vân tay mã nguồn **trước** khi dựng
+(`sourcewatch.mjs` đã có sẵn để import) và ghi vân tay đó cạnh phim; bước *freshness* của
+`core/render/review.sh` so vân tay đó với mã hiện tại thay vì so hai mốc thời gian. Khi đó một sửa
+giữa lúc dựng sẽ làm phim cũ **đúng như nó cũ**, và cổng sẽ báo.
+
 ## Còn lại
 
 - **[x]** N72: `core/render/still.mjs` chờ hai khung hình rồi mới chụp (12:47) — ảnh là của khung vừa dựng,
