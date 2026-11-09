@@ -1,7 +1,7 @@
 ---
 name: tram-nghi-nhieu
 description: Đạo diễn và dựng một tập của kênh Trạm Nghĩ Nhiều — câu hỏi "tại sao" đời thường, trả lời bằng diorama 3D toon (three.js) có ánh sáng thật, viền mực vẽ tay, máy quay đi vào bên trong vật, mọi vật dựng đúng là nó, chỉ thứ vô hình mới thành hình minh hoạ; một giọng kể tiếng Việt. Dùng khi làm bất kỳ tập nào của kênh.
-version: 14.6.0
+version: 14.7.0
 ---
 
 # Một tập Trạm Nghĩ Nhiều: Quy trình Đạo diễn & Phản biện Độc lập Phân tầng
@@ -61,6 +61,9 @@ Quy trình này thay cho bước 1–6 của `AGENTS.md` / `DIRECTOR.md` khi là
      output của job nền xảy ra **136 lần** — và một lần trong số đó là đọc output của job *đang chạy*.
    - `until [ -f file ]; do sleep 15; done` là một vòng dò: nó ăn hết lượt của bạn và không quyết định gì.
    - Cùng một lệnh lặp năm lần trở lên, dù nó đang nhìn cái gì, là một vòng dò.
+   - **Đọc lại tệp log của chính bạn lần thứ ba sẽ bị chặn** (`tools/hook_bg_log.py`, hook `PreToolUse` của thư viện):
+     lệnh bị từ chối và lời nhắc nói đúng cách làm thay thế. Đó là cơ chế, không phải lời nhắc — nên
+     đừng thử lại lệnh đó, hãy đọc output của harness.
 
 7. **Một vòng chấm, một người chấm.**
    - `review.sh` là công cụ của cả kênh: nó đọc mẫu, đánh số vòng, ký tên người chấm và đóng tem. Đừng tự làm lại
