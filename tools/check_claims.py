@@ -1,6 +1,10 @@
 """Check that the numbers the film shows are the numbers its research file supports:
 python3 tools/check_claims.py <film-folder> [<film-folder> ...]
 
+The check proves itself: python3 tools/check_claims.py --selftest runs its own cases — a forbidden value, a number
+with nothing behind it, a number attributed to the wrong year, a value that needs its qualifier — on film folders
+written to a temporary directory.
+
 Three classes of error, all seen in a real episode:
 
   1. A value the research file forbids. The research file names such values ("Cảnh báo cho thẻ "9,5 phút"...",
@@ -23,7 +27,9 @@ Exit code: 0 no number contradicts the research file; 1 some number does; 2 usag
 """
 import os
 import re
+import subprocess
 import sys
+import tempfile
 
 # a sentence of the research file that forbids a value
 FORBIDDEN = re.compile(r'(không được nói|không nói|KHÔNG có trong nguồn|không có trong nguồn|Cảnh báo|'
@@ -116,7 +122,162 @@ def mentions_pair(text, number, unit):
     return False
 
 
+def selftest():
+    """The check's own cases: every defect it exists to catch must be caught, every good card must pass.
+
+    The research files are the ones of real episodes — "Vì sao điện thoại nóng lúc sạc?" (tập 02) and "Tại sao ta
+    không tập trung được?" (tập 03) of the channel Trạm Nghĩ Nhiều — and the cards are the ones that were on screen
+    when the defects were found. Every case is built in a temporary directory, so the check never reads the
+    repository."""
+    script = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'check_claims.py')
+
+    def run(facts, code, voice=None):
+        """a film folder — a research file, a drawing code and a voice script — checked from scratch"""
+        with tempfile.TemporaryDirectory() as d:
+            os.makedirs(os.path.join(d, 'research'))
+            os.makedirs(os.path.join(d, 'src'))
+            with open(os.path.join(d, 'research', 'FACTS.md'), 'w', encoding='utf8') as f:
+                f.write(facts)
+            with open(os.path.join(d, 'src', 'shots.js'), 'w', encoding='utf8') as f:
+                f.write(code)
+            if voice is not None:
+                os.makedirs(os.path.join(d, 'voice'))
+                with open(os.path.join(d, 'voice', 'lines.json'), 'w', encoding='utf8') as f:
+                    f.write(voice)
+            p = subprocess.run([sys.executable, script, d], capture_output=True, text=True)
+            return p.returncode, p.stdout + p.stderr
+
+    # the research file of tập 02: the cổng USB-C and the values the film must not show
+    charger = '''# Facts — Vì sao điện thoại nóng lúc sạc?
+
+**Quy tắc của file này:** mỗi con số trên màn hình có nguồn ở đây, và một giá trị mà file này cấm thì **không được nói** trong phim.
+
+## 3. Cổng USB-C đưa vào máy tới hai mươi volt, và một cổng đảm bảo được sáu mươi oát khi cáp chỉ chịu được ba ampe
+
+> "When Port Present PDP would be > 60W but the cable Vbus Current Handling Capability = 3A, the Port Shall set Port Present PDP = 60W"
+
+USB Implementers Forum (2026), *Universal Serial Bus Type-C and Power Delivery — Source Power Requirements Compliance Test Specification*, Rev. 1.2 (2026-11-04). https://usb.org/document-library/usb-power-delivery
+
+- **Dùng trong phim:** nhãn củ sạc trong khung ghi **60 W**; con số này là mức công suất mà một cổng USB-C đảm bảo được khi cáp chỉ chịu được 3 A ở mức **20 V**.
+- **Phạm vi:** 20 V và 60 W là **giới hạn của chuẩn và của cáp**, không phải của mọi củ sạc; một củ sạc thường đưa ít hơn nhiều. Phim không nói mọi củ sạc đều sáu mươi oát.
+- **Cách nói:** "trên nhãn củ sạc ghi sáu mươi oát" và "cổng đưa vào hai mươi volt" — không nói "hai mươi ampe", không nói "một trăm oát".
+
+## Giá trị không được nói / Values this film must not show
+
+- "90 %" — không được nói trong phim: không có nguồn nào cho hiệu suất của một củ sạc cụ thể, và không có nguồn nào cho phần trăm điện vào máy mà bị thất thoát. Phim chỉ nói "việc đổi ấy không bao giờ trọn vẹn".
+- "1,5 A" — không được nói trong phim: nguồn ở mục 3 nói về **khả năng** của cáp, không nói dòng điện thật của một cái máy trong khung, và phim không đo được dòng điện thật.
+- "100 W" — không được nói trong phim: đây là trần của **cả chuẩn PD ở 20 V / 5 A** (mục 3), không phải công suất của củ sạc trong khung, và phim không nói chuẩn nào.
+'''
+    # the research file of tập 03: the twenty minutes, and the year they do not belong to
+    focus = '''# Facts — Tại sao ta không tập trung được?
+
+**Quy tắc của file này:** mỗi con số trên màn hình có nguồn ở đây, và một giá trị mà file này cấm thì **không được nói** trong phim.
+
+## 4. Trước khi người ta tự nhảy sang việc khác, đã có khoảng hai mươi phút
+
+- **Dùng trong phim:** con số 20 phút là của bài CHI 2008 của Mark, Gudith & Klocke.
+
+## 5. Cảnh báo cho thẻ số liệu
+
+- **Cảnh báo:** con số 20,3 phút KHÔNG có trong bài Leroy (2009); nó là số của một nghiên cứu khác (bài CHI 2008 của Mark).
+
+## Nguồn / Sources
+
+- Mark, I., Gudith, D. & Klocke, U. (2008). *The Cost of Interrupted Work: More Speed and Stress*. CHI '08. DOI: 10.1145/1357054.1357072
+'''
+    # the research file of tập 03: the number that is only allowed with its qualifier
+    dispersed = '''# Facts — Tại sao ta không tập trung được?
+
+## 6. Thời gian trước khi người ta tự nhảy sang việc khác
+
+- **Số 9,5 phút:** con số 9,5 phút không có trong nguồn nào; nó là 9 phút 56 giây ở nhóm phân tán.
+- **Cách nói:** Nếu giữ "9,5 phút" thì phải nói rõ đó là nhóm phân tán.
+'''
+    # the research file of tập 03: ninety-four trials, not ninety-four studies
+    trials = '''# Facts — Tại sao ta không tập trung được?
+
+## 3. Chín mươi bốn lần thử độc lập
+
+> "Findings from 94 independent tests indicate that people are more likely to remember an interrupted task if they are given the two tasks as a single task."
+
+Mark, I., Gudith, D. & Klocke, U. (2008). *The Cost of Interrupted Work: More Speed and Stress*. CHI '08. DOI: 10.1145/1357054.1357072
+'''
+    card_current = '''export const CARDS = [
+  { id: 'charger', title: 'DÒNG ĐIỆN', num: '1,5', unit: 'A' },
+];
+'''
+    prop_label = '''export const PROPS = [
+  { id: 'charger-label', title: 'CỦ SẠC 100 W' },
+];
+'''
+    prop_label_ok = '''export const PROPS = [
+  { id: 'charger-label', title: 'CỦ SẠC' },
+];
+'''
+    voice_label = '{"lines": [{"id": "l1", "text": "Trên nhãn củ sạc trong khung ghi 100 W."}]}\n'
+    card_unsupported = '''export const CARDS = [
+  { id: 'timer', title: 'THỜI GIAN', num: '47', unit: 'giây' },
+];
+'''
+    card_wrong_year = '''export const CARDS = [
+  { id: 'focus', title: 'TRƯỚC KHI NHẢY SANG VIỆC KHÁC', num: '20', unit: 'phút', note: 'nghiên cứu năm 2009' },
+];
+'''
+    card_no_qualifier = '''export const CARDS = [
+  { id: 'focus', title: 'TRƯỚC KHI NHẢY SANG VIỆC KHÁC', num: '9,5', unit: 'phút' },
+];
+'''
+    card_qualifier = '''export const CARDS = [
+  { id: 'focus', title: 'TRƯỚC KHI NHẢY SANG VIỆC KHÁC', num: '9,5', unit: 'phút', note: 'chỉ nhóm phân tán' },
+];
+'''
+    card_supported = '''export const CARDS = [
+  { id: 'charger', title: 'NHÃN CỦ SẠC', num: '60', unit: 'W', note: 'giới hạn của chuẩn và của cáp' },
+];
+'''
+    card_wording = '''export const CARDS = [
+  { id: 'trials', title: 'SỐ LẦN THỬ', num: '94', unit: 'nghiên cứu' },
+];
+'''
+    cases = [
+        ('a card shows a value the research file forbids',
+         charger, card_current, None, 1, 'the research file forbids this number'),
+        ('a prop label shows a value the research file forbids',
+         charger, prop_label, None, 1, 'the film shows "100 W", which its research file forbids'),
+        ('the voice script says a value the research file forbids',
+         charger, prop_label_ok, voice_label, 1, 'the film shows "100 W", which its research file forbids'),
+        ('a card shows a number the research file never mentions',
+         charger, card_unsupported, None, 1, 'the research file never mentions 47'),
+        ('a card gives a number a year the research file does not give it',
+         focus, card_wrong_year, None, 1, 'the research file says this number does not come from that year'),
+        ('a card shows a value the research file allows only with a qualifier',
+         dispersed, card_no_qualifier, None, 1, 'the research file allows this number only "nhóm phân tán"'),
+        ('the same card with the qualifier on screen passes',
+         dispersed, card_qualifier, None, 0, 'check_claims: PASS'),
+        ('a card the research file supports passes',
+         charger, card_supported, None, 0, 'check_claims: PASS'),
+        ('a number the research file words differently is reported, not failed',
+         trials, card_wording, None, 0, 'the research file words this number differently'),
+    ]
+    failed = 0
+    for name, facts, code_text, voice, want, expect in cases:
+        got, out = run(facts, code_text, voice)
+        if got == want and expect in out:
+            print(f'ok   {name}')
+        else:
+            failed += 1
+            print(f'FAIL {name} — expected exit {want} and "{expect}", got exit {got}: '
+                  + ' / '.join(l.strip() for l in out.splitlines() if l.strip())[:200])
+    if failed:
+        print(f'FAIL: {failed} case(s)')
+        return 1
+    print('ok')
+    return 0
+
+
 def main():
+    if '--selftest' in sys.argv[1:]:
+        return selftest()
     args = [a for a in sys.argv[1:] if not a.startswith('-')]
     if not args:
         print('usage: python3 tools/check_claims.py <film-folder> [<film-folder> ...]')
