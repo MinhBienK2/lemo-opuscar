@@ -2843,6 +2843,29 @@ R11 (bản đồ mã), R12 (xem tờ sheet, mở khung gốc khi cần), R14 (v�
 giờ in tiến độ sau mỗi câu với đồng hồ từng câu — hai lượt chạy lành mạnh trước đây bị giết chỉ vì log
 rỗng.
 
+## N91 — medium — Lời khuyên của cổng trái với luật của chính kênh, ngay trong một tệp
+
+**Bằng chứng.** `channels/tram-nghi-nhieu/tools/check_shots.py` in ra cờ `FILL` với lời khuyên:
+
+> "khung gần như trống — vật trong khung chỉ chiếm %d %% khung; **đưa máy gần hơn**, hoặc đổi bố cục để vật chiếm chỗ."
+
+Trong khi tài liệu của chính hàm đó, ngay trên nó vài dòng, đã nói:
+
+> "Cả ba lần, máy nói 'vật chính quá nhỏ' — và người làm phim tin máy thì **đưa máy sát vào cho số lớn lên**, làm
+> hỏng bố cục để thoả một con số mà máy vốn không đo được."
+
+Cùng một tệp, hai lời trái nhau, và cổng bàn giao chạy đúng hàm này (`core/render/review.sh`, bước `timing`):
+với tập 01 nó in ra 14 câu `FILL` và nói với người làm phim đưa máy sát vật — đúng cách sửa mà luật của
+kênh cấm. Trong lời kể của `lessons.md` đã có câu này rồi, nhưng cổng thì không.
+
+**Vì sao quan trọng.** Đây là "cảnh báo sai làm hỏng cả những cảnh báo đúng" (N80) ở dạng nguy hiểm nhất:
+lời khuyên sai không phải lúc nào cũng sai, và người làm phim làm theo nó thì phim hỏng theo hướng rất
+khó phát hiện (bố cục sát vật, không khí mất). Một cổng dạy đúng bố cục là cổng giữ được người làm phim ở
+đúng hướng khi nó thất bại.
+
+**Guard đã có.** Chưa có. **Đề xuất (đã làm):** lời của cờ `FILL` nói *đổi bố cục / cho vật một hành động
+rõ*, và nói thẳng rằng máy không đo được chủ thể có đủ lớn không, cùng một câu trong `lessons.md`.
+
 ## Còn lại
 
 - **[ ]** N72: sửa `core/render/still.mjs` (chờ khung đã trình chiếu). Chưa làm vì R13 — phiên đang

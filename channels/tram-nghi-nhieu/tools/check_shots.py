@@ -126,8 +126,13 @@ def problems(beat):
         # in ra danh sách câu này để người làm phim tự nhìn.
         return out
     if cover < FILL_MIN:
-        out.append(('FILL', 'khung gần như trống — vật trong khung chỉ chiếm %d %% khung; đưa máy gần hơn, '
-                           'hoặc đổi bố cục để vật chiếm chỗ.' % round(cover * 100)))
+        # "đưa máy gần hơn" là lời khuyên sai: máy đo được phần khung mà vật chiếm, không đo được
+        # chủ thể có đủ lớn không — đưa máy sát vật để đẩy con số lên là làm hỏng bố cục để thoả
+        # một con số máy vốn không đo được (xem lessons.md).
+        out.append(('FILL', 'khung gần như trống — vật trong khung chỉ chiếm %d %% khung; đổi bố cục để vật chiếm '
+                           'chỗ, hoặc cho vật một hành động rõ. Đừng đưa máy sát vật chỉ để đẩy con số lên: máy không '
+                           'đo được chủ thể có đủ lớn không, và bố cục hỏng thì con số có lên cũng không cứu được câu nào.'
+                     % round(cover * 100)))
     return out
 
 
