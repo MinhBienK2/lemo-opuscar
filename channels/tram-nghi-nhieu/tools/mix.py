@@ -279,6 +279,12 @@ sf.write(os.path.join(OUT, 'mix.wav'), mixd.astype(np.float32), SR, subtype='PCM
 
 # ——— peaks against loudness: mux.sh lifts the film to −14 LUFS with true peak ≤ −1.2 dB, which only works when the
 # peaks sit ≤ ~12.8 dB above the loudness; otherwise loudnorm misses one target. Measure, and limit the peaks down to it.
+#
+# The bar that really binds is the channel's own: `tools/check_delivery.py` refuses a delivered film whose sample
+# peak is above −3.0 dB ("mix bị chói"). The film gets there by being lifted by (target − measured) dB on the way
+# in, and AAC adds a little more on top — so the mix must sit 11.0 dB above its own loudness, not 12.3. Otherwise
+# the film passes the library's gate (true peak ≤ −1.0 dBFS) and then fails the channel's check *after* the render:
+# a defect found in the last minute, at the price of a whole re-render (tập 01, 15:18).
 def loudness(path):
     import subprocess, re
     r = subprocess.run(['ffmpeg', '-hide_banner', '-nostats', '-i', path, '-af', 'ebur128=peak=true', '-f', 'null', '-'],
@@ -289,8 +295,8 @@ def loudness(path):
 
 for _ in range(3):
     I, P = loudness(os.path.join(OUT, 'mix.wav'))
-    if I is None or P - I <= 12.3: break
-    ceil = 10 ** ((I + 11.8) / 20) / 1.12   # sample-peak ceiling, with room for the inter-sample (true) peak
+    if I is None or P - I <= 11.0: break
+    ceil = 10 ** ((I + 10.0) / 20) / 1.12   # sample-peak ceiling, with room for the inter-sample (true) peak
     for c in range(2): mixd[:, c] = sfx.limit(mixd[:, c], ceil, look=.003)
     sf.write(os.path.join(OUT, 'mix.wav'), mixd.astype(np.float32), SR, subtype='PCM_16')
 print('mix', round(len(mixd) / SR, 2), 's, peak', round(float(np.abs(mixd).max()), 3))

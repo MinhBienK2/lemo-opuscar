@@ -61,6 +61,13 @@ def where(text, needle):
 
 def write_atomic(path, body):
     """write the whole file next to the target, then rename it over: the target is never half-written"""
+    # A symlink is not the file. Renaming a regular file over a link destroys the link and leaves a copy
+    # where the repository expects a pointer — the edit "lands", the link does not, and the next session
+    # finds a regular file the repository has never heard of, with the same content and no history
+    # (the channel's mix.py → tools/mix.py, N113). So the link is followed: the content is written to the
+    # file it points at, and the link stays a link.
+    if os.path.islink(path):
+        path = os.path.realpath(path)
     d = os.path.dirname(os.path.abspath(path))
     # The mode travels with the content: a script that was executable before the edit is executable after it.
     # A rename with a fresh file silently drops the bit, and a script that lost it stops working for anyone
@@ -233,6 +240,16 @@ def selftest():
         write_atomic(script, read(script).replace('hi', 'hello'))
         mode = os.stat(script).st_mode & 0o111
         cases.append(('tệp thực thi vẫn thực thi sau khi sửa', mode != 0, oct(os.stat(script).st_mode), ''))
+
+        # a symlink stays a symlink: the edit lands in the file it points at, the pointer survives (N113)
+        real = os.path.join(tmp, 'real.py')
+        open(real, 'w', encoding='utf-8').write('A = 1\n')
+        link = os.path.join(tmp, 'link.py')
+        os.symlink('real.py', link)
+        write_atomic(link, 'A = 2\n')
+        cases.append(('liên kết tượng trỏ vẫn là liên kết tượng trỏ sau khi sửa',
+                      os.path.islink(link) and read(real) == 'A = 2\n',
+                      ('còn là liên kết' if os.path.islink(link) else 'đã thành tệp thường') + ' | ' + read(real), ''))
 
         # one call, several files: each edit names its own file. This is the shape a session writes by hand
         # when it edits a big source file and a doc in the same breath (N67).
