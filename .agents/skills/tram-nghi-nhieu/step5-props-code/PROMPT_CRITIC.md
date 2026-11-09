@@ -25,7 +25,7 @@ Nhiệm vụ của bạn là thẩm định code 3D và các ảnh chụp propch
    - Hàm khởi tạo component có hoàn toàn độc lập (pure function), không phụ thuộc vào biến toàn cục lạ lẫm không?
    - Tọa độ tâm (Pivot point) có đặt đúng chỗ không (vd: bản lề cánh cửa phải đặt ở mép, không đặt ở tâm)?
 
-## Định dạng Output Bắt buộc (`PROPS-CODE-REVIEW.md`)
+## Định dạng Output Bắt buộc (`PROPS-REVIEW.md`)
 
 ```markdown
 VERDICT: PASS | REJECT

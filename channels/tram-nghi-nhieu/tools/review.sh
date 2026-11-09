@@ -91,18 +91,11 @@ sign() { printf '\n---\nNgười chấm: %s · review.sh %s · %s\n' "$CRITIC_ID
 # The round number in a report is the tool's truth, not the reviewer's memory. A reviewer that is not told which
 # round it is writes "ROUND: 1/5" every time, and a report that always says round 1 cannot tell a loop from a
 # first attempt — nor can a reader who wants to know how much of the round budget is gone.
+# The writing is a tool of its own (tools/set_round.py, with its own selftest), so it can be proved rather than
+# trusted: a report with no round line, a report whose verdict is not the first line, and a report that guessed
+# its round all end up carrying the truth.
 set_round() {  # <file> <n> <limit>
-  python3 - "$1" "$2" "$3" <<'PY'
-import re, sys
-path, n, lim = sys.argv[1], sys.argv[2], sys.argv[3]
-t = open(path, encoding='utf-8', errors='replace').read()
-line = f"ROUND: {n}/{lim}"
-if re.search(r'^ROUND:.*$', t, re.M):
-    t = re.sub(r'^ROUND:.*$', line, t, count=1, flags=re.M)
-else:
-    t = re.sub(r'^(VERDICT:.*)$', lambda m: m.group(1) + '\n' + line, t, count=1, flags=re.M)
-open(path, 'w', encoding='utf-8').write(t)
-PY
+  python3 "$CHANNEL/tools/set_round.py" "$@"
 }
 # next number of a report: next <prefix> → n for <prefix>n.md
 next() { n=$(ls "$EP/review" 2>/dev/null | grep -cE "^$1[0-9]+\.md$" || true); echo $((n + 1)); }
@@ -188,6 +181,7 @@ if [ "$OUTLINE" = 1 ]; then
 $PREV
 Thư mục làm việc của bạn: $W. Đọc TREATMENT.md, FACTS.md, STRATEGY.md (và PREVIOUS.md nếu có), rồi viết OUTLINE-REVIEW.md ở đó theo mẫu, và in lại nó."
   [ -s OUTLINE-REVIEW.md ] || cp out.txt OUTLINE-REVIEW.md
+  set_round OUTLINE-REVIEW.md "$n" 4
   sign "--outline" OUTLINE-REVIEW.md
   cp OUTLINE-REVIEW.md "$EP/review/OUTLINE-REVIEW-$n.md"; cp OUTLINE-REVIEW.md "$EP/review/OUTLINE-REVIEW.md"
   cat OUTLINE-REVIEW.md
@@ -269,9 +263,14 @@ VERDICT: PASS | FAIL      (PASS khi không vật nào HỎNG: nhóm A phải đ�
 #n <tên định dựng> — [A|B] — KHỚP|HỎNG — người xem gọi: <tên mù> (lần 2: <tên mù thứ hai> nếu có)
   → SỬA: <cách sửa bằng hình>
 rồi in lại nó."
+  # the critic may write the report under the name in its template or the name in the task line;
+  # take either, or the round is lost in a file of warnings
+  if [ ! -s PROPS-REVIEW.md ] && [ -s PROPS-CODE-REVIEW.md ]; then cp PROPS-CODE-REVIEW.md PROPS-REVIEW.md; fi
   [ -s PROPS-REVIEW.md ] || cp out.txt PROPS-REVIEW.md
   n=$(next PROPS-REVIEW-)
-  { cat PROPS-REVIEW.md; printf '\n## Người xem không biết tên đã gọi\n'; cat BLIND.md; } > R.md; sign "--props" R.md
+  { cat PROPS-REVIEW.md; printf '\n## Người xem không biết tên đã gọi\n'; cat BLIND.md; } > R.md
+  set_round R.md "$n" 5
+  sign "--props" R.md
   # The hash of the props code goes into the report: two rounds that judged the same code and disagreed about
   # a prop are the reviewer changing its mind, and the director has to see that (not guess it).
   CODE_SHA=$(python3 -c "import hashlib,sys;print(hashlib.sha1(open(sys.argv[1],'rb').read()).hexdigest())" "$EP/src/props.js" 2>/dev/null || echo "")
@@ -348,7 +347,9 @@ if [ "$STORYBOARD" = 1 ]; then
 Thư mục làm việc của bạn: $W. Đọc LOOK.md (bảng bố cục, từng nhát, góc máy, lý do máy đứng ở đó), film.js (nếu có: mã dựng khung hình) và TREATMENT.md; mở từng ảnh trong hero/ và soi nó. Chấm đúng những tiêu chí trên, nhớ rằng đây là vòng $n/5 và những gì đã sửa từ vòng trước thì không nêu lại là lỗi.
 Viết STORYBOARD-REVIEW.md ở thư mục này theo mẫu, rồi in lại nó."
   [ -s STORYBOARD-REVIEW.md ] || cp out.txt STORYBOARD-REVIEW.md
-  { cat STORYBOARD-REVIEW.md; } > R.md; sign "--storyboard" R.md
+  { cat STORYBOARD-REVIEW.md; } > R.md
+  set_round R.md "$n" 5
+  sign "--storyboard" R.md
   cp R.md "$EP/review/STORYBOARD-REVIEW-$n.md"; cp R.md "$EP/review/STORYBOARD-REVIEW.md"
   cat R.md
   if grep -qE '^#*[[:space:]]*VERDICT: *PASS' R.md; then $GATE stamp "$EP" storyboard "$EP/review/STORYBOARD-REVIEW-$n.md" --critic "$CRITIC_ID"; echo "review --storyboard: PASS"; exit 0; fi
@@ -491,6 +492,9 @@ REL=$(python3 -c "import os,sys; print(os.path.relpath(sys.argv[1], sys.argv[2])
 cp "$EP/voice/lines.json" "$W/"; [ -f "$EP/research/FACTS.md" ] && cp "$EP/research/FACTS.md" "$W/"
 cp "$W/beats/beats.json" "$W/"
 for f in set_kitchen inside_banana flow cutaway_3; do [ -f "$CHANNEL/demo/stills/$f.jpg" ] && cp "$CHANNEL/demo/stills/$f.jpg" "$W/ref/"; done
+# what the last round fixed and what is still open. The tool already knows it (check_progress.py compares the two
+# last reviews); before this, only the console saw it and the reviewer started every round from zero.
+python3 "$CHANNEL/tools/check_progress.py" "$EP" > "$W/PROGRESS.md" 2>/dev/null || true
 # the sheets stay: they are how the reviewer reads the whole film at once (a sheet holds twelve frames with their
 # line, their flags and their fill, where opening sixty frames one by one costs an hour and a lot of tokens)
 
@@ -537,8 +541,12 @@ critic "$(get_prompt "step6-assembly")
 
 $(cat TASK.md)
 
-Đây là vòng $n/$LIMIT của phần chấm này; dòng thứ hai của bản chấm phải là "ROUND: $n/$LIMIT".
+Đây là vòng $n/$LIMIT của phần chấm này. Bạn không cần viết dòng "ROUND" — review.sh ghi số vòng thật vào bản chấm sau khi bạn viết xong.
+Nếu có PROGRESS.md, hãy đọc nó trước khi chấm: nó nói vòng trước đã sửa được gì và còn mở gì. Câu đã sửa rồi thì đừng nêu lại là lỗi; câu còn mở thì phải soi kỹ và nói rõ đã sửa hay chưa.
 Thư mục làm việc của bạn: $W. Mở từng ảnh của các câu trên, rồi viết REVIEW.md ở đó theo mẫu, và in lại nó."
+# the critic may write the report under the name in its template (SCENE-REVIEW.md) or the name in the
+# task line (REVIEW.md); take either, or the round is lost in a file of warnings
+if [ ! -s REVIEW.md ] && [ -s SCENE-REVIEW.md ]; then cp SCENE-REVIEW.md REVIEW.md; fi
 [ -s REVIEW.md ] || cp out.txt REVIEW.md
 # the machine flags stand unless the reviewer cleared them with "CỜ SAI <FLAG>: <why>"
 FLAGGED=$(unflag REVIEW.md "$(cat flags.txt)" "DARK SAME RUN NUM")

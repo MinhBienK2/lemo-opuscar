@@ -31,7 +31,7 @@ Nhiệm vụ của bạn là thẩm định nhịp điệu phim qua từng phân
    - Cảnh bên trong vật (ruột sợi, giữa vải, trong pin) được phép có nền tối trơn; nhưng vật chính vẫn phải đủ lớn để người xem tắt tiếng đoán ra đang xảy ra chuyện gì.
    - Cận cảnh vào một mặt phẳng trơn mà không có vật nào đọc được trong đó là FAIL.
    - Ghi rõ nhát nào FAIL và đề xuất sửa cụ thể: đưa máy lại gần hơn, đổi góc, dời vật chính vào giữa khung, hay thêm vật để khung có chuyện.
-## Định dạng Output Bắt buộc (`SCENE-REVIEW.md`)
+## Định dạng Output Bắt buộc (`REVIEW.md`)
 
 ```markdown
 VERDICT: PASS | REJECT

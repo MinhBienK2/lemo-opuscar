@@ -1219,6 +1219,36 @@ nhau không** — chứ không chỉ chấm dàn ý như một văn bản đứn
 
 ---
 
+## N44 — high — Người chấm viết bản chấm dưới một cái tên, công cụ đọc một cái tên khác, và bản chấm rơi vào một tệp cảnh báo
+
+**Bằng chứng.** Vòng chấm hình số 4 của tập 01 chạy lúc 08:25. Người chấm viết bản chấm 35 KB vào
+`SCENE-REVIEW.md` — đúng cái tên trong mẫu của nó (`step6-assembly/PROMPT_CRITIC.md`, dòng 34: *"Định dạng
+Output Bắt buộc (`SCENE-REVIEW.md`)"*) — trong khi `review.sh` đọc `REVIEW.md`, đúng cái tên trong câu lệnh
+gọi nó. Khi không thấy `REVIEW.md`, công cụ chạy:
+
+```sh
+[ -s REVIEW.md ] || cp out.txt REVIEW.md
+```
+
+và `out.txt` — thứ mà `claude -p` in ra — chỉ có **hai dòng cảnh báo** (connector bị tắt, model không nhận
+ra), không có lời chấm nào. Bản chấm 35 KB của vòng 4 sẽ biến thành 415 byte cảnh báo, rồi được ghi vào
+`review/REVIEW.md` — **đúng tệp mà phiên được bảo "sửa theo"**.
+
+Vòng 4 mất trắng tiến trình chấm của nó. Vì sao ba vòng trước không mất? Vì ở những vòng đó người chấm
+làm theo câu lệnh (`viết REVIEW.md`) chứ không theo mẫu. **Cái quyết định là một sự trùng hợp giữa hai
+câu trong cùng một lời gọi** — và nó đúng một phần hai.
+
+**Đã sửa.** Hai đầu: (1) mẫu của bước 5 và bước 6 nay ghi đúng cái tên công cụ đọc (`PROPS-REVIEW.md`,
+`REVIEW.md`); (2) công cụ nhận **cả hai** cái tên (`if [ ! -s REVIEW.md ] && [ -s SCENE-REVIEW.md ]`),
+nên lời gọi nào cũng không làm mất vòng chấm nữa. Cùng kiểu lỗi này: `step5` ghi `PROPS-CODE-REVIEW.md`
+trong khi công cụ đọc `PROPS-REVIEW.md` — cũng đã sửa.
+
+**Còn phải làm.** Các khối còn lại (`OUTLINE-REVIEW.md`, `SCRIPT-REVIEW.md`, `STORYBOARD-REVIEW.md`) đang
+khớp tên, nhưng bài học chung là: **một lời gọi không được để hai cái tên cùng một thứ** — và lời gọi
+nào cũng phải chịu được việc công cụ ghi ra tệp cảnh báo khi người chấm không viết đúng tên.
+
+---
+
 ## Các guard đã bắt được gì (tính từ 08:00, hai tập còn chạy)
 
 Đây là bằng chứng rằng các guard không phải lý thuyết — mỗi cái đã bắt một lỗi thật, hoặc đã được một
