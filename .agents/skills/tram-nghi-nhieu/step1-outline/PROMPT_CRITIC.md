@@ -11,6 +11,12 @@ Chấm theo 5 nhóm A, B, C, D, E từ 1 đến 5 điểm:
 - Câu hỏi đã tách rõ: chủ thể, sự thay đổi, so sánh, nguyên nhân?
 - Câu trả lời 1 câu có đúng chủ thể làm chủ ngữ, đúng chuỗi nhân quả của FACTS không? (Sai: CHẶN)
 - Mọi mắt xích có nguồn tin cậy trong FACTS không? (Không nguồn: CHẶN)
+  - **Nguồn tin cậy = nguồn sơ cấp**: sách chuyên ngành, bài báo bình duyệt, đặc tả của hiệp hội, datasheet của
+    nhà sản xuất, hay sổ tay của cơ quan chuẩn (IUPAC, NIST…). **Wikipedia là dẫn chiếu, không phải nguồn
+    chính**: một mốc mà nguồn duy nhất là Wikipedia thì CHẶN. Mốc nào khó tìm nguồn sơ cấp thì cần **hai
+    nguồn**, trong đó một nguồn sơ cấp. Nhìn vào tập tham chiếu của kênh để lấy chuẩn: mốc về nhiệt ẩn
+    trích *A Short Course in Cloud Physics* và *Journal of Applied Meteorology*, Wikipedia chỉ là dẫn
+    chiếu thứ hai.
 
 ### Nhóm B: Trật tự & Độc lập ý (Không lặp ý)
 - Mỗi ý một lần: Cùng một luận điểm không được xuất hiện ở 2 dòng khác nhau trong bảng ý → hình. (Lặp 3 lần hoặc lặp xuyên chương: CHẶN)

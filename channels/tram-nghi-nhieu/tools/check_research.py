@@ -12,7 +12,9 @@ This check says what is missing, in the file's own lines, before a review round 
   2. no line still holds a placeholder of the template (`<Author>`, `<doi or link>`, `<value>`, …);
   3. there is at least one claim — a numbered section heading (`## 1. …`);
   4. there is at least one source — a line that carries a year next to an author, a journal or an
-     identifier, the same test the library's `check_citations.py` uses.
+     identifier, the same test the library's `check_citations.py` uses;
+  5. **no claim rests on Wikipedia alone** — an encyclopedia is a cross-reference, not a source: a claim
+     whose every link is `wikipedia.org` is a claim without a primary source.
 
 Exit code: 0 the research file is written; 1 it is not; 2 usage.
 
@@ -71,6 +73,35 @@ def sources(text):
     return [b for b in blocks(text.splitlines()) if is_source(b['text'])]
 
 
+def claims(text):
+    """The claim sections of the file: each a heading with a number, and the lines under it."""
+    out, cur = [], None
+    for ln in text.splitlines():
+        if NUMBERED.match(ln):
+            cur = {'head': ln, 'lines': []}
+            out.append(cur)
+        elif cur is not None:
+            cur['lines'].append(ln)
+    return out
+
+
+def wiki_only(text):
+    """The claim sections that rest on Wikipedia alone — a claim with no primary source behind it.
+
+    A primary source is a link that is not Wikipedia, or an identifier of its own (a DOI, an ISBN, an
+    arXiv number): a book or a paper named with its publisher counts even without a link."""
+    out = []
+    for c in claims(text):
+        body = '\n'.join(c['lines'])
+        urls = re.findall(r'https?://[^\s)>\]]+', body)
+        if not urls or not all('wikipedia.org' in u for u in urls):
+            continue
+        if re.search(r'\b(?:doi|isbn|issn|arxiv|pmid)\b', body, re.I):
+            continue
+        out.append((c['head'].strip(), urls))
+    return out
+
+
 def check(path):
     """The problems of one research file; each as (line, message)."""
     try:
@@ -91,6 +122,10 @@ def check(path):
     src = sources(text)
     if not src:
         bad.append((0, 'no source found: a source is a line with a year next to an author, a journal or a DOI'))
+    for head, urls in wiki_only(text):
+        bad.append((0, f'{head} — the only link is Wikipedia; an encyclopedia is a cross-reference, '
+                       f'not a source: give this claim a primary source (a book, a paper, a specification, '
+                       f'a datasheet)'))
     return bad
 
 
@@ -128,6 +163,11 @@ Every number the film puts on screen has its source in this file.
         ('a file with no claim fails', GOOD.replace('## 1. Nước rời khỏi vải bằng cách hoá hơi', '## Ghi chú'), False),
         ('a file with no source fails', GOOD.replace('DOI: 10.1000/xyz.', 'in a book.').replace('(1989)', ''), False),
         ('the template itself fails', TEMPLATE, False),
+        ('a claim resting on Wikipedia alone fails',
+         GOOD.replace('DOI: 10.1000/xyz.', 'Wikipedia, *Joule heating*. https://en.wikipedia.org/wiki/Joule_heating'), False),
+        ('a claim with a primary source beside Wikipedia passes',
+         GOOD.replace('DOI: 10.1000/xyz.', 'Wikipedia, *Joule heating*. https://en.wikipedia.org/wiki/Joule_heating\n'
+                                           'Rogers, R. R. (1989), *Cloud Physics*, Pergamon. DOI: 10.1000/abc.'), True),
     ]
     bad = 0
     for name, text, want_ok in cases:
