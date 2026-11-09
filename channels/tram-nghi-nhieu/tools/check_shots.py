@@ -15,10 +15,19 @@ Dùng:
   python3 channels/tram-nghi-nhieu/tools/check_shots.py <tập>            # đọc out/beats/beats.json
   python3 channels/tram-nghi-nhieu/tools/check_shots.py <beats.json>
   python3 channels/tram-nghi-nhieu/tools/check_shots.py --selftest
+  python3 channels/tram-nghi-nhieu/tools/check_shots.py --note <tập>     # cờ gợi ý không chặn (cổng bàn giao)
+
+Hai mức chặn, vì cờ máy và lỗi máy không cùng đẳng cấp. Mặc định (vòng chấm hình, trước khi mở
+vòng) mọi cờ đều chặn: `FILL` (độ phủ thất), `SAME`, `RUN`, `DARK`, `NUM`, và câu thiếu tiếng. `--note`
+dùng ở cổng bàn giao: ở đó chỉ câu thiếu sự kiện giọng mới chặn (tiếng lệch hình thì không sửa được
+sau này), còn các cờ phép so sánh thì không chặn — người chấm hình đã phán (tem PICTURE.pass) và máy
+không có quyền phủ quyết của người chấm.
 """
 import json
 import os
 import sys
+
+NOTE = False       # --note: the machine's opinion is printed, but only what it can measure blocks
 
 # mỗi cờ máy, nói thẳng cần làm gì — cùng giọng với những gì người chấm nói
 HINT = {
@@ -29,6 +38,21 @@ HINT = {
     'VOICE': 'lời kể có câu này mà window.EV không có sự kiện giọng cho nó — tiếng sẽ lệch với hình; đối chiếu voice/lines.json với window.EV.',
 }
 FILL_MIN = 0.15          # dưới ngưỡng này thì vật chính là một vệt nhỏ giữa khung trống
+
+# Máy đo được thì khác với máy đoán: hai loại cờ này không cùng một đẳng cấp.
+#   Đo được — sai là sai: độ phủ thất (khung trống có vật), câu thiếu sự kiện giọng (tiếng sẽ lệch
+#           với hình). Không có lý do gì để bỏ qua.
+#   Phép so sánh — **cần mắt người phán**: hai khung giống nhau (SAME) có thể là vật đang chuyển động
+#           rất nhẹ; nhiều câu trên cùng bộ đạo cụ (RUN) có thể là một cảnh dài đúng ý; tối (DARK) và
+#           số chưa có trên màn hình (NUM) là hai phép đo rất thô.
+# Vì vậy có hai mức chặn, và cổng bàn giao gọi công cụ này ở mức nhẹ hơn:
+#   · VÒNG CHẤM HÌNH (mặc định): mọi cờ đều chặn — trước khi mở một vòng chấm, các cờ này phải
+#     được soi, vì đó là lúc người làm phim còn sửa được.
+#   · CỔNG BÀN GIAO (`--note`): chỉ lỗi cấu trúc mới chặn — một câu thiếu sự kiện giọng thì tiếng sẽ
+#     lệch với hình, và không ai sửa được sau khi phim xong. Cờ phép so sánh, **kể cả FILL**, không
+#     chặn ở đó: máy không biết thứ nhỏ trong khung là **chủ thể** hay một vệt vô nghĩa, và người chấm
+#     hình đã phán rồi (tem PICTURE.pass) — máy không có quyền phủ quyết của người chấm.
+FATAL_NOTE = ('VOICE',)
 
 
 def measured(beat):
@@ -105,6 +129,37 @@ def load(path):
             return json.load(fh), p
     except (OSError, ValueError):
         return None, p
+
+
+def sheet_older_than_code(episode, beats_path):
+    """(giờ của tờ sheet, giờ của mã) nếu tờ sheet cũ hơn mã — không thì None.
+
+    Một tờ sheet dựng lúc 11:02 nói về phim lúc 11:02. Nếu mã sửa lúc 11:26 thì mọi cờ trên tờ đó
+    nói về một hình **không còn tồn tại** — và cổng bàn giao sẽ chặn phim bằng những lỗi của hình cũ.
+    Không có gì nói ra điều đó; bài này nói.
+    """
+    if not beats_path or not os.path.isfile(beats_path):
+        return None
+    src = os.path.join(episode, 'src')
+    newest = 0
+    if os.path.isdir(src):
+        for name in os.listdir(src):
+            # CHỈ MÃ: `src/MAP.md` là bản đồ của mã, và người làm phim sửa nó sau khi sửa mã — đếm nó
+            # thì mọi tờ sheet đều bị báo cũ, và cảnh báo đó mất hết sức nặng
+            if not name.endswith('.js'):
+                continue
+            p = os.path.join(src, name)
+            if os.path.isfile(p):
+                newest = max(newest, os.path.getmtime(p))
+    if newest <= os.path.getmtime(beats_path):
+        return None
+    import datetime
+    def f(t):
+        d = datetime.datetime.fromtimestamp(t)
+        # ngày khác ngày thì phải nói cả ngày: 'tờ 11:21, mã 12:36' đọc ra là cùng một buổi, và người
+        # đọc tưởng chỉ lệch mấy tiếng, trong khi thật ra tờ sheet dựng hôm qua
+        return d.strftime('%d/%m %H:%M') if d.date() != datetime.date.today() else d.strftime('%H:%M')
+    return f(os.path.getmtime(beats_path)), f(newest)
 
 
 def problems(beat):
@@ -282,6 +337,9 @@ def selftest():
 def main(argv):
     if '--selftest' in argv:
         return selftest()
+    global NOTE
+    NOTE = '--note' in argv
+    argv = [a for a in argv if a != '--note']
     if len(argv) < 2:
         print(__doc__)
         return 0
@@ -291,8 +349,27 @@ def main(argv):
               'node channels/tram-nghi-nhieu/tools/beatsheet.mjs <tập> --out <scratch>' % argv[1],
               file=sys.stderr)
         return 2
+    stale = sheet_older_than_code(argv[1], path)
+    if stale:
+        print('check_shots: tờ sheet CŨ HƠN mã (tờ %s, mã %s) — những cờ này nói về một hình cũ hơn; '
+              'dựng lại tờ sheet rồi chạy lại: node channels/tram-nghi-nhieu/tools/beatsheet.mjs %s --out <scratch>'
+              % (stale[0], stale[1], argv[1]))
     n, unmeasured = report(beats)
     if n:
+        if NOTE:
+            fatal = []
+            for b in beats:
+                for kind, _ in problems(b):
+                    if kind in FATAL_NOTE:
+                        fatal.append(b.get('n'))
+                        break
+            if fatal:
+                print('\ncheck_shots: %d câu thiếu sự kiện giọng — tiếng sẽ lệch với hình: %s'
+                      % (len(fatal), cluster_text(fatal)))
+                return 1
+            print('\ncheck_shots: %d câu có cờ máy — ở chế độ --note chúng không chặn: mở khung gốc rồi tự phán, '
+                  'hoặc ghi vào bản cắt của đạo diễn. (Cổng bàn giao: người chấm hình đã phán rồi.)' % n)
+            return 0
         print('\ncheck_shots: %d câu còn vấn đề — sửa trước khi mở một vòng chấm.' % n)
         return 1
     if unmeasured:

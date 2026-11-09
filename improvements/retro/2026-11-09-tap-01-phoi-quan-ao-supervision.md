@@ -2875,6 +2875,59 @@ khó phát hiện (bố cục sát vật, không khí mất). Một cổng dạy
 **Guard đã có.** Chưa có. **Đề xuất (đã làm):** lời của cờ `FILL` nói *đổi bố cục / cho vật một hành động
 rõ*, và nói thẳng rằng máy không đo được chủ thể có đủ lớn không, cùng một câu trong `lessons.md`.
 
+## N92 — medium — Cổng chặn phim bằng những cờ nói về một hình không còn tồn tại
+
+**Bằng chứng.** Lượt cổng bàn giao của tập 01 (12:18) chạy bước `timing` trên tờ sheet
+`review/beatsheet/beats.json` dựng lúc **11:21**, trong khi `src/timeline.js` được sửa lúc **11:27** — sáu
+phút sau đó. Nên 27 cờ mà cổng in ra nói về một hình đã bị thay. Không ai nói ra điều đó: cổng in 27 cờ,
+người đọc không có cách nào biết cờ nào còn đúng với hình hiện tại.
+
+Điều này nguy hiểm ở chỗ: cổng FAIL thì người làm phim sửa. Họ sửa theo một hình cũ, dựng lại phim 35
+phút, và rồi cổng lại FAIL vì lý do khác — mỗi vòng sửa tốn một lần dựng mà không hề gần hơn.
+
+**Guard đã có (12:5x).** `check_shots.py` so sánh giờ của tờ sheet với giờ của **mã `.js` mới nhất** trong
+`src/`, và in ra ngay trước khi in các cờ:
+
+> `check_shots: tờ sheet CŨ HƠN mã (tờ 11:21, mã 11:27) — những cờ này nói về một hình cũ hơn; dựng lại tờ sheet rồi chạy lại`
+
+Hai chi tiết phải đúng, nếu không cảnh báo mất hết sức nặng: (1) ngày khác ngày thì in **cả ngày** —
+`tờ 11:21, mã 12:36` đọc ra là cùng một buổi, trong khi thật ra tờ sheet dựng từ hôm qua; (2) chỉ tính
+file `.js` — `src/MAP.md` là **bản đồ của mã**, và người làm phim sửa nó sau khi sửa mã, nên đếm nó thì
+**mọi** tờ sheet đều bị báo cũ.
+
+## N93 — high — Máy đo được và máy đoán không cùng đẳng cấp, nên cổng bàn giao không nên chặn bằng phép so sánh
+
+**Bằng chứng.** `check_shots.py` có năm loại cờ, và trước đây **tất cả chặn cùng một mức**, ở cả vòng chấm
+hình lẫn cổng bàn giao:
+
+| Cờ | Máy đo được hay so sánh | Sai thì sao |
+|---|---|---|
+| `VOICE` — câu thiếu sự kiện giọng | **đo được** | tiếng lệch với hình; không sửa được sau này |
+| `FILL` — độ phủ dưới 15 % | đo được, nhưng không phân biệt chủ thể với vệt | khung có thể trống có chủ thể nhỏ |
+| `SAME` / `RUN` / `DARK` / `NUM` | **phép so sánh** | cần mắt người phán |
+
+Ở cổng bàn giao thì **người chấm hình đã phán rồi** (tem `PICTURE.pass`) — máy không có quyền phủ quyết
+của người chấm. Nhưng cổng vẫn chặn tập 01 bằng 27 cờ phép so sánh, trong đó có những cờ mà chính người
+chấm đã nhìn và kết luận là không sao. Người làm phim phải dựng lại 35 phút một lần nữa cho một cờ không
+ai cần.
+
+**Vì sao quan trọng.** Đây là N80 — *cảnh báo sai làm hỏng cả những cảnh báo đúng* — ở dạng nguy hiểm nhất:
+không phải cổng báo sai, mà là cổng **bắt người làm phim làm một việc không cần làm**, và nếu họ sửa theo
+cờ thì họ sửa bố cục đã được duyệt.
+
+**Guard đã có (13:0x).** Hai mức chặn trong `check_shots.py`:
+
+- **Mặc định — vòng chấm hình:** mọi cờ đều chặn. Đó là lúc người làm phim còn sửa được, và các cờ này
+  là bản tóm tắt để người làm phim soi trước khi mở một vòng chấm bốn mươi phút.
+- **`--note` — cổng bàn giao:** chỉ lỗi cấu trúc mới chặn (câu thiếu sự kiện giọng). Mọi cờ phép so
+  sánh, **kể cả `FILL`**, được in ra nhưng không chặn.
+
+Cổng bàn giao của thư viện (`core/render/review.sh`, bước `timing`) nay gọi `check_shots.py --note`.
+Vòng chấm hình của kênh **không đổi**: vẫn gọi không có cờ này, vẫn mọi cờ đều chặn.
+
+Tôi đã báo quyết định này cho phiên của tập 01, kèm lý do và cách sửa đúng (năm thẻ quá ngắn mà
+`readcheck` chỉ ra — đó là lỗi thật, đo được, và không cờ nào bảo vệ được).
+
 ## Còn lại
 
 - **[x]** N72: `core/render/still.mjs` chờ hai khung hình rồi mới chụp (12:47) — ảnh là của khung vừa dựng,
@@ -2904,6 +2957,10 @@ rõ*, và nói thẳng rằng máy không đo được chủ thể có đủ l�
   `~/.claude/projects/-tmp-lemo-review-*` — **46 thư mục, 1,1 GB** sau ~45 vòng. Không có gì dọn, và bản
   ghi đó là bằng chứng (P5 đọc chính nó). Đề xuất: một công cụ dọn giữ lại N vòng gần nhất cho mỗi tập và
   in ra mức dùng đĩa; đĩa đang ở 85 %.
+- **[x]** N92: `check_shots.py` báo `tờ sheet CŨ HƠN mã (tờ …, mã …)` — chỉ tính file `.js`, và in cả
+  ngày khi khác ngày.
+- **[x]** N93: `check_shots.py --note` (cổng bàn giao chỉ chặn lỗi cấu trúc) và `core/render/review.sh`
+  gọi bài này với `--note`; vòng chấm hình của kênh không đổi.
 - **[ ]** N78: `window.SHOTPROBE` trả chỗ của từng vật; `window.LABELPROBE` raycast đuôi nũi tên của nhãn;
   `check_labels.py` báo nhãn trỏ vào không / trỏ nhầm / câu gọi tên vật A mà vật B chiếm khung nhiều hơn;
   `FILL` đo vật *được gọi tên*. Chưa làm vì R13 — ba phiên đang dựng bằng rig này.

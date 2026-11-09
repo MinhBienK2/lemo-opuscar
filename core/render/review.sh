@@ -69,7 +69,12 @@ if [ -f "$FOLDER/research/FACTS.md" ]; then
   # their own SHOTS array, a shape the library's 2D timing check does not read. When the channel ships a
   # checker of its own, the channel's checker wins, the same way the treatment check does below.
   if [ -f "$BCH/tools/check_shots.py" ]; then
-    run timing python3 "$BCH/tools/check_shots.py" "$FOLDER"
+    # --note: ở cổng bàn giao thì chỉ lỗi cấu trúc mới chặn (câu thiếu tiếng — tiếng sẽ lệch với hình,
+    # và sau này không sửa được). Các cờ phép so sánh (SAME/RUN/DARK/NUM, kể cả FILL) thì không chặn:
+    # người chấm hình đã phán (tem PICTURE.pass) và máy không có quyền phủ quyết của người chấm. Vòng chấm
+    # hình của kênh vẫn gọi bài này KHÔNG có cờ này — mọi cờ đều chặn, vì đó là lúc người làm phim còn
+    # sửa được.
+    run timing python3 "$BCH/tools/check_shots.py" --note "$FOLDER"
   else
     run timing python3 "$HERE/tools/check_timing.py" "$FOLDER"
   fi
