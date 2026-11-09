@@ -49,6 +49,13 @@ Quy trình này thay cho bước 1–6 của `AGENTS.md` / `DIRECTOR.md` khi là
 6. **Chờ việc xong, đừng dò file.**
    - Một việc dài (dựng khung, chấm hình, render) thì chạy bằng **công cụ nền của harness** (`Bash` với
      `run_in_background`); harness báo khi nó xong, đọc output của nó **một lần** sau lúc đó.
+   - **Đừng chuyển output của job nền ra tệp của riêng mình** (`> /tmp/round.log 2>&1`): harness vốn đã mang
+     output đó về cho bạn, nên tệp của bạn chỉ là một thứ **không đổi** — và đọc nó lần nữa là đọc lại một
+     thứ không đổi. Một phiên tập 02 đã đọc 111 lần các tệp log của chính nó, trong khi báo cáo luật bảo
+     "R9: 0 lần" — vì bộ đếm cũ chỉ nhìn output của harness, không nhìn tệp do chính phiên tạo ra.
+   - Vòng chấm của kênh thì chạy thế này, **không** có `>`:
+     `Bash(command="sh channels/tram-nghi-nhieu/tools/review.sh <tập> --props", run_in_background=true)`.
+     Rồi **đừng làm gì với vòng đó** cho tới khi harness báo xong; bản chấm nằm trong `review/`.
    - **`nohup … > log 2>&1 &` rồi `tail log` là một vòng dò, dù nó có vẻ tiện.** Harness không biết job đó
      tồn tại, nên không ai báo khi nó xong, và lượt của bạn cứ quay về đọc log. Trong phiên tập 01, đọc lại
      output của job nền xảy ra **136 lần** — và một lần trong số đó là đọc output của job *đang chạy*.

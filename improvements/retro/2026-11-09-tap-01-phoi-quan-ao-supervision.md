@@ -3193,6 +3193,53 @@ vá. Theo R7, một cách làm chung chỉ nên có **một** bản: ở tầng 
    `src/film.js` của tập 01 → dựng lại tập 01 (luật đọc của cổng phải vẫn xanh) → ghi vào `SKILL.md`
    một câu: *thẻ quá ngắn thì thêm `hold`/`lead`, đừng tự tính lại thời gian*.
 
+## N103 — high — Job nền mà chuyển output ra tệp của riêng mình: tệp đó không bao giờ đổi, và 111 lần đọc nó không ai đếm
+
+**Bằng chứng.** Báo cáo luật của phiên tập 02 bảo **"R9 0 lần"** — tức là phiên đó *không* đọc lại
+output của job nền nào. Nhưng transcript của chính nó nói khác: phiên chạy vòng chấm bằng công cụ nền
+của harness, **có** chuyển output của vòng ra tệp riêng, rồi đọc tệp đó lại:
+
+```
+05:47:19  BG  CRITIC_TIMEOUT=10800 sh …/review.sh … --props > /tmp/round_props3.log 2>&1; echo "exit=$?" >> …
+05:47:38  FG  tail -c 3000 /tmp/round_props3.log
+05:56:41  FG  tail -25 /tmp/round_props3.log …
+05:59:34  FG  tail -5 /tmp/round_props3.log; ls …/review/props/ | head
+06:01:49  FG  tail -3 /tmp/round_props3.log; …
+06:03:46  FG  tail -6 /tmp/round_props3.log; …
+06:04:41  FG  tail -3 /tmp/round_props3.log; …
+06:11:51  FG  tail -3 /tmp/round_props3.log; …
+06:17:28  FG  tail -3 /tmp/round_props3.log; …
+```
+
+Hai điều đã lỗi cùng lúc: (a) chuyển output ra tệp làm **harness mang về rỗng**, nên phiên không còn
+đường nào khác để xem vòng đó ngoài tệp; (b) tệp **không đổi** trong lúc vòng chạy, nên đọc nó là đọc
+một thứ không đổi — và mỗi lần đọc là một lượt của phiên.
+
+Đếm trên ba phiên (luật mới `R5b`, xem dưới):
+
+| Phiên | Số lần đọc lại tệp log của chính nó | Số tệp log | Báo cáo luật cũ nói |
+|---|---|---|---|
+| tập 01 (phiên cũ) | **80** | 14 | R9: 136 (đếm output của harness) |
+| tập 02 | **111** | 9 | R9: 0 |
+| tập 03 | **81** | 9 | R9: 6 |
+
+**Vì sao không ai thấy.** Bộ đếm cũ (R9) chỉ nhìn `tasks/*.output` — tức là output mà **harness** giữ.
+Tệp do chính phiên tạo ra (`> /tmp/round.log`) nằm ngoài tầm nhìn đó, nên một phiên có thể đọc tệp của
+mình 111 lần mà báo cáo vẫn bảo "0 lần".
+
+**Guard đã có (14:1x).**
+- `tools/rules.py` có luật mới **R5b**: một job nền có `> /tmp/x.log` trong lệnh, và tệp đó bị đọc lại
+  **≥ 3 lần** → báo. `tools/transcript.py` giờ mang qua cờ `run_in_background` mà trước đó nó bỏ rơi.
+  Selftest có ba ca (báo / chưa báo khi đọc hai lần / không báo khi job không chuyển output ra tệp).
+- Luật 6 của `SKILL.md` (v14.3.0) nói thẳng: **đừng chuyển output của job nền ra tệp của riêng mình**,
+  kèm công thức cụ thể cho vòng chấm của kênh, và nhắc con số 111 lần.
+- R9 trong `CODING_STANDARDS.md` thêm câu cuối: đọc lại tệp mà chính mình tạo ra cũng là đọc một thứ
+  không đổi.
+- `improvements/lessons.md` có dòng cho luật này.
+
+**Còn lại.** Chỉ các phiên *đang chạy* mới đọc được luật mới; chúng đã chạy quá nửa đời tập nên tôi
+đã nhắn trực tiếp cho hai phiên tập 02 và tập 03 (không phải yêu cầu, chỉ là thông tin đo được).
+
 ## Còn lại
 
 - **[x]** N72: `core/render/still.mjs` chờ hai khung hình rồi mới chụp (12:47) — ảnh là của khung vừa dựng,
