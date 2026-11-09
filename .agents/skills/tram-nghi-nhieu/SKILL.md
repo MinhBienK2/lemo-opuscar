@@ -1,7 +1,7 @@
 ---
 name: tram-nghi-nhieu
 description: Đạo diễn và dựng một tập của kênh Trạm Nghĩ Nhiều — câu hỏi "tại sao" đời thường, trả lời bằng diorama 3D toon (three.js) có ánh sáng thật, viền mực vẽ tay, máy quay đi vào bên trong vật, mọi vật dựng đúng là nó, chỉ thứ vô hình mới thành hình minh hoạ; một giọng kể tiếng Việt. Dùng khi làm bất kỳ tập nào của kênh.
-version: 14.1.0
+version: 14.2.0
 ---
 
 # Một tập Trạm Nghĩ Nhiều: Quy trình Đạo diễn & Phản biện Độc lập Phân tầng
@@ -71,6 +71,10 @@ Trước khi dựng, đọc `improvements/lessons.md` ở gốc thư viện — 
 
 ### Bước 1: Dàn ý khoa học & Nghiên cứu (Treatment & Facts)
 - **Đạo diễn thực hiện:** Đọc `step1-outline/GUIDE.md`. Viết `research/FACTS.md` và `TREATMENT.md` (lập bảng Ý → Hình).
+- **File nghiên cứu phải được viết, không phải copy khuôn:** cổng dàn ý chạy `tools/check_research.py` **trước khi tốn một vòng
+  chấm** — file còn dòng mẫu, chưa có mốc nào, hoặc chưa có nguồn nào thì dừng ngay. Mỗi mốc cần một **nguồn sơ cấp**
+  (sách chuyên ngành, bài báo bình duyệt, đặc tả, datasheet, sổ tay cơ quan chuẩn); **Wikipedia là dẫn chiếu, không phải
+  nguồn**: một mốc mà nguồn duy nhất là Wikipedia thì cổng dừng.
 - **Review độc lập:** Lấy prompt từ `step1-outline/PROMPT_CRITIC.md` gọi Subagent thẩm định.
 - **Vòng lặp:** Đạo diễn sửa lỗi lặp ý / thiếu mắt xích hoặc phản biện. Đạt `PASS` mới sang Bước 2.
 
@@ -101,6 +105,13 @@ Trước khi dựng, đọc `improvements/lessons.md` ở gốc thư viện — 
 - **Đạo diễn thực hiện:** Đọc `step6-assembly/GUIDE.md`. Ghép linh kiện vào `src/film.js`, viết keyframes diễn hoạt theo từ `V.w()`. Chạy kiểm tra `beatsheet.mjs`.
 - **Review độc lập:** Dùng prompt `step6-assembly/PROMPT_CRITIC.md` thẩm định nhịp điệu, triệt tiêu các cờ `DARK`, `SAME`, `NUM`, `RUN`.
 - **Nhãn nằm đúng câu:** cổng chấm hình cũng chạy `tools/check_labels.py` — một nhãn lệch câu phải sửa trước khi dựng.
+- **Mốc nhịp cho từng câu:** mỗi câu lời kể gắn một mốc vào `window.EV` (`markBeats(ev, V, (id, t) => [x, y])`), điểm
+  trên khung 1920×1080. Nhờ đó cổng đo được câu hỏi mà đếm pixel không trả lời được: **nhịp này có làm thay đổi phần
+  khung của nó không** (cổng đòi ≥ 75 % nhịp đổi). Không có mốc thì cổng chỉ đo "có gì đó động", không đo "câu này
+  đứng yên".
+- **Vật thể phải tự diễn:** camera trượt để giữ khung sống không cứu được phim — cổng đo cả phần khung camera trượt
+  (≤ 30 %) và phần khung vật thể đổi (≥ 55 %). `rig/motion.js` có `sway()`, `breathe()`, `motor()`; bước 6 phải gọi
+  hàm cập nhật của chúng mỗi khung hình.
 - **Vòng này sửa được gì so với vòng trước:** sau mỗi vòng chấm hình, cổng in bảng đối chiếu (`tools/check_progress.py`): câu nào đã qua, câu nào **còn mở**, câu nào mới phát hiện, và điểm đi đâu. Sửa đúng những câu còn mở; đừng làm lại những câu đã qua. Nếu hai vòng liên tiếp không tiến, đó là lúc viết đạo diễn cắt.
 - **Vòng lặp:** Đạo diễn sửa lỗi diễn hoạt/ánh sáng cho tới khi `PASS`.
 
@@ -123,5 +134,11 @@ Trước khi dựng, đọc `improvements/lessons.md` ở gốc thư viện — 
    - Thực hiện trọn vẹn từng chương: bóc tách linh kiện $\rightarrow$ code `props.js` $\rightarrow$ review hình ảnh từng chương qua `review.sh <tập> --chapter n` trước khi sang chương tiếp theo.
 4. **Bàn giao:**
    - Chỉ bàn giao khi mọi con dấu máy đã hợp lệ (`review/*.pass`) và `sh core/render/review.sh <tập>` thoát mã 0.
+   - Một bài báo "COULD NOT RUN" (mã 2) **không phải phán quyết** — đó là bài kiểm tra không chạy được: đọc lý do,
+     sửa nguyên nhân, chạy lại. Chỉ "FAILED" mới là lỗi thật của phim.
+   - **Thời lượng đo, không gõ tay:** `build.sh` đo bằng `ffprobe` rồi ghi vào `film.json`; cổng so manifest với
+     phim thật, nên con số gõ tay là một lời nói dối có dấu thời gian.
    - Báo cáo rõ ràng: đường dẫn phim `.mp4`, các khung hero hình ảnh, tờ beat và bản tổng kết review nguyên văn.
    - Dọn dẹp các ảnh still thử nghiệm và thư mục tạm để tiết kiệm dung lượng đĩa cứng.
+5. **Đạo diễn cắt viết sau lần sửa code cuối.** `review/…-DIRECTORS-CUT.md` là lối ra khỏi trần vòng chấm, nhưng nó
+   phải nói về code hiện tại: cổng không dùng một bản cắt cũ hơn code nó chấm. Sửa code xong rồi viết bản cắt.
