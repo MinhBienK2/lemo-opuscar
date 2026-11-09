@@ -1,0 +1,17 @@
+# Những dòng mà Whisper (mô hình tiếng Anh) đọc sai thanh điệu tiếng Việt, đã kiểm tra tay.
+# Mỗi dòng: mã câu — lý do. Không sửa lời trong lines.json để chiều theo máy.
+# (Xem core/render/review.sh: đọc file này để biết dòng nào được tha; dòng chưa được tha thì phim FAIL.)
+# Lý do chung: giọng đọc được thổi từ đúng nguyên văn dòng lời kể (edge-tts vi-VN-NamMinhNeural),
+# và khác biệt nằm ở **thanh điệu** — "dây" thành "giây", "nhiệt kế" thành "nhị kế" — nên đây là cách
+# nghe của mô hình, không phải lỗi thu. Vài dòng khác biệt vì mô hình viết số bằng chữ số
+# ("hai mươi" → "20"); lời kể đọc số bằng chữ.
+c9 — "bên trong dây chun không có lò xo nào cả" bị nghe thành "bình trong giây chung không có lo so nào cả": sai thanh điệu, giọng đọc đúng.
+c10 — "mạng chuỗi polymer, dãy mắt xích" bị nghe thành "mạng chuổi polim, dậy mắc sít": sai thanh điệu.
+c14 — "mắt xích, xếp" bị nghe thành "magic, set": sai thanh điệu.
+c29 — "một sợi dây chun, một vật nặng, một thước" bị nghe thành "1 sợi giây chung, 1 vật nặng, 1 thước": số đọc đúng, "dây chun" sai thanh điệu.
+c30 — "hai mươi độ" bị nghe thành "20 độ": số đọc đúng.
+c32 — "nhiệt kế" bị nghe thành "nhị kế", "sáu mươi độ" thành "60 độ": sai thanh điệu, số đọc đúng.
+c35 — "mình đo lực co, một độ giãn" bị nghe thành "mình đó lực có, 1 độ dẳng": sai thanh điệu, số đọc đúng.
+c36 — "lực co, mười bốn phần trăm" bị nghe thành "lực có, 14 phần trăm": sai thanh điệu, số đọc đúng.
+c40 — "đo được, mười tám" bị nghe thành "đó được, 18": sai thanh điệu, số đọc đúng.
+c48 — "dây ăn sâu, luồng khí nóng, máy sấy tóc" bị nghe thành "giây ăn sau, luôn khi nóng, mấy xấy tốc": sai thanh điệu.

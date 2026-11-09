@@ -1,0 +1,25 @@
+# Những dòng mà Whisper (mô hình tiếng Anh) đọc sai thanh điệu tiếng Việt.
+# Mỗi dòng: mã câu — lý do. Không sửa lời trong lines.json để chiều theo máy.
+# (Xem core/render/review.sh: đọc file này để biết dòng nào được tha; dòng chưa được tha thì phim FAIL.)
+# Lý do chung: giọng đọc được thổi từ đúng nguyên văn dòng lời kể (edge-tts vi-VN-NamMinhNeural),
+# và khác biệt với lời kể nằm ở **thanh điệu** — "chai" thành "trai", "mốc" thành "móc",
+# "mềm" thành "mượt", "phồng" thành "phòng" — nên đây là cách nghe của mô hình, không phải lỗi thu.
+# Vài dòng khác biệt vì mô hình viết số bằng chữ số ("một trăm" → "100"); lời kể đọc số bằng chữ.
+c8 — "mẩu nhựa" bị nghe thành "mục mẫu nhự": sai thanh điệu, giọng đọc đúng.
+c12 — "hai hướng" bị nghe thành "2 hướng": số đọc đúng, "giãn" bị nghe thành "dạng".
+c18 — "nhiệt kế" bị nghe thành "nhị kế", "một trăm độ" bị nghe thành "100 độ": sai thanh điệu, số đọc đúng.
+c22 — "miệng chai" bị nghe thành "miễn trai", "thành cột" bị nghe thành "thành cục": sai thanh điệu.
+c23 — "cái mốc" bị nghe thành "cái móc", "vật liệu" bị nghe thành "vượt liệu", "bảy mươi độ" bị nghe thành "70 độ": sai thanh điệu, số đọc đúng.
+c24 — "mốc" bị nghe thành "móc", "nhựa PET" bị nghe thành "nhượp tét": sai thanh điệu.
+c28 — "thành chai co về hình cũ" bị nghe thành "thành trai có về hình cũn": sai thanh điệu.
+c30 — "chai co lại" bị nghe thành "trai có lại": sai thanh điệu.
+c40 — "chai phồng lên, chứ không co" bị nghe thành "trái phòng lính chứ không co": sai thanh điệu.
+c41 — "áp suất" bị nghe thành "áp xúc", "chai" bị nghe thành "trai": sai thanh điệu.
+c46 — "đậy kín" bị nghe thành "để kính", "thì phồng" bị nghe thành "thi phong": sai thanh điệu.
+c47 — "không đậy thì co" bị nghe thành "không đẩy thì có": sai thanh điệu.
+c49 — "chai vừa phồng" bị nghe thành "trai vừa phòng", "để nguội" bị nghe thành "để ngụy": sai thanh điệu.
+c52 — "hai cái chai, ba trạng thái, một cơ chế" bị nghe thành "2 cái trai, 3 trạng thái, 1 cơ chế": số đọc đúng, "chai" sai thanh điệu.
+c54 — "thành chai" bị nghe thành "thành trai", "kéo giãn" bị nghe thành "kéo dạng", "thổi khuôn" bị nghe thành "thổi khung": sai thanh điệu.
+c55 — "mốc bảy mươi độ" bị nghe thành "móc 70 độ": sai thanh điệu, số đọc đúng.
+c56 — "các móc xích trượt" bị nghe thành "cắt móc xếp trực": sai thanh điệu.
+c57 — "không co vì sợ nóng" bị nghe thành "không có vị sở nóng": sai thanh điệu.

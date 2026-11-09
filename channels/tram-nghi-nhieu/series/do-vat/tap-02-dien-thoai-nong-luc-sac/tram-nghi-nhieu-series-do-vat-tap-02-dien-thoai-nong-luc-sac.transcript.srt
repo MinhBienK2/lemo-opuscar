@@ -1,0 +1,431 @@
+1
+00:00:02,400 --> 00:00:04,360
+Điện thoại nằm sấp trên bàn cạnh giường,
+
+2
+00:00:04,360 --> 00:00:05,986
+dây cắm thẳng vào ổ.
+
+3
+00:00:06,026 --> 00:00:08,976
+Cái đồng hồ sạc trên màn hình cứ nhích lên từng chút một.
+
+4
+00:00:09,016 --> 00:00:11,714
+Và cái máy này, mình vừa cầm lên.
+
+5
+00:00:11,814 --> 00:00:15,221
+Ấm. Rõ ràng là nóng ở mặt lưng.
+
+6
+00:00:15,521 --> 00:00:17,614
+Vì sao điện thoại nóng lúc sạc?
+
+7
+00:00:17,914 --> 00:00:19,014
+Mình sẽ lần theo dòng điện,
+
+8
+00:00:19,014 --> 00:00:21,178
+từ ổ cắm vào tận trong máy.
+
+9
+00:00:21,218 --> 00:00:23,735
+Nhìn kỹ thì có một quy luật rất đơn giản.
+
+10
+00:00:23,775 --> 00:00:26,177
+Điện chạy vào nhiều hơn điện nạp được vào pin.
+
+11
+00:00:26,217 --> 00:00:29,019
+Phần điện không kịp nạp thì không biến mất đâu.
+
+12
+00:00:29,319 --> 00:00:30,421
+Nó thành nhiệt.
+
+13
+00:00:30,461 --> 00:00:35,168
+Hạt màu xanh này là dòng điện. Hạt đỏ tách ra, là nhiệt.
+
+14
+00:00:35,468 --> 00:00:37,148
+Vậy cứ đi theo dòng hạt xanh,
+
+15
+00:00:37,148 --> 00:00:38,721
+xem nhiệt sinh ra ở đâu.
+
+16
+00:00:38,761 --> 00:00:41,954
+Ổ cắm này cấp điện, chạy qua dây nguồn vào củ sạc.
+
+17
+00:00:41,994 --> 00:00:44,119
+Trên nhãn in ở vỏ ghi sáu mươi oát.
+
+18
+00:00:44,159 --> 00:00:46,106
+Nhiệm vụ của nó rất đơn giản.
+
+19
+00:00:46,146 --> 00:00:48,737
+Đổi điện xoay chiều ở ổ thành điện một chiều.
+
+20
+00:00:48,777 --> 00:00:51,538
+Mà việc đổi ấy, không bao giờ trọn vẹn.
+
+21
+00:00:51,578 --> 00:00:54,548
+Một phần điện bị thất thoát ngay trong lúc đi qua đó.
+
+22
+00:00:54,588 --> 00:00:57,174
+Chỗ đổi điện ấy, nằm ngay trong củ sạc.
+
+23
+00:00:57,214 --> 00:01:00,337
+Dòng chạy qua đó, và một phần bị cản lại.
+
+24
+00:01:00,437 --> 00:01:01,651
+Hao hụt thành nhiệt.
+
+25
+00:01:01,691 --> 00:01:04,834
+Những hạt cam này, là phần điện bị thất thoát ở đây.
+
+26
+00:01:04,874 --> 00:01:06,754
+Nó nóng lên ở vỏ củ sạc,
+
+27
+00:01:06,754 --> 00:01:08,554
+và đó là chuyện bình thường.
+
+28
+00:01:08,832 --> 00:01:10,912
+Nhưng một việc ấy thôi.
+
+29
+00:01:10,912 --> 00:01:12,713
+Điện thoại thì phải làm nhiều hơn.
+
+30
+00:01:12,753 --> 00:01:14,961
+Đây là điện thoại, bị cưa ngang.
+
+31
+00:01:15,001 --> 00:01:17,571
+Cổng USB-C nối vào bo mạch.
+
+32
+00:01:17,611 --> 00:01:19,653
+Bo mạch nối tới túi pin.
+
+33
+00:01:19,853 --> 00:01:21,813
+Cổng đưa vào hai mươi volt.
+
+34
+00:01:21,813 --> 00:01:24,252
+Pin chỉ nhận được khoảng bốn volt.
+
+35
+00:01:24,292 --> 00:01:26,919
+Nên giữa đường, phải có một mạch hạ điện áp.
+
+36
+00:01:26,959 --> 00:01:28,879
+Mạch đó là một con chip, một con tụ,
+
+37
+00:01:28,879 --> 00:01:30,956
+và một cuộn cảm dây đồng.
+
+38
+00:01:30,996 --> 00:01:35,197
+Dòng chạy qua nó. Mà dây đồng thì có điện trở.
+
+39
+00:01:35,237 --> 00:01:37,947
+Chỗ nào dòng điện bị cản, chỗ đó nóng.
+
+40
+00:01:37,987 --> 00:01:41,180
+Nhìn: hạt xanh chuyển sang cam ngay ở cuộn cảm.
+
+41
+00:01:41,280 --> 00:01:43,202
+Đây là nơi sinh nhiệt thứ hai.
+
+42
+00:01:43,242 --> 00:01:45,894
+Còn một phần dòng thì rơi xuống nạp vào pin.
+
+43
+00:01:45,934 --> 00:01:49,437
+Phần này được giữ lại trong pin. Không mất.
+
+44
+00:01:49,537 --> 00:01:52,921
+Nhưng máy không chỉ sạc. Máy đang chạy.
+
+45
+00:01:52,961 --> 00:01:56,432
+Màn hình sáng, tin nhắn, thông báo, game.
+
+46
+00:01:56,472 --> 00:01:58,532
+Tất cả chạy trên một con chip.
+
+47
+00:01:58,532 --> 00:02:00,777
+Và con chip đó cũng nóng.
+
+48
+00:02:00,817 --> 00:02:03,826
+Đây là dòng thứ hai, chạy từ pin lên chip.
+
+49
+00:02:04,126 --> 00:02:05,726
+Vậy lúc vừa sạc vừa dùng,
+
+50
+00:02:05,726 --> 00:02:07,737
+máy có hai chỗ sinh nhiệt cùng lúc.
+
+51
+00:02:07,777 --> 00:02:09,897
+Còn một điều nữa: sạc nhanh.
+
+52
+00:02:09,937 --> 00:02:12,161
+Sạc nhanh thì dòng điện lớn hơn nhiều.
+
+53
+00:02:12,201 --> 00:02:14,754
+Máy vẫn nạp qua cùng một cuộn cảm đó.
+
+54
+00:02:14,794 --> 00:02:15,794
+Trong cuộn cảm,
+
+55
+00:02:15,794 --> 00:02:18,115
+nhiệt sinh ra theo bình phương dòng điện.
+
+56
+00:02:18,315 --> 00:02:21,676
+Nên dòng to hơn, mà hạt đỏ thì nhiều hơn hẳn.
+
+57
+00:02:21,716 --> 00:02:23,972
+Có máy có cảm biến nhiệt đặt trong pin.
+
+58
+00:02:24,012 --> 00:02:26,309
+Cảm biến đó đo nhiệt độ của pin.
+
+59
+00:02:26,609 --> 00:02:30,079
+Quanh bốn mươi lăm độ, tế bào pin không nên sạc nữa.
+
+60
+00:02:30,179 --> 00:02:32,319
+Vạch đỏ đó là mốc của tế bào pin,
+
+61
+00:02:32,319 --> 00:02:33,838
+không phải nhiệt độ mặt lưng.
+
+62
+00:02:33,878 --> 00:02:36,357
+Nóng quá thì máy tự giảm dòng sạc.
+
+63
+00:02:36,557 --> 00:02:40,062
+Ngoài hai chỗ ấy, còn một chỗ nữa: chính là túi pin.
+
+64
+00:02:40,102 --> 00:02:42,637
+Cả cái túi là nhiều lớp mỏng xếp chồng.
+
+65
+00:02:42,677 --> 00:02:46,161
+Đồng, graphite, lớp cách điện, rồi nhôm.
+
+66
+00:02:46,201 --> 00:02:49,139
+Mỏng như tờ giấy, và dính sát vào nhau.
+
+67
+00:02:49,179 --> 00:02:50,039
+Trong lúc nạp,
+
+68
+00:02:50,039 --> 00:02:52,911
+dòng điện bị điện trở bên trong tế bào cản lại.
+
+69
+00:02:52,951 --> 00:02:55,593
+Cản lại thì sinh nhiệt, ngay ở trong pin.
+
+70
+00:02:55,633 --> 00:02:57,802
+Nhiệt ấy không thoát ra ngoài được.
+
+71
+00:02:57,902 --> 00:03:01,111
+Nó lan đều trong túi pin, làm cả cục pin ấm lên.
+
+72
+00:03:01,151 --> 00:03:04,764
+Giờ gom lại: mạch sạc, cục pin, và con chip.
+
+73
+00:03:04,804 --> 00:03:07,221
+Cả ba cùng đổ nhiệt vào một chỗ.
+
+74
+00:03:07,421 --> 00:03:08,696
+Đó là vỏ máy.
+
+75
+00:03:08,736 --> 00:03:11,225
+Vỏ máy là tản nhiệt của cả cái máy.
+
+76
+00:03:11,265 --> 00:03:14,121
+Nó nóng lên, rồi tỏa ra không khí.
+
+77
+00:03:14,221 --> 00:03:15,647
+Nên lưng máy nóng.
+
+78
+00:03:15,687 --> 00:03:18,866
+Tay người là một miếng tản nhiệt lớn hơn không khí nhiều.
+
+79
+00:03:18,906 --> 00:03:20,609
+Cầm lên là thấy nóng ngay.
+
+80
+00:03:20,649 --> 00:03:23,662
+Còn cái ốp case thì giống một chiếc áo khoác giữ nhiệt.
+
+81
+00:03:23,702 --> 00:03:25,442
+Nó giữ nhiệt lại quanh máy,
+
+82
+00:03:25,442 --> 00:03:27,242
+không cho nhiệt thoát ra.
+
+83
+00:03:27,294 --> 00:03:29,858
+Nên máy có case sẽ nóng hơn máy không case.
+
+84
+00:03:29,898 --> 00:03:33,936
+Mình thử: hai chiếc máy giống nhau, cùng sạc, cùng một chỗ.
+
+85
+00:03:33,976 --> 00:03:36,328
+Cái này có case, cái kia không.
+
+86
+00:03:36,368 --> 00:03:38,607
+Nhiệt kế đặt trên lưng mỗi cái.
+
+87
+00:03:38,647 --> 00:03:40,709
+Cột nhiệt kế này dốc lên nhanh hơn.
+
+88
+00:03:40,749 --> 00:03:42,846
+Cái kia dốc lên chậm hơn.
+
+89
+00:03:43,146 --> 00:03:45,622
+Cái này là đo được, không phải đoán.
+
+90
+00:03:45,662 --> 00:03:47,788
+Mình quay lại cái bàn cạnh giường.
+
+91
+00:03:47,828 --> 00:03:50,048
+Cái máy vẫn cắm sạc, màn hình vẫn sáng,
+
+92
+00:03:50,048 --> 00:03:51,884
+và nó vẫn nóng.
+
+93
+00:03:51,924 --> 00:03:54,296
+Vậy cái nóng lúc sạc là bình thường.
+
+94
+00:03:54,396 --> 00:03:57,466
+Đó là máy đang làm việc, không phải máy đang hỏng.
+
+95
+00:03:57,506 --> 00:04:00,323
+Có một loại nóng khác, loại này mới đáng lo.
+
+96
+00:04:00,363 --> 00:04:02,127
+Nóng khi không cắm sạc.
+
+97
+00:04:02,167 --> 00:04:05,266
+Hoặc nóng lệch một chỗ, ở một góc lưng máy.
+
+98
+00:04:05,366 --> 00:04:07,947
+Lúc đó thì mình không tự đoán được nguyên nhân.
+
+99
+00:04:07,987 --> 00:04:10,871
+Còn với cái nóng lúc sạc, mình làm được mấy việc.
+
+100
+00:04:10,911 --> 00:04:12,895
+Sạc lâu thì bỏ ốp case ra.
+
+101
+00:04:12,935 --> 00:04:14,987
+Dùng củ sạc đúng chuẩn của máy.
+
+102
+00:04:15,027 --> 00:04:17,379
+Sạc chậm thì dòng vào máy ít hơn.
+
+103
+00:04:17,419 --> 00:04:19,530
+Đừng vừa sạc vừa chơi game.
+
+104
+00:04:19,570 --> 00:04:22,348
+Vì lúc đó máy có hai chỗ sinh nhiệt cùng lúc.
+
+105
+00:04:22,548 --> 00:04:24,628
+Và nếu máy nóng bất thường, rút sạc ra,
+
+106
+00:04:24,628 --> 00:04:26,318
+mang đi kiểm tra.
+
+107
+00:04:26,358 --> 00:04:28,158
+Máy không hỏng.
+
+108
+00:04:29,493 --> 00:04:31,293
+Nó đang làm việc.

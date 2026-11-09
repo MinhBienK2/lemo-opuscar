@@ -1,0 +1,317 @@
+[
+  {
+    "id": "c1",
+    "text": "Cái chai này vừa được rót nước sôi vào.",
+    "gap": 2.4
+  },
+  {
+    "id": "c2",
+    "text": "Nó đang co lại, và thành chai bắt đầu nhăn.",
+    "gap": 0.2
+  },
+  {
+    "id": "c3",
+    "text": "Mình thấy chuyện này ở bàn bếp, gần như ngày nào cũng có.",
+    "gap": 0.45
+  },
+  {
+    "id": "c4",
+    "text": "Vì sao một cái chai nhựa lại nhớ được hình cũ của nó?",
+    "gap": 0.9
+  },
+  {
+    "id": "c5",
+    "text": "Mình sẽ làm thử với hai chai giống hệt nhau.",
+    "gap": 0.2
+  },
+  {
+    "id": "c6",
+    "text": "Câu trả lời nằm ở chỗ chai được làm ra thế nào.",
+    "gap": 0.45
+  },
+  {
+    "id": "c7",
+    "text": "Người ta không cắt ra, mà thổi ra.",
+    "gap": 0.2
+  },
+  {
+    "id": "c8",
+    "text": "Thổi từ một mẩu nhựa nhỏ xíu.",
+    "gap": 0.2
+  },
+  {
+    "id": "c9",
+    "text": "Mẩu nhựa đó được bơm khí, nong dần thành hình chai.",
+    "gap": 0.3
+  },
+  {
+    "id": "c10",
+    "text": "Trong lúc nong, vật liệu bị kéo căng theo hai hướng.",
+    "gap": 0.3
+  },
+  {
+    "id": "c11",
+    "text": "Một hướng quanh thân chai, một hướng dọc thân chai.",
+    "gap": 0.2
+  },
+  {
+    "id": "c12",
+    "text": "Hai hướng đó không giãn giống nhau.",
+    "gap": 0.3
+  },
+  {
+    "id": "c13",
+    "text": "Và trong lớp nhựa đó có một thứ mà mắt thường không thấy.",
+    "gap": 0.45
+  },
+  {
+    "id": "c14",
+    "text": "Những móc xích dài, bị kéo căng, ôm lấy hình dạng của chai.",
+    "gap": 0.3
+  },
+  {
+    "id": "c15",
+    "text": "Nhựa không có trí nhớ.",
+    "gap": 0.3
+  },
+  {
+    "id": "c16",
+    "text": "Nhưng cái hình bị kéo căng thì có.",
+    "gap": 0.6
+  },
+  {
+    "id": "c17",
+    "text": "Bây giờ mình rót nước sôi vào.",
+    "gap": 0.3
+  },
+  {
+    "id": "c18",
+    "text": "Nhiệt kế bếp chỉ một trăm độ.",
+    "gap": 0.45
+  },
+  {
+    "id": "c19",
+    "text": "Nước sôi nóng hơn cái mức thành chai chịu được.",
+    "gap": 0.2
+  },
+  {
+    "id": "c20",
+    "text": "Nhiệt lấy từ nước, chạy vào thành nhựa.",
+    "gap": 0.2
+  },
+  {
+    "id": "c21",
+    "text": "Nó chui vào tận lớp móc xích bên trong.",
+    "gap": 0.2
+  },
+  {
+    "id": "c22",
+    "text": "Miệng chai thì hơi nước bốc lên thành cột.",
+    "gap": 0.3
+  },
+  {
+    "id": "c23",
+    "text": "Còn cái mốc để vật liệu mềm là khoảng bảy mươi độ.",
+    "gap": 0.5
+  },
+  {
+    "id": "c24",
+    "text": "Từ mốc đó, nhựa PET mềm đi.",
+    "gap": 0.3
+  },
+  {
+    "id": "c25",
+    "text": "Bên trong, vật liệu đang từ từ trượt ra khỏi chỗ cũ.",
+    "gap": 0.2
+  },
+  {
+    "id": "c26",
+    "text": "Chỗ nào mềm đi, thì chỗ đó trượt.",
+    "gap": 0.3
+  },
+  {
+    "id": "c27",
+    "text": "Các móc xích bên trong không còn giữ được hình dạng của chai.",
+    "gap": 0.2
+  },
+  {
+    "id": "c28",
+    "text": "Thành chai co về hình cũ.",
+    "gap": 0.25
+  },
+  {
+    "id": "c29",
+    "text": "Hình cũ là hình của mẩu nhựa lúc đầu.",
+    "gap": 0.4
+  },
+  {
+    "id": "c30",
+    "text": "Đó là lý do chai co lại.",
+    "gap": 0.4
+  },
+  {
+    "id": "c31",
+    "text": "Nhưng tại sao thành chai nhăn, chứ không co đều?",
+    "gap": 0.7
+  },
+  {
+    "id": "c32",
+    "text": "Có lẽ vì hai hướng đó co lại không giống nhau.",
+    "gap": 0.3
+  },
+  {
+    "id": "c33",
+    "text": "Chỗ bị kéo căng nhiều hơn thì co nhiều hơn.",
+    "gap": 0.2
+  },
+  {
+    "id": "c34",
+    "text": "Co lệch nhau, nên lớp nhựa gấp thành nếp dọc thân.",
+    "gap": 0.3
+  },
+  {
+    "id": "c35",
+    "text": "Nhưng còn một lực nữa, chạy ngược lại.",
+    "gap": 0.4
+  },
+  {
+    "id": "c36",
+    "text": "Trong chai có không khí.",
+    "gap": 0.2
+  },
+  {
+    "id": "c37",
+    "text": "Bàn tay vặn nắp lên miệng chai.",
+    "gap": 0.25
+  },
+  {
+    "id": "c38",
+    "text": "Nắp vặn kín, không khí đó không ra được.",
+    "gap": 0.25
+  },
+  {
+    "id": "c39",
+    "text": "Nó nóng lên thì nở ra, đẩy thành chai ra.",
+    "gap": 0.25
+  },
+  {
+    "id": "c40",
+    "text": "Chai phồng lên, chứ không co.",
+    "gap": 0.45
+  },
+  {
+    "id": "c41",
+    "text": "Chiếc đồng hồ này chỉ áp suất bên trong chai.",
+    "gap": 0.3
+  },
+  {
+    "id": "c42",
+    "text": "Kim đang chỉ lên.",
+    "gap": 0.4
+  },
+  {
+    "id": "c43",
+    "text": "Còn chai hở nắp thì khí thoát ra được.",
+    "gap": 0.25
+  },
+  {
+    "id": "c44",
+    "text": "Không có gì đẩy, nên nó chỉ còn một việc: co lại.",
+    "gap": 0.4
+  },
+  {
+    "id": "c45",
+    "text": "Vậy cái nào thắng, là tùy nắp đang đậy hay không.",
+    "gap": 0.5
+  },
+  {
+    "id": "c46",
+    "text": "Đậy kín lúc còn nóng thì phồng.",
+    "gap": 0.2
+  },
+  {
+    "id": "c47",
+    "text": "Không đậy thì co.",
+    "gap": 0.35
+  },
+  {
+    "id": "c48",
+    "text": "Còn một trường hợp nữa, mình thấy khá nhiều.",
+    "gap": 0.4
+  },
+  {
+    "id": "c49",
+    "text": "Cái chai vừa phồng kia, để nguội thì khí trong chai co lại.",
+    "gap": 0.2
+  },
+  {
+    "id": "c50",
+    "text": "Bên trong thành, áp suất thấp hơn bên ngoài.",
+    "gap": 0.2
+  },
+  {
+    "id": "c51",
+    "text": "Nó bị hút vào, méo vào trong.",
+    "gap": 0.5
+  },
+  {
+    "id": "c52",
+    "text": "Hai cái chai, ba trạng thái, một cơ chế.",
+    "gap": 0.6
+  },
+  {
+    "id": "c53",
+    "text": "Vậy nước nóng làm chai co lại vì cái gì?",
+    "gap": 0.8
+  },
+  {
+    "id": "c54",
+    "text": "Vì thành chai được kéo giãn lúc thổi khuôn.",
+    "gap": 0.2
+  },
+  {
+    "id": "c55",
+    "text": "Và vì nóng quá mốc bảy mươi độ, nhựa mềm đi.",
+    "gap": 0.2
+  },
+  {
+    "id": "c56",
+    "text": "Các móc xích trượt về hình cũ, nên chai co.",
+    "gap": 0.4
+  },
+  {
+    "id": "c57",
+    "text": "Chai không co vì sợ nóng.",
+    "gap": 0.3
+  },
+  {
+    "id": "c58",
+    "text": "Nó co vì cái hình mới của nó chỉ là hình được kéo căng.",
+    "gap": 0.4
+  },
+  {
+    "id": "c59",
+    "text": "Còn cái nắp thì quyết định cái nào thắng.",
+    "gap": 0.5
+  },
+  {
+    "id": "c60",
+    "text": "Vậy nên rót nước sôi vào chai nhựa thường là không nên.",
+    "gap": 0.3
+  },
+  {
+    "id": "c61",
+    "text": "Chai nhựa thường mềm đi và nhăn trước khi kịp nguội.",
+    "gap": 0.3
+  },
+  {
+    "id": "c62",
+    "text": "Muốn có nước nóng trong chai thì cứ chờ một chút.",
+    "gap": 0.2
+  },
+  {
+    "id": "c63",
+    "text": "Nước nguội bớt rồi hãy vặn nắp.",
+    "gap": 1.2
+  }
+]

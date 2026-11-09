@@ -7,6 +7,11 @@ Every film of the library, one row each. The one-shots live in `films/`; the epi
 | Film | Folder | Runtime | Movie |
 |---|---|---|---|
 | Vì sao phơi quần áo cần gió? | `channels/tram-nghi-nhieu/series/do-vat/tap-01-phoi-quan-ao/` | 2:56 | `channels/tram-nghi-nhieu/series/do-vat/tap-01-phoi-quan-ao/tram-nghi-nhieu-series-do-vat-tap-01-phoi-quan-ao.mp4` |
+| Vì sao điện thoại nóng lúc sạc? | `channels/tram-nghi-nhieu/series/do-vat/tap-02-dien-thoai-nong-luc-sac/` | 4:33 | `channels/tram-nghi-nhieu/series/do-vat/tap-02-dien-thoai-nong-luc-sac/tram-nghi-nhieu-series-do-vat-tap-02-dien-thoai-nong-luc-sac.mp4` |
+| Vì sao chai nhựa bị co lại khi rót nước sôi vào? | `channels/tram-nghi-nhieu/series/do-vat/tap-03-chai-nhua-co-lai/` | — | `channels/tram-nghi-nhieu/series/do-vat/tap-03-chai-nhua-co-lai/tram-nghi-nhieu-series-do-vat-tap-03-chai-nhua-co-lai.mp4` |
+| Tại sao dây chun bị kéo căng rồi hơi nóng thì lại co lại? | `channels/tram-nghi-nhieu/series/do-vat/tap-04-day-chun-co-lai/` | — | `channels/tram-nghi-nhieu/series/do-vat/tap-04-day-chun-co-lai/tram-nghi-nhieu-series-do-vat-tap-04-day-chun-co-lai.mp4` |
+| Tại sao rắc muối lên đá lạnh thì đá tan nhanh hơn? | `channels/tram-nghi-nhieu/series/do-vat/tap-05-muoi-tren-da-lat/` | — | `channels/tram-nghi-nhieu/series/do-vat/tap-05-muoi-tren-da-lat/tram-nghi-nhieu-series-do-vat-tap-05-muoi-tren-da-lat.mp4` |
+| Tại sao tờ giấy ướt lại dễ rách hơn tờ giấy khô? | `channels/tram-nghi-nhieu/series/do-vat/tap-06-giay-uot/` | — | `channels/tram-nghi-nhieu/series/do-vat/tap-06-giay-uot/tram-nghi-nhieu-series-do-vat-tap-06-giay-uot.mp4` |
 | Phi vụ triệu đô trong 2 phút — a Money Heist explainer in a talking-head toon | `films/host-toon-test/` | 2:12 | `films/host-toon-test/phi-vu-trieu-do-2-phut.mp4` |
 
 ## Channels
