@@ -173,6 +173,10 @@ def check(ep, step='render'):
 
 
 def status(ep):
+    if not os.path.isdir(ep):
+        print(f'tập chưa có thư mục: {ep}')
+        print('  tạo nó bằng scaffold: sh core/render/new_episode.sh tram-nghi-nhieu series/<cột>/<tập> "Câu hỏi?"')
+        return
     for step in STEPS:
         st = load(ep, step)
         if step == 'final':

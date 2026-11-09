@@ -70,7 +70,9 @@ def prompt(ep, leg, question):
         f'Thư mục tập chưa có: tạo nó theo bước 1 của skill, với câu hỏi "{question}".\n')
     return (f'Dùng skill `tram-nghi-nhieu`. Tập: `{rel}`' + (f' — câu hỏi: "{question}"' if question else '') + '.\n'
             + first +
-            f'Phiên này làm đúng một chặng: {what}. Các chặng trước đã xong; chặng sau do một phiên mới làm.\n'
+            f'Phiên này làm đúng một chặng: {what}. '
+            + ('Đây là chặng đầu tiên, chưa chặng nào xong trước đó. ' if n == '1'
+               else 'Các chặng trước đã xong; ') + 'Chặng sau do một phiên mới làm.\n'
             f'Bắt đầu bằng `python3 channels/tram-nghi-nhieu/tools/gate.py status {rel}`: nó cho biết tập đang ở đâu.\n'
             f'Chặng xong khi: {crit}.\n'
             'Phiên chạy không có người dùng: điền chỗ thiếu bằng mặc định hợp lý của skill, và đi tiếp.\n'
