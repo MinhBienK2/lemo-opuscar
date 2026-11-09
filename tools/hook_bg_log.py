@@ -37,6 +37,10 @@ READ = re.compile(
     # đường dẫn phải bắt đầu ở đầu một đoạn đường dẫn: không được bắt giữa chừng
     r'(?<![/\w])(?P<path>(?:/[\w.\-]+)+\.log)\b')
 
+# đọc output của một job nền mà harness quản lý: `/tmp/claude-1000/…/<phiên>/tasks/<mã>.output`
+JOB_OUTPUT = re.compile(
+    r'(?<![/\w])(?P<path>/tmp/claude-\d+/[\w./-]+/tasks/[\w.-]+\.output)\b')
+
 MESSAGE = (
     'Bạn đã đọc tệp log %s %d lần trong phiên này. Đọc lại một tệp mà job nền không ghi vào nữa '
     'là vòng dò, không phải việc (luật R5b): mỗi lần đọc lại tiêu tốn một lượt của phiên mà không '
@@ -46,15 +50,28 @@ MESSAGE = (
     'báo xong. Nếu cần nhật ký lâu dài thì để chính công cụ ghi nó ra '
     '(ví dụ `review.sh` ghi `review/PROPS-REVIEW.md`).\n')
 
+JOB_MESSAGE = (
+    'Bạn đã đọc output của job nền %s %d lần trong phiên này. Đọc lại output của một job **đang '
+    'chạy** là vòng dò, không phải việc (luật R9): job chưa xong thì output của nó không đổi, và '
+    'mỗi lần đọc lại chỉ tốn một lượt của phiên.\n'
+    'Cách làm đúng: đợi harness báo "job đã xong" rồi đọc output một lần. Nếu cần biết job còn '
+    'sống không thì hỏi tiến độ bằng cách khác (`ps -o etime= -p <pid>`), đừng đọc lại output.\n')
+
 
 def paths_in(command):
-    """Các tệp log mà lệnh này đọc."""
+    """Các tệp mà lệnh này đọc: tệp log (`.log`) và output của job nền (`.output` của harness)."""
     out = []
-    for m in READ.finditer(command or ''):
-        p = m.group('path')
-        if p not in out:
-            out.append(p)
+    for rx in (READ, JOB_OUTPUT):
+        for m in rx.finditer(command or ''):
+            p = m.group('path')
+            if p not in out:
+                out.append(p)
     return out
+
+
+def kind_of(path):
+    """'job' nếu đây là output của job nền, 'log' nếu là tệp log thường."""
+    return 'job' if JOB_OUTPUT.match(path) else 'log'
 
 
 def decide(command, session, state):
@@ -76,6 +93,8 @@ def decide(command, session, state):
     if blocked is None:
         return 0, ''
     p, count = blocked
+    if kind_of(p) == 'job':
+        return 2, JOB_MESSAGE % (p, count)
     return 2, MESSAGE % (p, count)
 
 
@@ -116,6 +135,7 @@ def main():
 
 
 def selftest():
+    job = '/tmp/claude-1000/-home-minhbien-Documents-lemo-opuscar/abc123/tasks/bxj9qoiqc.output'
     cases = [
         ('cat /tmp/round_props.log', ['/tmp/round_props.log']),
         ('tail -20 /tmp/round_storyboard.log; echo x', ['/tmp/round_storyboard.log']),
@@ -123,6 +143,11 @@ def selftest():
         ('ls -l /tmp/out.mp4', []),
         ('sh review.sh <tap> --props', []),
         ('cat /tmp/lemo-review-abc/blind/BLIND.md', []),
+        # output của job nền mà harness quản lý: cũng là vòng dò khi đọc lại
+        ('tail -30 %s' % job, [job]),
+        ('cat %s | head -5' % job, [job]),
+        # `.output` nào không phải của harness thì không chặn (có thể là tệp của dự án)
+        ('cat /tmp/build.output', []),
     ]
     for cmd, want in cases:
         got = paths_in(cmd)
@@ -144,7 +169,13 @@ def selftest():
     rc, _ = decide('cat /tmp/x.log', 's1', state)
     assert rc == 0, rc
     print('ok   quá cửa sổ thời gian → rc=0')
-    print('%d ca đều đúng' % (len(cases) + 6))
+    state6 = {}
+    for i in range(3):
+        rc, msg = decide('cat %s' % job, 's6', state6)
+        assert rc == (0 if i < 2 else 2), (i, rc)
+    assert 'job' in msg, msg
+    print('ok   đọc lại output của job nền lần thứ 3 → rc=2, lời nhắc nói về job (R9)')
+    print('%d ca đều đúng' % (len(cases) + 7))
     return 0
 
 
