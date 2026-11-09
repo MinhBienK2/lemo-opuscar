@@ -20,6 +20,14 @@ Cách kiểm:
 Số trong nhãn đọc thành chữ ("3 ÁO" → "ba áo", "20 g/kg" → "hai mươi"), và đơn vị (g, kg, kJ,
 %, °C) không tính là từ đặc trưng.
 
+Hai luật về **con số**:
+
+  1. một nhãn vẽ ra con số mà lời kể không đọc → lỗi (người xem đọc ra một số mà phim không
+     giải thích). Chiều ngược lại — lời nói số mà hình không có đồ đo — là cờ `NUM` của máy đo;
+  2. một đạo cụ **in** ra một con số mà lời kể không đọc → lỗi, vì cùng lý do. Chỉ chuỗi viết
+     thẳng (`fillText('…')`) mới tính: số của thang đo được tính ra (`String(i * 10)`) nên máy
+     không đọc được, và số trên thang là vạch của dụng cụ chứ không phải một lần đo.
+
 Dùng:  python3 channels/tram-nghi-nhieu/tools/check_labels.py <tập>
 Thoát mã 0 = không có nhãn nào lệch; 1 = có nhãn lệch (in ra từng cái).
 """
@@ -97,9 +105,19 @@ def cards_of(film_js):
 
 
 def numbers_in(text):
-    """the figures a label draws: 288 g, 20 g/kg, 90 %, 1/2, 30 °C"""
+    """the figures a label draws: 288 g, 20 g/kg, 90 %, 1/2, 30 °C
+
+    A figure whose digits sit between letters is not a measurement but part of a word — "H2O", "CO2",
+    "LiFePO4" — so it is left out: the number of the formula is not a number the film says.
+    """
     out = []
     for m in re.finditer(r'(\d+(?:[.,]\d+)?)\s*(?:/\s*(\d+))?', text):
+        # the character next to the digits themselves, not next to the whole match: the pattern eats the
+        # space in front of the unit, and "20 g" must not look like a word ending in a letter
+        before = text[m.start(1) - 1] if m.start(1) else ''
+        after = text[m.end(1)] if m.end(1) < len(text) else ''
+        if before.isalpha() or after.isalpha():
+            continue
         try:
             v = float(m.group(1).replace(',', '.'))
         except ValueError:
@@ -110,6 +128,30 @@ def numbers_in(text):
             except (ValueError, ZeroDivisionError):
                 pass
         out.append((v, m.group(0).strip()))
+    return out
+
+
+def drawn_numbers(src_dir):
+    """the figures a prop prints on itself: the strings it writes with fillText.
+
+    Only a literal counts — a computed label ("String(i * 10)", the ticks of a scale) is not a
+    figure the viewer reads as a measurement, and a scale's ticks are the scale, not a reading.
+    Each figure as (file, the text drawn, the figure).
+    """
+    out = []
+    try:
+        names = sorted(n for n in os.listdir(src_dir) if n.endswith('.js'))
+    except OSError:
+        return out
+    for name in names:
+        try:
+            body = open(os.path.join(src_dir, name), encoding='utf-8').read()
+        except OSError:
+            continue
+        for m in re.finditer(r"""fillText\s*\(\s*(['"])([^'"\\\n]{1,60})\1""", body):
+            text = m.group(2)
+            for value, raw in numbers_in(text):
+                out.append((name, text, raw, value))
     return out
 
 
@@ -180,6 +222,12 @@ def selftest():
          lambda: is_said(0.5, ['tốc độ bay hơi rơi còn một nửa'], ['tốc độ bay hơi rơi còn một nửa'])),
         ('"ba mươi độ" nói 30',
          lambda: is_said(30, ['ba mươi độ thì hơi nước lan xa hơn'], ['ba mươi độ thì hơi nước lan xa hơn'])),
+        ('một con số trong một công thức không phải là một lần đo',
+         lambda: numbers_in('H2O') == [] and numbers_in('CO2') == []),
+        ('một con số có đơn vị đi sau vẫn là một lần đo',
+         lambda: [v for v, _ in numbers_in('20 g/kg')] == [20.0]
+         and [v for v, _ in numbers_in('30 °C')] == [30.0]
+         and [v for v, _ in numbers_in('MAX 400')] == [400.0]),
     ]
     bad = [name for name, ok in cases if not ok()]
     for name, ok in cases:
@@ -263,6 +311,21 @@ def main():
         print(f'check_labels: {len(silent)} nhãn vẽ con số mà phim không nói')
         for text, raw in silent:
             print(f'  "{text}" — con số {raw} không có trong lời kể')
+        return 1
+
+    # The same mistake on the props: a gauge that prints a figure the voice never says. The machine cannot
+    # read a scale's ticks (they are computed), but a printed literal — "MAX 400" — is a figure the viewer
+    # reads, and it must be said. Tập 01 in vẽ "288 g" và "88 g" trên mặt cân và mặt đồng hồ.
+    printed = []
+    for name, text, raw, value in drawn_numbers(os.path.join(ep, 'src')):
+        if is_said(value, spoken_all, spoken_all):
+            continue
+        printed.append((name, text, raw))
+    if printed:
+        print(f'check_labels: {len(printed)} con số vẽ trên đạo cụ mà phim không nói')
+        for name, text, raw in printed:
+            print(f'  src/{name}: vẽ "{text}" — con số {raw} không có trong lời kể '
+                  f'(số trên thang đo thì không tính: nó là vạch của dụng cụ)')
         return 1
     return 0 if not bad else 1
 
