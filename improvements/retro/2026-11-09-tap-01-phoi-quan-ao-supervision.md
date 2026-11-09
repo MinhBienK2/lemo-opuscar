@@ -2956,10 +2956,12 @@ Tôi đã báo quyết định này cho phiên của tập 01, kèm lý do và c
 - **[ ]** N88 (nửa việc): cho `mux.sh` tự ưu tiên encode **tại chỗ** khi phim ngắn — đo được: encode
   cuối tại máy này tốn ~6,5 phút cho một tập 176 giây, còn đường xa là ~32 phút. Đó là đổi *chính sách*
   (đường xa có để máy này rảnh tay khi nhiều tập dựng cùng lúc), nên để người dùng quyết, không tự đổi.
-- **[ ]** N89 (thấp): mỗi vòng chấm để lại một thư mục transcript của người chấm trong
-  `~/.claude/projects/-tmp-lemo-review-*` — **46 thư mục, 1,1 GB** sau ~45 vòng. Không có gì dọn, và bản
-  ghi đó là bằng chứng (P5 đọc chính nó). Đề xuất: một công cụ dọn giữ lại N vòng gần nhất cho mỗi tập và
-  in ra mức dùng đĩa; đĩa đang ở 85 %.
+- **[x]** N89 (thấp): mỗi vòng chấm để lại một thư mục transcript của người chấm trong
+  `~/.claude/projects/-tmp-lemo-review-*` — **54 thư mục, 1 152 MB** sau ~45 vòng, và không có gì dọn.
+  **Guard đã có:** `tools/prune_reviews.py` (mới, có selftest) in ra báo cáo (bao nhiêu thư mục, nặng bao
+  nhiêu, cái nào cũ nhất) và chỉ xóa khi được bảo `--apply`; giữ mặc định 12 thư mục mới nhất, và **không
+  bao giờ xóa thư mục mới hơn 24 giờ** — bằng chứng của một vòng vừa xong thì còn đang được đọc. (Bản ghi
+  đó là bằng chứng — P5 đọc chính nó — nên tôi **không** tự xóa; lượt dọn thật là của người dùng.)
 - **[x]** N92: `check_shots.py` báo `tờ sheet CŨ HƠN mã (tờ …, mã …)` — chỉ tính file `.js`, và in cả
   ngày khi khác ngày.
 - **[x]** N93: `check_shots.py --note` (cổng bàn giao chỉ chặn lỗi cấu trúc) và `core/render/review.sh`
