@@ -2953,9 +2953,13 @@ Tôi đã báo quyết định này cho phiên của tập 01, kèm lý do và c
   `lessons.md` đã có một dòng về lệnh giết theo tên.
 - **[x]** N82: `channels/tram-nghi-nhieu/tools/check_film_claims.py` (mới, có selftest) — cảnh báo, không
   chặn; in ra câu gần nhất mà phim thật sự nói.
-- **[ ]** N88 (nửa việc): cho `mux.sh` tự ưu tiên encode **tại chỗ** khi phim ngắn — đo được: encode
-  cuối tại máy này tốn ~6,5 phút cho một tập 176 giây, còn đường xa là ~32 phút. Đó là đổi *chính sách*
-  (đường xa có để máy này rảnh tay khi nhiều tập dựng cùng lúc), nên để người dùng quyết, không tự đổi.
+- **[x]** N88 (nửa việc): `mux.sh` giờ **hỏi máy kia có mã hoá được không** trước khi giao việc cho nó
+  (một khung đen, khoảng một giây). Trước đó một máy chỉ trả lời `ssh` cũng nhận việc, và phim chờ
+  **sau khi** ảnh đã đi qua — tập 01 mắc đúng lỗi đó: `muse` bận, `muse2` nhận việc rồi mã hoá hỏng, và
+  phim chờ đường xa rồi mới quay về mã hoá tại chỗ. Thêm `LEMO_MUX_LOCAL=1` để mã hoá tại chỗ dù máy
+  kia rảnh (mặc định **không đổi**: đường xa vẫn được dùng, vì nó giữ CPU của máy này rảnh cho các tập
+  đang dựng song song — và **việc chọn mặc định là của người dùng**). Đã thử cả ba đường trên một phim
+  thử 3 giây: đường xa, `LEMO_MUX_LOCAL=1`, và `LEMO_REMOTE_FFMPEG=none` — cả ba ra phim.
 - **[x]** N89 (thấp): mỗi vòng chấm để lại một thư mục transcript của người chấm trong
   `~/.claude/projects/-tmp-lemo-review-*` — **54 thư mục, 1 152 MB** sau ~45 vòng, và không có gì dọn.
   **Guard đã có:** `tools/prune_reviews.py` (mới, có selftest) in ra báo cáo (bao nhiêu thư mục, nặng bao

@@ -6,6 +6,8 @@
 # 10 Mbit/s link costs about fifteen minutes each way, more than the final encode itself. One fast
 # local pass at crf 20 makes it four to five times smaller at ~40 dB PSNR (not visible), and the
 # final encode is crf 19 — so the film does not change. Small files are sent as they are.
+# Two ways to encode: on a remote host (this machine keeps its CPU free for other episodes) or here.
+# LEMO_MUX_LOCAL=1 forces the local one; without it, a free remote host is used.
 # Audio: two-pass loudnorm → −14 LUFS / TP −1.2 (a single pass is off by about 0.5 LU); finally prints the measured I / LRA / true peak and warns if off target (loudness outside ±1 LU or peak above −1 dB)
 # (when the mix itself clips or has extremely high peaks, loudnorm's dynamic mode misses both targets; measured −20 LUFS / +5 dBTP)
 # Any failed ffmpeg step exits non-zero and leaves no half-written file; the output path is printed only if the finished file exists and is non-empty.
@@ -102,6 +104,28 @@ for h in $HOSTS; do
   fi
   echo "mux.sh: $h is down or busy" >&2
 done
+# A host that answers ssh is not yet a host that can encode. Claiming the job first and finding out later
+# means the picture has already travelled (a crf-20 copy is ~240 MB) before the failure — the film waits for
+# nothing and the bandwidth is spent. So ask the host to encode one black frame before it is given the job
+# (N88). It costs about a second and it is the difference between "the remote encode failed; encoding locally"
+# after thirty minutes and before ten seconds.
+if [ "$USE_REMOTE" = 1 ]; then
+  if ! ssh -o ConnectTimeout=5 "$REMOTE_HOST" \
+      'command -v ffmpeg >/dev/null 2>&1 && ffmpeg -v error -f lavfi -i color=c=black:s=64x64:d=0.2 -frames:v 1 -f null -' >/dev/null 2>&1; then
+    echo "mux.sh: $REMOTE_HOST answers but does not encode; encoding on this machine" >&2
+    ssh -o ConnectTimeout=5 "$REMOTE_HOST" 'rm -rf ~/lemo-mux.lock' 2>/dev/null
+    REMOTE_HOST=""; USE_REMOTE=0
+  fi
+fi
+# LEMO_MUX_LOCAL=1 encodes on this machine even when a remote host is free. The remote path exists to keep
+# this machine's CPU free while other episodes render — when nothing else is running here, the local encode is
+# simply faster (a three-minute film: ~6.5 minutes here against ~30 minutes of transfer). The choice of default
+# is the user's; the switch is the tool's.
+if [ "$USE_REMOTE" = 1 ] && [ "${LEMO_MUX_LOCAL:-0}" = "1" ]; then
+  echo "mux.sh: LEMO_MUX_LOCAL=1 — encoding on this machine even though $REMOTE_HOST is free" >&2
+  ssh -o ConnectTimeout=5 "$REMOTE_HOST" 'rm -rf ~/lemo-mux.lock' 2>/dev/null
+  REMOTE_HOST=""; USE_REMOTE=0
+fi
 release() { [ -n "$REMOTE_HOST" ] && ssh -o ConnectTimeout=5 "$REMOTE_HOST" 'rm -rf ~/lemo-mux.lock' 2>/dev/null; REMOTE_HOST=""; }
 trap release EXIT INT TERM
 [ "$USE_REMOTE" = 1 ] || echo "mux.sh: encoding on this machine" >&2
