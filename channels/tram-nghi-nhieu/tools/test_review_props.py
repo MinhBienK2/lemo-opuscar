@@ -55,7 +55,7 @@ case "$prompt" in
     cat BLIND.md ;;
   *"Viết PROPS-REVIEW.md"*)
     printf '#1 vật một — A — KHỚP — người xem gọi: quả cà chua\n  → SỬA: không cần sửa\n' > PROPS-REVIEW.md
-    printf '#2 vật hai — B — KHỚP — người xem gọi: cục pin\n  → SỬA: không cần sửa\n' >> PROPS-REVIEW.md
+    if [ "${FAKE_SKIP2:-0}" != 1 ]; then printf '#2 vật hai — B — KHỚP — người xem gọi: cục pin\n  → SỬA: không cần sửa\n' >> PROPS-REVIEW.md; fi
     printf 'VERDICT: PASS\n' >> PROPS-REVIEW.md
     cat PROPS-REVIEW.md ;;
   *) printf '%s' "$WARNINGS" ;;
@@ -165,13 +165,23 @@ def selftest():
               "rc=%d out=%s" % (rc, out.strip()[-400:]))
         check("vòng nói rõ phép đo bổ sung đã thiếu", "lần đoán thứ hai không trả lời" in out,
               out.strip()[-400:])
+        # 4. the report leaves a prop out: the round fails, says which one, and stamps nothing
+        # (tap-01: vật #25 không có dòng phán quyết nào mà vòng vẫn xong — một vật chưa ai nhìn mà phim
+        # đi ra với nó)
+        ep = make_episode(root, "tap-4")
+        rc, out = run_props(ep, stubs, {"FAKE_SKIP2": "1"})
+        check("bản chấm bỏ sót một vật thì vòng FAIL", rc == 1, "rc=%d out=%s" % (rc, out.strip()[-400:]))
+        check("vòng nói vật nào chưa ai chấm", "chưa có dòng phán quyết" in out, out.strip()[-400:])
+        check("vòng bỏ sót vật thì không đóng tem",
+              not os.path.isfile(os.path.join(ep, "review", "PROPS.pass")),
+              str(os.listdir(os.path.join(ep, "review"))))
     finally:
         shutil.rmtree(root, ignore_errors=True)
 
     if failures:
         print("\n%d ca hỏng" % len(failures))
         return 1
-    print("\n3 ca đều đúng")
+    print("\n4 ca đều đúng")
     return 0
 
 
