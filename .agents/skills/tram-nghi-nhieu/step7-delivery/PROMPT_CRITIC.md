@@ -19,6 +19,10 @@ Nhiệm vụ của bạn là đánh giá toàn bộ sản phẩm video đã rend
    - Kết thúc phim có giải quyết trọn vẹn câu hỏi ban đầu không? Người xem có nhận được câu trả lời thỏa đáng không?
 4. **Kiểm tra Cổng Máy (`gate.py`):**
    - Đọc `GATE.md` — trạng thái từng tem do cổng in ra. Tem nào còn hiệu lực, tem nào không, và tem nào còn thiếu?
+5. **Nhãn gắn với đúng vật (đọc từng nhãn trên màn hình):**
+   - Mỗi nhãn hiện trên màn hình phải **nêu được vật nó gắn vào**: đọc nhãn phải biết nó nói về cái gì.
+   - Nếu trong cùng khung có **vật khác mà nhãn có thể bị đọc là của vật đó** (hai cái áo giống nhau, một cái áo và một cái khăn cùng dây), thì đó là lỗi của nhãn: nó phải có phần định tính để không nhầm ("áo màu sẫm", "áo ngoài"). Ở tập 01 (2:18) nhãn "CHỒNG LÊN NHAU" chỉ vào một cái áo đang treo cạnh chiếc khác trên cùng dây, chứ không vào chỗ hai cái áo chồng lên nhau — người xem gán nhãn cho cái áo và hiểu sai cả câu.
+   - Nhãn phải chỉ vào **tâm** vật nó nói tới, không vào mép vật; và nhãn bị mép khung cắt là một nhãn không có (tập 01, 0:22).
 
 ## Định dạng Output Bắt buộc (`FINAL-QA-REPORT.md`)
 
@@ -32,6 +36,10 @@ OVERALL_SCORE: [1-10]/10
 - Âm thanh & Lồng tiếng: [Xuất sắc | Đạt chuẩn | Cần cân bằng lại dB]
 - Hình ảnh & Hiệu ứng Three.js: [Đạt chuẩn diorama toon | Còn lỗi render]
 - Giá trị truyền tải khoa học: [Rõ ràng, dễ hiểu | Còn khó nắm bắt]
+
+## NHÃN ĐỌC NHẦM
+- [câu + chữ nhãn]: [nhãn thực sự chỉ vào vật nào, và vật nào khác trong cùng khung có thể bị đọc nhầm]
+*(ghi `KHÔNG CÓ` nếu không nhãn nào mơ hồ)*
 
 ## KẾT LUẬN CUỐI CÙNG
 - [Xác nhận phát hành video hoặc nêu lý do từ chối].

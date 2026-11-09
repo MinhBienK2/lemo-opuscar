@@ -650,6 +650,14 @@ if [ "$STORYBOARD" = 1 ]; then
     echo "review --storyboard: nhãn lệch câu, hoặc nhãn vẽ một con số mà lời kể không nói — sửa src/film.js (nhãn phải nằm ở câu gọi tên nó; mọi con số trên nhãn phải có lời kể đọc) rồi chạy lại" >&2
     exit 1
   fi
+  # a label that names one object and points at another: the machine checks the anchor, the critic checks the reading
+  ARC=0
+  ANC=$(python3 "$CHANNEL/tools/check_label_anchors.py" "$EP" 2>&1) || ARC=$?
+  echo "$ANC"
+  if [ "$ARC" = 1 ]; then
+    echo "review --storyboard: có nhãn nói về vật khác với vật nó gắn vào, hoặc nhãn mơ hồ — sửa src/film.js (mỗi thẻ có \`anchor: '<tên vật trong src/props.js>'\`; chữ của nhãn phải là của đúng vật đó) rồi chạy lại" >&2
+    exit 1
+  fi
   # The storyboard quotes the words of each line. When the words are rewritten, the quotes go stale and the
   # board describes a film that no longer exists — the same mistake as a treatment left behind by a new script.
   # The words are the standard; the board is what has to follow.
@@ -867,6 +875,16 @@ if [ "$FINAL" = 1 ]; then
     echo "review --final: các số vật trong bản chấm và bản cắt không còn trỏ vào vật cũ — sửa lại số rồi chạy lại" >&2
     exit 1
   fi
+  # The last gate never asked about the labels: a label that names one object and points at another (tap-01,
+  # 2:18 — "CHỒNG LÊN NHAU" pointing at a single shirt) slipped through the whole film. The machine checks the
+  # anchor, the critic checks the reading; here the machine runs first, so the film is not accepted with it.
+  ARC=0
+  ANC=$(python3 "$CHANNEL/tools/check_label_anchors.py" "$EP" 2>&1) || ARC=$?
+  echo "$ANC"
+  if [ "$ARC" = 1 ]; then
+    echo "review --final: có nhãn nói về vật khác với vật nó gắn vào, hoặc nhãn mơ hồ — sửa src/film.js rồi dựng lại và chạy lại" >&2
+    exit 1
+  fi
   ROUND_LABEL="lần chấm nghiệm thu thứ $n"
   # The last gate reads the whole film: its clock grows with the number of lines in it.
   scale_clock "$(lines_of "")"
@@ -1017,6 +1035,14 @@ LAB=$(python3 "$CHANNEL/tools/check_labels.py" "$EP" 2>&1) || LRC=$?
 echo "$LAB"
 if [ "$LRC" = 1 ]; then
   echo "review: nhãn lệch câu, hoặc nhãn vẽ một con số mà lời kể không nói — sửa src/film.js (nhãn phải nằm ở câu gọi tên nó; mọi con số trên nhãn phải có lời kể đọc) rồi chạy lại" >&2
+  exit 1
+fi
+# a label that names one object and points at another: the machine checks the anchor, the critic checks the reading
+ARC=0
+ANC=$(python3 "$CHANNEL/tools/check_label_anchors.py" "$EP" 2>&1) || ARC=$?
+echo "$ANC"
+if [ "$ARC" = 1 ]; then
+  echo "review: có nhãn nói về vật khác với vật nó gắn vào, hoặc nhãn mơ hồ — sửa src/film.js (mỗi thẻ có \`anchor: '<tên vật trong src/props.js>'\`; chữ của nhãn phải là của đúng vật đó) rồi chạy lại" >&2
   exit 1
 fi
 SRC=0

@@ -30,6 +30,7 @@ Nhiệm vụ của bạn là thẩm định nhịp điệu phim qua từng phân
 5. **Phụ đề & Thẻ chú thích (Readability):**
    - **Nhãn phải nằm trọn trong khung.** Một thẻ bị mép khung cắt là một thẻ không có: ở tập 01 (0:22) nhãn "KHÔNG CÓ GIÓ" bị mép trên cắt mất, người xem đọc "KHÔNG CÓ GI" thì không ra nghĩa. Nhìn mép khung của **mọi** thẻ, không chỉ thẻ đang làm nhiễu.
    - **Thẻ phải chỉ đúng vật, không chỉ đúng chỗ.** Mũi tên chạm vào mép một cái áo đang treo cạnh cái áo khác thì người xem đọc ngược thành nghĩa sai (tập 01, 2:18). Chỉ vào **tâm vật**, vào mặt vật mà lời kể đang nói.
+   - **Mỗi nhãn phải nêu được vật nó gắn vào, và không được đọc nhầm sang vật khác trong cùng khung.** Đọc nhãn phải biết nó nói về cái gì. Nếu trong khung có **vật khác mà nhãn có thể bị đọc là của vật đó** (hai cái áo giống nhau, một cái áo và một cái khăn cùng dây), thì đó là lỗi của nhãn: nó phải có phần định tính để không nhầm ("áo màu sẫm", "áo ngoài"). Ở tập 01 (2:18) nhãn "CHỒNG LÊN NHAU" chỉ vào **một cái áo đang treo cạnh chiếc khác trên cùng dây**, chứ không vào chỗ hai cái áo chồng lên nhau — người xem gán nhãn cho cái áo và hiểu sai cả câu. **Liệt kê mọi nhãn như vậy** ở mục `## NHÃN ĐỌC NHẦM` của bản chấm (không có thì ghi `KHÔNG CÓ`).
    - Chữ phụ đề có xuất hiện đúng lúc người nói phát âm không? Thẻ chữ `label` có trỏ đúng vào tâm chi tiết máy không?
    - **Thẻ chữ phải nằm ở câu gọi tên nó.** Một thẻ "LỚP HƠI ẨM" hiện ở câu 22 trong khi câu nói "Lớp hơi ẩm ấy bám sát mặt áo" là câu 24 là thẻ nói một đằng, lời nói một nẻo: người xem đọc thẻ ở câu 22 và không thấy gì đúng. Nếu thẻ gắn với nhiều câu, câu đầu tiên phải là câu đầu tiên nói ra nó.
    - **Người xem phải biết câu kể đang nói về vật nào.** Khi hai câu liên tiếp nói về cùng một vật mà câu sau **không nhắc lại tên nó** (vì người xem vừa thấy nó), thì vật đó phải còn nhận ra được: giữ thẻ gọi tên nó ở câu sau, hoặc vật phải đủ nổi bật để không cần thẻ. Ở tập 01, cái áo ướt có thẻ "KHÔNG CÓ GIÓ" ở c5, nhưng c6 — nơi khác biệt hiện ra **rõ nhất** — thì không có thẻ, nên người xem phải **nhớ** rằng cái áo ướt ở c6 chính là cái áo "KHÔNG CÓ GIÓ" ở c5. Khi máy đã lùi xa mà vật lại nhỏ đi, người xem không theo kịp: đó là lỗi của phim, không phải của người xem.
@@ -65,6 +66,10 @@ FLAGS_STATUS:
 
 ## NHẬN XÉT CHI TIẾT THEO CÂU/CẢNH
 - [Câu ID, vd: c12]: [Hiện tượng] -> Đề xuất sửa: [Thay đổi timing / Thêm đèn]
+
+## NHÃN ĐỌC NHẦM
+- [câu + chữ nhãn]: [nhãn thực sự chỉ vào vật nào, và vật nào khác trong cùng khung có thể bị đọc nhầm]
+*(ghi `KHÔNG CÓ` nếu không nhãn nào mơ hồ)*
 
 ## KHUYẾN NGHỊ ĐẠO DIỄN
 - Yêu cầu xử lý dứt điểm các cờ lỗi trên.
