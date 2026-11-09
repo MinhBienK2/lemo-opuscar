@@ -1876,6 +1876,7 @@ tiền (trước vòng chấm, trước lúc dựng, trước lúc bàn giao), c
 | 58 | Công cụ sửa file không được làm đổi cách tệp chạy (N58) | `tools/replace.py` | **xong** — quyền đi theo nội dung; một ca selftest |
 | 59 | Báo cáo phải đếm đúng, kể cả lệnh ghi tệp qua một tên biến (N59) | `tools/rules.py` | **xong** — theo phép gán trong lệnh; 10 ca selftest. Đo lại: tap-01 **369** lần (báo cáo cũ nói 37), tap-02 17, tap-03 0 |
 | 60 | Danh mục vật dựng và phim phải là cùng một danh sách (N60) | `channels/tram-nghi-nhieu/tools/check_props_used.py`, `channels/tram-nghi-nhieu/tools/review.sh` | **xong** — 4 ca selftest; chạy trong bước chấm hình. Đo: tap-01 0, tap-02 0, tap-03 **1** — và nó là cái nắp rời mà người chấm dàn ý đã xin |
+| 61 | Cái khoá phải biết chặn được ai (N61) | `channels/tram-nghi-nhieu/tools/test_review_lock.py` | **xong** — 5 ca selftest: khoá sống chặn, khoá chết được lấy lại, khoá phần khác không chặn, khoá được dọn |
 
 ### Mỗi phát hiện đã có dòng riêng trong `improvements/lessons.md`
 
