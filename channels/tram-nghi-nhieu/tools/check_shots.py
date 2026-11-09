@@ -361,6 +361,11 @@ def main(argv):
               'node channels/tram-nghi-nhieu/tools/beatsheet.mjs <tập> --out <scratch>' % argv[1],
               file=sys.stderr)
         return 2
+    # a sheet built before the label probe existed knows nothing about where the labels point (N78)
+    if any(measured(b) and 'labels' not in b for b in beats):
+        print('check_shots: tờ sheet này dựng TRƯỚC khi có probe nhãn — nó không biết nhãn nào trỏ vào vật nào. '
+              'Dựng lại tờ sheet (node channels/tram-nghi-nhieu/tools/beatsheet.mjs %s --out <scratch>) rồi chạy lại.'
+              % argv[1])
     stale = sheet_older_than_code(argv[1], path)
     if stale:
         print('check_shots: tờ sheet CŨ HƠN mã (tờ %s, mã %s) — những cờ này nói về một hình cũ hơn; '
