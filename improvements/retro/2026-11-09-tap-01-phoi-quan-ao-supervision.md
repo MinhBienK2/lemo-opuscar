@@ -535,6 +535,402 @@ nên không đổi gì; phim nào có cột thì đếm đúng những gì ngư�
 
 ---
 
+## N24 — critical — Cổng bàn giao quay vòng mãi khi thư mục phim viết tương đối
+
+**Bằng chứng.** `sh core/render/review.sh films/host-toon-test` — đúng cách dùng mà `AGENTS.md` dạy
+("chạy `sh tools/…` từ thư mục gốc thư viện") — không bao giờ kết thúc. Nó chạy tới bước `timing` rồi
+**không in thêm một dòng nào**, và treo đó hơn ba giờ cho tới khi bị giết. Vết:
+
+```
++ _d=.
++ [ ! -f ./CHANNEL.md ]
++ [ . != / ]
++ dirname .          →  "."
++ _d=.              →  lặp lại y hệt, mãi mãi
+```
+
+Dòng 72 của `core/render/review.sh` đi tìm thư mục kênh bằng `dirname`:
+
+```sh
+_d=$FOLDER; while [ ! -f "$_d/CHANNEL.md" ] && [ "$_d" != / ]; do _d=$(dirname "$_d"); done
+```
+
+Với đường dẫn **tương đối** (`films/host-toon-test`) chuỗi `dirname` đi tới `.` và đứng lại ở đó: `dirname(".")`
+là `"."`, còn `"." != "/"` thì luôn đúng. Vòng lặp không bao giờ kết thúc, và vì nó không in gì nên người
+đọc tưởng cổng đang chạy nặng. Đường dẫn **tuyệt đối** thì đi lên tới `/` nên vô hại — nên phim nằm trong
+một kênh (tập 01) không bao giờ mắc kẹt, còn **mọi one-shot dưới `films/`** thì mắc.
+
+Hai điều làm nó tệ hơn một vòng lặp vô hại: (1) `set -e` không cứu được vì vòng lặp không trả về mã lỗi;
+(2) chính file này đã có câu *"bài kiểm tra không chạy xong thì không nói gì về phim"* — cổng này vi phạm
+đúng điều nó tự nhắc.
+
+**Guard đã có.** Vòng đi tìm thư mục kênh nay đi bằng `cd` (như dòng 57 ngay trên nó vốn đã làm), nên đường
+dẫn luôn tuyệt đối và `"."` không bao giờ xuất hiện:
+
+```sh
+_d=$(cd "$FOLDER" 2>/dev/null && while [ ! -f CHANNEL.md ] && [ "$PWD" != / ]; do cd ..; done && pwd)
+```
+
+**Còn phải làm.** Một bài kiểm tra treo vô hạn là loại hỏng mà người giám sát khó nhận ra nhất, vì nó
+giống hệt một bài kiểm tra đang chạy. Xem N25.
+
+---
+
+## N25 — high — Một bước quay vòng mãi không khác gì một bước đang chạy nặng
+
+**Bằng chứng.** N24 treo im lặng ba giờ. Người giám sát nhìn vào cổng thấy "đang chạy" — không có cách nào
+biết nó đã chết. Đây là hình dạng tệ nhất của một bài kiểm tra treo: **không in gì, không trả gì**. Cùng
+một cơ chế đã xuất hiện hai lần trong phiên này: `readcheck` chết giữa chừng (N11) và `scenecheck`
+đếm trên cột sai (N23) — cả hai đều được giải quyết bằng cách *nói ra* ("COULD NOT RUN — không phải phán
+quyết"), chứ không phải bằng cách *hết giờ*.
+
+**Guard đã có.** `core/render/review.sh` giờ bọc mỗi bước trong một đồng hồ:
+
+```sh
+STEP_TIMEOUT=${REVIEW_TIMEOUT:-3600}
+set -- timeout -k 30 "$STEP_TIMEOUT" "$@"
+```
+
+Hết giờ thì bước đó bị giết và in `COULD NOT RUN (no answer in 3600s) — not a verdict about the film` —
+cùng một ngôn ngữ với "COULD NOT RUN (exit 2)", và mã 124 của `timeout` không bao giờ bị đọc thành
+"FAILED" (một phán quyết về phim). `REVIEW_TIMEOUT=<giây>` nâng hoặc hạ đồng hồ cho một lượt.
+
+Bằng chứng đã chạy: `REVIEW_TIMEOUT=8 sh core/render/review.sh films/host-toon-test` →
+
+```
+--- readcheck
+readcheck: COULD NOT RUN — the page died while the check was reading it (at 67.2s of 132.3s): …
+    COULD NOT RUN (no answer in 8s) — not a verdict about the film
+```
+
+**Còn phải làm.** Đồng hồ này nằm ở cổng bàn giao của thư viện. Cổng của kênh (`channels/tram-nghi-nhieu/
+tools/review.sh`) gọi một tiến trình `claude -p` làm người chấm hình, và tiến trình đó **không** có đồng hồ —
+một người chấm treo là một vòng chấm không bao giờ kết thúc, và vòng chấm của kênh có trần 5 vòng nên
+một vòng treo nuốt hết trần đó.
+
+---
+
+## N26 — high — Không có gì nói vòng chấm này đã sửa được gì, nên vòng sau bắt đầu lại từ đầu
+
+**Bằng chứng.** Bản chấm cả phim dài 39 nghìn chữ: 60 câu, mỗi câu một đoạn, kèm "đề xuất sửa", kèm mục
+cờ máy, kèm "KHUYẾN NGHỊ ĐẠO DIỄN". Vòng 1 có **22 câu FAIL**, vòng 2 còn **6**. Người đọc không có cách nào
+biết điều đó mà không mở cả hai bản báo và tự đối chiếu tay — nên thay vào đó họ đọc lại từ đầu, sửa lại
+cả những câu đã qua, và mỗi vòng tốn thêm hàng giờ.
+
+Tệ hơn: bản chấm vòng 2 nói **24 trong 26 cờ SAME là cờ sai** (cảnh đã đổi góc nên máy bắt nhầm) — tức là
+con số cờ máy đọc lên là 38 trong khi thực tế chỉ còn 12 cờ thật. Người đọc chỉ biết điều đó sau khi đọc
+tới dòng thứ chín mươi của bản báo.
+
+**Guard đã có.** `channels/tram-nghi-nhieu/tools/check_progress.py` đọc hai bản chấm liên tiếp và in ra
+đúng thứ đáng lẽ phải có:
+
+```
+so sánh: REVIEW-1.md  →  REVIEW-2.md
+phán quyết: REJECT → REJECT
+câu FAIL chặn: 22 → 6
+  đã sửa:      c5, c12, c13, … (20 câu)
+  CÒN MỞ:      c48, c60
+  mới phát hiện: c30, c41, c44, c53
+cờ máy còn mở: 15 → 12
+  CÒN MỞ:      c22:RUN
+  mới:         c17:DARK, c23:RUN, … (11 cờ RUN ở c22–c32)
+```
+
+Nó đọc được cả ba kiểu bản chấm của phiên này (ghi `- [c41]: **FAIL`, ghi `### #12 — framing FAIL`, và
+mục `Cờ máy chưa sửa` một dòng), và nó **bỏ các cờ mà người chấm đã bác bằng "CỜ SAI"** — nhưng chỉ bỏ
+đúng loại cờ mà câu đó đang nói, vì một câu có thể còn nợ một cờ khác. Cổng của kênh gọi nó sau mỗi vòng
+chấm hình (`tools/review.sh`), và skill của kênh (bước 6) bảo đạo diễn sửa đúng những câu còn mở, đừng
+làm lại những câu đã qua.
+
+---
+
+## N27 — critical — Người giám sát nhìn nhầm phiên, lần thứ hai: hai đường dẫn không bao giờ gặp nhau
+
+**Bằng chứng.** N1 đã sửa "người giám sát đọc transcript của omp chứ không phải của Claude Code". Nhưng khi
+chạy `tools/supervise.sh` với phim `tap-01` để đo xem phiên đang dựng phim có làm đúng luật không, nó báo
+`session faf986af…jsonl` — đó là **phiên của người giám sát**, không phải phiên đang dựng phim. Lý do nằm
+ở `tools/supervise.sh`:
+
+```python
+if not p.startswith(film):     # film = "/home/…/tap-01-phoi-quan-ao"  (tuyệt đối)
+```
+
+Còn `p` là đường dẫn mà phiên ghi vào — và `AGENTS.md` dạy chính là ghi **đường dẫn tương đối**
+(`src/props.js`). "tuyệt đối".startswith("tương đối") = không bao giờ đúng. Nên `writes_film()` không
+bao giờ thấy phiên nào viết vào thư mục phim, và bộ chọn rơi xuống nhánh dự phòng: "lấy phiên mới nhất".
+Phiên mới nhất lúc đó là phiên của người giám sát. Cùng lỗi ấy, hậu quả y hệt N1: **báo cáo về một
+phiên khác**.
+
+Hai lỗi nữa cùng chỗ, thấy ra khi sửa cái đầu tiên:
+
+- `SUPERVISE_FILM` **không tồn tại** — người giám sát chỉ xem được một phim, phim mới nhất. Khi hai phim
+  đang chạy thì nó chọn sai phim.
+- Bộ chọn có thể chọn **transcript của một subagent** (Claude Code đặt tên file của subagent là
+  `<thời-điểm>_<uuid>.jsonl`), trong khi cần transcript của phiên chính.
+
+**Guard đã có.** `tools/supervise.sh` giờ:
+
+- so hai đường dẫn **từ cùng một gốc** (đường dẫn tương đối với thư mục gốc thư viện) trước khi so sánh,
+  nên đường dẫn tương đối và đường dẫn tuyệt đối đều khớp;
+- nhận `SUPERVISE_FILM` để chỉ định phim cần theo dõi;
+- ưu tiên transcript của phiên chính, chỉ dùng transcript của subagent khi không còn gì khác.
+
+Đo lại sau khi sửa, với phim là `tap-01`:
+
+```
+supervise: film tap-01-phoi-quan-ao
+supervise: session e8ec853c-2f62-427e-9528-3cdc7c568ee1.jsonl   ← đúng phiên đang dựng
+```
+
+**Số liệu về quá trình, đo lại đúng phiên** (trước đó những con số này đo nhầm phiên):
+
+| Luật | Số lần | Chi tiết |
+|---|---|---|
+| R1 — ghi file dự án bằng shell | **37** | `src/props.js`×7, `src/film.js`×5, `LOOK.md`×5, `voice/lines.json`×4, `src/set.js`×4 … |
+| R10 — tự dựng montage ffmpeg | **20** | xếp khung bằng ffmpeg thay vì `core/render/sheet.py` |
+| R9 — dò file để chờ | **40 lệnh** | 12× `ls -l src/props.js; date`, 12× `ls /tmp/lemo-review-*/beats | wc -l`, 8× `node --check …` |
+
+Đáng nói: **người giám sát cũng vướng R1** — hai lần trong chính phiên này, tôi sửa `improvements/README.md`
+và `improvements/lessons.md` bằng heredoc của shell. Cái máy bắt được cả hai.
+
+---
+
+## N28 — high — Khuôn dựng của tập mới dựng bằng 4 trình duyệt, và phim mất khung trong im lặng
+
+**Bằng chứng.** `core/render/new_episode.sh` viết `build.sh` cho mỗi tập mới với:
+
+```sh
+node core/render/video.mjs "$HERE" --workers 4 --out "$OUT/video.mp4"
+```
+
+Nhưng `core/render/video.mjs` tự nói trong dòng đầu của nó: *"khi nhiều phim cùng chạy thì dùng 3 worker
+(mặc định); một phim chạy riêng thì lên tới 6"*. 4 là **trên** mặc định mà công cụ tự khuyên.
+
+Trên máy này (GTX 1660 Ti, 6 GB) bốn trình duyệt ở ss=2 (3840×2160) làm tràn VRAM: trình duyệt chết giữa
+phim, ffmpeg đóng tệp segment, và **phim mất khung mà không nói gì** — không có dòng lỗi, không có cảnh báo.
+Tập 01 phải sửa tay (`build.sh` của nó ghi `--workers 2`, đúng như `DEMO.md` của kênh), nhưng cái sửa tay
+đó không quay lại vào khuôn: tập 02 sinh ra hôm nay sẽ lại có 4.
+
+**Guard đã có.** `core/render/new_episode.sh` (và `films/host-toon-test/build.sh`) giờ ghi `--workers 2`,
+kèm dòng giải thích. Hai là số an toàn trên máy nhỏ; máy lớn hơn thì tăng.
+
+**Còn phải làm.** Một phim mất khung trong im lặng là loại hỏng mà cổng bàn giao không thấy: `ffprobe` đọc
+được tệp, thời lượng vẫn đúng, tiếng vẫn đủ. Cái duy nhất bắt được là **độ dài phải bằng tổng số khung
+phải có** — xem dòng 30 của bảng thứ tự xử lý.
+
+---
+
+## N29 — low — Một bài kiểm tra, hai hình dạng dàn ý: bài kiểm tra hỏi sai người
+
+**Bằng chứng.** `tools/check_treatment.py` đòi dàn ý theo `DIRECTOR.md` §2–§7: "## Phim mẫu", "## Ba cấu
+trúc", "## Logline", "## Beat sheet", "## Cue map", "## Âm thanh", "## Chấm lời", và mỗi vòng soi hình phải
+có đúng hai chữ "Thấy:" và "Sửa:".
+
+Nhưng kênh `Trạm Nghĩ Nhiều` có dàn ý riêng — `channels/tram-nghi-nhieu/templates/TREATMENT.tmpl.md` —
+với những mục khác hẳn: "Độ dài", "Câu hỏi, tách ra", "Mở và kết", "Nơi chốn", "Vật lên hình", "Thứ vô
+hình", "Bảng Ý → Hình", "Shot list". Tập 01 viết đúng theo mẫu đó. Chạy bài kiểm tra của thư viện lên nó:
+
+```
+BAD TREATMENT.md has no "## Phim mẫu" (benchmark) … (7 mục)
+BAD LOOK.md "vòng 4 …": write what you saw on the stills ("Thấy: …") and what you changed ("Sửa: …")  (9 vòng)
+FAIL (16)
+```
+
+**16 lỗi giả, trên một tập làm đúng quy trình của kênh.** Hôm nay chúng chưa làm hại gì vì cổng bàn giao
+chỉ chạy bài này khi có `board.json` hoặc `board_rules.json`, mà kênh này không có — nhưng ngày nào có
+người bật nó lên thì một tập đúng quy trình sẽ không dựng được. Và vòng soi hình của tập 01 viết đúng
+thứ nó thấy ("**Cờ `SAME` ở cặp thí nghiệm** → … Cách sửa: …"), chỉ là không dùng đúng hai chữ mà bài kiểm
+tra đòi.
+
+**Còn phải làm.** Bài kiểm tra nên hỏi kênh, không tự đoán: một file nhỏ ở thư mục kênh khai báo dàn ý
+của kênh cần những mục nào, và bài kiểm tra đọc nó. Chưa làm, vì hôm nay bài kiểm tra chưa chạy cho kênh
+này — nhưng nó là một quả bom có dây.
+
+---
+
+## N30 — high — Một bài kiểm tra trả lời "có" cho mọi thứ, nên nó im lặng và xanh
+
+**Bằng chứng.** Bài kiểm tra mới "nhãn vẽ con số mà phim không nói" (thêm vào
+`channels/tram-nghi-nhieu/tools/check_labels.py`) chạy ra `mọi nhãn nằm đúng câu` và **thoát 0**, trong khi
+chính các con số đáng ra phải bị báo đều không có trong lời kể:
+
+```
+'288 g' [(288.0, '288')] [False]
+'88 g'  [(88.0, '88')]   [False]
+'50 %'  [(50.0, '50')]   [False]
+```
+
+Ba lần đọc lại cùng một đoạn, cùng một kết luận: "không phải bài kiểm tra sai, mà **bài kiểm tra không
+chạy tới chỗ cần chạy**".
+
+**Nguyên nhân.** Lời kể được gom thành một danh sách, trong đó mỗi câu có hai cột: `text` (cột viết) và
+`say` (cột nói). Ở tập này **cột `say` rỗng với cả sáu mươi câu**, nên danh sách có sáu mươi chuỗi rỗng.
+Phép so của bài kiểm tra là:
+
+```python
+if w in s or strip_accents(s) in w:   # s có thể là chuỗi rỗng
+```
+
+Một chuỗi rỗng **là chuỗi con của mọi chuỗi** (`'' in 'hai trăm'` → `True`). Nên chỉ cần một chuỗi rỗng
+trong danh sách là mọi con số trong phim đều "đã được nói". Bài kiểm tra luôn trả lời "có" — và một bài
+kiểm tra luôn trả lời "có" thì không kiểm tra gì cả, chỉ tự nó là một cái cổng giả.
+
+**Đã sửa.** `is_said` bỏ qua chuỗi rỗng, và `numbers_in` hiểu "1/2" là **một nửa** chứ không phải "một"
+(`c37` nói "một nửa", và số 1 trong "1/2" cũng được tìm thấy ở câu khác — hai lỗi cùng một chỗ).
+
+**Bài học rộng hơn.** Một bài kiểm tra mới **phải được thử bằng một ví dụ nó phải bắt** trước khi tin là nó
+đang việc. Ở đây cả ba ví dụ đều có sẵn trong tập đang làm; chỉ cần đưa chúng vào một bảng kiểm
+(`check_labels.py --selftest`) để lần sau không phải đoán. Và chuỗi rỗng là một loại dữ liệu đáng ngờ:
+một cột trong bảng dữ liệu mà lúc nào cũng rỗng là dấu hiệu nó **chưa từng được dùng** — và mã đọc nó
+mà không hỏi.
+
+---
+
+## N31 — high — Phim vẽ ra con số mà giọng kể không đọc, và luật của chính tập không ai canh
+
+**Bằng chứng.** `research/FACTS.md` của tập 01 viết ngay đầu file:
+
+> "Mọi con số phim đưa lên màn hình đều có nguồn ở đây. **Giọng kể đọc chúng**; hình đặt chúng vào vật."
+
+Nhưng trên màn hình có ba con số mà lời kể không đọc:
+
+| Nhãn | Ở câu | Lời kể ở câu đó |
+|---|---|---|
+| `288 g` | c34 | "Hai cái kim lệch nhau." — không có con số nào |
+| `88 g` | c34 | như trên |
+| `50 %` | c46 | "…không khí ẩm chín mươi phần trăm…" — hình vẽ 50 % |
+
+Hai cái đầu là con số trên hai cái cân mà phim nói chung chung ("đo được: hai cái cân"); cái thứ ba là
+mặt đồng hồ độ ẩm vẽ 50 % trong khi câu kể đang nói về 90 %. Đây đúng là loại lỗi người chấm hình đã báo
+ở c41 ("mặt đồng hồ độ ẩm in hai thang số chồng lên nhau"), và nó **lọt qua cả cổng storyboard lẫn cổng
+hình** vì không có máy nào đọc mối quan hệ giữa *số trên nhãn* và *số trong lời*.
+
+Chỗ cụ thể (người chấm đã đoán đúng, nhưng phải tìm mới ra):
+
+| Tệp | Dòng | Cái gì được vẽ |
+|---|---|---|
+| `src/props.js` | 2058 | vạch `0 100 200 300 400` trên mặt cân |
+| `src/props.js` | 2067 | chữ **`MAX 400`** — người xem đọc "400 g" trong khi thẻ ghi `88 g` |
+| `src/props.js` | 2196–2205 | vạch và chữ `%`, `HUMIDITY` trên mặt ẩm kế |
+| `src/props.js` | 2225–2231 | **thang trong** `g/kg` của ẩm kế, chồng lên thang ngoài |
+| `src/film.js` | 197, 198, 208 | ba nhãn `288 g`, `88 g`, `50 %` |
+
+Cách sửa đúng luật của kênh: **con số không được nói thì đừng vẽ**. Câu c34 chỉ nói "hai cái kim lệch
+nhau", nên hình chỉ cần **hai kim chỉ khác nhau** — không cần biết chúng là bao nhiêu gam.
+
+**Đã sửa.** `check_labels.py` nay có hai phép kiểm: nhãn nằm đúng câu (từ N21) và **nhãn vẽ con số mà lời
+kể không đọc**. Cả cổng storyboard và cổng hình gọi nó, nên lỗi này bị chặn trước khi tốn một vòng chấm —
+đúng như N21. Trên tập 01 nó bắt đúng ba cái, không bắt nhầm.
+
+**Còn phải làm.** Kiểm mới chỉ nhìn bảng `CARDS` trong `src/film.js`. Những con số vẽ thẳng lên vật
+(mặt đồng hồ, thang đo, trục đồ thị) nằm trong `src/props.js` và **chưa** được kiểm. Cũng chưa có chiều
+ngược lại: một số lời kể có mà hình không có thì cổng `scenecheck` đã canh (N23).
+
+---
+
+## N32 — high — Phiên làm phim tốn thời gian vào việc đọc lại, không phải vào việc làm
+
+**Bằng chứng.** Đọc transcript của chính phiên đang làm (4.930 sự kiện công cụ, 1.183 lần đọc tệp):
+
+| Tệp | Số lần đọc | Kích thước |
+|---|---|---|
+| `src/props.js` | **70** | 236 kB |
+| `src/set.js` | **64** | 68 kB |
+| `src/film.js` | **52** | 37 kB |
+
+186 lần đọc trọn ba tệp mã nguồn — khoảng 16 MB mã bị đọc lại đi đọc lại trong một phiên, để tìm **một chỗ
+sửa**. Đó là phần lớn chi phí của phiên: nó không phải chỗ làm phim tốn thời gian, mà là chỗ nó phải **tìm**.
+
+Cùng phiên đó còn:
+- **12 + 12 + 8 + 8 lần** chạy cùng một lệnh dò (`ls -l --time-style=+%H:%M:%S src/props.js; date`) — đúng
+  cái vòng dò mà R9 cấm: đợi tệp thay vì đợi người.
+- **37 lần** ghi file của dự án bằng shell (R1), trong đó có nhiều `python3 - <<'PY'` ghi thẳng vào
+  `src/film.js` và `LOOK.md`.
+- **20 lần** tự dựng montage ffmpeg thay vì dùng `core/render/sheet.py` (R10).
+- **16 lần** lệnh hỏng vì chạy ở sai thư mục: 11 lần `no such file or directory: channels/tram-nghi-nhieu/…`
+  và 5 lần `sed: can't read src/props.js` — phiên đó đang đứng ở thư mục tập trong khi lệnh viết theo
+  đường dẫn quanh thư viện. Luật "chạy mọi lệnh từ gốc thư viện" có trong skill, nhưng không có gì nhắc
+  khi nó bị lỡ.
+
+**Đã sửa.** `tools/supervise.sh` đếm số lần đọc mỗi tệp và báo **R11** khi một tệp bị đọc lại từ 15 lần
+trở lên; `CODING_STANDARDS.md` có R11: *đọc một đoạn, không đọc cả tệp, và không đọc lại cùng một tệp lớn
+hai lần cho một lần sửa* — grep tên rồi đọc `offset`/`limit`, và giữ một bản đồ mã (tên hàm → dòng) bên
+cạnh mã nguồn.
+
+**Vì sao điều đó tốn cả buổi.** Chia 21 giờ của phiên theo khoảng lặng giữa hai lệnh:
+
+| Khoảng lặng | Thời gian | Có nghĩa là gì |
+|---|---|---|
+| < 10 s | 4,7 h (22 %) | máy đang trả lời |
+| 10–60 s | **10,2 h (49 %)** | **mô hình đang nghĩ giữa hai lệnh** |
+| 1–15 phút | 4,7 h (22 %) | người chấm đang chấm |
+| > 15 phút | 1,4 h (7 %) | chờ người chấm |
+
+Chờ người chấm — thứ mà người ta tưởng là chỗ tốn thời gian — chỉ chiếm **7 %**. Phần lớn buổi là mô
+hình **nghĩ**, và nó nghĩ chậm dần vì bối cảnh phình to: mỗi lần đọc lại ba tệp mã đẩy thêm hàng chục
+nghìn dòng vào cửa sổ ngữ cảnh, và mỗi lượt sau phải đọc lại cả cửa sổ ấy. Đọc lại mã không chỉ tốn
+token — nó **kéo dài mỗi lượt**, và đó là tiền thật, theo giờ.
+
+**Còn phải làm.** Bản đồ mã phải là một loại tệp trong quy trình của kênh (`src/MAP.md`), không phải một lời
+khuyên trong tài liệu; và cái cổng hình nên đọc bản đồ đó khi nó tìm chỗ sửa. Khi tệp vượt quá một ngàn
+dòng, mã nguồn nên được chia theo vai trò — đó là việc của tập sau, không phải của tập đang chạy.
+
+---
+
+## Kiểm chứng: tập 02 là lượt sản xuất đầu tiên chạy với các guard mới
+
+Tập 01 được làm **trong lúc** các guard này được viết, nên nó không chứng minh được điều gì. Tập 02
+("Vì sao điện thoại nóng lúc sạc?") là lượt đầu chạy với tất cả. Danh sách này là để người giám sát đọc
+từng dòng một, không phải để đọc lướt:
+
+| Guard | Cần thấy gì ở tập 02 | Nếu không thấy |
+|---|---|---|
+| `check_labels.py`: nhãn lệch câu | cổng dừng **trước** khi tốn một vòng chấm | nhãn vẫn lệch câu → kiểm tra không chạy, hoặc `CARDS` không đúng hình dạng |
+| `check_labels.py`: con số vẽ mà lời không nói | mọi con số trên nhãn có lời kể đọc, hoặc không vẽ con số đó | kiểm tra thứ hai chưa vào cổng |
+| `--selftest` của `check_labels.py` | chạy và xanh | một bài kiểm tra trả lời "có" cho mọi thứ (N30) |
+| `check_progress.py` | sau **mỗi** vòng chấm hình có bảng đối chiếu: đã sửa / còn mở / mới | vòng sau bắt đầu lại từ đầu (N26) |
+| `gate.py cut` | bản cắt đạo diễn viết **sau** lần sửa code cuối | một bản cắt cũ đóng tem cho code mới (N22) |
+| `--workers 2` trong `build.sh` | dựng không mất khung; cổng bàn giao không báo thiếu khung | khuôn dựng lại 4 worker (N28) |
+| Đồng hồ của cổng bàn giao | `core/render/review.sh` không treo, và "COULD NOT RUN" không bị đọc thành phán quyết | quay vòng vô hạn (N24) |
+| Đồng hồ của người chấm (`CRITIC_TIMEOUT`) | một vòng chấm kẹt thì thoát mã 2, không ăn tròn vòng | người chấm treo nuốt trần 5 vòng (N25) |
+| R11 (đếm số lần đọc lại) | `src/props.js` của tập 02 **không** bị đọc lại 15 lần trở lên | cùng cái tốn thời gian của tập 01 (N32) |
+| `src/MAP.md` | tồn tại sau bước 5 | tìm chỗ sửa bằng cách đọc lại cả tệp |
+
+Điều kiện để tập 02 được coi là **xác nhận**: cổng bàn giao thoát 0, và bảng trên không có dòng nào ở cột
+"Nếu không thấy".
+
+---
+
+## N33 — medium — Hai thước đo "phim có chuyển động" không đo cùng một thứ, và cái máy đo không thấy là cái người chấm thấy
+
+**Bằng chứng.** Cổng bàn giao đo `tools/check_motion.py` trên phim đã dựng: "có chuyển động" nghĩa là **một
+phần khung đổi**, sau khi bỏ cái trượt của camera (đối chiếu pha, dịch khung, rồi đếm phần pixel còn
+đổi). Người chấm hình đo bằng mắt: "**vật thể chính có cử động không**".
+
+Ở c37 của tập 01, hai thước đó cho hai câu trả lời khác nhau. Ảnh cho thấy một giọt nước **không nhìn
+thấy**: thẻ "1/2 TỐC ĐỘ" trỏ vào một vệt bầu dục mờ nằm đè lên chữ "KHÔNG CÓ GIÓ"; mốc đỏ nét đứt là
+một vòng tròn **xoay** — và chính cái vòng xoay đó làm thước đo của máy thấy "10,5 % khung đổi".
+
+Đo thử bằng công cụ mới (`beatsheet.mjs --motion`, hai khung trong cùng một câu, bỏ dịch camera):
+`c33` 0,117 · `c34` 0,107 · `c35` 0,029 · `c36` 0,100 · `c37` **0,155** · `c38` 0,036 — không câu nào
+"chết", trong khi người chấm nói c33/c34/c37/c50/c56 "mọi thứ đứng yên".
+
+**Nghĩa là gì.** Một cái vòng tròn nét đứt xoay đủ để một phim **trượt qua cổng chuyển động** mà câu
+chuyện vẫn đứng yên. Cổng bàn giao đo **khung hình**, người chấm đo **câu chuyện**. Không thể dùng thước
+đo của cổng thay cho mắt của người chấm — và cũng không nên dùng nó để kết luận "phim có chuyển động".
+
+**Đã sửa.** `beatsheet.mjs` có thêm `--motion`: chụp thêm một khung trong mỗi câu, bỏ dịch camera, và in
+`STILL` cho câu nào khung hình **không đổi chút nào** (ngưỡng 2 %, cùng ngưỡng của cổng bàn giao), kèm
+con số `motion` của từng câu trong `beats.json`. Nó **không phải phán quyết**: nó bắt được câu chết
+đúng, và nó không bắt được câu mà chỉ có một chi tiết trang trí đang động.
+
+**Còn phải làm.** Muốn đo "vật thể chính có cử động không" thì phải biết vật thể chính ở đâu trong khung —
+tức là cần **mốc nhịp** (`{type:'mark', kind:'beat', beat, t, d, xy}` trong `events.json`) mà kênh này
+chưa ghi. Có mốc thì `check_motion.py` dùng luôn được quy tắc "mỗi nhịp phải làm thay đổi phần khung của
+nó" — đó là thước đo gần với mắt của người chấm nhất mà máy có.
+
+---
+
 ## Đề xuất thứ tự xử lý
 
 | # | Việc | File cần sửa | Trạng thái |
@@ -563,6 +959,17 @@ nên không đổi gì; phim nào có cột thì đếm đúng những gì ngư�
 | 22 | Nhãn phải nằm ở câu gọi tên nó — kiểm bằng máy, trước khi tốn một vòng chấm (N21) | `channels/tram-nghi-nhieu/tools/check_labels.py`, `tools/review.sh`, `SKILL.md` | **xong** |
 | 23 | Bản cắt của đạo diễn phải viết sau lần sửa code cuối, không đóng tem cho code cũ (N22) | `channels/tram-nghi-nhieu/tools/gate.py`, `tools/review.sh` | **xong** |
 | 24 | Bài đếm con số đếm trên cột viết, không phải cột nói (N23) | `core/render/scenecheck.mjs` | **xong** |
+| 25 | Cổng bàn giao không quay vòng vô hạn khi đường dẫn phim viết tương đối (N24) | `core/render/review.sh` | **xong** |
+| 26 | Mỗi bước của cổng có đồng hồ, và hết giờ thì nói "không chạy được" chứ không nói "phim hỏng" (N25) | `core/render/review.sh` | **xong** (cổng của kênh: chưa) |
+| 27 | Mỗi vòng chấm hình nói ra nó đã sửa gì và cái gì còn mở (N26) | `channels/tram-nghi-nhieu/tools/check_progress.py`, `tools/review.sh`, `SKILL.md` | **xong** |
+| 27 | Người giám sát chọn đúng phiên: hai đường dẫn phải đo từ cùng một gốc (N27) | `tools/supervise.sh` | **xong** |
+| 28 | Khuôn dựng tập mới không dùng 4 worker ở ss=2 — phim mất khung trong im lặng (N28) | `core/render/new_episode.sh`, `films/host-toon-test/build.sh` | **xong** |
+| 29 | Bài kiểm tra dàn ý hỏi kênh thay vì tự đoán hình dạng (N29) | `tools/check_treatment.py`, `channels/tram-nghi-nhieu/` | **chưa** (bài kiểm tra chưa chạy cho kênh này) |
+| 30 | Số khung thật của phim phải bằng số khung phải có — để một lượt dựng mất khung không lọt qua cổng | `core/render/review.sh` | **chưa** |
+| 32 | Một bài kiểm tra phải có ví dụ nó phải bắt, và chuỗi rỗng không được trả lời "có" cho mọi thứ (N30) | `channels/tram-nghi-nhieu/tools/check_labels.py` | **xong** (chưa có `--selftest`) |
+| 33 | Con số trên nhãn phải có lời kể đọc — luật của chính FACTS.md, nay do máy canh (N31) | `channels/tram-nghi-nhieu/tools/check_labels.py`, `tools/review.sh` | **xong** (chưa nhìn `src/props.js`) |
+| 34 | Đếm số lần đọc lại cùng một tệp lớn: 186 lần đọc ba tệp mã là phần lớn chi phí của phiên (N32) | `tools/supervise.sh`, `CODING_STANDARDS.md` R11 | **xong** (chưa có `src/MAP.md`) |
+| 35 | Hai thước đo "phim có chuyển động" đo hai thứ khác nhau; thêm số đo theo từng câu trước khi dựng (N33) | `channels/tram-nghi-nhieu/tools/beatsheet.mjs` | **xong** (chưa có mốc nhịp `xy` trong `events.json`) |
 
 ### Mỗi phát hiện đã có dòng riêng trong `improvements/lessons.md`
 
@@ -581,13 +988,23 @@ nên không đổi gì; phim nào có cột thì đếm đúng những gì ngư�
 
 ## Mục chưa xử lý
 
-- **[ ]** Chưa có phim: `out/` còn rỗng. Bản chấm cả phim **vòng 1/5 đã REJECT** (`review/REVIEW-1.md`): 5 câu
-  FAIL về khung hình (#23, #37, #40, #57, #60), 14 cờ SAME chưa xử lý, cờ RUN ở #22, và nhóm lỗi "nhãn gán
-  sai beat" (N21 — nay có cổng máy chặn trước). Phiên đang sửa `src/props.js` và `src/set.js`.
+- **[~]** Chưa có phim: `out/` còn rỗng. Bản chấm cả phim đã đi hai vòng (vòng 1 REJECT với 22 câu FAIL,
+  vòng 2 REJECT với **6 câu FAIL** — xem bảng đối chiếu ở N26); vòng 3 đang chạy. Những gì vòng 2 còn
+  mở: c30, c41, c44, c48, c53, c60 (c60 đã sửa trong bộ khung 06:37, c41 thì chưa: mặt đồng hồ độ ẩm vẫn
+  chồng hai thang số lên nhau).
 - **[x]** N10 (một phần): một phiên chấm mù chạy lại trên **cùng tập ảnh** đã làm — xem N20.
 - **[x]** `improvements/lessons.md` đã có dòng cho N1–N4 và N10 (xem bảng trên).
-- **[~]** `films/host-toon-test`: **nguyên nhân đã tìm ra và sửa** (N23 cho phần con số; nhãn "5 tháng" đã
-  lên khỏi dải phụ đề). Còn một việc: `.mp4` trong `films/host-toon-test/` **đã cũ hơn code** — phải dựng lại
-  khi GPU rảnh (một lượt dựng nặng trên máy này là chỗ hai phiên cùng làm thì bài kiểm tra chết).
+- **[~]** `films/host-toon-test`: `.mp4` **đã cũ hơn code** — nó được commit ở `d5af2ce`, còn `src/film.js`
+  sửa ở `c12ef95` (nhãn "5 tháng" chuyển khỏi dải phụ đề), nên phim trong repository vẫn còn nhãn cũ. Sửa
+  được, nhưng **cần dựng lại từ đầu**: các wav giọng đã xử lý (`voice/proc/*.wav`) bị `.gitignore` và
+  không còn trên máy, nên phải sinh lại giọng trước (edge-tts, mạng) rồi mới dựng (GPU). Chưa làm: GPU
+  đang bận cho hai tập của kênh, và việc này không chặn gì.
+- **[ ]** Bài kiểm tra dàn ý chưa hỏi kênh (N27): hôm nay vô hại, ngày nào bật lên thì một tập đúng
+  quy trình sẽ bị báo 16 lỗi giả.
+- **[ ]** Cổng của kênh gọi người chấm hình bằng `claude -p` mà **không có đồng hồ** (N25): một người
+  chấm treo là một vòng chấm không kết thúc, và trần 5 vòng thì bị nuốt hết. **[đã xong 09/11]** —
+  `channels/tram-nghi-nhieu/tools/review.sh` giờ đặt đồng hồ cho người chấm (`CRITIC_TIMEOUT`, mặc định
+  3600 s) và **thoát mã 2** khi bị giết, tức là "không chạy được", không phải phán quyết về phim.
 - **[ ]** Chưa có lượt sản xuất nào chạy với các guard mới (chặng đọc, vân tay nguồn, kiểm tra con trỏ, nhãn
-  đúng câu, bản cắt đúng code): lượt sản xuất kế tiếp (tập 02) là lần kiểm chứng đầu tiên của chúng.
+  đúng câu, bản cắt đúng code, đồng hồ của cổng, bảng đối chiếu vòng chấm): lượt sản xuất kế tiếp (tập 02)
+  là lần kiểm chứng đầu tiên của chúng.

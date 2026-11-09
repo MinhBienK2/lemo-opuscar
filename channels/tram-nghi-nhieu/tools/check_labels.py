@@ -96,7 +96,104 @@ def cards_of(film_js):
     return out
 
 
+def numbers_in(text):
+    """the figures a label draws: 288 g, 20 g/kg, 90 %, 1/2, 30 °C"""
+    out = []
+    for m in re.finditer(r'(\d+(?:[.,]\d+)?)\s*(?:/\s*(\d+))?', text):
+        try:
+            v = float(m.group(1).replace(',', '.'))
+        except ValueError:
+            continue
+        if m.group(2):                      # "1/2" is one half, not one
+            try:
+                v = v / float(m.group(2))
+            except (ValueError, ZeroDivisionError):
+                pass
+        out.append((v, m.group(0).strip()))
+    return out
+
+
+def said_numbers(text):
+    """the figures a line says, as the words the voice speaks"""
+    said = []
+    s = strip_accents(text).lower()
+    for m in re.finditer(r'\d+(?:[.,]\d+)?', s):
+        try:
+            said.append(float(m.group(0).replace(',', '.')))
+        except ValueError:
+            pass
+    words = re.findall(r'[a-z]+', s)
+    NUMW = ('khong', 'mot', 'hai', 'ba', 'bon', 'nam', 'sau', 'bay', 'tam', 'chin', 'muoi',
+            'tram', 'nghin', 'ngan', 'trieu', 'ty', 'ti', 'linh', 'le', 'ruoi', 'mot',
+            'nua', 'phan')
+    run = []
+    for w in words:
+        if w in NUMW:
+            run.append(w)
+        else:
+            if run:
+                said.append(' '.join(run))
+                run = []
+    if run:
+        said.append(' '.join(run))
+    return said
+
+
+def is_said(value, spoken, all_said):
+    """is this figure said? the words of the figure, or a fraction said as 'mot nua'"""
+    words = number_words(int(value)) if float(value).is_integer() else None
+    if words:
+        w = strip_accents(words)
+        for s in spoken:
+            # an empty line says nothing: '' is a substring of every word, so it would answer
+            # "said" for every figure in the film
+            if not s:
+                continue
+            ss = strip_accents(s).lower()
+            if w in ss or ss in w:
+                return True
+    # "mot nua" says a half
+    if abs(value - 0.5) < 1e-9:
+        for s in spoken:
+            ss = strip_accents(s).lower()
+            if 'mot nua' in ss or 'nua' in ss:
+                return True
+    return False
+
+
+def selftest():
+    """a check that answers "yes" to everything is not a check: prove it can still say "no".
+
+    Every case here is a real line of a real episode, so a change in the helpers that makes the
+    check pass everything shows up here instead of in a film.
+    """
+    cases = [
+        ('numbers_in("1/2 TỐC ĐỘ") có giá trị 0.5',
+         lambda: numbers_in('1/2 TỐC ĐỘ')[0][0] == 0.5),
+        ('một câu rỗng không được trả lời "đã nói"',
+         lambda: not is_said(288, [''], [''])),
+        ('"hai cái kim lệch nhau" không nói 288',
+         lambda: not is_said(288, ['hai cái kim lệch nhau'], ['hai cái kim lệch nhau'])),
+        ('"hai mươi gam" nói 20',
+         lambda: is_said(20, ['hai mươi gam'], ['hai mươi gam'])),
+        ('"một nửa" nói 1/2',
+         lambda: is_said(0.5, ['tốc độ bay hơi rơi còn một nửa'], ['tốc độ bay hơi rơi còn một nửa'])),
+        ('"ba mươi độ" nói 30',
+         lambda: is_said(30, ['ba mươi độ thì hơi nước lan xa hơn'], ['ba mươi độ thì hơi nước lan xa hơn'])),
+    ]
+    bad = [name for name, ok in cases if not ok()]
+    for name, ok in cases:
+        print(f'  {"ok  " if ok() else "FAIL"} {name}')
+    if bad:
+        print(f'check_labels --selftest: {len(bad)}/{len(cases)} FAIL')
+        return 1
+    print(f'check_labels --selftest: {len(cases)}/{len(cases)} ok')
+    return 0
+
+
 def main():
+    if len(sys.argv) > 1 and sys.argv[1] == '--selftest':
+        return selftest()
     if len(sys.argv) < 2:
         print('usage: check_labels.py <episode>', file=sys.stderr)
         return 2
@@ -145,11 +242,29 @@ def main():
 
     if not bad:
         print('check_labels: mọi nhãn nằm đúng câu')
-        return 0
-    print(f'check_labels: {len(bad)} nhãn nằm lệch câu')
-    for text, first, naming, said in bad:
-        print(f'  "{text}" gắn từ câu {first}; câu gọi tên nó là câu {naming}: "{said}"')
-    return 1
+    else:
+        print(f'check_labels: {len(bad)} nhãn nằm lệch câu')
+        for text, first, naming, said in bad:
+            print(f'  "{text}" gắn từ câu {first}; câu gọi tên nó là câu {naming}: "{said}"')
+
+    # a figure drawn on a label that the voice never says: the viewer reads a number the story never
+    # explains. The other way round (a number said but not drawn) is the machine's NUM flag; this is
+    # the same mistake the other way round.
+    spoken_all = [strip_accents(t).lower() for t in texts]
+    spoken_all += [strip_accents(str(l.get('say') or '')).lower() for l in lines]
+    silent = []
+    for text, lines_ids in cards:
+        for value, raw in numbers_in(text):
+            if is_said(value, spoken_all, spoken_all):
+                continue
+            silent.append((text, raw))
+            break
+    if silent:
+        print(f'check_labels: {len(silent)} nhãn vẽ con số mà phim không nói')
+        for text, raw in silent:
+            print(f'  "{text}" — con số {raw} không có trong lời kể')
+        return 1
+    return 0 if not bad else 1
 
 
 if __name__ == '__main__':

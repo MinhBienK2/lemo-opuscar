@@ -295,7 +295,10 @@ if [ ! -f "$HERE/voice/proc/dur.json" ]; then
   exit 1
 fi
 FILM=$HERE "$LIB/.venv/bin/python" "$CHANNEL/mix.py"
-node core/render/video.mjs "$HERE" --workers 4 --out "$OUT/video.mp4"
+# two workers, not four: at ss=2 (3840×2160) four browsers overrun the 6 GB of a small GPU, the
+# browser dies mid-film, ffmpeg closes the segment — and the film loses frames in silence.
+# A machine with more VRAM can raise this; a machine with less should lower it.
+node core/render/video.mjs "$HERE" --workers 2 --out "$OUT/video.mp4"
 node --input-type=module -e "
 import fs from 'fs'; const { build } = await import('$HERE/src/timeline.js');
 const r = p => JSON.parse(fs.readFileSync('$HERE/' + p)); const T = build(r('voice/proc/dur.json'), r('voice/words.json'), r('voice/lips.json'));

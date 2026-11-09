@@ -154,6 +154,12 @@ export function film({ fov = 36, near = .02, far = 40 } = {}) {
 // Screen position of a world point.
 export function toScreen(p, camera) { const v = p.clone().project(camera); return [(v.x * .5 + .5) * W, (1 - (v.y * .5 + .5)) * H]; }
 
+// A beat mark: where the story acts, and for how long. `tools/check_motion.py` reads these to ask the one
+// question the pixel count cannot: does the beat change the part of the frame where it happens? Without them
+// the gate can only measure the film in general (something moves somewhere), never the beat that stands still.
+// `xy` is the point in the 1920×1080 frame (use toScreen for a world point).
+export function markBeat(ev, id, t, d, xy) { ev('mark', t, { kind: 'beat', beat: id, d, xy }); }
+
 // A term label: cream card, ink border and drop, red Be Vietnam Pro 900, a pointer toward (px, py).
 // Pops in with overshoot over `t0..t0+.35`, shrinks out over `t1-.2..t1`. Returns its box for TEXTS (or null mid-pop).
 export function label(g, text, x, y, t, t0, t1, { id = text, size = 54, color = PAL.red, tilt = -.05 } = {}) {

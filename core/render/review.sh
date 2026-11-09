@@ -24,16 +24,29 @@ TMP=$(mktemp -d)
 trap 'rm -rf "$TMP"' EXIT
 FAIL=0
 
+# A step that never finishes says nothing about the film, and it looks exactly like a step that is working hard.
+# So every step gets a wall clock: past it, the step is killed and reported as "could not run", not as a verdict.
+# REVIEW_TIMEOUT=<seconds> raises or lowers the clock for one run (the GPU steps are the slow ones).
+STEP_TIMEOUT=${REVIEW_TIMEOUT:-3600}
+have_timeout=0
+command -v timeout >/dev/null 2>&1 && have_timeout=1
+
 run() {   # run a step, keep going when it fails
   NAME=$1; shift
   echo "--- $NAME"
+  if [ "$have_timeout" -eq 1 ]; then
+    set -- timeout -k 30 "$STEP_TIMEOUT" "$@"
+  fi
   if "$@"; then
     echo "    ok"
   else
     RC=$?
     # exit 2 is the check's own "I could not run" — a crash or a film edited under the check.
     # It is not a verdict about the film, and saying so stops the reader from chasing a defect that is not there.
-    if [ "$RC" -eq 2 ]; then echo "    COULD NOT RUN (exit 2) — not a verdict about the film"; else echo "    FAILED"; fi
+    # 124 is timeout's own "the clock ran out" — the same thing said in another voice.
+    if [ "$RC" -eq 2 ]; then echo "    COULD NOT RUN (exit 2) — not a verdict about the film"
+    elif [ "$RC" -eq 124 ]; then echo "    COULD NOT RUN (no answer in ${STEP_TIMEOUT}s) — not a verdict about the film"
+    else echo "    FAILED"; fi
     FAIL=$((FAIL + 1))
   fi
 }
@@ -69,7 +82,9 @@ case "$FOLDER" in */films/*|films/*|*/channels/*|channels/*) BAND="--band 880";;
 # the rule the gate keeps. It also says how the reading check must draw: a channel that draws at 2× on a small
 # GPU loses the browser halfway through the film, and the check that never finished says nothing about the film.
 NUMOPT=""; QOPT=""
-_d=$FOLDER; while [ ! -f "$_d/CHANNEL.md" ] && [ "$_d" != / ]; do _d=$(dirname "$_d"); done
+# The walk starts inside the folder, so the path it compares is absolute: a relative folder turns into "." and
+# dirname(".") is "." forever, and the gate then spins without printing a line until it is killed.
+_d=$(cd "$FOLDER" 2>/dev/null && while [ ! -f CHANNEL.md ] && [ "$PWD" != / ]; do cd ..; done && pwd)
 if [ -f "$_d/CHANNEL.md" ] && [ -f "$_d/scene_rules.json" ]; then
   N=$(python3 -c "import json,sys;print(json.load(open(sys.argv[1])).get('numbersPer20s',''))" "$_d/scene_rules.json" 2>/dev/null || true)
   [ -n "$N" ] && NUMOPT="--numbers-per-20s $N"
@@ -265,6 +280,45 @@ PY
     BAD*) echo "    FAILED: $RT"; FAIL=$((FAIL + 1)) ;;
     ok*) echo "    $RT" ;;
     *) echo "    $RT" ;;
+  esac
+
+  # the frames the movie really has. A render that lost frames keeps its length (the audio carries on)
+  # and its metadata, so nothing else says so: only the frame count does.
+  echo "--- frames: the movie against the film"
+  FR=$("$PY" - "$FOLDER/events.json" "$MP4" <<'PY'
+import json, os, subprocess, sys
+try:
+    dur = float(json.load(open(sys.argv[1], encoding="utf-8")).get("dur") or 0)
+except Exception:
+    dur = 0
+if dur <= 0:
+    print("SKIP the film has no duration in events.json")
+    sys.exit(0)
+try:
+    out = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "v:0", "-count_frames",
+                          "-show_entries", "stream=nb_read_frames,r_frame_rate", "-of", "json",
+                          sys.argv[2]], capture_output=True, text=True, timeout=300).stdout
+    st = json.loads(out)["streams"][0]
+    have = int(st["nb_read_frames"]); num, den = (st["r_frame_rate"].split("/") + ["1"])[:2]
+except Exception:
+    print("SKIP ffprobe could not count the frames")
+    sys.exit(0)
+fps = float(num) / float(den or 1)
+want = round(dur * fps)
+if want <= 0:
+    print("SKIP the film's length and the movie's fps do not give a frame count")
+    sys.exit(0)
+missing = want - have
+if missing <= max(3, round(want * 0.01)):
+    print(f"ok {have} frames, the film asks for {want} ({dur:.1f}s at {fps:g} fps)")
+else:
+    print(f"BAD the movie has {have} frames but the film asks for {want} — {missing} frames are missing "
+          f"(a render that died mid-film leaves the audio running over the last frame)")
+PY
+)
+  case "$FR" in
+    BAD*) echo "    FAILED: $FR"; FAIL=$((FAIL + 1)) ;;
+    *) echo "    $FR" ;;
   esac
 
   # a film directed from a board must move: actions over time, not props switched on

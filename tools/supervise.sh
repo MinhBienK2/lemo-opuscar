@@ -68,9 +68,12 @@ trap 'rm -rf "$LOCK" "$GATE" "$TOOLS" "$RULES"' EXIT
 # --- 1. the session that is running -------------------------------------------------
 # The film under production comes first: the session that writes its files is the one to supervise, and a
 # supervisor that watches itself is decoration.
-FILM=""
+FILM=${SUPERVISE_FILM:-}
 BEST=0
 # the films of the library: the discovery module is the one that knows where they are (films/ and channels/*/*)
+# SUPERVISE_FILM names the film to watch when more than one is under production — the discovery below
+# picks the one with the newest file, which is not always the one a supervisor is watching.
+if [ -z "$FILM" ]; then
 if ! FILMS=$("$NODE" "$LIB/core/render/films.mjs" --films); then
   echo "supervise: the discovery module could not list the films" >&2
   exit 1
@@ -83,6 +86,7 @@ for rel in $FILMS; do
   T=${T:-0}
   if [ "$T" -gt "$BEST" ]; then BEST=$T; FILM="$d"; fi
 done
+fi
 [ -n "$FILM" ] || { echo "supervise: no film under production"; exit 0; }
 FILM=${FILM%/}
 echo "supervise: film $(basename "$FILM")"
@@ -91,11 +95,26 @@ SESSION=${SUPERVISE_SESSION:-}
 if [ -z "$SESSION" ]; then
   # the session that wrote inside the film folder most recently
   SESSION=$(python3 - "$SESSIONS" "$FILM" "$LIB/tools/transcript.py" <<'PY'
-import glob, os, sys, time
+import glob, os, re, sys, time
 sessions, film, lib = sys.argv[1], sys.argv[2], sys.argv[3]
 sys.path.insert(0, os.path.dirname(os.path.abspath(lib)))
 import transcript
 now = time.time()
+# The sessions write their paths the way AGENTS.md tells them to: relative to the library root. The film
+# folder may be given absolute or relative. So both sides are measured from the same place before they
+# are compared — otherwise the comparison never matches, and the picker falls back to "the newest
+# session", which is how it came to watch the wrong one.
+LIB = os.path.abspath(lib)
+
+
+def norm(path):
+    try:
+        return os.path.relpath(os.path.abspath(path), LIB)
+    except ValueError:
+        return path
+
+
+film_rel = norm(film)
 
 
 def writes_film(path):
@@ -107,7 +126,7 @@ def writes_film(path):
             if tool not in ('write', 'edit'):
                 continue
             p = args.get('path', '')
-            if not p.startswith(film):
+            if not norm(p).startswith(film_rel):
                 continue
             if at > last:
                 last = at
@@ -120,14 +139,28 @@ files = []
 for d in sessions.split(':'):
     files += glob.glob(os.path.join(d, '*.jsonl'))
 files = sorted(files, key=os.path.getmtime, reverse=True)[:50]
+# the main session is the one the user talks to; a subagent gets its own transcript named
+# "<timestamp>_<uuid>.jsonl". The main session is the one to supervise.
+def is_subagent(path):
+    return bool(re.match(r'^\d{4}-\d{2}-\d{2}T[\d-]+_\S+\.jsonl$', os.path.basename(path)))
+
 best, best_at = '', ''
+fallback, fallback_at = '', ''
 for f in files:
     if now - os.path.getmtime(f) > 7200:
         continue
-    # the session that writes the film's own files is the one to supervise
     at = writes_film(f)
-    if at and at > best_at:
+    if not at:
+        continue
+    if is_subagent(f):
+        if at > fallback_at:
+            fallback_at, fallback = at, f
+        continue
+    # the session that writes the film's own files is the one to supervise
+    if at > best_at:
         best_at, best = at, f
+if not best:
+    best = fallback
 if not best:
     for f in files:
         if now - os.path.getmtime(f) < 7200:
@@ -254,9 +287,14 @@ def write_targets(cmd):
 r1_n = 0
 r1_files = {}
 r10_n = 0
+reread = {}          # how often a project file is read (R11)
 for at, tool, args in transcript.events(sys.argv[1]):
     cmd = " ".join((args.get("command", "") or "").split())   # one line: a heredoc must not spill into the report
     at = at[11:19] if 'T' in at else at
+    if tool == "read":
+        p = args.get("path", "")
+        if p and not p.startswith("/tmp/"):
+            reread[p] = reread.get(p, 0) + 1
     if tool == "bash":
         # a settle of a second after a kill is not a poll; a wait of half a minute is
         if re.search(r'(^|[;&|]\s*)sleep\s+([5-9]|\d{2,})', cmd):
@@ -310,6 +348,12 @@ if r1_n:
                f"Dùng `edit`, hoặc `python3 tools/replace.py` khi đoạn cần thay quá dài.")
 if r10_n:
     out.append(f"R10 {r10_n} lần — montage ffmpeg tự viết: `core/render/sheet.py` xếp các khung lại và đặt tên từng khung.")
+# R11: the same big file read again and again. The read is the cost: a 200 kB source file read to find one function
+# buys nothing, and a session that reads it fifteen times is paying for the same context over and over.
+for f, n in sorted(reread.items(), key=lambda kv: -kv[1]):
+    if n >= 15:
+        out.append(f"R11 {n} lần đọc lại {f} — đọc cả tệp để tìm một chỗ sửa: grep tên rồi đọc đoạn (`offset`, `limit`), "
+                   f"và giữ một bản đồ mã (tên hàm → dòng) bên cạnh mã nguồn.")
 print("\n".join(out[-40:] + polls))
 PY
 if [ -s "$RULES" ]; then

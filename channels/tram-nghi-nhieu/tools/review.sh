@@ -60,8 +60,22 @@ else
 fi
 command -v "$CLI" >/dev/null || die "the reviewer '$CLI' is not installed"
 CRITIC_ID="$CLI -p ${LEMO_CRITIC_MODEL:+--model $LEMO_CRITIC_MODEL}"; [ -n "$LEMO_CRITIC_MODEL" ] || CRITIC_ID="$CRITIC_ID(model mặc định của $CLI)"
+CRITIC_TIMEOUT=${CRITIC_TIMEOUT:-3600}   # how long the reviewer may think; a hung reviewer ends the round, it does not eat it
 critic() {   # $1 = the prompt; runs in the current folder, leaves the reviewer's answer in out.txt
-  "$CLI" -p ${LEMO_CRITIC_MODEL:+--model "$LEMO_CRITIC_MODEL"} --permission-mode acceptEdits "$1" < /dev/null > out.txt 2>&1 || true
+  # The reviewer gets a wall clock. A reviewer that hangs is a round that never ends, and the round limit is
+  # eaten by a round that never happened. A killed reviewer is not a verdict about the film: exit 2 says so.
+  if command -v timeout >/dev/null 2>&1; then
+    timeout -k 30 "$CRITIC_TIMEOUT" "$CLI" -p ${LEMO_CRITIC_MODEL:+--model "$LEMO_CRITIC_MODEL"} --permission-mode acceptEdits "$1" < /dev/null > out.txt 2>&1
+    rc=$?
+  else
+    "$CLI" -p ${LEMO_CRITIC_MODEL:+--model "$LEMO_CRITIC_MODEL"} --permission-mode acceptEdits "$1" < /dev/null > out.txt 2>&1
+    rc=0
+  fi
+  if [ "$rc" -eq 124 ]; then
+    echo "review: người chấm không trả lời trong ${CRITIC_TIMEOUT}s — đây không phải phán quyết về phim. Đọc lý do (out.txt), sửa nguyên nhân rồi chạy lại; CRITIC_TIMEOUT=<giây> nâng đồng hồ." >&2
+    exit 2
+  fi
+  return 0
 }
 get_prompt() {
   _step=$1
@@ -77,17 +91,37 @@ sign() { printf '\n---\nNgười chấm: %s · review.sh %s · %s\n' "$CRITIC_ID
 # next number of a report: next <prefix> → n for <prefix>n.md
 next() { n=$(ls "$EP/review" 2>/dev/null | grep -cE "^$1[0-9]+\.md$" || true); echo $((n + 1)); }
 # the flags still standing after the reviewer's "CỜ SAI": unflag <review> "<#n:A+B …>" "<flags it may clear>"
+# The reviewer releases a machine flag in two shapes, and both are read here:
+#   a heading "#17" then a line "CỜ SAI SAME: <why>", or
+#   a per-beat bullet "- [c17]: CỜ SAME → CỜ SAI (mức nhẹ): <why>".
+# A line that still says the flag is standing ("CÒN Ở", "VẪN CÒN", "CHƯA SỬA") releases nothing, and the
+# FLAGS_STATUS summary is not a release: only the per-beat lines are.
 unflag() {
   python3 - "$1" "$2" "$3" <<'PY'
 import re, sys
 text, flagged, may = open(sys.argv[1], encoding='utf-8').read(), sys.argv[2].split(), set(sys.argv[3].split())
-cleared, n = {}, None
+NAMES = r'DARK|SAME|RUN|NUM'
+cleared, hn, bn = {}, None, None
 for ln in text.split('\n'):
-    m = re.match(r'#(\d+)\b', ln.strip())
-    if m: n = int(m.group(1))
-    elif ln.startswith('## '): n = None
-    for c in re.finditer(r'CỜ SAI\s*:?\s*([A-Z][A-Z+, /]*)', ln):
-        if n is not None: cleared.setdefault(n, set()).update(re.findall(r'[A-Z]{3,}', c.group(1)))
+    s = ln.strip()
+    if s.startswith('## '):
+        hn = bn = None; continue
+    m = re.match(r'^#(\d+)\b', s)
+    if m: hn = int(m.group(1)); continue
+    bullet = bool(re.match(r'^(?:[-*]|\d+\.)\s', s))
+    m = re.match(r'^(?:[-*]\s*|\d+\.\s*)?\[c(\d+)\]\s*:', s, re.I)
+    if m: bn = int(m.group(1))
+    if not re.search(r'CỜ\s*SAI', s): continue
+    if re.search(r'CÒN\s*Ở|VẪN\s*CÒN|CHƯA\s*SỬA|ĐÃ\s*XỬ\s*LÝ', s, re.I): continue
+    n = bn if (bullet and bn is not None) else hn
+    if n is None: continue
+    names = set()
+    m = re.search(r'CỜ\s+(' + NAMES + r')\b[^→\n]{0,40}→\s*CỜ\s*SAI', s, re.I)
+    if m: names.add(m.group(1).upper())
+    else:
+        m = re.search(r'CỜ\s*SAI[^:\n]{0,40}?\b(' + NAMES + r')\b', s, re.I)
+        if m: names.add(m.group(1).upper())
+    if names: cleared.setdefault(n, set()).update(names)
 out = []
 for f in flagged:
     k, fl = f.lstrip('#').split(':')
@@ -259,7 +293,7 @@ if [ "$STORYBOARD" = 1 ]; then
   LAB=$(python3 "$CHANNEL/tools/check_labels.py" "$EP" 2>&1) || LRC=$?
   echo "$LAB"
   if [ "$LRC" = 1 ]; then
-    echo "review --storyboard: nhãn lệch câu — sửa \`lines\` của nhãn trong src/film.js (nhãn phải nằm ở câu gọi tên nó) rồi chạy lại" >&2
+    echo "review --storyboard: nhãn lệch câu, hoặc nhãn vẽ một con số mà lời kể không nói — sửa src/film.js (nhãn phải nằm ở câu gọi tên nó; mọi con số trên nhãn phải có lời kể đọc) rồi chạy lại" >&2
     exit 1
   fi
   # The director's cut ends the step: a written scope of what was cut, ending in VERDICT: PASS, stands for the
@@ -418,7 +452,7 @@ LRC=0
 LAB=$(python3 "$CHANNEL/tools/check_labels.py" "$EP" 2>&1) || LRC=$?
 echo "$LAB"
 if [ "$LRC" = 1 ]; then
-  echo "review: nhãn lệch câu — sửa \`lines\` của nhãn trong src/film.js rồi chạy lại" >&2
+  echo "review: nhãn lệch câu, hoặc nhãn vẽ một con số mà lời kể không nói — sửa src/film.js (nhãn phải nằm ở câu gọi tên nó; mọi con số trên nhãn phải có lời kể đọc) rồi chạy lại" >&2
   exit 1
 fi
 echo "review: beat frames…" >&2
@@ -482,6 +516,8 @@ MODE="(cả phim)"; [ -n "$LINES" ] && MODE="--lines $LINES"; [ -n "$CHID" ] && 
 [ "$VIDEO" = 1 ] && MODE="$MODE --video"
 sign "$MODE" R.md
 cp R.md "$EP/review/REVIEW-$SCOPE$n.md"; cp R.md "$EP/review/REVIEW.md"
+# what the last round fixed and what is still open: the next round must not start from zero
+python3 "$CHANNEL/tools/check_progress.py" "$EP" 2>/dev/null || true
 cat R.md
 if grep -qE '^#*[[:space:]]*VERDICT: *PASS' R.md && [ -z "$FLAGGED" ]; then
   # only a review of a chapter or of the whole film, before the render, opens the gate

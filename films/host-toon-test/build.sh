@@ -8,7 +8,9 @@ OUT=${OUT:-$HERE/out}; mkdir -p "$OUT"; OUT=$(cd "$OUT" && pwd); export LIB OUT
 cd "$LIB"
 node core/render/events.mjs "$HERE"
 "$LIB/.venv/bin/python" "$HERE/mix.py"
-node core/render/video.mjs "$HERE" --workers 4 --out "$OUT/video.mp4"
+# two workers, not four: at ss=2 (3840×2160) four browsers overrun the 6 GB of this machine's GPU,
+# the browser dies mid-film and ffmpeg closes the segment — the film then loses frames in silence
+node core/render/video.mjs "$HERE" --workers 2 --out "$OUT/video.mp4"
 node --input-type=module -e "
 import fs from 'fs'; const { build } = await import('$HERE/src/timeline.js');
 const r = p => JSON.parse(fs.readFileSync('$HERE/' + p)); const T = build(r('voice/proc/dur.json'), r('voice/words.json'), r('voice/lips.json'));

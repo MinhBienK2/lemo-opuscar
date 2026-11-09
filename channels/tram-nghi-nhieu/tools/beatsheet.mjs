@@ -21,6 +21,11 @@ import { openDemo, closeServer, requireDemo } from '../../../core/render/page.mj
 const args = process.argv.slice(2);
 const take = k => { const i = args.indexOf(k); return i >= 0 ? args.splice(i, 2)[1] : null; };
 const at = +(take('--at') ?? .6), q = take('--q') || '', linesArg = take('--lines'), dir = args[0];
+// --motion: a second frame inside every line, so the machine can say whether the picture acts while the voice
+// talks. Two frames of the same line with the camera shift taken out: a camera that drifts changes every pixel
+// while nothing in the room moves. The same measure the delivery gate makes on the finished film — here it costs
+// a second per line, there it costs a two-hour render.
+const motion = args.includes('--motion');
 let minLine = 1, maxLine = Infinity;
 if (linesArg) {
   const [a, b] = linesArg.split('-').map(Number);
@@ -53,7 +58,14 @@ for (const [i, l] of lines.entries()) {
   const shot = await page.evaluate(() => window.SHOT || null);
   const f = path.join(out, `b_${String(i + 1).padStart(3, '0')}.jpg`);
   await page.screenshot({ path: f, type: 'jpeg', quality: 80 });
-  beats.push({ n: i + 1, id: l.id, text: l.text, t0, t1: +(t0 + d).toFixed(2), t, f, shown, shot });
+  let mf = null;
+  if (motion) {
+    const t2 = +(t0 + d * .92).toFixed(2);
+    await page.evaluate(x => { window.SHOTPROBE = 1; window.render(x); }, t2);
+    mf = path.join(out, `m_${String(i + 1).padStart(3, '0')}.jpg`);
+    await page.screenshot({ path: mf, type: 'jpeg', quality: 80 });
+  }
+  beats.push({ n: i + 1, id: l.id, text: l.text, t0, t1: +(t0 + d).toFixed(2), t, f, mf, shown, shot });
 }
 await browser.close(); closeServer();
 fs.writeFileSync(path.join(out, 'beats.json'), JSON.stringify(beats, null, 1));
@@ -72,6 +84,27 @@ def says_number(s):
                 or re.search(r'\\bthứ\\s+' + NUMW + r'\\b', s) or re.search(r'\\bmột\\s+(?:phần|trăm|nghìn|ngàn|triệu|tỷ)\\b', s))
 from PIL import Image, ImageDraw, ImageFont
 out, font = sys.argv[1], sys.argv[2]
+# the camera shift between two frames (phase correlation), then what still changes once the shift is taken out
+def shift_of(a, b):
+    HY, HX = a.shape
+    A, B = np.fft.fft2(a - a.mean()), np.fft.fft2(b - b.mean())
+    R = A * np.conj(B); R /= np.abs(R) + 1e-9
+    c = np.fft.ifft2(R).real; y, x = np.unravel_index(np.argmax(c), c.shape)
+    return (y if y < HY / 2 else y - HY), (x if x < HX / 2 else x - HX)
+
+def motion_of(f1, f2):
+    A = np.asarray(Image.open(f1).convert('L').resize((192, 108)), dtype=float)[:86]
+    B = np.asarray(Image.open(f2).convert('L').resize((192, 108)), dtype=float)[:86]
+    if A.shape != B.shape: return 1.0
+    dy, dx = shift_of(A, B)
+    if abs(dy) > 27 or abs(dx) > 48: dy = dx = 0
+    if abs(dy) > .5 or abs(dx) > .5:
+        FY, FX = np.meshgrid(np.fft.fftfreq(A.shape[0]), np.fft.fftfreq(A.shape[1]), indexing='ij')
+        bb = np.fft.ifft2(np.fft.fft2(B) * np.exp(-2j * np.pi * (FY * dy + FX * dx))).real
+    else:
+        bb = B
+    # a pixel acts when it changes both ways: against the world under the camera and against the frame as it is
+    return float((np.minimum(np.abs(bb - A), np.abs(B - A)) > 6).mean())
 B = json.load(open(out + '/beats.json')); F = ImageFont.truetype(font, 22); Fs = ImageFont.truetype(font, 18)
 prev = None; run, pool = 0, set()
 for b in B:
@@ -102,7 +135,15 @@ for b in B:
     vals = [v for _, v in ((b.get('shot') or {}).get('cast') or [])]
     b['fill'] = vals[0] if vals else 0.0
     if says_number(b['text']) and not any(re.search(r'\\d|' + NUMW, x.lower()) for x in b.get('shown', [])): b['flags'].append('NUM')
+    # does the picture act inside this line? (needs --motion) the camera shift is taken out first, so a frame that
+    # only drifts does not count as motion. It is a note, not a machine flag: the maker judges the line by eye.
+    if b.get('mf'):
+        mv = motion_of(b['f'], b['mf'])
+        b['motion'] = round(mv, 4)
+        b['still'] = mv < .02
 json.dump(B, open(out + '/beats.json', 'w'), indent=1)
+still = [b['n'] for b in B if b.get('still')]
+if still: print(f"{len(still)}/{len(B)} lines have a picture that does not move (camera shift taken out): #{' #'.join(map(str, still))}")
 for b in B:
     if b['flags']: print(f"#{b['n']} {b['id']}: {' '.join(b['flags'])}  — {b['text'][:70]}")
 thin = [b['n'] for b in B if b.get('fill', 0) < .15]
@@ -118,7 +159,8 @@ for s in range(0, len(B_draw), C * R):
         d.rectangle([x, y + H, x + W - 2, y + H + TX - 2], fill=(28, 28, 36))
         d.text((x + 8, y + H + 4), f"#{b['n']}  {b['id']}  {b.get('t0', '')}–{b.get('t1', '')} s", fill=(247, 189, 39), font=Fs)
         fill = b.get('fill', 0) or 0
-        d.text((x + W - 78, y + H + 4), f"fill {fill * 100:.0f}%", fill=(150, 152, 162) if fill >= .15 else (220, 40, 60), font=Fs)
+        note = f"fill {fill * 100:.0f}%" + ("  · STILL" if b.get('still') else "")
+        d.text((x + W - 78, y + H + 4), note, fill=(235, 150, 40) if b.get('still') else (150, 152, 162) if fill >= .15 else (220, 40, 60), font=Fs)
         if b['flags']:
             tag = ' '.join(b['flags']); tw = d.textlength(tag, font=F)
             d.rectangle([x + W - tw - 22, y + 8, x + W - 8, y + 40], fill=(220, 40, 60)); d.text((x + W - tw - 15, y + 10), tag, fill=(255, 255, 255), font=F)

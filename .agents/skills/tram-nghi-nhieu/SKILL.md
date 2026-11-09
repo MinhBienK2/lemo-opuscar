@@ -101,6 +101,7 @@ Trước khi dựng, đọc `improvements/lessons.md` ở gốc thư viện — 
 - **Đạo diễn thực hiện:** Đọc `step6-assembly/GUIDE.md`. Ghép linh kiện vào `src/film.js`, viết keyframes diễn hoạt theo từ `V.w()`. Chạy kiểm tra `beatsheet.mjs`.
 - **Review độc lập:** Dùng prompt `step6-assembly/PROMPT_CRITIC.md` thẩm định nhịp điệu, triệt tiêu các cờ `DARK`, `SAME`, `NUM`, `RUN`.
 - **Nhãn nằm đúng câu:** cổng chấm hình cũng chạy `tools/check_labels.py` — một nhãn lệch câu phải sửa trước khi dựng.
+- **Vòng này sửa được gì so với vòng trước:** sau mỗi vòng chấm hình, cổng in bảng đối chiếu (`tools/check_progress.py`): câu nào đã qua, câu nào **còn mở**, câu nào mới phát hiện, và điểm đi đâu. Sửa đúng những câu còn mở; đừng làm lại những câu đã qua. Nếu hai vòng liên tiếp không tiến, đó là lúc viết đạo diễn cắt.
 - **Vòng lặp:** Đạo diễn sửa lỗi diễn hoạt/ánh sáng cho tới khi `PASS`.
 
 ### Bước 7: Âm thanh, Mux & Nghiệm thu Tổng thể (Audio, Mux & Delivery)
