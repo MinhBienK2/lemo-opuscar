@@ -16,6 +16,11 @@ Luật ở đây là **mtime**: đọc lại một tệp mà tệp **không đ�
 gì, nên từ lần thứ ba trở đi thì chặn. Đọc lại sau khi vừa sửa tệp thì mtime đã đổi, nên vẫn
 được phép — đó là việc bình thường.
 
+Ngưỡng kích thước là **8 KB**, không phải 40 KB: những tệp bị đọc lại nhiều nhất trong các tập
+trước có cả tệp 14–23 KB (`src/film.js` của tập 04 là 23 KB, `src/props.js` 17 KB) — một ngưỡng
+40 KB đã bỏ sót chúng, và bỏ sót thì guard vô dụng đúng ở chỗ cần nó nhất. Dưới 8 KB thì một
+lần đọc rẻ đến mức lời nhắc "dùng grep" là vô nghĩa.
+
 Lời nhắc trong lời cảnh báo nói cách làm đúng: `grep -n "<tên hàm>" <tệp>` rồi đọc đúng đoạn
 (`offset`/`limit`), và giữ `src/MAP.md` bên cạnh mã.
 
@@ -30,7 +35,7 @@ import time
 STATE = os.path.join(os.environ.get('TMPDIR', '/tmp'), 'lemo-stale-reads.json')
 LIMIT = 3          # chặn từ lần đọc thứ 3 của cùng một tệp khi tệp không đổi
 WINDOW = 7200      # quên tệp đã đọc quá 2 giờ trước đó
-BIG = 40 * 1024    # tệp nhỏ hơn thì đọc cả cũng được
+BIG = 8 * 1024     # tệp nhỏ hơn thì đọc cả cũng được
 
 MESSAGE = (
     'Bạn đã đọc tệp %s %d lần mà tệp không đổi (mtime %s). Lần đọc thứ %d không mang tin mới gì, '
