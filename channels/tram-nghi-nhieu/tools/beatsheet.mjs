@@ -78,20 +78,23 @@ for (const [i, l] of lines.entries()) {
         if (x && x.id !== 'sub' && x.y0 < 870) o.add(x.text);
       return [...o];
     }, [t0, t0 + d]));
-    await clock(lineNum, page.evaluate(x => { window.SHOTPROBE = 1; window.render(x); }, t));
+    await clock(lineNum, page.evaluate(x => { window.SHOTPROBE = 1; window.LABELPROBE = 1; window.render(x); }, t));
     await present();
     const shot = await clock(lineNum, page.evaluate(() => window.SHOT || null));
+    // what each label's arrow points at (N78): a label that points at nothing is a label the viewer reads as
+    // "this thing" while the thing is not there
+    const labels = await clock(lineNum, page.evaluate(() => window.LABELHIT || []));
     const f = path.join(out, `b_${String(i + 1).padStart(3, '0')}.jpg`);
     await clock(lineNum, page.screenshot({ path: f, type: 'jpeg', quality: 80 }));
     let mf = null;
     if (motion) {
       const t2 = +(t0 + d * .92).toFixed(2);
-      await clock(lineNum, page.evaluate(x => { window.SHOTPROBE = 1; window.render(x); }, t2));
+      await clock(lineNum, page.evaluate(x => { window.SHOTPROBE = 1; window.LABELPROBE = 1; window.render(x); }, t2));
       await present();
       mf = path.join(out, `m_${String(i + 1).padStart(3, '0')}.jpg`);
       await clock(lineNum, page.screenshot({ path: mf, type: 'jpeg', quality: 80 }));
     }
-    beats.push({ n: i + 1, id: l.id, text: l.text, t0, t1: +(t0 + d).toFixed(2), t, f, mf, shown, shot });
+    beats.push({ n: i + 1, id: l.id, text: l.text, t0, t1: +(t0 + d).toFixed(2), t, f, mf, shown, shot, labels });
   } catch (e) {
     // a line that will not answer must say so, and must not take the rest of the sheet with it
     console.error(`beatsheet: line ${lineNum} (${l.id}) failed: ${e.message}`);
@@ -175,6 +178,9 @@ for b in B:
     # bằng 0. Tờ sheet đo độ trống của khung bằng 'cover'.
     b['cover'] = round(sum(vals), 4)
     if says_number(b['text']) and not any(re.search(r'\\d|' + NUMW, x.lower()) for x in b.get('shown', [])): b['flags'].append('NUM')
+    # PTR: a label's arrow ends on nothing (or on a room). The machine can see that the arrow hits no object;
+    # whether it should have hit this object is the maker's eye (N78).
+    if any(L.get('hit') is None or L.get('big') for L in (b.get('labels') or [])): b['flags'].append('PTR')
     # does the picture act inside this line? (needs --motion) the camera shift is taken out first, so a frame that
     # only drifts does not count as motion. It is a note, not a machine flag: the maker judges the line by eye.
     if b.get('mf'):

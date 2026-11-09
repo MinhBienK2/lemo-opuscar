@@ -102,11 +102,23 @@ export function film({ fov = 36, near = .02, far = 40 } = {}) {
 
   let texts = [];
   const probe = new THREE.Raycaster(); probe.layers.set(0);
+  // the helpers the probes share: what is visible, and how big each object is
+  const SZ = new Map(), size = x => SZ.get(x) ?? (SZ.set(x, new THREE.Box3().setFromObject(x).getSize(new THREE.Vector3()).length()), SZ.get(x));
+  const seen = x => { for (; x; x = x.parent) if (!x.visible) return false; return true; };
+  // the prop around a hit, not its parts: the largest group that is still prop-sized (≤ 1.2 m across);
+  // the room, the counter, the wall are not subjects
+  function labelTarget(hit, scene) {
+    if (!hit) return { name: null, big: false };
+    let top = hit;
+    while (top.parent && top.parent !== scene && size(top.parent) <= 1.2) top = top.parent;
+    return { name: top.name || top.uuid.slice(0, 8), big: size(top) > 1.2 };
+  }
   function frame(scene, o = {}) {
     const t = o.t ?? 0;
+    if (window.SHOTPROBE || window.LABELPROBE) { SZ.clear(); probeLabels = []; }
     if (window.SHOTPROBE) {   // for beatsheet: which things fill the frame (a 16×9 grid of rays, above the subtitle band)
-      camera.updateMatrixWorld(); const SZ = new Map(), size = x => SZ.get(x) ?? (SZ.set(x, new THREE.Box3().setFromObject(x).getSize(new THREE.Vector3()).length()), SZ.get(x));
-      const cov = new Map(), seen = x => { for (; x; x = x.parent) if (!x.visible) return false; return true; };
+      camera.updateMatrixWorld();
+      const cov = new Map();
       for (let j = 0; j < 9; j++) for (let i = 0; i < 16; i++) {
         probe.setFromCamera(new THREE.Vector2((i + .5) / 8 - 1, 1 - (j + .5) / 9 * 1.6), camera);
         const h = probe.intersectObjects(scene.children, true).find(k => seen(k.object));
@@ -144,7 +156,21 @@ export function film({ fov = 36, near = .02, far = 40 } = {}) {
     texts = o.overlay ? (o.overlay(ov, t) || []) : [];
     // the subtitle is not a text piece: its hold is set by the .srt, not by the film. A film that hands the subtitle
     // box back from its overlay would have every spoken line measured as a too-short text, so the rig drops it here.
-    texts = texts.filter(b => b && b.id !== 'sub');
+    texts = texts.filter(b => b.id !== 'sub' && b);
+    // The arrow of a label points at one exact point on the screen. "Does this label point at anything?" can only
+    // be answered by looking at that point — the label's own box says nothing (N78). The overlay has just drawn
+    // the labels, so their tips are known now.
+    if (window.LABELPROBE) {
+      const hits = [];
+      for (const L of probeLabels) {
+        const ndc = new THREE.Vector2((L.tip[0] / W) * 2 - 1, -((L.tip[1] / H) * 2 - 1));
+        probe.setFromCamera(ndc, camera);
+        const h = probe.intersectObjects(scene.children, true).find(k => seen(k.object));
+        const tg = labelTarget(h ? h.object : null, scene);
+        hits.push({ id: L.id, text: L.text, tip: L.tip.map(v => Math.round(v)), hit: tg.name, big: tg.big });
+      }
+      window.LABELHIT = hits;
+    }
     ovTex.needsUpdate = true; F.uOv.value = o.overlay ? 1 : 0;
     renderer.setRenderTarget(null); fin.render(renderer);
   }
@@ -174,6 +200,9 @@ export function toScreen(p, camera) { const v = p.clone().project(camera); retur
 // `xy` is the point in the 1920×1080 frame (use toScreen for a world point).
 export function markBeat(ev, id, t, d, xy) { ev('mark', t, { kind: 'beat', beat: id, d, xy }); }
 
+// the labels drawn in the current frame, with the point their arrow points at — read by window.LABELPROBE
+let probeLabels = [];
+
 // A term label: cream card, ink border and drop, red Be Vietnam Pro 900, a pointer toward (px, py).
 // Pops in with overshoot over `t0..t0+.35`, shrinks out over `t1-.2..t1`. Returns its box for TEXTS (or null mid-pop).
 export function label(g, text, x, y, t, t0, t1, { id = text, size = 54, color = PAL.red, tilt = -.05 } = {}) {
@@ -189,6 +218,12 @@ export function label(g, text, x, y, t, t0, t1, { id = text, size = 54, color = 
   g.fillRect(-bw / 2 + 33, bh / 2 - 9, 34, 8);
   g.fillStyle = color; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(text, 0, 4);
   g.restore();
+  if (window.LABELPROBE) {
+    // the tip of the arrow, in screen pixels: the arrow points down-left from the label, so its tip is the
+    // point the viewer reads as "this thing"
+    const Lx = -bw / 2 - 26, Ly = bh / 2 + 44, cs = Math.cos(tilt), sn = Math.sin(tilt);
+    probeLabels.push({ id, text, tip: [x + k * (Lx * cs - Ly * sn), y + k * (Lx * sn + Ly * cs)] });
+  }
   return k > .99 ? { id, text, x0: Math.round(x - bw / 2), y0: Math.round(y - bh / 2), x1: Math.round(x + bw / 2), y1: Math.round(y + bh / 2) } : null;
 }
 

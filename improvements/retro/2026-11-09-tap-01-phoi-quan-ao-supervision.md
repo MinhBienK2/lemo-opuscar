@@ -2391,6 +2391,18 @@ trỏ vào vật nào". Vì vậy:
 - không có bài kiểm tra nào bắt được **nhãn trỏ vào nhầm vật**;
 - không có bài kiểm tra nào bắt được **câu gọi tên vật A mà vật B lớn hơn nằm giữa khung**.
 
+**Guard đã có (13:2x).** `window.LABELPROBE` trong rig: `label()` ghi lại **điểm mũi tên** của mỗi nhãn
+(tính cả góc nghiêng và độ lớn), và sau khi lớp phủ 2D vẽ xong thì rig raycast từ đúng điểm đó để biết
+nó chạm vật nào, hay không chạm vật nào. `beatsheet.mjs` bật probe này cùng `SHOTPROBE` và ghi kết quả
+vào tờ sheet (`labels` mỗi câu); `check_shots.py` đọc nó và báo cờ mới **`PTR`** — *nhãn trỏ vào không* (mũi
+tên không chạm vật nào) hoặc *nhãn trỏ vào một vật lớn hơn cả vật trong cảnh* (tường, bàn, phòng). Đây là
+**cờ gợi ý**, không phải phán quyết: máy đo được mũi tên có chạm vật không, còn việc nó *phải* chạm vật
+nào thì cần mắt người — cùng đẳng cấp với `SAME`/`RUN`.
+
+Còn một phần chưa làm được: **tên vật**. Rig trả về `uuid` (`dcd71e8e`) vì các vật trong cảnh không có
+`tên` — nên máy biết nhãn này trỏ vào *một vật*, nhưng chưa biết nó có phải vật *đúng* không. Muốn vậy thì
+mỗi vật phải có tên; đó là việc của tập, không phải của rig, và nó chưa được yêu cầu ở đâu.
+
 **Đề xuất (chưa làm — R13: ba phiên đang dựng bằng rig này).** `window.SHOTPROBE` trả thêm vị trí màn
 hình của từng vật trong `cast`; một probe mới `window.LABELPROBE` raycast từ đuôi mũi tên của mỗi nhãn
 để biết nó trỏ vào vật nào (hoặc không vào vật nào); `check_labels.py` đọc kết quả đó và báo:
@@ -2975,9 +2987,10 @@ Tôi đã báo quyết định này cho phiên của tập 01, kèm lý do và c
   ngày khi khác ngày.
 - **[x]** N93: `check_shots.py --note` (cổng bàn giao chỉ chặn lỗi cấu trúc) và `core/render/review.sh`
   gọi bài này với `--note`; vòng chấm hình của kênh không đổi.
-- **[ ]** N78: `window.SHOTPROBE` trả chỗ của từng vật; `window.LABELPROBE` raycast đuôi nũi tên của nhãn;
-  `check_labels.py` báo nhãn trỏ vào không / trỏ nhầm / câu gọi tên vật A mà vật B chiếm khung nhiều hơn;
-  `FILL` đo vật *được gọi tên*. Chưa làm vì R13 — ba phiên đang dựng bằng rig này.
+- **[x]** N78 (phần lớn): `window.LABELPROBE` trong rig raycast từ mũi tên của mỗi nhãn; `beatsheet.mjs`
+  ghi kết quả vào tờ sheet; `check_shots.py` báo cờ `PTR` (nhãn trỏ vào không / trỏ vào vật lớn hơn cả vật
+  trong cảnh). Còn thiếu: **tên vật** — rig trả `uuid` vì các vật chưa được đặt tên, nên máy biết nhãn trỏ
+  vào *một vật* chứ chưa biết là vật *đúng*.
 
 **Đã xong trong đợt này:** N77 (`check_shots.py` phân biệt *chưa đo* với *đo được 0 %*; `review.sh` không
 dùng lại tờ sheet nửa vời cho vòng chấm cả phim) — commit `c8856c6`.

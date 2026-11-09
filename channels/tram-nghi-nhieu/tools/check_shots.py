@@ -31,6 +31,7 @@ NOTE = False       # --note: the machine's opinion is printed, but only what it 
 
 # mỗi cờ máy, nói thẳng cần làm gì — cùng giọng với những gì người chấm nói
 HINT = {
+    'PTR': 'nhãn trỏ vào không — mũi tên không chạm vật nào.',
     'DARK': 'vùng chính chìm trong bóng — thêm đèn điểm hoặc một vệt sáng nhỏ.',
     'SAME': 'khung này gần như y hệt câu trước — cho vật một hành động thật (vải rung, giọt trượt, cánh quạt quay, kim dịch chuyển), hoặc đổi hẳn bố cục; chỉ lia máy thì vật vẫn đứng yên.',
     'RUN': 'nhiều câu liên tiếp trên cùng một bộ đạo cụ — cho câu này một hình riêng (góc khác, cắt vào trong vật, so sánh hai vật).',
@@ -174,6 +175,17 @@ def problems(beat):
             out.append((f, HINT[f]))
     if not measured(beat):
         return out          # chưa được đo thì không kết luận gì
+    # PTR: the label's arrow points at nothing (or at a room). A label says "this thing" in words and
+    # points with an arrow; if the arrow ends on empty space, the viewer reads a pointing finger at nothing
+    # (N78). The machine can measure that the arrow hits no object; whether the object it *should* hit is the
+    # right one is a judgement, so this is a hint, not a verdict.
+    for L in (beat.get('labels') or []):
+        if L.get('hit') is None:
+            out.append(('PTR', 'nhãn "%s" trỏ vào không — mũi tên không chạm vật nào; người xem đọc một ngón tay '
+                               'chỉ vào chỗ trống' % str(L.get('text') or L.get('id') or '?')[:40]))
+        elif L.get('big'):
+            out.append(('PTR', 'nhãn "%s" trỏ vào một vật lớn hơn cả vật trong cảnh (tường, bàn, phòng) — mũi tên '
+                               'trỏ nhầm' % str(L.get('text') or L.get('id') or '?')[:40]))
     cover, _ = coverage(beat)
     if cover == 0:
         # Máy không thấy vật nào đủ lớn trong khung: cảnh cận trong một vật lớn, cảnh toàn cảnh, hay
