@@ -28,6 +28,10 @@ Dựa trên `COMPONENTS_SPEC.md` đã được duyệt ở Bước 4, lập trì
 2. **Ghi `src/MAP.md`**: một bảng ngắn "tên hàm → dòng" cho `props.js`, `set.js`, `film.js`. Tệp mã của tập
    này lớn hơn hai trăm kB; một lần đọc lại nó để tìm một chỗ sửa là mất hàng chục nghìn dòng ngữ cảnh, và
    tập sau sẽ phải trả giấy đó nhiều lần. Có bản đồ thì tìm chỗ sửa là một lệnh `grep`.
+   **Bản đồ mà không khớp mã thì tệ hơn không có bản đồ** — nó đưa người đọc tới nhầm chỗ, và người đọc
+   đã học được cách bỏ qua nó thì không đọc gì nữa. Kiểm bằng `python3 tools/check_map.py <tập>` (đối
+   chiếu số dòng trong tiêu đề và vị trí từng tên trong bảng với mã thật), và chạy lại **sau lần sửa code
+   cuối cùng** — tập 01 để bản đồ thối ngay khi được kiểm.
 3. Kiểm tra trực quan bằng công cụ propcheck chuyên biệt của kênh:
    `LEMO_ANGLE=vulkan node channels/tram-nghi-nhieu/tools/propcheck.mjs <tập>`
    (Công cụ này xuất ra ảnh xoay 3 phía của từng vật thể đứng riêng lẻ).

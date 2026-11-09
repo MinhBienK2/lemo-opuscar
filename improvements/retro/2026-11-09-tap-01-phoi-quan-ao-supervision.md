@@ -2245,7 +2245,7 @@ nguồn*. Nhưng bản đồ viết tay thối trong ba mươi phút, và một 
 tới chỗ khác — người đọc phải grep lại, tức là bản đồ tốn một lượt đọc mà không trả lại gì. R11 tự
 sinh ra vi phạm R11.
 
-**Guard đã có.** Chưa có. **Đề xuất:** `tools/check_map.py` đọc các dòng "tên → dòng" của
+**Guard đã có (12:55).** `tools/check_map.py` (mới) đọc các dòng "tên → dòng" của
 `src/MAP.md`, kiểm tra dòng đó còn chứa đúng tên, và báo lệch; `gate.py` chạy nó cho tập.
 
 ## N75 — medium — Số lần phá R1 bị đếm sai một bậc: 34 trong báo cáo, 376 trong transcript gốc
@@ -2872,7 +2872,9 @@ rõ*, và nói thẳng rằng máy không đo được chủ thể có đủ l�
   chạy dùng công cụ này.
 - **[ ]** N73: đồng hồ cho từng câu trong `beatsheet.mjs`, và `review.sh` bọc bước dựng tờ. Chưa làm vì
   R13 — phiên đang chạy chính công cụ này.
-- **[ ]** N74: `tools/check_map.py` + `gate.py`.
+- **[x]** N74: `tools/check_map.py` (mới, có selftest) đối chiếu bản đồ với mã; hướng dẫn của bước 5 gọi nó.
+  Chưa nối vào `gate.py`: một bản đồ thối không làm phim xấu hơn, nên nó là ghi chú chứ không phải
+  chặn — quyết định đó là của người dùng, xem phần "Còn lại".
 - **[ ]** N75: `tools/supervise.sh` đếm lệnh ghi file bằng cách nhắc tới đường dẫn dự án.
 - **[ ]** N76: `tools/supervise.sh` đếm lượt đọc `tasks/*.output`; R9 nói thêm về output của lệnh nền.
 - **[ ]** N81: `beatsheet.mjs` ghi tệp khoá theo tập; giết job bằng pid đọc từ tệp khoá, không `pkill`
