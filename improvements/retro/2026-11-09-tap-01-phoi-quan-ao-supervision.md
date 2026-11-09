@@ -4063,3 +4063,48 @@ không có cơ chế nào chặn. Và R10 nói rõ hơn cả: **thư viện đã
 
 Selftest 11 ca. Cơ chế này không bắt được *mọi* hình dạng dò (một vòng dò không kèm `date` thì lọt), và
 nó cố ý hẹp: chặn sau ba lần lặp, để một lệnh hợp lệ chạy hai lần vẫn qua.
+
+## N128 — medium — Bản chấm cuối nêu **tám** lỗi nhỏ, và bảy lỗi trong số đó không có luật nào giữ
+
+**Bằng chứng.** Vòng `--final` của tập 01 REJECT lúc 16:31 với một lỗi lớn (khối bóng ở c27, xem N125) và
+**bảy lỗi nhỏ** nữa. Tôi đã lần theo từng lỗi về nơi luật nên nằm, và tìm trong toàn bộ skill:
+
+| Lỗi trong phim | Nơi luật phải nằm | Trước đó |
+|---|---|---|
+| nhãn "KHÔNG CÓ GIÓ" bị mép trên khung cắt (0:22) | bước 6 (người làm) + mẫu người chấm | **không có** (chỉ có luật "chi tiết ở mép khung đọc bằng tai") |
+| "hai mươi" bị cắt đôi qua hai câu phụ đề (1:58) | bước 2 (người viết + người chấm) | **không có** — luật "số phải viết bằng chữ" không nói số không được chia làm hai |
+| cận sợi vải đọc ra như một tấm bìa phẳng có vân in (0:32–0:37) | bước 6 | **không có** |
+| mảng tường phẳng 45 % khung (0:12), vùng tối trống 35 % (0:27), trần trơn 60 % (0:68) | bước 6 | **không có** |
+| nhãn "CHỒNG LÊN NHAU" chỉ vào một cái áo treo cạnh cái khác (2:18) | bước 6 | có luật "mũi tên chỉ đúng điểm tiếp xúc" nhưng không nói "chỉ vào **tâm vật**, không chỉ vào mép vật tình cờ" |
+| hình kết là "hai cái bàn gỗ với bốn món quần áo trải trên đó", không phải "một cái áo úp còn ẩm trên sàn" như TREATMENT hứa (2:53) | bước 7 | **không có** — không nơi nào đòi đối chiếu hình kết với TREATMENT |
+| sợi vải cắt ngang mặt nước có màu nâu và dạng như cành khô (0:42) | bước 6 | **không có** |
+| một quầng sáng lõi cháy trắng trên dây phơi (c27) | bước 6 | **không có** |
+
+Một bản chấm nêu tám lỗi mà **bảy** lỗi không có luật nào giữ thì bản chấm đó sẽ bị lặp lại ở tập sau:
+người chấm sẽ nêu lại đúng những lỗi ấy, và người làm sẽ phải đoán lại từ đầu mỗi tập. Đây đúng là
+hình dạng N121 của câu chuyện phim: luật viết bằng văn xuôi ở đúng chỗ thì phiên giữ được, còn luật
+không có thì **không ai giữ**.
+
+**Đã làm.** Tám lỗi ấy nay là tám luật, mỗi luật ở **một** nơi:
+
+- `step2-script/GUIDE.md` + `PROMPT_CRITIC.md`: một số kèm đơn vị đứng trong một câu ("hai mươi" là một
+  cụm), và một cờ mới `SPLIT` cho người chấm.
+- `step6-assembly/GUIDE.md` + `PROMPT_CRITIC.md`: nhãn nằm trọn trong khung; mũi tên vào **tâm vật**;
+  cận cảnh phải đọc ra đặc trưng của vật (tắt tiếng có nói ra được không); không để vùng phẳng chiếm
+  gần nửa khung; không có điểm cháy trắng; vật phải trông đúng chất liệu của nó.
+- `step7-delivery/GUIDE.md`: hình kết phải là hình `TREATMENT.md` hứa — và luật này áp cho mọi nhát, không
+  riêng nhát cuối.
+
+**Cái đáng nói nhất: số bị cắt đôi là lỗi máy đo được.** "Hai mươi" nằm cuối câu này và "mươi" đầu câu
+kia là một hình dạng cụ thể trong `voice/lines.json` — không cần mắt người chấm, và lỗi ấy đã đi qua
+**năm vòng chấm** mà không ai bắt, vì cả năm vòng đều đọc lời kể theo câu, không ai đọc *qua ranh giới
+giữa hai câu*. Nay `tools/check_script.py` bắt nó, và ba ví dụ selftest giữ cho nó (cả câu đúng, cả
+trường hợp không có số bị chia). Đây là mẫu chung của cả N128: **lỗi người chấm nêu ra thường là lỗi
+máy đo được** — và mỗi lỗi như vậy nên có một cơ chế, không chỉ một dòng văn xuôi.
+
+**Chưa làm được.** Bảy lỗi còn lại vẫn là luật văn xuôi: "cận cảnh phải đọc ra đặc trưng", "vùng phẳng
+chiếm gần nửa khung", "hình kết phải khớp TREATMENT" — máy không đo được, vì chúng cần định nghĩa cái
+đẹp. Chúng đã vào mẫu người chấm (nơi người chấm đọc) và vào hướng dẫn người làm (nơi lỗi được ngăn từ
+đầu) — đó là mức chắc chắn cao nhất mà một luật văn xuôi có thể đạt. Nếu tập sau vẫn nêu lại những lỗi
+này thì phải nâng chúng thành cơ chế đo, chứ không nâng thêm lần nữa vào văn xuôi.
+
