@@ -88,24 +88,41 @@ CRITIC_ID="$CLI -p ${LEMO_CRITIC_MODEL:+--model $LEMO_CRITIC_MODEL}"; [ -n "$LEM
 CRITIC_TIMEOUT=${CRITIC_TIMEOUT:-3600}   # how long the reviewer may think; a hung reviewer ends the round, it does not eat it
 critic() {   # $1 = the prompt; $2 = "no-verdict" when the reviewer answers with a list, not with a verdict
   VERDICTLESS=${2:-}
+  # Every reviewer is told the same three facts: which round this is, where it works, and that everything it
+  # needs is here. Without them a reviewer that is unsure starts hunting across the machine — it read the
+  # harness, found another episode's review folder, and the round died of it (tap-05, 15:30).
+  PROMPT="$1
+---
+Bối cảnh vòng chấm: ${ROUND_LABEL:-vòng chấm này}. Bạn làm việc trong thư mục $PWD, và mọi thứ bạn cần đều nằm ở đây. Nếu thư mục này không có PREVIOUS.md thì đây là lần chấm đầu của phần này — đừng đi tìm bản chấm cũ ở nơi khác. Đừng đi tìm tệp khác trên máy này (find /, thư mục /tmp khác, thư mục của tập khác): bên ngoài đây không có gì thuộc về vòng chấm này, và bản chấm của tập khác không phải của tập này."
   # The reviewer gets a wall clock. A reviewer that hangs is a round that never ends, and the round limit is
   # eaten by a round that never happened. A killed reviewer is not a verdict about the film: exit 2 says so.
   # The reviewer runs with its permission checks OFF. It works in a folder of its own outside the repository and
   # writes only its own answer there — and a headless run has nobody to answer a permission prompt: every command
-  # comes back "This command requires approval", and the reviewer retries the same command until the wall clock
-  # kills it. That is three hours of a round that never happened (N100).
+  # comes back asking for permission, and the reviewer retries the same command until the wall clock kills it.
+  # That is three hours of a round that never happened (N100).
   if command -v timeout >/dev/null 2>&1; then
-    timeout -k 30 "$CRITIC_TIMEOUT" "$CLI" -p ${LEMO_CRITIC_MODEL:+--model "$LEMO_CRITIC_MODEL"} --dangerously-skip-permissions "$1" < /dev/null > out.txt 2>&1 &
+    timeout -k 30 "$CRITIC_TIMEOUT" "$CLI" -p ${LEMO_CRITIC_MODEL:+--model "$LEMO_CRITIC_MODEL"} --dangerously-skip-permissions "$PROMPT" < /dev/null > out.txt 2>&1 &
   else
-    "$CLI" -p ${LEMO_CRITIC_MODEL:+--model "$LEMO_CRITIC_MODEL"} --dangerously-skip-permissions "$1" < /dev/null > out.txt 2>&1 &
+    "$CLI" -p ${LEMO_CRITIC_MODEL:+--model "$LEMO_CRITIC_MODEL"} --dangerously-skip-permissions "$PROMPT" < /dev/null > out.txt 2>&1 &
   fi
   CPID=$!
   # The denial is not printed where the watchdog can see it: in `claude -p` the CLI prints only the final
-  # answer, and the words "This command requires approval" live in the session transcript. So the watchdog
-  # watches the transcript of the reviewer as well — the folder the CLI files it under is the working folder
-  # with its slashes turned into dashes.
+  # answer, and the words live in the session transcript. So the watchdog watches the transcript of the
+  # reviewer as well — the folder the CLI files it under is the working folder with its slashes turned into dashes.
   TDIR="$HOME/.claude/projects/$(printf '%s' "$PWD" | sed 's|/|-|g')"
-  denied() { grep -q "requires approval" out.txt 2>/dev/null || grep -rqs "requires approval" "$TDIR" 2>/dev/null; }
+  # The watchdog must not be fooled by what the reviewer merely *read*. A real denial stands at the head of
+  # a tool result ("…requires approval…"); a file the reviewer opened — the harness itself, a doc, a copy of
+  # review.sh left in /tmp — carries the same words further down, and matching them there kills a live
+  # reviewer: the round dies with a diagnosis about nothing (tap-05, 15:30). So the match is anchored at the
+  # head of the content, and the file that is hit is named, so a false positive is visible at once.
+  DENIED1="This command requires approval"
+  DENIED2="The Bash command contains multiple operations"
+  DENIED_WHERE=""
+  denied() {
+    DENIED_WHERE=$(grep -lE "(\"content\"|\"text\"):\s*\"[^\"]{0,40}($DENIED1|$DENIED2)" "$TDIR"/*.jsonl 2>/dev/null | head -1)
+    [ -n "$DENIED_WHERE" ] || DENIED_WHERE=$(grep -lE "^(Error: )?($DENIED1|$DENIED2)" out.txt 2>/dev/null | head -1)
+    [ -n "$DENIED_WHERE" ]
+  }
   # the watchdog: a reviewer that asks for permission has nobody to answer it, and it retries the same command
   # until the clock kills it. The watchdog names that in minutes instead of burning the round in hours.
   ( while kill -0 "$CPID" 2>/dev/null; do
@@ -117,7 +134,7 @@ critic() {   # $1 = the prompt; $2 = "no-verdict" when the reviewer answers with
   kill "$WPID" 2>/dev/null || true
   if denied; then
     echo "review: người chấm không chạy được lệnh nào (hỏi quyền mà không ai trả lời) — vòng chấm này không có kết quả, đây không phải phán quyết về phim." >&2
-    echo "review: đọc transcript của người chấm trong $TDIR để biết lệnh nào bị chặn, sửa nguyên nhân rồi chạy lại." >&2
+    echo "review: dấu vết nằm trong ${DENIED_WHERE:-$TDIR} — nếu đó là bản sao của chính review.sh thì đây chỉ là văn bản của công cụ, chứ không phải lệnh bị chặn; đọc transcript của người chấm trong $TDIR để biết lệnh nào bị chặn, sửa nguyên nhân rồi chạy lại." >&2
     exit 2
   fi
   if [ "$rc" -eq 124 ]; then
@@ -281,6 +298,7 @@ if [ "$OUTLINE" = 1 ]; then
     exit 1
   fi
   n=$(next OUTLINE-REVIEW-)
+  ROUND_LABEL="lần chấm thứ $n"
   if [ "$n" -gt 4 ]; then
     echo "review --outline: đã chấm 4 lần mà dàn ý vẫn chưa PASS. Dừng: báo người dùng các lỗi CHẶN còn lại của $EP/review/OUTLINE-REVIEW.md (câu hỏi có cần hẹp lại, đổi định dạng, dữ kiện nào thiếu nguồn) và hỏi hướng đi." >&2; exit 1
   fi
@@ -472,6 +490,7 @@ if [ "$STORYBOARD" = 1 ]; then
     echo "review --storyboard: PASS (đạo diễn cắt: $CUT)"; exit 0
   fi
   n=$(next STORYBOARD-REVIEW-)
+  ROUND_LABEL="lần chấm thứ $n"
   if [ "$n" -gt 5 ]; then
     echo "review --storyboard: đã chấm 5 lần mà khung hình vẫn chưa PASS. Dừng: báo người dùng các lỗi CHẶN còn lại của $EP/review/STORYBOARD-REVIEW.md, hoặc chốt bằng đạo diễn cắt (review/STORYBOARD-DIRECTORS-CUT.md, kết thúc bằng 'VERDICT: PASS' và nêu rõ nhát nào đã cắt) rồi chạy lại." >&2; exit 1
   fi
@@ -548,6 +567,7 @@ if [ "$SCRIPT" = 1 ]; then
   fi
   TAG=${CHID:+$CHID-}
   n=$(next "SCRIPT-REVIEW-$TAG")
+  ROUND_LABEL="lần chấm thứ $n${CHID:+ của chương $CHID}"
   if [ "$n" -gt 6 ]; then
     echo "review --script: đã chấm 6 lần ${CHID:+chương $CHID }mà lời vẫn chưa PASS. Dừng: báo người dùng các lỗi CHẶN còn lại của $EP/review/SCRIPT-REVIEW${CHID:+-$CHID}.md và hỏi hướng đi (bỏ ý, đổi câu hỏi, dữ kiện nào cần nguồn). Đừng chấm lần thứ bảy." >&2; exit 1
   fi
@@ -648,6 +668,7 @@ if [ "$FINAL" = 1 ]; then
     exit 1
   fi
   n=$(next "FINAL-QA-REVIEW-")
+  ROUND_LABEL="lần chấm nghiệm thu thứ $n"
   if [ "$n" -gt 3 ]; then
     echo "review --final: đã nghiệm thu 3 lượt mà phim vẫn chưa được nhận. Dừng: báo người dùng các lỗi còn lại trong $EP/review/FINAL-QA-REPORT.md và hỏi hướng đi." >&2; exit 1
   fi
@@ -733,6 +754,7 @@ if [ "$VIDEO" = 0 ] && [ -z "$LINES" ] && [ -f "$CUT" ] && grep -qE "$VPASS" "$C
   echo "review: PASS (đạo diễn cắt: $CUT)"; exit 0
 fi
 n=$(next "REVIEW-$SCOPE")
+ROUND_LABEL="lần chấm hình thứ $n"
 if [ "$n" -gt "$LIMIT" ]; then
   if [ "$SCOPE_NAME" = "một cảnh" ]; then
     echo "review: cảnh $LINES đã chấm $LIMIT lượt. Ghi vào LOOK.md câu nào còn FAIL và vì sao, rồi dựng cảnh sau; lần chấm chương (hay cả phim) sẽ bắt lại nó." >&2
