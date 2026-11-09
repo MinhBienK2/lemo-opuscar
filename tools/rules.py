@@ -11,6 +11,7 @@ The rules (R1–R5, R9–R12 of CODING_STANDARDS.md):
   R1  a project file written by the shell instead of by the file tool
   R3  every file staged on a dirty tree
   R5  a long job polled with `sleep`
+  R5b a background job whose output was sent to a file of its own, and that file read again and again
   R9  the same command five times over — a poll, not work
       (and reading a background job's output file over and over is the same poll in another shape)
   R10 a hand-rolled ffmpeg montage (the library has core/render/sheet.py)
@@ -33,7 +34,38 @@ import transcript  # noqa: E402  (the path is set above)
 REPO_FILE = r"[\w./-]+\.(?:md|js|mjs|py|json|sh|html|txt|css|yml|yaml|toml|mp4|srt)\b"
 # the output file of a background job: reading it again while the job runs is a poll (R9)
 JOB_OUT = re.compile(r"([\w.-]+\.output)\b")
+# the file a background job is told to write to: the harness already delivers that output, so sending it to
+# a file of one's own only means the session has to go and read that file — again and again (R5b)
+BG_LOG = re.compile(r">\s*([\w./-]+\.(?:log|txt|out))\b")
 SRC_EXT = r"\.(?:md|js|mjs|py|json|sh|html|txt|css|yml|yaml|toml)\b"
+
+
+def bglog_polls(session):
+    """R5b — a background job whose output was sent to a file of its own, and that file read over and over.
+
+    The harness delivers the output of a background job when the job ends. A session that also writes that
+    output to `/tmp/round.log` has made the harness's copy useless: the only way to see the round is to read
+    the file, and the file does not change while the round runs — so the session reads it, waits, reads it
+    again. Eight reads of one log in one round, and the reads become the work."""
+    cmds = []
+    bg = {}
+    for at, tool, args in transcript.events(session):
+        if tool != "bash":
+            continue
+        cmd = " ".join((args.get("command", "") or "").split())
+        cmds.append(cmd)
+        if args.get("background"):
+            for m in BG_LOG.finditer(cmd):
+                bg.setdefault(m.group(1), len(cmds) - 1)
+    out = []
+    for path, i0 in sorted(bg.items()):
+        reads = [c for c in cmds[i0 + 1:] if path in c and not re.search(r'>\s*' + re.escape(path), c)]
+        if len(reads) >= 3:
+            out.append(f"R5b {len(reads)} lần đọc lại tệp log của job nền {path} — job nền đã mang output về "
+                       f"cho harness rồi, nên đọc tệp này là đọc lại một thứ không đổi: chạy job nền mà KHÔNG "
+                       f"chuyển output ra tệp của riêng mình (`> {path}`), rồi đọc output đó **một lần**, lúc "
+                       f"harness báo xong.")
+    return out
 
 
 def _epoch(stamp):
@@ -377,6 +409,7 @@ def rules(session, film='', lib=''):
             out.append(f"R9 {len(reads)} lần đọc lại output của job nền {f} — đọc output của một job đang "
                        f"chạy là vòng dò, không phải việc: đợi job xong rồi đọc một lần (job dài thì để job "
                        f"tự in kết quả vào tệp, rồi đọc tệp đó một lần).")
+    out.extend(bglog_polls(session))
     # R12: the same frame looked at again and again. An image is a megabyte of context, so a session that opens one
     # frame twenty times pays for that picture twenty times; the sheet of twelve frames would have shown it once.
     # A frame that was rendered again in between is a different picture: looking at it again is work, not waste.
@@ -416,6 +449,19 @@ def _fake_transcript(path, commands):
             f.write(json.dumps({
                 "type": "assistant", "timestamp": f"2026-11-09T09:0{i}:00.000Z",
                 "message": {"content": [{"type": "tool_use", "name": "Bash", "input": {"command": cmd}}]},
+            }) + "\n")
+
+
+def _fake_bg_transcript(path, pairs):
+    """the same, but each command says whether it ran in the background (the harness's own flag)"""
+    with open(path, 'w', encoding='utf-8') as f:
+        for i, (cmd, bg) in enumerate(pairs):
+            inp = {"command": cmd}
+            if bg:
+                inp["run_in_background"] = True
+            f.write(json.dumps({
+                "type": "assistant", "timestamp": f"2026-11-09T09:{i:02d}:00.000Z",
+                "message": {"content": [{"type": "tool_use", "name": "Bash", "input": inp}]},
             }) + "\n")
 
 
@@ -474,6 +520,32 @@ def selftest():
         _fake_transcript(session, ['cat %s' % job] * 5)
         got = '\n'.join(rules(session))
         cases.append(('đọc lại output của job nền nhiều lần thì báo R9', 'R9 ' in got and 'job nền' in got, got, ''))
+
+        # a background job whose output was sent to a file of its own: the session then reads that file over
+        # and over, because the harness's copy of the output is empty (N103)
+        _fake_bg_transcript(session, [
+            ("sh channels/tram-nghi-nhieu/tools/review.sh <tập> --props > /tmp/round.log 2>&1", True),
+            ("tail -3 /tmp/round.log", False),
+            ("tail -25 /tmp/round.log", False),
+            ("cat /tmp/round.log | tail -5", False),
+        ])
+        got = '\n'.join(rules(session))
+        cases.append(('job nền chuyển output ra tệp riêng rồi đọc tệp đó nhiều lần thì báo R5b',
+                      'R5b ' in got and 'round.log' in got, got, ''))
+        _fake_bg_transcript(session, [
+            ("sh review.sh <tập> --props > /tmp/round.log 2>&1", True),
+            ("tail -3 /tmp/round.log", False),
+        ])
+        got = '\n'.join(rules(session))
+        cases.append(('đọc tệp log của job nền hai lần thì chưa báo R5b', 'R5b ' not in got, got, ''))
+        _fake_bg_transcript(session, [
+            ("sh review.sh <tập> --props", True),
+            ("tail -3 /tmp/round.log", False),
+            ("tail -3 /tmp/round.log", False),
+            ("tail -3 /tmp/round.log", False),
+        ])
+        got = '\n'.join(rules(session))
+        cases.append(('job nền không chuyển output ra tệp thì không báo R5b', 'R5b ' not in got, got, ''))
 
         # a script that only READS a source file is not a violation, and must not be reported as one
         _fake_transcript(session, ["python3 - <<'PY'\nimport re\ns=open('src/film.js',encoding='utf-8').read()\nprint(re.findall(r'x', s))\nPY"])

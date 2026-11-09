@@ -49,6 +49,8 @@ def _args(tool, args):
         a['intent'] = args['description']
     if isinstance(args.get('name'), str):
         a['name'] = args['name']
+    if isinstance(args.get('run_in_background'), bool):
+        a['background'] = args['run_in_background']
     return a
 
 
