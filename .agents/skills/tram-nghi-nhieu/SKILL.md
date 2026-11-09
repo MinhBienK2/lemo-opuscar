@@ -34,6 +34,10 @@ Quy trình này thay cho bước 1–6 của `AGENTS.md` / `DIRECTOR.md` khi là
    - Dùng `edit` / `write`. Khi đoạn thay quá dài để khớp chính xác, dùng
      `python3 tools/replace.py <file> <đoạn cũ> <đoạn mới>`: nó đếm số lần khớp, không khớp đúng một lần
      thì không ghi gì cả, và nó ghi nguyên tệp mới đè lên tệp cũ — tệp cũ không bao giờ bị nửa vời.
+   - Một tệp lớn cần **nhiều** sửa nhỏ (LOOK.md, `src/film.js`): đặt các sửa vào một tệp JSON
+     (`[{"old": "...", "new": "..."}]`) rồi chạy `python3 tools/replace.py <file> --batch <edits.json>`.
+     Mọi sửa phải khớp đúng số lần nêu trong nó, nếu không thì **không sửa gì cả**. Đừng tự viết script
+     python để sửa tệp của tập: script tự viết là đúng cái R1 cấm, và nó không để lại dấu vết đã sửa gì.
    - Heredoc của shell (`cat >> file <<EOF`) đã làm hỏng chữ tiếng Việt trong một tài liệu của phiên trước:
      shell ghi UTF-8 hỏng, không ai thấy ngay, và phải sửa lại bằng một lần ghi shell nữa.
 
