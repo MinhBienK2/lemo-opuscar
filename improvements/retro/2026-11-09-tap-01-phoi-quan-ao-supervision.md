@@ -1899,6 +1899,44 @@ mỗi câu mà công cụ in ra → nó nghĩa là gì → làm gì tiếp. Ba c
 
 ---
 
+## N69 — critical — Một kiểm tra hỏi sai câu giết đúng vòng chấm đã làm xong việc
+
+**Bằng chứng.** Phiên tập 02 báo: vòng chấm vật dựng không chạy được — mã 2, câu *"người chấm không
+trả lời (không có dòng VERDICT nào)"*. Nguyên nhân là của tôi: commit `4c1bfaf` thêm vào `critic()`
+một kiểm tra rất đúng — *"một vòng không có dòng VERDICT thì đó không phải phán quyết về phim"* — nhưng
+`critic()` phục vụ **mọi** pha của vòng chấm, trong đó có hai pha gọi tên mù trả lời bằng một **DANH SÁCH**
+tên vật. Chúng không bao giờ được hỏi câu phán quyết, nên câu trả lời đúng vẫn bị đọc thành *"không có
+câu trả lời"*.
+
+Tôi đo lại trên thư mục làm việc của chính phiên đó (`/tmp/lemo-review-Q4FryK`): `blind/BLIND.md` ghi
+đủ 19 vật (6 525 byte) và `blind/out.txt` in lại cả danh sách — người gọi tên **đã làm đúng việc**.
+Còn `blind2/out.txt` chỉ có 3 dòng cảnh báo của CLI (415 byte) và không có `BLIND2.md`: lần đoán thứ
+hai thật sự không trả lời, và **không có gì báo điều đó**.
+
+Hai vòng chấm hỏng, mỗi vòng 9 phút, đã mất. Ngân sách vòng không mất (không có `PROPS-REVIEW-*.md`
+nào được ghi, nên vòng kế tiếp vẫn là vòng 1) — nhưng thời gian thì có, và phiên đó bị chặn cửa.
+
+**Vì sao nó quan trọng.** Đây là dạng lỗi mà một guard tốt tạo ra. Tôi thêm một kiểm tra đúng để bắt
+một lỗi thật (một vòng không có phán quyết thì không được lưu thành một vòng đã chấm), rồi kiểm tra đó
+lan ra nơi nó không thuộc về. Một kiểm tra phải biết **câu nào được hỏi** ở từng pha: pha hỏi *"hãy
+phán"* thì câu trả lời phải có phán quyết; pha hỏi *"hãy gọi tên"* thì câu trả lời là danh sách. Một
+guard không biết sự khác biệt đó thì guard tự trở thành lỗi.
+
+**Đã sửa.** `critic()` nhận tham số `no-verdict` cho đúng hai pha đó: ở đó câu trả lời là chính danh
+sách — tệp người chấm viết ra, hoặc phần nó in ra — và cảnh báo của CLI (`unrecognized_model`,
+`connectors are disabled`) không phải câu trả lời. Lần đoán thứ hai là phép đo **bổ sung**: nếu nó
+không trả lời thì vòng đi tiếp với một lần đoán và in ra một dòng báo là thiếu, thay vì chết cả vòng
+vì một phép đo phụ. Lần gọi tên thứ nhất vẫn phải thành công: cả vòng chấm vật dựng đứng trên phép đo
+mù đó.
+
+Kèm ca selftest mới, `channels/tram-nghi-nhieu/tools/test_review_critic.py`: nó chạy `critic()`
+**thật** của `review.sh` — lấy ra từ tệp, không chép lại — với một người chấm giả, và kiểm sáu
+dạng: có phán quyết thì qua; danh sách ở pha phán quyết thì exit 2; im lặng thì exit 2; **danh sách ở
+pha `no-verdict` thì qua** (trên mã cũ là exit 2 — đúng cái lỗi phiên kia gặp); chỉ có cảnh báo của CLI
+thì exit 2; tệp người chấm viết ra thì tệp đó là câu trả lời.
+
+---
+
 ## Các guard đã bắt được gì (tính từ 08:00, hai tập còn chạy)
 
 Đây là bằng chứng rằng các guard không phải lý thuyết — mỗi cái đã bắt một lỗi thật, hoặc đã được một
@@ -1999,6 +2037,7 @@ tiền (trước vòng chấm, trước lúc dựng, trước lúc bàn giao), c
 | 66 | Luật R1 phải biết công cụ sửa file khỏi cách viết tay, và tính một tệp một lần (N66) | `tools/rules.py` | **xong** — 4 ca selftest (14/14). Đo lại tap-01: 369 lần ghi bằng shell = **344** lần script tự viết (297 `open(p,'w')`, 20 heredoc, 6 cp/mv, 3 sed -i) + **25** lần qua công cụ, nay báo riêng là `R1t`; `src/film.js` gộp lại `×167` thay vì `×90` và `×76` |
 | 67 | Đường đi an toàn phải là một lệnh (N67) | `tools/replace.py`, `CODING_STANDARDS.md` R1, `.agents/skills/tram-nghi-nhieu/SKILL.md` | **xong** — 4 ca selftest (9/9). `--batch -` đọc từ stdin, mỗi sửa tự nêu tệp: một lệnh sửa được nhiều tệp, mọi tệp được kiểm tra trước khi tệp nào bị ghi |
 | 68 | Công cụ của kênh phải có sổ tay (N68) | `channels/tram-nghi-nhieu/tools/README.md`, `channels/tram-nghi-nhieu/CHANNEL.md`, `.agents/skills/tram-nghi-nhieu/SKILL.md`, `.agents/skills/tram-nghi-nhieu/step6-assembly/GUIDE.md` | **xong** — sổ tay: lệnh của từng công cụ, thứ tự bước, ngân sách vòng, hợp đồng đạo diễn cắt, bảng "khi công cụ từ chối". Đo trước: **449** lệnh đọc mã công cụ, **350 nghìn token** (15 % output của phiên) |
+| 69 | Một kiểm tra hỏi sai câu giết đúng vòng chấm đã làm xong (N69) | `channels/tram-nghi-nhieu/tools/review.sh`, `channels/tram-nghi-nhieu/tools/test_review_critic.py` | **xong** — `critic()` biết pha nào hỏi phán quyết và pha nào hỏi danh sách; ca selftest chạy chính hàm đó với một người chấm giả (6 ca). Đo trên tap-02: hai vòng chấm vật dựng chết oan, mỗi vòng 9 phút; ngân sách vòng không mất |
 
 ### Mỗi phát hiện đã có dòng riêng trong `improvements/lessons.md`
 

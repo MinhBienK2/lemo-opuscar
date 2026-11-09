@@ -100,6 +100,8 @@ Dàn ý không có bản cắt: hết lượt thì báo người dùng các lỗ
 |---|---|---|
 | `đã có một vòng chấm … đang chạy` | một người chấm khác đang chạy trên phần đó | **Chờ.** Đọc bản chấm nó đã ghi trong `review/`. Đừng mở người chấm thứ hai. |
 | `người chấm không trả lời trong …` | người chấm bị treo, **không phải** phán quyết về phim | Đọc `out.txt` trong thư mục làm việc của vòng đó, sửa nguyên nhân, chạy lại. Vòng bị treo không mất lượt. |
+| `người chấm không trả lời (không có dòng VERDICT nào)` | vòng chấm không có phán quyết nào — người chấm đã không trả lời, **không phải** phán quyết về phim | Đọc `out.txt` trong thư mục làm việc của vòng đó (dòng cảnh báo của CLI như `unrecognized_model` không phải câu trả lời), sửa nguyên nhân rồi chạy lại. Vòng hỏng không mất lượt. |
+| `lần đoán thứ hai không trả lời` | phép đo bổ sung của vòng chấm vật dựng không có | Vòng đi tiếp với một lần đoán. Muốn có lần đoán thứ hai thì chạy lại `--props`. |
 | `đã chấm N lượt mà chưa PASS` | hết ngân sách của bước đó | Ba lối ra ở trên. **Đừng bàn giao như một phim đã đạt.** |
 | `bản cắt không còn nói về code hiện tại` | bản cắt viết trước lần sửa code cuối | Sửa code xong, viết lại bản cắt, chạy lại. |
 | `nhãn lệch câu, hoặc nhãn vẽ một con số mà lời kể không đọc` | `check_labels.py` bắt được | Sửa `src/film.js`: nhãn nằm ở câu gọi tên nó, mọi con số trên nhãn phải có lời kể đọc. |
