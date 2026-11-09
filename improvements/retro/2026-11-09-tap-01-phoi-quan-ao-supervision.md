@@ -2125,6 +2125,7 @@ tiền (trước vòng chấm, trước lúc dựng, trước lúc bàn giao), c
 | 78 | Đánh giá khách quan phim tập 01: cờ máy bắt được `SAME` và `FILL`, nhưng không bắt được điều quan trọng nhất — vật chính có phải là thứ câu đó đang gọi tên không (`fill` đo vật *lớn nhất*, không phải vật *được gọi tên*), vật có đang làm việc không, và tiền đề của cả phim có đọc được không ("áo ướt" nhìn như áo khô). 42 nhãn không có bài kiểm tra nào ghép được với vật trong khung, vì rig không trả về chỗ của vật | medium | **proposed** — `window.SHOTPROBE` trả thêm vị trí màn hình của từng vật, một `window.LABELPROBE` raycast đuôi mũi tên để biết nhãn trỏ vào vật nào, `check_labels.py` báo nhãn trỏ vào không / trỏ nhầm / câu gọi tên vật A mà vật B chiếm khung nhiều hơn; chưa làm vì R13 — ba phiên đang dựng bằng rig này |
 | 79 | Bảng trạng thái của cổng nói "script chưa có PASS" về một tập đã có tem của cả chương: `status` chỉ nhìn tem của cả tập, còn `check` thì biết tập dài được đóng tem theo từng chương — hai lệnh của cùng một công cụ trả lời khác nhau, và người làm phim mở thêm một vòng chấm cho một bước đã qua | medium | `gate.py status` dùng đúng `kind_ok()` cho hai loại tem theo chương (`script`, `picture`); selftest thêm hai ca: tem của chương tính là tem của tập, và cổng mở cho bước đó |
 | 80 | Danh sách cờ máy là một bức tường từng dòng, trong khi người làm phim sửa **đoạn** — 22 cờ SAME và 30 khung mỏng trong tập 01 phải tự đọc và tự gom, mỗi lần gom là một lần sửa code | medium | `check_shots.py` in thêm dòng tóm tắt theo từng loại cờ, gom các câu liền nhau (`c37–c40 (4 câu)`); selftest có ca cho việc này |
+| 81 | Máy đo "vật chính quá nhỏ" ở ba kiểu cảnh mà nó không nhìn thấy: cảnh cận trong một vật lớn, chủ thể là một nhóm vật, và cảnh toàn cảnh — trong 30 câu bị gọi là nhỏ ở tap-01 chỉ 11 câu là lỗi thật, 19 câu là máy mù; người làm phim đẩy máy sát vào vật để đẩy số lên là phim xấu đi vì lời của máy | high | `check_shots.py` đo **độ phủ** (tổng phần khung vật thật chiếm) thay cho vật lớn nhất: độ phủ < 15 % và khác 0 mới là lỗi, độ phủ = 0 thì máy in danh sách câu nó không nhìn thấy kèm "đừng đưa máy sát"; `beatsheet.mjs` in `cover` và tô màu theo độ phủ; selftest thêm bốn ca |
 
 ### Mỗi phát hiện đã có dòng riêng trong `improvements/lessons.md`
 
@@ -2204,20 +2205,27 @@ trình chiếu (hai `requestAnimationFrame`, hoặc dùng luôn đường `SHOTP
 `review.sh:764` lệnh này cũng không nằm trong `timeout` nào: `timeout` ở dòng 92 chỉ bọc **người
 chấm** (`claude -p`), không bọc bước dựng tờ.
 
-Lúc 10:47–10:54 lượt chạy viết được `b_001` … `b_020` rồi **dừng**; `b_021` … `b_060` vẫn mang mốc
-10:03; `beats.json` không được viết lại. Phiên tự tay giết job, chạy lại "có log", rồi viết một
-script dò riêng (`tmp-probe/probe_t01_mine.mjs`) để khoanh vùng câu nào treo — mười lăm phút, đến
-10:58 vẫn chưa xong.
+**Cập nhật 11:31 — và nó không treo; nó bị giết.** Hai lượt chạy đầu (10:47 và 11:00) viết được
+`b_001` … `b_020` rồi bị phiên tự tay giết (`pkill -f beatsheet.mjs` lúc 10:53:45, 10:54:28 và
+11:00:44); `b_021` … `b_060` giữ mốc cũ 10:03 và `beats.json` không được viết lại. Lượt chạy thứ ba
+(bắt đầu 11:02:41, `timeout 3000`) **đã xong lúc 11:21:32**: 60 khung + 5 tờ sheet. Tốc độ đo được
+~20 giây một khung, tức một lượt chạy mất **~19 phút** — và trong 19 phút đó `beatsheet.mjs` **không
+in gì cả**, vì nó chỉ in ở cuối.
 
 **Vì sao quan trọng.** Cổng hình là cổng cuối cùng trước khi dựng, và công cụ làm ra những tấm ảnh
-mà người chấm sẽ phán. Nó **không thể thất bại — chỉ có thể treo**. Không đồng hồ, không log, không mã
-thoát: từ ngoài nhìn vào, một job treo giống hệt một job đang chạy nặng. Đây là N24 ở dạng mới: N24 nói
-về một *cổng* treo, cái này là công cụ **sinh ra** cái cổng.
+mà người chấm sẽ phán. Nó **không thể thất bại — chỉ có thể treo**: không đồng hồ, không log, không mã
+thoát, từ ngoài nhìn vào một job đang chạy giống hệt một job đã chết. Đây là N24 ở dạng mới: N24 nói
+về một *cổng* treo, cái này là công cụ **sinh ra** cái cổng. Lần này hậu quả cụ thể hơn: **hai lượt
+chạy lành mạnh bị giết** vì log rỗng, mỗi lượt mất ~19 phút GPU, rồi phiên còn mất mười lăm phút mổ
+mã (`tmp-probe/probe_t01_mine.mjs`) để tìm cái treo không tồn tại. Đây là bài học đã có trong
+`lessons.md` ("a tool that prints at the end looks broken from the outside") lần thứ hai, và lần này
+ nó đắt.
 
 **Guard đã có.** Chưa có. **Đề xuất (chưa làm, vì R13 — phiên kia đang chạy chính công cụ này):**
 trong `beatsheet.mjs`, mỗi câu phải có đồng hồ (`Promise.race` với một hạn 60 s; hết hạn thì đóng
-trình duyệt, in câu số và thời điểm, thoát mã khác 0); `tools/README.md` nói `--lines a-b` là cách
-khoanh vùng một lần treo.
+trình duyệt, in câu số và thời điểm, thoát mã khác 0), **và phải in tiến độ sau mỗi câu** để người
+nhìn log không kết luận nhầm rằng nó đã chết; `tools/README.md` nói `--lines a-b` là cách khoanh
+vùng một lần treo, và nói một lượt chạy mất bao lâu.
 
 ## N74 — medium — Bản đồ mã (`src/MAP.md`), cách chữa R11, sai ngay sau khi viết và không ai kiểm tra
 
@@ -2442,6 +2450,92 @@ chỗ cuối. Đó là thông tin mà một bức tường 52 dòng không cho.
 
 ---
 
+## N80 — high — `pkill -f beatsheet.mjs` của một tập giết job của tập khác
+
+**Bằng chứng.** Phiên tap-01 dùng `pkill -f "beatsheet.mjs"` ba lần (10:53:45, 10:54:28, 11:00:44) để
+dừng lượt chạy của chính nó. Đúng lúc đó, **tap-03** (10:57 và 11:04) và **tap-02** (11:01) đang chạy
+`review.sh` của riêng chúng, mà `review.sh` gọi `beatsheet.mjs` ở dòng 764 — cùng một mẫu lệnh, cùng
+một tên tiến trình. Lệnh `pkill` không phân biệt tập nào.
+
+**Vì sao quan trọng.** Ba phiên cùng dựng một kênh là một thực tế của kênh này (người giám sát, các tập
+song song), nên một lệnh giết theo *tên* là một lệnh giết của người khác. Ở đây nó còn tệ hơn: lệnh
+giết đến từ một người đang tưởng job của mình đã chết, trong khi job đó chỉ đang chậm và im.
+
+**Guard đã có.** Chưa có. **Đề xuất:** `beatsheet.mjs` ghi một tệp khoá theo tập (`out/beats/.lock`
+chứa pid và đường dẫn tập), và giết phải theo pid đọc từ tệp khoá đó; `review.sh` không nên để một
+lệnh `pkill` theo mẫu chung tồn tại trong hướng dẫn. Ngoài ra `lessons.md` nên có một dòng: *một
+lệnh giết theo tên là một lệnh giết của người khác*.
+
+## N81 — medium — File nghiên cứu nói về bức tranh của phim, và không bài kiểm tra nào đối chiếu
+
+**Bằng chứng.** `research/FACTS.md` mục "Suy luận của tập phim" (dòng 127) viết rõ: *"Phim nói: … (**nhiệt
+kế trong cảnh chỉ hai mươi lăm độ**)"* và cả tệp đề xuất mọi con số ở **hai mươi lăm độ** (2,44 kJ/g;
+3,17 kPa; 20 g/kg khí khô). Nhưng `src/film.js:208` vẽ thẻ **"30 °C"** cho câu c44–c45, và dòng 119 của
+chính mã đó nói cột thuỷ ngân "đã dâng tới 30 °C". Tệp nghiên cứu sửa lần cuối lúc 11-08 11:40 và chưa
+hề được sửa.
+
+Chạy bài kiểm tra của thư viện lên chính tập này: `python3 tools/check_claims.py <tập>` → **`check_claims:
+PASS`**. Bài kiểm tra hỏi *"con số này có được tệp nghiên cứu nhắc đến không"*, và câu trả lời là có
+("ba mươi độ" có trong bảng của mục 2) — nên nó im. Không ai đọc câu *"nhiệt kế trong cảnh chỉ hai mươi
+lăm độ"* như một lời hứa về bức tranh.
+
+**Vì sao quan trọng.** Tệp nghiên cứu của kênh không chỉ ghi nguồn: nó ghi cả **"Dùng trong phim"** và
+**"Phim nói:"** — những câu nói về bộ dàn cảnh. Một lời hứa về bộ dàn cảnh mà không ai đối chiếu thì không
+phải nghiên cứu, nó là thứ đã lỡ. Nhân vật số trên màn hình và tài liệu đang lệch nhau ngay trong tập
+đang dựng.
+
+**Guard đã có.** Chưa có. **Đề xuất:** một bài kiểm tra cho kênh đọc các câu "Dùng trong phim" và "Phim
+nói:" của `research/FACTS.md`, lấy các con số trong đó, rồi đối chiếu với các thẻ chữ trong `src/*.js`
+và với `voice/lines.json`; số nào ở tài liệu mà không có ở phim thì báo. (Thư viện đã có
+`tools/check_claims.py` cho phim một tập, nhưng nó hỏi câu khác và không phủ câu "tài liệu nói về
+dàn cảnh".)
+
+## N81 — high — Máy đo "vật chính quá nhỏ" ở ba kiểu cảnh mà nó không nhìn thấy
+
+**Bằng chứng.** Tờ sheet của tập 01 vẽ 30 câu có `fill` dưới 15 %. Phiên làm tập 01 đã tự nhận ra
+và nói thẳng: phép đo chỉ bắt vật nhỏ hơn 1,2 m, nên "cảnh trong vải, mặt nước, cảnh toàn cảnh đọc
+0 % là giới hạn của phép đo" — và cố ý **không** đưa máy sát vào để đẩy con số lên.
+
+Đó là phản ứng đúng của một người đã hiểu chuyện. Nhưng nó là phản ứng của **một** người hiểu:
+công cụ nói sai, người làm phim phải đoán. Phiên sau không có người đã hiểu đó.
+
+Đếm lại trên chính tờ sheet của tap-01 (60 câu, đọc `shot.cast` của từng câu):
+
+| Cách đo | số câu |
+|---|---|
+| `fill` (vật lớn nhất) dưới 15 % — cách đo cũ | 30 |
+| trong đó máy **không thấy vật nào** trong khung (cảnh cận trong một vật lớn, cảnh toàn cảnh) | 14 |
+| trong đó chủ thể là một **nhóm vật** (mỗi vật nhỏ, cả nhóm mới là chủ thể) | 5 |
+| khung thật sự gần như trống — điều máy nói đúng | 11 |
+
+Tức là trong 30 câu mà máy gọi là "vật quá nhỏ", chỉ **11 câu** là lỗi thật. 19 câu là máy không
+nhìn thấy. Ở tap-02: 22 câu bị gọi là nhỏ, 10 câu máy không thấy gì, chỉ 8 câu là lỗi thật.
+
+**Vì sao quan trọng.** `check_shots.py` là cái cổng chặn trước khi mở một vòng chấm bốn mươi
+phút. Nếu cổng báo 30 câu phải sửa, người làm phim sửa 30 câu — hoặc tệ hơn: họ đẩy máy sát vào
+vật để số lên, và phim xấu đi vì lời của máy. Phiên tap-01 đã chọn "không sửa", nhờ có người hiểu
+chuyện. Người không có người hiểu thì sửa. Một số đo sai hướng dẫn cả một phiên đi sai hướng.
+
+**Đã sửa.** Hai chỗ, cùng một luật — đo độ trống của khung bằng **độ phủ** (tổng phần khung mà vật
+thật chiếm), không phải bằng vật lớn nhất:
+
+1. `check_shots.py`: độ phủ < 15 % **và** khác 0 mới là lỗi ("khung gần như trống"). Độ phủ = 0 thì
+   máy in ra danh sách câu nó **không nhìn thấy**, kèm đúng câu "đừng đưa máy sát chỉ để đẩy con số
+   lên" — máy nói thẳng là nó không kết luận được, thay vì im lặng rồi để người khác tưởng là chắc.
+   Câu có nhóm vật thì độ phủ lớn, không còn bị gọi là nhỏ.
+2. `beatsheet.mjs`: in thêm `cover`, tô màu đỏ theo độ phủ (không theo vật lớn nhất), và in ra dòng
+   các câu mà máy không nhìn thấy.
+
+Selftest của `check_shots.py` nay có 19 ca, thêm bốn ca: nhóm vật không bị báo là nhỏ; cảnh máy không
+nhìn thấy không bị báo là nhỏ; danh sách câu máy không nhìn thấy được in ra; và không lời nào trong
+báo cáo dạy đưa máy sát cho số.
+
+**Luật chung rút ra:** *con số máy đo được phải là con số máy đo được đúng.* `fill` trả lời "vật
+lớn nhất trong khung chiếm bao nhiêu" — nó không trả lời "chủ thể có đủ lớn không", và dùng nó để
+kết luận thứ hai là nói sai. Một công cụ không chắc thì phải nói ra là không chắc.
+
+---
+
 ## Còn lại
 
 - **[ ]** N72: sửa `core/render/still.mjs` (chờ khung đã trình chiếu). Chưa làm vì R13 — phiên đang
@@ -2451,6 +2545,10 @@ chỗ cuối. Đó là thông tin mà một bức tường 52 dòng không cho.
 - **[ ]** N74: `tools/check_map.py` + `gate.py`.
 - **[ ]** N75: `tools/supervise.sh` đếm lệnh ghi file bằng cách nhắc tới đường dẫn dự án.
 - **[ ]** N76: `tools/supervise.sh` đếm lượt đọc `tasks/*.output`; R9 nói thêm về output của lệnh nền.
+- **[ ]** N80: `beatsheet.mjs` ghi tệp khoá theo tập; giết job bằng pid đọc từ tệp khoá, không `pkill`
+  theo mẫu chung; `lessons.md` có một dòng về lệnh giết theo tên.
+- **[ ]** N81: bài kiểm tra của kênh đối chiếu các câu "Dùng trong phim" / "Phim nói:" của
+  `research/FACTS.md` với thẻ chữ trong `src/*.js` và với `voice/lines.json`.
 - **[ ]** N78: `window.SHOTPROBE` trả chỗ của từng vật; `window.LABELPROBE` raycast đuôi nũi tên của nhãn;
   `check_labels.py` báo nhãn trỏ vào không / trỏ nhầm / câu gọi tên vật A mà vật B chiếm khung nhiều hơn;
   `FILL` đo vật *được gọi tên*. Chưa làm vì R13 — ba phiên đang dựng bằng rig này.

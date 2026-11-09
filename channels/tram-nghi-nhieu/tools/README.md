@@ -117,6 +117,20 @@ Dàn ý không có bản cắt: hết lượt thì báo người dùng các lỗ
 | `cần TREATMENT.md và research/FACTS.md` | chưa có tài liệu nền | Viết `TREATMENT.md` và `research/FACTS.md` rồi chấm lại. |
 | `COULD NOT RUN (exit 2)` | bài kiểm tra **không chạy được**, chưa phải phán quyết | Để code đứng yên rồi chạy lại; dòng ngay dưới nói lý do. |
 
+## `fill` và độ phủ — hai con số khác nhau
+
+Tờ sheet in `fill` (vật lớn nhất trong khung) và `phủ` (tổng phần khung mà vật thật chiếm). Máy
+đo được **độ trống** của khung bằng độ phủ: dưới 15 % và khác 0 mới là khung gần như trống.
+
+Có ba kiểu cảnh mà máy không nhìn thấy chủ thể, và đó không phải lỗi của phim:
+
+- **cảnh cận trong một vật lớn** (ruột sợi, mặt nước, giữa vải) — thứ thấy lớn hơn 1,2 m nên phép đo bỏ qua;
+- **chủ thể là một nhóm vật** (một dãy quần áo, một đống chai) — mỗi vật nhỏ, cả nhóm mới là chủ thể;
+- **cảnh toàn cảnh** — chủ thể ở xa.
+
+Ở những câu đó `check_shots.py` không kết luận gì và in ra danh sách để người làm phim tự nhìn.
+**Đừng đưa máy sát chỉ để đẩy con số lên** — bố cục hỏng thì số có lên cũng không cứu được câu nào.
+
 ## Sửa tệp của tập
 
 Sửa bằng công cụ sửa file, không bằng shell: `edit` / `write`, hoặc một lệnh cho nhiều sửa dài:

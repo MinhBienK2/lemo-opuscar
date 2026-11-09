@@ -12,9 +12,12 @@
 //   NUM   — the line says a number (four days, 100 ppm) and no on-screen text (window.TEXTS, subtitle excluded) shows a
 //           number while it is said: give it a counter, a calendar, a label. A number painted into a 3D texture is not
 //           seen by this check: then say so in LOOK.md.
-// Under every frame the sheet prints "fill N%": the share of the frame the largest object-sized thing fills (the same
-//   rays that measure a RUN). A subject that is a speck in an empty field reads as a small number; a frame with no
-//   object-sized thing in it (an interior scene, a wide) reads 0%. The number is a hint, not a verdict: judge by eye.
+// Under every frame the sheet prints "phu N%" — the share of the frame real things fill — plus "fill N%" when the
+//   largest single object-sized thing is smaller than that (the same rays that measure a RUN). Emptiness is judged by
+//   "phu": a subject made of a GROUP of things reads a small "fill" and a large "phu"; a frame with nothing
+//   object-sized in it (an interior scene, a cutaway inside a big object, a wide) reads 0% for both — the machine
+//   cannot judge those. The number is a hint, not a verdict: judge by eye, and never move the camera closer only
+//   to raise it.
 import fs from 'fs'; import path from 'path'; import { spawnSync } from 'child_process';
 import { openDemo, closeServer, requireDemo } from '../../../core/render/page.mjs';
 
@@ -134,6 +137,10 @@ for b in B:
     # (the shot the viewer cannot read with the sound off) shows up here as a small number
     vals = [v for _, v in ((b.get('shot') or {}).get('cast') or [])]
     b['fill'] = vals[0] if vals else 0.0
+    # 'fill' là vật LỚN NHẤT; 'cover' là phần khung mà vật thật chiếm (tổng). Một chủ thể là nhóm vật
+    # (dãy quần áo, đống chai) thì 'fill' nhỏ còn 'cover' lớn; một cảnh cận trong vật lớn thì cả hai
+    # bằng 0. Tờ sheet đo độ trống của khung bằng 'cover'.
+    b['cover'] = round(sum(vals), 4)
     if says_number(b['text']) and not any(re.search(r'\\d|' + NUMW, x.lower()) for x in b.get('shown', [])): b['flags'].append('NUM')
     # does the picture act inside this line? (needs --motion) the camera shift is taken out first, so a frame that
     # only drifts does not count as motion. It is a note, not a machine flag: the maker judges the line by eye.
@@ -146,8 +153,11 @@ still = [b['n'] for b in B if b.get('still')]
 if still: print(f"{len(still)}/{len(B)} lines have a picture that does not move (camera shift taken out): #{' #'.join(map(str, still))}")
 for b in B:
     if b['flags']: print(f"#{b['n']} {b['id']}: {' '.join(b['flags'])}  — {b['text'][:70]}")
-thin = [b['n'] for b in B if b.get('fill', 0) < .15]
-if thin: print(f"{len(thin)}/{len(B)} frames have a main object under 15% of the frame: #{' #'.join(map(str, thin))}")
+thin = [b['n'] for b in B if 0 < b.get('cover', 0) < .15]
+if thin: print(f"{len(thin)}/{len(B)} frames have props filling under 15% of the frame: #{' #'.join(map(str, thin))}")
+blind = [b['n'] for b in B if not b.get('skipped') and not b.get('missing') and b.get('cover', 0) == 0]
+if blind: print(f"{len(blind)}/{len(B)} frames show no prop-sized thing (cutaway inside a big object, or a wide "
+                f"shot) — the machine cannot judge them: #{' #'.join(map(str, blind))}")
 W, H, TX, C, R = 640, 360, 96, 3, 4
 B_draw = [b for b in B if not b.get('skipped')]
 for s in range(0, len(B_draw), C * R):
@@ -159,8 +169,10 @@ for s in range(0, len(B_draw), C * R):
         d.rectangle([x, y + H, x + W - 2, y + H + TX - 2], fill=(28, 28, 36))
         d.text((x + 8, y + H + 4), f"#{b['n']}  {b['id']}  {b.get('t0', '')}–{b.get('t1', '')} s", fill=(247, 189, 39), font=Fs)
         fill = b.get('fill', 0) or 0
-        note = f"fill {fill * 100:.0f}%" + ("  · STILL" if b.get('still') else "")
-        d.text((x + W - 78, y + H + 4), note, fill=(235, 150, 40) if b.get('still') else (150, 152, 162) if fill >= .15 else (220, 40, 60), font=Fs)
+        cover = b.get('cover', 0) or 0
+        note = f"phủ {cover * 100:.0f}%" + (f" · fill {fill * 100:.0f}%" if fill < .15 else "") + ("  · STILL" if b.get('still') else "")
+        nw = d.textlength(note, font=Fs)
+        d.text((x + W - 8 - nw, y + H + 4), note, fill=(235, 150, 40) if b.get('still') else (220, 40, 60) if 0 < cover < .15 else (150, 152, 162), font=Fs)
         if b['flags']:
             tag = ' '.join(b['flags']); tw = d.textlength(tag, font=F)
             d.rectangle([x + W - tw - 22, y + 8, x + W - 8, y + 40], fill=(220, 40, 60)); d.text((x + W - tw - 15, y + 10), tag, fill=(255, 255, 255), font=F)

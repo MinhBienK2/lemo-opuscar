@@ -42,6 +42,34 @@ def measured(beat):
     return isinstance(beat, dict) and 'fill' in beat and not beat.get('skipped')
 
 
+def coverage(beat):
+    """(tổng phủ, số vật) — phần khung mà vật thật chiếm, và có bao nhiêu vật.
+
+    `fill` trên tờ sheet là phần khung mà vật LỚN NHẤT chiếm. Con số đó mù ở ba kiểu cảnh rất
+    phổ biến của kênh này:
+
+      · cảnh cận trong một vật lớn (ruột sợi, mặt nước, giữa vải) — thứ thấy là một vật >1,2 m
+        nên phép đo bỏ qua, và không có vật nhỏ nào đủ sức đo được;
+      · chủ thể là một NHÓM vật (một dãy quần áo, một đống chai) — mỗi vật nhỏ, nên số đơn lẻ nhỏ
+        trong khi cả nhóm chính là chủ thể;
+      · cảnh toàn cảnh — chủ thể ở xa, mỗi vật chỉ chiếm một vệt nhỏ.
+
+    Cả ba lần, máy nói "vật chính quá nhỏ" — và người làm phim tin máy thì đưa máy sát vào cho
+    số lớn lên, làm hỏng bố cục để thoả một con số mà máy vốn không đo được.
+
+    Thứ máy đo được, và đo đúng, là phần khung mà vật thật chiếm (tổng). Rỗng hay không rỗng thì
+    đo cái đó; còn "chủ thể có đủ lớn không" thì để mắt người — máy không biết vật nào là chủ thể.
+    """
+    cast = (beat.get('shot') or {}).get('cast') or []
+    vals = []
+    for c in cast:
+        try:
+            vals.append(float(c[1]))
+        except (TypeError, ValueError, IndexError):
+            pass
+    return sum(vals), len(vals)
+
+
 def find_beats(path):
     """beats.json: the given file, or the one in a known folder.
 
@@ -91,14 +119,15 @@ def problems(beat):
             out.append((f, HINT[f]))
     if not measured(beat):
         return out          # chưa được đo thì không kết luận gì
-    try:
-        fill = float(beat.get('fill') or 0)
-    except (TypeError, ValueError):
-        fill = 0.0
-    if fill < FILL_MIN:
-        out.append(('FILL', 'vật chính chỉ chiếm %d %% khung — đưa máy gần hơn, hoặc đổi bố cục để vật chiếm chỗ. '
-                           '(Một cảnh bên trong vật — ruột sợi, mặt nước, giữa vải — được phép trống: bỏ qua câu này nếu đó là cảnh cận trong vật.)'
-                    % round(fill * 100)))
+    cover, _ = coverage(beat)
+    if cover == 0:
+        # Máy không thấy vật nào đủ lớn trong khung: cảnh cận trong một vật lớn, cảnh toàn cảnh, hay
+        # khung thật sự trống — máy không phân biệt được ba cái đó, nên không kết luận gì. Báo cáo
+        # in ra danh sách câu này để người làm phim tự nhìn.
+        return out
+    if cover < FILL_MIN:
+        out.append(('FILL', 'khung gần như trống — vật trong khung chỉ chiếm %d %% khung; đưa máy gần hơn, '
+                           'hoặc đổi bố cục để vật chiếm chỗ.' % round(cover * 100)))
     return out
 
 
@@ -135,15 +164,22 @@ def report(beats, out=sys.stdout):
         print('check_shots: %d câu KHÔNG được đo (tờ sheet bỏ qua, hoặc lời kể chưa có sự kiện giọng) — '
               'chúng KHÔNG phải "vật quá nhỏ"; dựng lại tờ sheet cho cả tập: '
               'node channels/tram-nghi-nhieu/tools/beatsheet.mjs <tập> --out <scratch>' % unmeasured, file=out)
+    blind = [b.get('n') for b in beats if measured(b) and not b.get('missing') and coverage(b)[0] == 0]
+    if blind:
+        print('check_shots: %d câu máy KHÔNG nhìn thấy vật nào trong khung — cảnh cận trong một vật lớn, '
+              'cảnh toàn cảnh, hay khung thật sự trống; máy không kết luận được, tự nhìn: %s'
+              % (len(blind), cluster_text(blind)), file=out)
+        print('check_shots: đừng đưa máy sát chỉ để đẩy con số lên.', file=out)
     for b, ps in bad:
         flags = ' '.join(b.get('flags') or []) or '—'
         try:
             fill = '%d%%' % round(float(b.get('fill') or 0) * 100)
         except (TypeError, ValueError):
             fill = '—'
+        cover = '%d%%' % round(coverage(b)[0] * 100)
         text = (b.get('text') or '').strip()
         print('', file=out)
-        print('  c%s  [%s]  fill %s  "%s"' % (b.get('n'), flags, fill, text), file=out)
+        print('  c%s  [%s]  fill %s · phủ %s  "%s"' % (b.get('n'), flags, fill, cover, text), file=out)
         for kind, hint in ps:
             print('        → %s: %s' % (kind, hint), file=out)
     # the same flags, read as stretches: a maker fixes a stretch, not a line
@@ -172,22 +208,29 @@ def selftest():
         if not cond:
             fails.append(name + (' — ' + detail if detail else ''))
 
+    def cast(*vals):
+        return {'shot': {'cast': [['v%d' % i, v] for i, v in enumerate(vals)]}}
+
     beats = [
-        {'n': 1, 'text': 'Một câu sạch', 'flags': [], 'fill': 0.5},
-        {'n': 2, 'text': 'Câu lặp khung', 'flags': ['SAME'], 'fill': 0.4},
-        {'n': 3, 'text': 'Câu có số', 'flags': ['NUM'], 'fill': 0.3},
-        {'n': 4, 'text': 'Câu tối', 'flags': ['DARK'], 'fill': 0.3},
-        {'n': 5, 'text': 'Câu vật quá nhỏ', 'flags': [], 'fill': 0.05},
-        {'n': 6, 'text': 'Câu có cả hai', 'flags': ['SAME', 'NUM'], 'fill': 0.2},
+        {'n': 1, 'text': 'Một câu sạch', 'flags': [], 'fill': 0.5, **cast(0.5)},
+        {'n': 2, 'text': 'Câu lặp khung', 'flags': ['SAME'], 'fill': 0.4, **cast(0.4)},
+        {'n': 3, 'text': 'Câu có số', 'flags': ['NUM'], 'fill': 0.3, **cast(0.3)},
+        {'n': 4, 'text': 'Câu tối', 'flags': ['DARK'], 'fill': 0.3, **cast(0.3)},
+        {'n': 5, 'text': 'Câu vật quá nhỏ', 'flags': [], 'fill': 0.05, **cast(0.05)},
+        {'n': 6, 'text': 'Câu có cả hai', 'flags': ['SAME', 'NUM'], 'fill': 0.2, **cast(0.2)},
         {'n': 7, 'text': 'Câu ngoài khoảng dựng', 'flags': [], 'skipped': True},
         {'n': 8, 'text': 'Câu không có sự kiện giọng', 'flags': [], 'missing': True},
+        # nhóm vật: từng vật nhỏ, nhưng cả nhóm là chủ thể — máy không được kết luận "vật quá nhỏ"
+        {'n': 9, 'text': 'Câu có nhóm vật', 'flags': [], 'fill': 0.06, **cast(0.06, 0.08, 0.07)},
+        # cảnh cận trong vật lớn / toàn cảnh: máy không thấy vật nào — máy không kết luận được
+        {'n': 10, 'text': 'Câu máy không nhìn thấy', 'flags': [], 'fill': 0.0, **cast()},
     ]
     with tempfile.TemporaryDirectory() as d:
         p = os.path.join(d, 'beats.json')
         with open(p, 'w', encoding='utf-8') as fh:
             json.dump(beats, fh)
         got, path = load(p)
-        check('đọc được beats.json', got is not None and len(got) == 8)
+        check('đọc được beats.json', got is not None and len(got) == 10)
         buf = io.StringIO()
         with contextlib.redirect_stdout(buf):
             bad, unmeasured = report(got, out=buf)
@@ -201,6 +244,10 @@ def selftest():
         check('nêu cờ NUM', 'NUM' in text)
         check('nêu cờ DARK', 'DARK' in text)
         check('nêu vật quá nhỏ', 'FILL' in text and '5 %' in text)
+        check('nhóm vật không bị báo là vật quá nhỏ', 'Câu có nhóm vật' not in text)
+        check('cảnh máy không nhìn thấy không bị báo là vật quá nhỏ', 'Câu máy không nhìn thấy' not in text)
+        check('nêu rõ câu nào máy không nhìn thấy', 'KHÔNG nhìn thấy vật nào' in text)
+        check('không dạy đưa máy sát cho số', 'đừng đưa máy sát' in text.lower())
         check('in câu lời để còn biết là câu nào', 'Câu có cả hai' in text)
         check('cờ hiện thành cụm', 'SAME: c2, c4' in text or 'SAME:' in text, text[-400:])
         # a folder that holds beats.json is found too
