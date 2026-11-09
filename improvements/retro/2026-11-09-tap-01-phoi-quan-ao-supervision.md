@@ -1937,6 +1937,56 @@ thì exit 2; tệp người chấm viết ra thì tệp đó là câu trả lờ
 
 ---
 
+## N70 — critical — Người chấm đã chấm phim bằng một prompt bị cắt cụt
+
+**Bằng chứng.** `review.sh` đưa lời dặn cho người chấm bằng một chuỗi shell. Ngay khi chuỗi đó có
+một dấu `"` chưa escape bên trong, shell **kết thúc chuỗi tại đó**: phần còn lại của lời dặn trở thành
+những TỪ RIÊNG, và người chấm chỉ nhận được mảnh đầu của một bộ tiêu chí dài.
+
+Tôi tìm ra việc này khi viết bài kiểm tra cho vòng chấm vật dựng: một người chấm giả nhận prompt,
+không viết ra báo cáo, và vòng chấm chết. Bản thân chuỗi shell cho biết ngay:
+
+```
+PROMPT_LEN=864      # trước khi sửa
+PROMPT_LEN=4941     # sau khi sửa
+```
+
+**4 077 ký tự, 83 % lời dặn, không tới nơi.** Mất đúng phần quan trọng nhất:
+
+| Prompt | Bị cắt ở | Mất gì |
+|---|---|---|
+| chấm vật dựng | `một tên đúng nhưng "chắc thấp"` | tiêu chí KHỚP/HỎNG, hai nhóm A và B, mẫu báo cáo, và câu *"Viết PROPS-REVIEW.md ở thư mục này theo mẫu"* |
+| chấm hình | `dòng "ROUND"` | câu *"Mở từng ảnh của các câu trên, rồi viết REVIEW.md ở đó theo mẫu"* — tức là người chấm **không được bảo viết báo cáo vào đâu** |
+| chấm bảng đặc tả | `cột "Xuất hiện ở"` | tiêu chí của cột đó, và câu *"Viết ASSET-AUDIT-REPORT.md ở thư mục này theo mẫu"* |
+
+**Khi nào.** Cả ba dấu `"` đều do **tôi** đưa vào: `914d948` (03:40, vòng chấm vật dựng), `c6f4a80`
+(08:48, vòng chấm hình), `6de8d8b` (09:48, vòng chấm bảng đặc tả). Một lỗi cú pháp ba lần, ở ba chỗ khác
+nhau, cùng một cách — trong lúc viết lời dặn cho người chấm.
+
+**Vì sao nó quan trọng.** Vòng chấm vẫn chạy, người chấm vẫn trả lời, báo cáo vẫn có phán quyết, và
+một vòng vẫn có thể ghi "PASS". Không có gì hỏng — ngoại trừ việc người chấm **chấm phim bằng một đề
+bài không đầy đủ**. Với vòng chấm vật dựng, đề bài còn thiếu hẳn tiêu chí KHỚP/HỎNG: người chấm bị
+hỏi "vật này là vật thật không" mà không được cho biết câu trả lời phải trông thế nào.
+
+Nhiều thứ tôi từng ghi thành lỗi riêng lẻ trong đợt đúc kết này — báo cáo ghi tên tệp khác, dòng
+`ROUND` do người chấm tự viết — chính là **triệu chứng** của cái cắt này: hai lời dặn cuối cùng,
+chính là hai lời dặn nằm sau dấu `"` bị cắt.
+
+**Đã sửa.** Ba dấu `"` được escape. Kèm hai guard, vì một lỗi cú pháp không nên chờ tái diễn:
+
+- `channels/tram-nghi-nhieu/tools/check_prompts.py` — đọc tệp shell và nói, cho từng lệnh
+  `critic "…"`, cái mà shell thật sự đưa cho lệnh đó là **một** lời dặn hay **nhiều từ**. Có
+  `--selftest` với một prompt đúng và một prompt bị cắt.
+- `channels/tram-nghi-nhieu/tools/test_review_props.py` — chạy **trọn vòng chấm vật dựng** với một
+  người chấm giả và một công cụ dựng ảnh giả: không GPU, không trình duyệt, hai giây. Nó kiểm
+  19 điều, trong đó có việc người chấm nhận đủ ba prompt, mỗi prompt **không bị cắt ở giữa**, và
+  nhận đủ tiêu chí KHỚP/HỎNG và hai nhóm A, B. Chạy trên mã cũ: 11 điều hỏng.
+
+Để chạy được vòng chấm trong bài kiểm tra, công cụ dựng ảnh ba góc nhìn phải thay được: `PROPCHECK`
+(trang đãnh) cho phép thay nó, và bài kiểm tra dùng đúng đường đó.
+
+---
+
 ## Các guard đã bắt được gì (tính từ 08:00, hai tập còn chạy)
 
 Đây là bằng chứng rằng các guard không phải lý thuyết — mỗi cái đã bắt một lỗi thật, hoặc đã được một
@@ -2038,6 +2088,7 @@ tiền (trước vòng chấm, trước lúc dựng, trước lúc bàn giao), c
 | 67 | Đường đi an toàn phải là một lệnh (N67) | `tools/replace.py`, `CODING_STANDARDS.md` R1, `.agents/skills/tram-nghi-nhieu/SKILL.md` | **xong** — 4 ca selftest (9/9). `--batch -` đọc từ stdin, mỗi sửa tự nêu tệp: một lệnh sửa được nhiều tệp, mọi tệp được kiểm tra trước khi tệp nào bị ghi |
 | 68 | Công cụ của kênh phải có sổ tay (N68) | `channels/tram-nghi-nhieu/tools/README.md`, `channels/tram-nghi-nhieu/CHANNEL.md`, `.agents/skills/tram-nghi-nhieu/SKILL.md`, `.agents/skills/tram-nghi-nhieu/step6-assembly/GUIDE.md` | **xong** — sổ tay: lệnh của từng công cụ, thứ tự bước, ngân sách vòng, hợp đồng đạo diễn cắt, bảng "khi công cụ từ chối". Đo trước: **449** lệnh đọc mã công cụ, **350 nghìn token** (15 % output của phiên) |
 | 69 | Một kiểm tra hỏi sai câu giết đúng vòng chấm đã làm xong (N69) | `channels/tram-nghi-nhieu/tools/review.sh`, `channels/tram-nghi-nhieu/tools/test_review_critic.py` | **xong** — `critic()` biết pha nào hỏi phán quyết và pha nào hỏi danh sách; ca selftest chạy chính hàm đó với một người chấm giả (6 ca). Đo trên tap-02: hai vòng chấm vật dựng chết oan, mỗi vòng 9 phút; ngân sách vòng không mất |
+| 70 | Người chấm đã chấm phim bằng một prompt bị cắt cụt (N70) | `channels/tram-nghi-nhieu/tools/review.sh`, `channels/tram-nghi-nhieu/tools/check_prompts.py`, `channels/tram-nghi-nhieu/tools/test_review_props.py` | **xong** — 3 prompt bị cắt (83 % lời dặn của vòng chấm vật dựng mất); guard tĩnh đọc tệp shell, bài kiểm tra chạy trọn vòng chấm với người chấm giả (19 điều, 2 giây, không GPU) |
 
 ### Mỗi phát hiện đã có dòng riêng trong `improvements/lessons.md`
 
@@ -2078,3 +2129,112 @@ tiền (trước vòng chấm, trước lúc dựng, trước lúc bàn giao), c
   `set_round` nên số vòng là của công cụ, bốn khối còn lại thì người chấm vẫn tự điền (N34).
 - **[ ]** `tools/supervise.sh` đếm lượt mở ảnh nhưng **chưa** báo dung lượng transcript của phiên — một con
   số đơn giản sẽ cho thấy ngay một phiên đang đắt (N37).
+
+---
+
+# Phần ba: sau vòng chấm hình thứ năm (10:12 → 10:58)
+
+Vòng chấm hình thứ năm (`review/REVIEW.md`, 10:12) trả lời **REJECT**: ba câu FAIL (c45, c49, c59) và
+22 cờ máy còn mở. Phiên bắt đầu sửa, sửa được một lượt, rồi **tờ sheet nhịp điệu treo**. Năm phát hiện
+dưới đây là của đoạn đó — chúng không có trong N1–N69, và cả năm đều là lỗi của **công cụ**, không
+phải của phim.
+
+## N70 — high — `core/render/still.mjs` chụp phải khung cũ, và phiên làm phim tự viết lại công cụ của thư viện
+
+**Bằng chứng.** `core/render/still.mjs` gọi `await page.evaluate(t => window.render(t), t)` rồi chụp
+ngay: `await page.screenshot(...)` — không chờ khung hình nào được trình chiếu. Lúc 11-08 04:56 phiên
+tạo `/tmp/stills2.mjs`, và chính dòng chú thích của nó nói:
+
+> `// (core/render/still.mjs chụp ngay sau khi render nên đôi khi ảnh còn là khung trước đó.)`
+
+Bản riêng đó chờ hai khung hình trước khi chụp. Phiên chạy nó 15 lần. Nó nằm trong `/tmp`, nên chết
+cùng máy, và tập sau sẽ viết lại bản riêng của nó.
+
+**Vì sao quan trọng.** Không chỉ là "viết lại công cụ" (R10): người làm phim **nhìn nhầm khung hình
+rồi sửa mã để sửa cái không hỏng**. Rất nhiều vòng sửa camera, đèn và đạo cụ trong `src/film.js` và
+`src/set.js` của tập này có thể là sửa cho một khung hình không phải khung hình đang xem. Thư viện đã
+có đúng cơ chế: rig dựng vào một target phụ rồi trả khung về (`window.SHOTPROBE` → `window.SHOT`),
+và tờ beat dùng đúng cơ chế đó nên ảnh của nó không bị lệch.
+
+**Guard đã có.** Chưa có. **Đề xuất (chưa làm, vì R13):** `core/render/still.mjs` chờ khung hình đã
+trình chiếu (hai `requestAnimationFrame`, hoặc dùng luôn đường `SHOTPROBE` của rig) trước khi chụp;
+`core/README.md` nói rõ công cụ chụp *sau* khi khung đã có.
+
+## N71 — high — Bài dựng tờ beat không có đồng hồ: một câu treo là cả vòng chấm treo
+
+**Bằng chứng.** `channels/tram-nghi-nhieu/tools/beatsheet.mjs` gọi
+`await page.evaluate(x => { window.SHOTPROBE = 1; window.render(x); }, t)` cho từng câu — không có
+`timeout`, không có `try`. `core/render/page.mjs` chỉ chặn `window.READY` (180 s). Trong
+`review.sh:764` lệnh này cũng không nằm trong `timeout` nào: `timeout` ở dòng 92 chỉ bọc **người
+chấm** (`claude -p`), không bọc bước dựng tờ.
+
+Lúc 10:47–10:54 lượt chạy viết được `b_001` … `b_020` rồi **dừng**; `b_021` … `b_060` vẫn mang mốc
+10:03; `beats.json` không được viết lại. Phiên tự tay giết job, chạy lại "có log", rồi viết một
+script dò riêng (`tmp-probe/probe_t01_mine.mjs`) để khoanh vùng câu nào treo — mười lăm phút, đến
+10:58 vẫn chưa xong.
+
+**Vì sao quan trọng.** Cổng hình là cổng cuối cùng trước khi dựng, và công cụ làm ra những tấm ảnh
+mà người chấm sẽ phán. Nó **không thể thất bại — chỉ có thể treo**. Không đồng hồ, không log, không mã
+thoát: từ ngoài nhìn vào, một job treo giống hệt một job đang chạy nặng. Đây là N24 ở dạng mới: N24 nói
+về một *cổng* treo, cái này là công cụ **sinh ra** cái cổng.
+
+**Guard đã có.** Chưa có. **Đề xuất (chưa làm, vì R13 — phiên kia đang chạy chính công cụ này):**
+trong `beatsheet.mjs`, mỗi câu phải có đồng hồ (`Promise.race` với một hạn 60 s; hết hạn thì đóng
+trình duyệt, in câu số và thời điểm, thoát mã khác 0); `tools/README.md` nói `--lines a-b` là cách
+khoanh vùng một lần treo.
+
+## N72 — medium — Bản đồ mã (`src/MAP.md`), cách chữa R11, sai ngay sau khi viết và không ai kiểm tra
+
+**Bằng chứng.** `src/MAP.md` viết lúc 10:45: `src/film.js (524 dòng)`, `src/set.js (1099 dòng)`.
+Ngay lúc 10:58 hai tệp đó dài **553** và **1194** dòng (`props.js` 4514 vẫn đúng). Bản đồ tự ghi:
+"dòng lệch một chút sau khi sửa là bình thường". Hướng dẫn của kênh (`step5-props-code/GUIDE.md`) bảo
+mọi tập đều phải có bản đồ này, nên mọi tập sau cũng sẽ có một bản đồ nói dối.
+
+**Vì sao quan trọng.** R11 nói: cách chữa là *một bản đồ của mã, viết một lần và để bên cạnh mã
+nguồn*. Nhưng bản đồ viết tay thối trong ba mươi phút, và một số dòng lệch 29 dòng đưa người đọc
+tới chỗ khác — người đọc phải grep lại, tức là bản đồ tốn một lượt đọc mà không trả lại gì. R11 tự
+sinh ra vi phạm R11.
+
+**Guard đã có.** Chưa có. **Đề xuất:** `tools/check_map.py` đọc các dòng "tên → dòng" của
+`src/MAP.md`, kiểm tra dòng đó còn chứa đúng tên, và báo lệch; `gate.py` chạy nó cho tập.
+
+## N73 — medium — Số lần phá R1 bị đếm sai một bậc: 34 trong báo cáo, 376 trong transcript gốc
+
+**Bằng chứng.** N17 ghi báo cáo của người giám sát thấy 34 lần ghi file bằng shell. Đếm lại transcript
+gốc của phiên `e8ec853c`: **376** lệnh heredoc chạm vào tệp của dự án — `film.js` 215, `props.js` 99,
+`set.js` 96, `LOOK.md` 48, `COMPONENTS_SPEC.md` 17, `TREATMENT.md` 9, `voice/lines.json` 9. Cùng phiên
+đó dùng công cụ sửa tệp 522 lần.
+
+**Vì sao.** Bộ đếm bỏ sót vì nó đòi `open(x, 'w')` với một đường dẫn nó đoán được, trong khi các lệnh
+này ghi qua biến (`p = 'src/set.js'` … `open(p, 'w')`) và transcript cắt lệnh dài. Đường dẫn thì luôn
+nằm trong lệnh; biến thì không.
+
+**Guard đã có.** `tools/supervise.sh` đếm sai. **Đề xuất:** một lệnh heredoc là một lần ghi khi lệnh đó
+**nhắc tới đường dẫn của dự án** (đo từ gốc thư viện), bỏ qua biến mang nó; và đọc phần lệnh gốc
+trong transcript thay vì dòng đã hiển thị.
+
+## N74 — medium — Chờ một việc nền bằng cách đọc file output của chính nó
+
+**Bằng chứng.** `…/tasks/bib9128mh.output` được đọc **24** lần, `…/tasks/buqnq0skq.output` **13** lần —
+đó là file output của chính các lệnh nền của harness, và harness tự giao file đó khi lệnh xong. Thêm
+nữa: 23 vòng `until [ -s … ]; do sleep 5`, và 61 lệnh bash có `sleep`.
+
+**Vì sao.** R9 cấm việc chờ bằng cách dò tệp, nhưng nó được viết cho *tệp của một subagent*; file output
+của một lệnh nền là thứ harness giao, và đọc nó là chờ sai thứ theo cách đắt nhất.
+
+**Guard đã có.** R9 có, nhưng không đếm. **Đề xuất:** `tools/supervise.sh` đếm lượt đọc
+`tasks/*.output` và các lệnh `until … sleep` như một dòng luật riêng; và R9 nói rõ: *output của một
+lệnh nền là của harness để giao*.
+
+---
+
+## Còn lại
+
+- **[ ]** N70: sửa `core/render/still.mjs` (chờ khung đã trình chiếu). Chưa làm vì R13 — phiên đang
+  chạy dùng công cụ này.
+- **[ ]** N71: đồng hồ cho từng câu trong `beatsheet.mjs`, và `review.sh` bọc bước dựng tờ. Chưa làm vì
+  R13 — phiên đang chạy chính công cụ này.
+- **[ ]** N72: `tools/check_map.py` + `gate.py`.
+- **[ ]** N73: `tools/supervise.sh` đếm lệnh ghi file bằng cách nhắc tới đường dẫn dự án.
+- **[ ]** N74: `tools/supervise.sh` đếm lượt đọc `tasks/*.output`; R9 nói thêm về output của lệnh nền.
+

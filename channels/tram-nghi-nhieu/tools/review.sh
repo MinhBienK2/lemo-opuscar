@@ -291,7 +291,9 @@ if [ "$PROPS" = 1 ]; then
   if [ "$n" -gt 5 ]; then
     echo "review --props: đã chấm 5 lần mà vật dựng vẫn chưa PASS. Dừng: hoặc báo người dùng các lỗi CHẶN còn lại của $EP/review/PROPS-REVIEW.md — vật nào nhóm A chưa đúng tên, vật nào nhóm B còn đọc thành vật thật khác — và hỏi hướng đi (bỏ vật đó khỏi danh sách, đổi cách dựng, hay hạ tiêu chuẩn nhóm B); hoặc chốt bằng đạo diễn cắt: viết $EP/review/PROPS-DIRECTORS-CUT.md, kết thúc bằng 'VERDICT: PASS' và nêu rõ vật nào cắt, rồi chạy lại. Đừng chấm lần thứ sáu." >&2; exit 1
   fi
-  (cd "$LIB" && node channels/tram-nghi-nhieu/propcheck.mjs "$EP" --out "$W/p" >/dev/null) || exit 2
+  # The three views of every object. The renderer can be swapped, so the whole round can be run by a test
+  # without a GPU, without a browser and without spending a reviewer's time.
+  (cd "$LIB" && ${PROPCHECK:-node channels/tram-nghi-nhieu/propcheck.mjs} "$EP" --out "$W/p" >/dev/null) || exit 2
   mkdir -p "$W/blind"; cp "$W"/p/p_*.jpg "$W/blind/"
   N=$(ls "$W"/blind | wc -l)
   # 1. blind: this session never sees the names
@@ -339,7 +341,7 @@ import json; P=json.load(open('p/props.json'))
 open('NAMES.md','w').write('\n'.join(f\"#{x['n']} {x['name']}  (p/p_{x['n']:02d}.jpg)\" for x in P)+'\n')"
   # 2. judge: the blind names against the intended ones
   critic "Bạn kiểm tra vật dựng cho kênh Trạm Nghĩ Nhiều, nơi mọi vật có thật phải dựng đúng là nó, nhìn một giây là biết (trực thăng ra trực thăng có cánh quạt, đuôi, càng; không bao giờ là một cái hộp thay cho nó). Một người xem khác, không biết vật định dựng là gì, đã gọi tên từng vật trong BLIND.md. BLIND2.md (nếu có) là lần đoán thứ hai, của một người khác, chỉ với những vật mà lần đoán đầu không chắc. NAMES.md là tên người làm định dựng. Ảnh ở p/.
-Với từng vật: mở ảnh của nó, TỰ GỌI TÊN bằng mắt mình, rồi mới phán. Tên trong BLIND.md và BLIND2.md là lần đoán của người khác, và họ cũng có thể sai. ĐỘ CHẮC KHÔNG PHẢI LÀ PHÁN QUYẾT: một tên đúng nhưng "chắc thấp" vẫn là KHỚP, một tên sai nhưng "chắc cao" vẫn là HỎNG. Hai lần đoán lệch nhau thì ghi rõ lệch, và vật đó KHÔNG THỂ HỎNG CHỈ VÌ TÊN — nó HỎNG khi ảnh cho thấy vật khác.
+Với từng vật: mở ảnh của nó, TỰ GỌI TÊN bằng mắt mình, rồi mới phán. Tên trong BLIND.md và BLIND2.md là lần đoán của người khác, và họ cũng có thể sai. ĐỘ CHẮC KHÔNG PHẢI LÀ PHÁN QUYẾT: một tên đúng nhưng \"chắc thấp\" vẫn là KHỚP, một tên sai nhưng \"chắc cao\" vẫn là HỎNG. Hai lần đoán lệch nhau thì ghi rõ lệch, và vật đó KHÔNG THỂ HỎNG CHỈ VÌ TÊN — nó HỎNG khi ảnh cho thấy vật khác.
 KHỚP khi ảnh tự nó nói ra vật thật đó: danh từ chính là đúng vật đó (từ đồng nghĩa được), trạng thái đúng (xanh/chín, nguyên/cắt đôi, chất liệu như thuỷ tinh/nhựa/kim loại), tỉ lệ và bộ phận đặc trưng đúng. HỎNG khi: ảnh cho thấy một vật gần giống (bát thành đĩa, thuỷ tinh thành nhựa, chuối lốm đốm thành chuối chín), vật định dựng chỉ là một phần trong tên của vật khác (\"ống vàng có găng tay\" cho một bàn tay), hoặc ảnh không cho biết đó là vật gì sau một giây nhìn. Đừng nương tay: người xem phim chỉ có một giây. Riêng linh kiện kỹ thuật mà người thường không biết tên (thanh lưỡng kim, tiếp điểm công tắc, rơ-le, mâm nhiệt): KHỚP khi người xem tả đúng hình thật làm nên nó (hai lớp kim loại khác màu dán vào nhau; hai lá kim loại có đầu tiếp xúc bạc, nối dây điện; đĩa kim loại có dây điện trở) và không gọi nó thành một vật thường khác (kẹp quần áo, bản lề, bếp ga): đó là HỎNG. Mở ảnh của vật hỏng, chỉ ra vì sao nó bị gọi sai (thiếu bộ phận đặc trưng nào, tỉ lệ sai, màu hay chất liệu sai, trông như vật nào khác), và cách sửa bằng hình: thêm bộ phận gì, đổi hình dáng gì, chất liệu gì. Cả vật khớp cũng ghi chỗ còn thô (khối trơn, thiếu chi tiết bề mặt) nếu có.
 Bốn nhóm, xếp theo CHÍNH CÁI TÊN trong NAMES.md — mỗi vật in ra nhóm của nó cùng lý do, không xếp sau:
 A. VẬT ĐỨNG RIÊNG — người xem nhìn một mình vật đó cũng gọi được tên nó (giàn phơi, kẹp gỗ, áo phông, quần, khăn tắm, bồn chậu, quạt, túi, cân, nhiệt kế, ẩm kế, ghế, bàn). Nhóm này KHỚP khi ảnh tự nó đúng vật; HỎNG khi ảnh cho thấy vật khác, hoặc khi ảnh không cho biết sau một giây nhìn đó là vật gì — kể cả khi người đoán gọi KHÔNG RÕ (lúc đó bạn tự mở ảnh và tự phán: bạn cũng không gọi được tên thì HỎNG).
@@ -489,7 +491,7 @@ if [ "$ASSETS" = 1 ]; then
   p=$((n - 1)); [ -f "$EP/review/ASSET-AUDIT-REVIEW-$p.md" ] && cp "$EP/review/ASSET-AUDIT-REVIEW-$p.md" "$W/PREVIOUS.md"
   cd "$W"
   critic "$(get_prompt step4-component-breakdown)
-Thư mục làm việc của bạn: $W. Đọc COMPONENTS_SPEC.md (bản đặc tả), LOOK.md (dàn ý), voice/lines.json và src/*.js của tập. Soi xem bản đặc tả có nói đúng cái mã dựng không: mỗi linh kiện có thật trong mã chứ, mỗi cột "Xuất hiện ở" có đúng nhát không, mỗi mô tả và mỗi số đo có đúng hình không. Chấm đúng những tiêu chí trên, nhớ rằng đây là vòng $n/5 và những gì đã sửa từ vòng trước thì không nêu lại là lỗi.
+Thư mục làm việc của bạn: $W. Đọc COMPONENTS_SPEC.md (bản đặc tả), LOOK.md (dàn ý), voice/lines.json và src/*.js của tập. Soi xem bản đặc tả có nói đúng cái mã dựng không: mỗi linh kiện có thật trong mã chứ, mỗi cột \"Xuất hiện ở\" có đúng nhát không, mỗi mô tả và mỗi số đo có đúng hình không. Chấm đúng những tiêu chí trên, nhớ rằng đây là vòng $n/5 và những gì đã sửa từ vòng trước thì không nêu lại là lỗi.
 Viết ASSET-AUDIT-REPORT.md ở thư mục này theo mẫu, rồi in lại nó."
   # the reviewer may write the report under the name in its template or the name of the round line; take
   # either, or the round is lost in a file of warnings
@@ -813,7 +815,7 @@ critic "$(get_prompt "step6-assembly")
 
 $(cat TASK.md)
 
-Đây là vòng $n/$LIMIT của phần chấm này. Bạn không cần viết dòng "ROUND" — review.sh ghi số vòng thật vào bản chấm sau khi bạn viết xong.
+Đây là vòng $n/$LIMIT của phần chấm này. Bạn không cần viết dòng \"ROUND\" — review.sh ghi số vòng thật vào bản chấm sau khi bạn viết xong.
 Nếu có PROGRESS.md, hãy đọc nó trước khi chấm: nó nói vòng trước đã sửa được gì và còn mở gì. Câu đã sửa rồi thì đừng nêu lại là lỗi; câu còn mở thì phải soi kỹ và nói rõ đã sửa hay chưa.
 Thư mục làm việc của bạn: $W. Mở từng ảnh của các câu trên, rồi viết REVIEW.md ở đó theo mẫu, và in lại nó."
 # the critic may write the report under the name in its template (SCENE-REVIEW.md) or the name in the
