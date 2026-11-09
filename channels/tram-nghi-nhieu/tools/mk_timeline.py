@@ -13,8 +13,11 @@ import json
 import os
 import sys
 
-HERE = os.path.abspath(sys.argv[1] if len(sys.argv) > 1 else os.environ.get('FILM', '.'))
-LINES = json.load(open(os.path.join(HERE, 'voice', 'lines.json'), encoding='utf-8'))
+HERE = os.path.abspath(sys.argv[1] if len(sys.argv) > 1 and sys.argv[1] != '--selftest'
+                  else os.environ.get('FILM', '.'))
+LINES = []
+if '--selftest' not in sys.argv:
+    LINES = json.load(open(os.path.join(HERE, 'voice', 'lines.json'), encoding='utf-8'))
 
 DEFAULT_GAP = 0.26
 TAIL = 3.0
@@ -73,7 +76,29 @@ def split_chunks(text, max_len=MAX_CHUNK):
             merged[-1] = merged[-1] + ' ' + c
         else:
             merged.append(c)
-    return merged
+    # Không để ranh giới mảnh rơi vào **giữa một cụm số**. Vòng trên đã cố tránh, nhưng khi mọi chỗ cắt
+    # hợp lệ đều quá ngắn thì nó bỏ qua luật và cắt đôi cụm số: câu "…tối đa khoảng hai mươi gam hơi
+    # nước." bị cắt thành "…khoảng hai" | "mươi gam hơi nước." (tap-01, 1:58 — người xem đọc "mươi gam
+    # hơi nước", một vế cụt). Ở đây dồn cả cụm số sang mảng sau; nếu mảnh trước quá ngắn thì gộp hẳn nó
+    # vào mảnh sau — một mảch ngắn còn hơn một cụm số bị cắt đôi.
+    fixed = []
+    for c in merged:
+        c = c.strip()
+        if not c:
+            continue
+        if fixed:
+            prev = fixed[-1]
+            while is_num(prev.split()[-1]) and is_num(c.split()[0]):
+                w = prev.split()[-1]
+                prev = ' '.join(prev.split()[:-1])
+                c = w + ' ' + c
+            if len(prev) >= MIN_CHUNK:
+                fixed[-1] = prev
+            else:
+                c = prev + ' ' + c
+                fixed.pop()
+        fixed.append(c)
+    return fixed
 
 
 def chunk_key(chunk):
@@ -202,5 +227,39 @@ def main():
     print('timeline.js written: %d lines, %d sub chunks' % (len(LINES), sum(len(v) for v in parts_by_line.values())))
 
 
+def selftest():
+    """Các ca thử: một cụm số không được bị cắt làm đôi ở bất kỳ ranh giới mảnh nào."""
+    cases = [
+        # (câu, có cụm số nào bị cắt đôi không)
+        ('Lực kéo tối đa của dải giấy rơi từ bảy phẩy năm sáu newton xuống còn sáu phẩy sáu newton.', False),
+        ('Nhiệt độ tối đa của pin khi sạc nhanh lên tới bốn mươi lăm độ C.', False),
+        ('Trong một thí nghiệm, lực kéo tối đa khoảng hai mươi gam hơi nước.', False),
+        # câu thật của tap-01 (c41) — bản cũ cắt thành '…khoảng hai' | 'mươi gam hơi nước.'
+        ('Không khí ở nhiệt độ này chứa được tối đa khoảng hai mươi gam hơi nước.', False),
+        ('Dải giấy chịu được khoảng hai mươi gam hơi nước trước khi nứt.', False),
+    ]
+    bad = 0
+    for text, want_split in cases:
+        chunks = split_chunks(text)
+        split = False
+        for a, b in zip(chunks, chunks[1:]):
+            if is_num(a.split()[-1]) and is_num(b.split()[0]):
+                split = True
+        ok = split == want_split
+        bad += 0 if ok else 1
+        print(('ok   ' if ok else 'FAIL ') + text[:60])
+        if not ok:
+            print('       ' + ' | '.join(chunks))
+    # một câu không có cụm số thì không được đổi
+    plain = split_chunks('Một tờ giấy ướt thì dễ rách hơn một tờ giấy khô rất nhiều.')
+    if len(plain) < 1:
+        bad += 1
+        print('FAIL câu không có cụm số vẫn phải ra mảnh')
+    print('%d ca hỏng' % bad if bad else 'đều đúng')
+    return 1 if bad else 0
+
+
 if __name__ == '__main__':
+    if '--selftest' in sys.argv:
+        sys.exit(selftest())
     main()
