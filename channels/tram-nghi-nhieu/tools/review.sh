@@ -689,6 +689,16 @@ if [ "$SRC" = 1 ]; then
   echo "review: mỗi câu lời kể phải có đúng một nhát hình, và các nhát phải đi đúng thứ tự của lời — sửa src/film.js rồi chạy lại" >&2
   exit 1
 fi
+# The catalogue and the film are two lists of the same objects, and nothing checked that they are the same
+# list: a prop the critic judged from three views, that never reaches the screen. The picture is the first
+# step where the shot code exists, so this is where the two lists can finally be compared.
+PU=0
+PUS=$(python3 "$CHANNEL/tools/check_props_used.py" "$EP" 2>&1) || PU=$?
+echo "$PUS"
+if [ "$PU" = 1 ]; then
+  echo "review: có vật trong danh mục mà phim không đưa lên màn hình — đưa vật đó lên màn hình, hoặc bỏ nó khỏi danh mục, rồi chạy lại" >&2
+  exit 1
+fi
 echo "review: beat frames…" >&2
 REL=$(python3 -c "import os,sys; print(os.path.relpath(sys.argv[1], sys.argv[2]))" "$EP" "$LIB")   # the page server serves the library root
 (cd "$LIB" && node channels/tram-nghi-nhieu/beatsheet.mjs "$REL" --out "$W/beats" ${LINES:+--lines "$LINES"} >/dev/null)

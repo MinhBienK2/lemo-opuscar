@@ -1768,6 +1768,22 @@ khác biệt, chứ không phải chỉ là đo.
 
 ---
 
+## N60 — high — Danh mục vật dựng và phim là hai danh sách, và không ai so chúng
+
+**Bằng chứng.** `src/props.js` xuất ra `export const PROPS` — danh mục **mọi vật của phim**, để người chấm vật soi từng vật riêng, từ ba phía. Phim thì dựng cảnh trong `src/set.js` và `src/film.js`, và gọi **cùng những hàm dựng** đó. Vậy danh mục và phim là hai danh sách của **cùng một đạo diện** — và không có gì kiểm tra chúng là **cùng một danh sách**.
+
+Ở tập 03, danh mục có `'nắp chai nhựa có ren dọc': () => createCap().group`, nhưng `createCap()` không được gọi ở đâu trong `src/set.js` hay `src/film.js` (cái nắp trên chai được dựng riêng trong `createBottle()`). Vật đó là công cốc: người chấm vật bỏ vòng soi nó từ ba phía, và người xem không bao giờ thấy.
+
+Và nó không chỉ là công cốc. Người chấm **dàn ý**, đọc dàn ý của cùng tập đó, đã hỏi đúng chỗ ấy: *"thiếu vật dùng trên hình: … nắp chai rời trên bàn"*. Dàn ý có cảnh nắp chai rời nằm cạnh chai chưa vặn. **Hai công cụ độc lập chỉ một chỗ trống**: phim thiếu một vật, và danh mục thì có vật đó mà không ai đưa lên màn hình.
+
+**Vì sao nó quan trọng.** Đây là hình dạng thứ ba của N50 (tài liệu và mã trôi lệch nhau), và hình dạng này nằm ở bước mà mọi cổng khác đã kín: dàn ý được chấm, lời kể được chấm, vật được chấm, khung hình được chấm — mà **không ai hỏi danh mục vật có đúng bằng phim không**. Người chấm vật là người duy nhất nhìn thấy mọi vật của phim, và ông ta nhìn một **phòng trưng bày**, không phải một phim.
+
+**Đã sửa.** `channels/tram-nghi-nhieu/tools/check_props_used.py`: mỗi mục của danh mục, lần theo hàm dựng mà nó gọi, rồi hỏi hàm đó **có được gọi** ở đâu ngoài danh mục không (một hàm chỉ được **định nghĩa** thì chưa phải được dùng). Bốn ca selftest, gồm cả ca *"chỉ định nghĩa mà không gọi thì vẫn là vật chết"*. Bài kiểm tra chạy trong **bước chấm hình** — bước đầu tiên mà mã dựng cảnh đã tồn tại, nên đó là chỗ duy nhất so được hai danh sách.
+
+Đo trên ba tập: tap-01 **0** vật chết (26 vật), tap-02 **0** (19 vật), tap-03 **1** — và nó là cái nắp rời mà người chấm dàn ý đã xin.
+
+---
+
 ## Các guard đã bắt được gì (tính từ 08:00, hai tập còn chạy)
 
 Đây là bằng chứng rằng các guard không phải lý thuyết — mỗi cái đã bắt một lỗi thật, hoặc đã được một
@@ -1859,6 +1875,7 @@ tiền (trước vòng chấm, trước lúc dựng, trước lúc bàn giao), c
 | 57 | Một tập, một vòng chấm: chốt theo từng phần (N57) | `channels/tram-nghi-nhieu/tools/review.sh` | **xong** |
 | 58 | Công cụ sửa file không được làm đổi cách tệp chạy (N58) | `tools/replace.py` | **xong** — quyền đi theo nội dung; một ca selftest |
 | 59 | Báo cáo phải đếm đúng, kể cả lệnh ghi tệp qua một tên biến (N59) | `tools/rules.py` | **xong** — theo phép gán trong lệnh; 10 ca selftest. Đo lại: tap-01 **369** lần (báo cáo cũ nói 37), tap-02 17, tap-03 0 |
+| 60 | Danh mục vật dựng và phim phải là cùng một danh sách (N60) | `channels/tram-nghi-nhieu/tools/check_props_used.py`, `channels/tram-nghi-nhieu/tools/review.sh` | **xong** — 4 ca selftest; chạy trong bước chấm hình. Đo: tap-01 0, tap-02 0, tap-03 **1** — và nó là cái nắp rời mà người chấm dàn ý đã xin |
 
 ### Mỗi phát hiện đã có dòng riêng trong `improvements/lessons.md`
 
