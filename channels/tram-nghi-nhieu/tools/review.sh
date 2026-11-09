@@ -355,10 +355,15 @@ if [ "$STORYBOARD" = 1 ]; then
   # The director's cut ends the step: a written scope of what was cut, ending in VERDICT: PASS, stands for the
   # storyboard. It must be at least as new as the last round it answers, or a cut from an earlier state of the
   # film would pass a later one.
-  # The stamp binds the cut to LOOK.md + src/film.js by their hash, so a cut written for an older film cannot
-  # pass a newer one — the digest is that guard, and no timestamp rule is needed on top of it.
+  # The stamp binds the cut to LOOK.md + src/film.js by their hash — but a hash only says what was judged, not
+  # what the cut was written about, so the cut itself has to be written after the last change of the code it
+  # judges. That is the rule props and picture already have; the storyboard is the third kind, and it had none.
   CUT="$EP/review/STORYBOARD-DIRECTORS-CUT.md"
   if [ -f "$CUT" ] && grep -qE "$VPASS" "$CUT"; then
+    if ! python3 "$CHANNEL/tools/gate.py" cut "$EP" storyboard "$CUT" >&2; then
+      echo "review --storyboard: bản cắt không còn nói về dàn ý và mã nhát hiện tại — viết lại bản cắt (nêu rõ nhát nào đã cắt) sau khi sửa code xong rồi chạy lại" >&2
+      exit 1
+    fi
     $GATE stamp "$EP" storyboard "$CUT" --critic "$CRITIC_ID"
     echo "review --storyboard: PASS (đạo diễn cắt: $CUT)"; exit 0
   fi

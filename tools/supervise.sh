@@ -91,6 +91,18 @@ fi
 FILM=${FILM%/}
 echo "supervise: film $(basename "$FILM")"
 
+# The channel the film belongs to, and its own gate. A film under channels/<name>/ is judged by that
+# channel's stamps; the supervisor has to read them, or it reports on the files while the film itself goes
+# unjudged.
+CHANNEL_GATE=""
+case "$FILM" in
+  "$LIB"/channels/*)
+    CH_REL=${FILM#"$LIB"/channels/}
+    CH_NAME=${CH_REL%%/*}
+    [ -f "$LIB/channels/$CH_NAME/tools/gate.py" ] && CHANNEL_GATE="$LIB/channels/$CH_NAME/tools/gate.py"
+    ;;
+esac
+
 SESSION=${SUPERVISE_SESSION:-}
 if [ -z "$SESSION" ]; then
   # the session that wrote inside the film folder most recently
@@ -197,8 +209,20 @@ gate_step() {   # run one check, keep its output, remember whether it passed
   gate_step index "$PY" "$LIB/tools/check_films_index.py"
   # a film's treatment is a deliverable: it must be committable, or the episode vanishes with the machine
   gate_step tracked "$PY" "$LIB/tools/check_tracked.py" "$FILM"
+  # The channel's own gate: where the episode stands, and whether the render may run at all. The checks above
+  # answer "is this file well formed"; this one answers "has this film been judged" — and a green gate that
+  # never asks that question is a green gate that cannot see a film a reviewer rejected. It is asked of the
+  # channel the film belongs to, because the channel is the one that knows what its stamps mean.
+  if [ -n "$CHANNEL_GATE" ]; then
+    gate_step channel-gate "$PY" "$CHANNEL_GATE" status "$FILM"
+    # a film that has been built and whose gate is closed must not be handed over; a film still being built
+    # is not a fault — its gate is closed on purpose
+    if ls "$FILM"/*.mp4 "$FILM"/out/*.mp4 >/dev/null 2>&1; then
+      gate_step gate-render "$PY" "$CHANNEL_GATE" check --for render "$FILM"
+    fi
+  fi
 } > "$GATE" 2>&1
-echo "supervise: gate $( [ "$GATE_OK" -eq 1 ] && echo PASS || echo FAIL ) (filmcheck, drawcheck, citations, claims, facts, index, tracked)"
+echo "supervise: gate $( [ "$GATE_OK" -eq 1 ] && echo PASS || echo FAIL ) (filmcheck, drawcheck, citations, claims, facts, index, tracked, channel gate)"
 
 # --- the session's own tool log: what it did, and when -------------------------------
 TOOLS=$(mktemp)

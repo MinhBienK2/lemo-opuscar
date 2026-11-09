@@ -122,7 +122,11 @@ def digest(ep, kind, ch=None):
     if kind in ('script', 'picture'): h.update(words(ep, ch).encode())
     files = []
     if kind == 'props': files = [os.path.join(ep, 'src/props.js')]
-    if kind == 'storyboard': files = [os.path.join(ep, 'LOOK.md')]
+    # The storyboard pass judges the board *and* the shot code it reads: review.sh --storyboard hands the critic
+    # LOOK.md and src/film.js together. A stamp that says it covers both and hashes only one is a stamp that
+    # promises more than it holds.
+    if kind == 'storyboard':
+        files = [os.path.join(ep, 'LOOK.md'), os.path.join(ep, 'src/film.js')]
     if kind == 'picture':
         files = [os.path.join(ep, 'src', f) for f in picture_files(ep, ch)] + [os.path.join(ep, 'index.html')]
     for f in files:
@@ -149,6 +153,8 @@ def newest_code_mtime(ep, kind, ch=None):
     files = []
     if kind == 'props':
         files = [os.path.join(ep, 'src/props.js')]
+    if kind == 'storyboard':
+        files = [os.path.join(ep, 'LOOK.md'), os.path.join(ep, 'src/film.js')]
     if kind == 'picture':
         files = [os.path.join(ep, 'src', f) for f in picture_files(ep, ch)] + [os.path.join(ep, 'index.html')]
     ts = [os.path.getmtime(f) for f in files if os.path.isfile(f)]
@@ -162,7 +168,7 @@ def stale_cut(ep, kind, cut, ch=None):
     written before the last change of the code says nothing about that code: accepting it would stamp code
     nobody looked at. The cut therefore has to be written after the code it judges.
     """
-    if kind not in ('props', 'picture'):
+    if kind not in ('props', 'storyboard', 'picture'):
         return None
     t = newest_code_mtime(ep, kind, ch)
     if t is None or not os.path.isfile(cut):
@@ -195,9 +201,9 @@ def valid(ep, kind, ch=None):
         # The outline and the storyboard are plans, not the film: they are deliberately not reopened by later edits
         # (a treatment is refined after it passes, and LOOK.md is kept in step with the assembly). A reader must
         # still be able to see that what was judged is no longer what is on disk.
-        what = 'dàn ý' if kind == 'outline' else 'bản LOOK.md'
+        what = 'dàn ý' if kind == 'outline' else 'bản LOOK.md và src/film.js'
         print(f'gate: cảnh báo — {os.path.basename(p)} chấm một {what} khác với hiện tại (đã sửa sau lần PASS). '
-              f'{what.capitalize()} không bị mở lại, nhưng bản chấm không nói về {what} đang dùng.',
+              f'Không bị mở lại, nhưng bản chấm không nói về {what} đang dùng.',
               file=sys.stderr)
     review = os.path.join(ep, head[2])
     if not os.path.isfile(review) or sha(review) != head[1] or not passed(review):
@@ -250,8 +256,17 @@ def status(ep):
 
 def check(ep, step='render'):
     """None when the step may run, else the reason it may not"""
+    if not os.path.isdir(ep):
+        return (f'không có thư mục tập {ep} — một cổng không đọc tệp nào thì không có gì để chấm, '
+                f'nhưng "không có gì" không phải là PASS')
     L = lines(ep)
-    if not L: return None   # the channel's demo, a rig test: no words, nothing to gate
+    if not L:
+        # The channel's demo, a rig test: no words, nothing to gate. But only if the folder really is
+        # something the channel made — a path that was typed wrong must not open the gate.
+        if not any(os.path.exists(os.path.join(ep, f)) for f in ('index.html', 'src', 'film.json')):
+            return (f'{ep} không phải một tập của kênh (không có voice/lines.json, src/ hay index.html) — '
+                    f'cổng không mở cho một thư mục không có gì')
+        return None   # the channel's demo, a rig test: no words, nothing to gate
     cov = coverage(ep)
     if cov: return cov
     for kind in NEEDS[step]:
@@ -265,40 +280,158 @@ def check(ep, step='render'):
     return None
 
 
-if __name__ == '__main__':
-    a = sys.argv[1:]
-    opt = lambda k: a[a.index(k) + 1] if k in a and a.index(k) + 1 < len(a) else None
+def main(argv=None):
+    a = sys.argv[1:] if argv is None else list(argv)
     if len(a) < 2: sys.exit(__doc__)
-    op, ep = a[0], os.path.abspath(a[1])
+    op = a[0]
+    # The episode may come before the flags or after them: "check <tập> --for render" and
+    # "check --for render <tập>" are the same command. A gate that reads the wrong one is worse than
+    # no gate — it answers "PASS" about a folder that does not exist.
+    opts, pos, i = {}, [], 1
+    while i < len(a):
+        x = a[i]
+        if x.startswith('--'):
+            if i + 1 < len(a) and not a[i + 1].startswith('--'):
+                opts[x] = a[i + 1]; i += 2
+            else:
+                opts[x] = True; i += 1
+        else:
+            pos.append(x); i += 1
+    if not pos: sys.exit(__doc__)
+    ep = os.path.abspath(pos[0])
+    opt = lambda k: opts.get(k)
     if op == 'check':
         step = opt('--for') or 'render'
         if step not in NEEDS: sys.exit(__doc__)
         r = check(ep, step)
         if r: sys.exit('cổng chấm: ' + r)
         print('cổng chấm: PASS')
-    elif op == 'need' and len(a) >= 3 and all(k in WHAT for k in a[2:]):
-        for k in a[2:]:
+    elif op == 'need' and len(pos) >= 2 and all(k in WHAT for k in pos[1:]):
+        for k in pos[1:]:
             why = kind_ok(ep, k)
             if why: sys.exit('cổng chấm: ' + why)
     elif op == 'placeholders':
-        c = chapter(ep, a[2]) if len(a) >= 3 else None
+        c = chapter(ep, pos[1]) if len(pos) >= 2 else None
         ph = placeholders(ep, c)
         if ph: sys.exit(f"src/{', src/'.join(ph)} vẫn là file giữ chỗ (placeholder): dựng thật trước khi chấm")
-    elif op == 'status' and len(a) >= 2:
-        status(os.path.abspath(a[1]))
-    elif op == 'cut' and len(a) >= 4 and a[2] in WHAT:
+    elif op == 'status':
+        status(ep)
+    elif op == 'cut' and len(pos) >= 3 and pos[1] in WHAT:
         ch = chapter(ep, opt('--chapter')) if opt('--chapter') else None
-        why = stale_cut(ep, a[2], os.path.abspath(a[3]), ch)
+        why = stale_cut(ep, pos[1], os.path.abspath(pos[2]), ch)
         if why: sys.exit('cổng chấm: ' + why)
         print('bản cắt còn hợp lệ')
-    elif op == 'chapter' and len(a) >= 3:
-        c = chapter(ep, a[2])
-        if not c: sys.exit(f"gate: không có chương '{a[2]}' trong {ep}/src/chapters.js")
+    elif op == 'chapter' and len(pos) >= 2:
+        c = chapter(ep, pos[1])
+        if not c: sys.exit(f"gate: không có chương '{pos[1]}' trong {ep}/src/chapters.js")
         print(f"{c['a']}-{c['b']} {c['id']}")
-    elif op == 'stamp' and len(a) >= 4 and a[2] in WHAT:
+    elif op == 'stamp' and len(pos) >= 3 and pos[1] in WHAT:
         ch = None
         if opt('--chapter'):
             ch = chapter(ep, opt('--chapter'))
             if not ch: sys.exit(f"gate: không có chương '{opt('--chapter')}'")
-        stamp(ep, a[2], os.path.abspath(a[3]), ch, opt('--critic') or '')
+        stamp(ep, pos[1], os.path.abspath(pos[2]), ch, opt('--critic') or '')
     else: sys.exit(__doc__)
+
+
+# ——— selftest ———
+
+def selftest():
+    """một cái kiểm trả lời "được" cho mọi thứ thì không phải kiểm
+
+    Những ca này là những lỗi đã xảy ra thật: phán quyết viết đậm bị đọc thành không có
+    phán quyết; bản cắt viết trước lần sửa code đóng tem cho code mới; và cổng đọc
+    nhầm vị trí đối số rồi trả lời PASS về một thư mục không tồn tại.
+    """
+    import shutil
+    import tempfile
+    cases = []
+
+    # — phán quyết: đúng những cách người viết —
+    tmp = tempfile.mkdtemp(prefix='gate-selftest-')
+    try:
+        def report(text, name='REVIEW.md'):
+            p = os.path.join(tmp, name)
+            open(p, 'w', encoding='utf-8').write(text)
+            return p
+        for label, text, want in (('phán quyết thường', 'VERDICT: PASS\n', True),
+                                  ('phán quyết đậm', '**VERDICT: PASS**\n', True),
+                                  ('phán quyết dưới tiêu đề', '## VERDICT: PASS\n', True),
+                                  ('phán quyết REJECT', 'VERDICT: REJECT\n', False),
+                                  ('không có phán quyết', '## NHẬN XÉT\n- c1 tốt\n', False),
+                                  ('phán quyết ở giữa dòng', 'xem VERDICT: PASS nhé\n', False)):
+            got = passed(report(text))
+            cases.append((f'{label} thì {"đọc" if want else "không đọc"} đúng', got == want, got, ''))
+
+        # — một tập thật, đủ nhỏ —
+        ep = os.path.join(tmp, 'tap')
+        os.makedirs(os.path.join(ep, 'src'))
+        os.makedirs(os.path.join(ep, 'voice'))
+        os.makedirs(os.path.join(ep, 'review'))
+        open(os.path.join(ep, 'LOOK.md'), 'w', encoding='utf-8').write('# dàn ý\n')
+        open(os.path.join(ep, 'src/film.js'), 'w', encoding='utf-8').write('// mã nhát 1\n')
+        open(os.path.join(ep, 'src/props.js'), 'w', encoding='utf-8').write('// vật 1\n')
+        open(os.path.join(ep, 'voice/lines.json'), 'w', encoding='utf-8').write(
+            '[{"id":"c1","text":"Vì sao thế này?"}]')
+        open(os.path.join(ep, 'index.html'), 'w', encoding='utf-8').write('<html></html>')
+
+        # — tem storyboard phải bám cả dàn ý lẫn mã nhát, vì cổng storyboard chấm cả hai —
+        d0 = digest(ep, 'storyboard')
+        open(os.path.join(ep, 'src/film.js'), 'w', encoding='utf-8').write('// mã nhát 2\n')
+        d1 = digest(ep, 'storyboard')
+        cases.append(('tem storyboard đổi khi mã nhát đổi', d0 != d1, d1, ''))
+        open(os.path.join(ep, 'LOOK.md'), 'w', encoding='utf-8').write('# dàn ý khác\n')
+        d2 = digest(ep, 'storyboard')
+        cases.append(('tem storyboard đổi khi dàn ý đổi', d1 != d2, d2, ''))
+
+        # — bản cắt phải viết sau lần sửa code cuối —
+        cut = os.path.join(ep, 'review/STORYBOARD-DIRECTORS-CUT.md')
+        open(cut, 'w', encoding='utf-8').write('## VERDICT: PASS\n')
+        os.utime(cut, (1000, 1000))          # viết trước mọi thứ
+        why = stale_cut(ep, 'storyboard', cut)
+        cases.append(('bản cắt cũ hơn code thì bị chặn', bool(why), why, ''))
+        os.utime(cut, None)                   # viết sau
+        why = stale_cut(ep, 'storyboard', cut)
+        cases.append(('bản cắt mới hơn code thì được dùng', why is None, why, ''))
+
+        # — cổng không mở cho một thư mục không có gì —
+        r = check(os.path.join(tmp, 'khong-co'), 'render')
+        cases.append(('thư mục không tồn tại thì cổng không trả lời PASS', r is not None, r, ''))
+        r = check(ep, 'render')
+        cases.append(('tập chưa có tem picture thì cổng chặn', r is not None, r, ''))
+
+        # — thứ tự đối số không được đổi ý nghĩa —
+        import io
+        import contextlib
+        outs = []
+        for argv in (['check', ep, '--for', 'render'], ['check', '--for', 'render', ep]):
+            buf = io.StringIO()
+            try:
+                with contextlib.redirect_stdout(buf), contextlib.redirect_stderr(io.StringIO()):
+                    main(argv)
+                code = 0
+            except SystemExit as e:
+                code = e.code
+            outs.append((code, buf.getvalue().strip()))
+        cases.append(('thứ tự cờ trước hay sau cho cùng kết quả', outs[0] == outs[1], outs, ''))
+        cases.append(('tập chưa có tem picture thì cổng trả mã khác 0',
+                       outs[0][0] != 0, outs[0][0], ''))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    failed = 0
+    for name, ok, got, extra in cases:
+        print(f'{"ok  " if ok else "FAIL"} {name}' + (f'  [{got}]' if not ok else ''))
+        if not ok:
+            failed += 1
+    if failed:
+        print(f'gate --selftest: {failed}/{len(cases)} FAIL')
+        return 1
+    print(f'gate --selftest: {len(cases)}/{len(cases)} ok')
+    return 0
+
+
+if __name__ == '__main__':
+    if '--selftest' in sys.argv[1:]:
+        sys.exit(selftest())
+    main()

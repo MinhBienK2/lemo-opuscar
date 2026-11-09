@@ -1440,6 +1440,69 @@ mọi bản chấm mà công cụ sẽ đọc có phán quyết mà công cụ �
 công cụ** — hai bước 4 và 7 được nêu tên ngay trong đầu ra, và bài kiểm tra sẽ tự im đi khi
 kênh thêm chế độ cho chúng.
 
+## N52 — critical — Cổng chấm trả lời "PASS" về một thư mục không tồn tại
+
+**Bằng chứng.** `gate.py` đọc đối số kiểu `op, ep = a[0], os.path.abspath(a[1])`. Nghĩa là
+`python3 gate.py check --for render <tập>` lấy `--for` làm đường dẫn tập. Rồi `check()`:
+
+```python
+L = lines(ep)
+if not L: return None   # the channel's demo, a rig test: no words, nothing to gate
+```
+
+`lines()` trả `None` cho một thư mục không có `voice/lines.json` — **kể cả thư mục không tồn tại** —
+nên cổng trả lời PASS. Đo bằng máy:
+
+```
+$ python3 channels/tram-nghi-nhieu/tools/gate.py check --for render /tmp/khong-co-that
+cổng chấm: PASS          # trước khi sửa
+```
+
+Cách thoát dành cho demo ("không có lời kể thì không có gì để canh") nuốt luôn đường dẫn gõ
+sai. Hai lý do khiến nó thành lỗi **nghiêm trọng**, không phải là phiền toái:
+
+1. `core/render/video.mjs` và `voice/tts_vi.py` gọi cổng **đúng** thứ tự tài liệu, nên các
+   lệnh trong thư viện chưa từng bị đánh lừa — nhưng chính vì thế mọi lần gọi sai đều im lặng.
+2. Cổng là thứ **cuối cùng** trước khi dựng. Một cổng trả PASS về một đường dẫn sai thì
+   không còn gì để chặn nữa.
+
+**Đã sửa.** (a) `gate.py` tách cờ và đối số vị trí: `check <tập> --for render` và
+`check --for render <tập>` cho cùng kết quả, vì cổng không được trả lời khác nhau theo thứ tự
+gõ. (b) `check()` nói thẳng ra khi thư mục không tồn tại, và chỉ để "không có lời kể, không có
+gì để canh" cho một thư mục **thật** (có `index.html`, `src/` hay `film.json`). (c) `gate.py`
+giờ có `--selftest` với 14 ca, trong đó có đúng ca này.
+
+## N53 — high — Tem storyboard nói nó phủ cả mã nhát, nhưng nó chỉ băm dàn ý
+
+**Bằng chứng.** `gate.py` tự mô tả: `STORYBOARD.pass  LOOK.md + src/film.js`. Nhưng
+`digest()` băm **một tệp**:
+
+```python
+if kind == 'storyboard': files = [os.path.join(ep, 'LOOK.md')]
+```
+
+Trong khi `review.sh --storyboard` đưa cho người chấm **cả hai**: `cp "$EP/LOOK.md" "$W/"`
+*và* `cp "$EP/src/film.js" "$W/film.js"`. Tức là vòng chấm có phán quyết về mã nhát, còn con
+tem thì không dính vào mã nhát. Một tem nói phủ cả hai mà chỉ băm một là một tem nói dối.
+
+Hệ quả kép: `src/film.js` sửa xong thì tem cũ vẫn "còn hiệu lực"; và **bản cắt của đạo diễn ở
+bước storyboard không có luật cũ** — `stale_cut()` chỉ biết `props` và `picture`, nên một bản
+cắt viết trước lần sửa `src/film.js` cuối cùng vẫn đóng được tem cho một phim mà không ai
+nhìn (đúng cái N22 đã sửa cho hai loại kia, quên loại thứ ba).
+
+**Đã sửa.** (a) `digest()` băm `LOOK.md` **và** `src/film.js` cho loại `storyboard`; tem nói
+đúng điều nó phủ. (b) `stale_cut()` biết loại `storyboard`, và `review.sh --storyboard` gọi
+`gate.py cut` trước khi đóng tem, y như props và picture — bản cắt viết trước lần sửa code
+cuối thì bị từ chối, và cổng nói phải làm gì. (c) Cả 14 ca của `--selftest` mới đều có ví dụ
+nó phải bắt.
+
+**Cùng lúc đó: người giám sát không hỏi cổng của kênh.** `tools/supervise.sh` chạy
+`filmcheck`, `drawcheck`, `citations`, `claims`, `facts`, `index`, `tracked` — bảy bài kiểm tra
+mà **không bài nào hỏi "phim này đã được chấm chưa"**. Nên một cổng xanh nói "mọi thứ ổn" về
+một phim mà người chấm vừa trả về REJECT 7,3/10 và cổng dựng đang đóng. Nay `supervise.sh` gọi
+`gate.py status` (in ra từng tem và **phán quyết vòng chấm cuối**) và `gate.py check --for render`
+(khi phim đã dựng xong thì cổng đóng là FAIL, còn đang dựng thì chưa).
+
 ---
 
 ## Các guard đã bắt được gì (tính từ 08:00, hai tập còn chạy)
@@ -1524,6 +1587,9 @@ tiền (trước vòng chấm, trước lúc dựng, trước lúc bàn giao), c
 | 48 | Một cách viết lệch lệch phải lộ ra, chứ không phải khi nó làm mất một vòng chấm (N49) | `channels/tram-nghi-nhieu/tools/check_reports.py` | **xong** — bài kiểm tra đi dọc mẫu và bản chấm, nói cách viết nào công cụ không đọc; 27/27 selftest |
 | 49 | Một tài liệu cũ không tự nói là cũ; phải có bài kiểm tra đọc nó cùng tài liệu nó phải khớp (N50) | `channels/tram-nghi-nhieu/tools/check_storyboard.py`, `check_voice_facts.py` | **xong** |
 | 50 | Hai bước không có công cụ: bản chấm viết ra không ai đọc, không ai đếm (N51) | `channels/tram-nghi-nhieu/tools/check_reports.py` | **một nửa** — bài kiểm tra đã nêu tên hai bước đó; thêm chế độ cho chúng trong `tools/review.sh` thì còn lại nửa kia |
+| 51 | Cổng không được trả lời PASS về một thư mục không tồn tại (N52) | `channels/tram-nghi-nhieu/tools/gate.py` | **xong** — cờ và đối số tách riêng; thư mục không phải tập thì bị từ chối; 14 ca selftest |
+| 52 | Tem phải phủ đúng cái nó nói; bản cắt của bước storyboard cũng phải viết sau lần sửa code (N53) | `channels/tram-nghi-nhieu/tools/gate.py`, `channels/tram-nghi-nhieu/tools/review.sh` | **xong** |
+| 53 | Người giám sát phải hỏi cổng của kênh, không chỉ hỏi các tệp có đúng hình dạng không | `tools/supervise.sh` | **xong** — `gate.py status` in ra từng tem và phán quyết vòng chấm cuối; `check --for render` là FAIL khi phim đã dựng mà cổng đóng |
 
 ### Mỗi phát hiện đã có dòng riêng trong `improvements/lessons.md`
 
