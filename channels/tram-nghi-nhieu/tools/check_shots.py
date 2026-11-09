@@ -102,6 +102,28 @@ def problems(beat):
     return out
 
 
+def runs(numbers):
+    """consecutive line numbers grouped: [25..32, 40] → [[25..32], [40]]"""
+    out = []
+    for n in sorted(numbers):
+        if out and n == out[-1][-1] + 1:
+            out[-1].append(n)
+        else:
+            out.append([n])
+    return out
+
+
+def cluster_text(numbers):
+    """'c25–c32 (8 câu), c40' — the machine flags read as stretches, not as a list of single lines"""
+    parts = []
+    for r in runs(numbers):
+        if len(r) == 1:
+            parts.append('c%d' % r[0])
+        else:
+            parts.append('c%d–c%d (%d câu)' % (r[0], r[-1], len(r)))
+    return ', '.join(parts)
+
+
 def report(beats, out=sys.stdout):
     bad = [(b, problems(b)) for b in beats]
     bad = [(b, p) for b, p in bad if p]
@@ -124,6 +146,15 @@ def report(beats, out=sys.stdout):
         print('  c%s  [%s]  fill %s  "%s"' % (b.get('n'), flags, fill, text), file=out)
         for kind, hint in ps:
             print('        → %s: %s' % (kind, hint), file=out)
+    # the same flags, read as stretches: a maker fixes a stretch, not a line
+    by_kind = {}
+    for b, ps in bad:
+        for kind, _ in ps:
+            by_kind.setdefault(kind, []).append(b.get('n'))
+    if by_kind:
+        print('', file=out)
+        for kind in sorted(by_kind):
+            print('  %s: %s' % (kind, cluster_text(by_kind[kind])), file=out)
     return len(bad), unmeasured
 
 
@@ -171,6 +202,7 @@ def selftest():
         check('nêu cờ DARK', 'DARK' in text)
         check('nêu vật quá nhỏ', 'FILL' in text and '5 %' in text)
         check('in câu lời để còn biết là câu nào', 'Câu có cả hai' in text)
+        check('cờ hiện thành cụm', 'SAME: c2, c4' in text or 'SAME:' in text, text[-400:])
         # a folder that holds beats.json is found too
         got2, path2 = load(d)
         check('tìm thấy beats.json trong thư mục', got2 is not None and path2 == p)

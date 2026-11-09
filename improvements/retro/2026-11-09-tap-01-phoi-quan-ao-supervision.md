@@ -2124,6 +2124,7 @@ tiền (trước vòng chấm, trước lúc dựng, trước lúc bàn giao), c
 | 77 | Bài kiểm tra hình báo "60 câu vật quá nhỏ" về 54 câu chưa từng được dựng: tờ sheet vẽ cho một khoảng câu đánh dấu phần còn lại là `skipped`, mà máy coi `fill` thiếu là 0 — nên 54 câu không hề có lỗi biến thành 54 lỗi giả, ngay ở chỗ người làm phim phải tin trước khi mở một vòng chấm bốn mươi phút | high | `check_shots.py` phân biệt *chưa đo* với *đo được 0* (câu `skipped` không còn bị báo lỗi, được đếm riêng), báo lỗi thật cho câu thiếu sự kiện giọng (`VOICE`), ra mã 2 khi chưa đo hết, chọn tờ sheet nào đo được nhiều câu hơn, và `review.sh` không dùng lại tờ nửa vời cho vòng chấm cả phim |
 | 78 | Đánh giá khách quan phim tập 01: cờ máy bắt được `SAME` và `FILL`, nhưng không bắt được điều quan trọng nhất — vật chính có phải là thứ câu đó đang gọi tên không (`fill` đo vật *lớn nhất*, không phải vật *được gọi tên*), vật có đang làm việc không, và tiền đề của cả phim có đọc được không ("áo ướt" nhìn như áo khô). 42 nhãn không có bài kiểm tra nào ghép được với vật trong khung, vì rig không trả về chỗ của vật | medium | **proposed** — `window.SHOTPROBE` trả thêm vị trí màn hình của từng vật, một `window.LABELPROBE` raycast đuôi mũi tên để biết nhãn trỏ vào vật nào, `check_labels.py` báo nhãn trỏ vào không / trỏ nhầm / câu gọi tên vật A mà vật B chiếm khung nhiều hơn; chưa làm vì R13 — ba phiên đang dựng bằng rig này |
 | 79 | Bảng trạng thái của cổng nói "script chưa có PASS" về một tập đã có tem của cả chương: `status` chỉ nhìn tem của cả tập, còn `check` thì biết tập dài được đóng tem theo từng chương — hai lệnh của cùng một công cụ trả lời khác nhau, và người làm phim mở thêm một vòng chấm cho một bước đã qua | medium | `gate.py status` dùng đúng `kind_ok()` cho hai loại tem theo chương (`script`, `picture`); selftest thêm hai ca: tem của chương tính là tem của tập, và cổng mở cho bước đó |
+| 80 | Danh sách cờ máy là một bức tường từng dòng, trong khi người làm phim sửa **đoạn** — 22 cờ SAME và 30 khung mỏng trong tập 01 phải tự đọc và tự gom, mỗi lần gom là một lần sửa code | medium | `check_shots.py` in thêm dòng tóm tắt theo từng loại cờ, gom các câu liền nhau (`c37–c40 (4 câu)`); selftest có ca cho việc này |
 
 ### Mỗi phát hiện đã có dòng riêng trong `improvements/lessons.md`
 
@@ -2411,6 +2412,33 @@ tính là tem của tập, và cổng cũng mở cho bước đó.
 
 **Luật chung rút ra:** hai lệnh của một công cụ phải dùng **cùng một phép so sánh**. Nếu `check` mở
 cửa mà `status` báo chưa có, thì `status` đang nói dối — và người đọc nó sẽ hành động theo.
+
+---
+
+## N80 — medium — Danh sách cờ máy phải đọc được như những đoạn, không phải như từng dòng
+
+**Bằng chứng.** Tờ sheet mới của tập 01 (dựng lúc 11:21) cho **22 cờ `SAME` và 30 khung có vật chính
+dưới 15 %**. `check_shots.py` in ra từng câu một:
+
+```
+  c25  [SAME]  fill 24%  "Lớp đó bám sát vải, nhanh chóng bị bão hoà."
+  c26  [—]  fill 19%  …
+  c27  [SAME]  fill 17%  …
+```
+
+Người làm phim không sửa "hai mươi hai câu" — họ sửa **ba đoạn**. Nhưng danh sách không nói cho họ
+biết đâu là đoạn: phải tự đọc và tự gom, mỗi lần sửa lại là một lần sửa code.
+
+**Đã sửa.** `check_shots.py` in thêm một dòng tóm tắt theo từng loại cờ, gom các câu liền nhau:
+
+```
+  SAME: c5–c7 (3 câu), c16, c23, c25, c27, c29–c31 (3 câu), c34–c35 (2 câu), c37–c40 (4 câu),
+        c45–c46 (2 câu), c49–c50 (2 câu), c55, c59–c60 (2 câu)
+  FILL: c1, c13–c18 (6 câu), c20, c22–c23 (2 câu), …
+```
+
+Nhìn một dòng là biết ngay: đoạn `c37–c40` và đoạn `c44–c47` là hai chỗ phải làm lại; `c59–c60` là
+chỗ cuối. Đó là thông tin mà một bức tường 52 dòng không cho.
 
 ---
 
