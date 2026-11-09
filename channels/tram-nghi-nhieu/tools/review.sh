@@ -85,6 +85,11 @@ else
 fi
 command -v "$CLI" >/dev/null || die "the reviewer '$CLI' is not installed"
 CRITIC_ID="$CLI -p ${LEMO_CRITIC_MODEL:+--model $LEMO_CRITIC_MODEL}"; [ -n "$LEMO_CRITIC_MODEL" ] || CRITIC_ID="$CRITIC_ID(model mặc định của $CLI)"
+# The clock must fit the work. A reviewer that opens 23 images cannot finish in the time one that reads three
+# texts needs: the props round of tap-02 was killed by the clock at exactly 3600 s — an hour of a review that was
+# nearly done, and its verdict was lost with it. So the default grows with the number of images the round has to
+# open; a CRITIC_TIMEOUT given by hand still wins.
+CRITIC_TIMEOUT_SET=${CRITIC_TIMEOUT:+1}
 CRITIC_TIMEOUT=${CRITIC_TIMEOUT:-3600}   # how long the reviewer may think; a hung reviewer ends the round, it does not eat it
 critic() {   # $1 = the prompt; $2 = "no-verdict" when the reviewer answers with a list, not with a verdict
   VERDICTLESS=${2:-}
@@ -251,7 +256,18 @@ SCOPE_ID="film"
 [ "$ASSETS" = 1 ] && SCOPE_ID="assets"
 [ "$FINAL" = 1 ] && SCOPE_ID="final"
 [ -n "$LINES" ] && SCOPE_ID="lines-$LINES"
-[ -n "$CHAPTER" ] && SCOPE_ID="chapter-$CHAPTER"
+# The chapter is resolved BEFORE the lock, and the lock is named after the chapter's OWN id: the same chapter
+# can be asked for by its id ("ch4"), by its number ("4") or by "ch" + the number ("ch4"), and the gate resolves
+# all three to one chapter. A lock named after the raw argument gives that one chapter three different locks —
+# so two reviewers can sit on the same chapter at once, and the second one's report overwrites the first (tap-04
+# had both "chapter-ch4" and "chapter-4" markers in the same episode).
+CHID=""
+if [ -n "$CHAPTER" ]; then
+  R=$($GATE chapter "$EP" "$CHAPTER") || exit 2
+  LINES=${R% *}; CHID=${R#* }
+  echo "review: chapter $CHID -> lines $LINES" >&2
+fi
+[ -n "$CHID" ] && SCOPE_ID="chapter-$CHID"
 [ "$VIDEO" = 1 ] && SCOPE_ID="$SCOPE_ID-video"
 LOCK="$EP/.review-$SCOPE_ID.lock"
 if ! mkdir "$LOCK" 2>/dev/null; then
@@ -263,6 +279,24 @@ if ! mkdir "$LOCK" 2>/dev/null; then
   fi
   rm -rf "$LOCK"; mkdir "$LOCK" || die "cannot take the review lock $LOCK"
 fi
+# A round started before the lock was renamed still holds the lock under the raw argument's name ("chapter-4"),
+# and it is the SAME chapter: it still counts as busy, or two reviewers would sit on one chapter at once. So every
+# lock of this chapter is looked at — by id ("ch4"), by number ("4"), by anything the gate resolves to it.
+if [ -n "$CHID" ]; then
+  for LK in "$EP"/.review-chapter-*.lock; do
+    [ -d "$LK" ] || continue
+    [ "$LK" = "$LOCK" ] && continue          # this round's own lock
+    LPID=$(cat "$LK/pid" 2>/dev/null)
+    if [ -z "$LPID" ] || ! kill -0 "$LPID" 2>/dev/null; then rm -rf "$LK"; continue; fi
+    LKEY=${LK##*/.review-chapter-}; LKEY=${LKEY%.lock}
+    LCH=$($GATE chapter "$EP" "$LKEY" 2>/dev/null | awk '{print $2}')
+    [ "$LCH" = "$CHID" ] || continue
+    echo "review: đã có một vòng chấm của chương '$CHID' đang chạy (pid $LPID) trên tập này — đừng mở vòng thứ hai." >&2
+    echo "review: chờ vòng đang chạy xong rồi đọc bản chấm nó đã ghi vào $EP/review/." >&2
+    rm -rf "$LOCK"
+    exit 1
+  done
+fi
 echo $$ > "$LOCK/pid"
 W=$(mktemp -d "${TMPDIR:-/tmp}/lemo-review-XXXXXX")   # outside the repository: the reviewer is not shown the code
 # A round that dies must leave a trace. A silent death reads like "nobody has reviewed this yet": the producer
@@ -273,12 +307,6 @@ mkdir -p "$EP/review"
 rm -f "$DIED"
 printf 'bắt đầu %s · pid %s\n' "$(date '+%H:%M:%S')" "$$" > "$RUNNING"
 trap 'rc=$?; cd /; rm -rf "$W" "$LOCK"; rm -f "$RUNNING"; if [ "$rc" -ne 0 ]; then printf "vòng chấm chết (exit %s) lúc %s\n" "$rc" "$(date "+%H:%M:%S")" > "$DIED"; fi' EXIT
-CHID=""
-if [ -n "$CHAPTER" ]; then
-  R=$($GATE chapter "$EP" "$CHAPTER") || exit 2
-  LINES=${R% *}; CHID=${R#* }
-  echo "review: chapter $CHID -> lines $LINES" >&2
-fi
 
 # ——————————————————————————————————————————— the outline ———————————————————————————————————————————
 if [ "$OUTLINE" = 1 ]; then
@@ -345,6 +373,9 @@ if [ "$PROPS" = 1 ]; then
   (cd "$LIB" && ${PROPCHECK:-node channels/tram-nghi-nhieu/propcheck.mjs} "$EP" --out "$W/p" >/dev/null) || exit 2
   mkdir -p "$W/blind"; cp "$W"/p/p_*.jpg "$W/blind/"
   N=$(ls "$W"/blind | wc -l)
+  # The blind namer opens every one of these images, one by one. The clock grows with them: 180 s per image on
+  # top of the hour, so a round of 23 objects is not killed half-way through its own work.
+  [ -n "$CRITIC_TIMEOUT_SET" ] || CRITIC_TIMEOUT=$((3600 + 180 * N))
   # 1. blind: this session never sees the names
   cd "$W/blind"
   critic "Trong thư mục này có $N ảnh p_01.jpg … Mỗi ảnh là MỘT vật dựng 3D kiểu hoạt hình, nhìn từ ba phía (chéo, ngang, trên xuống), đặt trên nền trơn. Mở từng ảnh. Với mỗi ảnh, nói nó là vật gì như một người xem bình thường sẽ gọi: một cụm danh từ tiếng Việt cụ thể (\"quả chuối chín\", \"con chip máy tính\", \"cục pin điện thoại bị cắt đôi\"), cả trạng thái nếu thấy (xanh/chín, nguyên/cắt đôi). Đừng đoán theo một câu chuyện nào. Nếu không chắc, viết KHÔNG RÕ và nói nó giống những gì. Viết BLIND.md ở đây, mỗi ảnh một dòng:
@@ -377,6 +408,7 @@ PY
   done
   if [ -n "$(ls "$W/blind2" 2>/dev/null)" ]; then
     M=$(ls "$W/blind2" | wc -l)
+    [ -n "$CRITIC_TIMEOUT_SET" ] || CRITIC_TIMEOUT=$((3600 + 180 * M))
     # Lần đoán thứ hai là phép đo BỔ SUNG: nếu nó không trả lời, vòng này đi tiếp với một lần đoán và nói rõ là thiếu —
     # đoán mù là phép đo của một người, lần đoán thứ hai là phép đo của một người khác; mất lần thứ hai thì mất
     # phép đo của người khác, nhưng không được để một phép đo phụ giết vòng chấm của cả vật dựng.
@@ -391,6 +423,8 @@ rồi in lại nó." no-verdict); then
 import json; P=json.load(open('p/props.json'))
 open('NAMES.md','w').write('\n'.join(f\"#{x['n']} {x['name']}  (p/p_{x['n']:02d}.jpg)\" for x in P)+'\n')"
   # 2. judge: the blind names against the intended ones
+  # The judge opens every object's image too, so its clock is the big one again.
+  [ -n "$CRITIC_TIMEOUT_SET" ] || CRITIC_TIMEOUT=$((3600 + 180 * N))
   critic "Bạn kiểm tra vật dựng cho kênh Trạm Nghĩ Nhiều, nơi mọi vật có thật phải dựng đúng là nó, nhìn một giây là biết (trực thăng ra trực thăng có cánh quạt, đuôi, càng; không bao giờ là một cái hộp thay cho nó). Một người xem khác, không biết vật định dựng là gì, đã gọi tên từng vật trong BLIND.md. BLIND2.md (nếu có) là lần đoán thứ hai, của một người khác, chỉ với những vật mà lần đoán đầu không chắc. NAMES.md là tên người làm định dựng. Ảnh ở p/.
 Với từng vật: mở ảnh của nó, TỰ GỌI TÊN bằng mắt mình, rồi mới phán. Tên trong BLIND.md và BLIND2.md là lần đoán của người khác, và họ cũng có thể sai. ĐỘ CHẮC KHÔNG PHẢI LÀ PHÁN QUYẾT: một tên đúng nhưng \"chắc thấp\" vẫn là KHỚP, một tên sai nhưng \"chắc cao\" vẫn là HỎNG. Hai lần đoán lệch nhau thì ghi rõ lệch, và vật đó KHÔNG THỂ HỎNG CHỈ VÌ TÊN — nó HỎNG khi ảnh cho thấy vật khác.
 KHỚP khi ảnh tự nó nói ra vật thật đó: danh từ chính là đúng vật đó (từ đồng nghĩa được), trạng thái đúng (xanh/chín, nguyên/cắt đôi, chất liệu như thuỷ tinh/nhựa/kim loại), tỉ lệ và bộ phận đặc trưng đúng. HỎNG khi: ảnh cho thấy một vật gần giống (bát thành đĩa, thuỷ tinh thành nhựa, chuối lốm đốm thành chuối chín), vật định dựng chỉ là một phần trong tên của vật khác (\"ống vàng có găng tay\" cho một bàn tay), hoặc ảnh không cho biết đó là vật gì sau một giây nhìn. Đừng nương tay: người xem phim chỉ có một giây. Riêng linh kiện kỹ thuật mà người thường không biết tên (thanh lưỡng kim, tiếp điểm công tắc, rơ-le, mâm nhiệt): KHỚP khi người xem tả đúng hình thật làm nên nó (hai lớp kim loại khác màu dán vào nhau; hai lá kim loại có đầu tiếp xúc bạc, nối dây điện; đĩa kim loại có dây điện trở) và không gọi nó thành một vật thường khác (kẹp quần áo, bản lề, bếp ga): đó là HỎNG. Mở ảnh của vật hỏng, chỉ ra vì sao nó bị gọi sai (thiếu bộ phận đặc trưng nào, tỉ lệ sai, màu hay chất liệu sai, trông như vật nào khác), và cách sửa bằng hình: thêm bộ phận gì, đổi hình dáng gì, chất liệu gì. Cả vật khớp cũng ghi chỗ còn thô (khối trơn, thiếu chi tiết bề mặt) nếu có.
