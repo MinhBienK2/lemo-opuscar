@@ -1373,6 +1373,7 @@ những dòng dán câu cũ:
 | 85 | Bài kiểm tra liên kết tự báo lỗi ở chỗ không phải nguyên nhân: một khối code fence có dấu nháy lẻ làm `check_doc_links.py` ghép lệch mọi đoạn code **cả tệp**, nên lỗi báo ra ở cuối tài liệu, cách nguyên nhân hàng nghìn ký tự — người đọc sửa nhầm chỗ báo lỗi, rồi tắt luôn bài kiểm tra | medium | `check_doc_links.py` bỏ fence trước, rồi ghép đoạn code theo từng đoạn văn thay vì theo cả tệp; selftest có ca cho việc này |
 | 86 | Báo cáo đo nói "không có khoảng lặng" cho một tệp **không có tiếng nào**: `film_report.py` chạy trên bản dựng hình chưa ghép tiếng in ra "not measured" và "no silent stretch of 1.0 s or more" — đúng theo nghĩa đen, sai theo nghĩa đúng, và người đọc sẽ tưởng phim ổn | medium | `film_report.py` hỏi trước có luồng tiếng không: không có thì in `NO SOUND`, nói rõ ở phần khoảng lặng rằng đây là phim không có tiếng chứ không phải lời kể bị ngắt, và trả mã 1; selftest có ba ca |
 | 87 | Tờ sheet không phải là phim: đọc tờ sáu mươi ô (~480 px) rồi kết luận cho ba nhận định sai (c32 "tường tối, chỉ có vai áo" trong khi trên phim là một cái áo trắng lớn giữa khung; c7 "hai áo giống nhau" trong khi áo trái nhạt áo phải sẫm; nhãn "3 CÁI" thực ra là `3 ÁO`) — ô nhỏ làm mất đúng thứ phim dạy, tức tương phản sáng/tối và kích thước vật | medium | `tools/frames_at.py` (mới) cắt một khung cho mỗi câu **từ chính mp4**, đúng giữa câu lời kể, rồi dán bằng `core/render/sheet.py`; có `--cols`/`--w` để soi một câu ở kích thước đọc được; R12 trong `CODING_STANDARDS.md` nói rõ tờ sheet là bản đồ để tìm câu, phim mới là bằng chứng |
+| 88 | Bản dựng giữa được chuyển đi và về nguyên vẹn: `mux.sh` gửi 1 113 MB (52,9 Mbit/s) qua đường truyền ~1,3 MB/s — ~14 phút lên, ~12 phút encode, ~6 phút về — trong khi encode cuối **tại chỗ** chỉ tốn ~6,5 phút cho cả tập. Đường xa chậm hơn encode tại chỗ khoảng bốn lần, vì nó chuyển một bản trung gian *xa hơn nhiều* so với thứ bản cuối cần | medium | `mux.sh` thu nhỏ bản giữa một lần tại chỗ (`-preset veryfast -crf 20`): 239 MB thay vì 1 113 MB, đo thật PSNR 40,4 dB, bản cuối vẫn `crf 19` — tệp nhỏ dưới 200 MB thì gửi nguyên bản, thu nhỏ hỏng thì gửi bản gốc, và bản thu nhỏ bị xoá sau khi chuyển |
 Dàn ý trông vẫn đầy đặn, vẫn đúng về hình — nó chỉ nói về **những câu mà phim không còn nói**. Đây là
 cùng một lớp lỗi với N43, ở tầng khác: N43 là dàn ý (`TREATMENT.md`) bị bỏ lại; đây là **bản dàn ý
 hình** (`LOOK.md`) bị bỏ lại. Cả hai đều là tài liệu mô tả phim, và cả hai đều im lặng.
@@ -2721,6 +2722,40 @@ kích thước gốc.**
 
 **Luật chung rút ra:** **đánh giá phim thì phải xem phim.** Một bằng chứng hình ảnh nhỏ đến mức mất
 chi tiết thì không phải bằng chứng, chỉ là một câu hỏi.
+
+---
+
+## N88 — medium — Bản dựng giữa được chuyển đi và về nguyên vẹn 1,1 GB, và chuyển lâu hơn encode
+
+**Bằng chứng.** Tập 01 render xong lúc 11:43 (`out/video.mp4`, 1 113 MB, 52,9 Mbit/s — `core/render/video.mjs`
+mã hoá bằng `libx264 -preset medium -crf 14`). `core/render/mux.sh` thấy `LEMO_REMOTE_FFMPEG` mặc định là
+`muse muse2`, nên nó:
+
+| Bước | Thời gian |
+|---|---|
+| `scp` 1,1 GB lên `muse2` (đường truyền ~1,3 MB/s) | ~14 phút |
+| encode cuối ở `muse2` (`-preset slow -crf 19`) | ~12 phút |
+| `scp` phim cuối về | ~6 phút |
+
+Tổng ~32 phút, trong đó **~20 phút là chuyển dữ liệu**. Trong khi đó, encode cuối **tại máy này** tốn
+66,75 giây cho 30 giây phim — tức **~6,5 phút cho cả tập**. Đường xa chậm hơn encode tại chỗ khoảng bốn
+lần, và lý do không phải máy xa yếu: nó là chuyển một bản trung gian *xa hơn nhiều* so với thứ bản
+cuối cần.
+
+**Đã sửa.** `mux.sh` thu nhỏ bản giữa **một lần, tại chỗ**, trước khi chuyển đi:
+
+- `-c:v libx264 -preset veryfast -crf 20` → 239 MB thay vì 1 113 MB (**4,6× nhỏ hơn**), tốn 79 giây CPU;
+- đo thật: **PSNR trung bình 40,4 dB** (thấp nhất 38,4) so với bản giữa, và bản cuối vẫn encode ở
+  `crf 19` — chênh lệch không nhìn thấy;
+- tệp nhỏ dưới 200 MB thì chuyển nguyên bản; nếu thu nhỏ hỏng thì gửi bản gốc, phim vẫn ra;
+- bản thu nhỏ nằm ở `$TMPDIR` và bị xoá sau khi chuyển xong.
+
+**Luật chung rút ra:** *khi một bước chuyển dữ liệu chiếm nhiều thời gian hơn bước xử lý, hãy làm cho
+thứ được chuyển nhỏ đi — đừng làm cho máy xa mạnh hơn.* Bản giữa ở `crf 14` là dư: bản cuối `crf 19`
+đã không cần nó.
+
+**Chưa làm:** cho `mux.sh` tự ưu tiên encode tại chỗ khi phim ngắn (dưới khoảng bốn phút, encode tại
+chỗ thắng rõ). Đó là đổi chính sách, không chỉ đổi cách làm, nên để người dùng quyết.
 
 ---
 

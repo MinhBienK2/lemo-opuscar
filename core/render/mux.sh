@@ -1,6 +1,11 @@
 #!/bin/sh
 # Mux the finished film: mux.sh video.mp4 mix.wav out.mp4 [fps] [grain]
 # Video is output at the target frame rate (held segments get duplicated frames automatically); grain = grain strength (default 2, 0 = none; use 0 for pixel/vector styles)
+# The picture travels as a crf-20 copy when it is large: the renderer writes a near-lossless
+# intermediate (crf 14, ~53 Mbit/s — 1.1 GB for a three-minute film), and shipping that across a
+# 10 Mbit/s link costs about fifteen minutes each way, more than the final encode itself. One fast
+# local pass at crf 20 makes it four to five times smaller at ~40 dB PSNR (not visible), and the
+# final encode is crf 19 — so the film does not change. Small files are sent as they are.
 # Audio: two-pass loudnorm → −14 LUFS / TP −1.2 (a single pass is off by about 0.5 LU); finally prints the measured I / LRA / true peak and warns if off target (loudness outside ±1 LU or peak above −1 dB)
 # (when the mix itself clips or has extremely high peaks, loudnorm's dynamic mode misses both targets; measured −20 LUFS / +5 dBTP)
 # Any failed ffmpeg step exits non-zero and leaves no half-written file; the output path is printed only if the finished file exists and is non-empty.
@@ -105,10 +110,24 @@ if [ "$USE_REMOTE" = 1 ]; then
   echo "mux.sh: offloading heavy x264 encode to remote VPS ($REMOTE_HOST)" >&2
   # the remote home, not /tmp: a VPS /tmp is often a small tmpfs (512 MB) that a 1080p intermediate overflows
   RDIR="lemo-mux-$$"
-  RV="$RDIR/$(basename "$V")"; RA="$RDIR/$(basename "$A")"; RO="$RDIR/$(basename "$O")"
+  RA="$RDIR/$(basename "$A")"; RO="$RDIR/$(basename "$O")"
+  # a large intermediate is shrunk once, locally, before it travels (see the note at the top)
+  SV="$V"; SMALL=""
+  SZ=$(wc -c < "$V" | tr -d ' ')
+  if [ "${SZ:-0}" -gt 200000000 ]; then
+    SMALL="${TMPDIR:-/tmp}/mux-small-$$-$(basename "$V")"
+    if ffmpeg -y -loglevel error -i "$V" -c:v libx264 -preset veryfast -crf 20 -pix_fmt yuv420p "$SMALL"; then
+      SV="$SMALL"
+      echo "mux.sh: the picture travels as a crf-20 copy ($(( $(wc -c < "$SMALL") / 1048576 )) MB instead of $(( SZ / 1048576 )) MB) — the final encode is crf 19, so the film does not change" >&2
+    else
+      echo "mux.sh: could not make the smaller copy; sending the original" >&2
+      SMALL=""; rm -f "$SMALL" 2>/dev/null
+    fi
+  fi
+  RV="$RDIR/$(basename "$SV")"
   # any failure on the remote side falls back to the local encode below instead of failing the film
   # shellcheck disable=SC2086
-  if ssh "$REMOTE_HOST" "mkdir -p $RDIR" && scp -q "$V" "$A" "$REMOTE_HOST:$RDIR/" \
+  if ssh "$REMOTE_HOST" "mkdir -p $RDIR" && scp -q "$SV" "$A" "$REMOTE_HOST:$RDIR/" \
     && ssh "$REMOTE_HOST" "ffmpeg -y -loglevel error -i \"$RV\" -i \"$RA\" \
     -filter_complex \"[0:v]$VF[v];[1:a]$LN,aresample=48000$PAD[a]\" \
     -map \"[v]\" -map \"[a]\" -c:v libx264 -preset slow -crf 19 -r \"$FPS\" $CARGS -c:a aac -b:a 256k -movflags +faststart -shortest \"$RO\"" \
@@ -117,6 +136,7 @@ if [ "$USE_REMOTE" = 1 ]; then
   fi
   ssh "$REMOTE_HOST" "rm -rf $RDIR" 2>/dev/null
   release
+  [ -z "$SMALL" ] || rm -f "$SMALL"
 fi
 
 if [ "$USE_REMOTE" = 1 ]; then :
