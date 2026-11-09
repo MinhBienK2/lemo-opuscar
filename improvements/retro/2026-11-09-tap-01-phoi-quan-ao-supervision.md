@@ -2737,6 +2737,13 @@ chi tiết thì không phải bằng chứng, chỉ là một câu hỏi.
   theo mẫu chung; `lessons.md` có một dòng về lệnh giết theo tên.
 - **[ ]** N82: bài kiểm tra của kênh đối chiếu các câu "Dùng trong phim" / "Phim nói:" của
   `research/FACTS.md` với thẻ chữ trong `src/*.js` và với `voice/lines.json`.
+- **[ ]** N88 (nửa việc): cho `mux.sh` tự ưu tiên encode **tại chỗ** khi phim ngắn — đo được: encode
+  cuối tại máy này tốn ~6,5 phút cho một tập 176 giây, còn đường xa là ~32 phút. Đó là đổi *chính sách*
+  (đường xa có để máy này rảnh tay khi nhiều tập dựng cùng lúc), nên để người dùng quyết, không tự đổi.
+- **[ ]** N89 (thấp): mỗi vòng chấm để lại một thư mục transcript của người chấm trong
+  `~/.claude/projects/-tmp-lemo-review-*` — **46 thư mục, 1,1 GB** sau ~45 vòng. Không có gì dọn, và bản
+  ghi đó là bằng chứng (P5 đọc chính nó). Đề xuất: một công cụ dọn giữ lại N vòng gần nhất cho mỗi tập và
+  in ra mức dùng đĩa; đĩa đang ở 85 %.
 - **[ ]** N78: `window.SHOTPROBE` trả chỗ của từng vật; `window.LABELPROBE` raycast đuôi nũi tên của nhãn;
   `check_labels.py` báo nhãn trỏ vào không / trỏ nhầm / câu gọi tên vật A mà vật B chiếm khung nhiều hơn;
   `FILL` đo vật *được gọi tên*. Chưa làm vì R13 — ba phiên đang dựng bằng rig này.
