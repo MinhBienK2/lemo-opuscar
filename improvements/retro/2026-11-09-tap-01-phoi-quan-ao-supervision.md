@@ -2826,7 +2826,12 @@ tập khác), ở đây không ai bị giết: job chỉ không bao giờ kết 
 cả hai vỏ: có ngoặc vuông thì không báo). Tôi đã báo cho phiên của tập 01 biết và chỉ đích danh pid
 (2886362) để nó tự giết — tôi không giết tiến trình của phiên khác.
 
-## Đánh giá toàn bộ quá trình — bản cuối, đo bằng log của chính phiên
+## Đánh giá toàn bộ quá trình — đo bằng log của chính phiên
+
+**Cập nhật 14:0x: dòng đầu của mục này trước đây viết "Phim đã xong và qua cổng" — và đó là sai.**
+Phim có (176,4 s, dựng lúc 12:21), nhưng **cổng bàn giao FAIL** lúc 12:45 với hai bước hỏng (`timing`
+và `readcheck`), và mã đã đổi sau đó (`src/film.js` sửa lúc 13:47) nên phim trên đĩa **cũ hơn mã**.
+Sửa lại ở đây, vì một bản ghi ghi "đã qua cổng" thì người đọc tin nó và không ai chạy lại cổng.
 
 Phim đã xong và qua cổng. Dưới đây là quá trình, đo bằng công cụ đọc log của chính phiên
 (`tools/rules.py` trên toàn bộ transcript 935 MB), không bằng cảm nhận.
@@ -2840,7 +2845,7 @@ Phim đã xong và qua cổng. Dưới đây là quá trình, đo bằng công c
 | Vật dựng | 15:20 | 09-11 02:08 | 5 | REJECT cả 5 → Đạo diễn cắt → PASS lúc 08:04 |
 | Hình | 09-11 03:34 | 10:12 | 5 | REJECT cả 5 → Đạo diễn cắt → PASS lúc 11:27 |
 | Dựng rồi ghép tiếng | 04:27 | 12:21 | | phim 176,4 s |
-| Cổng bàn giao | 12:18 | | | |
+| Cổng bàn giao | 12:18 | 12:45 | | **FAIL — 2 bước hỏng**: `timing` (27 câu có cờ máy, lúc đó cổng chặn cả cờ đo lẫn cờ đoán) và `readcheck` (5 thẻ chữ hiện ít giây hơn thời gian đọc) |
 
 Tổng: **~25 giờ** cho một tập 176 giây. Vòng hình cuối vẫn REJECT, và ba câu chặn (c45, c49, c59) được
 sửa **sau** vòng cuối — nghĩa là giới hạn vòng chấm đếm số vòng, không đếm mức đủ: phim chỉ đủ hình sau
@@ -2869,6 +2874,36 @@ nó, và **R14** báo mọi mẫu `pgrep -f`/`pkill -f` nằm ngay trong dòng l
 R11 (bản đồ mã), R12 (xem tờ sheet, mở khung gốc khi cần), R14 (vòng chờ không tự khớp), và `beatsheet.mjs`
 giờ in tiến độ sau mỗi câu với đồng hồ từng câu — hai lượt chạy lành mạnh trước đây bị giết chỉ vì log
 rỗng.
+
+### So với các phiên mới — cùng phép đo, cùng công cụ (kiểm chứng)
+
+Các luật và guard có thật sự làm phiên sau tốt hơn không? Đo bằng `tools/rules.py` trên transcript của
+từng phiên, lúc 14:0x ngày 9 (transcript của tập 01 đã lớn thêm 38 MB kể từ lần đo trước, nên con số
+mở ảnh của nó là 834 chứ không phải 808):
+
+| Phép đo | tập 01 (phiên cũ) | tập 02 (phiên mới) | tập 03 (phiên mới) |
+|---|---|---|---|
+| R1 — ghi tệp dự án bằng shell | 370 | 40 | 1 |
+| R1t — sửa an toàn nhưng đi qua chương trình trung gian | 60 | 2 | 39 |
+| R10 — montage ffmpeg tự viết | 15 | 4 | 0 |
+| R11 — đọc lại tệp mã nguồn lớn | 236 | 65 | 44 |
+| R12 — mở ảnh | 834 | 138 | 88 |
+| R9 — đọc lại output của job nền (của harness) | 136 | 0 | 6 |
+| R5b — đọc lại tệp log của **chính mình** (luật mới) | 80 | 111 | 81 |
+| R14 — mẫu tự khớp (`pkill -f`, `pgrep -f`) | 5 | 1 | 0 |
+| Kích thước transcript | 973 MB | 108 MB | 81 MB |
+
+**Đọc.** Các luật đã có tác dụng: ghi tệp bằng shell giảm 9 lần, đọc lại tệp mã giảm 3–5 lần, mở ảnh
+giảm 6–10 lần, đọc lại output của harness về gần 0, transcript nhỏ hơn 9 lần.
+
+**Nhưng một lớp lỗi không giảm — và báo cáo cũ không thấy nó:** đọc lại tệp log mà chính phiên tạo ra
+(R5b): 80 / 111 / 81 lần. Nó chưa từng hiện ra trong báo cáo, vì bộ đếm R9 chỉ nhìn output của
+harness, còn tệp do phiên tự tạo (`> /tmp/round.log`) nằm ngoài tầm nhìn đó. Xem N103.
+
+**Còn cách đo bị mù.** Phiên tập 04 không có transcript riêng (N97), nên không đo được bằng công cụ;
+đo bằng tệp log của nó (`/tmp/tap04_tty.log`, 1 giờ 15 phút): 0 `pkill -f`, 0 `pgrep -f`, 0 `nohup`,
+0 `> file` cho job nền, **3 lần mở ảnh** (tập 01: 834), và 5 lần đọc lại tệp log của chính vòng đang
+chạy — cùng lớp lỗi R5b, vì phiên đó khởi động trước khi luật này có.
 
 ## N91 — medium — Lời khuyên của cổng trái với luật của chính kênh, ngay trong một tệp
 
