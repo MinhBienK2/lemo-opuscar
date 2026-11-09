@@ -37,12 +37,13 @@ HINT = {
     'RUN': 'nhiều câu liên tiếp trên cùng một bộ đạo cụ — cho câu này một hình riêng (góc khác, cắt vào trong vật, so sánh hai vật).',
     'NUM': 'lời kể có con số mà hình không có số đọc được — thêm đồng hồ / thước đo / bảng số, hoặc bỏ số khỏi lời.',
     'VOICE': 'lời kể có câu này mà window.EV không có sự kiện giọng cho nó — tiếng sẽ lệch với hình; đối chiếu voice/lines.json với window.EV.',
+    'OVERLAP': 'hai chữ trên màn hình đè lên nhau — người xem không đọc được chữ nào; dời một chữ sang chỗ khác trong khung.',
 }
 FILL_MIN = 0.15          # dưới ngưỡng này thì vật chính là một vệt nhỏ giữa khung trống
 
 # Máy đo được thì khác với máy đoán: hai loại cờ này không cùng một đẳng cấp.
 #   Đo được — sai là sai: độ phủ thất (khung trống có vật), câu thiếu sự kiện giọng (tiếng sẽ lệch
-#           với hình). Không có lý do gì để bỏ qua.
+#           với hình), hai chữ đè nhau (không ai đọc được chữ nào). Không có lý do gì để bỏ qua.
 #   Phép so sánh — **cần mắt người phán**: hai khung giống nhau (SAME) có thể là vật đang chuyển động
 #           rất nhẹ; nhiều câu trên cùng bộ đạo cụ (RUN) có thể là một cảnh dài đúng ý; tối (DARK) và
 #           số chưa có trên màn hình (NUM) là hai phép đo rất thô.
@@ -53,7 +54,9 @@ FILL_MIN = 0.15          # dưới ngưỡng này thì vật chính là một v�
 #     lệch với hình, và không ai sửa được sau khi phim xong. Cờ phép so sánh, **kể cả FILL**, không
 #     chặn ở đó: máy không biết thứ nhỏ trong khung là **chủ thể** hay một vệt vô nghĩa, và người chấm
 #     hình đã phán rồi (tem PICTURE.pass) — máy không có quyền phủ quyết của người chấm.
-FATAL_NOTE = ('VOICE',)
+# `OVERLAP` thì ở nhóm đầu: hai chữ đè nhau là hai chữ không ai đọc được — lỗi đo được, không cần
+# mắt người phán (N98).
+FATAL_NOTE = ('VOICE', 'OVERLAP')
 
 
 def measured(beat):
@@ -163,6 +166,45 @@ def sheet_older_than_code(episode, beats_path):
     return f(os.path.getmtime(beats_path)), f(newest)
 
 
+# Hai hộp chữ coi là đè nhau khi phần chồng chiếm từ một phần tư hộp nhỏ hơn trở lên, và phần chồng
+# phải lớn hơn một vệt nhỏ. Hai hộp chỉ **chạm mép** nhau thì không phải đè — nếu báo cả, cờ báo sai
+# dạy người làm phim bỏ qua cờ (xem N80, N94).
+OVERLAP_MIN_FRAC = 0.25
+OVERLAP_MIN_PX = 400
+
+
+def overlapping(beat):
+    """the pairs of on-screen texts that sit on top of each other: [(text a, text b, % of the smaller box)]"""
+    boxes = beat.get('boxes') or []
+    out = []
+    for i in range(len(boxes)):
+        a = boxes[i]
+        for j in range(i + 1, len(boxes)):
+            b = boxes[j]
+            if str(a.get('id')) == str(b.get('id')):
+                continue                      # cùng một chữ, ở hai thời điểm khác nhau
+            try:
+                ax0, ay0, ax1, ay1 = (float(a['x0']), float(a['y0']), float(a['x1']), float(a['y1']))
+                bx0, by0, bx1, by1 = (float(b['x0']), float(b['y0']), float(b['x1']), float(b['y1']))
+            except (KeyError, TypeError, ValueError):
+                continue
+            ox = min(ax1, bx1) - max(ax0, bx0)
+            oy = min(ay1, by1) - max(ay0, by0)
+            if ox <= 0 or oy <= 0:
+                continue
+            area = ox * oy
+            if area < OVERLAP_MIN_PX:
+                continue
+            small = min((ax1 - ax0) * (ay1 - ay0), (bx1 - bx0) * (by1 - by0))
+            if small <= 0:
+                continue
+            frac = area / small
+            if frac >= OVERLAP_MIN_FRAC:
+                out.append((str(a.get('text') or a.get('id'))[:40],
+                            str(b.get('text') or b.get('id'))[:40], round(frac * 100)))
+    return out
+
+
 def problems(beat):
     """the machine problems of one line: [(kind, text)]"""
     out = []
@@ -183,6 +225,12 @@ def problems(beat):
         if L.get('hit') is None:
             out.append(('PTR', 'nhãn "%s" trỏ vào không — mũi tên không chạm vật nào; người xem đọc một ngón tay '
                                'chỉ vào chỗ trống' % str(L.get('text') or L.get('id') or '?')[:40]))
+    # OVERLAP: hai chữ trên màn hình cùng lúc ở một chỗ — người xem không đọc được chữ nào (N98).
+    # Đây là lỗi **đo được** (hai hình chữ nhau là hai chữ không ai đọc), nên nó chặn cả ở vòng chấm
+    # lẫn ở cổng bàn giao — khác với SAME/RUN/DARK, vốn là phép so sánh cần mắt người.
+    for pair in overlapping(beat):
+        out.append(('OVERLAP', 'hai chữ đè nhau: "%s" và "%s" (%d %% diện tích hộp nhỏ hơn)'
+                    % (pair[0], pair[1], pair[2])))
     cover, _ = coverage(beat)
     if cover == 0:
         # Máy không thấy vật nào đủ lớn trong khung: cảnh cận trong một vật lớn, cảnh toàn cảnh, hay
@@ -293,18 +341,26 @@ def selftest():
         {'n': 9, 'text': 'Câu có nhóm vật', 'flags': [], 'fill': 0.06, **cast(0.06, 0.08, 0.07)},
         # cảnh cận trong vật lớn / toàn cảnh: máy không thấy vật nào — máy không kết luận được
         {'n': 10, 'text': 'Câu máy không nhìn thấy', 'flags': [], 'fill': 0.0, **cast()},
+        # hai chữ đè nhau: người xem không đọc được chữ nào (N98)
+        {'n': 11, 'text': 'Câu hai thẻ đè nhau', 'flags': [], 'fill': 0.4, **cast(0.4),
+         'boxes': [{'id': 'a', 'text': 'THẺ 1', 'x0': 100, 'y0': 100, 'x1': 300, 'y1': 200},
+                   {'id': 'b', 'text': 'THẺ 2', 'x0': 200, 'y0': 150, 'x1': 400, 'y1': 250}]},
+        # hai chữ chỉ chạm mép nhau thì không phải đè
+        {'n': 12, 'text': 'Câu hai thẻ chạm mép', 'flags': [], 'fill': 0.4, **cast(0.4),
+         'boxes': [{'id': 'c', 'text': 'THẺ 3', 'x0': 100, 'y0': 100, 'x1': 300, 'y1': 200},
+                   {'id': 'd', 'text': 'THẺ 4', 'x0': 300, 'y0': 100, 'x1': 500, 'y1': 200}]},
     ]
     with tempfile.TemporaryDirectory() as d:
         p = os.path.join(d, 'beats.json')
         with open(p, 'w', encoding='utf-8') as fh:
             json.dump(beats, fh)
         got, path = load(p)
-        check('đọc được beats.json', got is not None and len(got) == 10)
+        check('đọc được beats.json', got is not None and len(got) == 12)
         buf = io.StringIO()
         with contextlib.redirect_stdout(buf):
             bad, unmeasured = report(got, out=buf)
         text = buf.getvalue()
-        check('đếm đúng 6 câu có vấn đề', bad == 6, 'got %s' % bad)
+        check('đếm đúng 7 câu có vấn đề', bad == 7, 'got %s' % bad)
         check('đếm đúng 2 câu chưa được đo', unmeasured == 2, 'got %s' % unmeasured)
         check('câu chưa đo không bị báo là vật quá nhỏ', 'Câu ngoài khoảng dựng' not in text)
         check('câu không có sự kiện giọng thì báo VOICE', 'VOICE' in text and 'Câu không có sự kiện giọng' in text)
@@ -317,6 +373,8 @@ def selftest():
         check('cảnh máy không nhìn thấy không bị báo là vật quá nhỏ', 'Câu máy không nhìn thấy' not in text)
         check('nêu rõ câu nào máy không nhìn thấy', 'KHÔNG nhìn thấy vật nào' in text)
         check('không dạy đưa máy sát cho số', 'đừng đưa máy sát' in text.lower())
+        check('báo hai chữ đè nhau', 'OVERLAP' in text and 'THẺ 1' in text, text[-400:])
+        check('hai chữ chỉ chạm mép thì không báo', 'Câu hai thẻ chạm mép' not in text)
         check('in câu lời để còn biết là câu nào', 'Câu có cả hai' in text)
         check('cờ hiện thành cụm', 'SAME: c2, c4' in text or 'SAME:' in text, text[-400:])
         # a folder that holds beats.json is found too
@@ -371,14 +429,18 @@ def main(argv):
     n, unmeasured = report(beats)
     if n:
         if NOTE:
-            fatal = []
+            fatal, overlap = [], []
             for b in beats:
-                for kind, _ in problems(b):
-                    if kind in FATAL_NOTE:
-                        fatal.append(b.get('n'))
-                        break
+                kinds = [kind for kind, _ in problems(b)]
+                if 'OVERLAP' in kinds:
+                    overlap.append(b.get('n'))
+                if any(kind in FATAL_NOTE for kind in kinds):
+                    fatal.append(b.get('n'))
+            if overlap:
+                print('\ncheck_shots: %d câu có hai chữ đè nhau — người xem không đọc được chữ nào: %s'
+                      % (len(overlap), cluster_text(overlap)))
             if fatal:
-                print('\ncheck_shots: %d câu thiếu sự kiện giọng — tiếng sẽ lệch với hình: %s'
+                print('\ncheck_shots: %d câu chặn ở cổng bàn giao: %s'
                       % (len(fatal), cluster_text(fatal)))
                 return 1
             print('\ncheck_shots: %d câu có cờ máy — ở chế độ --note chúng không chặn: mở khung gốc rồi tự phán, '

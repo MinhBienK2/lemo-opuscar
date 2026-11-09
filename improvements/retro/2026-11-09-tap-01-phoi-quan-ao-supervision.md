@@ -3028,6 +3028,74 @@ Tôi không khởi động lại nó (công sức nghiên cứu nguồn đã b�
 kém hơn hẳn — không chạy được `tools/rules.py` trên nó, không nhắn tin cho nó được — nên lần sau
 phải dùng đúng công thức trên.
 
+## N98 — medium — Những lỗi mà người chấm vẫn phải tự tìm bằng mắt, và cái nào trong chúng máy đo được
+
+**Bằng chứng.** Hai vòng chấm gần nhất (storyboard của tập 02, props của tập 03) tự nêu ra cùng một
+họ lỗi, và cả hai đều **không có bài kiểm tra nào bắt được** — người chấm phải mở ảnh và nhìn:
+
+| Lỗi | Chỗ | Máy đo được không? |
+|---|---|---|
+| Hai thẻ (chữ trên màn hình) **đè lên nhau** | tập 01: hai thẻ phải dời chỗ khi giữ lâu hơn; tập 02: thẻ `ĐIỆN THOẠI` nằm ngay trên thân máy | **Có** — mỗi hộp chữ có toạ độ (`window.TEXTS` trả `x0,y0,x1,y1`) |
+| Thẻ **đè lên vật mà nó gọi tên** | tập 02 c1, c28 (thẻ `20 V` đè lên vệt mực `20 V` in trên bo mạch) | Chưa — cần hộp của vật trên màn hình, mà rig chưa trả |
+| Thẻ **trỏ nhầm vào một vật khác** khi cảnh có hai vật giống nhau | tập 02 c34 (hai cuộn cảm đều đỏ, thẻ trỏ vào cuộn nhỏ), c29 (hai chip đen sát nhau) | Chưa — cần **tên vật** (phần còn lại của N78) |
+| Mặt vật **cháy trắng**, mất hết chi tiết | tập 02 c14 (vỏ củ sạc, chữ `60 W` đọc không được), tập 03 #9 (mặt đồng hồ áp suất trắng xóa, mất vạch chia) | Chưa — cần đo độ phẳng của vùng trắng trong khung; chưa có ngưỡng nào đáng tin |
+| Chủ thể **quá nhỏ** trong khung / tường trống chiếm 40 % | tập 02 c1, c20 | Một phần — `FILL`/`cover` đo được phần khung mà vật chiếm, nhưng không đo được *chủ thể có đủ lớn không* (xem N93) |
+
+**Guard đã có (13:2x).** Cờ mới **`OVERLAP`**: hai hộp chữ trên màn hình chồng lên nhau quá một phần
+tư diện tích hộp nhỏ hơn thì người xem không đọc được chữ nào. `beatsheet.mjs` gom hộp của từng
+chữ (nó **đã** gọi `window.TEXTS` sẵn cho cờ `NUM`, nên không tốn thêm khung hình nào), và
+`check_shots.py` báo cờ. Đây là lỗi **đo được** — hai hình chữ nhau là hai chữ không ai đọc được —
+nên nó chặn ở cả vòng chấm hình lẫn cổng bàn giao (xem N93: chặn bằng phép so sánh thì không,
+chặn bằng phép đo thì có).
+
+**Còn lại — ghi ra để lần sau không phải nghĩ lại từ đầu.** Ba lỗi còn lại đều cần cùng một thứ:
+**hộp của vật trên màn hình** (và tên của vật). Một thay đổi duy nhất trong rig — trả về hộp màn
+hình của từng vật trong `cast`, cùng tên của nó — mở ra cả ba:
+- thẻ đè lên vật nó gọi tên → so hộp thẻ với hộp vật;
+- thẻ trỏ nhầm vật → so tên vật mà mũi tên chạm với tên vật mà câu nói gọi;
+- mặt cháy trắng → đo độ phẳng trong hộp vật.
+
+RIG dùng chung cho ba tập đang dựng, nên việc đó **chưa làm** (R13) — và phải làm cùng lúc với việc
+đặt tên cho vật, không làm hai lần.
+
+## N99 — high — 136 lần đọc lại output của job nền: luật có rồi, nhưng luật không nói **làm sao cho nó chạy được**
+
+**Bằng chứng.** Đo lại transcript của phiên tập 01 (13:0x, 963 MB):
+
+```
+R9  37 lần đọc lại output của job nền bib9128mh.output
+R9  24 lần đọc lại output của job nền buqnq0skq.output
+R9  16 lần … + 12 + 10 + 9 + 8 + 7 + 7 + 6 …
+```
+
+Tổng **136 lần**. Đó là cùng một hình dạng: job dài chạy nền, xong rồi người làm phim quay lại đọc
+log của nó. Và một lần trong số đó là đọc output của job **đang chạy** — tức là nó thậm chí không đợi
+xong.
+
+**Vì sao quan trọng.** Đây không phải một luật mới thiếu: R9 đã có, và SKILL.md đã nói *"một việc dài
+thì chạy nền; harness báo khi nó xong"*. Nhưng luật nói **không làm sao**, và người làm phim làm theo
+cách mình hiểu: `nohup … > log 2>&1 &` rồi `tail log`. Với cách đó **harness không biết job tồn tại**,
+nên không ai báo khi nó xong, và lượt của phiên cứ quay về đọc log. Luật có mà không có cách thực hiện
+thì hành vi không đổi — đó là loại lỗi mà cần sửa **cách làm**, không phải sửa lại luật.
+
+Đây cũng là chỗ **tốn thời gian nhất** của các phiên: 136 lượt quay về đọc log, mỗi lượt là một vòng
+dò không quyết định gì, cộng với 827 lần mở ảnh và 236 lần đọc lại ba tệp mã — tức là phần lớn ngân
+sách của phiên tập 01 là **nhìn**, không phải **làm**.
+
+**Guard đã có (13:4x).**
+
+- `SKILL.md` (nguyên tắc 6) nói thẳng cách làm: **chạy việc dài bằng công cụ nền của harness**
+  (`Bash` với `run_in_background`) — nó tự báo khi xong, và output được đọc **một lần** sau đó; và nói
+  rõ `nohup … &` rồi `tail` **là một vòng dò dù nó có vẻ tiện**.
+- `CODING_STANDARDS.md` R9 nói thêm một câu: đọc lại log của job mà bạn tự `nohup` là R9 ở hình thức
+  khác, vì harness không báo khi job xong.
+- `tools/rules.py` đã đếm được hình thức này từ N76 (đọc output của job nền), nên báo cáo của phiên
+  giám sát đã thấy nó — nhưng báo cáo chỉ thấy thì không đủ; cách làm phải nằm trong tay người làm phim.
+
+**Còn lại.** `tools/rules.py` báo *bao nhiêu lần*, không báo *job nào bị dò*. Thêm tên job vào dòng
+báo sẽ giúp người giám sát chỉ đúng chỗ — nhưng nguyên nhân gốc đã ở trên: nếu job chạy bằng công cụ
+nền của harness thì không còn gì để dò.
+
 ## Còn lại
 
 - **[x]** N72: `core/render/still.mjs` chờ hai khung hình rồi mới chụp (12:47) — ảnh là của khung vừa dựng,

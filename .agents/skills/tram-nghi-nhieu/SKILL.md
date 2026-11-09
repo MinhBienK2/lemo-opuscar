@@ -47,7 +47,11 @@ Quy trình này thay cho bước 1–6 của `AGENTS.md` / `DIRECTOR.md` khi là
      shell ghi UTF-8 hỏng, không ai thấy ngay, và phải sửa lại bằng một lần ghi shell nữa.
 
 6. **Chờ việc xong, đừng dò file.**
-   - Một việc dài (dựng khung, chấm hình, render) thì chạy nền; harness báo khi nó xong, đọc output của nó một lần.
+   - Một việc dài (dựng khung, chấm hình, render) thì chạy bằng **công cụ nền của harness** (`Bash` với
+     `run_in_background`); harness báo khi nó xong, đọc output của nó **một lần** sau lúc đó.
+   - **`nohup … > log 2>&1 &` rồi `tail log` là một vòng dò, dù nó có vẻ tiện.** Harness không biết job đó
+     tồn tại, nên không ai báo khi nó xong, và lượt của bạn cứ quay về đọc log. Trong phiên tập 01, đọc lại
+     output của job nền xảy ra **136 lần** — và một lần trong số đó là đọc output của job *đang chạy*.
    - `until [ -f file ]; do sleep 15; done` là một vòng dò: nó ăn hết lượt của bạn và không quyết định gì.
    - Cùng một lệnh lặp năm lần trở lên, dù nó đang nhìn cái gì, là một vòng dò.
 
