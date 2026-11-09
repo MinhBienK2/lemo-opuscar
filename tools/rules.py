@@ -1,7 +1,11 @@
 """The rules a film session broke, read off its own tool log.
 
-    python3 tools/rules.py <transcript> [transcript.py]   print the rules it broke
+    python3 tools/rules.py <transcript>                 print the rules it broke
     python3 tools/rules.py --selftest                     prove the rules with examples
+
+The film under production comes from the environment, not from a second argument: `SUPERVISE_FILM` names its
+folder and `SUPERVISE_LIB` the library root. Without `SUPERVISE_FILM` the report cannot tell a three.js film
+from a 2D one, and it fires rules that only make sense for the 2D one.
 
 `tools/supervise.sh` calls this; the rules live here so they can be **read and tested on their own**.
 A rule that names the wrong file teaches its reader to ignore it, and a reader who has learned to ignore
