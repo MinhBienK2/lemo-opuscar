@@ -165,7 +165,7 @@ Trước khi dựng, đọc `improvements/lessons.md` ở gốc thư viện — 
   hàm cập nhật của chúng mỗi khung hình.
 - **Vòng này sửa được gì so với vòng trước:** sau mỗi vòng chấm hình, cổng in bảng đối chiếu (`tools/check_progress.py`): câu nào đã qua, câu nào **còn mở**, câu nào mới phát hiện, và điểm đi đâu. Sửa đúng những câu còn mở; đừng làm lại những câu đã qua. Nếu hai vòng liên tiếp không tiến, đó là lúc viết đạo diễn cắt.
 - **Vòng chấm hình tốn ảnh, và cổng đo điều đó:** người chấm đọc **tờ sheet** trước (một tờ đáng giá bằng khoảng
-  một ảnh riêng), mở ảnh riêng chỉ cho câu có cờ máy, câu fill dưới 15 %, hoặc câu nó nghi ngờ, và **mỗi ảnh một
+  một ảnh riêng), mở ảnh riêng chỉ cho câu có cờ máy, câu phủ dưới 15 %, hoặc câu nó nghi ngờ, và **mỗi ảnh một
   lần**. Sau mỗi vòng, cổng in ra số ảnh vòng đó đã mở — đó là khoản lớn nhất của vòng chấm.
 - **Vòng lặp:** Đạo diễn sửa lỗi diễn hoạt/ánh sáng cho tới khi `PASS`.
 

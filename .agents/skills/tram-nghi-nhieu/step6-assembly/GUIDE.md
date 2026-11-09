@@ -29,7 +29,9 @@ Lắp ráp các linh kiện (từ `src/props.js`) vào bối cảnh hoàn chỉn
    Dựng vào đúng đường dẫn đó: bước chấm sẽ **dùng lại** tờ sheet này nếu không có mã nào đổi sau lần dựng, thay vì dựng lại sáu mươi khung.
    Rồi đọc những lỗi máy đã thấy sẵn, **trước khi** mở một vòng chấm:
    `python3 channels/tram-nghi-nhieu/tools/check_shots.py <tập>/out/beats` — nó liệt kê câu có cờ
-   SAME/RUN/NUM/DARK và câu có vật chính quá nhỏ, kèm đề xuất sửa. Một vòng chấm tốn ~40 phút và
+   SAME/RUN/NUM/DARK và câu có khung gần như trống, kèm đề xuất sửa. Câu mà máy **không nhìn thấy vật
+   nào** in thành một mục riêng: đó không phải lỗi, hãy tự nhìn, và **đừng đưa máy sát chỉ để đẩy
+   con số lên**. Một vòng chấm tốn ~40 phút và
    người chấm chỉ mở được khoảng 25/60 khung, nên lỗi máy thấy sẵn thì đừng để người chấm là
    người phát hiện ra.
 4. **Vòng lặp Thẩm định Diễn hoạt & Khung cảnh (Max 5 rounds):**
