@@ -193,10 +193,10 @@ Trước khi dựng, đọc `improvements/lessons.md` ở gốc thư viện — 
 - **Vật thể phải tự diễn:** camera trượt để giữ khung sống không cứu được phim — cổng đo cả phần khung camera trượt
   (≤ 30 %) và phần khung vật thể đổi (≥ 55 %). `rig/motion.js` có `sway()`, `breathe()`, `motor()`; bước 6 phải gọi
   hàm cập nhật của chúng mỗi khung hình.
-- **Mở đầu phải là hiện tượng, không phải bối cảnh:** người xem phải thấy được **cái đang được hỏi** trong 8 giây
-  đầu. Ở tập 01, khung mở đầu chỉ có dây trên nắp hũ, hiện tượng "siết chặt hơn" chỉ xuất hiện ở giây thứ 8 —
-  người xem chờ mất 8 giây mới biết phim đang kể gì. Nhát đầu tiên phải **làm việc** (vật đang biến đổi ngay
-  trước mắt), chứ không phải dựng lên cái khung rồi mới tới việc.
+- **Mở đầu phải là hiện tượng, không phải bối cảnh:** nhát đầu tiên phải **làm việc** — vật đang biến
+  đổi ngay trước mắt, chứ không phải dựng lên cái khung rồi mới tới việc. Ở tập 01, nhát mở đầu đã
+  cho thấy cái áo ướt đang nhỏ nước và bồn nước bên dưới; thứ xuất hiện ở giây thứ 8 là **nguyên nhân**
+  (cái quạt), và đặt nguyên nhân sau hiện tượng là đúng bài.
 - **Vòng này sửa được gì so với vòng trước:** sau mỗi vòng chấm hình, cổng in bảng đối chiếu (`tools/check_progress.py`): câu nào đã qua, câu nào **còn mở**, câu nào mới phát hiện, và điểm đi đâu. Sửa đúng những câu còn mở; đừng làm lại những câu đã qua. Nếu hai vòng liên tiếp không tiến, đó là lúc viết đạo diễn cắt.
 - **Vòng chấm hình tốn ảnh, và cổng đo điều đó:** người chấm đọc **tờ sheet** trước (một tờ đáng giá bằng khoảng
   một ảnh riêng), mở ảnh riêng chỉ cho câu có cờ máy, câu phủ dưới 15 %, hoặc câu nó nghi ngờ, và **mỗi ảnh một

@@ -3446,28 +3446,43 @@ Hai cái kết không lặp lại hình của phần đầu.
 diễn (vệt gió, giọt hơi nước, phân tử bốc lên), và chất toon có nét mực vẽ tay nhất quán. Cổng đo
 `action 77 %`, `big 46 %`, đoạn đứng yên dài nhất 6 s, 55/60 nhịp đổi phần khung — phim **không chết**.
 
-Điểm yếu thấy được, xếp theo mức độ:
+Điểm yếu thấy được, xếp theo mức độ (đã đối chiếu lại bằng **khung cắt từ chính phim đã bàn giao**):
 
-1. **Hiệu ứng phân biệt hai cái áo xuất hiện muộn và mờ.** Ở c4–c7 hai cái áo trông y hệt nhau, chưa
-   thấy cái nào "nhạt màu dần" — mà đó là mấu chốt của cả phim. Người xem phải đợi tới đâu mới thấy
-   một cái khô hơn cái kia? Máy đo độ phủ **không đo được** điều đó (nó đo được *khoảng trống*, không
-   đo được *chủ thể có đủ lớn và đủ khác nhau không*) — đây đúng là loại lỗi mà vòng chấm hình bằng
-   mắt phải bắt, và nó nằm đúng chỗ phim cần đúng nhất.
-2. **Cờ `SAME` của máy ở c4–c7 bắn sai** (cùng chủ thể, khác bố cục) — đây là N105: "cảnh giống
+1. **Chi tiết ở mép khung thì đọc bằng tai, không đọc bằng mắt.** Ở c1 (4,6 s) bồn nước bị mép khung
+   cắt, nên câu *"nước vẫn còn đó"* chỉ hiểu được bằng tai; ở cỡ nhỏ, bồn dễ bị đọc nhầm thành nắp
+   hũ. Đây là lỗi **độ đọc được** — không phải lỗi "chưa có hiện tượng".
+2. **Khác biệt giữa hai cái áo có trên màn hình, nhưng đến muộn và nhỏ.** Ở c4–c5 (13–18 s) hai cái
+   áo **đúng là** giống nhau; mã phai màu chạy từ 20,47 s trong 6,9 s (`src/set.js:779-781`), nên khác
+   biệt hiện ra ở **c6 (22,4 s)** — áo trước quạt nhạt hẳn, áo kia vẫn nâu sẫm — và rõ nhất ở
+   **c7 (25,5 s)**, đúng lúc câu *"Cái trước quạt đang nhạt màu dần"* đang nói. Nhưng ở c7 máy đã lùi
+   xa nên hai cái áo chỉ còn ~1/3 chiều cao khung. Tức là mấu chốt của phim **có** trên màn hình,
+   nhưng đến lúc giây thứ 22 và ở cỡ nhỏ.
+3. **Cờ `SAME` của máy ở c4–c7 bắn sai** (cùng chủ thể, khác bố cục) — đây là N105: "cảnh giống
    nhau" và "cảnh đứng yên" là hai câu hỏi khác nhau, và một ảnh tĩnh không trả lời được câu nào.
-3. **Khoảnh khắc mở đầu hơi lạnh.** Khung 0:00 chỉ có dây trên nắp hũ; hiện tượng "siết chặt hơn"
-   xuất hiện ở 0:08 — người xem phải chờ 8 giây mới thấy điều phim kể. (Đây cũng là lỗi NHẸ mà người
-   chấm tập 04 đã nêu cho chính mình: mở đầu nên có sẵn một cái áo đang siết.)
-## N110 — high — Cổng bàn giao đo được khoảng trống, nhưng không đo được thứ quan trọng nhất: hiện tượng có nhìn thấy được không
 
-- **Bằng chứng.** Khi xem phim tập 01 ở cỡ thật, ở **cả bốn nhát so sánh** (c4–c7) hai cái áo trông
-  **y hệt nhau** — nên cái "cái này nhạt màu dần" mà cả tập kể không xuất hiện được lần nào. Đây là mấu
-  chốt của phim, và nó nằm đúng chỗ phim cần đúng nhất.
+**Điều tôi đã phán sai, và phiên làm phim đã sửa bằng bằng chứng.** Tôi viết rằng *"hai cái áo trông
+y hệt nhau… nên cái nhạt màu dần mà cả tập kể không xuất hiện được lần nào"* và rằng *"người xem phải
+chờ 8 giây mới thấy điều phim kể"*. Cả hai đều **sai**:
+- Khung cắt từ chính mp4 cho thấy c6/c7 khác nhau rõ ràng (tôi đã tự cắt lại và xem: 22,4 s và
+  25,5 s) — tôi đã phán trên ô nhỏ của tờ sheet / trên bản dựng cũ, tức là phán trên **một hình không
+  tồn tại** (đúng cái mà R12 cấm).
+- Nhát mở đầu (c1, 4,6 s) **đã** cho thấy hiện tượng: cái áo ướt chiếm ~40 % khung, có giọt nước
+  bám, thẻ "QUẦN ÁO ƯỚT" chỉ thẳng vào áo, bồn nước nằm ngay dưới mép áo. Thứ xuất hiện ở giây thứ
+  8 là **nguyên nhân** (cái quạt) — đặt nguyên nhân sau hiện tượng là đúng bài, không phải lỗi.
+
+**Bài học cho chính người giám sát (và cho mọi người chấm phim).** Muốn phán một phim thì phải cắt
+khung **từ chính tệp phim đã bàn giao**, ở cỡ thật. Tờ sheet và bản dựng cũ là **bản đồ**, không
+phải bằng chứng — và phán trên chúng thì kết luận sai, mà kết luận sai thì đẻ ra luật sai.
+
+## N110 — medium — Cổng bàn giao đo được khoảng trống, không đo được thứ quan trọng nhất: hiện tượng có nhìn thấy được không
+
+- **Bằng chứng.** Ở tập 01, khác biệt giữa hai cái áo — mấu chốt của cả tập — chỉ hiện ra ở c6–c7
+  (22,4 s và 25,5 s) và ở cỡ nhỏ, trong khi hai nhát so sánh đầu (13–18 s) hai áo giống hệt nhau.
 - **Vì sao máy không bắt được.** Cổng đo **phần khung vật thể chiếm** (`phủ`, `fill`). Phủ trả lời
   "chỗ này có bao nhiêu vật", không trả lời "chủ thể có **đủ lớn và đủ khác nhau** để người xem
   thấy hiện tượng không". Hai cái áo trông y hệt nhau vẫn là hai cái áo — phủ vẫn cao.
-- **Cùng một lớp lỗi: khoảnh khắc mở đầu.** Khung 0:00 chỉ có dây trên nắp hũ; hiện tượng "siết
-  chặt hơn" xuất hiện ở 0:08. Người xem chờ 8 giây mới biết phim kể gì.
+- **Cùng một lớp lỗi: độ đọc được ở mép khung.** Bồn nước ở c1 bị mép khung cắt, nên "nước vẫn
+  còn đó" chỉ hiểu được bằng tai.
 - **Guard đã dựng.** (1) `step6-assembly/PROMPT_CRITIC.md` có tiêu chí mới *"Hiện tượng của tập có
   nhìn thấy được không (mắt, không phải máy)"*: người chấm phải **mở ảnh riêng của những nhát so
   sánh** và tự xem (ô trong tờ sheet là bản đồ, không phải bằng chứng — R12), và nhát mở đầu phải là
