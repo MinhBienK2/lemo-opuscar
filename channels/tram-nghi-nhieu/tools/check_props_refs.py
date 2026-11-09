@@ -63,8 +63,16 @@ def strip_accents(s):
 
 
 def catalogue_names(ep):
-    """the names of the props catalogue, in order"""
-    src = open(os.path.join(ep, 'src', 'props.js'), encoding='utf8').read()
+    """the names of the props catalogue, in order — None when the episode has none yet
+
+    An episode that has not reached the props step has no `src/props.js`. That is not an error and
+    not a crash: there is nothing to check yet, and a traceback here would send the next agent
+    hunting for a broken tool instead of reading the message.
+    """
+    try:
+        src = open(os.path.join(ep, 'src', 'props.js'), encoding='utf8').read()
+    except OSError:
+        return None
     i = src.find('export const PROPS')
     if i < 0:
         return None
@@ -109,8 +117,7 @@ def references(text):
 def check(ep):
     names = catalogue_names(ep)
     if not names:
-        print('props: không đọc được danh mục vật trong %s/src/props.js' % ep)
-        return []
+        return None      # no catalogue yet — nothing to check
     cat = [prop_words(n) for n in names]
     # which catalogue entry owns each word: a word that only one entry has is a *name* word
     owner = {}
@@ -129,18 +136,30 @@ def check(ep):
                 continue          # not a reference to a prop (a line number, a round number)
             if n < 1 or n > len(names):
                 problems.append((os.path.basename(path), '#%d %s' % (n, name),
-                                 'danh mục có %d vật, không có vật #%d' % (len(names), n)))
+                                 'danh mục có %d vật, không có vật #%d' % (len(names), n), 'error'))
                 continue
             missing = words - cat[n - 1]
             if not missing:
                 continue          # the number still points at the prop that was written
-            problems.append((os.path.basename(path), '#%d %s' % (n, name),
-                             one_detail(n, name, words, missing, names, cat, owner)))
+            kind, why = one_detail(n, name, words, missing, names, cat, owner)
+            problems.append((os.path.basename(path), '#%d %s' % (n, name), why, kind))
     return problems
 
 
 def one_detail(n, name, words, missing, names, cat, owner):
-    """say what happened: the number moved to another prop, or the name is not the catalogue's name"""
+    """what happened, and how serious it is
+
+    Two kinds, and they are not the same:
+
+    - **error** — the name belongs to another prop, so the number points at the wrong object. The report
+      cannot be followed any more: the reader opens `p_NN.jpg` and sees something else. This must stop
+      the round.
+    - **note** — the number is right but the written name is not the catalogue's name for it (the critic
+      called it "bàn thí nghiệm", the catalogue calls it "bàn gỗ với hai mặt kính và vách ngăn"). The
+      trail still works; the film's vocabulary and the catalogue's have drifted apart. That is worth
+      saying, and it is not worth failing a round over — a critic that shortened a name has not broken
+      anything.
+    """
     distinctive = {w for w in words if len(owner.get(w, ())) == 1}
     elsewhere = None
     if distinctive:
@@ -148,10 +167,11 @@ def one_detail(n, name, words, missing, names, cat, owner):
         if len(holders) == 1:
             elsewhere = holders.pop()
     if elsewhere is not None and elsewhere != n - 1:
-        return ('"%s" là vật #%d trong danh mục (%s), không phải #%d (%s) — '
+        return ('error', '"%s" là vật #%d trong danh mục (%s), không phải #%d (%s) — '
                 'số trong bản chấm đã trỏ sang vật khác'
                 % (name, elsewhere + 1, names[elsewhere], n, names[n - 1]))
-    return ('"%s" không phải tên vật #%d — danh mục gọi nó là "%s"; số và tên phải nói cùng một vật'
+    return ('note', '"%s" không phải tên vật #%d — danh mục gọi nó là "%s"; số vẫn đúng, nhưng tên nên '
+            'theo danh mục để người đọc tìm thấy vật'
             % (name, n, names[n - 1]))
 
 
@@ -209,6 +229,8 @@ def selftest():
         write('PROPS-REVIEW-2.md', "#2 bàn tay người — B — HỎNG — người xem gọi: \"bàn chân\"\n")
         probs = check(ep)
         check_case("số cũ không trỏ vào vật cũ thì báo", len(probs) == 1, str(probs))
+        check_case("số dịch chỗ thì là lỗi, không phải ghi chú",
+                   bool(probs) and probs[0][3] == 'error', str(probs))
         check_case("báo đúng vật đã dịch chỗ",
                    bool(probs) and 'bàn tay người' in probs[0][2] and '#3' in probs[0][2], str(probs))
 
@@ -224,9 +246,13 @@ def selftest():
         probs = check(ep)
         check_case("tên không phải của danh mục thì báo",
                    any('không phải tên vật #1' in p[2] for p in probs), str(probs))
+        check_case("tên không khớp thì chỉ là ghi chú, không chặn vòng",
+                   sum(1 for p in probs if p[3] == 'note') == 1
+                   and all(p[3] == 'error' for p in probs if 'đã trỏ sang vật khác' in p[2]),
+                   str(probs))
     finally:
         shutil.rmtree(root, ignore_errors=True)
-    total = 8
+    total = 10
     for f in failures:
         print("FAIL %s" % f)
     print("%d ca đều đúng" % (total - len(failures)) if not failures else "%d ca sai" % len(failures))
@@ -240,11 +266,20 @@ if __name__ == '__main__':
         print(__doc__)
         sys.exit(2)
     probs = check(sys.argv[1])
-    for f, ref, why in probs:
-        print("%s: %s — %s" % (f, ref, why))
-    if probs:
+    if probs is None:
+        print('props: tập này chưa có danh mục vật (src/props.js) — chưa đến bước vật, không có gì để kiểm tra.')
+        sys.exit(0)
+    errors = [p for p in probs if p[3] == 'error']
+    notes = [p for p in probs if p[3] != 'error']
+    for f, ref, why, kind in probs:
+        print("%s%s: %s — %s" % (f, '' if kind == 'error' else ' (ghi chú)', ref, why))
+    if errors:
         print("props: %d cách viện dẫn không còn trỏ vào vật cũ — sửa lại số trong bản chấm, "
-              "hoặc dời vật để số không dịch." % len(probs))
+              "hoặc dời vật để số không dịch." % len(errors))
         sys.exit(1)
+    if notes:
+        print("props: mọi cách viện dẫn vẫn trỏ đúng vật; %d tên viết không theo danh mục "
+              "(xem dòng trên — không chặn vòng)." % len(notes))
+        sys.exit(0)
     print("props: mọi cách viện dẫn vẫn trỏ đúng vật.")
     sys.exit(0)
