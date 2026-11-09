@@ -4108,3 +4108,58 @@ chiếm gần nửa khung", "hình kết phải khớp TREATMENT" — máy khôn
 đầu) — đó là mức chắc chắn cao nhất mà một luật văn xuôi có thể đạt. Nếu tập sau vẫn nêu lại những lỗi
 này thì phải nâng chúng thành cơ chế đo, chứ không nâng thêm lần nữa vào văn xuôi.
 
+## N129 — high — "Bóng này của ai?" là câu hỏi **đo được**, và câu trả lời nằm trong phim chứ không phải trong đầu người làm
+
+**Bằng chứng.** Phiên tập 01 dò bóng ở nhát c27 bằng cách tự viết một cờ tạm vào **nguồn của chính tập
+mình**: `?nc=9-12,74,75` để tắt `castShadow` của một dải `scene.children`, rồi render từng nghi phạm
+một lần. Lệnh render của phiên đó lúc 17:12 là:
+
+```
+node core/render/still.mjs channels/tram-nghi-nhieu/series/do-vat/tap-01-phoi-quan-ao 82 \
+  --q nc=9-12,74,75 --out /tmp/k_9-12,74,75 --prefix f_
+```
+
+Đó là mã chẩn đoán nằm trong mã của phim, và nó chỉ biến mất khi ai đó nhớ gỡ. Trong `src/set.js` của
+tập 01 còn thêm `?list` và cách gắn `userData.tag` cho từng vật — cũng để dò. Nếu phiên giao phim lúc
+đó, mã chẩn đoán đó đi thẳng vào commit.
+
+**Vì sao đáng ghi riêng.** N125 đã nói đúng: viền mực là hiệu ứng sau-render nên **bóng không có cạnh**,
+và người làm phải biết "bóng của ai" mới sửa được. Nhưng luật của N125 bảo người làm *dựng riêng từng
+vật trong phòng và tìm vật nào khớp hình dáng* — tức là đoán bằng mắt, mỗi lần một vật, mỗi lần một
+lần render. Đó là cách làm **tốn giờ của người làm** để trả lời một câu hỏi mà máy trả lời được chính
+xác hơn: bóng là hình chiếu, nên tắt bóng của từng vật một và đo xem ô tối sáng lên bao nhiêu.
+
+**Đã làm.** `channels/tram-nghi-nhieu/tools/shadow_who.mjs`:
+
+```
+node channels/tram-nghi-nhieu/tools/shadow_who.mjs <tập> --at 80.5 [--patch 0.72,0.85]
+```
+
+Cơ chế, theo thứ tự: (1) **vá module rig ngay trong trình duyệt** để lấy được `scene` — nguồn của tập
+không bị đụng tới, nên không còn mã chẩn đoán nào nằm trong phim; (2) dựng khung lúc có bóng và lúc tắt
+bóng (`?noshadow` của rig), tìm ô lưới tối nhất **thay đổi** giữa hai lần — đó là ô bóng; (3) tắt lần
+lượt từng vật trong `scene` và đo lại ô đó: vật nào làm ô sáng lên nhiều nhất là vật đổ bóng; (4) in ra
+số thứ tự, màu, vị trí và cỡ của vật đó.
+
+Đo trên tập 01 lúc 80,5 s: ô tối nhất ở lưới (8, 11); thủ phạm là **child #100** — một Group ba mesh
+màu `#efede4` đứng ở `(0.42, 1.42, -3.3)`; tắt riêng nó thì ô sáng thêm **+20,5** điểm, còn 85 vật
+còn lại tắt đi thì ô sáng thêm **0,0**. Một con số khác 0,0 là câu trả lời; một loạt 0,0 là câu trả lời
+"không phải nó".
+
+**Còn lại.** Công cụ đo được bóng của *vật đang có trong `scene`*. Một vật bị dựng sai (đặt sai chỗ,
+thu nhỏ, sai hướng) vẫn tìm thấy — nhưng nó nằm ngoài khung nên bóng của nó rơi vào trong khung, và
+đó đúng là thứ ta cần. Còn mảng bóng mà *không vật nào* đổ thì công cụ in ra "không vật nào" — đó là
+trường hợp khác (ánh sáng, vật thể trong `scene` con, hay bóng tự đổ của chính nó), và cần đọc tiếp.
+
+## N122 (bổ sung) — Cùng một luật, hai cửa: vòng chấm cũng hỏi máy trước khi mở người chấm
+
+**Đã làm (tiếp).** `tools/hook_load.py` chặn lệnh nặng **ở dòng lệnh**, trước khi nó chạy. Nhưng một
+vòng chấm không phải lệnh nặng duy nhất: nó tự dựng ảnh (`propcheck.mjs` dựng 23 vật × 3 góc) **trước**
+khi mở người chấm, và máy có thể đầy lúc đó. Nay `review.sh` hỏi **cùng một câu** (`hook_load.over_capacity()`)
+ngay lúc mở người chấm — sau chính những lần dựng ảnh đó, nơi bộ nhớ thật sự bị dùng. Cùng ngưỡng, cùng
+số liệu, cùng một chỗ đặt luật (`tools/hook_load.py`); `review.sh` chỉ gọi lại, không giữ ngưỡng thứ hai.
+
+Khi máy quá tải, vòng chấm **không mở** (exit 2) và nói rõ: đợi việc đang chạy xong rồi chạy lại, đừng
+mở thêm một vòng cùng lúc. Trước đây cùng tình huống đó chỉ có một cách: kernel giết vòng chấm, và
+mất cả giờ.
+
