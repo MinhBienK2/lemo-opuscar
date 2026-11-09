@@ -3474,6 +3474,34 @@ chờ 8 giây mới thấy điều phim kể"*. Cả hai đều **sai**:
 khung **từ chính tệp phim đã bàn giao**, ở cỡ thật. Tờ sheet và bản dựng cũ là **bản đồ**, không
 phải bằng chứng — và phán trên chúng thì kết luận sai, mà kết luận sai thì đẻ ra luật sai.
 
+### Đối chiếu lần cuối trên chính phim đã bàn giao (15:38, 373 770 845 byte)
+
+Tôi tự cắt khung từ tệp mp4 **đã bàn giao** (không phải bản dựng trung gian, không phải ô trong tờ
+sheet), ở cỡ 1400 px, và xem bằng mắt:
+
+- **c1 (4,6 s) — nhát mở đầu.** Cái áo ướt chiếm khoảng 40 % khung, có vệt ướt trên vai và các giọt
+  nước bám; thẻ "QUẦN ÁO ƯỚT" chỉ thẳng vào áo. **Bồn nước nằm ngay dưới mép áo, giữa khung**: nó
+  bị mép dưới cắt một phần, nhưng ở cỡ thật thì đọc ra là **một bồn nước** (trắng, mặt nước xanh),
+  không phải nắp hũ như tôi đã viết ở điểm yếu số 1. Và câu *"nước vẫn còn đó"* nói về **nước còn
+  trên vải** — vệt ướt và giọt nước trên áo đọc được rõ. Tôi đã đánh giá thấp phần này ở lần trước.
+- **c4–c7 — xác nhận bằng mắt.** c4 hai áo giống nhau (đúng như lời kể), c5 khung rộng có quạt và hai
+  thẻ "TRƯỚC QUẠT" / "KHÔNG CÓ GIÓ", c6 (22,4 s) **áo bên trái nhạt, áo bên phải nâu sẫm ướt** — rõ
+  nhất; c7 (25,5 s) cùng khác biệt nhưng máy đã lùi xa nên hai áo chỉ còn ~1/3 chiều cao khung.
+  **Mấu chốt của phim có thật trên màn hình**, đúng lúc lời kể đang nói.
+- **Một chi tiết đáng ghi (không phải lỗi).** Ở c6–c7, cái áo ướt **không có thẻ tên**: người làm cố
+  ý chỉ đặt thẻ "KHÔNG CÓ GIÓ" cho c5, vì ở c5–c7 khung chỉ nên có đúng hai cái áo (`src/film.js:187-189`).
+  Người xem phải nhớ cái áo ướt ở c6 chính là cái áo "KHÔNG CÓ GIÓ" ở c5. Tôi không coi đây là lỗi —
+  nó là lựa chọn có lý do — nhưng **giữ thêm thẻ "KHÔNG CÓ GIÓ" ở c6** (một thẻ, không phá bố cục)
+  sẽ giúp người xem khớp ngay mà không cần nhớ.
+- **Đầu và cuối phim.** Khung đầu (1,0 s) là hiện tượng; khung cuối (175,4 s) là góc rộng bàn gỗ với
+  cái áo đã khô trải ra. **Không có watermark, không có chữ LemoLab** — đúng luật: phim ngoài
+  `styles/` là của người dùng.
+
+**Kết luận khách quan sau khi xem bằng mắt:** phim nói được hiện tượng của nó bằng hình (áo ướt →
+quạt → khác biệt giữa hai cái áo → hơi nước và khí), bố cục đổi thật, vật tự diễn, chữ tiếng Việt rõ.
+Điểm yếu còn lại: **mấu chốt hiện ra muộn (giây 22) và ở cỡ nhỏ**, và **chi tiết ở mép khung thì phải
+nghe mới hiểu**.
+
 ## N110 — medium — Cổng bàn giao đo được khoảng trống, không đo được thứ quan trọng nhất: hiện tượng có nhìn thấy được không
 
 - **Bằng chứng.** Ở tập 01, khác biệt giữa hai cái áo — mấu chốt của cả tập — chỉ hiện ra ở c6–c7
