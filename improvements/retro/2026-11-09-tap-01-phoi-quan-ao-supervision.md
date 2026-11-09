@@ -3546,10 +3546,20 @@ mốc mới nhất, mà nội dung phim là của mã cũ. Ở tập này, chín
 sau khi render bắt đầu… tôi sẽ dựng lại một lượt nữa"*) — nhưng nó biết **từ trí nhớ về luật**, không
 phải từ một báo cáo của cổng. Lần sau sẽ không có ai nhớ.
 
-**Guard đã có.** Chưa có. **Đề xuất:** `core/render/video.mjs` lấy vân tay mã nguồn **trước** khi dựng
-(`sourcewatch.mjs` đã có sẵn để import) và ghi vân tay đó cạnh phim; bước *freshness* của
-`core/render/review.sh` so vân tay đó với mã hiện tại thay vì so hai mốc thời gian. Khi đó một sửa
-giữa lúc dựng sẽ làm phim cũ **đúng như nó cũ**, và cổng sẽ báo.
+**Guard đã có. Đã có — commit `4e027ea` (15:2x, 09-11), ngay sau khi phát hiện này được ghi.**
+`core/render/video.mjs` nay lấy vân tay mã nguồn **trước** khi dựng và ghi vào
+`out/source-fingerprint.json`; bước *freshness* của `core/render/review.sh` (dòng 261-274) so vân tay
+đó với mã trên đĩa bằng `core/render/sourcecheck.mjs`, và in
+`FAILED: the code moved on since the movie was built — the delivered movie shows the old code`.
+
+**Còn lại (một lỗ nhỏ của chính guard này).** Bước đó chỉ chạy khi **tệp vân tay tồn tại**
+(`if [ -f "$SNAP" ]`). Tập 01 dựng lúc 14:09, **trước** khi guard có, nên `out/source-fingerprint.json`
+không tồn tại và bước này **bị bỏ qua im lặng** — phim cũ đi qua. Đề xuất: khi thiếu tệp vân tay mà
+đã có phim, cổng phải in một dòng cảnh báo nói rõ *"bản dựng này không có vân tay nên không kiểm được
+độ tươi của mã"* (và có thể coi là lỗi), thay vì im lặng bỏ qua.
+
+Ngoài ra `core/render/review.sh` hiện in hai lần dòng `ok: movie is up to date with source files`
+(khối `if [ "$STALE" -eq 0 ]` bị lặp ở dòng 254-259) — vết của một lần vá chồng lên nhau.
 
 ## Còn lại
 
@@ -3633,4 +3643,85 @@ bị đặt sai chỗ), tôi đã viết thẳng vào tệp bằng một script 
 Không có hậu quả (thay đổi là di chuyển một dòng, và tệp vẫn đúng), nhưng luật viết tệp của tôi không
 có ngoại lệ cho chính tôi: **R1 áp cho mọi lệnh sửa tệp dự án, kể cả của người giám sát**. Đã sửa bằng
 `tools/replace.py` ngay sau đó, và ghi lại ở đây để nhớ.
+
+## N113 — high — Hai cổng, hai ngưỡng, một tệp âm thanh
+
+Vòng `--final` của tập 01 chết lúc 15:18:43, và lý do nó báo là *"mix bị chói (đỉnh −2,4 dB)"*.
+Không có gì sai với phim: chỉ là **hai cổng dùng hai ngưỡng khác nhau trên cùng một tệp**.
+
+- Cổng của thư viện (`core/render/review.sh`) hỏi true peak ≤ −1,0 dBFS → phim ở −2,4 dB, **qua**.
+- Cổng của kênh (`channels/tram-nghi-nhieu/tools/check_delivery.py`) hỏi đỉnh **mẫu** ≤ −3,0 dB → phim ở
+  −2,4 dB, **hỏng**.
+
+Cả hai ngưỡng đều hợp lý riêng. Nhưng phim bị dựng xong, rồi mới hỏng — giá trọn một lượt dựng lại.
+
+**Đo được cả chuỗi âm thanh.** `mux.sh` nâng mix lên −14 LUFS rồi AAC cộng thêm ~0,4 dB đỉnh liên mẫu,
+nên đỉnh mà người xem nhận được là:
+
+> đỉnh của phim ≈ (đỉnh của mix − loudness của mix) − 13,6 dB
+
+Kiểm lại trên chính tập 01, hai chiều:
+
+| mix của tập 01 | headroom | đỉnh phim sau mux | cổng kênh |
+|---|---|---|---|
+| trộn cũ (limiter 12,3 dB) | 11,2 dB | **−2,4 dB** (đo được) | hỏng |
+| trộn mới (limiter 11,0 dB) | 9,8 dB | **−3,8 dB** (đo được) | qua |
+
+**Sửa (commit `03c5790`).** Mixer của kênh giữ mix ở **≤ 10,4 dB headroom** (ngưỡng cổng kênh + 0,2 dB
+lề), limiter siết còn 10,0 dB, và — điểm quan trọng — **một mix không về được tới đó thì hỏng ngay lúc
+trộn**, vài giây, thay vì sau khi đã dựng. Lỗi thấy sớm thì rẻ; lỗi thấy muộn thì đắt.
+
+**Bài học.** Ngưỡng nào cũng đúng, nhưng phải là **một** ngưỡng cho cùng một tệp, và nó phải được kiểm
+**trước** lúc dựng. Một con số nằm trong một tệp mà phiên khác sở hữu thì có thể lùi một bước và làm hỏng
+cả phim; nên phần cứng nằm ở mixer, phần kiểm nằm ở cổng.
+
+## N114 — medium — Sửa bằng công cụ ghi nguyên tử có thể phá liên kết tượng trỏ
+
+Tôi sửa limiter của mixer bằng `tools/replace.py` — công cụ mà R1 bắt dùng — và công cụ **xoá mất con
+trỏ**: `channels/tram-nghi-nhieu/mix.py` là một liên kết tượng trỏ tới `tools/mix.py`, còn `replace.py`
+ghi tệp tạm rồi `rename` đè lên tệp đích. `rename` lên một liên kết thì **thay con trỏ bằng một tệp
+thường**: nội dung vẫn đúng (nên phim vẫn chạy), nhưng mã của kênh không còn nằm ở tệp mà repo theo dõi,
+và `git status` báo đúng thứ đó: một tệp thường chỗ của một liên kết.
+
+**Sửa (commit `08bf4c3`).** `write_atomic` nay đi theo liên kết và ghi vào tệp nó trỏ tới; liên kết vẫn là
+liên kết. Có ca kiểm trong selftest (11/11). Tôi cũng trả `mix.py` về đúng dạng liên kết.
+
+**Bài học.** "Ghi nguyên tử" bảo đảm tệp không bao giờ nửa vời — nhưng nó nói *tệp đích*, không nói *con
+trỏ*. Một công cụ sửa tệp mà đi trên liên kết thì phải đi theo nó, nếu không nó sẽ lặng lẽ biến cái
+được chia sẻ thành một bản sao rời.
+
+## N115 — high — Con chó canh của vòng chấm tự bắn mình
+
+Vòng chấm dàn ý của **tập 05** chết lúc 15:30 với câu *"người chấm không chạy được lệnh nào (hỏi quyền mà
+không ai trả lời)"*. Tôi đọc transcript của người chấm: **không có lệnh nào bị chặn**. Người chấm đang sống,
+đang làm việc — nó đọc `review.sh` (một bản sao cũ trong `/tmp`) để tìm **số vòng**, vì lần chấm đầu không
+có `PREVIOUS.md` và lời dặn không nói cho nó biết đây là lần mấy. Transcript của nó vì thế mang câu
+*"requires approval"* — câu mà **chính `review.sh` nói ra trong bình luận**. Con chó canh quét transcript
+tìm cụm từ đó, thấy, và giết một người chấm còn sống. Vòng chấm chết với một chẩn đoán không liên quan gì
+tới phim.
+
+**Sửa (commit `8b3962a`).** Ba thứ:
+
+1. Con chó canh bám vào chỗ câu đó **thực sự nằm**: đầu một kết quả lệnh (`"content":"…"`), không phải
+   bất cứ chỗ nào trong transcript. Một tệp người chấm chỉ *đọc* thì không kích hoạt được nó.
+2. Nó **nêu tên tệp đã khớp**, nên một lần báo sai là thấy ngay, không phải đoán.
+3. Lời dặn nói rõ: đây là lần chấm thứ mấy, bạn làm việc ở thư mục nào, mọi thứ bạn cần đều ở đó, và
+   **đừng đi tìm tệp khác trên máy** (`find /`, thư mục `/tmp` khác, thư mục của tập khác).
+
+Kèm `channels/tram-nghi-nhieu/tools/watchdog_selftest.sh`: bốn ca — văn bản của chính công cụ thì không
+kích hoạt, lệnh bị chặn thật thì kích hoạt (cả hai cách viết của CLI), lệnh bị chặn trong `out.txt` thì
+kích hoạt.
+
+**Bài học.** Cơ chế chặn sai cũng là một vòng chấm chết, và chẩn đoán sai còn tệ hơn không có chẩn đoán:
+lần này nó bảo "người chấm bị chặn quyền" trong khi người chấm đang đi tìm số vòng. Và một người chấm đi
+tìm số vòng là **lỗi của lời dặn**, không phải lỗi của người chấm.
+
+## Còn để mở (không tự quyết)
+
+- **Tem dàn ý không mở lại khi dàn ý bị sửa sau lần PASS.** Tập 01: dàn ý sửa sau lúc đã có tem, cổng cố
+  ý không mở lại (đó là phát hiện P2 trong retro của phiên tập 01), và chấm lại thì bị chặn vì đã đủ
+  4/4 vòng. Hệ quả: **phim cuối được chấm theo một dàn ý mà không ai chấm lại**. Tôi không tự đổi luật
+  này — nó là luật của kênh, có chủ ý, và đổi nó là việc của người dùng.
+- **`readcheck` là bước chậm nhất của cổng bàn giao** (N111): nó dựng lại mọi khung hình của phim trong
+  Chromium. Giữ nguyên: một cổng chậm còn hơn một cổng sai.
 
