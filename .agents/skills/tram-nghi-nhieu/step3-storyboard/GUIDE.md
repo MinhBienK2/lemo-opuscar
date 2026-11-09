@@ -16,7 +16,8 @@ Xác định bố cục hình ảnh, góc đặt máy quay (camera framing), c�
    - Camera nhìn thấy những góc nào?
    - Những góc nào bị khuất (để không tốn công dựng 3D ở bước sau)?
 3. Xuất các khung hình tham chiếu thử nghiệm:
-   `LEMO_ANGLE=vulkan node core/render/still.mjs <tập> <t…> --out <scratch>`
+   `LEMO_ANGLE=vulkan node core/render/still.mjs <tập> <t…> --out <tập>/review/hero`
+   **Đặt ảnh vào `<tập>/review/hero/`** — vòng chấm của bước này đọc đúng thư mục đó, và nếu thư mục rỗng thì vòng chấm **không mở** (một vòng chấm không có ảnh chỉ là một giờ đọc mã: tap-05 mất một giờ như thế lúc 19:31 và bản chấm ghi thẳng ra rằng `hero/` có 0 tệp).
 4. Ghi nhật ký phân tích vào `LOOK.md`.
 5. **Vòng lặp Thẩm định Storyboard (Max 5 rounds):**
    - Mở vòng chấm bằng **công cụ của kênh**: `sh channels/tram-nghi-nhieu/tools/review.sh <tập> --storyboard`.

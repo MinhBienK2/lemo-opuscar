@@ -4470,3 +4470,33 @@ dùng bản cũ (đồng hồ phẳng) — nếu nó chết theo kiểu 17:42 th
 vòng mở **từ sau**. Ba vòng đang chạy lúc sửa dùng bản cũ, và không có cách nào đổi đồng hồ của một tiến trình đã
 chạy mà không giết nó.
 
+## N143 — medium — Một vòng chấm **không có ảnh để soi**: một giờ chấm bàn
+
+**BẰNG CHỨNG.** Vòng storyboard của tap-05 kết thúc lúc 19:31:53 — `VERDICT: REJECT`, `ROUND: 1/5`, 31 051 byte —
+và bản chấm mở đầu bằng chính câu nói về giới hạn của nó:
+
+> **Phạm vi lần thẩm định này.** Thư mục `hero/` trong gói thẩm định **trống hoàn toàn (0 tệp)** — không có ảnh
+> khung hình nào để soi. Vì vậy đây là **thẩm định bàn viết**: đối chiếu bảng máy trong `film.js` … với `LOOK.md`
+> và `TREATMENT.md`. … Ba tiêu chí cần mắt (vùng sáng chính, mức chiếm khung thực tế của vật thể, tối/sáng) **chưa
+> thể xác nhận**.
+
+Người chấm nói thẳng ra — và đó là điều tốt. Nhưng vòng đã mất **một giờ** để làm ra một bản chấm bàn viết, và
+người làm nhận về một REJECT mà không có ảnh nào trong tay.
+
+**VÌ SAO ẢNH KHÔNG CÓ.** Không phải vì chỗ sai: `review.sh` đọc ảnh ở `<tập>/review/hero/`, và hướng dẫn bước 3
+của kênh bảo người làm dựng bằng `node core/render/still.mjs <tập> <t…> --out <scratch>` — chữ "`<scratch>`" không
+nói là thư mục nào, và không ai hỏi xem ảnh đã tới chỗ vòng chấm đọc chưa. Ba tập trước có ảnh (tap-01: 6, tap-02:
+35, tap-03: 16), tap-05 thì không.
+
+**CƠ CHẾ.**
+1. `review.sh --storyboard` **không mở vòng** khi `review/hero/` không có ảnh nào, và nói luôn cách dựng:
+   `node core/render/still.mjs <tập> <giây> --out <tập>/review/hero`.
+2. Lời dặn của người chấm nói rõ **có bao nhiêu ảnh** ("Trong `hero/` có N ảnh — hãy soi **đủ N ảnh**; nếu số ảnh
+   không khớp với những gì bạn mở được thì nói rõ trong bản chấm"), để người chấm thiếu ảnh thì nói thẳng thay vì
+   lặng lẽ chấm bàn.
+3. Hướng dẫn bước 3 nói rõ đặt ảnh vào `<tập>/review/hero/`.
+
+**CÒN LẠI.** Không có cách nào biết một người chấm đã soi **đủ** những ảnh nó được đưa cho — số ảnh trong lời dặn
+là số nó được bảo soi, không phải số nó đã mở. Muốn biết thì phải đếm từ transcript của người chấm (đã có công cụ
+đếm cảnh: `critic_images()`), và nối số đó với số ảnh của vòng — việc này chưa làm.
+

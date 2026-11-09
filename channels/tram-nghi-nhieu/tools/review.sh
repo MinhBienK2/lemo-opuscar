@@ -696,12 +696,19 @@ if [ "$STORYBOARD" = 1 ]; then
   # hand still wins.
   NHERO=$(ls "$EP"/review/hero/*.jpg 2>/dev/null | wc -l | tr -d ' ')
   case "$NHERO" in ''|*[!0-9]*) NHERO=0 ;; esac
+  # A round that judges frames it does not have is an hour spent reading the code instead. tap-05's storyboard
+  # round (19:31) REJECTed after a full hour, with the report saying outright that `hero/` held **0 files** and
+  # that it was a desk review. The subject of this round is missing, so the round does not open.
+  if [ "$NHERO" -eq 0 ]; then
+    echo "review --storyboard: không có ảnh khung hình chính nào để soi ($EP/review/hero/ rỗng) — dựng ảnh hero vào đó (node core/render/still.mjs <tập> <giây> --out $EP/review/hero) rồi chạy lại; một vòng chấm không có ảnh chỉ là một giờ đọc mã." >&2
+    exit 1
+  fi
   if [ -z "$CRITIC_TIMEOUT_SET" ] && [ "$NHERO" -gt 0 ]; then CRITIC_TIMEOUT=$((3600 + 120 * NHERO)); fi
   cp "$EP/LOOK.md" "$W/"; [ -f "$EP/src/film.js" ] && cp "$EP/src/film.js" "$W/film.js"
   [ -f "$EP/TREATMENT.md" ] && cp "$EP/TREATMENT.md" "$W/"
   cd "$W"
   critic "$(get_prompt step3-storyboard)
-Thư mục làm việc của bạn: $W. Đọc LOOK.md (bảng bố cục, từng nhát, góc máy, lý do máy đứng ở đó), film.js (nếu có: mã dựng khung hình) và TREATMENT.md; mở từng ảnh trong hero/ và soi nó. Chấm đúng những tiêu chí trên, nhớ rằng đây là vòng $n/5 và những gì đã sửa từ vòng trước thì không nêu lại là lỗi.
+Thư mục làm việc của bạn: $W. Đọc LOOK.md (bảng bố cục, từng nhát, góc máy, lý do máy đứng ở đó), film.js (nếu có: mã dựng khung hình) và TREATMENT.md; mở từng ảnh trong hero/ và soi nó. Trong hero/ có $NHERO ảnh — hãy soi **đủ $NHERO ảnh**; nếu số ảnh không khớp với những gì bạn mở được thì nói rõ trong bản chấm, đừng kết luận từ trí nhớ. Chấm đúng những tiêu chí trên, nhớ rằng đây là vòng $n/5 và những gì đã sửa từ vòng trước thì không nêu lại là lỗi.
 Viết STORYBOARD-REVIEW.md ở thư mục này theo mẫu, rồi in lại nó."
   [ -s STORYBOARD-REVIEW.md ] || cp out.txt STORYBOARD-REVIEW.md
   { cat STORYBOARD-REVIEW.md; } > R.md
