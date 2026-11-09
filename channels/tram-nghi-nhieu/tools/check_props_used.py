@@ -6,9 +6,9 @@ object of the film, alone, from three views. The film itself builds its scene in
 things — and nothing checks that they are the **same** list.
 
 A prop in the catalogue that the film never calls is dead work: the critic spent rounds judging it, and
-the viewer never sees it. Worse, it usually means the *film* is missing something: tap-03's catalogue
-held "nắp chai nhựa có ren dọc" while the film never placed it — and the outline reviewer, reading the
-treatment, independently asked for "nắp chai rời trên bàn" on screen. Two tools, one hole.
+the viewer never sees it. Worse, it usually means the *film* is missing something: an episode's catalogue
+once held a part the film never placed, while the outline reviewer, reading the treatment,
+independently asked for that same part on screen. Two tools, one hole.
 
 This check says which catalogue props the film never calls. Two ways out, and both are right: put the
 prop on screen, or take it out of the catalogue. A catalogue is a promise about the film, and a promise

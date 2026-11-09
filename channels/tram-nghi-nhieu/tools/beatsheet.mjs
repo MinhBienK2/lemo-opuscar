@@ -169,7 +169,7 @@ def motion_of(f1, f2):
     return float((np.minimum(np.abs(bb - A), np.abs(B - A)) > 6).mean())
 # does one frame fit the other better when it is scaled a little? that is a camera that pushed in or pulled
 # back — the composition changed, so the line has a picture of its own. The rule lives in tools/sameflag.py
-# (with its own selftest): the SAME flag fired on 22 of 60 lines of tap-01 and 51 of 93 of tap-02, and the
+# (with its own selftest): the SAME flag fired on 22 of 60 lines of one episode and 51 of 93 of another, and the
 # reviewer had to clear them by hand, because the 16x9 thumbnail barely notices a slow push.
 B = json.load(open(out + '/beats.json')); F = ImageFont.truetype(font, 22); Fs = ImageFont.truetype(font, 18)
 prev = None; run, pool = 0, set()

@@ -158,11 +158,11 @@ def audit_script(lines_data, strict=False):
 def selftest():
     """a check that answers "yes" to everything is not a check: prove it can still say "no".
 
-    Every line here is a real line of a real episode (tap-01 and tap-02 of the channel), so a change in
+    Every line here is a real line of a real episode (two episodes of the channel), so a change in
     the helpers that makes the check pass everything shows up here instead of in a film. Each case is run
     through the checker itself, on a file written in a temporary folder, and the exit code is the verdict.
     """
-    # the real lines: tap-02 (điện thoại nóng lúc sạc) and tap-01 (phơi quần áo)
+    # real lines of two episodes
     REAL = [
         {"id": "c1", "text": "Điện thoại nằm sấp trên bàn cạnh giường, dây cắm thẳng vào ổ.", "gap": 2.4},
         {"id": "c2", "text": "Cái đồng hồ sạc trên màn hình cứ nhích lên từng chút một.", "gap": 0.3},

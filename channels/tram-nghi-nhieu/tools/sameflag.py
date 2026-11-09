@@ -8,15 +8,15 @@ biểu đồ màu. Trước đây chỉ có một phép so: `dl < .07` (bố c�
 (cùng bảng màu) và `dl < .15`. Nhưng máy quay đẩy vào — đúng cái chuyển động là chữ ký của kênh —
 làm thay đổi bố cục rất ít ở tầng thu nhỏ: một căn phòng bị đẩy vào 12 % chỉ khác nhau ~0,05.
 Nên cờ SAME bắn vào chính những cặp câu mà người làm cố tình đẩy camera vào, và người chấm phải
-xoá từng cờ bằng tay: tap-01 có 22 cờ trên 60 câu, 21 cờ bị xoá; tap-02 có 51 cờ trên 93 câu.
+xoá từng cờ bằng tay: một tập có 22 cờ trên 60 câu, 21 cờ bị xoá; một tập khác 51 cờ trên 93 câu.
 
 `camera_moved` hỏi câu đúng hơn: **một khung có khớp khung kia hơn khi nó được thu nhỏ (hoặc phóng
 to) một chút không?** Nếu có, thì máy đã đi, bố cục đã đổi, và câu đó có hình riêng của nó —
 không phải cờ SAME nữa. So sánh được làm trong vùng chung của hai khung (không dán nền ra ngoài,
 vì nền dán tự nó làm sai lệch).
 
-Đo trên dữ liệu thật: tap-01 23 cờ → 12; tap-03 15 → 6; tap-02 51 → 17. Những cờ còn lại
-trùng với đúng những cặp người chấm tay đã giữ lại (tap-01: c25, c34).
+Đo trên dữ liệu thật của ba tập: 23 cờ → 12; 15 → 6; 51 → 17. Những cờ còn lại trùng với
+đúng những cặp người chấm tay đã giữ lại.
 """
 import sys
 
