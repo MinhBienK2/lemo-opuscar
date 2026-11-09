@@ -47,24 +47,20 @@ WRITE_API = re.compile(
 # nên WRITE_API không nhìn thấy nó — và tệp bị ghi là tệp nguồn thật (FACTS.md là tệp mà cả phim trích dẫn,
 # và mà các kiểm tra claim/facts đọc). Đường dẫn được gán vào một biến rồi biến ấy được ghi vào thì chặn.
 ASSIGN = re.compile(r"(?m)^\s*(?P<v>[A-Za-z_]\w*)\s*=\s*(?P<q>['\"])(?P<p>[^'\"]+)(?P=q)")
-PROJECT_FILE = re.compile(
-    r"(?:channels|films|styles|core|tools|rig|src|research|voice|review|out)/[A-Za-z0-9_./-]*"
-    r"\.(?:md|json|js|mjs|cjs|jsx|ts|py|html|css|sh|yaml|yml|txt|svg)")
 
 
-def var_project_writes(body):
-    """Các tệp trong dự án mà thân heredoc ghi vào qua một biến"""
+def var_project_writes(body, root=None):
+    """Các tệp nguồn của dự án mà thân heredoc ghi vào qua một biến"""
     out = []
     body = body or ''
+    root = root or project_root()
     for m in ASSIGN.finditer(body):
         v, p = m.group('v'), m.group('p')
-        if not PROJECT_FILE.search(p):
-            continue
         v = re.escape(v)
         writes = (re.search(r"open\(\s*%s\s*,\s*['\"][wax]" % v, body)
                   or re.search(r"Path\(\s*%s\s*\)\s*\.\s*write_(?:text|bytes)\(" % v, body)
                   or re.search(r"\b%s\s*\.\s*write_(?:text|bytes)\(" % v, body))
-        if writes:
+        if writes and is_source(p, root):
             out.append(p)
     return out
 
@@ -155,7 +151,7 @@ def decide(command, root=None):
         if is_source(path, root):
             return 2, MESSAGE % (f'{kind}: {path}')
     for body in heredoc_bodies(command):
-        for path in var_project_writes(body):
+        for path in var_project_writes(body, root):
             return 2, MESSAGE % (f'heredoc (ghi qua biến): {path}')
     return 0, ''
 
@@ -182,6 +178,8 @@ def selftest():
         # — ghi qua biến: đường dẫn không lộ ra nên WRITE_API không thấy —
         ("python3 - <<'PY'\np='research/FACTS.md'\ns=open(p).read()\nopen(p,'w').write(s.replace('a','b'))\nPY", True),
         ("python3 - <<'PY'\np='/tmp/ghi.txt'\nopen(p,'w').write('x')\nPY", False),
+        ("python3 - <<'PY'\np='out/beats/beats.json'\nopen(p,'w').write('{}')\nPY", False),
+        ("python3 - <<'PY'\np='review/NOTE.md'\nopen(p,'w').write('x')\nPY", False),
         # — script trong thư mục của tập vẫn là mã nguồn, kể cả khi nằm trong review/ —
         ("cat > review/.review-local.sh <<'EOF'\necho x\nEOF", True),
         ("cat > out/helper.py <<'EOF'\nprint(1)\nEOF", True),
