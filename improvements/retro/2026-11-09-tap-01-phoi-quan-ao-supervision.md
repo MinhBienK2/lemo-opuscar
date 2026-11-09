@@ -1303,6 +1303,37 @@ cả những cách người ta viết** — không chỉ đúng một hình dạ
 
 ---
 
+---
+
+## N47 — medium — Vòng chấm hình trả tiền cho ảnh nó không nhìn lần thứ hai, và không ai đo được cái giá
+
+**Bằng chứng.** Đo lại transcript của người chấm vòng 4 của tập 01 (mỗi lần đọc ảnh là một lời gọi
+`Read` với một tệp `.jpg`):
+
+| | |
+|---|---|
+| tờ sheet đọc | 10 lần (5 tờ, mỗi tờ hai lần) |
+| ảnh riêng đọc | **201 lần**, trong đó **58 ảnh khác nhau** trên tổng số 60 câu |
+| ảnh bị đọc nhiều nhất | `b_027.jpg` **9 lần**, `b_037.jpg` 8 lần, `b_045.jpg` 7 lần |
+| dung lượng transcript của vòng đó | 72 MB |
+
+Một tờ sheet chứa mười hai câu, mỗi câu 640×360, và mô hình thu nhỏ ảnh về ~1568 px cạnh dài — nên
+**một tờ sheet đáng giá bằng khoảng một ảnh riêng**. Đọc 201 ảnh riêng tức là trả tiền cho khoảng
+200 ảnh để soi 60 ảnh. Lời dặn "đừng mở từng ảnh riêng" đã có sẵn trong mẫu và **không có tác dụng**:
+người chấm cần tới chi tiết để phán "nhãn này chỉ vào tường trống", nên nó mở từng ảnh.
+
+**Đã sửa.** (1) Mẫu của người chấm hình nay có **ngân sách ảnh**: ảnh riêng chỉ cho câu có cờ máy, câu
+fill dưới 15 %, hoặc câu người chấm nghi ngờ; **mỗi ảnh chỉ mở một lần**; quá 25 ảnh thì phải nói lý do.
+(2) `review.sh` **đo** số ảnh người chấm đọc trong transcript của chính nó và in ra sau mỗi vòng:
+*"vòng này tốn 201 lần đọc ảnh riêng (58 ảnh khác nhau)"*. Cái giá của vòng chấm trở thành con số nhìn
+thấy được, thay vì một bản transcript 72 MB.
+
+**Còn phải làm.** Nếu ngân sách ảnh không đủ, bước tiếp theo là **đưa phép đo của máy vào tờ sheet** —
+vẽ hộp của nhãn, đuôi nhãn chỉ vào đâu, và hộp của vật chính — để tờ sheet đủ sức chứng minh điều người
+chấm phải soi, và người chấm chỉ cần mở ảnh riêng cho câu thật sự khó.
+
+---
+
 ## Các guard đã bắt được gì (tính từ 08:00, hai tập còn chạy)
 
 Đây là bằng chứng rằng các guard không phải lý thuyết — mỗi cái đã bắt một lỗi thật, hoặc đã được một
