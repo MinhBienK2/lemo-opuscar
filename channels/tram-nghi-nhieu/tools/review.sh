@@ -365,6 +365,29 @@ if [ -n "$CHID" ]; then
   done
 fi
 echo $$ > "$LOCK/pid"
+# ——— thứ tự các vòng: bước sau cần tem của bước trước ———
+# Tem của vòng trước là hàng rào của vòng này: vòng chấm vật ràng danh mục vật mà bố cục hình và các lát cắt
+# trỏ tới, và bàn giao thì không mở tem nào thiếu. Chạy vòng sau khi thiếu tem trước là vòng sau đang chấm
+# thứ chưa ai chấm — và nó phải chạy lại sau, tốn một vòng. Đây là **cảnh báo**, không phải chặn: có lúc
+# người làm cần xem bố cục trước khi dựng xong vật.
+case "$SCOPE_ID" in
+  script) PREV=outline ;;
+  props) PREV=script ;;
+  storyboard) PREV=props ;;
+  assets) PREV=storyboard ;;
+  film) PREV=assets ;;
+  chapter-*) PREV=assets ;;
+  final) PREV=picture ;;
+  *) PREV="" ;;
+esac
+if [ -n "$PREV" ]; then
+  PROW=$(python3 "$GATE" status "$EP" 2>/dev/null | grep -E "^$PREV +" | head -1)
+  case "$PROW" in
+    *"còn hiệu lực"*) ;;
+    *) echo "review: cảnh báo — tem '$PREV' của tập này chưa có, hoặc đã hết hiệu lực.${PROW:+ ($PROW)}" >&2
+       echo "review: vòng này đang chấm thứ mà '$PREV' chưa chấm; khi bàn giao, '$PREV' là hàng rào — phải chạy lại nó sau." >&2 ;;
+  esac
+fi
 W=$(mktemp -d "${TMPDIR:-/tmp}/lemo-review-XXXXXX")   # outside the repository: the reviewer is not shown the code
 # A round that dies must leave a trace. A silent death reads like "nobody has reviewed this yet": the producer
 # waits for a verdict that was never written, or opens a second round on top of a half-finished one (N106).
