@@ -2416,16 +2416,32 @@ Tờ sheet là ảnh **dựng riêng**; người xem sẽ xem mp4. Nên tôi c�
 | c40 | Ba cái áo chồng lên nhau, nhãn `3 ÁO`. |
 | c49 | Hai cái áo, nhãn `ÁO ÚP` (sẫm) và `PHƠI RỘNG` (nhạt) — sự khác đọc được. |
 
-**Còn yếu, xét trên phim.** **c29** ("Gió không sấy nước") — cái quạt chiếm gần hết khung, cái áo ướt
-nằm trong góc trên bên phải và rất nhỏ: câu kể và hình không nối được. **c54** ("quạt thổi tay lại thấy
-mát") — khung tối, bàn tay không đọc ra.
+**Còn yếu, xét trên phim.** *Không còn câu nào tôi dám gọi là hỏng.* Hai câu từng khiến tôi nghi
+ngờ — **c29** và **c54** — mở ở kích thước gốc thì **đều ổn**:
 
-**Một bài học về chính cách tôi đọc.** Tôi đọc tờ sheet sáu mươi ô (~480 px một ô) rồi kết luận, và
-kết luận sai hai lần: **c32** tôi đọc là "tường tối, chỉ có vai áo" trong khi trên phim đó là **một
-cái áo trắng lớn ở giữa khung**, có quạt, có đồng hồ; **c7** tôi đọc là "hai áo giống nhau" trong khi
-thực tế áo bên trái nhạt, áo bên phải sẫm. Một lần nữa trước đó: nhãn "3 CÁI" tưởng sai, hoá ra là
-`3 ÁO`. Ô nhỏ làm mất đúng thứ phim dạy — tương phản sáng/tối, kích thước vật. Nên: **tờ sheet để
-tìm câu cần xem, phim mới là bằng chứng** (N87).
+- **c29** ("Gió không sấy nước"): quạt lớn giữa khung, có đĩa mờ của cánh quay, và **hai vệt gió chạy
+  từ miệng quạt sang góc trên bên phải**, nơi cái áo có **giọt màu xanh** đang treo. Quan hệ gió–nước
+  đọc được. Lý do "giữ" của đạo diễn cắt đúng.
+- **c54** ("quạt thổi tay lại thấy mát"): quạt bên trái, **bàn tay duỗi ra với giọt màu xanh trên mu
+  bàn tay**, vệt gió chạy từ quạt tới tay, một chiếc quạt nhỏ ở giữa khung. Câu kể đọc được rõ ràng.
+
+**Bài học về chính cách tôi đọc — sai ba lần, và tôi đã gửi tin nhắn sai cho phiên làm phim.** Tôi đọc
+tờ sheet sáu mươi ô (~480 px một ô) rồi kết luận. Ba nhận định sai:
+
+| Câu | Tôi đọc trên tờ sheet | Thực tế trên phim |
+|---|---|---|
+| c32 | "tường tối, chỉ có một vai áo, khung gần như trống" | **một cái áo trắng lớn ở giữa khung**, có quạt, có đồng hồ, có dây phơi |
+| c7 | "hai cái áo giống nhau, không thấy khác biệt" | áo bên trái **nhạt**, áo bên phải **sẫm** — đúng câu kể |
+| c54 | "khung tối, bàn tay không đọc ra" | **bàn tay là chủ thể rõ nhất**: duỗi ra, giọt màu xanh trên mu, vệt gió từ quạt tới tay |
+
+Và tôi đã **gửi cho phiên làm tập 01 một tin nhắn sai**: bảo họ làm lại c29 và c54 vì "yếu". Cả hai
+đều không có lỗi. Tôi đính chính ngay sau đó — nhưng một tin nhắn sai đã đủ để kéo một phiên đang
+dựng phim đi sửa hai câu không có lỗi, và trong lúc phim đang dựng thì đó là thời gian thật.
+
+Ô nhỏ làm mất đúng thứ phim dạy: tương phản sáng/tối, kích thước vật, sự hiện diện của vật. Ba nhận
+định sai ấy đủ để gửi cả phim đi sửa ba câu không có lỗi. Nên: **tờ sheet để tìm câu cần xem, phim
+mới là bằng chứng** (N87) — và **người giám sát cũng phải mở khung gốc trước khi nói câu nào hỏng**,
+đúng như người làm phim.
 
 **Và một cái bẫy khi đo.** Tôi chạy `tools/film_report.py` trên `out/video.mp4` — đó là bản **dựng
 hình, chưa ghép tiếng** — và báo cáo in ra "không có khoảng lặng từ 1,0 s trở lên" cho một tệp không
@@ -2681,19 +2697,25 @@ phim** và so:
 |---|---|---|
 | c32 | "tường tối, chỉ có một vai áo, khung gần như trống" | **một cái áo trắng lớn ở giữa khung**, có quạt, có đồng hồ, có dây phơi |
 | c7 | "hai cái áo giống nhau, không thấy khác biệt" | áo bên trái **nhạt**, áo bên phải **sẫm** — đúng câu kể |
+| c54 | "khung tối, bàn tay không đọc ra" | **bàn tay là chủ thể rõ nhất** — duỗi ra, giọt màu xanh trên mu, vệt gió từ quạt tới tay |
 | c40 | (lần trước) nhãn "3 CÁI" gọi tên vật không có trong hình | nhãn là `3 ÁO`, và câu nói đúng |
 
-Ba nhận định sai trong một buổi đọc. Không phải lỗi may mắn: **ô nhỏ làm mất đúng thứ phim dạy** —
-tương phản sáng/tối, kích thước vật, và sự hiện diện của vật. Ba lần sai ấy đủ để gửi cả phim đi
-sửa ba câu không có lỗi, và đủ để làm người đọc tin rằng câu đó hỏng.
+Bốn nhận định sai trong một buổi đọc. Không phải lỗi may mắn: **ô nhỏ làm mất đúng thứ phim dạng** —
+tương phản sáng/tối, kích thước vật, và sự hiện diện của vật. Bốn lần sai ấy đủ để gửi cả phim đi
+sửa bốn câu không có lỗi, và đủ để làm người đọc tin rằng câu đó hỏng.
+
+Và tôi đã **gửi sai cho phiên làm phim**: tin nhắn bảo họ làm lại c29 và c54. Cả hai đều không có lỗi.
+Người giám sát sai không chỉ tốn thời gian của mình — nó kéo một phiên đang dựng đi làm lại hai câu
+đúng, và mất thời gian dựng nữa. **Không gửi kết luận về một câu hỏng trước khi mở chính câu đó ở
+kích thước gốc.**
 
 **Đã sửa.**
 
 1. `tools/frames_at.py` (mới) — cắt một khung cho mỗi câu **từ chính mp4 đã dựng**, đúng giữa câu
    lời kể, rồi dán lại bằng `core/render/sheet.py` của thư viện. Có `--lines c1,c13-c18` và `--at`.
    Đây là hình người xem thật sự sẽ thấy, không phải ảnh dựng riêng.
-2. `frames_at.py` nhận `--cols` và `--w`: mặc định ba cột để lướt qua, hai cột 780 px để **soi** một
-   câu — vì đó là kích thước mà tương phản sáng/tối còn đọc được.
+2. `frames_at.py` nhận `--cols` và `--w`, và **mặc định là hai cột 780 px** — kích thước mà tương phản
+   sáng/tối còn đọc được. Muốn lướt thì `--cols 3`, muốn soi một câu thì `--cols 1 --w 1200`.
 3. R12 trong `CODING_STANDARDS.md` nói rõ hơn: tờ sheet là **bản đồ** để tìm câu cần xem; câu trả
    lời phải đến từ phim, ở kích thước đọc được.
 

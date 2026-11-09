@@ -12,10 +12,10 @@ Dùng:
 `beats.json` là của `beatsheet.mjs` (nó có `t0`/`t1` của từng câu). Không có `--lines` thì lấy
 tất cả. Ảnh được dán bằng công cụ của thư viện (`core/render/sheet.py`), không tự vẽ.
 
-**Kích thước ô là một phần của câu hỏi.** Mặc định ba cột (mỗi ô ~480 px) là để *lướt qua*: xem
-phim có ổn không, câu nào cần xem kỹ. Để *soi* một câu, dùng `--cols 2 --w 780` — ở ô nhỏ, tương
-phản sáng/tối và kích thước vật mất đi, và đó đúng là những thứ phim dạy (một cái áo nhạt, một cái
-áo sẫm: sự khác đó *là* câu kể).
+**Kích thước ô là một phần của câu hỏi.** Mặc định **hai cột, mỗi ô 780 px**: ở ô nhỏ (480 px) mất cả
+tương phản sáng/tối lẫn kích thước vật — mà đó đúng là những thứ phim dạy (một cái áo nhạt, một cái
+áo sẫm: sự khác đó *là* câu kể). Ba lần đọc sai trong một lượt soi phim đều bắt nguồn từ ô nhỏ. Muốn
+lướt qua thì `--cols 3` (rộng hơn, nhỏ hơn), muốn soi thì `--cols 1 --w 1200`.
 """
 import json
 import os
@@ -53,7 +53,7 @@ def _num(s):
     return int(s[1:]) if s.startswith('c') else int(s)
 
 
-def take(mp4, beats, out, lines='', at=0.6, cols=3, w=None):
+def take(mp4, beats, out, lines='', at=0.6, cols=2, w=780):
     picks = parse_lines(lines, beats) if lines else [b for b in beats if b.get('t0') is not None]
     tmp = []
     try:
@@ -109,7 +109,7 @@ def main(argv):
         print(__doc__)
         return 2
     mp4, beats_path, out = argv[1], argv[2], argv[3]
-    lines, at, cols, w = '', 0.6, 3, None
+    lines, at, cols, w = '', 0.6, 2, 780
     if '--lines' in argv:
         lines = argv[argv.index('--lines') + 1]
     if '--at' in argv:
