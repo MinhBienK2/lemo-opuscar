@@ -34,12 +34,13 @@ command -v timeout >/dev/null 2>&1 && have_timeout=1
 
 run() {   # run a step, keep going when it fails
   NAME=$1; shift
+  T0=$(date +%s)
   echo "--- $NAME"
   if [ "$have_timeout" -eq 1 ]; then
     set -- timeout -k 30 "$STEP_TIMEOUT" "$@"
   fi
   if "$@"; then
-    echo "    ok"
+    echo "    ok ($(( $(date +%s) - T0 ))s)"
   else
     RC=$?
     # exit 2 is the check's own "I could not run" — a crash or a film edited under the check.
@@ -48,6 +49,7 @@ run() {   # run a step, keep going when it fails
     if [ "$RC" -eq 2 ]; then echo "    COULD NOT RUN (exit 2) — not a verdict about the film"
     elif [ "$RC" -eq 124 ]; then echo "    COULD NOT RUN (no answer in ${STEP_TIMEOUT}s) — not a verdict about the film"
     else echo "    FAILED"; fi
+    echo "    ($(( $(date +%s) - T0 ))s)"
     FAIL=$((FAIL + 1))
   fi
 }
