@@ -84,6 +84,14 @@ và cả phim chỉ có 5 lượt: một tập 60 câu không thể hội tụ t
   Muốn máy đo được cả tập thì dựng tờ sheet cho cả tập:
   `node channels/tram-nghi-nhieu/tools/beatsheet.mjs <tập> --out <tập>/out/beats`.
 
+### Tên tệp bản chấm: số lượt và bản chép
+
+Mỗi vòng chấm ghi **hai** tệp: `X-n.md` là bản chấm của **lượt thứ n** (lịch sử, không đổi sau đó),
+`X.md` là **bản chép của lượt mới nhất** để đọc nhanh. Hai tệp cùng nội dung là bình thường, không phải lỗi,
+không phải hai vòng chấm khác nhau. Tem (`gate.py stamp`) đóng bằng tệp **có số lượt**; công cụ kiểm tra
+bản chấm đọc tệp **không số**. Chấm theo chương thì chương nằm trong tên: `SCRIPT-REVIEW-ch1-2.md` và
+`SCRIPT-REVIEW-ch1.md` (tệp không số có số chương là bản chép của lượt mới nhất của chương đó).
+
 ## Đạo diễn cắt — lối ra khi hết lượt
 
 Hết lượt thì **không** chấm lần thứ sáu. Có ba lối ra, rẻ nhất trước:
