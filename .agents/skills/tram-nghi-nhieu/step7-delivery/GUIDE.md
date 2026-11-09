@@ -29,6 +29,11 @@ Hoàn thiện toàn bộ hệ thống âm thanh (tiếng động foley, nhạc n
    **Chạy lúc code đã đứng yên** — không sửa `src/` trong khi chấm.
 3. Biên tập và tổng hợp âm thanh:
    `$LIB/.venv/bin/python channels/tram-nghi-nhieu/tools/mix.py <tập>`
+   Rồi **kiểm headroom ngay, trước khi dựng**:
+   `$LIB/.venv/bin/python channels/tram-nghi-nhieu/tools/check_mix.py <tập>`
+   Bài này đo đỉnh mà phim sẽ có (mix được nâng lên −14 LUFS rồi AAC cộng thêm ~0,4 dB). Nếu nó bảo vượt
+   ngưỡng, **hạ đỉnh rồi trộn lại** — chứ đừng dựng rồi mới biết: cổng của kênh từ chối phim trên −3,0 dB
+   đỉnh mẫu, và lỗi đó lộ ra *sau* cả lượt dựng (tập 01, 15:18).
 4. Render video headless và mux sản phẩm cuối cùng:
    `sh <tập>/build.sh`
    (Lệnh này tự từ chối nếu thiếu tem — xem phần Tem kiểm duyệt số ở trên. Nó cũng **tự ghi thời lượng đo

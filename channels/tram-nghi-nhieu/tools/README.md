@@ -34,6 +34,7 @@ Các công cụ của `core/` có sẵn [`core/README.md`](../../../core/README.
 | `python3 channels/tram-nghi-nhieu/tools/check_progress.py <tập>` | hai vòng chấm liên tiếp có so điểm không (`--all` cho cả kênh) | — |
 | `python3 channels/tram-nghi-nhieu/tools/check_reports.py [<tập> …]` | các bản chấm có đủ phần và đúng mẫu không | — |
 | `python3 channels/tram-nghi-nhieu/tools/check_prompts.py` | lời dặn nào trong `review.sh` bị shell cắt mất (một `"` chưa escape là mất 83 % lời dặn) | — |
+| `python3 channels/tram-nghi-nhieu/tools/check_mix.py <tập>` | âm của tập có đủ headroom không: đo đỉnh mà phim sẽ có **trước khi dựng**, chặn lúc vài giây thay vì sau cả lượt dựng | — |
 | `sh channels/tram-nghi-nhieu/tools/watchdog_selftest.sh` | con chó canh của vòng chấm có bắt đúng lệnh bị chặn không, và có bỏ qua người chấm chỉ *đọc* tệp có chứa cụm từ đó không | — |
 | `.venv/bin/python channels/tram-nghi-nhieu/tools/mix.py <tập>` | nhạc, ambience, foley, master −14 LUFS | `<tập>/out/` |
 | `python3 channels/tram-nghi-nhieu/tools/mk_timeline.py <tập>` | tính timeline từ giọng đọc | `src/timeline.js` |
