@@ -6,6 +6,7 @@
 // <out>.lock holds the owner's pid; if the owner is gone, or the lock file hasn't been refreshed for over 12 hours (the pid was reused by another process), it counts as stale and a new render takes over.
 import fs from 'fs'; import path from 'path'; import { spawn, execFileSync } from 'child_process';
 import { openDemo, closeServer, requireDemo, takeSize } from './page.mjs';
+import { fingerprintOf } from './sourcewatch.mjs';
 const args = process.argv.slice(2), { w: W, h: H } = takeSize(args), opt = (k, d) => { const i = args.indexOf(k); return i >= 0 ? args[i + 1] : d; };
 const dir = args[0]; requireDemo(dir);
 // an episode of a channel that keeps a review gate (channels/<channel>/gate.py, docs/layout.md) renders only what the
@@ -24,6 +25,15 @@ if (!(FPS > 0) || !Number.isInteger(WK) || WK < 1) { console.error('bad --fps / 
 const out = path.resolve(opt('--out', path.join(dir, 'out', 'video.mp4')));
 const outDir = path.dirname(out), base = path.basename(out, path.extname(out));
 fs.mkdirSync(outDir, { recursive: true });
+
+// The fingerprint of the code this film is about to be built from. It is taken BEFORE the frames
+// exist, so a source file edited while the render runs leaves a movie that no longer matches the
+// code — the mtimes cannot see that (a file edited during the build ends up *newer* than the movie,
+// and the movie still shows the old code). The delivery gate compares this snapshot with the code
+// that is on disk now; see core/render/sourcecheck.mjs.
+const snapshotPath = path.join(outDir, 'source-fingerprint.json');
+const snapshot = fingerprintOf(dir);
+fs.writeFileSync(snapshotPath, JSON.stringify(snapshot, null, 2));
 
 // —— only one render may write a given --out: <out>.lock holds the pid ——
 const alive = pid => { try { process.kill(pid, 0); return true; } catch (e) { return e.code === 'EPERM'; } };
@@ -81,3 +91,13 @@ fs.renameSync(path.join(segDir, 'merged.mp4'), out);   // any characters in the 
 cleanup(); release();
 console.log('done', out, TOTAL, 'frames', ((Date.now() - t0) / 1000).toFixed(0) + 's');
 closeServer();
+
+// The code that moved while the frames were being rendered: the movie is a mixture of two versions
+// of the film, and no mtime will say so. The frames are already written, but a film that is half
+// old and half new is not a film — so this is a failure, not a warning.
+const now = fingerprintOf(dir);
+const moved = [...new Set([...Object.keys(now), ...Object.keys(snapshot)])].filter(k => now[k] !== snapshot[k]);
+if (moved.length) {
+  console.error(`video: the code changed while the film was rendering — the movie would be a mixture of two versions:\n  ${moved.join('\n  ')}\n  render again, and do not edit the sources while a render is running.`);
+  process.exit(1);
+}

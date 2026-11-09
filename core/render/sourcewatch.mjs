@@ -39,3 +39,29 @@ export function changed(dir, snapshot) {
   for (const k of Object.keys(snapshot)) if (!(k in now)) out.push(`${k} (removed)`);
   return out;
 }
+
+// the channel's shared rig is part of the film's code: the episode's own src/ is only half of it.
+// A rig file that changes after the frames were rendered makes the film just as stale as a changed
+// episode file does — and the episode file is the one everyone thinks of.
+export function rigDir(dir) {
+  let d = path.dirname(path.resolve(dir));
+  while (d && d !== '/') {
+    if (fs.existsSync(path.join(d, 'CHANNEL.md'))) return path.join(d, 'rig');
+    d = path.dirname(d);
+  }
+  return '';
+}
+
+// the fingerprint of everything the film is built from: the episode's own files and the channel's rig
+export function fingerprintOf(dir) {
+  const out = fingerprint(dir);
+  const rig = rigDir(dir);
+  if (rig && fs.existsSync(rig)) {
+    for (const name of fs.readdirSync(rig).sort()) {
+      if (!/\.(js|mjs)$/.test(name)) continue;
+      const f = path.join(rig, name);
+      out['rig/' + name] = crypto.createHash('sha1').update(fs.readFileSync(f)).digest('hex');
+    }
+  }
+  return out;
+}

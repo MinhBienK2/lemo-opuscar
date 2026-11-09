@@ -254,6 +254,24 @@ if [ -n "$MP4" ]; then
   if [ "$STALE" -eq 0 ]; then
     echo "    ok: movie is up to date with source files"
   fi
+  if [ "$STALE" -eq 0 ]; then
+    echo "    ok: movie is up to date with source files"
+  fi
+
+  # The fingerprint: the movie was built from one specific version of the code. The mtimes above
+  # cannot say which version — a file edited *during* the build ends up newer than the movie, and
+  # the movie still shows the old code. The build writes the fingerprint of the code it started
+  # from; this compares it with the code that is on disk now.
+  SNAP="$FOLDER/out/source-fingerprint.json"
+  if [ -f "$SNAP" ]; then
+    if node "$HERE/core/render/sourcecheck.mjs" "$FOLDER" "$SNAP" >"$TMP/src.txt" 2>&1; then
+      echo "    ok: the movie was built from the code that is on disk now"
+    else
+      echo "    FAILED: the code moved on since the movie was built — the delivered movie shows the old code:"
+      sed 's/^/      /' "$TMP/src.txt"
+      FAIL=$((FAIL + 1))
+    fi
+  fi
 
   # the filters print their summary at the info level, so -v error would hide it: the log is captured and the lines we need are picked out
   echo "--- loudness: $MP4"
