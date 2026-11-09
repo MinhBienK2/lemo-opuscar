@@ -2905,6 +2905,53 @@ harness, còn tệp do phiên tự tạo (`> /tmp/round.log`) nằm ngoài tầm
 0 `> file` cho job nền, **3 lần mở ảnh** (tập 01: 834), và 5 lần đọc lại tệp log của chính vòng đang
 chạy — cùng lớp lỗi R5b, vì phiên đó khởi động trước khi luật này có.
 
+### Đo lại lúc 14:2x — luật có đổi được hành vi của phiên đang chạy không?
+
+Cùng công cụ, cùng hai transcript (tập 01 đã dừng, nên không đo lại):
+
+| Phép đo | tập 01 (phiên cũ) | tập 02 (phiên mới) | tập 03 (phiên mới) |
+|---|---|---|---|
+| R1 — ghi tệp dự án bằng shell | 370 | 40 | **1** |
+| R1t — sửa an toàn nhưng đi qua chương trình trung gian | 60 | 2 | **45** |
+| R10 — montage ffmpeg tự viết | 15 | 4 | 0 |
+| R11 — đọc lại tệp mã nguồn lớn | 236 | 65 | 51 |
+| R12 — mở ảnh | 834 | 138 | 94 |
+| R9 — đọc lại output của job nền (của harness) | 136 | 0 | 6 |
+| R5b — đọc lại tệp log của **chính mình** | 80 | **114** | **81** |
+| R14 — mẫu tự khớp (`pkill -f`, `pgrep -f`) | 5 | 1 | 0 |
+| Kích thước transcript | 973 MB | 108 MB | 83 MB |
+
+**Đọc.** Ba điều khác nhau, và đáng ghi rõ vì chúng dễ bị đọc thành một:
+
+1. **Tập 03 đã bỏ hẳn lớp lỗi R5b**: 81 lần lúc 14:0x và **81 lần lúc 14:2x** — không tăng. Cùng lúc đó
+   nó ghi tệp bằng shell **1 lần** (tập 01: 370) và dùng `tools/replace.py` **45 lần**: nó đã đọc luật
+   và làm theo. Đây là bằng chứng rằng luật viết bằng văn xuôi **có** đổi được hành vi khi người đọc
+   là một phiên mới đọc luật từ đầu.
+2. **Tập 02 thì không**: 111 → 114, và ba lần tăng nằm quanh vòng chấm props **chết** (xem N106) —
+   người làm phải mở tệp log để thấy vòng chấm chết ở đâu. Đó là đọc log một lần sau khi job đã xong,
+   không phải vòng dò. Nhưng mẫu cũ vẫn còn: nó vẫn `> /tmp/round_props4.log 2>&1`.
+3. **Một luật mà rơi vào giữa một phiên đang chạy không đổi được hành vi của phiên đó**: cả hai phiên
+   đã nhận tin nhắn của tôi và đã ghi nhận, nhưng tập 02 vẫn giữ mẫu cũ. Muốn luật có tác dụng với
+   những phiên đang chạy thì phải **nói vào đúng lúc** (tôi đã nói) **hoặc chặn bằng cơ chế** (một
+   `PreToolUse` hook trong `.claude/settings.json` của thư việc chưa có — xem "Còn lại").
+
+## N106 — high — Vòng chấm chết ngay ở dòng lệnh đầu tiên, và nó chết trong im lặng
+
+Vòng chấm props của tập 02 chết lúc 14:10 ở dòng `review.sh: 348`:
+
+```
+review.sh: 348: printf: 09: not completely converted
+```
+
+`printf 'p_%02d.jpg' 09` hiểu "09" là số bát phân — 09 không phải số bát phân hợp lệ — nên `printf`
+báo lỗi. Vòng chấm in ra "three views of every object…" rồi chết, exit=1, **không để lại
+`PROPS-REVIEW.md`**, và vì vậy cổng báo "props: chưa có PASS" mà không nói vì sao. Người làm phim thì
+đang bận làm việc khác, và thông báo chết nằm trong một tệp log mà chính nó không đọc (R5b).
+
+Đã sửa (`30926ba`): bỏ số 0 ở đầu trước khi đưa vào `printf`. Bài học rộng hơn con số 09: **một vòng
+chấm chết phải để lại dấu vết** — không có bản chấm thì cổng phải nói "vòng này chết, đọc log", chứ
+không phải im lặng như thể chưa ai chạy. Đây là việc còn làm (xem "Còn lại").
+
 ## N91 — medium — Lời khuyên của cổng trái với luật của chính kênh, ngay trong một tệp
 
 **Bằng chứng.** `channels/tram-nghi-nhieu/tools/check_shots.py` in ra cờ `FILL` với lời khuyên:
