@@ -494,3 +494,27 @@ không có vòng lặp thăm dò (`until [ -f x ]; do sleep 15; done`); không �
 - Tờ sheet phải dựng lại bằng rig mới (`c2df58d`) trước khi đọc bất kỳ cờ `FILL`/`PTR` nào — tờ cũ đo bằng probe cũ.
 - `review.sh --video` và `--final` của kênh.
 
+## Đóng bản ghi ngày 08-11 (18:20 ngày 09-11)
+
+Bản ghi này mở lúc 23:29 ngày 08-11 với tám phát hiện (P1–P15) và một danh sách việc còn lại, và nó không
+đóng lại được vì phiên vẫn đang chạy. Những việc còn lại ấy giờ đã có trạng thái:
+
+| Việc còn lại (lúc 23:29) | Trạng thái lúc 18:20 ngày 09-11 |
+|---|---|
+| Tờ sheet phải dựng lại bằng rig mới (`c2df58d`) trước khi đọc bất kỳ cờ `FILL`/`PTR` nào | **Đã xong**: `review/beatsheet/beats.json` dựng lại lúc 16:36, đủ **60** câu có mốc thời gian; tờ cũ (6 câu) không còn được dùng. |
+| `review.sh --video` và `--final` của kênh | **`--final` đã chạy** (16:31): REJECTED, tám lỗi → N128 (mỗi lỗi thành một luật ở một nơi). **`--video` chưa chạy** — và xem N131: vòng `--final` nay tự cắt một khung cho mỗi câu, nên phần phủ của phim là **đủ**; `--video` (bốn khung cho mỗi câu) vẫn là chỗ dành cho những câu cần soi kỹ. |
+| Phim có `--final` PASS? | **Chưa.** Tập 01 chưa DONE: bản chấm cuối REJECTED, và người làm đang sửa (sáu điểm đã nêu ở phần *Đánh giá khách quan phim tap-01* trong bản ghi ngày 09-11). |
+
+Những gì phát hiện sau 01:30 ngày 09-11 không nằm trong bản ghi này mà nằm ở
+[`2026-11-09-tap-01-phoi-quan-ao-supervision.md`](2026-11-09-tap-01-phoi-quan-ao-supervision.md):
+N119–N131, cộng **đánh giá khách quan phim tap-01** (đọc từ chính mp4 đã dựng, 60 câu, ba tờ ảnh).
+Tóm tắt những gì đã đổi trong thư viện vì những phát hiện đó:
+
+| Vấn đề | Guard |
+|---|---|
+| Bóng/điểm lạ không ai đo được (N125, N129) | `tools/shadow_who.mjs` — vá rig trong trình duyệt, tìm ô tối nhất, tắt từng vật, đo xem vật nào làm ô sáng lên |
+| Vòng chấm bị kernel giết vì máy hết chỗ (N122, N126) | `tools/hook_load.py` chặn lệnh nặng; `review.sh` hỏi cùng câu trước khi mở vòng và **không mở** nếu máy hết chỗ; việc từ chối có mã riêng (exit 3) để không bị gọi là "chết" |
+| Người chấm đổi ý trên cùng mã (P9) | `review.sh --props` ghi hash `src/props.js` vào bản chấm và in ra vật đổi phán quyết khi mã y hệt |
+| Số vật trong bản chấm dịch chỗ (N130) | `tools/check_props_refs.py` + ba cửa trong `review.sh` |
+| Người nghiệm thu nhìn phim bằng một mẫu (N131) | Vòng `--final` cắt một khung cho mỗi câu, ô ghi mã câu, và `COVERAGE.txt` nói rõ câu nào không thấy |
+

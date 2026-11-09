@@ -1,7 +1,7 @@
 ---
 name: tram-nghi-nhieu
 description: Đạo diễn và dựng một tập của kênh Trạm Nghĩ Nhiều — câu hỏi "tại sao" đời thường, trả lời bằng diorama 3D toon (three.js) có ánh sáng thật, viền mực vẽ tay, máy quay đi vào bên trong vật, mọi vật dựng đúng là nó, chỉ thứ vô hình mới thành hình minh hoạ; một giọng kể tiếng Việt. Dùng khi làm bất kỳ tập nào của kênh.
-version: 15.3.0
+version: 15.4.0
 ---
 
 # Một tập Trạm Nghĩ Nhiều: Quy trình Đạo diễn & Phản biện Độc lập Phân tầng
@@ -209,7 +209,7 @@ Trước khi dựng, đọc `improvements/lessons.md` ở gốc thư viện — 
 
 ### Bước 7: Âm thanh, Mux & Nghiệm thu Tổng thể (Audio, Mux & Delivery)
 - **Đạo diễn thực hiện:** Đọc `step7-delivery/GUIDE.md`. Đăng ký `window.EV` (foley, ambience), chạy `mix.py`, render headless và mux `build.sh`.
-- **Review độc lập:** chạy `sh channels/tram-nghi-nhieu/tools/review.sh <tập> --final` — công cụ nạp mẫu `step7-delivery/PROMPT_CRITIC.md`, đưa cho người chấm những điều máy đo được về phim (độ dài, âm lượng, chỗ im lặng, sự kiện) bên cạnh các tờ trích từ phim đã dựng, rồi đóng tem `review/FINAL.pass`.
+- **Review độc lập:** chạy `sh channels/tram-nghi-nhieu/tools/review.sh <tập> --final` — công cụ nạp mẫu `step7-delivery/PROMPT_CRITIC.md`, đưa cho người chấm những điều máy đo được về phim (độ dài, âm lượng, chỗ im lặng, sự kiện) bên cạnh các tờ trích từ phim đã dựng — **một khung cho mỗi câu**, ô trên khung ghi **mã câu** (c27) — rồi đóng tem `review/FINAL.pass`. Người chấm phải gọi lỗi bằng mã câu, và phải nói câu nào nó không soi được.
 
 ## Hướng dẫn Vận hành & Cổng Thẩm định (Verification & Gatekeeper)
 

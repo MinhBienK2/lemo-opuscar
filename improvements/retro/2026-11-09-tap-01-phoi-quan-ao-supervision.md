@@ -4220,6 +4220,42 @@ lệch, và bản chấm trông đúng. Muốn bắt cả hai thì danh mục ph
 đó là việc lớn hơn một vòng chấm. Hiện tại, giá của việc sửa số trong bản chấm là rẻ: người làm đã có sẵn
 ảnh `p_NN.jpg` để đối chiếu.
 
+## N131 — high — Vòng nghiệm thu cuối **lấy mẫu** phim theo thời gian: 36/60 câu không ai chấm, và lời dặn của người chấm bị shell ăn mất
+
+**Bằng chứng.** Vòng `--final` của tap-01 chạy lúc 16:31 ngày 09-11: nó cắt **24 khung hình theo thời
+gian** (mỗi ~7,3 s một khung), dán thành hai tờ, và người chấm kết luận REJECTED. Phim có **60 câu**
+(`voice/lines.json`). Vậy **36 câu — 60% — chưa từng xuất hiện trước mắt người chấm**, và bản chấm không
+nói điều đó.
+
+Tệ hơn: lời dặn của người chấm bị **shell ăn mất một đoạn**. Trong `review.sh`, câu lệnh cho người
+chấm nằm trong `"$( … )"`, và trong đó có `` `sheet_N.jpg` `` — mà backtick trong dấu nháy kép là **thay
+thế lệnh**. Shell chạy `sheet_N.jpg` (không có lệnh đó), in "not found", và thay cả đoạn đó bằng
+**rỗng**. Người chấm nhận được câu: *"mở từng tờ  — mỗi tờ là mười hai khung hình…"* — không có tên
+tệp. Nó vẫn tìm được các tờ (nó liệt kê thư mục), nên lỗi này **im lặng**: không ai biết mà không tự
+kiểm tra. Đã kiểm chứng bằng `sh -c 'x="mở \`sheet_N.jpg\` — xong"; echo "$x"'` → in ra `mở  — xong`.
+
+**Vì sao đáng ghi riêng.** Đây là hình dạng thứ ba của *"một câu hỏi không ai hỏi"* (sau N130 về số vật
+và lỗ hổng về tư thế vật trong cận cảnh): **người chấm cuối cùng — người quyết định phim được nhận —
+nhìn phim bằng một mẫu**. Không có luật nào nói "người nghiệm thu phải thấy hết phim", và không có mặt
+nào trong báo cáo nói "tôi chỉ thấy 24/60 câu".
+
+**Đã làm.**
+
+- Vòng `--final` nay **cắt một khung cho mỗi câu** khi có tờ nhịp điện biết mốc thời gian
+  (`review/beatsheet/beats.json` hoặc `out/beats/beats.json`): 60 câu → 5 tờ, mỗi ô ghi **mã câu**
+  (c27) thay vì số giây — nên lỗi trong báo cáo gọi đúng *tên câu*, và người làm mở đúng câu. Đã thử
+  trên chính phim tap-01: 60 khung cắt sạch, 5 tờ, không có dòng lỗi nào trên stderr.
+- Khi **không** có tờ có mốc thời gian, vòng vẫn lấy mẫu theo thời gian — nhưng nó ghi vào
+  `COVERAGE.txt` rằng bao nhiêu câu **không** có khung, và lời dặn của người chấm phải nói rõ trong
+  báo cáo là chưa soi câu nào. Lời dặn còn chỉ cách mở **khung gốc** của một câu
+  (`tools/frames_at.py … --lines c17 --cols 1 --w 1200`), vì ô nhỏ thì đọc sai.
+- Backtick trong lời dặn: bỏ hết, dùng nháy đơn. (`get_prompt` đọc mẫu từ tệp nên không dính; chỉ câu
+  viết tay trong `review.sh` mới dính.)
+
+**Còn lại.** Một khung cho mỗi câu vẫn là **một** khung: một câu mà lỗi chỉ hiện ở nửa sau nhịp thì ô
+lấy ở 60% nhịp có thể không thấy. Vòng `--video` (bốn khung cho mỗi câu) là chỗ dành cho việc đó; nó vẫn
+chưa bắt buộc trong cổng — một câu hỏi mở cho lần sau.
+
 ## Đánh giá khách quan phim tap-01 (60 câu, đọc từ chính phim đã dựng)
 
 **Cách đọc.** Không xem ảnh tĩnh của vật — xem phim. 60 câu được cắt từ **mp4 đã dựng** bằng

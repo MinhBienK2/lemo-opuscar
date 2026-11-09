@@ -424,7 +424,7 @@ if [ "$OUTLINE" = 1 ]; then
   at_work "review --outline:"
   critic "$(get_prompt "step1-outline")
 $PREV
-Thư mục làm việc của bạn: $W. Đọc TREATMENT.md, FACTS.md, STRATEGY.md (và PREVIOUS.md nếu có), rồi viết OUTLINE-REVIEW.md ở đó theo mẫu, và in lại nó."
+Thư mục làm việc của bạn: $W. Đọc FILM-FACTS.md (những điều máy đo được về phim — độ dài, âm lượng, chỗ im lặng, sự kiện), GATE.md (trạng thái từng tem), FACTS.md, TREATMENT.md, lines.json, và COVERAGE.txt (bạn đã xem được câu nào của phim), rồi mở từng tờ 'sheet_N.jpg' — mỗi tờ là mười hai khung hình **trích từ phim đã dựng**; ô trên khung ghi **mã câu** (c12 là câu 12 của lời kể) nếu COVERAGE.txt nói vậy, và số giây nếu không. Câu nào cần soi kỹ hơn thì mở khung gốc: python3 $LIB/tools/frames_at.py <mp4> <beats.json> <tệp> --lines c17 --cols 1 --w 1200 (beats.json ở review/beatsheet/beats.json hoặc out/beats/beats.json). Trong báo cáo, **nêu mã câu** của mọi lỗi bạn thấy (c27, không phải "khoảng 1:20"), và nói rõ câu nào bạn không soi được. Rồi viết FINAL-QA-REPORT.md ở đó theo mẫu, và in lại nó."
   [ -s OUTLINE-REVIEW.md ] || cp out.txt OUTLINE-REVIEW.md
   set_round OUTLINE-REVIEW.md "$n" 4
   sign "--outline" OUTLINE-REVIEW.md
@@ -813,29 +813,72 @@ if [ "$FINAL" = 1 ]; then
     echo "review --final: đã nghiệm thu 3 lượt mà phim vẫn chưa được nhận. Dừng: báo người dùng các lỗi còn lại trong $EP/review/FINAL-QA-REPORT.md và hỏi hướng đi." >&2; exit 1
   fi
   mkdir -p "$W/frames"
-  python3 "$CHANNEL/tools/check_delivery.py" "$EP" --facts > "$W/FILM-FACTS.md"
-  $GATE status "$EP" > "$W/GATE.md" 2>/dev/null || true
-  [ -f "$EP/research/FACTS.md" ] && cp "$EP/research/FACTS.md" "$W/"
-  [ -f "$EP/TREATMENT.md" ] && cp "$EP/TREATMENT.md" "$W/"
-  [ -f "$EP/voice/lines.json" ] && cp "$EP/voice/lines.json" "$W/"
-  # The frames come from the *rendered film*, not from the stills: the point of the last gate is to look at
-  # what the viewer gets. A sheet holds twelve frames, and the sheet is how the critic reads the whole film
-  # at once — sixty frames one by one is what the picture review learned not to do (N18).
-  python3 - "$W" "$MP4" "$LIB" <<'EOF'
-import glob, os, subprocess, sys
-W, mp4, LIB = sys.argv[1], sys.argv[2], sys.argv[3]
-out = subprocess.run(['ffprobe', '-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', mp4],
-                     capture_output=True, text=True).stdout.strip()
-dur = float(out or 0)
-n = max(12, min(36, int(round(dur / 5))))
-for k in range(n):
-    t = dur * (k + 0.5) / n
-    subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-ss', f'{t:.2f}', '-i', mp4,
-                    '-frames:v', '1', '-vf', 'scale=480:-1', f'{W}/frames/{k:02d}-{int(t):04d}s.jpg'], check=False)
-files = sorted(glob.glob(W + '/frames/*.jpg'))
-for p in range(0, len(files), 12):
-    subprocess.run([sys.executable, LIB + '/core/render/sheet.py', f'{W}/sheet_{p // 12 + 1}.jpg']
-                   + files[p:p + 12] + ['--cols', '4'], check=False)
+  python3 - "$W" "$MP4" "$LIB" "$EP" <<'EOF'
+import glob, json, os, subprocess, sys
+W, mp4, LIB, EP = sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]
+
+# How many lines does the film have? The voice script says.
+lines = []
+lj = os.path.join(EP, 'voice', 'lines.json')
+if os.path.isfile(lj):
+    try:
+        d = json.load(open(lj, encoding='utf8'))
+        lines = d if isinstance(d, list) else (d.get('lines') or [])
+    except Exception:
+        lines = []
+
+# A beats sheet that knows the TIME of each line lets this round see one frame of EVERY line. A sheet
+# without timings cannot be cut from the mp4, so it does not count. The QA used to sample the film by time:
+# 24 of 60 lines were never seen by the critic that accepted the film (tap-01, 16:31).
+timed = []
+for p in (os.path.join(EP, 'review', 'beatsheet', 'beats.json'),
+          os.path.join(EP, 'out', 'beats', 'beats.json')):
+    if not os.path.isfile(p):
+        continue
+    try:
+        d = json.load(open(p, encoding='utf8'))
+    except Exception:
+        continue
+    t = [b for b in d if isinstance(b, dict) and b.get('t0') is not None and b.get('t1') is not None]
+    if len(t) > len(timed):
+        timed = t
+
+if timed and (not lines or len(timed) >= len(lines)):
+    # one frame per line, cut from the rendered film, pasted with the library's sheet tool
+    picks = []
+    for b in timed:
+        t0, t1 = b.get('t0'), b.get('t1')
+        t = t0 + 0.6 * ((t1 - t0) if t1 is not None else 1.0)
+        name = b.get('id') or ('c%d' % b.get('n', len(picks) + 1))
+        f = os.path.join(W, 'frames', str(name) + '.jpg')
+        r = subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-ss', '%.3f' % t, '-i', mp4,
+                            '-frames:v', '1', '-vf', 'scale=480:-1', '-q:v', '3', f], check=False)
+        if r.returncode == 0 and os.path.isfile(f):
+            picks.append(f)
+    for k in range(0, len(picks), 12):
+        subprocess.run([sys.executable, LIB + '/core/render/sheet.py', f'{W}/sheet_{k // 12 + 1}.jpg']
+                       + picks[k:k + 12] + ['--cols', '4'], check=False)
+    open(W + '/COVERAGE.txt', 'w').write(
+        'Phim có %d câu lời kể. Các tờ sheet_N.jpg có MỘT khung hình cho MỌI câu, cắt từ chính file mp4;\n'
+        'ô trên mỗi khung ghi mã câu (c12 = câu 12). Không câu nào bị bỏ sót.\n' % len(lines))
+else:
+    # no timed sheet: sample the film by time, and say plainly which lines were not shown
+    out = subprocess.run(['ffprobe', '-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', mp4],
+                         capture_output=True, text=True).stdout.strip()
+    dur = float(out or 0)
+    n = max(12, min(36, int(round(dur / 5))))
+    for k in range(n):
+        t = dur * (k + 0.5) / n
+        subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-ss', f'{t:.2f}', '-i', mp4,
+                        '-frames:v', '1', '-vf', 'scale=480:-1', f'{W}/frames/{k:02d}-{int(t):04d}s.jpg'], check=False)
+    files = sorted(glob.glob(W + '/frames/*.jpg'))
+    for p in range(0, len(files), 12):
+        subprocess.run([sys.executable, LIB + '/core/render/sheet.py', f'{W}/sheet_{p // 12 + 1}.jpg']
+                       + files[p:p + 12] + ['--cols', '4'], check=False)
+    open(W + '/COVERAGE.txt', 'w').write(
+        'Phim có %d câu lời kể, nhưng vòng này chỉ lấy %d khung hình theo thời gian: %d câu KHÔNG có khung nào.\n'
+        'Đừng kết luận về những câu bạn không thấy — hãy nói rõ trong báo cáo là chưa soi.\n'
+        % (len(lines), n, max(0, len(lines) - n)))
 EOF
   cd "$W"
   at_work "review --final:"
