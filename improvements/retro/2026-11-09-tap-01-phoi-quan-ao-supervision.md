@@ -3798,3 +3798,46 @@ rồi đọc một lần; cần biết job còn sống thì hỏi bằng `ps -o 
 về tệp log. Selftest 16/16. Commit `1aaafc2`.
 
 
+
+## N118 — high — Đồng hồ của vòng chấm không biết vòng chấm này lớn tới đâu
+
+**Bằng chứng.** Vòng chấm vật dựng của tập 02 chết lúc **16:07:53** với `exit 2`, đúng **3600 giây**
+sau khi nó bắt đầu (15:07:53) — tức là đồng hồ giết nó, không phải người chấm trả lời. Vòng đó có **23 vật**,
+và pha đoán mù mở từng ảnh một (`p_01.jpg … p_23.jpg`), nên nó cần nhiều hơn một giờ.
+
+**Vì sao quan trọng.** Một vòng chấm bị giết đúng lúc nó sắp xong không chỉ mất câu trả lời: nó mất
+**một lượt của ngân sách vòng** mà không có gì để đọc, và người làm phim tưởng phim của hình ảnh có vấn đề
+trong khi thật ra chưa ai kịp phán. Cùng kiểu ấy: đồng hồ của cổng bàn giao (N111) là đồng hồ của một
+bài kiểm tra, còn đồng hồ này là đồng hồ của một **người đọc ảnh** — một việc chậm hơn hẳn.
+
+**Đã làm.** `review.sh` nay lớn đồng hồ theo việc phải làm: `CRITIC_TIMEOUT` mặc định là
+`3600 + 180 × (số ảnh vòng đó phải mở)` cho vòng vật dựng (23 vật → 7740 s), và một `CRITIC_TIMEOUT` gõ
+tay vẫn thắng. Commit `3828cdb`.
+
+## N119 — high — Một chương, ba khoá: hai người chấm có thể ngồi trên cùng một chương
+
+**Bằng chứng.** Tập 04 có **hai** dấu vết vòng chấm của cùng một chương 4 trong cùng thư mục:
+`review/.round-chapter-ch4.died` (15:57) và `review/.round-chapter-4.running` (16:06) — trong khi cổng chỉ
+có một chương 4. Nguyên nhân: khoá vòng chấm được đặt theo **đúng chuỗi người làm gõ**
+(`--chapter ch4` → `chapter-ch4`, `--chapter 4` → `chapter-4`), trong khi cổng tra cứu được cả ba cách
+gọi (`ch4`, `4`, `chch4`) về **một** chương.
+
+**Vì sao quan trọng.** Khoá tồn tại để hai người chấm không ngồi lên nhau (một vòng chấm ghi đè bản chấm
+của vòng kia, và ngân sách vòng bị tiêu hai lần). Một khoá theo tên gõ thì không chặn được gì: cùng một
+chương, hai tên, hai khoá, hai vòng chấm cùng lúc.
+
+**Đã làm.** Chương được tra cứu **trước khi** tạo khoá, khoá mang tên của chính chương đó, và mọi khoá
+cũ của cùng chương (kể cả khoá của một vòng đang chạy từ trước khi đổi tên) đều bị tính là bận. Commit
+`3828cdb`.
+
+## N120 — high — Một vòng chấm **có phán quyết** không phải vòng chấm chết, và cổng dặn sai đúng chỗ đó
+
+**Bằng chứng.** Mọi lần thoát với mã khác 0 đều được ghi vào `review/.round-<phần>.died` là "vòng chấm
+chết", và `gate.py status` in ra: *"vòng chấm ĐÃ CHẾT … đọc log của job nền rồi chạy lại, **đừng mở vòng
+thứ hai**"*. Nhưng mã 1 là **phán quyết REJECT** — đúng lúc người làm phim phải sửa rồi chạy vòng kế
+tiếp. Ba lần REJECT thật (tập 03 storyboard lúc 15:34, tập 04 chương 2 lúc 15:38 và chương 4 lúc 15:57)
+đều bị cổng gọi là "chết", và lời dặn "đừng mở vòng thứ hai" đúng lúc cần mở vòng kế tiếp.
+
+**Đã làm.** `review.sh` tự phân biệt: vòng nào đã viết bản chấm có dòng `VERDICT:` thì ghi "vòng chấm có
+phán quyết … không phải chết", vòng nào không thì vẫn là "chết (exit N) — không có phán quyết". Cổng in
+lời dặn ứng với từng loại. `gate.py --selftest` có 3 ca mới (27/27). Commit `9f3cdfe`.
