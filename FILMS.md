@@ -6,8 +6,9 @@ Every film of the library, one row each. The one-shots live in `films/`; the epi
 
 | Film | Folder | Runtime | Movie |
 |---|---|---|---|
-| Vì sao ngủ trưa dậy lại mệt? | `channels/tram-nghi-nhieu/series/co-the/tap-01-ngu-trua-day-me/` | — | `channels/tram-nghi-nhieu/series/co-the/tap-01-ngu-trua-day-me/tram-nghi-nhieu-series-co-the-tap-01-ngu-trua-day-me.mp4` |
+| Vì sao ngủ trưa dậy lại mệt? | `channels/tram-nghi-nhieu/series/co-the/tap-01-ngu-trua-day-me/` | 0:00 | `channels/tram-nghi-nhieu/series/co-the/tap-01-ngu-trua-day-me/tram-nghi-nhieu-series-co-the-tap-01-ngu-trua-day-me.mp4` |
 | Vì sao phơi quần áo cần gió? | `channels/tram-nghi-nhieu/series/do-vat/tap-01-phoi-quan-ao/` | 2:56 | `channels/tram-nghi-nhieu/series/do-vat/tap-01-phoi-quan-ao/tram-nghi-nhieu-series-do-vat-tap-01-phoi-quan-ao.mp4` |
+| Vì sao nồi cơm điện tự biết lúc nào cơm chín? | `channels/tram-nghi-nhieu/series/do-vat/tap-02-noi-com-dien/` | — | `channels/tram-nghi-nhieu/series/do-vat/tap-02-noi-com-dien/tram-nghi-nhieu-series-do-vat-tap-02-noi-com-dien.mp4` |
 | Vì sao cầu vồng lại luôn ở hướng đối diện với Mặt Trời? | `channels/tram-nghi-nhieu/series/the-gioi/tap-01-cau-vong/` | — | `channels/tram-nghi-nhieu/series/the-gioi/tap-01-cau-vong/tram-nghi-nhieu-series-the-gioi-tap-01-cau-vong.mp4` |
 | Phi vụ triệu đô trong 2 phút — a Money Heist explainer in a talking-head toon | `films/host-toon-test/` | 2:12 | `films/host-toon-test/phi-vu-trieu-do-2-phut.mp4` |
 
