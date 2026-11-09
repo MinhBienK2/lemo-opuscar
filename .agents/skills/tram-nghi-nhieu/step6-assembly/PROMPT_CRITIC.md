@@ -35,6 +35,7 @@ Nhiệm vụ của bạn là thẩm định nhịp điệu phim qua từng phân
    - **BẮT LỖI NGAY** khi vật chính của câu này quá nhỏ để đọc ra: một vệt nhỏ giữa một mảng trống (bức tường trơn, mặt nước trống, nền trơn, mảng đất trống) là FAIL — khung hình đó không kể được chuyện gì, dù hình đẹp. Nhưng **đừng kết luận lỗi chỉ vì con số**: mở ảnh của câu đó và tự xem; máy không biết vật nào là chủ thể của câu.
    - Cảnh bên trong vật (ruột sợi, giữa vải, trong pin) được phép có nền tối trơn; nhưng vật chính vẫn phải đủ lớn để người xem tắt tiếng đoán ra đang xảy ra chuyện gì.
    - Cận cảnh vào một mặt phẳng trơn mà không có vật nào đọc được trong đó là FAIL.
+   - **Khung bạc màu:** một khung mà gần như mọi thứ cùng một sắc độ — vật chính và nền cùng sáng, không có vùng nào đậm hơn để tách vật ra khỏi nền — thì người xem **không thấy hình**, dù khung hình đúng. Vài mảng sáng trên nền sáng không phải là tương phản. **Mở ảnh riêng ở kích thước thật trước khi kết luận**: ô trong tờ sheet nhỏ làm mọi khung sáng hơn, nên phán quyết lúc này là phán quyết về một hình không tồn tại. Khi đó sửa bằng ánh sáng (đèn chủ, vùng sáng, bóng đổ) chứ không phải bằng cách đổi bố cục.
    - Ghi rõ nhát nào FAIL và đề xuất sửa cụ thể: đưa máy lại gần hơn, đổi góc, dời vật chính vào giữa khung, hay thêm vật để khung có chuyện.
 ## Định dạng Output Bắt buộc (`REVIEW.md`)
 
