@@ -4303,3 +4303,43 @@ Cũng không vòng nào hỏi *vật trong tư thế phim dùng có đọc ra kh
 được tem vật dựng (lỗi 3). Hai lỗ hổng đó có cùng một hình dạng: **một câu hỏi mà không ai hỏi**, và vì
 vậy không ai trả lời, và vì vậy phim vẫn "PASS".
 
+## N132 — vòng chấm vật có thể bắt người làm sửa một vật đang đúng
+
+**Cái thấy được.** Vòng `--props` thứ năm của tap-01 FAIL: tám vật "HỎNG". Tôi mở hai ảnh ra xem:
+
+- `review/props/p_17.jpg` — một lưới sợi đan: sợi cuộn tròn đan qua nhau, đúng ý nghĩa danh mục `#17`
+  *sợi vải đan cận*. Bản chấm gọi nó là *đống lọ thuỷ tinh nhỏ có nắp kim loại* và phán HỎNG.
+- `review/props/p_26.jpg` — một bàn tay có cổ tay, đúng ý nghĩa danh mục `#26` *bàn tay người*. Bản chấm
+  gọi nó là *bàn chân người gắn vào một cán gỗ dài* và phán HỎNG.
+
+Cả hai là vật **đúng**, bị đòi sửa. Người làm đã bắt đầu sửa `src/props.js` theo bản chấm — sửa một lưới sợi
+đan thành đống lọ, và một bàn tay thành bàn chân.
+
+**Vì sao vòng chấm đi sai.** Vòng chấm vật có hai người đọc: người đoán mù (nhìn ảnh, không biết tên người
+làm định dựng) và người chấm (mở ảnh, so với tên định dựng). Ở tập này người đoán mù đọc sai hai ảnh, và
+người chấm đã lấy lời của người đoán mù làm căn cứ phán quyết. Luật của nhóm B nói "chỉ HỎNG khi ảnh cho
+thấy một vật thật khác" — nhưng dòng phán quyết **không có lời của người chấm**, nên không ai, kể cả người
+đọc bản chấm, thấy được rằng người chấm chưa tự mở ảnh.
+
+**Hai lỗ hổng khác trong cùng một bản chấm.**
+
+1. **Số trong BLIND.md không đáng tin.** Người đoán mù tự đánh số dòng của nó: mục #20 và #21 bị hoán
+   đổi so với file ảnh, và mục #25 **thiếu hẳn**. Người chấm biết điều này (ghi rõ trong bản chấm) mà vẫn
+   dùng các số ấy để so.
+2. **Vật #25 không có dòng phán quyết nào** — 25 trên 26 vật được chấm. Vòng vẫn xong, và nếu nó PASS thì
+   phim đi ra với một vật chưa ai nhìn.
+
+**Cái đã thêm.**
+
+- Dòng phán quyết phải có **"ảnh cho thấy:"** — lời của chính người chấm. Không có nó thì dòng chỉ là lời
+  của người đoán mù, và không ai kiểm tra được; có nó thì người đọc thấy ngay khi hai bên lệch nhau.
+- Luật nhóm B nói rõ: **căn cứ là ảnh người chấm tự mở**; ảnh đúng mà người xem gọi nhầm tên thì dòng đó là
+  KHỚP kèm ghi chú, không phải HỎNG.
+- `channels/tram-nghi-nhieu/tools/props_report_check.py`: mỗi vật phải có **đúng một** dòng phán quyết
+  (thiếu hoặc lặp là lỗi chặn vòng), và số trong BLIND.md được báo là không đáng tin khi lệch với tên file.
+- Người đoán mù nay ghi **tên file ảnh** vào mỗi dòng: tên file là sự thật, số nó tự đánh thì không.
+
+**Còn lại trong bản chấm này.** Sáu vật còn lại trong tám vật HỎNG tôi chưa mở ảnh: `#20` (tôi đã mở — đúng là
+HỎNG thật: ảnh là một cây chải, không phải mặt nước), `#2`, `#9`, `#17`, `#18`, `#19`, `#24`. Với `#17` và `#26`
+tôi đã mở và xác nhận là HỎNG **sai**; người làm đã được báo trước khi sửa.
+
