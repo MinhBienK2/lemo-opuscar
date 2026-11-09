@@ -1370,7 +1370,7 @@ những dòng dán câu cũ:
 | 20 | (nhãn) | `chỗ nóng nhất (c42–c52)` | c42: *"Ngoài hai chỗ ấy, còn một chỗ nữa: chính là túi pin."* |
 | 76 | c42 | *"chỗ nóng nhất không nằm ở bo mạch"* | c42: *"Ngoài hai chỗ ấy, còn một chỗ nữa…"* |
 | 84 | c50 | *"chỗ nóng nhất trong cả cái máy"*, nhãn `CHỖ NÓNG NHẤT` | c50: *"Giờ gom lại: mạch sạc, cục pin, và con chip."* |
-
+| 85 | Bài kiểm tra liên kết tự báo lỗi ở chỗ không phải nguyên nhân: một khối code fence có dấu nháy lẻ làm `check_doc_links.py` ghép lệch mọi đoạn code **cả tệp**, nên lỗi báo ra ở cuối tài liệu, cách nguyên nhân hàng nghìn ký tự — người đọc sửa nhầm chỗ báo lỗi, rồi tắt luôn bài kiểm tra | medium | `check_doc_links.py` bỏ fence trước, rồi ghép đoạn code theo từng đoạn văn thay vì theo cả tệp; selftest có ca cho việc này |
 Dàn ý trông vẫn đầy đặn, vẫn đúng về hình — nó chỉ nói về **những câu mà phim không còn nói**. Đây là
 cùng một lớp lỗi với N43, ở tầng khác: N43 là dàn ý (`TREATMENT.md`) bị bỏ lại; đây là **bản dàn ý
 hình** (`LOOK.md`) bị bỏ lại. Cả hai đều là tài liệu mô tả phim, và cả hai đều im lặng.
@@ -2128,7 +2128,7 @@ tiền (trước vòng chấm, trước lúc dựng, trước lúc bàn giao), c
 | 81 | `pkill -f beatsheet.mjs` của một tập giết job của tập khác: ba tập dựng song song, mỗi tập gọi `beatsheet.mjs` bằng cùng một mẫu lệnh, nên lệnh giết theo *tên* là lệnh giết của người khác | high | `beatsheet.mjs` ghi một tệp khoá theo tập (`out/beats/.lock` chứa pid và đường dẫn tập), giết job theo pid đọc từ tệp khoá đó; `lessons.md` có dòng "một lệnh giết theo tên là một lệnh giết của người khác" |
 | 82 | File nghiên cứu nói về bức tranh của phim ("nhiệt kế trong cả cái máy", "cái cửa mở ra"), và không bài kiểm tra nào đối chiếu lời hứa đó với cái thật trên hình | medium | chưa có guard — `FACTS.md` cần một bài kiểm tra đối chiếu các câu "Dùng trong phim" / "Phim nói:" với thẻ chữ trong `src/*.js` và với `voice/lines.json` |
 | 83 | Máy đo "vật chính quá nhỏ" ở ba kiểu cảnh mà nó không nhìn thấy: cảnh cận trong một vật lớn, chủ thể là một nhóm vật, và cảnh toàn cảnh — trong 30 câu bị gọi là nhỏ ở tap-01 chỉ 11 câu là lỗi thật, 19 câu là máy mù; người làm phim đẩy máy sát vào vật để đẩy số lên là phim xấu đi vì lời của máy | high | `check_shots.py` đo **độ phủ** (tổng phần khung vật thật chiếm) thay cho vật lớn nhất: độ phủ < 15 % và khác 0 mới là lỗi, độ phủ = 0 thì máy in danh sách câu nó không nhìn thấy kèm "đừng đưa máy sát"; `beatsheet.mjs` in `cover` và tô màu theo độ phủ; selftest thêm bốn ca |
-
+| 84 | Con trỏ viết trong backtick không ai kiểm: luật R10 trong chính `CODING_STANDARDS.md` bảo dùng `core/render/film_report.py`, mà tệp đó không tồn tại (nó ở `tools/film_report.py`) — người đọc R10 gõ đúng những gì R10 viết, không thấy tệp, rồi tự viết lại bằng ffmpeg, đúng cái R10 cấm | low | đường dẫn trong R10 sửa; `check_doc_links.py` nay soi con trỏ backtick trong các tài liệu luôn nằm trong ngữ cảnh, chỉ với `core/` và `docs/` (hẹp, nếu không sẽ ra 383 lỗi tiếng ồn); selftest có ca |
 ### Mỗi phát hiện đã có dòng riêng trong `improvements/lessons.md`
 
 `lessons.md` giữ **một dòng cho mỗi bài học**, không phải một dòng cho mỗi phát hiện — nên N1–N4 và N10
@@ -2535,6 +2535,69 @@ báo cáo dạy đưa máy sát cho số.
 **Luật chung rút ra:** *con số máy đo được phải là con số máy đo được đúng.* `fill` trả lời "vật
 lớn nhất trong khung chiếm bao nhiêu" — nó không trả lời "chủ thể có đủ lớn không", và dùng nó để
 kết luận thứ hai là nói sai. Một công cụ không chắc thì phải nói ra là không chắc.
+
+---
+
+## N84 — low — Con trỏ viết trong backtick không ai kiểm, và một con trỏ trong chính bộ luật đã hỏng
+
+**Bằng chứng.** Luật R10 trong `CODING_STANDARDS.md` — tài liệu mọi phiên đọc — bảo dùng
+`core/render/film_report.py` để đo một phim đã dựng. Tệp đó **không tồn tại**: nó ở
+`tools/film_report.py`.
+
+`check_doc_links.py` không bắt được, vì nó chỉ soi liên kết markdown `](target)`. Một con trỏ viết
+trong backtick không phải liên kết: không có gì để bấm, nên hỏng thì không ai thấy.
+
+**Vì sao quan trọng.** Đây là con trỏ tới đúng công cụ để đánh giá khách quan một phim đã xong. Người
+đọc R10 gõ đúng những gì R10 viết, không thấy tệp, rồi tự viết lại bằng `ffmpeg` — đúng cái R10 cấm.
+Trong `improvements/` có những tài liệu cũ nhắc `tools/gate.py`, `tools/review.sh` — những đường dẫn
+đã chuyển sang `channels/tram-nghi-nhieu/tools/` từ lâu.
+
+**Đã sửa.** Hai việc:
+
+1. Đường dẫn trong R10 sửa thành `tools/film_report.py`.
+2. `check_doc_links.py` nay soi thêm **con trỏ viết trong backtick** — nhưng chỉ trong những tài liệu
+   luôn nằm trong ngữ cảnh mọi phiên (`AGENTS.md`, `CODING_STANDARDS.md`, `DIRECTOR.md`, `TECHNIQUE.md`,
+   `docs/layout.md`, `core/README.md`, `MAINTAINING.md`, `MY-STYLES.md`), và chỉ khi đường dẫn bắt đầu
+   bằng `core/` hoặc `docs/` — hai thư mục này chỉ có một nghĩa trong kho, nên đường dẫn là từ gốc kho
+   và có đúng một tệp mang tên đó. Đường dẫn tương đối với thư mục dự án (`src/film.js`, `tools/` của
+   một kênh) thì không đụng tới. Selftest có ca cho việc này.
+
+**Vì sao phải hẹp.** Quét mọi backtick trong mọi tài liệu ra **383** đường dẫn hỏng: phần lớn là tài
+liệu lịch sử (`improvements/supervision/*.md`) nhắc đường dẫn của ngày xưa đã bị xoá, và
+`styles/*/DEMO.md` nhắc `tools/` của chính style đó. Một bài kiểm tra 383 lỗi là tiếng ồn, và tiếng ồn
+thì không ai đọc — nó sẽ bị bỏ qua sau lần đầu tiên.
+
+**Luật chung rút ra:** con trỏ viết trong backtick cũng là con trỏ; nhưng bài kiểm tra phải hẹp đúng,
+nếu không thì chính nó trở thành tiếng ồn và bị tắt.
+
+---
+
+## N85 — medium — Bài kiểm tra liên kết tự báo lỗi ở chỗ không phải nguyên nhân
+
+**Bằng chứng.** Khi commit N84, cổng `doc-links` báo:
+
+```
+BAD improvements/retro/2026-11-09-tap-01-phoi-quan-ao-supervision.md: link target not found: target
+```
+
+Dòng đó **không có lỗi**: đó là câu tôi viết trong N84, trong đó tôi *trích* dạng liên kết markdown
+`](target)` để giải thích bài kiểm tra soi cái gì. Nguyên nhân thật nằm cách đó hàng nghìn ký tự: một
+khối code fence trong tài liệu chứa số dấu nháy lẻ, mà `check_doc_links.py` ghép các đoạn code **theo
+cả tệp** — nên từ chỗ đó trở đi mọi dấu nháy bị ghép lệch. Lỗi báo ra ở cuối tệp, cách nguyên nhân
+hàng nghìn ký tự.
+
+**Vì sao quan trọng.** Người đọc báo lỗi sẽ đi sửa **chỗ báo lỗi**. Sửa xong mà lỗi vẫn còn, thì lần
+hai người ta đi sửa chỗ khác — và lần ba thì bài kiểm tra bị tắt. Một bài kiểm tra mà báo lỗi ở chỗ
+không phải nguyên nhân là một bài kiểm tra đang dạy người ta sửa sai.
+
+**Đã sửa.** `check_doc_links.py` bỏ hẳn khối code fence **trước**, rồi ghép đoạn code **theo từng
+đoạn văn** thay vì theo cả tệp. Một dấu nháy lẻ giờ chỉ hỏng đúng đoạn của nó, và lỗi báo ra luôn
+gần chỗ thật. Selftest có ca cho việc này: một khối fence có dấu nháy lẻ không được làm hỏng phần
+văn bên sau nó.
+
+**Luật chung rút ra:** một bài kiểm tra phải chỉ ra **nguyên nhân**, không phải chỗ hậu quả. Và thứ
+tự các bước của nó cũng là một phần của câu chuyện: bỏ fence trước khi ghép backtick, hay ghép
+trước khi bỏ, cho hai kết quả khác hẳn nhau.
 
 ---
 
