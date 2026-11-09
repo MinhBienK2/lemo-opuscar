@@ -148,7 +148,21 @@ export function film({ fov = 36, near = .02, far = 40 } = {}) {
     ovTex.needsUpdate = true; F.uOv.value = o.overlay ? 1 : 0;
     renderer.setRenderTarget(null); fin.render(renderer);
   }
-  return { renderer, camera, ov, frame, texts: () => texts };
+  // Every line of the episode gets its mark, in one call: `markBeats(ev, V, (id, t) => [x, y])` — the callback
+  // puts the camera where it will be at that line and returns the point of the beat **on the screen**
+  // (1920×1080), the label's point if the line has a label, else what the camera looks at. Without these marks
+  // the delivery gate can only ask "does something move somewhere", never "does this beat change the part of
+  // the frame where it happens" — the question the reviewer keeps asking.
+  function markBeats(ev, V, at) {
+    for (const id of Object.keys(V.L)) {
+      const { t0, t1 } = V.L[id];
+      const p = at(id, (t0 + t1) / 2);
+      if (!p) continue;
+      ev('mark', t0, { kind: 'beat', beat: id, d: +(t1 - t0).toFixed(3),
+                      xy: [Math.round(p[0]), Math.round(p[1])] });
+    }
+  }
+  return { renderer, camera, ov, frame, texts: () => texts, markBeats };
 }
 
 // Screen position of a world point.

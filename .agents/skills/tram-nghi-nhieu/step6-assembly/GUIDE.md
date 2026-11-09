@@ -13,11 +13,12 @@ Lắp ráp các linh kiện (từ `src/props.js`) vào bối cảnh hoàn chỉn
   - Dùng `particleStream()` tạo dòng hạt bay biểu diễn gió, hơi nước, nhiệt, điện cực nhẹ GPU.
 - **Cấm camera rỗng (No aimless camera pan):** Tuyệt đối không chống chế cờ `SAME` bằng cách chỉ nhích nhẹ camera trên một bối cảnh chết. Camera chỉ chuyển động khi bám theo hành động của đồ vật hoặc cơ chế vật lý.
 - **Cơ chế nhân quả:** Khi có lực tác động $\rightarrow$ vật thể phải biến đổi thấy được trong 1-2 giây.
-- **Mốc nhịp (`markBeat`):** mỗi câu lời kể gắn một mốc vào `window.EV` —
-  `markBeat(ev, 'c12', t0, d, [x, y])`, với `xy` là toạ độ tâm nhát trên khung 1920×1080
-  (`toScreen(point, camera)` cho một điểm trong không gian). Nhờ đó `tools/check_motion.py` đo được câu
-  hỏi mà đếm pixel không trả lời được: **nhịp này có làm thay đổi phần khung của nó không**. Không có mốc
-  thì cổng chỉ đo được "có gì đó động", không đo được "câu này đứng yên".
+- **Mốc nhịp (`markBeats`):** mỗi câu lời kể gắn một mốc vào `window.EV` — một lệnh cho cả tập:
+  `markBeats(ev, V, (id, t) => [x, y])`, trong đó `(id, t)` **đặt máy ở đúng góc của câu đó** rồi trả về
+  điểm của nhịp **trên khung 1920×1080** (`toScreen(point, camera)` cho một điểm trong không gian: điểm
+  thẻ thuật ngữ nếu câu có thẻ, không thì là điểm máy đang nhìn). Nhờ đó `tools/check_motion.py` đo được
+  câu hỏi mà đếm pixel không trả lời được: **nhịp này có làm thay đổi phần khung của nó không** (cổng đòi
+  ≥ 75 % nhịp đổi). Không có mốc thì cổng chỉ đo được "có gì đó động", không đo được "câu này đứng yên".
 - **Dòng chảy vô hình:** Dùng `flow()` hoặc `particleStream()` to bản, có điểm xuất phát rõ ràng và điểm tiếp xúc thực tế (không dùng mũi tên vẽ lơ lửng).
 - **Thẻ thuật ngữ (`label`):** Tối đa 1 thẻ xuất hiện cùng lúc, mũi tên chỉ đúng điểm tiếp xúc.
 ## Quy trình thực hiện
