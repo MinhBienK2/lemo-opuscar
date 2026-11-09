@@ -599,6 +599,7 @@ if [ "$FINAL" = 1 ]; then
   fi
   mkdir -p "$W/frames"
   python3 "$CHANNEL/tools/check_delivery.py" "$EP" --facts > "$W/FILM-FACTS.md"
+  $GATE status "$EP" > "$W/GATE.md" 2>/dev/null || true
   [ -f "$EP/research/FACTS.md" ] && cp "$EP/research/FACTS.md" "$W/"
   [ -f "$EP/TREATMENT.md" ] && cp "$EP/TREATMENT.md" "$W/"
   [ -f "$EP/voice/lines.json" ] && cp "$EP/voice/lines.json" "$W/"
@@ -625,7 +626,7 @@ EOF
   at_work "review --final:"
   critic "$(get_prompt "step7-delivery")
 
-Thư mục làm việc của bạn: $W. Đọc FILM-FACTS.md (những điều máy đo được về phim — độ dài, âm lượng, chỗ im lặng, sự kiện), FACTS.md, TREATMENT.md, lines.json, rồi mở từng tờ `sheet_N.jpg` — mỗi tờ là mười hai khung hình **trích từ phim đã dựng**, tên mỗi khung ghi số giây của nó trong phim. Rồi viết FINAL-QA-REPORT.md ở đó theo mẫu, và in lại nó."
+Thư mục làm việc của bạn: $W. Đọc FILM-FACTS.md (những điều máy đo được về phim — độ dài, âm lượng, chỗ im lặng, sự kiện), GATE.md (trạng thái từng tem), FACTS.md, TREATMENT.md, lines.json, rồi mở từng tờ `sheet_N.jpg` — mỗi tờ là mười hai khung hình **trích từ phim đã dựng**, tên mỗi khung ghi số giây của nó trong phim. Rồi viết FINAL-QA-REPORT.md ở đó theo mẫu, và in lại nó."
   [ -s FINAL-QA-REPORT.md ] || cp out.txt FINAL-QA-REPORT.md
   set_round FINAL-QA-REPORT.md "$n" 3
   sign "--final" FINAL-QA-REPORT.md
