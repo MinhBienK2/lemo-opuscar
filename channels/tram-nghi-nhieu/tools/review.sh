@@ -651,6 +651,17 @@ if [ -n "$CHID" ]; then SCOPE="$CHID-"; SCOPE_NAME="một chương"; LIMIT=5
 elif [ -n "$LINES" ]; then SCOPE="lines-$LINES-"; SCOPE_NAME="một cảnh"; LIMIT=3
 else SCOPE=""; SCOPE_NAME="cả phim"; LIMIT=5; fi
 [ "$VIDEO" = 1 ] && SCOPE="${SCOPE}video-"
+# A long film judged as one picture is judged badly: the critic opens about twenty-five of its sixty frames, the
+# round costs forty minutes, and the whole film gets five rounds. The chapter route exists for exactly this, and
+# the tool says so before the budget is spent — not after.
+if [ -z "$CHID" ] && [ -z "$LINES" ] && [ "$VIDEO" = 0 ] && [ ! -f "$EP/src/chapters.js" ]; then
+  NL=$(python3 -c "import json,sys;print(len(json.load(open(sys.argv[1]))))" "$EP/voice/lines.json" 2>/dev/null || echo 0)
+  case "$NL" in ''|*[!0-9]*) NL=0;; esac
+  if [ "$NL" -gt 30 ]; then
+    echo "review: phim dài ($NL câu) mà chưa có src/chapters.js — vòng chấm cả phim soi được khoảng 25 khung, tốn ~40 phút, và có 5 lượt cho cả phim." >&2
+    echo "review: chia câu thành các chương (src/chapters.js) rồi chấm từng chương (--chapter <id>): mỗi chương có 5 lượt riêng và cổng mở khi mọi chương PASS." >&2
+  fi
+fi
 # The director's cut ends the step: a written scope of what was cut, ending in VERDICT: PASS, stands for the
 # picture. The stamp binds it to the film's own files by their hash, so a cut written for an older film cannot
 # pass a newer one.
@@ -668,7 +679,7 @@ if [ "$n" -gt "$LIMIT" ]; then
   if [ "$SCOPE_NAME" = "một cảnh" ]; then
     echo "review: cảnh $LINES đã chấm $LIMIT lượt. Ghi vào LOOK.md câu nào còn FAIL và vì sao, rồi dựng cảnh sau; lần chấm chương (hay cả phim) sẽ bắt lại nó." >&2
   else
-    echo "review: ${CHID:+chương $CHID}${CHID:-cả phim} đã chấm $LIMIT lượt mà chưa PASS. Dừng: hoặc báo người dùng điểm và các lỗi còn lại của $EP/review/REVIEW.md và hỏi hướng đi; hoặc chốt bằng đạo diễn cắt: viết $CUT, kết thúc bằng 'VERDICT: PASS' và nêu rõ nhát nào đã cắt, rồi chạy lại. Đừng bàn giao như một phim đã đạt." >&2
+    echo "review: ${CHID:+chương $CHID}${CHID:-cả phim} đã chấm $LIMIT lượt mà chưa PASS. Dừng: hoặc báo người dùng điểm và các lỗi còn lại của $EP/review/REVIEW.md và hỏi hướng đi; hoặc chốt bằng đạo diễn cắt: viết $CUT, kết thúc bằng 'VERDICT: PASS' và nêu rõ nhát nào đã cắt, rồi chạy lại; hoặc chấm lại đúng những câu đã sửa bằng --lines a-b (3 lượt mỗi cảnh, rẻ hơn một vòng cả phim nhiều lần). Nếu phim dài (>30 câu) mà chưa có src/chapters.js thì chia chương trước rồi chấm --chapter <id> (5 lượt mỗi chương, cổng mở khi mọi chương PASS). Đừng bàn giao như một phim đã đạt." >&2
   fi
   exit 1
 fi

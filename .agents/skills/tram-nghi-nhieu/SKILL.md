@@ -167,7 +167,7 @@ Trước khi dựng, đọc `improvements/lessons.md` ở gốc thư viện — 
    - Đạo diễn có trách nhiệm kiểm tra: điểm nào Subagent nói đúng thì sửa ngay; điểm nào Subagent đòi hỏi vượt khung kỹ thuật (vd: đòi poly-count quá cao gây crash Vulkan/WebGL, đòi texture phi thực tế) thì Đạo diễn lập luận phản biện rõ ràng để bảo vệ tính khả thi.
    - Cả hai bên đối thoại và hiệu chỉnh tối đa **5 vòng lặp** cho mỗi bước.
 3. **Tập dài chia chương:**
-   - Khi dàn ý dài (trên 8 phút), chia chương trong `TREATMENT.md` và `src/chapters.js`. Mỗi chương là một tầng cơ chế độc lập.
+   - Khi dàn ý dài (trên 8 phút) **hoặc nhiều câu (trên 30 câu)**, chia chương trong `TREATMENT.md` và `src/chapters.js`. Mỗi chương là một tầng cơ chế độc lập. Số câu là mốc quan trọng hơn thời lượng: một vòng chấm cả phim soi được khoảng 25 khung và tốn ~40 phút, nên phim 60 câu không thể hội tụ trong 5 vòng cả phim — mỗi chương có 5 lượt riêng và cổng mở khi mọi chương PASS.
    - Thực hiện trọn vẹn từng chương: bóc tách linh kiện $\rightarrow$ code `props.js` $\rightarrow$ review hình ảnh từng chương qua `review.sh <tập> --chapter n` trước khi sang chương tiếp theo.
 4. **Bàn giao:**
    - Chỉ bàn giao khi mọi con dấu máy đã hợp lệ (`review/*.pass`) và `sh core/render/review.sh <tập>` thoát mã 0.

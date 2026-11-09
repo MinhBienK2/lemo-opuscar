@@ -20,7 +20,7 @@ Lắp ráp các linh kiện (từ `src/props.js`) vào bối cảnh hoàn chỉn
   câu hỏi mà đếm pixel không trả lời được: **nhịp này có làm thay đổi phần khung của nó không** (cổng đòi
   ≥ 75 % nhịp đổi). Không có mốc thì cổng chỉ đo được "có gì đó động", không đo được "câu này đứng yên".
 - **Dòng chảy vô hình:** Dùng `flow()` hoặc `particleStream()` to bản, có điểm xuất phát rõ ràng và điểm tiếp xúc thực tế (không dùng mũi tên vẽ lơ lửng).
-- **Thẻ thuật ngữ (`label`):** Tối đa 1 thẻ xuất hiện cùng lúc, mũi tên chỉ đúng điểm tiếp xúc.
+- **Thẻ thuật ngữ (`label`):** Tối đa 1 thẻ xuất hiện cùng lúc, mũi tên chỉ đúng điểm tiếp xúc. Một thẻ gọi tên một vật thì **neo vào chính vật đó** (`at: t => vị trí của vật`), không phải một toạ độ cố định trong không gian: vật chuyển động và máy quay đổi góc là thẻ trỏ sang vật khác, và người xem đọc ngược thành nghĩa sai.
 ## Quy trình thực hiện
 1. Dựng bối cảnh phòng (Set): Đặt các props vào đúng tọa độ, gắn camera, thiết lập đèn chính in bóng qua lỗ tường (`wallWithHole`).
 2. Viết keyframes diễn hoạt với `keys()` và easing tự nhiên (có lấy đà và vung đà).
@@ -33,6 +33,6 @@ Lắp ráp các linh kiện (từ `src/props.js`) vào bối cảnh hoàn chỉn
      - `SAME`: 2 câu thoại liên tiếp có hình ảnh giống hệt nhau $\rightarrow$ Cắt máy, đổi góc hoặc thay đổi trạng thái vật.
      - `NUM`: Câu nói có con số nhưng hình không có đồng hồ/thước đo $\rightarrow$ Bổ sung hiển thị trực quan.
      - `RUN`: Cảnh kéo dài quá lâu không có biến chuyển máy quay.
-   - Chạy review từng phân đoạn: `sh channels/tram-nghi-nhieu/tools/review.sh <tập> --lines a-b`.
+   - Chọn đường chấm theo độ dài tập: tập ngắn (≤ 30 câu) thì chấm cả phim — `sh channels/tram-nghi-nhieu/tools/review.sh <tập>`; tập dài thì **chia chương trước** (`src/chapters.js`: mỗi chương `{ id: 'ch1', lines: ['c1', 'c10'], files: [...] }`, các chương phủ hết các câu, đúng thứ tự), rồi chấm từng chương — `review.sh <tập> --chapter <id>`. Mỗi chương có 5 lượt riêng và cổng mở khi **mọi chương** PASS; cổng không mở bằng một vòng chấm cả phim của tập dài. `--lines a-b` (3 lượt mỗi cảnh) dùng để soi lại đúng một cảnh vừa sửa.
    - **Đạo diễn tiếp nhận:** Điều chỉnh timing, camera track, ánh sáng.
    - Lặp lại tối đa 5 hiệp cho tới khi `VERDICT: PASS`.
