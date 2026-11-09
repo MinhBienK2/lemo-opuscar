@@ -1,7 +1,7 @@
 ---
 name: tram-nghi-nhieu
 description: Đạo diễn và dựng một tập của kênh Trạm Nghĩ Nhiều — câu hỏi "tại sao" đời thường, trả lời bằng diorama 3D toon (three.js) có ánh sáng thật, viền mực vẽ tay, máy quay đi vào bên trong vật, mọi vật dựng đúng là nó, chỉ thứ vô hình mới thành hình minh hoạ; một giọng kể tiếng Việt. Dùng khi làm bất kỳ tập nào của kênh.
-version: 14.7.0
+version: 14.8.0
 ---
 
 # Một tập Trạm Nghĩ Nhiều: Quy trình Đạo diễn & Phản biện Độc lập Phân tầng
@@ -64,10 +64,10 @@ Quy trình này thay cho bước 1–6 của `AGENTS.md` / `DIRECTOR.md` khi là
    - **Đọc lại tệp log của chính bạn lần thứ ba sẽ bị chặn** (`tools/hook_bg_log.py`, hook `PreToolUse` của thư viện):
      lệnh bị từ chối và lời nhắc nói đúng cách làm thay thế. Đó là cơ chế, không phải lời nhắc — nên
      đừng thử lại lệnh đó, hãy đọc output của harness.
-   - **Đọc lại một tệp lớn không đổi lần thứ ba cũng bị chặn** (`tools/hook_stale_read.py`): đọc lại tệp
-     mà tệp không đổi (mtime y hệt) không mang tin mới, mà mỗi lần đọc cả tệp là hàng chục nghìn token.
-     Vừa sửa tệp xong thì đọc lại vẫn được phép (mtime đã đổi). Khi bị chặn: `grep -n "<tên hàm>" <tệp>`
-     rồi đọc đúng đoạn (`offset`/`limit`).
+   - **Đọc lại một tệp lớn không đổi lần thứ ba cũng bị chặn** (`tools/hook_stale_read.py`, tệp từ 8 KB
+     trở lên): đọc lại tệp mà tệp không đổi (mtime y hệt) không mang tin mới, mà mỗi lần đọc cả tệp là
+     hàng chục nghìn token. Vừa sửa tệp xong thì đọc lại vẫn được phép (mtime đã đổi). Khi bị chặn:
+     `grep -n "<tên hàm>" <tệp>` rồi đọc đúng đoạn (`offset`/`limit`).
 
 7. **Một vòng chấm, một người chấm.**
    - `review.sh` là công cụ của cả kênh: nó đọc mẫu, đánh số vòng, ký tên người chấm và đóng tem. Đừng tự làm lại
@@ -193,6 +193,10 @@ Trước khi dựng, đọc `improvements/lessons.md` ở gốc thư viện — 
 - **Vật thể phải tự diễn:** camera trượt để giữ khung sống không cứu được phim — cổng đo cả phần khung camera trượt
   (≤ 30 %) và phần khung vật thể đổi (≥ 55 %). `rig/motion.js` có `sway()`, `breathe()`, `motor()`; bước 6 phải gọi
   hàm cập nhật của chúng mỗi khung hình.
+- **Mở đầu phải là hiện tượng, không phải bối cảnh:** người xem phải thấy được **cái đang được hỏi** trong 8 giây
+  đầu. Ở tập 01, khung mở đầu chỉ có dây trên nắp hũ, hiện tượng "siết chặt hơn" chỉ xuất hiện ở giây thứ 8 —
+  người xem chờ mất 8 giây mới biết phim đang kể gì. Nhát đầu tiên phải **làm việc** (vật đang biến đổi ngay
+  trước mắt), chứ không phải dựng lên cái khung rồi mới tới việc.
 - **Vòng này sửa được gì so với vòng trước:** sau mỗi vòng chấm hình, cổng in bảng đối chiếu (`tools/check_progress.py`): câu nào đã qua, câu nào **còn mở**, câu nào mới phát hiện, và điểm đi đâu. Sửa đúng những câu còn mở; đừng làm lại những câu đã qua. Nếu hai vòng liên tiếp không tiến, đó là lúc viết đạo diễn cắt.
 - **Vòng chấm hình tốn ảnh, và cổng đo điều đó:** người chấm đọc **tờ sheet** trước (một tờ đáng giá bằng khoảng
   một ảnh riêng), mở ảnh riêng chỉ cho câu có cờ máy, câu phủ dưới 15 %, hoặc câu nó nghi ngờ, và **mỗi ảnh một
