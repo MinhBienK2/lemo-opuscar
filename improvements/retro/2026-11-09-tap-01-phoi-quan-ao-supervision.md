@@ -4283,8 +4283,11 @@ không có nó, người xem sẽ thấy một bàn chân gỗ trong phim và t�
    chấm vật: nó chấm vật **cô lập**, không chấm vật **trong tư thế phim dùng**.
 4. **Hình cuối — hai bàn phơi có quần áo**, trái với TREATMENT đã hứa (*một cái áo úp còn ẩm trên sàn*).
    Người xem đã đi theo cả phim rồi mà bị đưa ra bằng một hình khác hẳn câu chuyện.
-5. **Nhiều cặp khung liên tiếp gần như giống nhau.** Máy đã gắn cờ `SAME` trong tờ nhịp điện, nhưng
-   cờ đó là *cần mắt người phán* — chưa có luật nào giữ.
+5. **Nhiều cặp khung liên tiếp gần như giống nhau.** Cờ `SAME` của máy đã bắn 22 lần trên 60 câu —
+   và người chấm đã xoá 21 cờ, nói *"có vật thể thật chuyển động"*. Luật thì **có** (cờ còn đứng thì vòng
+   FAIL), nhưng máy đo sai chỗ: nó đo bố cục ở tầng thu nhỏ 16×9, mà một cú đẩy camera vào — đúng cái
+   chuyển động là chữ ký của kênh — chỉ làm bố cục khác ~0,05. Nên cờ bắn vào những cặp người làm cố
+   tình đẩy camera vào, và phần lớn là cờ sai (N133).
 6. **Chữ nhỏ trên vật không đọc được** (mặt cân in số 0–400 g): người xem thấy những con số không nói
    với ai. Bản cắt của đạo diễn đã xử lý (bỏ số, chỉ giữ vạch và kim) — nghĩa là luật ở đây là **bản
    cắt**, không phải một quy tắc chung.
@@ -4292,8 +4295,10 @@ không có nó, người xem sẽ thấy một bàn chân gỗ trong phim và t�
 **Chỗ nào giữ lỗi nào, sau khi giám sát này.** Lỗi 1 và 2 → luật của N125 (bóng không có cạnh) và công cụ
 đo của N129, cộng luật *không có điểm cháy trắng* của N128. Lỗi 3 → luật của N128 (*cận cảnh phải đọc ra
 được đặc trưng của vật*). Lỗi 4 → luật của N128 ở `step7-delivery` (*hình kết là hình TREATMENT đã hứa —
-cho **mọi** cảnh, không riêng cảnh cuối*). Lỗi 5 **chưa** có luật: cờ `SAME` mới chỉ là một lời nhắc cho mắt
-người. Lỗi 6 **chưa** có luật chung: nó sống trong bản cắt của từng tập.
+cho **mọi** cảnh, không riêng cảnh cuối*). Lỗi 5 **có** luật, nhưng luật bị loãng: cờ SAME đứng thì vòng FAIL, và người chấm phải xoá từng cờ
+bằng tay — 21 cờ trong 22 — vì máy bắn nhầm vào lúc máy quay đẩy vào. N133 sửa máy đo (tap-01: 23→12
+cờ; tap-02: 51→17), và phần còn lại là phép chia việc: máy nói *bố cục có đổi không*, người chấm nói
+*thứ đổi trong bố cục ấy có đủ để câu đó có hình riêng không*. Lỗi 6 **chưa** có luật chung: nó sống trong bản cắt của từng tập.
 
 **Nhìn lại toàn quá trình.** Điều làm tập này kéo dài không phải là phim khó — mà là **mỗi vòng chấm trả lời
 một câu khác nhau**: vòng vật hỏi *vật này là gì*, vòng storyboard hỏi *bố cục có đúng không*, vòng hình hỏi
