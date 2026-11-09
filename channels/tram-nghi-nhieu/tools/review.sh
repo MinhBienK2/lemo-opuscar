@@ -109,6 +109,27 @@ lines_of() {   # $1 = "a-b" (a range) or empty (the whole film); prints the numb
     python3 -c "import json,sys;print(len(json.load(open(sys.argv[1]))))" "$EP/voice/lines.json" 2>/dev/null || echo 0
   fi
 }
+# The machine must have room for this round. A round that opens 23 images starts a browser for the frames it
+# looks at, and the kernel kills a round that asks for more memory than the machine has: tap-03's storyboard
+# round was SIGKILLed at 16:27 with the props round running beside it, and an hour of review went with it.
+# The kernel does not warn and saves nothing. The rule and its numbers live in ONE place — tools/hook_load.py,
+# which blocks the same work at the command line — so the round asks the same question at the moment it opens
+# the reviewer, and refuses the same way. One rule, two doors.
+room_state() {   # "<STATE>|<detail>|<avail MiB>|<swap %>" — always four fields
+  python3 - "$LIB" <<'PY' 2>/dev/null || echo "OK|?|?"
+import sys, os
+sys.path.insert(0, os.path.join(sys.argv[1], 'tools'))
+import hook_load
+avail, swap_used = hook_load.meminfo()
+pct = round((swap_used or 0) * 100)
+over = hook_load.over_capacity()
+if over:
+    print('OVER|%s|%s|%s' % (over[1], avail, pct))
+else:
+    print('OK|-|%s|%s' % (avail, pct))
+PY
+}
+
 critic() {   # $1 = the prompt; $2 = "no-verdict" when the reviewer answers with a list, not with a verdict
   VERDICTLESS=${2:-}
   # Every reviewer is told the same three facts: which round this is, where it works, and that everything it
@@ -123,6 +144,19 @@ Bối cảnh vòng chấm: ${ROUND_LABEL:-vòng chấm này}. Bạn làm việc 
   # writes only its own answer there — and a headless run has nobody to answer a permission prompt: every command
   # comes back asking for permission, and the reviewer retries the same command until the wall clock kills it.
   # That is three hours of a round that never happened (N100).
+  # No room, no round: the kernel kills a round that asks for more memory than the machine has, and the round
+  # leaves nothing behind but a trace. The box is asked here, at the moment the reviewer is about to start —
+  # after the round's own renders, which is where the memory actually goes.
+  ROOM=$(room_state)
+  RSTATE=${ROOM%%|*}
+  REST=${ROOM#*|}; RDETAIL=${REST%%|*}; REST=${REST#*|}
+  RAVAIL=${REST%%|*}; RSWAP=${REST#*|}
+  if [ "$RSTATE" = "OVER" ]; then
+    echo "review: máy đang quá tải ($RDETAIL) — vòng chấm này không mở được, và một vòng mở trên máy hết chỗ chỉ bị kernel giết (tap-03 mất một giờ vòng storyboard vì thế)." >&2
+    echo "review: đợi việc đang chạy xong rồi chạy lại lệnh này (một job nền, để harness báo khi xong) — đừng mở thêm một vòng cùng lúc." >&2
+    exit 2
+  fi
+  echo "review: máy còn $RAVAIL MiB RAM trống, swap đã dùng $RSWAP% — vòng này mở được." >&2
   if command -v timeout >/dev/null 2>&1; then
     timeout -k 30 "$CRITIC_TIMEOUT" "$CLI" -p ${LEMO_CRITIC_MODEL:+--model "$LEMO_CRITIC_MODEL"} --dangerously-skip-permissions "$PROMPT" < /dev/null > out.txt 2>&1 &
   else
