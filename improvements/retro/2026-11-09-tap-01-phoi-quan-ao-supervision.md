@@ -2957,6 +2957,22 @@ của người dùng. Tải máy giảm ngay.
 **Đã thành luật:** dò tiến trình giữ một cổng thì dùng `ss -ltnp`, `fuser`, `lsof` — **đừng dò `/proc`**.
 Dòng này nằm trong `lessons.md`.
 
+## N96 — low — Bản đồ mã: tên tệp trong tiêu đề không dùng đúng cách, và người làm phim sửa bằng tay
+
+**Bằng chứng.** Phiên tập 02 báo: `tools/check_map.py` báo *"tệp không có"* cho các tiêu đề dạng
+``## `src/props.js` (938 dòng)`` — vì bản đồ viết tên có sẵn `src/`, còn công cụ lại nối `src` với cái tên
+đó thành `src/src/props.js`. Người làm phim **sửa số dòng bằng tay** và báo lại, thay vì để công cụ nói
+đúng chỗ sai.
+
+**Vì sao quan trọng.** Một công cụ báo sai thì người làm phim học được cách bỏ qua nó. Ở đây còn tệ hơn:
+bài kiểm tra **không chạy được** thì bản đồ thối đi, và bản đồ thối thì người đọc mã tới nhầm chỗ — đúng
+thứ R11 cấm.
+
+**Guard đã có.** `resolve()` trong `tools/check_map.py`: tên trong tiêu đề được thử ở **mọi nơi nó có thể
+là** — thư mục được truyền vào, `src`, `src` + tên gốc, và `src` với tiều tố `src/` bỏ đi. Ghi chú khi
+không tìm thấy nay liệt kê **những đường dẫn đã thử**, để người đọc thấy máy đã đoán gì. Có ca selftest
+cho đúng trường hợp này. (Dòng `.strip('`')` là của chính phiên tập 02 thêm — họ tự sửa trước khi hỏi.)
+
 ## Còn lại
 
 - **[x]** N72: `core/render/still.mjs` chờ hai khung hình rồi mới chụp (12:47) — ảnh là của khung vừa dựng,

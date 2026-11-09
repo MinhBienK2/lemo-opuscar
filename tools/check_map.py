@@ -67,6 +67,31 @@ def file_lines(path):
         return None
 
 
+def resolve(folder, src, name):
+    """the file a heading names — (path, tried).
+
+    The heading in a map says `src/props.js`, but the tool can be given the episode folder **or** the src
+    folder, and the map may be written before the file is named the same way. So the name is tried in every
+    place it could mean: against the folder given, against src, and — when the name already carries the
+    `src/` prefix — against src with the prefix taken off (N96: the tool joined "src" with a name that
+    already had "src/" and then reported the file as missing, so the maker fixed the map by hand and the
+    tool never got the chance to say what was wrong).
+    """
+    cands = []
+    if os.path.isabs(name):
+        cands.append(name)
+    else:
+        cands.append(os.path.join(folder, name))
+        cands.append(os.path.join(src, name))
+        cands.append(os.path.join(src, os.path.basename(name)))
+        if name.startswith('src/'):
+            cands.append(os.path.join(src, name[len('src/'):]))
+    for c in cands:
+        if os.path.isfile(c):
+            return c, cands
+    return cands[0] if cands else name, cands
+
+
 def check(folder):
     """(findings, notes) — findings are things a person must fix; notes are what the machine cannot judge"""
     src = folder if os.path.basename(folder.rstrip('/')) == 'src' else os.path.join(folder, 'src')
@@ -80,14 +105,12 @@ def check(folder):
     for line in text.splitlines():
         m = HEAD.match(line)
         if m:
-            cur_file = m.group(1)
+            cur_file = m.group(1).strip('`')
             said = int(m.group(2))
-            path = os.path.join(folder, cur_file) if not os.path.isabs(cur_file) else cur_file
-            if not os.path.exists(path):
-                path = os.path.join(src, os.path.basename(cur_file))
+            path, tried = resolve(folder, src, cur_file)
             body = file_lines(path)
             if body is None:
-                notes.append('%s: tệp không có (%s)' % (cur_file, path))
+                notes.append('%s: tệp không có (đã thử: %s)' % (cur_file, ', '.join(tried)))
                 cur_lines = None
                 continue
             have = len(body)
@@ -141,6 +164,14 @@ def selftest():
             fh.write('# MAP\n\n## src/film.js (40 dòng)\n')
         f, n = check(tmp)
         cases.append(('số dòng trong tiêu đề lệch nhiều thì báo', any('dòng' in x for x in f), f, ''))
+        # the heading says `src/film.js` (with the prefix, and in backticks) and the tool is given the src
+        # folder — the file must still be found (N96)
+        with open(os.path.join(src, 'MAP.md'), 'w', encoding='utf8') as fh:
+            fh.write('# MAP\n\n## `src/film.js` (100 dòng)\n')
+        f, n = check(src)
+        cases.append(('tiêu đề có `src/` mà thư mục truyền vào là src thì vẫn tìm thấy tệp',
+                      not any('tệp không có' in x for x in n), n, ''))
+        cases.append(('số dòng đúng thì không báo khi tìm thấy tệp', not f, f, ''))
         # a map that does not exist
         f, n = check(os.path.join(tmp, 'khong-co'))
         cases.append(('không có bản đồ thì ghi chú, không đoán', not f and n, f, ''))
