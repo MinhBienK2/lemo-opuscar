@@ -1059,6 +1059,36 @@ khi tờ sheet không đủ trả lời câu hỏi, và ghi lại khung nào đ�
 
 ---
 
+## N38 — high — Một bách khoa là một dẫn chiếu, không phải một nguồn; và cổng máy không hỏi được câu đó
+
+**Bằng chứng.** `research/FACTS.md` của tập 02 (lúc tôi kiểm, 08:02) có **mười một mốc** và **mười ba
+lần nhắc `wikipedia.org`**; **năm mốc đứng trên Wikipedia một mình**. Cổng máy không bắt được:
+`check_citations.py` chỉ hỏi "nguồn này có tra được không", và một URL Wikipedia là tra được.
+
+Chỉ **người chấm dàn ý** mới hỏi đúng câu — mẫu chấm ghi: *"Mọi mắt xích có **nguồn tin cậy** trong FACTS
+không? (Không nguồn: CHẶN)"* — nhưng "nguồn tin cậy" không được định nghĩa, nên một bài báo Wikipedia
+cũng là "nguồn", và người chấm sẽ phải tự biết.
+
+Tập 01 — tập tham chiếu của chính kênh này — làm khác: mốc 1 trích **Rogers & Yau, *A Short Course in
+Cloud Physics*** (sách), mốc 2 trích **Alduchov & Eskridge, *Journal of Applied Meteorology*** 35(4),
+mốc 3 trích **IUPAC Gold Book**; Wikipedia chỉ xuất hiện **một lần**, trong câu "Công thức và giá trị của
+nước cũng được dẫn lại ở Wikipedia". Đó là chuẩn của kênh: **nguồn sơ cấp trước, bách khoa là dẫn chiếu**.
+
+Đáng chú ý: phiên tập 02 **đã tải sẵn** một nguồn sơ cấp — bảng dữ liệu LTC4069 của Analog Devices, và
+bảng dữ liệu đó nói đúng những gì phim cần (NTC đo nhiệt độ pin, tự giảm dòng sạc, giới hạn nhiệt độ).
+Nhưng nó không được trích.
+
+**Đã sửa.** `check_research.py` bổ sung một luật **máy kiểm được**: một mốc mà mọi đường dẫn đều là
+Wikipedia thì fail (trừ khi mốc đó có mã định danh riêng: DOI/ISBN/arXiv). Và mẫu chấm dàn ý nói thẳng
+"nguồn tin cậy = nguồn sơ cấp (sách, bài báo, đặc tả, datasheet, sổ tay cơ quan chuẩn); Wikipedia là
+dẫn chiếu, không phải nguồn chính", kèm ví dụ lấy từ tập tham chiếu.
+
+**Còn phải làm.** Máy không biết một datasheet là của một củ sạc thật hay của một món đồ chơi; chất
+lượng của nguồn sơ cấp vẫn là việc của người chấm. Và cổng hiện bắt "Wikipedia một mình", chưa bắt
+"mười mốc trích cùng một trang Wikipedia" — thứ mà một bài báo Wikipedia về một chủ đề rộng vẫn đúng.
+
+---
+
 ## Đề xuất thứ tự xử lý
 
 | # | Việc | File cần sửa | Trạng thái |
@@ -1102,6 +1132,7 @@ khi tờ sheet không đủ trả lời câu hỏi, và ghi lại khung nào đ�
 | 37 | File nghiên cứu phải được viết, không phải copy khuôn — cổng dàn ý canh trước khi tốn một vòng chấm (N35) | `channels/tram-nghi-nhieu/tools/check_research.py`, `tools/review.sh` | **xong** |
 | 38 | Lời nhắc trong ngoặc ngược không phải chỗ cần điền (N36) | `channels/tram-nghi-nhieu/tools/check_treatment.py`, `core/render/filmcheck.mjs` | **xong** |
 | 39 | Xem tờ sheet, không mở lại một khung hình: 436 MB ảnh, 311 lần mở lại (N37) | `CODING_STANDARDS.md` R12, `tools/supervise.sh` | **xong** |
+| 40 | Một mốc không được đứng trên Wikipedia một mình — bách khoa là dẫn chiếu (N38) | `channels/tram-nghi-nhieu/tools/check_research.py`, `step1-outline/PROMPT_CRITIC.md` | **xong** |
 
 ### Mỗi phát hiện đã có dòng riêng trong `improvements/lessons.md`
 
