@@ -74,9 +74,7 @@ if [ -f "$FOLDER/research/FACTS.md" ]; then
   if [ -f "$BCH/tools/check_shots.py" ]; then
     # --note: ở cổng bàn giao thì chỉ lỗi cấu trúc mới chặn (câu thiếu tiếng — tiếng sẽ lệch với hình,
     # và sau này không sửa được). Các cờ phép so sánh (SAME/RUN/DARK/NUM, kể cả FILL) thì không chặn:
-    # người chấm hình đã phán (tem PICTURE.pass) và máy không có quyền phủ quyết của người chấm. Vòng chấm
-    # hình của kênh vẫn gọi bài này KHÔNG có cờ này — mọi cờ đều chặn, vì đó là lúc người làm phim còn
-    # sửa được.
+    # người chấm hình của kênh đã phán, và máy không có quyền phủ quyết của người chấm.
     run timing python3 "$BCH/tools/check_shots.py" --note "$FOLDER"
   else
     run timing python3 "$HERE/tools/check_timing.py" "$FOLDER"

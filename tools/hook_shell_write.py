@@ -66,8 +66,35 @@ def var_project_writes(body, root=None):
 
 
 HEREDOC = re.compile(r"<<-?\s*(['\"]?)([A-Za-z_]\w*)\1")
-REDIRECT = re.compile(r"(?:^|[^0-9<>])>>?\s*(?!&)(?P<p>[^\s|;&]+)")
-TEE = re.compile(r"\btee\s+(?:-a\s+)?(?P<p>[^\s|;&]+)")
+REDIRECT = re.compile(r"(?:^|[^0-9<>=])>>?\s*(?!&)(?P<p>[^\s|;&)'\"]+)")
+TEE = re.compile(r"\btee\s+(?:-a\s+)?(?P<p>[^\s|;&)'\"]+)")
+QUOTED = re.compile(r"'[^']*'|\"(?:\\.|[^\"\\])*\"")
+TARGET_PREFIX = re.compile(r"(?:>>?|\btee(?:\s+-a)?)\s*$")
+
+
+def shell_text(command):
+    """Phần shell của lệnh: bỏ thân heredoc, và bỏ chuỗi trong nháy (trừ chuỗi ngay sau `>` / `tee`, là đích ghi)."""
+    lines, skip = [], None
+    for line in (command or '').split('\n'):
+        if skip is not None:
+            if line.strip() == skip:
+                skip = None
+            continue
+        lines.append(line)
+        m = HEREDOC.search(line)
+        if m:
+            skip = m.group(2)
+    text = '\n'.join(lines)
+    out, last = [], 0
+    for m in QUOTED.finditer(text):
+        out.append(text[last:m.start()])
+        if TARGET_PREFIX.search(text[:m.start()]):
+            out.append(m.group(0)[1:-1])
+        else:
+            out.append(' ')
+        last = m.end()
+    out.append(text[last:])
+    return ''.join(out)
 
 MESSAGE = (
     'Lệnh này ghi tệp của dự án bằng shell (%s). Ghi bằng shell không chỉ là cách viết khác: nó làm hỏng '
@@ -89,6 +116,8 @@ def is_source(path, root):
     if not p or p.startswith('-') or '<' in p:
         return False
     if p.startswith('/dev/') or p.startswith('/proc/') or p.startswith('~'):
+        return False
+    if '$' in p or '`' in p:    # có biến shell: không biết nó trỏ đi đâu, nên không chặn
         return False
     ext = os.path.splitext(p)[1].lower()
     if ext in SKIP_EXT or not ext:
@@ -137,9 +166,10 @@ def targets(command):
     for body in heredoc_bodies(command):
         for p in writes_in(body):
             out.append(('heredoc', p))
-    for m in REDIRECT.finditer(command or ''):
+    text = shell_text(command)
+    for m in REDIRECT.finditer(text):
         out.append(('redirect', m.group('p')))
-    for m in TEE.finditer(command or ''):
+    for m in TEE.finditer(text):
         out.append(('tee', m.group('p')))
     return out
 
@@ -166,6 +196,17 @@ def selftest():
         ("tee src/props.js <<'EOF'\nhello\nEOF", True),
         ("python3 - <<'PY'\nfrom pathlib import Path\nPath('src/set.js').write_text('x')\nPY", True),
         # — không chặn —
+        ("git commit -m 'a > b.md'", False),
+        ("echo 'x > y.md'", False),
+        ('node -e "f=x=>y.js"', False),
+        ('echo x > "$HOME/notes.md"', False),
+        ('echo x > $OUT/notes.md', False),
+        ('echo x > ${DIR}/notes.md', False),
+        ('echo x > ~/notes.md', False),
+        # — chặn: đích có nháy, và `2>&1 >` —
+        ('echo x > "tools/foo.py"', True),
+        ('echo x > tools/foo.py', True),
+        ('cmd 2>&1 > notes.md', True),
         ("python3 - <<'PY'\nimport json\nprint(json.load(open('src/film.js')))\nPY", False),
         ("cat > /tmp/note.txt <<'EOF'\nhello\nEOF", False),
         ("cat > out/log.txt <<'EOF'\nhello\nEOF", False),

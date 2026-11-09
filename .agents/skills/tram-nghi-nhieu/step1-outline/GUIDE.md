@@ -27,14 +27,6 @@ Tạo ra `research/FACTS.md` và `TREATMENT.md` với chuỗi nhân quả hoàn 
    - Tách câu hỏi: Chủ thể thay đổi là gì? Thay đổi thế nào?
    - Câu trả lời tóm tắt trong đúng 1 câu.
    - Bảng **Ý → Hình**: Mỗi ý một dòng. Nguyên tắc: Khái niệm khoa học phải có hình ảnh xuất hiện TRƯỚC hoặc NGAY KHI được nhắc tới.
-4. **Vòng lặp Thẩm định (Max 5 rounds):**
-   - Mở vòng chấm bằng **công cụ của kênh**: `sh channels/tram-nghi-nhieu/tools/review.sh <tập> --outline`.
-     Công cụ nạp mẫu `step1-outline/PROMPT_CRITIC.md`, đánh số vòng, ký tên người chấm và đóng tem
-     `review/OUTLINE.pass`. **Không** tự gọi subagent: báo cáo của nó rơi vào một tệp không ai đọc,
-     không ai đếm vòng, không ai ký.
-   - Subagent trả về kết quả theo chuẩn `OUTLINE-REVIEW.md`.
-   - **Đạo diễn tiếp nhận (Bắt buộc):**
-     - Điểm đúng: Sửa đổi trực tiếp vào `TREATMENT.md`.
-     - Điểm không đồng tình: Ghi rõ phản biện kỹ thuật/khoa học.
-   - Lặp lại tối đa 5 hiệp cho đến khi nhận `VERDICT: PASS`. Hết lượt thì báo người dùng các lỗi còn lại
-     và hỏi hướng đi — dàn ý không có bản cắt. Ngân sách vòng của từng phần: `channels/tram-nghi-nhieu/tools/README.md`.
+4. **Chấm:** `sh channels/tram-nghi-nhieu/tools/review.sh <tập> outline`. Công cụ chạy `check_treatment.py` và
+   `check_research.py` trước; lỗi của máy thì sửa trước khi có người chấm. Câu hỏi của người chấm:
+   `step1-outline/RUBRIC.md`. Dàn ý phải sửa thì `review/OUTLINE.md` nói câu nào sai và vì sao.

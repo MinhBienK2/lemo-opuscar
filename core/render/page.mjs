@@ -4,6 +4,7 @@
 import { chromium } from 'playwright-core';
 import fs from 'fs'; import path from 'path'; import { fileURLToPath } from 'url';
 import { serve, pageURL } from './serve.mjs';
+import { acquire } from './slot.mjs';
 import { EXE, ARGS, warnIfSoftwareGL } from './browser.mjs';
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 let srv = null;
@@ -24,6 +25,7 @@ const warned = new Set();   // each optional file warns only once per process (v
 const FATAL = new Set(['script', 'document']);   // things the page must have; module imports also have type script
 export async function openDemo(dir, { w = 1920, h = 1080, q = '', warnings = false } = {}) {
   requireDemo(dir);
+  await acquire();   // machine-wide render queue (slot.mjs): waits here when the GPU is busy; once per process
   const { port } = await server();
   const browser = await chromium.launch({ executablePath: EXE, args: ARGS });
   const page = await browser.newPage({ viewport: { width: w, height: h }, deviceScaleFactor: 1 });

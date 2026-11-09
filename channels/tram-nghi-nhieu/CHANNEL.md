@@ -9,7 +9,8 @@ Kênh tiếng Việt giải thích các câu hỏi "tại sao" của đời thư
 | Nội dung, chọn đề tài, độ dài | [`STRATEGY.md`](STRATEGY.md) |
 | Hình (bất biến) | [`STYLE.md`](STYLE.md), khung tham chiếu `demo/stills/` |
 | Rig 3D (API) | [`rig/README.md`](rig/README.md) |
-| Ba người chấm: dàn ý, lời, hình | Xem trực tiếp trong `.agents/skills/tram-nghi-nhieu/step*/PROMPT_CRITIC.md` |
+| Câu hỏi của người chấm ở từng bước | `.agents/skills/tram-nghi-nhieu/step*/RUBRIC.md` |
+| Lệnh của công cụ, và khi công cụ từ chối | [`tools/README.md`](tools/README.md) |
 | Demo 18 s và cái học được từ nó | [`DEMO.md`](DEMO.md) |
 
 ## Thư mục
@@ -33,8 +34,9 @@ channels/tram-nghi-nhieu/
 ├── demo/             # phim mẫu 18 s, cutaway/ 8 s, stills/ (khung tham chiếu)
 ├── tools/            # các công cụ & script kiểm soát tự động của kênh
 │   ├── README.md    #   chạy gì, và làm gì khi công cụ từ chối — đọc cái này trước khi đọc mã
-│   ├── review.sh     #   chấm độc lập: --outline, --script, --storyboard, --props, cảnh, chương, cả phim
-│   ├── gate.py       #   con dấu PASS (cổng máy)
+│   ├── review.sh     #   chấm theo từng mục: outline, script, look, props, picture, final (review.py)
+│   ├── gate.py       #   cổng: giọng và dựng phim chỉ chạy khi các bước chấm đã xong
+│   ├── props_catalog.py # danh mục vật của tập (src/props/<mã>.js), sinh src/props.js
 │   ├── mix.py        #   nhạc, ambience, foley, master -14 LUFS
 │   ├── beatsheet.mjs #   kiểm tra nhịp điệu khung hình & cờ máy
 │   ├── propcheck.mjs #   xuất ảnh 3 phía kiểm tra linh kiện 3D
@@ -63,7 +65,7 @@ Khi đề tài đòi hỏi đào sâu hoặc người dùng yêu cầu video dà
 - **Whisper nghe sai dấu thanh tiếng Việt.** Model là model tiếng Anh trước: `rìa → trì`, `vải → vậy`, `cân → cưng`, `úp → út`, `giọt → dọc`. Cổng giọng của thư viện (`core/render/review.sh`) coi mỗi dòng khác là lỗi, nên một tập đọc đúng vẫn đỏ vì máy nghe sai. Dòng đó được gỡ bằng **lời xác nhận viết ra**, không bằng cách sửa kịch bản cho máy: ghi vào `voice/asr-cleared.txt`, mỗi dòng một mã lời kể và lý do — `c12 — rìa/trì: mô hình nghe sai dấu thanh, âm thanh đúng.` Dòng nào chưa có lời xác nhận thì cổng vẫn đỏ. (`asr` trong `voice/lines.json` dành cho số và từ nước ngoài, không dùng để bịt lỗi nghe của máy — R8 trong `CODING_STANDARDS.md`.)
 - Ổ đĩa gần đầy: xoá still thử và `out/` cũ khi xong.
 - **Bài kiểm tra đọc hình (`readcheck`, `scenecheck`) phải chạy trên một tập đã đứng yên.** Chúng so vân tay của `index.html` / `src/*.js` / `voice/lines.json` lúc mở trang và lúc đọc xong: file nào đổi trong lúc chạy thì kết quả bị bỏ và bài kiểm tra in *"the film's source changed while the check was reading it … Run it again on a settled file"* rồi thoát mã 2. Trang chết giữa chừng cũng ra *"COULD NOT RUN"*, không phải một phán quyết về phim. Vậy nên: dựng xong một đợt sửa, để nó đứng yên, rồi mới chấm — đừng chạy kiểm tra trong kúc một agent khác đang sửa cùng thư mục.
-- **Một máy, một lần dựng nặng.** Một tập 3D dựng nhiều khung (beatsheet 88 khung, readcheck hàng nghìn khung) chiếm GPU và RAM; chạy hai việc nặng cùng lúc thì trình duyệt có thể chết giữa chừng. Xong một việc nặng rồi hãy làm việc tiếp theo.
+- **Dựng hình xếp hàng.** Mọi lệnh mở trình duyệt chờ một chỗ dựng hình còn trống của cả máy (`core/render/slot.mjs`, mặc định hai chỗ cho GPU 6 GB). Máy `muse` không có GPU và gần hết RAM, nên dựng hình chạy ở máy này; `muse` chỉ dùng cho ffmpeg.
 - **Luật của kênh do máy giữ, không chỉ trên giấy.** `scene_rules.json` nói giới hạn của kênh (hiện: tối đa hai con số mỗi phút, `STRATEGY.md`), và `core/render/review.sh` truyền nó cho `scenecheck`. Mặc định của thư viện là 2 con số mỗi 20 giây — lỏng hơn luật của kênh ba lần, nên cột giới hạn trong `scene_rules.json` mới là thứ được giữ.
 
 ## Đăng YouTube

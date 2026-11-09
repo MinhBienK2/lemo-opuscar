@@ -17,11 +17,10 @@ Dùng:
   python3 channels/tram-nghi-nhieu/tools/check_shots.py --selftest
   python3 channels/tram-nghi-nhieu/tools/check_shots.py --note <tập>     # cờ gợi ý không chặn (cổng bàn giao)
 
-Hai mức chặn, vì cờ máy và lỗi máy không cùng đẳng cấp. Mặc định (vòng chấm hình, trước khi mở
-vòng) mọi cờ đều chặn: `FILL` (độ phủ thất), `SAME`, `RUN`, `DARK`, `NUM`, và câu thiếu tiếng. `--note`
-dùng ở cổng bàn giao: ở đó chỉ câu thiếu sự kiện giọng mới chặn (tiếng lệch hình thì không sửa được
-sau này), còn các cờ phép so sánh thì không chặn — người chấm hình đã phán (tem PICTURE.pass) và máy
-không có quyền phủ quyết của người chấm.
+Hai mức chặn, vì cờ máy và lỗi máy không cùng đẳng cấp. Mặc định (đạo diễn tự chạy) mọi cờ đều chặn:
+`FILL` (độ phủ thất), `SAME`, `RUN`, `DARK`, `NUM`, và câu thiếu tiếng. `--note` (vòng chấm hình và cổng
+bàn giao): chỉ câu thiếu sự kiện giọng và chữ đè nhau mới chặn; các cờ phép so sánh đến tay người chấm
+hình như gợi ý, vì máy không có quyền phủ quyết của người chấm.
 """
 import json
 import os
@@ -47,13 +46,11 @@ FILL_MIN = 0.15          # dưới ngưỡng này thì vật chính là một v�
 #   Phép so sánh — **cần mắt người phán**: hai khung giống nhau (SAME) có thể là vật đang chuyển động
 #           rất nhẹ; nhiều câu trên cùng bộ đạo cụ (RUN) có thể là một cảnh dài đúng ý; tối (DARK) và
 #           số chưa có trên màn hình (NUM) là hai phép đo rất thô.
-# Vì vậy có hai mức chặn, và cổng bàn giao gọi công cụ này ở mức nhẹ hơn:
-#   · VÒNG CHẤM HÌNH (mặc định): mọi cờ đều chặn — trước khi mở một vòng chấm, các cờ này phải
-#     được soi, vì đó là lúc người làm phim còn sửa được.
-#   · CỔNG BÀN GIAO (`--note`): chỉ lỗi cấu trúc mới chặn — một câu thiếu sự kiện giọng thì tiếng sẽ
-#     lệch với hình, và không ai sửa được sau khi phim xong. Cờ phép so sánh, **kể cả FILL**, không
-#     chặn ở đó: máy không biết thứ nhỏ trong khung là **chủ thể** hay một vệt vô nghĩa, và người chấm
-#     hình đã phán rồi (tem PICTURE.pass) — máy không có quyền phủ quyết của người chấm.
+# Vì vậy có hai mức chặn:
+#   · Mặc định (đạo diễn tự chạy): mọi cờ đều chặn — đó là danh sách để soi trước khi chấm.
+#   · `--note` (vòng chấm hình, cổng bàn giao): chỉ lỗi cấu trúc mới chặn — một câu thiếu sự kiện giọng
+#     thì tiếng sẽ lệch với hình. Cờ phép so sánh, **kể cả FILL**, không chặn: máy không biết thứ nhỏ
+#     trong khung là **chủ thể** hay một vệt vô nghĩa, nên nó đến tay người chấm hình như một gợi ý.
 # `OVERLAP` thì ở nhóm đầu: hai chữ đè nhau là hai chữ không ai đọc được — lỗi đo được, không cần
 # mắt người phán (N98).
 FATAL_NOTE = ('VOICE', 'OVERLAP')

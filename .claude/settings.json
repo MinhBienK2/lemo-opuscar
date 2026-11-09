@@ -14,10 +14,6 @@
           },
           {
             "type": "command",
-            "command": "python3 \"${CLAUDE_PROJECT_DIR:-.}/tools/hook_load.py\""
-          },
-          {
-            "type": "command",
             "command": "python3 \"${CLAUDE_PROJECT_DIR:-.}/tools/hook_poll.py\""
           }
         ]

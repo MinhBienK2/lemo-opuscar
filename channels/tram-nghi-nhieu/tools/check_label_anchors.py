@@ -12,7 +12,7 @@ phải vào chỗ hai cái áo chồng lên nhau. Người xem đọc nhãn, th�
 hiểu rằng nó nói về cái áo đó.
 
 Máy **không** đo được cái này (đó là lỗi đọc của người xem, và người chấm hình
-bắt được nó bằng mắt — xem luật trong `step6-assembly/PROMPT_CRITIC.md`). Nhưng máy
+bắt được nó bằng mắt — câu `nhan` trong `step6-assembly/RUBRIC.md`). Nhưng máy
 đo được một thứ liên quan: **nhãn có mã neo không, và mã neo có đúng không.**
 
 Mỗi thẻ trong bảng `CARDS` của `src/film.js` có thể mang thêm một trường:
