@@ -101,7 +101,10 @@ export function film({ fov = 36, near = .02, far = 40 } = {}) {
   }));
 
   let texts = [];
-  const probe = new THREE.Raycaster(); probe.layers.set(0);
+  // The probe has to see the effect layer too: everything built with fxLayer() sits on layer 1, and it IS
+  // drawn in the film. A probe that only tests layer 0 says "this label points at nothing" for a label that
+  // points at an effect, and measures 0 % coverage for a shot that is entirely effect (N104).
+  const probe = new THREE.Raycaster(); probe.layers.enableAll();
   // the helpers the probes share: what is visible, and how big each object is
   const SZ = new Map(), size = x => SZ.get(x) ?? (SZ.set(x, new THREE.Box3().setFromObject(x).getSize(new THREE.Vector3()).length()), SZ.get(x));
   const seen = x => { for (; x; x = x.parent) if (!x.visible) return false; return true; };
@@ -198,6 +201,17 @@ export function toScreen(p, camera) { const v = p.clone().project(camera); retur
 // question the pixel count cannot: does the beat change the part of the frame where it happens? Without them
 // the gate can only measure the film in general (something moves somewhere), never the beat that stands still.
 // `xy` is the point in the 1920×1080 frame (use toScreen for a world point).
+// The window a text card lives in: from the moment the camera cuts to its line (that is, when the previous
+// line ends) to the end of its own line. A short line is not long enough to read the card, so `lead` (show it
+// earlier, in seconds) and `hold` (keep it longer) widen the window; both default to 0, so a card that does
+// not use them behaves exactly as before. The rule lives here, in the rig, so that every episode measures its
+// cards the same way (N102).
+export function cardWindow(C, V) {
+  const n0 = +C.lines[0].slice(1), n1 = +C.lines[C.lines.length - 1].slice(1);
+  const t0 = n0 > 1 ? V.L['c' + (n0 - 1)].t1 : V.L[C.lines[0]].t0;
+  return { t0: t0 - (C.lead ?? 0), t1: V.L['c' + n1].t1 + (C.hold ?? 0) };
+}
+
 export function markBeat(ev, id, t, d, xy) { ev('mark', t, { kind: 'beat', beat: id, d, xy }); }
 
 // the labels drawn in the current frame, with the point their arrow points at — read by window.LABELPROBE

@@ -21,6 +21,7 @@ Lắp ráp các linh kiện (từ `src/props.js`) vào bối cảnh hoàn chỉn
   ≥ 75 % nhịp đổi). Không có mốc thì cổng chỉ đo được "có gì đó động", không đo được "câu này đứng yên".
 - **Dòng chảy vô hình:** Dùng `flow()` hoặc `particleStream()` to bản, có điểm xuất phát rõ ràng và điểm tiếp xúc thực tế (không dùng mũi tên vẽ lơ lửng).
 - **Thẻ thuật ngữ (`label`):** Tối đa 1 thẻ xuất hiện cùng lúc, mũi tên chỉ đúng điểm tiếp xúc. Một thẻ gọi tên một vật thì **neo vào chính vật đó** (`at: t => vị trí của vật`), không phải một toạ độ cố định trong không gian: vật chuyển động và máy quay đổi góc là thẻ trỏ sang vật khác, và người xem đọc ngược thành nghĩa sai.
+- **Cửa sổ thẻ (`cardWindow`):** thẻ hiện từ lúc máy cắt sang nhát của câu và tắt khi câu hết; câu ngắn thì thẻ không đủ lâu để đọc trọn. Lấy cửa sổ bằng `cardWindow(C, V)` của `rig/render.js` (`for (const C of CARDS) Object.assign(C, cardWindow(C, V));`), và kéo dài nó bằng `hold` (giữ lâu hơn) hoặc `lead` (hiện sớm hơn), tính theo giây — chỉ khi vật thẻ bám vào vẫn còn trong khung.
 ## Quy trình thực hiện
 1. Dựng bối cảnh phòng (Set): Đặt các props vào đúng tọa độ, gắn camera, thiết lập đèn chính in bóng qua lỗ tường (`wallWithHole`).
 2. Viết keyframes diễn hoạt với `keys()` và easing tự nhiên (có lấy đà và vung đà).

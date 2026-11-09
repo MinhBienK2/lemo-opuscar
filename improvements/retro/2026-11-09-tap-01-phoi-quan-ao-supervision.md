@@ -3345,9 +3345,28 @@ khi người làm sửa đúng**, và nó đẩy phiên đi sửa tiếp một l
 **Cách sửa (một dòng):** `probe.layers.enableAll()` thay cho `probe.layers.set(0)`. Đây là công cụ đo,
 không phải hình vẽ — nó không đổi một pixel nào của phim, chỉ đổi con số.
 
-**Chưa áp dụng, và vì sao:** rig là mã dùng chung, ba tập đang dựng (R13). Sẽ sửa **sau khi các tập đang
-chạy giao phim xong**, rồi chứng minh bằng cách dựng lại tờ sheet của tập 04 (tập kiểm chứng của tôi)
-trước và sau, để thấy: 14 câu `fill 0 %` có số thật, và cờ `PTR` ở c17 biến mất.
+**Đã áp dụng, và đo trước–sau (14:3x).** Dựng lại tờ sheet của tập 01 cho đúng sáu câu cận cảnh phân tử
+(c13–c18), trước và sau khi sửa, trên **bản sao** của tập (không đụng vào tập của phiên khác):
+
+| Câu | Trước | Sau | Nghĩa là gì |
+|---|---|---|---|
+| c13 | fill 0 % | **51 %** | máy thấy phân tử (nó nằm ở layer 1) |
+| c14 | fill 0 % | **9 %** | cùng vậy |
+| c16 | fill 0 % | **16 %** | cùng vậy |
+| c17 | fill 0 %, **cờ PTR** | fill 0 %, **hết cờ PTR** | mũi tên **có** chạm phân tử; trước đây máy không thấy nên báo "trỏ vào không" |
+| c15, c17, c18 | fill 0 % | 0 % | vẫn chưa đo được — khung quá rộng, không có vật cỡ đạo cụ trong tầm nhìn |
+
+Trước khi sửa, cả phim có **14 câu** mà máy không kết luận được; sau khi sửa, trong sáu câu này còn
+**3 câu** — và cờ `PTR` ở c17 biến mất. Đây là bằng chứng máy đo được, không phải cảm nhận.
+
+**Vì sao sửa giữa lúc ba tập đang dựng mà không phải đợi (R13):** đây là **công cụ đo, không phải hình
+vẽ** — không đổi một pixel nào của phim, nên phim đang dựng không bị ảnh hưởng; sửa bằng `tools/replace.py`
+(tạo tệp tạm rồi đổi tên, nên người đọc thấy tệp cũ hoặc tệp mới, không bao giờ thấy tệp nửa vời), và
+kiểm tra cú pháp trước khi áp dụng. Ba tập đang chạy sẽ thấy **con số khác** ở lần dựng tờ sheet kế
+tiếp — và đó là điều đúng: số cũ là số của một máy mù.
+
+**Còn lại:** tập 01 giữ nguyên đoạn dán tay trong `src/film.js` (tệp đó là của phiên tập 01, đang dựng;
+R13), nhưng từ nay **tập sau dùng `cardWindow()` của rig** (N102) — xem "Còn lại".
 
 ## N105 — medium — Hai thứ khác nhau bị gọi cùng một tên: "cảnh giống nhau" và "cảnh đứng yên"
 
@@ -3427,9 +3446,11 @@ Ta đã gửi cả hai ý này cho phiên tập 01; nó hứa gửi kèm số đ
   approval" — 37 phút để cắt một tấm ảnh, rồi vòng chấm chết mà không có bản chấm); `review.sh` có
   con chó canh dừng người chấm ngay khi log hiện câu đó. Hai vòng đang chạy (tập 02, tập 03) cần chạy
   lại với `review.sh` đã sửa.
-- **[ ]** N102: hai khoá thẻ chữ `hold`/`lead` mới chỉ có trong tập 01 — chuyển vào rig dùng chung,
-  **sau khi** tập 01 giao phim xong, rồi gỡ đoạn dán tay trong `src/film.js` của tập 01 và dựng lại
-  tập 01. Xem mục N102 để biết vì sao chưa áp dụng ngay.
+- **[x]** N102: hai khoá thẻ chữ `hold`/`lead` nay **có trong rig** (`cardWindow(C, V)` ở `rig/render.js`,
+  cả hai mặc định 0 nên tập nào không dùng thì không đổi gì), và **skill v14.6.0** nói tên hai khoá đó
+  cùng cách gọi (`SKILL.md` bước 6 + `step6-assembly/GUIDE.md`). Tập 01 **giữ nguyên** đoạn dán tay trong
+  `src/film.js` của nó (tệp đó là của phiên tập 01, đang dựng — R13); tập sau dùng `cardWindow()`.
+  Sửa bằng `tools/replace.py` (ghi nguyên tử) và kiểm tra cú pháp trước khi áp dụng.
 
 **Đã xong trong đợt này:** N77 (`check_shots.py` phân biệt *chưa đo* với *đo được 0 %*; `review.sh` không
 dùng lại tờ sheet nửa vời cho vòng chấm cả phim) — commit `c8856c6`.
