@@ -902,6 +902,31 @@ từng dòng một, không phải để đọc lướt:
 | `ROUND:` trong bản chấm | mỗi bản chấm ghi đúng vòng của nó (`REVIEW-2.md` → `ROUND: 2/5`) | bản chấm tự khai số vòng, và khai sai (N34) |
 | `check_research.py` | `research/FACTS.md` của tập 02 **có** các mục và nguồn thật, cổng dàn ý chạy qua | file nghiên cứu còn là khuôn (N35) |
 | `check_treatment.py` | cổng dàn ý chạy qua với một dàn ý đã viết, kể cả khi dàn ý nhắc tới chỗ ở khuôn | cổng chặn nhầm một tập đã viết xong (N36) |
+| `check_voice_facts.py` | lời kể của tập 02 **không** nói câu mà `FACTS.md` cấm | máy chỉ canh con số, câu bị cấm lọt qua (N42) |
+| `check_storyboard.py` | `LOOK.md` của tập 02 trích **đúng** câu của `voice/lines.json` | dàn ý mô tả một phim không còn tồn tại (N48) |
+| `check_reports.py` | mọi bản chấm của tập 02 mà cổng đọc đều có phán quyết đọc được | một vòng chấm rơi vào một tệp không ai đọc (N49) |
+| `gate.py --selftest` | 14/14 xanh, và `gate.py check --for render <tập>` trả mã khác 0 khi cổng đóng | cổng trả PASS về một thư mục không tồn tại (N52) |
+| Bản cắt của bước storyboard | viết **sau** lần sửa `LOOK.md` và `src/film.js` cuối | bản cắt cũ đóng tem cho code mới (N53) |
+
+**Đã thấy ở tập 02 (tính đến 09:45).**
+
+- `check_voice_facts.py` **bắt được**: lời kể của tập 02 nói *"chỗ nóng nhất trong cả cái máy"* — đúng câu
+  `FACTS.md` cấm. Phiên đã bỏ khỏi lời kể và sửa dàn ý theo.
+- `check_storyboard.py` **bắt được**: `LOOK.md` còn ba dòng dán câu lời kể **đã bị viết lại** (dòng 20, 76, 84)
+  và nhãn `CHỖ NÓNG NHẤT`. Phiên đã sửa cả ba.
+- `check_reports.py` chạy xanh trên toàn kênh: 5/5 mẫu có công cụ nêu đúng tên tệp, 31/31 bản chấm có
+  phán quyết đọc được; hai bước chưa có công cụ được nêu tên (N51).
+- `gate.py --selftest` 14/14.
+- **Chưa có bằng chứng** cho: `check_progress.py` (bước hình chưa tới), bản cắt của bước storyboard
+  (bước storyboard của tập 02 chưa tới), đồng hồ của cổng bàn giao (chưa dựng).
+
+**Một sự lệch mới, do người giám sát phát hiện ở tập 02 (xem N50).** `FACTS.md` mục 5 vẫn viết vạch
+đỏ 45 °C nằm trên **nhiệt kế**, còn phim đặt nó trên **cảm biến nhiệt trong máy** (`src/props.js`
+dựng cảm biến như một vật) và lời kể c77 nói *"Vạch đỏ đó là mốc của tế bào pin, không phải nhiệt độ
+mặt lưng"*. Ba nơi, ba câu khác nhau: file nghiên cứu, hình, lời kể. `check_claims.py` chỉ canh
+con số nên không thấy; `check_citations.py` và `check_facts.py` cũng xanh. Đây là hình dạng thứ ba
+của N50 — và nó cho thấy một lớp kiểm tra còn thiếu: so **danh từ** của dòng "Dùng trong phim" trong
+file nghiên cứu với **vật** mà phim dựng.
 
 Điều kiện để tập 02 được coi là **xác nhận**: cổng bàn giao thoát 0, và bảng trên không có dòng nào ở cột
 "Nếu không thấy".
@@ -1401,6 +1426,12 @@ hai phiên đã đẩy mọi thứ vào. Và mỗi tài liệu có một cách �
 - `TREATMENT.md` bị bỏ lại khi lời kể viết lại (N43);
 - `LOOK.md` bị bỏ lại khi lời kể viết lại (N48);
 - `FACTS.md` **sinh ra** lệnh cấm mà lời kể không làm theo (N42).
+
+Và hình dạng thứ ba, tìm ra ở tập 02: **`FACTS.md` bị bỏ lại khi hình đi trước nó.** Mục 5 của file
+nghiên cứu vẫn viết vạch đỏ 45 °C nằm trên nhiệt kế; phim dựng nó trên cảm biến nhiệt trong máy;
+lời kể nói nó là mốc của tế bào pin. Ba nơi, ba câu khác nhau, và **không bài kiểm tra nào thấy** —
+vì `check_claims.py` canh con số, mà con số 45 thì vẫn đúng cả ba nơi. Điều lệch ở đây là **danh
+từ**, không phải số.
 
 Điểm chung: **một tài liệu cũ không tự báo là cũ.** Nó vẫn in ra, vẫn đúng về hình, vẫn đọc được —
 nên người đọc tin nó. Chỉ khi một bài kiểm tra đọc nó **cùng lúc với** tài liệu nó phải khớp thì
