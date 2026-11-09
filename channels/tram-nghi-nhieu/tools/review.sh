@@ -100,6 +100,20 @@ critic() {   # $1 = the prompt; runs in the current folder, leaves the reviewer'
     echo "review: người chấm không trả lời trong ${CRITIC_TIMEOUT}s — đây không phải phán quyết về phim. Đọc lý do (out.txt), sửa nguyên nhân rồi chạy lại; CRITIC_TIMEOUT=<giây> nâng đồng hồ." >&2
     exit 2
   fi
+  # Hai pha của vòng chấm vật dựng trả lời bằng một DANH SÁCH, không phải bằng một phán quyết: người gọi tên mù
+  # gọi tên từng vật mà không bao giờ thấy tên định dựng. Đòi chúng trả lời bằng dòng VERDICT là hỏi một câu mà
+  # chúng không được hỏi, nên câu trả lời đúng vẫn bị đọc thành "không có câu trả lời" và vòng chấm chết vì một
+  # lý do không liên quan gì tới phim. Với hai pha này, câu trả lời là chính danh sách: tệp người chấm viết ra,
+  # hoặc phần nó in ra. Cảnh báo của CLI ('unrecognized_model', 'connectors are disabled') không phải câu trả lời.
+  if [ "${2:-}" = "no-verdict" ]; then
+    if [ -z "$(grep -vE 'unrecognized_model|connectors are disabled' out.txt 2>/dev/null | grep -vE '^[[:space:]]*$' | head -1)" ] \
+       && [ -z "$(find . -maxdepth 1 -name '*.md' -size +0c -print -quit 2>/dev/null)" ]; then
+      echo "review: người gọi tên không trả lời (chỉ có cảnh báo của CLI, không có danh sách nào) — đây không phải kết quả đo tên." >&2
+      echo "review: đọc $W/out.txt để biết vì sao, sửa nguyên nhân rồi chạy lại." >&2
+      exit 2
+    fi
+    return 0
+  fi
   # A round that comes back with no verdict is not a judgement about the film — it is a reviewer that never
   # answered. Filed as a round it would advance the round number, shrink the budget, and tell the next round
   # that a previous round exists that nobody ever read. The warnings the CLI prints ('unrecognized_model',
@@ -284,7 +298,7 @@ if [ "$PROPS" = 1 ]; then
   cd "$W/blind"
   critic "Trong thư mục này có $N ảnh p_01.jpg … Mỗi ảnh là MỘT vật dựng 3D kiểu hoạt hình, nhìn từ ba phía (chéo, ngang, trên xuống), đặt trên nền trơn. Mở từng ảnh. Với mỗi ảnh, nói nó là vật gì như một người xem bình thường sẽ gọi: một cụm danh từ tiếng Việt cụ thể (\"quả chuối chín\", \"con chip máy tính\", \"cục pin điện thoại bị cắt đôi\"), cả trạng thái nếu thấy (xanh/chín, nguyên/cắt đôi). Đừng đoán theo một câu chuyện nào. Nếu không chắc, viết KHÔNG RÕ và nói nó giống những gì. Viết BLIND.md ở đây, mỗi ảnh một dòng:
 #n TÊN: <tên> | CHẮC: cao|vừa|thấp | THẤY: <những chi tiết làm bạn gọi tên như vậy; chi tiết nào lạ>
-rồi in lại nó."
+rồi in lại nó." no-verdict
   [ -s BLIND.md ] || cp out.txt BLIND.md
   cd "$W"; cp blind/BLIND.md .
   # 1b. a second blind namer for the objects the first namer was unsure about: "chắc thấp" and "KHÔNG RÕ" are
@@ -310,9 +324,14 @@ PY
   done
   if [ -n "$(ls "$W/blind2" 2>/dev/null)" ]; then
     M=$(ls "$W/blind2" | wc -l)
-    (cd "$W/blind2" && critic "Trong thư mục này có $M ảnh: $(ls "$W/blind2" | tr '\n' ' '). Mỗi ảnh là MỘT vật dựng 3D kiểu hoạt hình, nhìn từ ba phía (chéo, ngang, trên xuống), đặt trên nền trơn. Hãy gọi tên từng vật như một người xem bình thường sẽ gọi: một cụm danh từ tiếng Việt cụ thể, có cả trạng thái nếu thấy. Đừng đoán theo một câu chuyện nào. Đây là lần đoán thứ hai, độc lập: không ai cho bạn xem lần đoán trước. Nếu không chắc, viết KHÔNG RÕ và nói nó giống những gì. Viết BLIND2.md ở đây, mỗi ảnh một dòng:
+    # Lần đoán thứ hai là phép đo BỔ SUNG: nếu nó không trả lời, vòng này đi tiếp với một lần đoán và nói rõ là thiếu —
+    # đoán mù là phép đo của một người, lần đoán thứ hai là phép đo của một người khác; mất lần thứ hai thì mất
+    # phép đo của người khác, nhưng không được để một phép đo phụ giết vòng chấm của cả vật dựng.
+    if ! (cd "$W/blind2" && critic "Trong thư mục này có $M ảnh: $(ls "$W/blind2" | tr '\n' ' '). Mỗi ảnh là MỘT vật dựng 3D kiểu hoạt hình, nhìn từ ba phía (chéo, ngang, trên xuống), đặt trên nền trơn. Hãy gọi tên từng vật như một người xem bình thường sẽ gọi: một cụm danh từ tiếng Việt cụ thể, có cả trạng thái nếu thấy. Đừng đoán theo một câu chuyện nào. Đây là lần đoán thứ hai, độc lập: không ai cho bạn xem lần đoán trước. Nếu không chắc, viết KHÔNG RÕ và nói nó giống những gì. Viết BLIND2.md ở đây, mỗi ảnh một dòng:
 #n TÊN: <tên> | CHẮC: cao|vừa|thấp | THẤY: <những chi tiết làm bạn gọi tên như vậy>
-rồi in lại nó.")
+rồi in lại nó." no-verdict); then
+      echo "review --props: lần đoán thứ hai không trả lời — vòng này đi tiếp với một lần đoán; số đoán thứ hai là của người khác sẽ thiếu." >&2
+    fi
     if [ -s "$W/blind2/BLIND2.md" ]; then cp "$W/blind2/BLIND2.md" "$W/BLIND2.md"; fi
   fi
   python3 -c "
