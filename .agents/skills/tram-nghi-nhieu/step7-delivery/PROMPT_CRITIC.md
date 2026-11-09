@@ -18,8 +18,10 @@ Nhiệm vụ của bạn là đánh giá toàn bộ sản phẩm video đã rend
 
 ## Định dạng Output Bắt buộc (`FINAL-QA-REPORT.md`)
 
+Dòng `VERDICT:` trong khối dưới đây là **chỗ điền**, không phải câu trả lời: xoá ngoặc và chỉ để lại đúng **MỘT** chữ (`ACCEPTED_FOR_PUBLISH` hoặc `REJECTED`). Để nguyên dòng mẫu là một bản chấm không đọc được — cổng không đóng tem cho nó, và vòng chấm bị tính như chưa xong.
+
 ```markdown
-VERDICT: ACCEPTED_FOR_PUBLISH | REJECTED
+VERDICT: (điền đúng MỘT chữ: ACCEPTED_FOR_PUBLISH hoặc REJECTED)
 OVERALL_SCORE: [1-10]/10
 
 ## ĐÁNH GIÁ CHẤT LƯỢNG SẢN PHẨM

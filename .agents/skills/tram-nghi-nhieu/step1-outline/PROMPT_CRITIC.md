@@ -39,9 +39,11 @@ Chấm theo 5 nhóm A, B, C, D, E từ 1 đến 5 điểm:
 
 ## Định dạng Output Bắt buộc (`OUTLINE-REVIEW.md`)
 
+Dòng `VERDICT:` trong khối dưới đây là **chỗ điền**, không phải câu trả lời: xoá ngoặc và chỉ để lại đúng **MỘT** chữ (`PASS` hoặc `REJECT`). Để nguyên dòng mẫu là một bản chấm không đọc được — cổng không đóng tem cho nó, và vòng chấm bị tính như chưa xong.
+
 ```markdown
 SCORES: A=[1-5] B=[1-5] C=[1-5] D=[1-5] E=[1-5]
-VERDICT: PASS | REJECT
+VERDICT: (điền đúng MỘT chữ: PASS hoặc REJECT)
 ROUND: (số vòng do review.sh ghi — người chấm không tự điền)
 
 ## NHẬN XÉT CHI TIẾT

@@ -53,7 +53,10 @@ def library_root():
 # ——— phán quyết ———
 
 # Đúng mẫu của gate.py: phán quyết ở đầu dòng, có thể có dấu #, có thể đậm.
-VERDICT_WORD = re.compile(r'^#*\s*[*_]{0,2}VERDICT: *[*_]{0,2} *(\w+)', re.M)
+# A verdict is ONE word. The templates print 'VERDICT: PASS | REJECT' as a placeholder, and a report that
+# copies that line verbatim would read as a PASS — the placeholder is not an answer. A word that runs on
+# ('PASSED') is not a verdict either.
+VERDICT_WORD = re.compile(r'^#*\s*[*_]{0,2}VERDICT: *[*_]{0,2} *(\w+)(?![A-Za-z_])(?!\s*[*_]{0,2}\s*[|/+])', re.M)
 # Tên tệp mà mẫu khai báo: "Định dạng Output Bắt buộc (`REVIEW.md`)"
 DECLARED = re.compile(r'Định dạng Output Bắt buộc\s*\(`([^`]+)`\)')
 

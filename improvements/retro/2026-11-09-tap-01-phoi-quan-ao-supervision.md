@@ -1590,6 +1590,128 @@ dbg.html×1` — và không có tệp nào chỉ được nhắc tới.
 
 ---
 
+## N55 — critical — Dòng mẫu "VERDICT: PASS | REJECT" được cổng đọc thành PASS
+
+**Bằng chứng.** Sáu trong bảy mẫu của kênh in khối output của chúng với đúng dòng này:
+
+```
+## Định dạng Output Bắt buộc (`OUTLINE-REVIEW.md`)
+
+```markdown
+SCORES: A=[1-5] B=[1-5] C=[1-5] D=[1-5] E=[1-5]
+VERDICT: PASS | REJECT
+```
+
+Còn cổng đọc phán quyết bằng:
+
+```python
+re.search(r'^#*\s*[*_]{0,2}VERDICT: *[*_]{0,2} *PASS', ...)
+```
+
+Dòng mẫu khớp **đúng** biểu thức đó. Người chấm điền điểm vào `SCORES:` rồi **chép nguyên dòng
+`VERDICT:`** — một động tác rất tự nhiên, vì dòng đó nằm ngay trong khối mẫu — và bản chấm đó
+được cổng đóng tem như một PASS. Cùng cái đó, `check_reports.py` đọc chữ phán quyết là `PASS`.
+
+Chưa bản chấm nào trong repository rơi vào hình này (`grep -rn "VERDICT: PASS | REJECT" channels/`
+rỗng) — nhưng đó là may mắn, không phải bảo đảm: cổng đang trả PASS cho một câu trả lời mà người
+chấm chưa từng chọn.
+
+**Vì sao nó quan trọng.** Đây là loại lỗi tệ nhất của một cổng: **cổng trả đúng cho một câu trả lời
+sai**. Mọi phát hiện khác trong bản đúc kết này là cổng *quá dễ* (N52: nói PASS về một thư mục
+không tồn tại) hoặc cổng *quá khó* (N3: đòi người chấm đoán thứ không thể đoán). Cái này là cổng
+**nói PASS về một bản chấm chưa có ý kiến** — và nó im lặng đúng lúc im lặng là đáng sợ nhất.
+
+**Đã sửa.** (a) Cả bảy mẫu in dòng mẫu thành `VERDICT: (điền đúng MỘT chữ: PASS hoặc REJECT)` —
+một dòng mà **không** công cụ nào đọc được là phán quyết — kèm một câu dặn ngay trên khối mẫu.
+(b) `gate.py` và `check_reports.py` không còn đọc một dòng phán quyết sau đó còn dấu chọn (`|`, `/`,
+`+`), và không đọc một chữ chạy tiếp (`PASSED`). (c) Bốn ca selftest mới trong `gate.py` khẳng
+định đúng cái lỗi này.
+
+Kiểm chứng bằng chính cổng:
+
+```
+$ printf 'VERDICT: PASS | REJECT\n' > r.md && gate.py stamp … ; echo $?
+gate: … does not say VERDICT: PASS
+1
+$ printf 'VERDICT: PASS\n' > r.md && gate.py stamp … ; echo $?
+0
+```
+
+---
+
+## N56 — high — Người chấm chỉ in câu trả lời ở cuối, nên phiên tưởng nó chết và mở người chấm thứ hai
+
+**Bằng chứng.** `review.sh` gọi người chấm bằng `claude -p … > out.txt 2>&1`. `claude -p` **in
+câu trả lời khi nó xong**, không in tiến trình — nên suốt thời gian nó nghĩ, `out.txt` gần như rỗng.
+Phiên tập 03 đọc `out.txt` thấy 415 byte cảnh báo của CLI rồi kết luận người chấm đã chết, và:
+
+- tự dựng lại một lệnh chấm (`claude -p` tay),
+- chạy `review.sh --outline` lần nữa với `--model` khác,
+- rồi tự ghép prompt và tự chạy `set_round.py` bằng tay.
+
+Cả ba cùng ghi vào một tệp bản chấm. Lệnh thứ nhất (pid 2283040) vẫn đang chạy và là lệnh hợp lệ.
+
+Hai dòng cảnh báo mà phiên đọc là "lỗi" — `⚠ claude.ai connectors are disabled because
+ANTHROPIC_API_KEY …` và `[claude-code:unrecognized_model] {"model":"2tocom/MiniMax-M3.1-Flash[1m]"}` —
+là **cảnh báo của CLI, không phải lỗi**: một `claude -p "Reply with exactly: OK"` in ra đúng hai
+cảnh báo đó, rồi trả lời `OK` và thoát mã 0.
+
+**Vì sao nó quan trọng.** Đây là R9/R5 (chờ người, không chờ tệp) ở dạng tệ nhất: không chỉ tốn
+tiền, mà còn **làm hỏng vòng chấm đang chạy**. Và nó xảy ra với mọi người chấm, không riêng phiên
+này — vì `claude -p` không in gì cho tới khi xong.
+
+**Đã sửa.** (a) `review.sh` nói thẳng trong dòng "reviewer at work" rằng câu trả lời chỉ in ra ở
+cuối, file gần như rỗng là bình thường, và phải chờ lệnh này chứ đừng mở vòng thứ hai. (b) Một
+vòng chấm **không có dòng `VERDICT:`** nào trong cả `out.txt` lẫn các tệp nó viết thì thoát mã 2
+— "không chạy được", không phải phán quyết về phim — thay vì được lưu thành một vòng đã tiêu.
+
+---
+
+## N57 — high — Hai người chấm một tập: hai bản chấm một tệp, hai vòng bị tính, ngân sách bị tiêu hai lần
+
+**Bằng chứng.** Trong khoảng ba phút, tập 03 có ba người chấm cùng một dàn ý (pid 2283040,
+2294643, 2298787). `review.sh` không có chốt nào, và mỗi người chấm tự tính số vòng từ các tệp
+đã có — nên cả ba cùng viết `OUTLINE-REVIEW-1.md`.
+
+**Vì sao nó quan trọng.** Hai người chấm một tập không chỉ tốn gấp đôi: người chấm sau **ghi đè**
+bản chấm của người trước, nên phán quyết cuối cùng là của người nào kết thúc sau, chứ không phải
+người nào chấm kỹ hơn. Vì số vòng đếm từ tệp, một vòng bị mất đi mà không ai biết.
+
+**Đã sửa.** `review.sh` giờ giữ một chốt theo từng phần (`$EP/.review-<phần>.lock`): chốt là một
+thư mục, vì `mkdir` là lệnh duy nhất thất bại khi thứ đó đã ở đó. Hai vòng chấm **cùng một phần**
+của cùng một tập thì vòng thứ hai bị từ chối ngay, kèm lời giải thích; hai vòng chấm **khác phần**
+thì vẫn chạy song song. Một chốt bỏ lại do phiên bị giết được lấy lại, không chặn mãi (chốt ghi
+pid; pid không còn sống thì chốt cũ bị gỡ).
+
+Kiểm chứng:
+
+```
+$ sh review.sh <tập> --outline     # khi đã có chốt
+review: đã có một vòng chấm 'outline' đang chạy (pid 2310720) trên tập này — đừng mở vòng thứ hai.
+1
+```
+
+---
+
+## N58 — low — Công cụ sửa file của chính người giám sát làm rơi quyền thực thi của một tệp
+
+**Bằng chứng.** `tools/replace.py` ghi bằng cách tạo một tệp tạm rồi `os.replace` đè lên tệp cũ. Tệp
+tạm sinh ra bởi `mkstemp` có quyền `0600`, và quyền cũ **không** được mang sang. Hậu quả: khi tôi sửa
+`channels/tram-nghi-nhieu/tools/review.sh` bằng công cụ đó, nó biến mất khỏi `100755` thành `100644`
+trong git. Lịch sử cho thấy cùng kiểu mất quyền đã xảy ra trước đó với `tools/supervise.sh` và 26 tệp
+`build.sh` — và đã phải sửa tay từng tệp một (lịch sử có 27 dòng "mode change 100644 => 100755").
+
+**Vì sao nó quan trọng.** Một công cụ sửa file mà làm đổi cách tệp chạy là một công cụ **không trung
+thực**: người đọc diff thấy nội dung đổi và không để ý rằng tệp không còn chạy được nữa. Và ở đây
+công cụ đáng lẽ phải là đường đi an toàn (R1: sửa bằng công cụ, không bằng shell) — nó đang là đường
+đi *mất một thứ*.
+
+**Đã sửa.** `write_atomic()` nay đọc quyền của tệp đích và đặt lại quyền đó cho tệp tạm trước khi
+đổi tên. Có một ca selftest: "tệp thực thi vẫn thực thi sau khi sửa". `review.sh` đã trả lại quyền
+`755`; `git diff --summary` không còn dòng "mode change" nào trong sửa đổi này.
+
+---
+
 ## Các guard đã bắt được gì (tính từ 08:00, hai tập còn chạy)
 
 Đây là bằng chứng rằng các guard không phải lý thuyết — mỗi cái đã bắt một lỗi thật, hoặc đã được một
@@ -1676,6 +1798,10 @@ tiền (trước vòng chấm, trước lúc dựng, trước lúc bàn giao), c
 | 52 | Tem phải phủ đúng cái nó nói; bản cắt của bước storyboard cũng phải viết sau lần sửa code (N53) | `channels/tram-nghi-nhieu/tools/gate.py`, `channels/tram-nghi-nhieu/tools/review.sh` | **xong** |
 | 53 | Người giám sát phải hỏi cổng của kênh, không chỉ hỏi các tệp có đúng hình dạng không | `tools/supervise.sh` | **xong** — `gate.py status` in ra từng tem và phán quyết vòng chấm cuối; `check --for render` là FAIL khi phim đã dựng mà cổng đóng |
 | 54 | Báo cáo phải nêu tệp đã ghi, và luật viết bằng tay thì phải kiểm chứng được (N54) | `tools/rules.py`, `tools/supervise.sh` | **xong** — 8 ca selftest |
+| 55 | Cổng không được đọc một dòng mẫu chưa điền thành phán quyết (N55) | `channels/tram-nghi-nhieu/tools/gate.py`, `check_reports.py`, 7 mẫu `PROMPT_CRITIC.md` | **xong** — mẫu in `VERDICT: (điền đúng MỘT chữ: …)`; cổng từ chối `PASS \| REJECT`, `PASS/REJECT` và `PASSED`; 4 ca selftest mới |
+| 56 | Người chấm chỉ in ở cuối: nói rõ điều đó, và một vòng không có phán quyết thì không phải một vòng (N56) | `channels/tram-nghi-nhieu/tools/review.sh` | **xong** |
+| 57 | Một tập, một vòng chấm: chốt theo từng phần (N57) | `channels/tram-nghi-nhieu/tools/review.sh` | **xong** |
+| 58 | Công cụ sửa file không được làm đổi cách tệp chạy (N58) | `tools/replace.py` | **xong** — quyền đi theo nội dung; một ca selftest |
 
 ### Mỗi phát hiện đã có dòng riêng trong `improvements/lessons.md`
 

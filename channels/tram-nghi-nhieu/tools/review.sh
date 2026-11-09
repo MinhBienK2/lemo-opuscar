@@ -98,6 +98,17 @@ critic() {   # $1 = the prompt; runs in the current folder, leaves the reviewer'
     echo "review: người chấm không trả lời trong ${CRITIC_TIMEOUT}s — đây không phải phán quyết về phim. Đọc lý do (out.txt), sửa nguyên nhân rồi chạy lại; CRITIC_TIMEOUT=<giây> nâng đồng hồ." >&2
     exit 2
   fi
+  # A round that comes back with no verdict is not a judgement about the film — it is a reviewer that never
+  # answered. Filed as a round it would advance the round number, shrink the budget, and tell the next round
+  # that a previous round exists that nobody ever read. The warnings the CLI prints ('unrecognized_model',
+  # 'connectors are disabled') are not an answer either: the model may still be working, but a file with
+  # nothing in it is not a review.
+  if ! grep -qiE 'VERDICT: *[*_]{0,2} *(PASS|REJECT|FAIL|ACCEPTED_FOR_PUBLISH|REJECTED)' out.txt 2>/dev/null \
+     && ! grep -qiE 'VERDICT: *[*_]{0,2} *(PASS|REJECT|FAIL|ACCEPTED_FOR_PUBLISH|REJECTED)' ./*.md 2>/dev/null; then
+    echo "review: người chấm không trả lời (không có dòng VERDICT nào) — đây không phải phán quyết về phim." >&2
+    echo "review: đọc $W/out.txt để biết vì sao (cảnh báo của CLI như 'unrecognized_model' không phải câu trả lời), sửa nguyên nhân rồi chạy lại." >&2
+    exit 2
+  fi
   return 0
 }
 get_prompt() {
@@ -111,6 +122,11 @@ get_prompt() {
   die "cannot find PROMPT_CRITIC.md for $_step"
 }
 sign() { printf '\n---\nNgười chấm: %s · review.sh %s · %s\n' "$CRITIC_ID" "$1" "$(date '+%Y-%m-%d %H:%M')" >> "$2"; }
+# What "the reviewer is at work" means, said once and used everywhere. The reviewer prints its answer only when
+# it is done, so its output file stays nearly empty the whole time it thinks. A session that reads that file,
+# concludes the reviewer died, and opens a second reviewer on the same episode burns the round budget twice and
+# leaves two reports on one file. The wait is the answer.
+at_work() { echo "$1 reviewer at work in $W… (trả lời chỉ in ra ở cuối — file vẫn gần như rỗng là bình thường; chờ lệnh này xong, đừng mở vòng chấm thứ hai)" >&2; }
 # The round number in a report is the tool's truth, not the reviewer's memory. A reviewer that is not told which
 # round it is writes "ROUND: 1/5" every time, and a report that always says round 1 cannot tell a loop from a
 # first attempt — nor can a reader who wants to know how much of the round budget is gone.
@@ -164,8 +180,34 @@ PY
 }
 
 mkdir -p "$EP/review"
+
+# —————— one review of one part at a time ——————
+# Two reviewers on one episode write one report: the second overwrites the first, the round is counted twice,
+# and the round budget is spent twice. The lock is a directory, because mkdir is the one call that fails when
+# the thing is already there. The lock is per part, so a props review and a storyboard review may run side by
+# side, but two outline reviews may not. A lock left behind by a killed run is taken over, not obeyed forever.
+SCOPE_ID="film"
+[ "$OUTLINE" = 1 ] && SCOPE_ID="outline"
+[ "$SCRIPT" = 1 ] && SCOPE_ID="script"
+[ "$PROPS" = 1 ] && SCOPE_ID="props"
+[ "$STORYBOARD" = 1 ] && SCOPE_ID="storyboard"
+[ "$ASSETS" = 1 ] && SCOPE_ID="assets"
+[ -n "$LINES" ] && SCOPE_ID="lines-$LINES"
+[ -n "$CHAPTER" ] && SCOPE_ID="chapter-$CHAPTER"
+[ "$VIDEO" = 1 ] && SCOPE_ID="$SCOPE_ID-video"
+LOCK="$EP/.review-$SCOPE_ID.lock"
+if ! mkdir "$LOCK" 2>/dev/null; then
+  OLDPID=$(cat "$LOCK/pid" 2>/dev/null)
+  if [ -n "$OLDPID" ] && kill -0 "$OLDPID" 2>/dev/null; then
+    echo "review: đã có một vòng chấm '$SCOPE_ID' đang chạy (pid $OLDPID) trên tập này — đừng mở vòng thứ hai." >&2
+    echo "review: hai người chấm một tập là hai bản chấm đè lên nhau, hai vòng bị tính, và hai lần tốn ngân sách. Chờ vòng đang chạy xong rồi đọc bản chấm nó đã ghi vào $EP/review/." >&2
+    exit 1
+  fi
+  rm -rf "$LOCK"; mkdir "$LOCK" || die "cannot take the review lock $LOCK"
+fi
+echo $$ > "$LOCK/pid"
 W=$(mktemp -d "${TMPDIR:-/tmp}/lemo-review-XXXXXX")   # outside the repository: the reviewer is not shown the code
-trap 'cd /; rm -rf "$W"' EXIT
+trap 'cd /; rm -rf "$W" "$LOCK"' EXIT
 CHID=""
 if [ -n "$CHAPTER" ]; then
   R=$($GATE chapter "$EP" "$CHAPTER") || exit 2
@@ -199,7 +241,7 @@ if [ "$OUTLINE" = 1 ]; then
   cd "$W"
   PREV=""; [ -f PREVIOUS.md ] && PREV="
 Đây là lần chấm thứ $n. PREVIOUS.md là bản chấm lần trước của chính bạn; người làm đã sửa theo nó. Trước tiên xét từng lỗi trong đó: đã sửa chưa, sửa đúng chưa. Đừng đổi ý về điều lần trước bạn đã chấp nhận; mục đích là đưa dàn ý tới PASS."
-  echo "review --outline: reviewer at work in $W…" >&2
+  at_work "review --outline:"
   critic "$(get_prompt "step1-outline")
 $PREV
 Thư mục làm việc của bạn: $W. Đọc TREATMENT.md, FACTS.md, STRATEGY.md (và PREVIOUS.md nếu có), rồi viết OUTLINE-REVIEW.md ở đó theo mẫu, và in lại nó."
@@ -512,7 +554,7 @@ open(W + '/TASK.md', 'w').write('\n'.join(T) + '\n')
 open(W + '/flags.txt', 'w').write(' '.join(fl))
 PY
   cd "$W"
-  echo "review --script: reviewer at work in $W…" >&2
+  at_work "review --script:"
   critic "$(get_prompt "step2-script")
 
 $(cat TASK.md)
@@ -635,7 +677,7 @@ open(W + '/flags.txt', 'w').write(' '.join(f"#{x['n']}:{'+'.join(x['flags'])}" f
 EOF
 
 cd "$W"
-echo "review: reviewer at work in $W…" >&2
+at_work "review:"
 critic "$(get_prompt "step6-assembly")
 
 $(cat TASK.md)

@@ -46,10 +46,19 @@ def where(text, needle):
 def write_atomic(path, body):
     """write the whole file next to the target, then rename it over: the target is never half-written"""
     d = os.path.dirname(os.path.abspath(path))
+    # The mode travels with the content: a script that was executable before the edit is executable after it.
+    # A rename with a fresh file silently drops the bit, and a script that lost it stops working for anyone
+    # who runs it as `./script` rather than `sh script`.
+    try:
+        mode = os.stat(path).st_mode & 0o7777
+    except OSError:
+        mode = None
     fd, tmp = tempfile.mkstemp(dir=d, prefix='.replace-')
     try:
         with os.fdopen(fd, 'w', encoding='utf8') as f:
             f.write(body)
+        if mode is not None:
+            os.chmod(tmp, mode)
         os.replace(tmp, path)
     except BaseException:
         if os.path.exists(tmp):
@@ -138,6 +147,14 @@ def selftest():
         json.dump([{'old': 'a', 'new': 'A'}, {'old': 'a', 'new': 'B'}], open(edits, 'w', encoding='utf-8'))
         rc = batch(target, edits)
         cases.append(('hai sửa cùng đoạn cũ thì sửa thứ hai bị từ chối', rc == 1 and read(target) == 'a\n', read(target), ''))
+
+        # the mode travels with the content: a script stays executable
+        script = os.path.join(tmp, 's.sh')
+        open(script, 'w', encoding='utf-8').write('echo hi\n')
+        os.chmod(script, 0o755)
+        write_atomic(script, read(script).replace('hi', 'hello'))
+        mode = os.stat(script).st_mode & 0o111
+        cases.append(('tệp thực thi vẫn thực thi sau khi sửa', mode != 0, oct(os.stat(script).st_mode), ''))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
     failed = 0

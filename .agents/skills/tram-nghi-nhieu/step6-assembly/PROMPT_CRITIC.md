@@ -38,8 +38,10 @@ Nhiệm vụ của bạn là thẩm định nhịp điệu phim qua từng phân
    - Ghi rõ nhát nào FAIL và đề xuất sửa cụ thể: đưa máy lại gần hơn, đổi góc, dời vật chính vào giữa khung, hay thêm vật để khung có chuyện.
 ## Định dạng Output Bắt buộc (`REVIEW.md`)
 
+Dòng `VERDICT:` trong khối dưới đây là **chỗ điền**, không phải câu trả lời: xoá ngoặc và chỉ để lại đúng **MỘT** chữ (`PASS` hoặc `REJECT`). Để nguyên dòng mẫu là một bản chấm không đọc được — cổng không đóng tem cho nó, và vòng chấm bị tính như chưa xong.
+
 ```markdown
-VERDICT: PASS | REJECT
+VERDICT: (điền đúng MỘT chữ: PASS hoặc REJECT)
 ROUND: (số vòng do review.sh ghi — người chấm không tự điền)
 SCORES: NHỊP_ĐIỆU=[1-5] CHUYỂN_ĐỘNG=[1-5] ÁNH_SÁNG=[1-5]
 FLAGS_STATUS:

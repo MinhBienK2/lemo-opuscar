@@ -46,6 +46,19 @@ Quy trình này thay cho bước 1–6 của `AGENTS.md` / `DIRECTOR.md` khi là
    - `until [ -f file ]; do sleep 15; done` là một vòng dò: nó ăn hết lượt của bạn và không quyết định gì.
    - Cùng một lệnh lặp năm lần trở lên, dù nó đang nhìn cái gì, là một vòng dò.
 
+7. **Một vòng chấm, một người chấm.**
+   - `review.sh` là công cụ của cả kênh: nó đọc mẫu, đánh số vòng, ký tên người chấm và đóng tem. Đừng tự làm lại
+     bất kỳ phần nào của nó — kể cả khi nó chạy lâu và bạn muốn xem kết quả sớm.
+   - Người chấm **chỉ in câu trả lời khi đã xong**. Suốt thời gian nó nghĩ, file output của nó gần như rỗng —
+     đó là bình thường, không phải nó chết. Đừng mở file output đó để "kiểm tra xem còn sống không": đó là một
+     vòng dò, và nó khiến bạn mở người chấm thứ hai.
+   - Hai dòng cảnh báo của CLI (`connectors are disabled`, `unrecognized_model`) là **cảnh báo, không phải
+     lỗi**: mô hình vẫn chạy và vẫn trả lời. Đừng đổi `LEMO_CRITIC_MODEL` để làm chúng im đi.
+   - Vòng chấm kéo dài hàng chục phút: chạy nó ở chế độ nền và để harness báo khi nó xong, rồi đọc bản chấm nó
+     ghi vào `review/`.
+   - Một tập, một vòng chấm cho mỗi phần. `review.sh` giữ chốt: nếu nó nói còn một vòng đang chạy trên tập
+     này, hãy chờ — mở vòng thứ hai là hai bản chấm đè lên nhau, hai vòng bị tính, và ngân sách bị tiêu hai lần.
+
 Mọi lệnh dưới đây chạy từ gốc thư viện. Trên máy này, mọi lệnh dựng hình (`still.mjs`, `beatsheet.mjs`, `review.sh`, `build.sh`) cần `LEMO_ANGLE=vulkan` ở đầu lệnh.
 
 **Tập đang dở.** Một tập mất hơn một ngày, nên phiên mở tập thường không phải phiên làm xong tập. Khi thư mục

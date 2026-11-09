@@ -145,11 +145,17 @@ def digest(ep, kind, ch=None):
 def sha(path): return hashlib.sha256(open(path, 'rb').read()).hexdigest()
 
 
+# A verdict of PASS — it may sit under a heading ('## VERDICT: PASS'), the way a director's cut ends,
+# and it may be written in bold ('**VERDICT: PASS**'), the way a critic writes it when it answers in chat.
+# It must be ONE verdict. The templates print their output block with a placeholder — 'VERDICT: PASS | REJECT' —
+# and a reviewer that fills in the scores but copies the verdict line verbatim hands the gate a PASS it never
+# gave. So a verdict followed by a choice ('|', '/', '+') is a template and not an answer, and a word that runs
+# on ('PASSED') is not a verdict either.
+PASS_RE = re.compile(r'^#*\s*[*_]{0,2}VERDICT: *[*_]{0,2} *PASS(?![A-Za-z_])(?!\s*[*_]{0,2}\s*[|/+])', re.M)
+
+
 def passed(review):
-    """a verdict of PASS — it may sit under a heading ('## VERDICT: PASS'), the way a director's cut ends,
-    and it may be written in bold ('**VERDICT: PASS**'), the way a critic writes it when it answers in chat"""
-    return bool(re.search(r'^#*\s*[*_]{0,2}VERDICT: *[*_]{0,2} *PASS',
-                          open(review, encoding='utf-8').read(), re.M))
+    return bool(PASS_RE.search(open(review, encoding='utf-8').read()))
 
 
 def stamp_path(ep, kind, ch=None):
@@ -259,7 +265,8 @@ def status(ep):
     if reports:
         last = reports[-1]
         head = open(last, encoding='utf-8', errors='replace').read()
-        verdict = re.search(r'^#*\s*[*_]{0,2}VERDICT: *[*_]{0,2} *\w+', head, re.M)
+        # the same rule as the stamp: a placeholder is not a verdict
+        verdict = re.search(r'^#*\s*[*_]{0,2}VERDICT: *[*_]{0,2} *\w+(?![A-Za-z_])(?!\s*[*_]{0,2}\s*[|/+])', head, re.M)
         print(f'last verdict: {verdict.group(0).strip() if verdict else "?"} ({os.path.relpath(last, ep)})')
     movies = [f for f in glob.glob(os.path.join(ep, '*.mp4')) + glob.glob(os.path.join(ep, 'out', '*.mp4'))]
     print('movie:', ', '.join(os.path.basename(m) for m in movies) if movies else 'chưa có')
@@ -370,7 +377,11 @@ def selftest():
                                   ('phán quyết dưới tiêu đề', '## VERDICT: PASS\n', True),
                                   ('phán quyết REJECT', 'VERDICT: REJECT\n', False),
                                   ('không có phán quyết', '## NHẬN XÉT\n- c1 tốt\n', False),
-                                  ('phán quyết ở giữa dòng', 'xem VERDICT: PASS nhé\n', False)):
+                                  ('phán quyết ở giữa dòng', 'xem VERDICT: PASS nhé\n', False),
+                                  ('dòng mẫu chưa điền (PASS | REJECT)', 'VERDICT: PASS | REJECT\n', False),
+                                  ('dòng mẫu chưa điền (PASS/REJECT)', 'VERDICT: PASS/REJECT\n', False),
+                                  ('chữ chạy tiếp (PASSED)', 'VERDICT: PASSED\n', False),
+                                  ('phán quyết đúng, kèm ghi chú', 'VERDICT: PASS — cảnh 3 ổn\n', True)):
             got = passed(report(text))
             cases.append((f'{label} thì {"đọc" if want else "không đọc"} đúng', got == want, got, ''))
 

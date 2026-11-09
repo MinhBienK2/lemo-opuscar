@@ -19,8 +19,10 @@ Nhiệm vụ của bạn là thẩm định bố cục các khung hình chính (
 
 ## Định dạng Output Bắt buộc (`STORYBOARD-REVIEW.md`)
 
+Dòng `VERDICT:` trong khối dưới đây là **chỗ điền**, không phải câu trả lời: xoá ngoặc và chỉ để lại đúng **MỘT** chữ (`PASS` hoặc `REJECT`). Để nguyên dòng mẫu là một bản chấm không đọc được — cổng không đóng tem cho nó, và vòng chấm bị tính như chưa xong.
+
 ```markdown
-VERDICT: PASS | REJECT
+VERDICT: (điền đúng MỘT chữ: PASS hoặc REJECT)
 ROUND: (số vòng do review.sh ghi — người chấm không tự điền)
 SCORES: BỐ_CỤC=[1-5] ÁNH_SÁNG=[1-5] GÓC_MÁY=[1-5]
 
