@@ -1145,8 +1145,8 @@ tiền (trước vòng chấm, trước lúc dựng, trước lúc bàn giao), c
 | 27 | Mỗi vòng chấm hình nói ra nó đã sửa gì và cái gì còn mở (N26) | `channels/tram-nghi-nhieu/tools/check_progress.py`, `tools/review.sh`, `SKILL.md` | **xong** |
 | 27 | Người giám sát chọn đúng phiên: hai đường dẫn phải đo từ cùng một gốc (N27) | `tools/supervise.sh` | **xong** |
 | 28 | Khuôn dựng tập mới không dùng 4 worker ở ss=2 — phim mất khung trong im lặng (N28) | `core/render/new_episode.sh`, `films/host-toon-test/build.sh` | **xong** |
-| 29 | Bài kiểm tra dàn ý hỏi kênh thay vì tự đoán hình dạng (N29) | `tools/check_treatment.py`, `channels/tram-nghi-nhieu/` | **chưa** (bài kiểm tra chưa chạy cho kênh này) |
-| 30 | Số khung thật của phim phải bằng số khung phải có — để một lượt dựng mất khung không lọt qua cổng | `core/render/review.sh` | **chưa** |
+| 29 | Bài kiểm tra dàn ý hỏi kênh thay vì tự đoán hình dạng (N29) | `tools/check_treatment.py`, `channels/tram-nghi-nhieu/tools/check_treatment.py`, `core/render/review.sh` | **xong** — cổng bàn giao gọi bài kiểm tra của kênh khi kênh có bài của riêng nó, nên một tập của kênh không còn bị hỏi về hình dạng của `DIRECTOR.md` |
+| 30 | Số khung thật của phim phải bằng số khung phải có — để một lượt dựng mất khung không lọt qua cổng | `core/render/review.sh` | **xong** — bước `frames` đếm khung của `.mp4` và so với `events.json` |
 | 32 | Một bài kiểm tra phải có ví dụ nó phải bắt, và chuỗi rỗng không được trả lời "có" cho mọi thứ (N30) | `channels/tram-nghi-nhieu/tools/check_labels.py` | **xong** (chưa có `--selftest`) |
 | 33 | Con số trên nhãn phải có lời kể đọc — luật của chính FACTS.md, nay do máy canh (N31) | `channels/tram-nghi-nhieu/tools/check_labels.py`, `tools/review.sh` | **xong** (chưa nhìn `src/props.js`) |
 | 34 | Đếm số lần đọc lại cùng một tệp lớn: 186 lần đọc ba tệp mã là phần lớn chi phí của phiên (N32) | `tools/supervise.sh`, `CODING_STANDARDS.md` R11 | **xong** (chưa có `src/MAP.md`) |

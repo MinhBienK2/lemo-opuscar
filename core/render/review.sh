@@ -71,7 +71,13 @@ BCH=$(cd "$FOLDER" && while [ ! -f CHANNEL.md ] && [ "$PWD" != / ]; do cd ..; do
 if [ -f "$FOLDER/board.json" ] || [ -f "$BCH/board_rules.json" ]; then
   run board "$PY" "$HERE/tools/check_board.py" "$FOLDER"
   # …and directed before it was drawn: benchmark, three structures, cue map, sound, content review, the look rounds
-  run treatment python3 "$HERE/tools/check_treatment.py" "$FOLDER"
+  # A channel knows the shape of its own treatment; the library's check asks for DIRECTOR.md's shape and would
+  # fail every episode of a channel whose treatment has its own headings. So the channel's check wins when it has one.
+  if [ -f "$BCH/tools/check_treatment.py" ]; then
+    run treatment python3 "$BCH/tools/check_treatment.py" "$FOLDER"
+  else
+    run treatment python3 "$HERE/tools/check_treatment.py" "$FOLDER"
+  fi
 fi
 # a film's own film folder: the subtitles sit at the bottom, so nothing else may be down there.
 # The band is matched on the path, so it must match the one-shots under films/ and the episodes under channels/.
