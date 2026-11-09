@@ -1503,6 +1503,42 @@ một phim mà người chấm vừa trả về REJECT 7,3/10 và cổng dựng 
 `gate.py status` (in ra từng tem và **phán quyết vòng chấm cuối**) và `gate.py check --for render`
 (khi phim đã dựng xong thì cổng đóng là FAIL, còn đang dựng thì chưa).
 
+## N54 — high — Báo cáo của người giám sát nêu tệp mà phiên không hề viết
+
+**Bằng chứng.** `tools/supervise.sh` có sẵn cách đọc đúng: `write_targets(cmd)` biết lệnh đó
+**ghi** tệp nào, khác với tệp lệnh chỉ **nhắc tới**. Nhưng dòng báo cáo R1 thì ném cái danh sách
+đó đi và dò lại tên tệp trong lệnh:
+
+```python
+targets = [f for f in write_targets(cmd) if project_file(f, cmd) and re.search(src_ext, f)]
+is_r1 = bool(targets)
+...
+if is_r1:
+    targets = [f for f in re.findall(repo_file, cmd) if project_file(f, cmd)]   # ← ném đi
+```
+
+Hệ quả đo được trên phiên tập 01: báo cáo nêu `core/render/page.mjs×4` — nhưng transcript
+không có lệnh nào ghi tệp đó; nó chỉ được **import** trong một heredoc. Cùng lúc đó, mười hai
+lần ghi thật vào `TREATMENT.md` và `voice/lines.json` rơi vào dòng "R1?" — không ai hành động
+được. Đây là lỗi đã được ghi trong `improvements/lessons.md`: *"475 violations where the truth
+was 34"* — lặp lại ở dạng nhỏ.
+
+**Vì sao nó quan trọng.** Đây không phải một phép đo lệch — đây là **báo cáo mà người đọc không
+tin được**. Người đọc báo cáo không tin được thì không đọc báo cáo lần nữa, và phát hiện thật
+bên trong nó cũng chết theo.
+
+**Đã sửa.** (a) Luật R1 dùng danh sách tệp đã ghi mà nó đã tính sẵn. (b) Lệnh không nói được
+tệp nào thì báo `R1?` và **không đoán** — trước đó dòng này nói "the log truncates the command",
+nhưng transcript **không** cắt lệnh; chỉ phần hiển thị mới cắt. (c) Khối luật rời khỏi
+`supervise.sh` ra `tools/rules.py`, có `--selftest` 8 ca — trong đó đúng cái ca "heredoc chỉ
+import một tệp thì báo cáo không được nêu tệp đó". (d) Tên tệp trong báo cáo nay ngắn lại
+theo thư mục phim, để người đọc nhìn ra ngay.
+
+Đo lại trên cùng phiên: `R1 37 lần` trước và sau, nhưng danh sách tệp nay là những tệp thật
+sự bị ghi — `src/props.js×5, LOOK.md×5, src/set.js×4, voice/lines.json×3,
+review/beatsheet/beats.json×2, COMPONENTS_SPEC.md×2, review/STORYBOARD-DIRECTORS-CUT.md×2,
+dbg.html×1` — và không có tệp nào chỉ được nhắc tới.
+
 ---
 
 ## Các guard đã bắt được gì (tính từ 08:00, hai tập còn chạy)
@@ -1590,6 +1626,7 @@ tiền (trước vòng chấm, trước lúc dựng, trước lúc bàn giao), c
 | 51 | Cổng không được trả lời PASS về một thư mục không tồn tại (N52) | `channels/tram-nghi-nhieu/tools/gate.py` | **xong** — cờ và đối số tách riêng; thư mục không phải tập thì bị từ chối; 14 ca selftest |
 | 52 | Tem phải phủ đúng cái nó nói; bản cắt của bước storyboard cũng phải viết sau lần sửa code (N53) | `channels/tram-nghi-nhieu/tools/gate.py`, `channels/tram-nghi-nhieu/tools/review.sh` | **xong** |
 | 53 | Người giám sát phải hỏi cổng của kênh, không chỉ hỏi các tệp có đúng hình dạng không | `tools/supervise.sh` | **xong** — `gate.py status` in ra từng tem và phán quyết vòng chấm cuối; `check --for render` là FAIL khi phim đã dựng mà cổng đóng |
+| 54 | Báo cáo phải nêu tệp đã ghi, và luật viết bằng tay thì phải kiểm chứng được (N54) | `tools/rules.py`, `tools/supervise.sh` | **xong** — 8 ca selftest |
 
 ### Mỗi phát hiện đã có dòng riêng trong `improvements/lessons.md`
 
