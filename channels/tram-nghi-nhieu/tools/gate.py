@@ -272,6 +272,16 @@ def status(ep):
     """where the episode stands: every stamp, whether it still holds, and the last verdict"""
     for kind in ('outline', 'script', 'props', 'storyboard', 'assets', 'picture', 'final'):
         p = stamp_path(ep, kind)
+        if kind in ('script', 'picture') and chapters(ep):
+            # A long episode is stamped chapter by chapter. Saying "chưa có PASS" about the whole film while
+            # its chapters all hold a valid stamp is a false alarm: the agent reads it, and opens a review round
+            # for a step that already passed. The same rule the gate itself uses decides it.
+            why = kind_ok(ep, kind)
+            if why is None:
+                print(f'{kind:<11} PASS còn hiệu lực')
+            else:
+                print(f'{kind:<11} chưa có PASS — {why}')
+            continue
         if not os.path.isfile(p):
             print(f'{kind:<11} chưa có PASS')
             continue
@@ -463,6 +473,28 @@ def selftest():
         cases.append(('thứ tự cờ trước hay sau cho cùng kết quả', outs[0] == outs[1], outs, ''))
         cases.append(('tập chưa có tem picture thì cổng trả mã khác 0',
                        outs[0][0] != 0, outs[0][0], ''))
+
+        # — một tập có chương: tem của từng chương cũng là tem của tập —
+        ep2 = os.path.join(tmp, 'tap-chap')
+        os.makedirs(os.path.join(ep2, 'src'))
+        os.makedirs(os.path.join(ep2, 'voice'))
+        os.makedirs(os.path.join(ep2, 'review'))
+        open(os.path.join(ep2, 'voice/lines.json'), 'w', encoding='utf-8').write(
+            '[{"id":"c1","text":"Một"},{"id":"c2","text":"Hai"}]')
+        open(os.path.join(ep2, 'src/chapters.js'), 'w', encoding='utf-8').write(
+            "export const CHAPTERS = [ { id: 'chuon', lines: ['c1','c2'], files: ['film.js'] } ];\n")
+        open(os.path.join(ep2, 'src/film.js'), 'w', encoding='utf-8').write('// mã nhát\n')
+        rv = os.path.join(ep2, 'review/SCRIPT-REVIEW-chuon.md')
+        open(rv, 'w', encoding='utf-8').write('VERDICT: PASS\n')
+        stamp(ep2, 'script', rv, chapter(ep2, 'chuon'), critic='người chấm thử')
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf), contextlib.redirect_stderr(io.StringIO()):
+            status(ep2)
+        txt = buf.getvalue()
+        cases.append(('tập có chương: tem của chương tính là tem của tập',
+                      'script      PASS còn hiệu lực' in txt, txt.replace('\n', ' | '), ''))
+        cases.append(('tập có chương: cổng cũng mở cho bước đó',
+                      kind_ok(ep2, 'script') is None, kind_ok(ep2, 'script'), ''))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 

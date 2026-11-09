@@ -2123,6 +2123,7 @@ tiền (trước vòng chấm, trước lúc dựng, trước lúc bàn giao), c
 | 71 | Hướng dẫn của bước vẫn bảo gọi subagent, và người làm phim làm đúng như vậy (N71) | `.agents/skills/tram-nghi-nhieu/step{1,2,3,4,5}-*/GUIDE.md`, `.agents/skills/tram-nghi-nhieu/SKILL.md`, `channels/tram-nghi-nhieu/tools/check_reports.py` | **xong** — mọi hướng dẫn gọi đúng lệnh `review.sh`, kèm hợp đồng của bản cắt; cảnh báo sai về hai bước đã có công cụ bị xoá, và bài kiểm tra bắt đúng lỗi thật (bản cắt tập 01 không có dòng phán quyết) |
 | 77 | Bài kiểm tra hình báo "60 câu vật quá nhỏ" về 54 câu chưa từng được dựng: tờ sheet vẽ cho một khoảng câu đánh dấu phần còn lại là `skipped`, mà máy coi `fill` thiếu là 0 — nên 54 câu không hề có lỗi biến thành 54 lỗi giả, ngay ở chỗ người làm phim phải tin trước khi mở một vòng chấm bốn mươi phút | high | `check_shots.py` phân biệt *chưa đo* với *đo được 0* (câu `skipped` không còn bị báo lỗi, được đếm riêng), báo lỗi thật cho câu thiếu sự kiện giọng (`VOICE`), ra mã 2 khi chưa đo hết, chọn tờ sheet nào đo được nhiều câu hơn, và `review.sh` không dùng lại tờ nửa vời cho vòng chấm cả phim |
 | 78 | Đánh giá khách quan phim tập 01: cờ máy bắt được `SAME` và `FILL`, nhưng không bắt được điều quan trọng nhất — vật chính có phải là thứ câu đó đang gọi tên không (`fill` đo vật *lớn nhất*, không phải vật *được gọi tên*), vật có đang làm việc không, và tiền đề của cả phim có đọc được không ("áo ướt" nhìn như áo khô). 42 nhãn không có bài kiểm tra nào ghép được với vật trong khung, vì rig không trả về chỗ của vật | medium | **proposed** — `window.SHOTPROBE` trả thêm vị trí màn hình của từng vật, một `window.LABELPROBE` raycast đuôi mũi tên để biết nhãn trỏ vào vật nào, `check_labels.py` báo nhãn trỏ vào không / trỏ nhầm / câu gọi tên vật A mà vật B chiếm khung nhiều hơn; chưa làm vì R13 — ba phiên đang dựng bằng rig này |
+| 79 | Bảng trạng thái của cổng nói "script chưa có PASS" về một tập đã có tem của cả chương: `status` chỉ nhìn tem của cả tập, còn `check` thì biết tập dài được đóng tem theo từng chương — hai lệnh của cùng một công cụ trả lời khác nhau, và người làm phim mở thêm một vòng chấm cho một bước đã qua | medium | `gate.py status` dùng đúng `kind_ok()` cho hai loại tem theo chương (`script`, `picture`); selftest thêm hai ca: tem của chương tính là tem của tập, và cổng mở cho bước đó |
 
 ### Mỗi phát hiện đã có dòng riêng trong `improvements/lessons.md`
 
@@ -2381,6 +2382,35 @@ hình của từng vật trong `cast`; một probe mới `window.LABELPROBE` ray
 nhãn không trỏ vào gì; nhãn trỏ vào vật không thuộc câu đó; và câu đó gọi tên vật A nhưng vật chiếm
 khung nhiều nhất lại là B. Khi đó `fill` của cờ `FILL` cũng nên đo **vật được gọi tên**, thay vì vật lớn
 nhất — cùng một số đo, đúng nghĩa hơn.
+
+---
+
+## N79 — medium — Bảng trạng thái nói "chưa có PASS" về một tập đã có tem của cả chương
+
+**Bằng chứng.** Tập 03 có `src/chapters.js` (một chương, id `tap-03`) và tem `review/SCRIPT-tap-03.pass`.
+Nhưng:
+
+```
+python3 channels/tram-nghi-nhieu/tools/gate.py status <tập 03>
+→ script      chưa có PASS          ← sai: tem của chương vẫn còn hiệu lực
+```
+
+Trong khi `gate.py check --for render` (cùng một lúc, cùng một tập) **mở** cho bước giọng kể, vì nó
+dùng `kind_ok()` — hàm biết một tập dài được đóng tem **theo từng chương**. Còn `status()` thì chỉ
+nhìn tệp tem của cả tập (`review/SCRIPT.pass`), không biết chuyện tem theo chương.
+
+**Vì sao quan trọng.** `status` là bảng người làm phim đọc để biết "tập đang ở đâu". Bảng đó nói
+"script chưa có PASS" thì người làm phim tin nó, và mở thêm một vòng chấm cho một bước **đã qua** —
+mỗi vòng là tiền và bốn mươi phút. Đây là lần thứ hai trong đợt này mà hai lệnh của cùng một công cụ
+trả lời khác nhau về cùng một câu hỏi (lần trước là `check_shots` với tờ sheet nửa vời, N77).
+
+**Đã sửa.** `status()` dùng đúng luật của cổng cho hai loại tem theo chương (`script`, `picture`):
+tem của cả chương hợp lệ thì bảng in `PASS còn hiệu lực`; thiếu thì in `chưa có PASS — <lý do>` kèm
+lệnh cần chạy. Selftest của `gate.py` nay có 24 ca, thêm hai ca: tập có chương thì tem của chương
+tính là tem của tập, và cổng cũng mở cho bước đó.
+
+**Luật chung rút ra:** hai lệnh của một công cụ phải dùng **cùng một phép so sánh**. Nếu `check` mở
+cửa mà `status` báo chưa có, thì `status` đang nói dối — và người đọc nó sẽ hành động theo.
 
 ---
 
