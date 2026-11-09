@@ -35,6 +35,8 @@ def find(secs, *keys):
 # a candidate is a list item, a ### heading, or a paragraph that opens on a bold name (**A. …**)
 items = lambda body: [l for l in body.splitlines() if re.match(r'^\s*([-*]|\d+[.)])\s+\S|^###\s+\S|^\*\*(?!(chọn|chosen|choice))', l, re.I)]
 has = lambda body, *keys: any(re.search(k, body, re.I | re.U) for k in keys)
+# a line that says what to learn (or what not to take) is not a reference work
+LEARN = re.compile(r'^\s*[-*]?\s*\**\s*(học|không lấy|learn|don\'?t take|not take|do not take)\s*[:|]', re.I | re.U)
 
 def check(film):
     """The problems of one film's treatment and LOOK. Returns (code, bad, info)."""
@@ -50,7 +52,8 @@ def check(film):
         if not has(b, r'học\s*[:|]', r'learn\s*[:|]', r'\|\s*(học|learn)\s*\|'): BAD('"## Phim mẫu": say what to learn from each work ("Học: …")')
         if not has(b, r'không lấy', r"(don't|do not|not) (take|learn)"): BAD('"## Phim mẫu": say what not to take ("Không lấy: …")')
         # the bar is set from outside: the channel's own episodes and STYLE.md are what the film already knows
-        refs = [l for l in b.splitlines() if l.strip() and not re.match(r'^\s*\|?\s*[-:| ]+$', l) and not re.search(r'(học|learn)\s*\|', l, re.I)]
+        # (the references are the works themselves; the "Học:"/"Không lấy:" lines under a work are not references)
+        refs = [l for l in b.splitlines() if l.strip() and not re.match(r'^\s*\|?\s*[-:| ]+$', l) and not re.search(r'(học|learn)\s*\|', l, re.I) and not LEARN.match(l)]
         if refs and all(re.search(r'\btập\s*\d|tap-\d|STYLE\.md|series|kênh|channel', l, re.I) for l in refs):
             BAD('"## Phim mẫu": every reference is the channel itself — name 1–2 works from outside it (a channel, a film, an ad) that set the bar for this topic')
     s = find(secs, 'ba cấu trúc', 'cấu trúc', 'structures')
@@ -193,6 +196,15 @@ def selftest():
         put(own, 'TREATMENT.md', own_t)
         put(own, 'LOOK.md', GOOD_LOOK)
 
+        # the same, with learn lines that do not name the channel: only the work is the channel
+        own_quiet = film('benchmark-is-the-channel-quiet-learn-lines')
+        own_q_t = head + ('## Phim mẫu\n\n'
+                          '- **Tập 1 (series do-vat)** — xem lại chính công việc của kênh này.\n'
+                          '  - Học: nhịp cắt và cách dựng.\n'
+                          '  - Không lấy: nhân vật, màu, nhạc.\n\n') + tail
+        put(own_quiet, 'TREATMENT.md', own_q_t)
+        put(own_quiet, 'LOOK.md', GOOD_LOOK)
+
         two = film('two-structures')
         put(two, 'TREATMENT.md', GOOD_TREATMENT.replace(
             '- **C. Một đồng hồ**: đếm ngược từ hoàng hôn đến khuya, mỗi giờ một lớp vải.\n', ''))
@@ -224,6 +236,7 @@ def selftest():
             ('a treatment with no benchmark is caught', no_bench, 1, 'no "## Phim mẫu"'),
             ('a benchmark with no "Không lấy" is caught', no_dont, 1, 'say what not to take'),
             ('a benchmark that only names the channel itself is caught', own, 1, 'every reference is the channel itself'),
+            ('a channel-only benchmark with quiet learn lines is caught', own_quiet, 1, 'every reference is the channel itself'),
             ('two candidate structures are caught', two, 1, 'candidates listed'),
             ('a treatment with no choice is caught', no_choice, 1, 'say which one you chose'),
             ('a treatment with no cue map is caught', no_cue, 1, 'no "## Cue map"'),
