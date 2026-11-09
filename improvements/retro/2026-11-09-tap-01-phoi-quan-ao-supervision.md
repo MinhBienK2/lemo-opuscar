@@ -2125,7 +2125,9 @@ tiền (trước vòng chấm, trước lúc dựng, trước lúc bàn giao), c
 | 78 | Đánh giá khách quan phim tập 01: cờ máy bắt được `SAME` và `FILL`, nhưng không bắt được điều quan trọng nhất — vật chính có phải là thứ câu đó đang gọi tên không (`fill` đo vật *lớn nhất*, không phải vật *được gọi tên*), vật có đang làm việc không, và tiền đề của cả phim có đọc được không ("áo ướt" nhìn như áo khô). 42 nhãn không có bài kiểm tra nào ghép được với vật trong khung, vì rig không trả về chỗ của vật | medium | **proposed** — `window.SHOTPROBE` trả thêm vị trí màn hình của từng vật, một `window.LABELPROBE` raycast đuôi mũi tên để biết nhãn trỏ vào vật nào, `check_labels.py` báo nhãn trỏ vào không / trỏ nhầm / câu gọi tên vật A mà vật B chiếm khung nhiều hơn; chưa làm vì R13 — ba phiên đang dựng bằng rig này |
 | 79 | Bảng trạng thái của cổng nói "script chưa có PASS" về một tập đã có tem của cả chương: `status` chỉ nhìn tem của cả tập, còn `check` thì biết tập dài được đóng tem theo từng chương — hai lệnh của cùng một công cụ trả lời khác nhau, và người làm phim mở thêm một vòng chấm cho một bước đã qua | medium | `gate.py status` dùng đúng `kind_ok()` cho hai loại tem theo chương (`script`, `picture`); selftest thêm hai ca: tem của chương tính là tem của tập, và cổng mở cho bước đó |
 | 80 | Danh sách cờ máy là một bức tường từng dòng, trong khi người làm phim sửa **đoạn** — 22 cờ SAME và 30 khung mỏng trong tập 01 phải tự đọc và tự gom, mỗi lần gom là một lần sửa code | medium | `check_shots.py` in thêm dòng tóm tắt theo từng loại cờ, gom các câu liền nhau (`c37–c40 (4 câu)`); selftest có ca cho việc này |
-| 81 | Máy đo "vật chính quá nhỏ" ở ba kiểu cảnh mà nó không nhìn thấy: cảnh cận trong một vật lớn, chủ thể là một nhóm vật, và cảnh toàn cảnh — trong 30 câu bị gọi là nhỏ ở tap-01 chỉ 11 câu là lỗi thật, 19 câu là máy mù; người làm phim đẩy máy sát vào vật để đẩy số lên là phim xấu đi vì lời của máy | high | `check_shots.py` đo **độ phủ** (tổng phần khung vật thật chiếm) thay cho vật lớn nhất: độ phủ < 15 % và khác 0 mới là lỗi, độ phủ = 0 thì máy in danh sách câu nó không nhìn thấy kèm "đừng đưa máy sát"; `beatsheet.mjs` in `cover` và tô màu theo độ phủ; selftest thêm bốn ca |
+| 81 | `pkill -f beatsheet.mjs` của một tập giết job của tập khác: ba tập dựng song song, mỗi tập gọi `beatsheet.mjs` bằng cùng một mẫu lệnh, nên lệnh giết theo *tên* là lệnh giết của người khác | high | `beatsheet.mjs` ghi một tệp khoá theo tập (`out/beats/.lock` chứa pid và đường dẫn tập), giết job theo pid đọc từ tệp khoá đó; `lessons.md` có dòng "một lệnh giết theo tên là một lệnh giết của người khác" |
+| 82 | File nghiên cứu nói về bức tranh của phim ("nhiệt kế trong cả cái máy", "cái cửa mở ra"), và không bài kiểm tra nào đối chiếu lời hứa đó với cái thật trên hình | medium | chưa có guard — `FACTS.md` cần một bài kiểm tra đối chiếu các câu "Dùng trong phim" / "Phim nói:" với thẻ chữ trong `src/*.js` và với `voice/lines.json` |
+| 83 | Máy đo "vật chính quá nhỏ" ở ba kiểu cảnh mà nó không nhìn thấy: cảnh cận trong một vật lớn, chủ thể là một nhóm vật, và cảnh toàn cảnh — trong 30 câu bị gọi là nhỏ ở tap-01 chỉ 11 câu là lỗi thật, 19 câu là máy mù; người làm phim đẩy máy sát vào vật để đẩy số lên là phim xấu đi vì lời của máy | high | `check_shots.py` đo **độ phủ** (tổng phần khung vật thật chiếm) thay cho vật lớn nhất: độ phủ < 15 % và khác 0 mới là lỗi, độ phủ = 0 thì máy in danh sách câu nó không nhìn thấy kèm "đừng đưa máy sát"; `beatsheet.mjs` in `cover` và tô màu theo độ phủ; selftest thêm bốn ca |
 
 ### Mỗi phát hiện đã có dòng riêng trong `improvements/lessons.md`
 
@@ -2450,7 +2452,7 @@ chỗ cuối. Đó là thông tin mà một bức tường 52 dòng không cho.
 
 ---
 
-## N80 — high — `pkill -f beatsheet.mjs` của một tập giết job của tập khác
+## N81 — high — `pkill -f beatsheet.mjs` của một tập giết job của tập khác
 
 **Bằng chứng.** Phiên tap-01 dùng `pkill -f "beatsheet.mjs"` ba lần (10:53:45, 10:54:28, 11:00:44) để
 dừng lượt chạy của chính nó. Đúng lúc đó, **tap-03** (10:57 và 11:04) và **tap-02** (11:01) đang chạy
@@ -2466,7 +2468,7 @@ chứa pid và đường dẫn tập), và giết phải theo pid đọc từ t�
 lệnh `pkill` theo mẫu chung tồn tại trong hướng dẫn. Ngoài ra `lessons.md` nên có một dòng: *một
 lệnh giết theo tên là một lệnh giết của người khác*.
 
-## N81 — medium — File nghiên cứu nói về bức tranh của phim, và không bài kiểm tra nào đối chiếu
+## N82 — medium — File nghiên cứu nói về bức tranh của phim, và không bài kiểm tra nào đối chiếu
 
 **Bằng chứng.** `research/FACTS.md` mục "Suy luận của tập phim" (dòng 127) viết rõ: *"Phim nói: … (**nhiệt
 kế trong cảnh chỉ hai mươi lăm độ**)"* và cả tệp đề xuất mọi con số ở **hai mươi lăm độ** (2,44 kJ/g;
@@ -2490,7 +2492,7 @@ và với `voice/lines.json`; số nào ở tài liệu mà không có ở phim 
 `tools/check_claims.py` cho phim một tập, nhưng nó hỏi câu khác và không phủ câu "tài liệu nói về
 dàn cảnh".)
 
-## N81 — high — Máy đo "vật chính quá nhỏ" ở ba kiểu cảnh mà nó không nhìn thấy
+## N83 — high — Máy đo "vật chính quá nhỏ" ở ba kiểu cảnh mà nó không nhìn thấy
 
 **Bằng chứng.** Tờ sheet của tập 01 vẽ 30 câu có `fill` dưới 15 %. Phiên làm tập 01 đã tự nhận ra
 và nói thẳng: phép đo chỉ bắt vật nhỏ hơn 1,2 m, nên "cảnh trong vải, mặt nước, cảnh toàn cảnh đọc
@@ -2545,9 +2547,9 @@ kết luận thứ hai là nói sai. Một công cụ không chắc thì phải 
 - **[ ]** N74: `tools/check_map.py` + `gate.py`.
 - **[ ]** N75: `tools/supervise.sh` đếm lệnh ghi file bằng cách nhắc tới đường dẫn dự án.
 - **[ ]** N76: `tools/supervise.sh` đếm lượt đọc `tasks/*.output`; R9 nói thêm về output của lệnh nền.
-- **[ ]** N80: `beatsheet.mjs` ghi tệp khoá theo tập; giết job bằng pid đọc từ tệp khoá, không `pkill`
+- **[ ]** N81: `beatsheet.mjs` ghi tệp khoá theo tập; giết job bằng pid đọc từ tệp khoá, không `pkill`
   theo mẫu chung; `lessons.md` có một dòng về lệnh giết theo tên.
-- **[ ]** N81: bài kiểm tra của kênh đối chiếu các câu "Dùng trong phim" / "Phim nói:" của
+- **[ ]** N82: bài kiểm tra của kênh đối chiếu các câu "Dùng trong phim" / "Phim nói:" của
   `research/FACTS.md` với thẻ chữ trong `src/*.js` và với `voice/lines.json`.
 - **[ ]** N78: `window.SHOTPROBE` trả chỗ của từng vật; `window.LABELPROBE` raycast đuôi nũi tên của nhãn;
   `check_labels.py` báo nhãn trỏ vào không / trỏ nhầm / câu gọi tên vật A mà vật B chiếm khung nhiều hơn;
