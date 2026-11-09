@@ -28,9 +28,12 @@ PAST_LOCK = "needs TREATMENT.md"           # và nói câu này khi đã đi qua
 
 def run_review(episode, *flags, timeout=120):
     """chạy review.sh trên một tập giả; trả về (mã thoát, toàn bộ lời in ra)"""
+    env = dict(os.environ)
+    # the box check must not decide the result of a test: the machine's load is not the subject here
+    env["LEMO_ROOM_CHECK"] = "off"
     proc = subprocess.run(
         ["sh", REVIEW_SH, episode] + list(flags),
-        capture_output=True, text=True, timeout=timeout, cwd=LIB,
+        capture_output=True, text=True, timeout=timeout, cwd=LIB, env=env,
     )
     return proc.returncode, proc.stdout + proc.stderr
 

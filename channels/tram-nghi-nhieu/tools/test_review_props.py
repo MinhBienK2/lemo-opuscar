@@ -87,6 +87,8 @@ def run_props(ep, stubs, extra=None, timeout=300):
         "LEMO_CRITIC_CLI": stubs["critic"],
         "PROPCHECK": stubs["propcheck"],
         "CRITIC_TIMEOUT": "60",
+        # the box check must not decide the result of a test: the machine's load is not the subject here
+        "LEMO_ROOM_CHECK": "off",
         "WARNINGS": WARNINGS,
     })
     env.update(extra or {})

@@ -116,6 +116,9 @@ lines_of() {   # $1 = "a-b" (a range) or empty (the whole film); prints the numb
 # which blocks the same work at the command line — so the round asks the same question at the moment it opens
 # the reviewer, and refuses the same way. One rule, two doors.
 room_state() {   # "<STATE>|<detail>|<avail MiB>|<swap %>" — always four fields
+  # LEMO_ROOM_STATE is the seam for the test: it lets a selftest say "the box is full" without waiting
+  # for the box to be full. It is a test seam, not a way to skip the check on a real round.
+  if [ -n "$LEMO_ROOM_STATE" ]; then echo "$LEMO_ROOM_STATE"; return 0; fi
   python3 - "$LIB" <<'PY' 2>/dev/null || echo "OK|?|?"
 import sys, os
 sys.path.insert(0, os.path.join(sys.argv[1], 'tools'))
@@ -128,6 +131,25 @@ if over:
 else:
     print('OK|-|%s|%s' % (avail, pct))
 PY
+}
+
+refuse_no_room() {   # says what the machine can take, and stops the round before it costs anything
+  # A test runs review.sh with a stub critic, and the result of a test must not depend on how busy the
+  # machine happens to be. LEMO_ROOM_CHECK=off is the sanctioned way to run a round without the box check.
+  [ "${LEMO_ROOM_CHECK:-on}" = "off" ] && return 0
+  ROOM=$(room_state)
+  RSTATE=${ROOM%%|*}
+  REST=${ROOM#*|}; RDETAIL=${REST%%|*}; REST=${REST#*|}
+  RAVAIL=${REST%%|*}; RSWAP=${REST#*|}
+  if [ "$RSTATE" = "OVER" ]; then
+    echo "review: máy đang quá tải ($RDETAIL) — vòng chấm này không mở được, và một vòng mở trên máy hết chỗ chỉ bị kernel giết (tap-03 mất một giờ vòng storyboard vì thế)." >&2
+    echo "review: đợi việc đang chạy xong rồi chạy lại lệnh này (một job nền, để harness báo khi xong) — đừng mở thêm một vòng cùng lúc." >&2
+    exit 2
+  fi
+  [ -n "$ROOM_REPORTED" ] && return 0
+  ROOM_REPORTED=1
+  echo "review: máy còn $RAVAIL MiB RAM trống, swap đã dùng $RSWAP% — vòng này mở được." >&2
+  return 0
 }
 
 critic() {   # $1 = the prompt; $2 = "no-verdict" when the reviewer answers with a list, not with a verdict
@@ -145,18 +167,9 @@ Bối cảnh vòng chấm: ${ROUND_LABEL:-vòng chấm này}. Bạn làm việc 
   # comes back asking for permission, and the reviewer retries the same command until the wall clock kills it.
   # That is three hours of a round that never happened (N100).
   # No room, no round: the kernel kills a round that asks for more memory than the machine has, and the round
-  # leaves nothing behind but a trace. The box is asked here, at the moment the reviewer is about to start —
+  # leaves nothing behind but a trace. The box is asked here too, at the moment the reviewer is about to start —
   # after the round's own renders, which is where the memory actually goes.
-  ROOM=$(room_state)
-  RSTATE=${ROOM%%|*}
-  REST=${ROOM#*|}; RDETAIL=${REST%%|*}; REST=${REST#*|}
-  RAVAIL=${REST%%|*}; RSWAP=${REST#*|}
-  if [ "$RSTATE" = "OVER" ]; then
-    echo "review: máy đang quá tải ($RDETAIL) — vòng chấm này không mở được, và một vòng mở trên máy hết chỗ chỉ bị kernel giết (tap-03 mất một giờ vòng storyboard vì thế)." >&2
-    echo "review: đợi việc đang chạy xong rồi chạy lại lệnh này (một job nền, để harness báo khi xong) — đừng mở thêm một vòng cùng lúc." >&2
-    exit 2
-  fi
-  echo "review: máy còn $RAVAIL MiB RAM trống, swap đã dùng $RSWAP% — vòng này mở được." >&2
+  refuse_no_room
   if command -v timeout >/dev/null 2>&1; then
     timeout -k 30 "$CRITIC_TIMEOUT" "$CLI" -p ${LEMO_CRITIC_MODEL:+--model "$LEMO_CRITIC_MODEL"} --dangerously-skip-permissions "$PROMPT" < /dev/null > out.txt 2>&1 &
   else
@@ -372,6 +385,10 @@ trap 'rc=$?; cd /;
     fi
   fi
   rm -rf "$W" "$LOCK"; rm -f "$RUNNING"' EXIT
+# The box is asked BEFORE the round spends anything: a props round renders the images of every object, and
+# a round that opens on a machine that is already full gets killed by the kernel with an hour of review
+# inside it. Refusing here costs a second; refusing after the renders costs the render too.
+refuse_no_room
 
 # ——————————————————————————————————————————— the outline ———————————————————————————————————————————
 if [ "$OUTLINE" = 1 ]; then

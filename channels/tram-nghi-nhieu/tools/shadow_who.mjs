@@ -148,12 +148,21 @@ for (const c of children) {
   results.push({ ...c, delta: v - base });
 }
 results.sort((a, b) => b.delta - a.delta);
+// A delta of 0.0 means the object has nothing to do with this patch. Naming one anyway would be a guess
+// wearing a measurement's clothes, so the ones that explain nothing are dropped.
+const blamed = results.filter(r => r.delta >= 0.5);
 console.log(`\n${results.length} objects cast a shadow. Removing each one in turn and measuring the patch:`);
 for (const r of results.slice(0, 8)) {
   console.log(`  +${r.delta.toFixed(1).padStart(6)}  child #${String(r.i).padStart(3)}  ${r.type.padEnd(14)} ${(r.name || '(no name)').padEnd(18)} ${r.mat.padEnd(8)} at ${r.pos.join(', ')} scale ${r.scale.join(', ')} (${r.kids} kids, ${r.casts} meshes)`);
 }
-if (results.length) {
-  const w = results[0];
+if (!blamed.length) {
+  console.log(`\nNO OBJECT IN THE SCENE EXPLAINS THIS PATCH — every one of them changes it by ${results.length ? results[0].delta.toFixed(1) : '0.0'} points.`);
+  console.log('So the darkness here is not the shadow of a scene object. It can be: a shape that is added to the');
+  console.log('scene only while this shot is drawn, an object that casts without being a child of the scene, the');
+  console.log('housing of the light itself, or a dark object rather than a shadow at all. Look at the frame:');
+  console.log('an object has an ink outline, a shadow does not.');
+} else {
+  const w = blamed[0];
   console.log(`\nthe caster is child #${w.i} — ${w.type} "${w.name || '(no name)'}" ${w.mat} at ${w.pos.join(', ')}`);
   console.log('move it out of the light, shrink it, or take it out of frame; the shadow goes with it.');
 }
