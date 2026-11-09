@@ -352,6 +352,16 @@ if r1_n:
                f"Dùng `edit`, hoặc `python3 tools/replace.py` khi đoạn cần thay quá dài.")
 if r10_n:
     out.append(f"R10 {r10_n} lần — montage ffmpeg tự viết: `core/render/sheet.py` xếp các khung lại và đặt tên từng khung.")
+# the cost of the session, in bytes. A transcript grows with every event, and a transcript that has grown
+# by hundreds of megabytes is a session that has stopped making and started looking: the number says so before
+# anyone reads the log.
+try:
+    SIZE = os.path.getsize(sys.argv[1])
+except OSError:
+    SIZE = 0
+if SIZE:
+    out.append(f"COST the transcript is {SIZE/1048576:.0f} MB — a session's cost is measurable in bytes, and a "
+               f"transcript that grows by hundreds of megabytes is a session looking, not making.")
 # R11: the same big file read again and again. The read is the cost: a 200 kB source file read to find one function
 # buys nothing, and a session that reads it fifteen times is paying for the same context over and over.
 for f, n in sorted(reread.items(), key=lambda kv: -kv[1]):

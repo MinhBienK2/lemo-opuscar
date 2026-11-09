@@ -144,6 +144,10 @@ jobs:
           test -L .claude/skills/tram-nghi-nhieu || { echo "::error::the Claude Code copy of the channel skill must be a symlink to the omp copy, so the two cannot drift"; exit 1; }
           test "$(readlink -f .claude/skills/tram-nghi-nhieu)" = "$(readlink -f .agents/skills/tram-nghi-nhieu)" || { echo "::error::the two copies of the channel skill point at different folders"; exit 1; }
           echo "the skill Claude Code loads and the skill omp loads are one skill"
+      - name: every check proves it can fail
+        run: |
+          sh tools/run_selftests.sh
+          echo "every checker proved itself on its own cases"
       - name: every pointer in a document points at something that exists
         run: |
           python3 tools/check_doc_links.py .
