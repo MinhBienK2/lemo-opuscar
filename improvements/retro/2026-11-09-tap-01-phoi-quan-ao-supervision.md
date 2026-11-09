@@ -896,6 +896,8 @@ từng dòng một, không phải để đọc lướt:
 | R11 (đếm số lần đọc lại) | `src/props.js` của tập 02 **không** bị đọc lại 15 lần trở lên | cùng cái tốn thời gian của tập 01 (N32) |
 | `src/MAP.md` | tồn tại sau bước 5 | tìm chỗ sửa bằng cách đọc lại cả tệp |
 | `ROUND:` trong bản chấm | mỗi bản chấm ghi đúng vòng của nó (`REVIEW-2.md` → `ROUND: 2/5`) | bản chấm tự khai số vòng, và khai sai (N34) |
+| `check_research.py` | `research/FACTS.md` của tập 02 **có** các mục và nguồn thật, cổng dàn ý chạy qua | file nghiên cứu còn là khuôn (N35) |
+| `check_treatment.py` | cổng dàn ý chạy qua với một dàn ý đã viết, kể cả khi dàn ý nhắc tới chỗ ở khuôn | cổng chặn nhầm một tập đã viết xong (N36) |
 
 Điều kiện để tập 02 được coi là **xác nhận**: cổng bàn giao thoát 0, và bảng trên không có dòng nào ở cột
 "Nếu không thấy".
@@ -961,6 +963,63 @@ nhưng nếu sau này có một bản chấm sinh ra ngoài `review.sh` thì nó
 
 ---
 
+## N35 — high — File nghiên cứu chưa ai viết, mà mọi cổng đều xanh
+
+**Bằng chứng.** `research/FACTS.md` của tập 02 (lúc tôi kiểm) là **nguyên khuôn của thư viện**, chưa sửa
+dòng nào: `<claim, in the words the film will use>`, `<Author>`, `<doi or link>`, `<value>`. Trong khi đó:
+
+- `tools/check_facts.py` → **PASS**. Đúng vậy: file rỗng thì không có dòng nào trùng nhau và không có
+  tham chiếu chéo nào sai. Bài kiểm tra trả lời "PASS" cho một file không có gì.
+- `tools/check_citations.py` → báo **2 dòng** mẫu, nhưng cổng dàn ý của kênh **không gọi** nó; nó chỉ hỏi
+  `research/FACTS.md` có tồn tại không.
+- Người chấm dàn ý đọc file đó để hỏi "mỗi ý của phim có nguồn không" — và đọc một file rỗng thì **không có
+  gì để phản đối**. Người chấm vẫn PASS.
+
+Nghĩa là: **nghiên cứu là nền của cả phim, và không có máy nào canh nó cho tới khi phim đã xong** — lúc đó
+cổng bàn giao mới báo, sau hàng giờ dựng. Đây là cùng loại lỗi với N30, ở một chỗ khác: một bài kiểm tra
+trả lời "không có vấn đề" cho một file không có gì.
+
+**Đã sửa.** `channels/tram-nghi-nhieu/tools/check_research.py`: file phải có nội dung, không còn dòng mẫu,
+phải có ít nhất **một claim** (tiêu đề đánh số `## 1. …`) và ít nhất **một nguồn** (dòng có năm cạnh tác
+giả, tạp chí hoặc định danh — đúng phép thử mà `check_citations.py` của thư viện dùng). Cổng dàn ý gọi nó
+**trước khi** tốn một vòng chấm, và nói rõ dòng nào còn dở. `--selftest` có bốn ca thật, trong đó có ca
+"chính khuôn phải fail".
+
+**Còn phải làm.** `core/render/new_episode.sh` vẫn viết khuôn có dấu `<…>` vào `research/FACTS.md`; một
+tập mới sẽ hỏng cổng dàn ý cho tới khi người làm viết lại file. Đó là đúng ý — nhưng khuôn nên ghi rõ
+"xoá mọi dòng trong ngoặc nhọn" để người làm không phải đoán.
+
+---
+
+## N36 — medium — Cổng nói sai, và nó nói sai với một tập đã viết xong
+
+**Bằng chứng.** Cổng dàn ý của kênh dừng bằng:
+
+    grep -q '<viết:' "$EP/TREATMENT.md" && die "TREATMENT.md still holds '<viết: …>' placeholders …"
+
+Tập 02 đã viết xong `TREATMENT.md` — nhưng dòng 2 của nó, nguyên văn dòng đầu của khuôn, là:
+
+    > Dàn ý của tập. … Thay mọi chỗ `<viết: …>`. Xoá các dòng hướng dẫn bắt đầu bằng `>` khi xong.
+
+Dòng đó **chỉ nhắc** chỗ cần điền, trong ngoặc ngược. Cổng đọc chuỗi `<viết:` và bảo "còn chỗ của khuôn
+chưa viết" — cho một tập không hề có chỗ nào. Tệ hơn: cổng bàn giao của thư viện (`core/render/filmcheck.mjs`)
+cũng săn đúng chuỗi đó, nên cùng một cái hiểu sai sẽ bắt phim lúc bàn giao.
+
+**Nghĩa là gì.** Một cổng nói sai làm hai điều: nó chặn nhầm một việc đã xong, và nó dạy người làm rằng cổng
+không đáng tin. Người làm sửa file vì cổng bảo, rồi cổng vẫn báo lỗi khác — đó là cách một phiên dài
+bắt đầu quay vòng với những lỗi không bao giờ hết.
+
+**Đã sửa.** Phân biệt **chỗ cần điền** với **lời nhắc**: một khoản trong ngoặc ngược là lời nhắc, một khoản
+ngoài ngoặc ngược là chỗ cần điền. `channels/tram-nghi-nhieu/tools/check_treatment.py` giữ luật đó (và
+`--selftest` có ca "một dòng bắt đầu bằng `>` là của chính tập, không phải lỗi" — tập 01 dùng dòng `>`
+để viết quyết định của phim, nên cổng **không** được gọi chúng là lỗi). `filmcheck.mjs` bỏ ngoặc ngược
+trước khi săn.
+
+**Còn phải làm.** `core/render/filmcheck.mjs` không có `--selftest`; luật "ngoặc ngược là lời nhắc" nên có
+một ca thật bên cạnh (một `FACTS.md` đã viết mà nhắc `<Author>` trong ngoặc ngược không bị chặn).
+
+---
+
 ## Đề xuất thứ tự xử lý
 
 | # | Việc | File cần sửa | Trạng thái |
@@ -1001,6 +1060,8 @@ nhưng nếu sau này có một bản chấm sinh ra ngoài `review.sh` thì nó
 | 34 | Đếm số lần đọc lại cùng một tệp lớn: 186 lần đọc ba tệp mã là phần lớn chi phí của phiên (N32) | `tools/supervise.sh`, `CODING_STANDARDS.md` R11 | **xong** (chưa có `src/MAP.md`) |
 | 35 | Hai thước đo "phim có chuyển động" đo hai thứ khác nhau; thêm số đo theo từng câu trước khi dựng (N33) | `channels/tram-nghi-nhieu/tools/beatsheet.mjs` | **xong** (chưa có mốc nhịp `xy` trong `events.json`) |
 | 36 | Số vòng trong bản chấm là của công cụ, không phải trí nhớ của người chấm (N34) | `channels/tram-nghi-nhieu/tools/review.sh` | **xong** |
+| 37 | File nghiên cứu phải được viết, không phải copy khuôn — cổng dàn ý canh trước khi tốn một vòng chấm (N35) | `channels/tram-nghi-nhieu/tools/check_research.py`, `tools/review.sh` | **xong** |
+| 38 | Lời nhắc trong ngoặc ngược không phải chỗ cần điền (N36) | `channels/tram-nghi-nhieu/tools/check_treatment.py`, `core/render/filmcheck.mjs` | **xong** |
 
 ### Mỗi phát hiện đã có dòng riêng trong `improvements/lessons.md`
 
