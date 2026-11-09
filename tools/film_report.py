@@ -69,8 +69,37 @@ def parse_srt(path):
     return cues
 
 
+def has_audio_stream(streams):
+    """does the file carry a sound track at all?
+
+    A file with no audio track is not a film that happens to be quiet — it is a film with no
+    sound. The two must never be reported the same way: "no silent stretch of 1.0 s or more"
+    read on a file that has no sound at all is a false pass, and the loudness line "not
+    measured" hides the reason.
+    """
+    return any(s.get('codec_type') == 'audio' for s in streams or [])
+
+
+def selftest():
+    cases = [
+        ('có tiếng', has_audio_stream([{'codec_type': 'video'}, {'codec_type': 'audio'}]), True),
+        ('chỉ có hình', has_audio_stream([{'codec_type': 'video'}]), False),
+        ('không có luồng nào', has_audio_stream([]), False),
+    ]
+    fails = 0
+    for name, got, want in cases:
+        ok = got == want
+        print('%-4s %s' % ('ok' if ok else 'FAIL', name))
+        if not ok:
+            fails += 1
+    print('\n%d ca đều đúng' % len(cases) if not fails else '\n%d ca hỏng' % fails)
+    return 1 if fails else 0
+
+
 def main():
     argv = sys.argv[1:]
+    if '--selftest' in argv:
+        return selftest()
     opts, rest = {}, []
     i = 0
     while i < len(argv):
@@ -116,26 +145,32 @@ def main():
         if s.get('codec_type') == 'video':
             print(f"   {s.get('width')}x{s.get('height')}  {s.get('r_frame_rate')} fps")
     print(f"   {dur:.1f} s ({int(dur // 60)}:{dur % 60:04.1f})")
+    has_audio = has_audio_stream(streams)
+    if not has_audio:
+        print("   NO SOUND: the file has no audio track at all")
 
     # loudness
-    lr = run(['ffmpeg', '-hide_banner', '-nostats', '-i', mp4, '-af', 'ebur128=peak=true', '-f', 'null', '-'])
-    log = lr.stderr
-    I = re.findall(r'^\s+I:\s*(-?[\d.]+) LUFS', log, re.M)
-    LRA = re.findall(r'^\s+LRA:\s*(-?[\d.]+) LU', log, re.M)
-    PK = re.findall(r'^\s+Peak:\s*(-?[\d.]+) dBFS', log, re.M)
     print("== the loudness")
-    if I:
-        i = float(I[-1])
-        print(f"   integrated {i:.1f} LUFS" + (f"  ·  range {LRA[-1]} LU" if LRA else '') +
-              (f"  ·  true peak {PK[-1]} dBFS" if PK else ''))
-        verdict = []
-        if not (-20 <= i <= -11):
-            verdict.append(f"integrated loudness {i:.1f} LUFS is outside −20…−11 (target −14)")
-        if PK and float(PK[-1]) > -1.0:
-            verdict.append(f"true peak {PK[-1]} dBFS is above −1.0 dBFS")
-        print("   " + ("; ".join(verdict) if verdict else "within the target"))
+    if not has_audio:
+        print("   not measured: the file has no audio track")
     else:
-        print("   not measured")
+        lr = run(['ffmpeg', '-hide_banner', '-nostats', '-i', mp4, '-af', 'ebur128=peak=true', '-f', 'null', '-'])
+        log = lr.stderr
+        I = re.findall(r'^\s+I:\s*(-?[\d.]+) LUFS', log, re.M)
+        LRA = re.findall(r'^\s+LRA:\s*(-?[\d.]+) LU', log, re.M)
+        PK = re.findall(r'^\s+Peak:\s*(-?[\d.]+) dBFS', log, re.M)
+        if I:
+            i = float(I[-1])
+            print(f"   integrated {i:.1f} LUFS" + (f"  ·  range {LRA[-1]} LU" if LRA else '') +
+                  (f"  ·  true peak {PK[-1]} dBFS" if PK else ''))
+            verdict = []
+            if not (-20 <= i <= -11):
+                verdict.append(f"integrated loudness {i:.1f} LUFS is outside −20…−11 (target −14)")
+            if PK and float(PK[-1]) > -1.0:
+                verdict.append(f"true peak {PK[-1]} dBFS is above −1.0 dBFS")
+            print("   " + ("; ".join(verdict) if verdict else "within the target"))
+        else:
+            print("   not measured: ffmpeg read the track but reported no loudness")
 
     # black stretches
     br = run(['ffmpeg', '-hide_banner', '-nostats', '-i', mp4, '-vf', 'blackdetect=d=0.5', '-f', 'null', '-'])
@@ -144,10 +179,13 @@ def main():
     print("   " + (", ".join(f"{a}s–{b}s" for a, b in blacks) if blacks else "no black stretch of 0.5 s or more"))
 
     # silence
-    sr = run(['ffmpeg', '-hide_banner', '-nostats', '-i', mp4, '-af', 'silencedetect=noise=-45dB:d=1.0', '-f', 'null', '-'])
-    sil = re.findall(r'silence_start: (-?[\d.]+) \| silence_end: (-?[\d.]+)', sr.stderr)
     print("== the silence")
-    print("   " + (", ".join(f"{a}s–{b}s" for a, b in sil) if sil else "no silent stretch of 1.0 s or more"))
+    if not has_audio:
+        print("   the file has no audio track — this is not a film whose voice stops, it is a film with no sound")
+    else:
+        sr = run(['ffmpeg', '-hide_banner', '-nostats', '-i', mp4, '-af', 'silencedetect=noise=-45dB:d=1.0', '-f', 'null', '-'])
+        sil = re.findall(r'silence_start: (-?[\d.]+) \| silence_end: (-?[\d.]+)', sr.stderr)
+        print("   " + (", ".join(f"{a}s–{b}s" for a, b in sil) if sil else "no silent stretch of 1.0 s or more"))
 
     # subtitles
     srt = srt_files(folder)
@@ -191,6 +229,9 @@ def main():
             print(f"== the frames\n   {len(frames)} frames every {every:g}s → {sheet}  {r.stdout.strip()}")
         else:
             print("== the frames\n   no frame could be extracted")
+    if not has_audio:
+        print("== the verdict\n   the film has no audio track")
+        return 1
     return 0
 
 

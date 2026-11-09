@@ -1371,6 +1371,8 @@ những dòng dán câu cũ:
 | 76 | c42 | *"chỗ nóng nhất không nằm ở bo mạch"* | c42: *"Ngoài hai chỗ ấy, còn một chỗ nữa…"* |
 | 84 | c50 | *"chỗ nóng nhất trong cả cái máy"*, nhãn `CHỖ NÓNG NHẤT` | c50: *"Giờ gom lại: mạch sạc, cục pin, và con chip."* |
 | 85 | Bài kiểm tra liên kết tự báo lỗi ở chỗ không phải nguyên nhân: một khối code fence có dấu nháy lẻ làm `check_doc_links.py` ghép lệch mọi đoạn code **cả tệp**, nên lỗi báo ra ở cuối tài liệu, cách nguyên nhân hàng nghìn ký tự — người đọc sửa nhầm chỗ báo lỗi, rồi tắt luôn bài kiểm tra | medium | `check_doc_links.py` bỏ fence trước, rồi ghép đoạn code theo từng đoạn văn thay vì theo cả tệp; selftest có ca cho việc này |
+| 86 | Báo cáo đo nói "không có khoảng lặng" cho một tệp **không có tiếng nào**: `film_report.py` chạy trên bản dựng hình chưa ghép tiếng in ra "not measured" và "no silent stretch of 1.0 s or more" — đúng theo nghĩa đen, sai theo nghĩa đúng, và người đọc sẽ tưởng phim ổn | medium | `film_report.py` hỏi trước có luồng tiếng không: không có thì in `NO SOUND`, nói rõ ở phần khoảng lặng rằng đây là phim không có tiếng chứ không phải lời kể bị ngắt, và trả mã 1; selftest có ba ca |
+| 87 | Tờ sheet không phải là phim: đọc tờ sáu mươi ô (~480 px) rồi kết luận cho ba nhận định sai (c32 "tường tối, chỉ có vai áo" trong khi trên phim là một cái áo trắng lớn giữa khung; c7 "hai áo giống nhau" trong khi áo trái nhạt áo phải sẫm; nhãn "3 CÁI" thực ra là `3 ÁO`) — ô nhỏ làm mất đúng thứ phim dạy, tức tương phản sáng/tối và kích thước vật | medium | `tools/frames_at.py` (mới) cắt một khung cho mỗi câu **từ chính mp4**, đúng giữa câu lời kể, rồi dán bằng `core/render/sheet.py`; có `--cols`/`--w` để soi một câu ở kích thước đọc được; R12 trong `CODING_STANDARDS.md` nói rõ tờ sheet là bản đồ để tìm câu, phim mới là bằng chứng |
 Dàn ý trông vẫn đầy đặn, vẫn đúng về hình — nó chỉ nói về **những câu mà phim không còn nói**. Đây là
 cùng một lớp lỗi với N43, ở tầng khác: N43 là dàn ý (`TREATMENT.md`) bị bỏ lại; đây là **bản dàn ý
 hình** (`LOOK.md`) bị bỏ lại. Cả hai đều là tài liệu mô tả phim, và cả hai đều im lặng.
@@ -2396,6 +2398,42 @@ nhất — cùng một số đo, đúng nghĩa hơn.
 
 ---
 
+### Đo lại trên chính phim (11:43 → 12:05)
+
+Tờ sheet là ảnh **dựng riêng**; người xem sẽ xem mp4. Nên tôi cắt lại từng câu **trên chính phim**
+(`tools/frames_at.py` — cắt đúng giữa câu lời kể, dán lại bằng `core/render/sheet.py`) và đọc lại.
+
+**Những chỗ đã được sửa, nay có trong phim:**
+
+| Câu | Nhìn thấy được trên phim |
+|---|---|
+| c1 | Áo có mép dưới **sẫm hơn**, có giọt rơi xuống, chậu dưới chân, nhãn `QUẦN ÁO ƯỚT` — "ướt" đọc được. |
+| c7 | Hai cái áo: bên trái **nhạt**, bên phải **sẫm** — đúng câu "cái trước quạt nhạt màu dần, còn cái kia vẫn sẫm". |
+| c8 | Cảnh trong ruột sợi: sợi vải và một giọt nước. |
+| c13 | Phân tử nước đỏ to, nước ở trên nền vải — "muốn rời khỏi vải, nước phải đổi thành hơi nước" đọc được. |
+| c17 | Nhãn `PHÂN TỬ BAY LÊN`, một hạt sáng với vệt hơi bay lên. |
+| c38 | Nhiệt kế, đồng hồ độ ẩm (70 %), tấm vải phơi — "ba thứ quyết định tốc độ" có mặt trong khung. |
+| c40 | Ba cái áo chồng lên nhau, nhãn `3 ÁO`. |
+| c49 | Hai cái áo, nhãn `ÁO ÚP` (sẫm) và `PHƠI RỘNG` (nhạt) — sự khác đọc được. |
+
+**Còn yếu, xét trên phim.** **c29** ("Gió không sấy nước") — cái quạt chiếm gần hết khung, cái áo ướt
+nằm trong góc trên bên phải và rất nhỏ: câu kể và hình không nối được. **c54** ("quạt thổi tay lại thấy
+mát") — khung tối, bàn tay không đọc ra.
+
+**Một bài học về chính cách tôi đọc.** Tôi đọc tờ sheet sáu mươi ô (~480 px một ô) rồi kết luận, và
+kết luận sai hai lần: **c32** tôi đọc là "tường tối, chỉ có vai áo" trong khi trên phim đó là **một
+cái áo trắng lớn ở giữa khung**, có quạt, có đồng hồ; **c7** tôi đọc là "hai áo giống nhau" trong khi
+thực tế áo bên trái nhạt, áo bên phải sẫm. Một lần nữa trước đó: nhãn "3 CÁI" tưởng sai, hoá ra là
+`3 ÁO`. Ô nhỏ làm mất đúng thứ phim dạy — tương phản sáng/tối, kích thước vật. Nên: **tờ sheet để
+tìm câu cần xem, phim mới là bằng chứng** (N87).
+
+**Và một cái bẫy khi đo.** Tôi chạy `tools/film_report.py` trên `out/video.mp4` — đó là bản **dựng
+hình, chưa ghép tiếng** — và báo cáo in ra "không có khoảng lặng từ 1,0 s trở lên" cho một tệp không
+có tiếng nào, và "độ lớn tiếng — không đo được". Cả hai câu đúng theo nghĩa đen, sai theo nghĩa đúng:
+người đọc sẽ tưởng phim có tiếng và chỉ bị ngắt lời (N86).
+
+---
+
 ## N79 — medium — Bảng trạng thái nói "chưa có PASS" về một tập đã có tem của cả chương
 
 **Bằng chứng.** Tập 03 có `src/chapters.js` (một chương, id `tap-03`) và tem `review/SCRIPT-tap-03.pass`.
@@ -2598,6 +2636,69 @@ văn bên sau nó.
 **Luật chung rút ra:** một bài kiểm tra phải chỉ ra **nguyên nhân**, không phải chỗ hậu quả. Và thứ
 tự các bước của nó cũng là một phần của câu chuyện: bỏ fence trước khi ghép backtick, hay ghép
 trước khi bỏ, cho hai kết quả khác hẳn nhau.
+
+---
+
+## N86 — medium — Báo cáo đo nói "không có khoảng lặng" cho một tệp không có tiếng nào
+
+**Bằng chứng.** `tools/film_report.py` chạy trên `out/video.mp4` của tập 01 (bản dựng hình, **chưa
+ghép tiếng**) in ra:
+
+```
+== the loudness
+   not measured
+== the silence
+   no silent stretch of 1.0 s or more
+```
+
+Cả hai câu đúng theo nghĩa đen và sai theo nghĩa đúng. Tệp không có **luồng tiếng nào**; "không có
+khoảng lặng" nghe như phim đã có tiếng và chỉ lời kể bị ngắt quãng. Người đọc báo cáo sẽ kết luận
+phim ổn. Còn "not measured" thì không nói lý do, và lý do là thứ duy nhất quan trọng.
+
+**Đã sửa.** `film_report.py` giờ hỏi trước: tệp có luồng tiếng không?
+
+- không có → in `NO SOUND: the file has no audio track at all` ngay dưới phần thông tin tệp;
+- phần độ lớn tiếng: `not measured: the file has no audio track`;
+- phần khoảng lặng: `the file has no audio track — this is not a film whose voice stops, it is a film
+  with no sound`;
+- trả về mã thoát 1, kèm dòng `== the verdict`.
+
+Selftest mới có ba ca (`có tiếng` / `chỉ có hình` / `không có luồng nào`).
+
+**Luật chung rút ra:** **"không đo được" và "đo được là 0" là hai kết quả khác nhau.** Với một tệp
+có tiếng, "không có khoảng lặng" là tin tốt. Với một tệp không có tiếng, cùng câu đó là tin xấu
+nặng nhất. Công cụ phải nói rõ nó đang ở trường hợp nào, không được để người đọc tự suy.
+
+---
+
+## N87 — medium — Tờ sheet không phải là phim: đọc tờ ở ô nhỏ sinh ra nhận định sai
+
+**Bằng chứng.** Phần bốn của retro này đánh giá phim tập 01 trên tờ sheet sáu mươi ô — ảnh **dựng
+riêng** bằng `beatsheet.mjs`, mỗi ô khoảng 480 px. Khi có mp4, tôi cắt lại từng câu **trên chính
+phim** và so:
+
+| Câu | Tôi đọc trên tờ sheet | Thực tế trên phim |
+|---|---|---|
+| c32 | "tường tối, chỉ có một vai áo, khung gần như trống" | **một cái áo trắng lớn ở giữa khung**, có quạt, có đồng hồ, có dây phơi |
+| c7 | "hai cái áo giống nhau, không thấy khác biệt" | áo bên trái **nhạt**, áo bên phải **sẫm** — đúng câu kể |
+| c40 | (lần trước) nhãn "3 CÁI" gọi tên vật không có trong hình | nhãn là `3 ÁO`, và câu nói đúng |
+
+Ba nhận định sai trong một buổi đọc. Không phải lỗi may mắn: **ô nhỏ làm mất đúng thứ phim dạy** —
+tương phản sáng/tối, kích thước vật, và sự hiện diện của vật. Ba lần sai ấy đủ để gửi cả phim đi
+sửa ba câu không có lỗi, và đủ để làm người đọc tin rằng câu đó hỏng.
+
+**Đã sửa.**
+
+1. `tools/frames_at.py` (mới) — cắt một khung cho mỗi câu **từ chính mp4 đã dựng**, đúng giữa câu
+   lời kể, rồi dán lại bằng `core/render/sheet.py` của thư viện. Có `--lines c1,c13-c18` và `--at`.
+   Đây là hình người xem thật sự sẽ thấy, không phải ảnh dựng riêng.
+2. `frames_at.py` nhận `--cols` và `--w`: mặc định ba cột để lướt qua, hai cột 780 px để **soi** một
+   câu — vì đó là kích thước mà tương phản sáng/tối còn đọc được.
+3. R12 trong `CODING_STANDARDS.md` nói rõ hơn: tờ sheet là **bản đồ** để tìm câu cần xem; câu trả
+   lời phải đến từ phim, ở kích thước đọc được.
+
+**Luật chung rút ra:** **đánh giá phim thì phải xem phim.** Một bằng chứng hình ảnh nhỏ đến mức mất
+chi tiết thì không phải bằng chứng, chỉ là một câu hỏi.
 
 ---
 

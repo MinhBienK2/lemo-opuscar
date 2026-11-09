@@ -7,9 +7,15 @@ mp4**: mỗi khung cắt đúng giữa câu lời kể, rồi dán lại thành 
 
 Dùng:
   python3 tools/frames_at.py <mp4> <beats.json> <out.jpg> [--lines c1,c13-c18] [--at .6]
+                                 [--cols 3] [--w 780]
 
 `beats.json` là của `beatsheet.mjs` (nó có `t0`/`t1` của từng câu). Không có `--lines` thì lấy
 tất cả. Ảnh được dán bằng công cụ của thư viện (`core/render/sheet.py`), không tự vẽ.
+
+**Kích thước ô là một phần của câu hỏi.** Mặc định ba cột (mỗi ô ~480 px) là để *lướt qua*: xem
+phim có ổn không, câu nào cần xem kỹ. Để *soi* một câu, dùng `--cols 2 --w 780` — ở ô nhỏ, tương
+phản sáng/tối và kích thước vật mất đi, và đó đúng là những thứ phim dạy (một cái áo nhạt, một cái
+áo sẫm: sự khác đó *là* câu kể).
 """
 import json
 import os
@@ -47,7 +53,7 @@ def _num(s):
     return int(s[1:]) if s.startswith('c') else int(s)
 
 
-def take(mp4, beats, out, lines='', at=0.6):
+def take(mp4, beats, out, lines='', at=0.6, cols=3, w=None):
     picks = parse_lines(lines, beats) if lines else [b for b in beats if b.get('t0') is not None]
     tmp = []
     try:
@@ -60,7 +66,10 @@ def take(mp4, beats, out, lines='', at=0.6):
             tmp.append(f)
         if not tmp:
             return None
-        subprocess.run([sys.executable, SHEET, out] + tmp + ['--cols', '3'], check=True)
+        cmd = [sys.executable, SHEET, out] + tmp + ['--cols', str(cols)]
+        if w:
+            cmd += ['--w', str(w)]
+        subprocess.run(cmd, check=True)
         return out
     finally:
         for f in tmp:
@@ -71,7 +80,7 @@ def take(mp4, beats, out, lines='', at=0.6):
 
 
 def selftest():
-    """the line picking is the part that can be wrong silently"""
+    """the line picking is the part that can go wrong silently"""
     beats = [{'n': 1, 'id': 'c1', 't0': 1.0, 't1': 3.0}, {'n': 2, 'id': 'c2', 't0': 3.0, 't1': 5.0},
              {'n': 13, 'id': 'c13', 't0': 20.0, 't1': 22.0}, {'n': 14, 'id': 'c14', 't0': 22.0, 't1': 24.0},
              {'n': 15, 'id': 'c15', 't0': 24.0, 't1': 26.0}, {'n': 20, 'id': 'c20', 't0': 30.0, 't1': 32.0}]
@@ -100,14 +109,18 @@ def main(argv):
         print(__doc__)
         return 2
     mp4, beats_path, out = argv[1], argv[2], argv[3]
-    lines, at = '', 0.6
+    lines, at, cols, w = '', 0.6, 3, None
     if '--lines' in argv:
         lines = argv[argv.index('--lines') + 1]
     if '--at' in argv:
         at = float(argv[argv.index('--at') + 1])
+    if '--cols' in argv:
+        cols = int(argv[argv.index('--cols') + 1])
+    if '--w' in argv:
+        w = int(argv[argv.index('--w') + 1])
     with open(beats_path, encoding='utf-8') as fh:
         beats = json.load(fh)
-    if not take(mp4, beats, out, lines, at):
+    if not take(mp4, beats, out, lines, at, cols, w):
         print('frames_at: không lấy được khung nào')
         return 1
     return 0
