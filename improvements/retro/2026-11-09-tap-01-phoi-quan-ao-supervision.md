@@ -4166,8 +4166,11 @@ mất cả giờ.
 **Nhưng cái giá của việc từ chối phải nói được.** Vòng bị từ chối ra mã `2` — cùng mã với một vòng
 chết — và dấu vết của nó ghi: *"vòng chấm chết (exit 2) … đọc log của job nền rồi chạy lại"*. Người làm
 đọc vậy sẽ đi tìm một log của một vòng **chưa bao giờ chạy** — và tệ hơn, người làm sẽ tưởng vòng
-đó chết vì lỗi của tập. Tap-04 gặp đúng việc đó lúc 17:42 (vòng storyboard không mở vì máy hết chỗ),
-trong khi chính lúc đó máy đang dựng ảnh vật cho ba tập khác.
+đó chết vì lỗi của tập. Tap-04 gặp đúng việc đó lúc 17:42 — nhưng **nguyên nhân thật thì khác hẳn**:
+vòng storyboard của nó **đã mở và đã trả lời** (VERDICT: REJECT, 17 416 byte, md5 `92ecbcc7d16a0e9ec74a74ecda8d8958`),
+nhưng `timeout` giết tiến trình lúc 17:42:25 vì một workflow nền của chính người chấm còn chạy sau câu trả lời,
+rồi bẫy `EXIT` xoá thư mục làm việc và mang bản chấm đi. Người làm vì thế đi tìm log của một vòng *chưa bao giờ chạy*,
+và tưởng vòng đó chết vì máy hết chỗ. (Bằng chứng, và cách dựng lại bản chấm: xem N140.)
 
 Nay việc từ chối có mã riêng: **exit 3** — *vòng không mở*, không phải *vòng chết*. Dấu vết ghi rõ
 ("vòng chấm không mở (exit 3) … máy hết chỗ để mở vòng chấm, đây không phải chết: đợi việc đang chạy
@@ -4396,4 +4399,74 @@ một giờ. So với phiên tap-05 cùng kênh (R1 2×, một vòng chờ 30 ph
 **Bài học về cách đo.** `tools/rules.py` đếm **lệnh**, không đếm **lệnh bị chặn** — nên báo cáo của nó vẫn ghi
 "R1 2 lần" dù cả hai đều bị hook chặn. Đọc báo cáo mà không đọc transcript thì tưởng phiên vẫn phạm luật. Đo
 đúng là: `rules.py` + hai lần thông báo từ chối trong transcript.
+
+## N140 — high — Người chấm **đã trả lời xong**, đồng hồ giết tiến trình, và bẫy `EXIT` xoá mất bản chấm
+
+**BẰNG CHỨNG.** Vòng storyboard của tap-04 lúc 17:42 ngày 09-11. Transcript của người chấm còn nguyên
+(`~/.claude/projects/-tmp-lemo-review-qrOjRn/72c33090-5496-4257-ad60-27dc31031b96.jsonl` — thư mục làm việc có
+dấu gạch chéo nên CLI đổi tên thành dấu gạch ngang, và nó **không** nằm trong thư mục làm việc mà bẫy xoá):
+
+- 16:54:39Z → 17:14Z: người chấm viết `STORYBOARD-REVIEW.md` — 16 lần Edit, cộng **2 lần ghi bằng shell heredoc**
+  (`python3 - <<EOF`: lúc 09:57:45 để đánh số lại `9.→10.`, `10.→11.`, `11.→12.`, và lúc 10:15:23 để sửa ba chỗ bằng `.replace()`).
+- 17:37–17:39Z: nó in md5 của **chính bản chấm của nó**: `92ecbcc7d16a0e9ec74a74ecda8d8958`.
+- 17:39:58Z: câu trả lời cuối của nó chứa `VERDICT: REJECT` và câu *"The review is done."*
+- Nhưng tiến trình vẫn sống: nó để một **workflow** nền chạy (`wf_44da1fb0-906`: 45 tác vụ bắt đầu, 35 xong, **10 chưa xong**).
+- 17:42:25,547Z: `timeout` giết nó — đúng **3600,008 s**, tức là đúng giờ của vòng storyboard.
+- Bẫy `EXIT` của `review.sh` tìm phán quyết **chỉ trong `$EP/review/`**, mà bản chấm lúc đó còn nằm trong thư mục làm
+  việc `$W` (dòng chép sang `review/` chạy *sau* khi `critic()` trả về, nên không bao giờ tới). Bẫy ghi *"vòng chấm chết —
+  không có phán quyết"* rồi `rm -rf "$W"`: **bản chấm 17 416 byte bị xoá.**
+
+Dấu vết nói ngược với sự thật: `.died` ghi *"không có phán quyết"*, trong khi bản chấm có `VERDICT: REJECT` và người
+chấm còn in md5 của chính nó ra.
+
+**HAI LỜI GIẢI THÍCH, CẢ HAI ĐỀU SAI.**
+1. *"Vòng storyboard chưa được co giãn đồng hồ nên chết đúng 3600 s"* — đúng về con số, sai về nguyên nhân: người
+   chấm **đã xong** lúc 17:39:58, hai phút trước lúc bị giết. Xem N141 cho lỗ hổng đồng hồ thật sự của vòng này.
+2. *"Vòng không mở vì máy hết chỗ"* — không thể: cơ chế từ chối (exit 3) sinh ra **sau**, lúc 17:58; và vòng đã mở,
+   đã chạy 45 phút, đã có người chấm ngồi đó.
+
+**CƠ CHẾ (ba tầng).**
+1. `channels/tram-nghi-nhieu/tools/recover_review.py` (mới): dựng lại bản chấm đã bị xoá từ transcript của CLI — kể cả
+   các lần ghi bằng shell heredoc — rồi **đối chiếu md5 với chính md5 người chấm đã in**. Chạy cho tap-04: dựng lại
+   17 416 byte, md5 `92ecbcc7d16a0e9ec74a74ecda8d8958` — **đúng byte nào**. Nó cũng tự tìm transcript (theo các dòng
+   dài của `TREATMENT.md` của tập) và **từ chối** khi không chắc, thay vì đoán.
+2. `review.sh`: (a) đồng hồ hết hạn mà câu trả lời **đã in dòng VERDICT** ⇒ vòng đó **đã trả lời**: giữ bản chấm và
+   đi tiếp, thay vì `exit 2`; (b) bẫy `EXIT` **không xoá** thư mục làm việc khi trong đó còn câu trả lời đã in, và dấu
+   vết nói rõ nó nằm ở đâu.
+3. Lời dặn chung cho mọi vòng (thêm vào "Bối cảnh vòng chấm" của `critic()`): *trả lời xong thì dừng — đừng để một
+   workflow, một lệnh chạy dài hay một subagent nào còn chạy sau câu trả lời của bạn*, vì đồng hồ của vòng chấm đo cả
+   thời gian tiến trình còn sống.
+
+**VỀ VIỆC SỬA `review.sh` KHI CÓ VÒNG ĐANG CHẠY (N124).** Thí nghiệm đo lại — và phải **khôi phục tệp gốc trước mỗi
+lần chạy**, nếu không thì lần chạy sau đọc nhầm tệp đã đổi và báo sai (tôi đã báo sai một lần rồi): với `os.replace`
+(nguyên tử) thì `sh`, `bash` và `dash` đều đọc **inode cũ** (thử với tệp 256 byte và 62 746 byte, cùng kết luận); chỉ
+khi ghi **tại chỗ** (giữ nguyên inode) thì shell mới có thể đọc nội dung mới. Ba vòng đang chạy lúc sửa (tap-06
+`--outline`, tap-02 `--props`, tap-05 `--storyboard`) đều giữ một inode **đã bị xoá** (`/proc/<pid>/fd/10 ->
+review.sh (deleted)`) — tức là chúng chạy trên bản cũ và sửa này không chạm tới chúng; các vòng mở **từ sau** mới dùng
+bản mới. Vì vậy `recover_review.py` vẫn là lưới an toàn cho ba vòng đang chạy — đặc biệt tap-05 `--storyboard`, đúng
+vòng có nguy cơ gặp lại đúng tai nạn này.
+
+**CÒN LẠI.** Không có cách nào chắc chắn biết một tiến trình CLI còn sống vì lý do gì khi đồng hồ giết nó — `timeout`
+chỉ báo mã 124, không báo lý do. Cơ chế duy nhất là **giữ lại transcript** (CLI đã giữ sẵn trong
+`~/.claude/projects/`) và dựng lại. Không có gì chặn được việc một người chấm tự bỏ mình sau câu trả lời — chỉ có
+lời dặn (tầng 3) và lưới an toàn (tầng 1–2).
+
+## N141 — medium — Vòng storyboard có đồng hồ phẳng, dù nó phải mở **mọi** khung hình chính
+
+**BẰNG CHỨNG.** `review.sh` co giãn đồng hồ cho vòng vật dựng (`3600 + 180·N` theo số vật) và cho vòng hình/cuối
+(`scale_clock` = `3600 + 120·số câu`). Vòng **storyboard** — vòng mở **mọi** ảnh `review/hero/*.jpg` và soi từng ảnh —
+không có: nó giữ nguyên `3600` phẳng. Số ảnh hero thật: tap-02 **35**, tap-03 16, tap-01 6, tap-04 5. Một vòng phải
+mở 35 khung hình chính với đồng hồ ngang với một vòng đọc ba tệp văn bản là đồng hồ không vừa việc.
+
+**CẦN CẨN THẬN.** Đồng hồ phẳng này **không phải** nguyên nhân của tai nạn 17:42 (xem N140: người chấm đó đã xong
+trước khi bị giết). Nhưng nó là lỗ hổng thật, cùng hình dạng với N118 và N131, và nó để lại một đường chết thứ hai
+cho cùng một tập.
+
+**CƠ CHẾ.** `review.sh` đếm ảnh hero của vòng storyboard và co giãn đồng hồ theo chúng (`3600 + 120·N` ảnh), đúng
+như vòng vật dựng và vòng hình; `CRITIC_TIMEOUT` đặt tay vẫn thắng. Vòng tap-05 `--storyboard` đang chạy lúc sửa
+dùng bản cũ (đồng hồ phẳng) — nếu nó chết theo kiểu 17:42 thì `recover_review.py` dựng lại được.
+
+**CÒN LẠI.** Với một vòng đã **mở** rồi, việc co giãn đồng hồ không cứu được vòng đó — nó chỉ có tác dụng với các
+vòng mở **từ sau**. Ba vòng đang chạy lúc sửa dùng bản cũ, và không có cách nào đổi đồng hồ của một tiến trình đã
+chạy mà không giết nó.
 

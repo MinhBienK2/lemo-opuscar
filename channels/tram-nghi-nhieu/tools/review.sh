@@ -38,6 +38,8 @@ set -e
 # ("**VERDICT: PASS**"), with or without a heading mark in front — and a report whose verdict the tool
 # cannot read is a round thrown away, not a verdict about the film.
 VPASS='^#*[[:space:]]*[*_]{0,2}VERDICT: *[*_]{0,2} *PASS'
+# Any verdict, not only PASS: a round that answered REJECT is an answer too.
+VVERD='VERDICT: *[*_]{0,2} *(PASS|REJECT|FAIL|ACCEPTED_FOR_PUBLISH|REJECTED)'
 HERE=$(cd "$(dirname "$0")" && pwd)
 CHANNEL=$(cd "$HERE" && while [ ! -f "CHANNEL.md" ] && [ "$PWD" != "/" ]; do cd ..; done; pwd)
 LIB=$(cd "$HERE" && while [ ! -f "AGENTS.md" ] && [ "$PWD" != "/" ]; do cd ..; done; pwd)
@@ -161,7 +163,7 @@ critic() {   # $1 = the prompt; $2 = "no-verdict" when the reviewer answers with
   # harness, found another episode's review folder, and the round died of it (tap-05, 15:30).
   PROMPT="$1
 ---
-Bối cảnh vòng chấm: ${ROUND_LABEL:-vòng chấm này}. Bạn làm việc trong thư mục $PWD, và mọi thứ bạn cần đều nằm ở đây. Nếu thư mục này không có PREVIOUS.md thì đây là lần chấm đầu của phần này — đừng đi tìm bản chấm cũ ở nơi khác. Đừng đi tìm tệp khác trên máy này (find /, thư mục /tmp khác, thư mục của tập khác): bên ngoài đây không có gì thuộc về vòng chấm này, và bản chấm của tập khác không phải của tập này."
+Bối cảnh vòng chấm: ${ROUND_LABEL:-vòng chấm này}. Bạn làm việc trong thư mục $PWD, và mọi thứ bạn cần đều nằm ở đây. Nếu thư mục này không có PREVIOUS.md thì đây là lần chấm đầu của phần này — đừng đi tìm bản chấm cũ ở nơi khác. Đừng đi tìm tệp khác trên máy này (find /, thư mục /tmp khác, thư mục của tập khác): bên ngoài đây không có gì thuộc về vòng chấm này, và bản chấm của tập khác không phải của tập này. Trả lời xong thì dừng: đừng để một việc nền nào (một workflow, một lệnh chạy dài, một subagent) còn chạy sau câu trả lời của bạn — nếu bạn dùng subagent để soi chéo thì hãy chờ chúng xong rồi mới viết bản chấm, vì đồng hồ của vòng chấm đo cả thời gian bạn còn sống."
   # The reviewer gets a wall clock. A reviewer that hangs is a round that never ends, and the round limit is
   # eaten by a round that never happened. A killed reviewer is not a verdict about the film: exit 2 says so.
   # The reviewer runs with its permission checks OFF. It works in a folder of its own outside the repository and
@@ -210,6 +212,14 @@ Bối cảnh vòng chấm: ${ROUND_LABEL:-vòng chấm này}. Bạn làm việc 
     exit 2
   fi
   if [ "$rc" -eq 124 ]; then
+    # The clock running out does not un-answer an answer that exists. The critic prints its answer at the end, and
+    # something it left running in the background (a workflow of its own) can keep the process alive long after
+    # the answer — then `timeout` kills it, and the round dies with the finished report still in the working
+    # folder (tap-04, 17:42). A printed VERDICT IS an answer: read it, keep it, and let the round go on.
+    if grep -qiE "$VVERD" out.txt 2>/dev/null; then
+      echo "review: the clock ran out (${CRITIC_TIMEOUT}s) but the critic DID answer — a VERDICT line is in its answer. The report is kept; this round counts as answered." >&2
+      return 0
+    fi
     echo "review: người chấm không trả lời trong ${CRITIC_TIMEOUT}s — đây không phải phán quyết về phim. Đọc lý do (out.txt), sửa nguyên nhân rồi chạy lại; CRITIC_TIMEOUT=<giây> nâng đồng hồ." >&2
     exit 2
   fi
@@ -405,13 +415,24 @@ trap 'rc=$?; cd /;
     V=$(find "$EP/review" -maxdepth 1 -name "*.md" -newer "$RUNNING" 2>/dev/null | head -1)
     if [ -n "$V" ] && grep -qiE "VERDICT:" "$V" 2>/dev/null; then
       printf "vòng chấm có phán quyết (exit %s) lúc %s — không phải chết: đọc %s, sửa theo nó, rồi chạy vòng kế tiếp\n" "$rc" "$(date "+%H:%M:%S")" "${V##*/}" > "$DIED"
+    elif grep -qiE "$VVERD" "$W/out.txt" 2>/dev/null; then
+      # The critic DID answer (a VERDICT line is in its own answer) and the round died afterwards, before the
+      # report could be copied into review/. Deleting the working folder then deletes the evidence: keep it and
+      # say where it is.
+      printf "vòng chấm chết (exit %s) lúc %s — nhưng người chấm ĐÃ trả lời (VERDICT trong out.txt) và bản chấm chưa kịp chép ra review/: nó ở %s. Đọc nó (tools/recover_review.py dựng lại từ transcript nếu cần), rồi chạy lại.\n" "$rc" "$(date "+%H:%M:%S")" "$W" > "$DIED"
     elif [ "$rc" -eq 3 ]; then
       printf "vòng chấm không mở (exit 3) lúc %s — máy hết chỗ để mở vòng chấm, đây không phải chết: đợi việc đang chạy xong rồi chạy lại\n" "$(date "+%H:%M:%S")" > "$DIED"
     else
       printf "vòng chấm chết (exit %s) lúc %s — không có phán quyết: đọc log của job nền rồi chạy lại\n" "$rc" "$(date "+%H:%M:%S")" > "$DIED"
     fi
   fi
-  rm -rf "$W" "$LOCK"; rm -f "$RUNNING"' EXIT
+  # A working folder that still holds an answer is EVIDENCE: it is not deleted.
+  if grep -qiE "$VVERD" "$W/out.txt" 2>/dev/null; then
+    :
+  else
+    rm -rf "$W"
+  fi
+  rm -rf "$LOCK"; rm -f "$RUNNING"' EXIT
 # The box is asked BEFORE the round spends anything: a props round renders the images of every object, and
 # a round that opens on a machine that is already full gets killed by the kernel with an hour of review
 # inside it. Refusing here costs a second; refusing after the renders costs the render too.
@@ -661,6 +682,13 @@ if [ "$STORYBOARD" = 1 ]; then
   fi
   mkdir -p "$W/hero"
   cp "$EP"/review/hero/*.jpg "$W/hero/" 2>/dev/null || true
+  # The clock must fit the work: this round opens EVERY hero frame of the film. tap-01's storyboard round has 59
+  # of them, and one flat hour is not enough for a reviewer that looks at each one — the same rule the props
+  # round (180 s per image) and the picture round (120 s per line) already follow. A CRITIC_TIMEOUT given by
+  # hand still wins.
+  NHERO=$(ls "$EP"/review/hero/*.jpg 2>/dev/null | wc -l | tr -d ' ')
+  case "$NHERO" in ''|*[!0-9]*) NHERO=0 ;; esac
+  if [ -z "$CRITIC_TIMEOUT_SET" ] && [ "$NHERO" -gt 0 ]; then CRITIC_TIMEOUT=$((3600 + 120 * NHERO)); fi
   cp "$EP/LOOK.md" "$W/"; [ -f "$EP/src/film.js" ] && cp "$EP/src/film.js" "$W/film.js"
   [ -f "$EP/TREATMENT.md" ] && cp "$EP/TREATMENT.md" "$W/"
   cd "$W"
