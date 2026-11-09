@@ -35,6 +35,14 @@ Hoàn thiện toàn bộ hệ thống âm thanh (tiếng động foley, nhạc n
    được** vào `film.json`; đừng gõ tay số thời lượng — cổng bàn giao sẽ so manifest với phim và bắt lỗi.)
 5. Chấm phim đã dựng:
    `sh channels/tram-nghi-nhieu/tools/review.sh <tập> --video`
+5b. **Tự soi phim đã dựng như một người xem.** Cắt một khung giữa mỗi câu lời kể **từ chính file mp4**
+   rồi dán lại thành tờ:
+   `python3 tools/frames_at.py <tập>/out/<tên_tập>.mp4 <tập>/review/beatsheet/beats.json <scratch>/film.jpg --cols 3`
+   Đọc tờ để xem phim nói gì, rồi **mở khung gốc** cho câu nào tờ đã chỉ ra là có vấn đề:
+   `python3 tools/frames_at.py <mp4> <beats.json> <scratch>/one.jpg --lines c17 --cols 1 --w 1200`.
+   Tờ là **bản đồ, không phải bằng chứng**: ô nhỏ mất tương phản và kích thước, nên một câu có thể trông
+   vỡ trong tờ mà ngon trong phim — và ngược lại. **Đừng kết luận về một câu khi chưa mở khung gốc của nó.**
+   Câu nào sai thì sửa và dựng lại; đừng sửa `beats.json` để tờ khớp.
 6. **Cổng bàn giao của thư viện** — bắt buộc, phải thoát mã 0:
    `sh core/render/review.sh <tập>`
    Cổng này chạy những thứ cổng của kênh không chạy: `filmcheck` (tập là của riêng nó),

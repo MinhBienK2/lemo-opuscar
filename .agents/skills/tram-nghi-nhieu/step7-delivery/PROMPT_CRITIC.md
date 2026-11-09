@@ -13,6 +13,7 @@ Nhiệm vụ của bạn là đánh giá toàn bộ sản phẩm video đã rend
    - Mọi hành động va chạm trên màn hình có phát ra tiếng động (foley) tương ứng không? (đếm trong `FILM-FACTS.md`) Có cảnh nào bị im lặng vô lý không?
 2. **Hình ảnh & Độ mượt Render (Render Quality):**
    - Mở các tờ `sheet_N.jpg` — mỗi tờ là mười hai khung hình trích từ file mp4, tên mỗi khung ghi số giây của nó trong phim. Có khung nào đen, nhấp nháy ánh sáng (flickering), hay vỡ hình không?
+   - Có khung nào **bạc màu** không — gần như mọi thứ cùng một sắc độ, vật chính và nền cùng sáng, không có vùng nào đậm hơn để tách vật ra khỏi nền? Người xem **không thấy hình** dù nhát đúng, và đó là lỗi thật. Vài mảng sáng trên nền sáng không phải là tương phản. **Mở khung gốc ở kích thước thật trước khi kết luận**: ô trong tờ nhỏ làm mọi khung sáng hơn, nên phán quyết lúc này là phán quyết về một hình không tồn tại.
    - Viền mực vẽ tay (`outline/ink`) có sắc nét và ổn định không?
 3. **Tính chính xác khoa học & Thông điệp:**
    - Kết thúc phim có giải quyết trọn vẹn câu hỏi ban đầu không? Người xem có nhận được câu trả lời thỏa đáng không?
