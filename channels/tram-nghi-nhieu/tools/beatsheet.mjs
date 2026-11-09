@@ -144,6 +144,8 @@ def says_number(s):
                 or re.search(r'\\bthứ\\s+' + NUMW + r'\\b', s) or re.search(r'\\bmột\\s+(?:phần|trăm|nghìn|ngàn|triệu|tỷ)\\b', s))
 from PIL import Image, ImageDraw, ImageFont
 out, font = sys.argv[1], sys.argv[2]
+sys.path.insert(0, sys.argv[3] if len(sys.argv) > 3 else '.')
+from sameflag import camera_moved
 # the camera shift between two frames (phase correlation), then what still changes once the shift is taken out
 def shift_of(a, b):
     HY, HX = a.shape
@@ -165,6 +167,10 @@ def motion_of(f1, f2):
         bb = B
     # a pixel acts when it changes both ways: against the world under the camera and against the frame as it is
     return float((np.minimum(np.abs(bb - A), np.abs(B - A)) > 6).mean())
+# does one frame fit the other better when it is scaled a little? that is a camera that pushed in or pulled
+# back — the composition changed, so the line has a picture of its own. The rule lives in tools/sameflag.py
+# (with its own selftest): the SAME flag fired on 22 of 60 lines of tap-01 and 51 of 93 of tap-02, and the
+# reviewer had to clear them by hand, because the 16x9 thumbnail barely notices a slow push.
 B = json.load(open(out + '/beats.json')); F = ImageFont.truetype(font, 22); Fs = ImageFont.truetype(font, 18)
 prev = None; run, pool = 0, set()
 for b in B:
@@ -182,7 +188,7 @@ for b in B:
     hh = np.histogram(hsv[..., 0], bins=12, range=(0, 255), weights=hsv[..., 1] / 255)[0]; hh = hh / (hh.sum() + 1e-9)
     if prev is not None:
         dl, dh = np.abs(lay - prev[0]).mean(), .5 * np.abs(hh - prev[1]).sum()
-        if dl < .07 or (dh < .25 and dl < .15): b['flags'].append('SAME')
+        if (dl < .07 or (dh < .25 and dl < .15)) and not camera_moved(lay, prev[0], dl): b['flags'].append('SAME')
     prev = (lay, hh)
     # RUN: the lines go on showing the same things. A run's pool is every prop seen since it began; a line whose main
     # subject (the prop filling most of the frame) is already in the pool continues the run
@@ -244,7 +250,7 @@ for s in range(0, len(B_draw), C * R):
         for j, ln in enumerate(textwrap.wrap(b['text'], 52)[:3]): d.text((x + 8, y + H + 26 + j * 22), ln, fill=(240, 236, 228), font=Fs)
     p = f"{out}/sheet_{s // (C * R) + 1}.jpg"; S.save(p, quality=86); print(p)
 `;
-const r = spawnSync('python3', ['-c', py, out, font], { encoding: 'utf8' });
+const r = spawnSync('python3', ['-c', py, out, font, path.dirname(new URL(import.meta.url).pathname)], { encoding: 'utf8' });
 process.stdout.write(r.stdout); process.stderr.write(r.stderr);
 const miss = beats.filter(b => b.missing).length;
 if (miss) console.log(`${miss} line(s) have no voice event in window.EV`);
