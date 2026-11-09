@@ -3757,28 +3757,32 @@ tìm số vòng là **lỗi của lời dặn**, không phải lỗi của ngư�
   nào và không nhắn tin được. Tôi theo dõi nó qua dấu vết của tập (tem, phán quyết, tệp phim) — nhưng
   không đo được hành vi của nó.
 
-## N116 — medium — Cơ chế chặn chỉ ràng buộc phiên mở **sau** khi nó được cài, và một phiên đang chạy thì không đo được
+## N116 — medium — Cài một cơ chế chặn không phải là đưa nó vào dùng
 
-**Bằng chứng.** Hai hook `PreToolUse` được cài vào `.claude/settings.json` của thư viện lúc **14:47–15:07**
-hôm nay (`96616db`, `5d00635`, `9dec09d`, `e4d6d60`). Đo transcript của các phiên:
+**Bằng chứng (và một đính chính).** Tôi đã viết ở bản đầu của mục này rằng hook chỉ ràng buộc phiên **mở sau**
+khi nó được cài. **Điều đó sai, và chính tôi đã tự bác bỏ nó**: khi tôi commit hook thứ ba (`hook_shell_write.py`)
+lúc 16:5x, chính lượt `Bash` kế tiếp của tôi — một `cat >> … <<'EOF'` vào tệp retro — **bị chặn**. Hook có hiệu
+lực **ngay với phiên đang chạy**.
 
-| Phiên | Mở lúc | Số lần vi phạm đo được | Lỗi hook trong transcript |
-|---|---|---|---|
-| tập 02 | ~08:00, **trước** hook | R5b 114 · R11 102 · R12 157 · R1 42 | **0** |
-| tập 03 | ~10:00, **trước** hook | R5b 81 · R11 69 · R12 149 · R9 23 | **0** |
-| tập 05 | 14:56, **sau** hook | — | **1** (lần đọc thứ 3 của `/tmp/tap05-outline-round1.log` bị chặn) |
+Vậy tại sao hai phiên đang chạy có 226 lần vi phạm mà không lần nào bị chặn? Vì **chúng đã vi phạm xong trước
+khi hook tồn tại**:
 
-Hai phiên đầu vi phạm hàng trăm lần mà hook **không một lần** kêu — không phải vì luật sai, mà vì Claude
-Code nạp hook lúc **phiên bắt đầu**. Cơ chế có một mốc thời gian, và mốc đó là lúc phiên mở.
+| Phiên | Lần đọc lại log bằng `Bash` | Trong đó sau 14:47 (lúc hook cài) |
+|---|---|---|
+| tập 02 | 144 | **1** (lúc 15:08) |
+| tập 03 | 82 | **0** |
 
-**Vì sao quan trọng.** N99/N103 đã chỉ ra rằng luật viết bằng văn xuôi không cứu được một phiên đang
-làm: cả ba tập đều có luật "chạy job nền không có `>`, đọc output một lần" trong prompt khởi đầu, và cả
-ba đều đọc lại log hàng chục lần. Hook thì cứu được — nhưng **chỉ phiên sau đó**. Nên "cài hook" và
-"giám sát được phiên đang chạy" là hai việc khác nhau, và việc thứ hai chỉ làm được bằng cách **nhắn
-tay**.
+Lần 15:08 của tập 02 là lần đọc *đầu tiên kể từ khi hook có mặt* — nên nó được phép; lần thứ hai thì được;
+lần thứ ba thì chặn. Chiếc đồng hồ của cơ chế đếm từ lúc nó bắt đầu tồn tại, không đếm lại quá khứ.
 
-**Đã làm.** 16:10 tôi nhắn cho hai phiên đang chạy (tập 02, tập 03) kèm số đo của chính chúng và cách
-làm thay thế; cả hai nhận được tin trong hộp thư của phiên.
+**Vì sao quan trọng.** Cơ chế chặn được việc **từ lúc nó có mặt**, và nó không hề báo cho phiên đang chạy rằng
+một luật vừa trở thành máy chặn — nên một phiên vẫn làm như cũ cho tới khi bị chặn lần đầy tiên, và có khi nó
+không bao giờ đọc lại tệp đó nữa. "Cài xong" và "đã có hiệu lực với những phiên đang chạy" là hai việc khác nhau:
+việc thứ nhất làm bằng cách commit, việc thứ hai làm bằng cách **nói**.
+
+**Đã làm.** 16:10 tôi nhắn cho hai phiên đang chạy (tập 02, tập 03) kèm số đo của chính chúng và cách làm thay
+thế. Cả hai nhận được tin trong hộp thư của phiên, và số đo sau đó cho thấy chúng **đổi hành vi ngay**: tập 03 từ
+84 lần đọc log xuống còn 0 lần trong các lượt sau, và chúng dùng `tools/replace.py` thay vì heredoc.
 
 **Còn mù.** Tập 04: phiên `pid 3107449` không có tên trong `~/.claude/sessions` và không để lại transcript
 trong bất kỳ thư mục project nào — đúng bệnh N97 (phiên mở từ trong phiên khác kế thừa
