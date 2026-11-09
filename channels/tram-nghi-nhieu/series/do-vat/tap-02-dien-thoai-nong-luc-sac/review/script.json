@@ -1,0 +1,658 @@
+{
+ "step": "script",
+ "round": 0,
+ "items": {
+  "c1": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "2bb96498265148bf725b24b51bcc59f14b8f5777650927f258b65a97eadb3a0d"
+  },
+  "c2": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "acd955c9d5ab88ed24db831270ec8eaa8ccb5b276743bc109e2c1fee67e21920"
+  },
+  "c3": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "d56a868b65775f9a4bd97a0faf176d94bb2d70fc5f261bcbef017535ac83a9e8"
+  },
+  "c4": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "193bf29e8faf0c0535e1df392afdc71eb0f903c42f3098e00d6d39f675fa28cf"
+  },
+  "c5": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "f18018988f7d94cc43ac1db48b06b513eb11f46163975aae7c876070e59ce37f"
+  },
+  "c6": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "70e46a78161d24f7e95e269136b3ca54e5c27b1555eee1e825da2de4cbcc0db3"
+  },
+  "c7": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "37a362f244af68c35a0a4b421edadf7398cc7c43b6ef3893abe3ce0e9daef0c5"
+  },
+  "c8": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "993f04dd67ba051fe2596ddf8cd7b250bfaa8c9c4c180025d1a79f7554eff3f6"
+  },
+  "c9": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "137c3c6bc35e16f81216ce1bcc3229f2f9afe81b82ac5e86f14c661501aa0efa"
+  },
+  "c10": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "574eefe63249931a97fc6dd296394b52a9670c03590a72149d346e13a38b637a"
+  },
+  "c11": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "33a1e3d31d751c37a5aeb8ba91fa6806b089ec1b5a9b183e776f8a63dd1640e0"
+  },
+  "c12": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "43c10822a1cf5c29df1b6af10c3422f3c7494ffd2b2a6a163d0be5fd6b132cb1"
+  },
+  "c13": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "6b615c067bffd480bdc5a7b00444a4f31b0b440f43973db664f746c7fe60aa88"
+  },
+  "c14": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "2f4b1facbff2b08230fcd488ffb2b0579bfdab941e45dd5f999e8300d64d76c6"
+  },
+  "c15": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "7d48cf198165afc782952064b76de140b57c5b5602282be63e221470d54a26e0"
+  },
+  "c16": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "3c9762b1a63d7898d3769ae36bfe7613c1c343bdadc83c035cf9b4ece2d00d04"
+  },
+  "c17": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "e2bba6d04530cf3dd670ce82db5f7fc5ed374abf5407647bc4785909751aa7fc"
+  },
+  "c18": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "f8525237774ebcfd22a0bf59eb6507f784ac9c6d82d7d328fff97bf96962a646"
+  },
+  "c19": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "dc8e26b41b767889fcab15a8156a18a18e05e2ab2a7431851f3122280fae8555"
+  },
+  "c20": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "c2c53c662e580210dadccd142dd6778c584dbc55fd1272e6b70a8622bc3c272a"
+  },
+  "c21": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "1ea5c773d45906e80dfde64675b255de96b12d74cef43bc55110607b33d1b78e"
+  },
+  "c22": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "122e1f0a7d5dd8975dc1e046c8f012f11dbaca0274905ef76fbb8bafd3aa0196"
+  },
+  "c23": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "10d8e98b7fe93c79687afb183148775c3ce709918f8d188da39ac5fd13d676bc"
+  },
+  "c24": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "6bc7697371c9010fdd074deb9af8fa5ec4f62231e09e2d60182c25e7adfc1d8d"
+  },
+  "c25": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "3d43ba40aee838d3f672f06f8fd2fd2a41cc8b81f4306ffbf3ad9e4bbf7d5bcb"
+  },
+  "c26": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "4fe0e7d262f0d152dd6863c3d545f7d039bfa25d33a0635e898c5954052b7382"
+  },
+  "c27": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "2488d65f39bf6c3a590e7d4199e2b22c36d52c9fa1e3e8eea0e445014ffa2602"
+  },
+  "c28": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "5d9e0dc7dee3585c52303ef226104d68b67558884a6dff175f4d81ddae7529c0"
+  },
+  "c29": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "453ab7d0f85ccfd452f3dcb68655a370b848704cc93c87dc3d5e3c4bf24b1831"
+  },
+  "c30": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "b57aeadcb2c8bc9954e0545a1672e86f3cfa4f17feca003f067bea81934a5a05"
+  },
+  "c31": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "ee82d298278bc5becaf5697ce1fb67dc24ea34768cce534075a219c8279c3087"
+  },
+  "c32": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "40f6e5a11ad48111668e8d334c83a1d17ad0f058fefcf1fdc697c89758e1caf3"
+  },
+  "c33": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "4e02476cc4d2061e8ef29fbe5929ede406c34db60ded86d40447117dc13ce9c0"
+  },
+  "c34": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "1088987718233229dab13fd478eebb0b5164322f6c2e823775a68e4103de3593"
+  },
+  "c35": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "1b32cdb7942f078a9d46cb3519cb1884e360be445a4cd51add6d9426c4ba5e2d"
+  },
+  "c36": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "96699085a7070773384ab14c6a969613f6887681cd077378911cdb38c9edf234"
+  },
+  "c37": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "249d93035f7af401fb118cd026e708ca281e8186da97a220afd4195194c1b2c1"
+  },
+  "c38": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "0c9e403d22a9fefe5e89c6924c9db2b524c9ce2a3975145dcc51484097177220"
+  },
+  "c39": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "ac936260b1a618b56f8463b88365ccefe5dbe54a659b1ec51a5abad3dc408411"
+  },
+  "c40": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "fdfa802409a6c5e61c1e2ec755fd2ac79e28315ddd8a50cf0a33bc4f11c81ef1"
+  },
+  "c41": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "8ae2363e3e3d65eab94686f9e5b1e191f2d2c00006fe30224b6e595d21a17dca"
+  },
+  "c69": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "90dca510f4e6e9f431764dc9d0e78bf8d3ba7fa2ae5d67be46886f116a37beb5"
+  },
+  "c70": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "db2d513acc999243f4e14f80f9fae4941f63b150c9b8eb9963aa5afdf433461a"
+  },
+  "c71": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "9d5d01669b2c7511853ca0b432aaf2b70a5b69d9a4b4045d2a3ebdeeb22e2411"
+  },
+  "c72": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "ccd1dea6e6571221360fe05ba03ace2262cc14f489ffeabc2b8bf0b6ca9ff9d7"
+  },
+  "c73": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "1d6cedac50ab515548b2b3bd127db03a3ba81e8505cc74b73a8039de081f6fac"
+  },
+  "c74": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "b995c997e31e1e201203722e420860f2f473160456b1ffec0cdd056f5999f507"
+  },
+  "c75": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "f126acb4f5c96f9018cb31356819a798636e8576bd88a67f937cc40d1d0426d5"
+  },
+  "c76": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "aefbb8d2fdcc62843412fd7d869b60b056e1e7e16eec33c811255363619f6cf1"
+  },
+  "c77": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "dd873cfec269bdbc60f90a5ef6e5f5b12a7be2c6cdcba913dd30e50c49ab9632"
+  },
+  "c78": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "c0267a2ce8ad30d1244bf2886f79d090e1b7b9e2f9a950210a2da9e517de216f"
+  },
+  "c42": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "1dab76d369269f44e62c49c6a031d23fd4e10dbd7f32199dee92eb95f79ac29b"
+  },
+  "c43": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "ef0c3467c75b69a50fcc4c2b2e5bce0d395de2d0e2b511bb43cd8c18bd145f1c"
+  },
+  "c44": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "471d0dc8fb9b8b39d7f8d263760c51e6eed0ab69b123481363f530dfb6b0a7e0"
+  },
+  "c45": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "53a7ee856a714f5a92f31d36229e816fa68e94e96518c16697f156e4fa313118"
+  },
+  "c46": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "2a471ea5451183217b4e4a85228bb262eacca3c2594c2aaaf6775272563f6faf"
+  },
+  "c47": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "ce4c92b737d290518250d49cc39c3f81d7327db351a6241ed7c42bca7250dcf8"
+  },
+  "c48": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "6d4136a53bf4c52a09891168e751e723508bc9f732539a371e149fe375d00dd9"
+  },
+  "c49": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "a8dcd4ff4c8c4a6e5c323ae1bd6223350e2ba51591b37b1f0ab29edf31c1c65a"
+  },
+  "c50": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "e9bf08809b6bee6f7ee2cb11eafdd10b6e1a047ad903a92b9288d0a9bfe61d78"
+  },
+  "c51": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "ee64340d5dde518046ae0361bdd11b078ff11958923edefebbcb5b75835cef05"
+  },
+  "c52": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "8ce8bf38e388a5c28a5abe48846ddef984a446676eac11cc178f6ed10d28307d"
+  },
+  "c53": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "64bbc955d1733efc543ec39cb75d943b94c111f9ea49406bb66ed5aa9a4237a5"
+  },
+  "c54": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "2a02dd60737d5d4938cdba06c6f202063e38b14dc1979fb4e1f30c41eba8dadd"
+  },
+  "c55": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "8c9ea2d2f86c217ab3574544a73523fc4ea2ea0a98ef43dece436d3c55a832e4"
+  },
+  "c56": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "5dbd0837a70ffc35daef0701f66f6b82cc3048bcb080264765749c78fe965eff"
+  },
+  "c57": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "4d79801dd701b0f8dc5c2118d4cb0cfe35dd0c022ff38399e3c11aceb4232fcd"
+  },
+  "c58": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "19495a0fbc9c9b26f1028474030539c331f8a541baf22c40473d5832a41416d4"
+  },
+  "c59": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "a1dae3a1f75788313ce0b9d6760d3da989b6e2e88e29f221b0d699ca1a838c26"
+  },
+  "c60": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "6bd011a45ab45f409b626dbe1d13e0acb8bb581cd0c13cc484579d25c37b882d"
+  },
+  "c61": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "01c53f2755e04e33f3a3f91a64f44ae579ea84e45f9a311eb350cc8299a28f79"
+  },
+  "c62": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "dd56527b76fea9f65b662a61d5e97d5dad5074e5f08cd0f1f6deafb0f21506c8"
+  },
+  "c63": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "0196703f79c641a8403a93725e46795940cab492d613c6bc6deb2dd691af8f8d"
+  },
+  "c64": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "e536e6df7b6a7c1ae484f9b3fae5e48a5e6961e3c0bc412fabf9fb7bc40a8656"
+  },
+  "c65": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "55ecd1344c870bd034855aa88685b3b34c86a4f8032341dc05339639780e59e9"
+  },
+  "c66": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "5a30baa63db6d1bd20599aa89a227e47f6689f261904b2509bd98956dec77975"
+  },
+  "c67": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "a2c8f13f4cdd97264181a61e2c80b2c71bd31b90a0b6bfc0365491db12c77409"
+  },
+  "c68": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "26f90814d0d3a952885f1aeee01205baa979a1a376b77d26ad08ad7109ee41b8"
+  },
+  "c79": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "df9a5c11e5a1396d014330f9d605c19c926d741d3cbe0fd4bc2043e5dd199a34"
+  },
+  "c80": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "4f3aa901ccf77f3027ef7ff432ea4d08e87a03e80abfddf7db3168cbfae803c3"
+  },
+  "c81": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "c95ab00bb8532762a93b75d9973fe6510f9543f874fd7d572f0d00958b3944f3"
+  },
+  "c82": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "50808e38344e529605381d377c1230780aed135dc5159ab9c36d0fb3f0e803de"
+  },
+  "c83": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "5ee78e4707cc3274b682e8cce604d351ee42908d21e7e02e23ecd6b15d5ad011"
+  },
+  "c84": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "fc6708ecbdea1c49fceeadc5f2ebef01a9b10b68bfd152628429e2293602ec01"
+  },
+  "c85": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "83761f2f59b04c8e8484d1ffa331a188c65acc227b386845f5eb19db582dd12a"
+  },
+  "c86": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "fb758cc7248e5460b6621cd619068333378bc045f0b24be1d37818bab3852cd6"
+  },
+  "c87": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "89bebf36e691225abe2a2335a3e25f57bd30dd7da45536be4d79332a8ca46b4b"
+  },
+  "c88": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "659ab1886691cc12e336c0d8b3070f00d32fbb5ea5a9746eccf2a9b2e1e7e68a"
+  },
+  "c89": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "652e62f89ae8a1134adf49245063880db198f4bb91eeaafb5f9fc84ec7cffe57"
+  },
+  "c90": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "e6eef2e1b3b8bd6affd5fb5f3eae03707fe79edf615be37569dc2ef73dde2b6b"
+  },
+  "c91": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "06d2bc5713f114645800208dbfd9433b3ad1687a35a6ee25ac7a7cd3a3769e5c"
+  },
+  "c94": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "0d5bbd2fd89c6e3e167cb9ed29f162b7f8ddfffb51a08b0c61556dc3c884690a"
+  },
+  "c95": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "7c68726be7942d5bc0d7c369cdc7e242059daaea782d88f3d752bcd37ad49006"
+  }
+ },
+ "migrated": "chuyển từ tem cũ (script) lúc 2026-11-09 22:41: tem còn hiệu lực theo cổng cũ"
+}

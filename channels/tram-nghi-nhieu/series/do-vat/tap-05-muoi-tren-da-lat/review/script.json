@@ -1,0 +1,182 @@
+{
+ "step": "script",
+ "round": 0,
+ "items": {
+  "c1": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "b790d69620398d0f01e9ae2da79b7e5f75d93c1e4cd46e2cb850c27c2857d6ac"
+  },
+  "c2": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "0bc199740ebc2740b3852dd21ceda4bc173c95654895e340c16d86e19fd02142"
+  },
+  "c3": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "95f75921617b03bf6a53d1d30f0b2c71ebcaa2e984c7ec7513b34e7fa7380a68"
+  },
+  "c4": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "3581b854eaa66615b4cbbb6de47080b9f66172851eb1497bdeec029146e30284"
+  },
+  "c5": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "721df8e55bd7fb63356849bdd1be00fa232c13d59af81018cf226d33dd534dc3"
+  },
+  "c6": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "7ee875590a279d51b75f5602e33275373cb7de0cfa67d9136cb4795498ae5941"
+  },
+  "c7": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "1f2be454aa46b41057a3882744ab9275508fb558323be9e2a5ed123c83a08fd7"
+  },
+  "c8": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "3a6d7f714f7c477974f295460ab7335dd40e0001640091192e427d71b5bf0958"
+  },
+  "c9": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "870b8f0e82acacc4cbf34fdad783b2ffbec6e0b479e779ffbc336d00517a54e0"
+  },
+  "c10": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "5db00737f8345d7429397c4274b6e8b431c2d3ceb7b23ecc99ac7cf386f3a4e9"
+  },
+  "c11": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "b85048f4f40fe0de9ddf955d7f686e94546930766589952d17117b178e2bf064"
+  },
+  "c12": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "5b02832584fc69be7e5bdcbf274afe8bf35de8ac9f3deaf1b657f3fe011761b6"
+  },
+  "c13": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "3e05403bc2c7e1c554ab14b86013a06e7a84cd954f6031a51518f613acd91355"
+  },
+  "c14": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "27a96dc6a55642b658ac86e5d87dca03a95c238dfac8bbadb6f3634e11a84b08"
+  },
+  "c15": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "42072ba437bf5435cc65841c958c689b3c0d45fc3bf9286d19b4c7fb0978f191"
+  },
+  "c16": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "4e9875524a4d83b8da04ee48a910d84f588d770a2d92b4cf60e20418cafc8edb"
+  },
+  "c17": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "f21e9a9ceea90a6e7b7d0ac9b301ccc00176c377c40541ef068a1225bbda4825"
+  },
+  "c18": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "5f6f293c86c5e550d379209c3b8428c72844e123a38172d1a9fe30c292eec60f"
+  },
+  "c19": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "420436a741d7ca2ed52c23a657c4ad885155f6aaec08c591f85c2ab4c18b89d7"
+  },
+  "c20": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "5b77d918866817de53356b0e488f6ca2293c0abba8384bde7ee428da3bdbd6f8"
+  },
+  "c21": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "cee4466b423b02820d2edb26af0da70c28e802f1134ade4ca93c7933c13b1d01"
+  },
+  "c22": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "e88f28397ca3ca1987f81c6bbfc0bd8b9e2564738037203aeb8fbea98875a150"
+  },
+  "c23": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "692741617d07aa645d1a76560ed33b1e959f935773c7ec507f17e55afcbd63db"
+  },
+  "c24": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "dffb75ce4e847c4f13aa0593929840e9a60f6bea8c814f0a2efb3dba2ae0880d"
+  },
+  "c25": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "2394b4f87ed6eb07a269a67dcb7e2fabc4a6c5c762fde23b1edda94040845b56"
+  }
+ },
+ "migrated": "chuyển từ tem cũ (script) lúc 2026-11-09 22:41: tem còn hiệu lực theo cổng cũ"
+}

@@ -1,0 +1,15 @@
+{
+ "step": "outline",
+ "round": 0,
+ "items": {
+  "dan-y": {
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 0,
+   "rows": [],
+   "key": "98e87f62fba2182846f2c3b0bf9f998ebfc49eef3730c472471edc06fcd13aec"
+  }
+ },
+ "migrated": "chuyển từ tem cũ (outline) lúc 2026-11-09 22:41: tem còn hiệu lực theo cổng cũ",
+ "closed": true
+}
