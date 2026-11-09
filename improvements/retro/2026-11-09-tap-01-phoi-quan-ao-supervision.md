@@ -3458,6 +3458,60 @@ diễn (vệt gió, giọt hơi nước, phân tử bốc lên), và chất toon
 3. **Khoảnh khắc mở đầu hơi lạnh.** Khung 0:00 chỉ có dây trên nắp hũ; hiện tượng "siết chặt hơn"
    xuất hiện ở 0:08 — người xem phải chờ 8 giây mới thấy điều phim kể. (Đây cũng là lỗi NHẸ mà người
    chấm tập 04 đã nêu cho chính mình: mở đầu nên có sẵn một cái áo đang siết.)
+## N110 — high — Cổng bàn giao đo được khoảng trống, nhưng không đo được thứ quan trọng nhất: hiện tượng có nhìn thấy được không
+
+- **Bằng chứng.** Khi xem phim tập 01 ở cỡ thật, ở **cả bốn nhát so sánh** (c4–c7) hai cái áo trông
+  **y hệt nhau** — nên cái "cái này nhạt màu dần" mà cả tập kể không xuất hiện được lần nào. Đây là mấu
+  chốt của phim, và nó nằm đúng chỗ phim cần đúng nhất.
+- **Vì sao máy không bắt được.** Cổng đo **phần khung vật thể chiếm** (`phủ`, `fill`). Phủ trả lời
+  "chỗ này có bao nhiêu vật", không trả lời "chủ thể có **đủ lớn và đủ khác nhau** để người xem
+  thấy hiện tượng không". Hai cái áo trông y hệt nhau vẫn là hai cái áo — phủ vẫn cao.
+- **Cùng một lớp lỗi: khoảnh khắc mở đầu.** Khung 0:00 chỉ có dây trên nắp hũ; hiện tượng "siết
+  chặt hơn" xuất hiện ở 0:08. Người xem chờ 8 giây mới biết phim kể gì.
+- **Guard đã dựng.** (1) `step6-assembly/PROMPT_CRITIC.md` có tiêu chí mới *"Hiện tượng của tập có
+  nhìn thấy được không (mắt, không phải máy)"*: người chấm phải **mở ảnh riêng của những nhát so
+  sánh** và tự xem (ô trong tờ sheet là bản đồ, không phải bằng chứng — R12), và nhát mở đầu phải là
+  nhát đang biến đổi. (2) `SKILL.md` bước 6 có cùng luật, viết cho người làm phim: *"Mở đầu phải là
+  hiện tượng, không phải bối cảnh"*. Phiên bản 14.8.0.
+- **Còn hở.** Cổng máy vẫn không đo được hiện tượng. Muốn đo thì phải so sánh **pixel** hai vật ở
+  cùng một cỡ khung — đẳng cấp với việc so sánh màu trung bình của một vùng, và ngưỡng thì không
+  ai biết trước. Ta chọn **không** dựng phép đo này: một phép đo sai làm cổng từ chối phim đúng.
+
+## N111 — medium — Bước chậm nhất của cổng bàn giao là `readcheck`, và nó giành GPU với các tập đang dựng song song
+
+- **Bằng chứng.** `readcheck.mjs` mở trang phim trong Chromium và **dựng lại từng khung hình** ở bước
+  0,04 s để đo thời gian đọc thẻ chữ. Phim tập 01 dài ~4 phút → ~6 000 khung; tiến trình GPU của
+  Chromium chạy **100 % một lõi suốt 12 phút** trong khi cổng còn đang ở bước này.
+- **Hậu quả.** Cổng bàn giao là bước **cuối**, và nó là bước dài nhất — nên phiên làm phim ngồi chờ
+  ở bước cuối cùng, đúng lúc nên đang sửa nốt. Tệ hơn: nó chạy cùng lúc với các tập khác đang dựng,
+  nên **nhiều tập cùng giành GPU**.
+- **Cân nhắc và vì sao chưa sửa.** Rẻ nhất là dựng thưa hơn (STEP 0,08 s thay vì 0,04 s) — nhưng
+  phép đo chồng thẻ (`OVERLAP`) cần độ phân giải khung hình, và làm thưa đi là **làm yếu đúng cái cổng
+  đang bắt lỗi**. Một cách khác là dựng thưa rồi tinh chỉnh quanh các mốc thẻ đổi, nhưng để biết
+  mốc thì phải biết trước cửa sổ thẻ — tức là **tính lại cái mà rig đã tính**, đúng cái điều luật
+  "đừng tự tính lại cửa sổ thẻ" cấm. Ta **không sửa**: cổng chậm còn hơn cổng sai.
+
+## Kiểm chứng — phiên mới (tập 05) sau khi dựng hook: cùng một phép đo, cùng một công cụ
+
+Phiên tập 05 được mở mới (`/tmp/launch_tap05.py`, pty riêng, **không** kế thừa
+`CLAUDE_CODE_SESSION_ID` — N97), với đúng prompt mà một người làm phim mới sẽ có.
+
+| Phiên | R1 (ghi tệp bằng shell) | R5b (đọc lại log job nền) | R11 (đọc lại tệp lớn) | R12 (mở lại ảnh) | R9 | R10 | Transcript |
+|---|---|---|---|---|---|---|---|
+| tập 01 (cũ) | 370 | 80 | 236 | 835 | 176 | 15 | 975 MB |
+| tập 02 | 42 | 114 | 102 | 157 | 5 | 4 | 124 MB |
+| tập 03 | 1 | 84 | 57 | 126 | 6 | 0 | 99 MB |
+| **tập 05 (mới)** | **0** | **0** | **0** | **0** | **0** | **0** | **2 MB** |
+
+Đo bằng `tools/rules.py` trên transcript của chính phiên đó (mốc 15:0x, tập 05 còn đang làm tập
+đầu). Con số của tập 03 **tụt** so với lúc tôi nhắn nhở (R1 từ nhiều xuống 1) — nhắc đúng chỗ thì
+phiên sửa hành vi ngay.
+
+Nhưng phép đo này **không công bằng**: tập 05 mới làm được 15 phút, còn tập 02 đã làm 7 giờ. Số
+tuyệt đối không so được. Cái so được là **cơ chế**: hai hook (`hook_bg_log.py`, `hook_stale_read.py`)
+là cái **chặn**, không phải lời nhắc — nên phiên mới không cần phải "nhớ luật" mới không phạm;
+và `tools/rules.py` đo được việc phạm luật **vì nó đo transcript**, chứ không phải vì nó đo ý chí.
+
 ## Còn lại
 
 - **[x]** N72: `core/render/still.mjs` chờ hai khung hình rồi mới chụp (12:47) — ảnh là của khung vừa dựng,
