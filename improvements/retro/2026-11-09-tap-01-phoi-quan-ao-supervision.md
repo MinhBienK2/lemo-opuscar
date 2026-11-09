@@ -2940,6 +2940,23 @@ Vòng chấm hình của kênh **không đổi**: vẫn gọi không có cờ n�
 Tôi đã báo quyết định này cho phiên của tập 01, kèm lý do và cách sửa đúng (năm thẻ quá ngắn mà
 `readcheck` chỉ ra — đó là lỗi thật, đo được, và không cờ nào bảo vệ được).
 
+## N95 — medium — Bốn lệnh `grep` quay vòng suốt ba ngày, ăn bốn lõi của máy đang dựng phim
+
+**Bằng chứng.** Bốn tiến trình `grep -l "socket:[…]" /proc/[0-9]*/fd/*` chạy từ 09-11 12:57 đến nay, mỗi cái
+~97 % CPU, cộng lại **bốn lõi** của máy đang dựng bốn tập phim. Lệnh là của chính phần giám sát này (một
+lệnh dò tiến trình nào giữ cổng 2222, viết cách đây ba ngày).
+
+**Vì sao quan trọng.** `grep` đọc tệp, và `/proc/<pid>/fd/*` là **symlink** — nên nó đi thẳng vào socket và
+đọc ở đó mãi, không bao giờ tới cuối. Lệnh không treo trong im lặng: nó quay vòng, ăn CPU, và **không ai
+thấy** trong danh sách tiến trình của phiên (nó thuộc một phiên đã kết thúc từ lâu). Trên một máy dựng
+phim, bốn lõi bị ăn là bốn tập phim chậm đi mà không có lý do nào hiện ra.
+
+**Đã làm:** dừng cả bốn (kèm vỏ shell cha của chúng) — chúng là của chính phần giám sát này, không phải
+của người dùng. Tải máy giảm ngay.
+
+**Đã thành luật:** dò tiến trình giữ một cổng thì dùng `ss -ltnp`, `fuser`, `lsof` — **đừng dò `/proc`**.
+Dòng này nằm trong `lessons.md`.
+
 ## Còn lại
 
 - **[x]** N72: `core/render/still.mjs` chờ hai khung hình rồi mới chụp (12:47) — ảnh là của khung vừa dựng,
