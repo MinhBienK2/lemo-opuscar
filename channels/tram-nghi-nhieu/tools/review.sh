@@ -100,18 +100,24 @@ critic() {   # $1 = the prompt; $2 = "no-verdict" when the reviewer answers with
     "$CLI" -p ${LEMO_CRITIC_MODEL:+--model "$LEMO_CRITIC_MODEL"} --dangerously-skip-permissions "$1" < /dev/null > out.txt 2>&1 &
   fi
   CPID=$!
+  # The denial is not printed where the watchdog can see it: in `claude -p` the CLI prints only the final
+  # answer, and the words "This command requires approval" live in the session transcript. So the watchdog
+  # watches the transcript of the reviewer as well — the folder the CLI files it under is the working folder
+  # with its slashes turned into dashes.
+  TDIR="$HOME/.claude/projects/$(printf '%s' "$PWD" | sed 's|/|-|g')"
+  denied() { grep -q "requires approval" out.txt 2>/dev/null || grep -rqs "requires approval" "$TDIR" 2>/dev/null; }
   # the watchdog: a reviewer that asks for permission has nobody to answer it, and it retries the same command
-  # until the clock kills it. The watchdog names that in seconds instead of burning the round in silence.
+  # until the clock kills it. The watchdog names that in minutes instead of burning the round in hours.
   ( while kill -0 "$CPID" 2>/dev/null; do
-      if grep -q "requires approval" out.txt 2>/dev/null; then kill -TERM "$CPID" 2>/dev/null; break; fi
+      if denied; then kill -TERM "$CPID" 2>/dev/null; break; fi
       sleep 10
     done ) &
   WPID=$!
   rc=0; wait "$CPID" || rc=$?
   kill "$WPID" 2>/dev/null || true
-  if grep -q "requires approval" out.txt 2>/dev/null; then
+  if denied; then
     echo "review: người chấm không chạy được lệnh nào (hỏi quyền mà không ai trả lời) — vòng chấm này không có kết quả, đây không phải phán quyết về phim." >&2
-    echo "review: đọc $W/out.txt để biết vì sao, sửa nguyên nhân rồi chạy lại." >&2
+    echo "review: đọc transcript của người chấm trong $TDIR để biết lệnh nào bị chặn, sửa nguyên nhân rồi chạy lại." >&2
     exit 2
   fi
   if [ "$rc" -eq 124 ]; then
