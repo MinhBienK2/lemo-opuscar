@@ -43,9 +43,9 @@ def target_of(link):
     return link.strip()
 
 
-def main():
-    root = os.path.abspath(sys.argv[1] if len(sys.argv) > 1 else '.')
-    bad = 0
+def broken_links(root):
+    """the links of the documents under `root` that point at nothing; each as (file, target)"""
+    out = []
     for path in markdown_files(root):
         try:
             text = open(path, encoding='utf8', errors='replace').read()
@@ -61,9 +61,45 @@ def main():
                 continue
             full = os.path.normpath(os.path.join(os.path.dirname(path), tgt))
             if not os.path.exists(full):
-                rel = os.path.relpath(path, root)
-                print(f"BAD {rel}: link target not found: {tgt}")
+                out.append((path, tgt))
+    return out
+
+
+def selftest():
+    """The shapes a pointer really takes — a link that resolves, and one that does not."""
+    import tempfile
+    with tempfile.TemporaryDirectory() as d:
+        os.makedirs(os.path.join(d, 'docs'))
+        open(os.path.join(d, 'docs', 'a.md'), 'w', encoding='utf-8').write(
+            '# A\n\n[x](b.md) and [y](b.md#anchor) and [z](https://example.com) '
+            'and `not a link](nope.md)`\n')
+        open(os.path.join(d, 'docs', 'b.md'), 'w', encoding='utf-8').write('# B\n')
+        open(os.path.join(d, 'docs', 'c.md'), 'w', encoding='utf-8').write('# C\n\n[x](gone.md)\n')
+        cases = [
+            ('a link to a file that is there resolves', 'docs/a.md', False),
+            ('a link to a file that is not there is caught', 'docs/c.md', True),
+        ]
+        bad = 0
+        for name, rel, want_bad in cases:
+            broken = broken_links(d)
+            hits = [t for p, t in broken if os.path.relpath(p, d) == rel]
+            ok = bool(hits) == want_bad
+            if not ok:
                 bad += 1
+            print(('ok   ' if ok else 'FAIL ') + name)
+        print('ok' if not bad else f'FAIL: {bad} case(s)')
+        return 0 if not bad else 1
+
+
+def main():
+    if '--selftest' in sys.argv:
+        return selftest()
+    root = os.path.abspath(sys.argv[1] if len(sys.argv) > 1 else '.')
+    bad = 0
+    for path, tgt in broken_links(root):
+        rel = os.path.relpath(path, root)
+        print(f"BAD {rel}: link target not found: {tgt}")
+        bad += 1
     if bad:
         print(f"doc-links: FAILED ({bad} broken link(s))")
         return 1

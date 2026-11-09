@@ -78,7 +78,59 @@ def claimed_runtime(manifest):
     return int(parts[0]) * 60 + int(parts[1])
 
 
+def problems(m, want_seconds):
+    """what is wrong with a measured movie; each as a sentence. Empty when the movie is right."""
+    out = []
+    if m['w'] != W or m['h'] != H:
+        out.append(f'it is {m["w"]}×{m["h"]}, the library\'s format is {W}×{H}')
+    if abs(m['fps'] - FPS) > 0.5:
+        out.append(f'it runs at {m["fps"]:.3f} fps, the library\'s rate is {FPS}')
+    if m['lufs'] is None or not (LUFS_LO <= m['lufs'] <= LUFS_HI):
+        out.append(f'its loudness is {m["lufs"]} LUFS, the target is −14 (bounds {LUFS_LO}…{LUFS_HI})')
+    if m['peak'] is None or m['peak'] > PEAK_MAX:
+        out.append(f'its true peak is {m["peak"]} dBFS, the ceiling is {PEAK_MAX}')
+    if want_seconds is not None and abs(m['seconds'] - want_seconds) > RUNTIME_TOLERANCE:
+        out.append(f'the manifest says {mmss(want_seconds)}, the movie is {mmss(m["seconds"])}')
+    return out
+
+
+def selftest():
+    """The judgement of a measured movie: what is right, and each of the four things that are not."""
+    good = {'w': 1920, 'h': 1080, 'fps': 24.0, 'seconds': 132.0, 'lufs': -14.0, 'peak': -1.2}
+    cases = [
+        ('a movie in the library\'s format and loudness has no problem',
+         problems(good, 132), False),
+        ('a movie of the wrong size is caught',
+         problems({**good, 'w': 1280}, 132), True),
+        ('a movie at the wrong rate is caught',
+         problems({**good, 'fps': 30.0}, 132), True),
+        ('a movie that is too quiet is caught',
+         problems({**good, 'lufs': -30.0}, 132), True),
+        ('a movie whose peak is above the ceiling is caught',
+         problems({**good, 'peak': -0.2}, 132), True),
+        ('a movie that is longer than the manifest claims is caught',
+         problems(good, 140), True),
+        ('a manifest with no runtime leaves the movie unchecked on that count',
+         problems(good, None), False),
+        ('a runtime of M:SS is read as seconds', claimed_runtime({'runtime': '2:12'}), 132),
+        ('a runtime that is not M:SS is refused', claimed_runtime({'runtime': '132'}), None),
+        ('a manifest with no runtime claims nothing', claimed_runtime({}), None),
+    ]
+    bad = 0
+    for name, got, want in cases:
+        ok = (bool(got) is want) if isinstance(want, bool) else (got == want)
+        if not ok:
+            bad += 1
+        print(('ok   ' if ok else 'FAIL ') + name)
+        if not ok:
+            print('      got: %r' % (got,))
+    print('ok' if not bad else f'FAIL: {bad} case(s)')
+    return 0 if not bad else 1
+
+
 def main():
+    if '--selftest' in sys.argv:
+        return selftest()
     lib = discovery()
     films = lib.get('films') or []
     if not films:
@@ -111,20 +163,10 @@ def main():
                 bad += 1
                 continue
             checked += 1
-            problems = []
-            if m['w'] != W or m['h'] != H:
-                problems.append(f'it is {m["w"]}×{m["h"]}, the library\'s format is {W}×{H}')
-            if abs(m['fps'] - FPS) > 0.5:
-                problems.append(f'it runs at {m["fps"]:.3f} fps, the library\'s rate is {FPS}')
-            if m['lufs'] is None or not (LUFS_LO <= m['lufs'] <= LUFS_HI):
-                problems.append(f'its loudness is {m["lufs"]} LUFS, the target is −14 (bounds {LUFS_LO}…{LUFS_HI})')
-            if m['peak'] is None or m['peak'] > PEAK_MAX:
-                problems.append(f'its true peak is {m["peak"]} dBFS, the ceiling is {PEAK_MAX}')
-            if want_seconds is not None and abs(m['seconds'] - want_seconds) > RUNTIME_TOLERANCE:
-                problems.append(f'the manifest says {mmss(want_seconds)}, the movie is {mmss(m["seconds"])}')
-            if problems:
+            bad_here = problems(m, want_seconds)
+            if bad_here:
                 bad += 1
-                print(f'  FAIL {rel_path}: ' + '; '.join(problems))
+                print(f'  FAIL {rel_path}: ' + '; '.join(bad_here))
             else:
                 print(f'  ok: {rel_path} — {mmss(m["seconds"])}, {m["lufs"]} LUFS, peak {m["peak"]} dBFS, '
                       f'{m["w"]}×{m["h"]} at {m["fps"]:.0f} fps')

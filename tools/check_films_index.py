@@ -58,11 +58,12 @@ def mmss(seconds):
     return '{}:{:02d}'.format(int(seconds // 60), int(seconds % 60))
 
 
-def rows():
+def rows(path=None):
     """the film rows of FILMS.md: the table above the channels section"""
-    if not os.path.isfile(INDEX):
+    path = path or INDEX
+    if not os.path.isfile(path):
         return None
-    text = open(INDEX, encoding='utf8').read()
+    text = open(path, encoding='utf8').read()
     head = CHANNELS_HEADING.split(text)[0]
     out = []
     for line in head.splitlines():
@@ -72,7 +73,43 @@ def rows():
     return out
 
 
+def selftest():
+    """The parts of this check that decide: an M:SS runtime, and the rows of the index."""
+    import tempfile
+    cases = []
+    # a runtime is read as M:SS
+    cases.append(('a runtime of M:SS is read as seconds', parse('2:56') == 176, parse('2:56')))
+    cases.append(('a runtime that is not M:SS is refused', parse('cũng') is None, parse('cũng')))
+    cases.append(('seconds are written back as M:SS', mmss(176) == '2:56', mmss(176)))
+    cases.append(('seconds under a minute keep their zero', mmss(65) == '1:05', mmss(65)))
+    with tempfile.TemporaryDirectory() as d:
+        p = os.path.join(d, 'FILMS.md')
+        open(p, 'w', encoding='utf-8').write(
+            '# Films\n\n| Title | Folder | Runtime | Movie |\n|---|---|---|---|\n'
+            '| Một | `films/one/` | 2:56 | `one.mp4` |\n'
+            '| Hai | `films/two/` | — | — |\n'
+            '\n## Channels\n\n| Title | Folder | Runtime | Movie |\n|---|---|---|---|\n'
+            '| Ba | `channels/c/` | 1:00 | `c.mp4` |\n')
+        r = rows(p)
+        cases.append(('the film rows are read', r is not None and len(r) == 2, r))
+        cases.append(('a row keeps its title and its folder',
+                      r and r[0]['title'] == 'Một' and r[0]['folder'] == 'films/one/', r and r[0]))
+        cases.append(('a channel row is not a film row', r and all(x['folder'] != 'channels/c/' for x in r),
+                      r and [x['folder'] for x in r]))
+    bad = 0
+    for name, ok, got in cases:
+        if not ok:
+            bad += 1
+        print(('ok   ' if ok else 'FAIL ') + name)
+        if not ok:
+            print('      got: %r' % (got,))
+    print('ok' if not bad else f'FAIL: {bad} case(s)')
+    return 0 if not bad else 1
+
+
 def main():
+    if '--selftest' in sys.argv:
+        return selftest()
     lib = discovery()
     films = lib['films']
     if not films:
