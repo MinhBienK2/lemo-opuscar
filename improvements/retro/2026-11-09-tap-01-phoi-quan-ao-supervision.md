@@ -4376,3 +4376,24 @@ có, và phiên của nó đọc `src/props.js` **năm lần** săn một tên h
 không còn được miễn trừ bởi `SKIP_DIR` — một script lọt vào thư mục của tập là mã nguồn, và nó được commit cùng tập.
 Cổng: nói ra khi tập có mã mà không có bản đồ. Selftest hook: 22 ca.
 
+## Kiểm chứng — phiên mới (tập 06) sau khi bịt lỗ hổng: hook bắt ngay, và phiên làm theo
+
+**Đo trên chính transcript của phiên tập 06** (`9b34fa7d-…`, `SUPERVISE_FILM` trỏ vào tập):
+`tools/rules.py` báo **R1 2 lần** — `src/set.js` và `tmp-probe/tap06/probe.js`. Nhưng cả hai lần đều là
+**lệnh bị hook chặn**, không phải lỗi đã xảy ra: transcript có đúng hai lần thông báo từ chối
+(`Lệnh này ghi tệp của dự án bằng shell (heredoc (ghi qua biến): src/set.js)` và
+`… (redirect: tmp-probe/tap06/probe.js)`). Lệnh đầu là **đúng hình dạng** mà lỗ hổng N135 nói tới — ghi tệp
+nguồn qua một biến — và nó bị chặn lúc **18:58**, ba phút sau khi luật đó được đặt xuống.
+
+**Phiên làm theo ngay.** Sau lần chặn lúc 18:58:26, nó dùng `Edit` trong vòng **3 giây**; sau lần chặn thứ hai
+lúc 19:03:56, nó dùng `Edit` trong vòng **34 giây**. Không có lần thử lại cùng cách.
+
+**Còn lại thì sạch**: không có R5 (đứng chờ), không có R9 (dò), không có R10 (tự dựng tờ ảnh), không có
+R11 (đọc lại tệp lớn), không có R12 (mở lại đúng khung đã xem — 3 lần mở ảnh, 0 lần lặp), transcript 12 MB sau
+một giờ. So với phiên tap-05 cùng kênh (R1 2×, một vòng chờ 30 phút, 18 lần mở ảnh, 5 lần đọc lại
+`src/props.js`), đây là hồ sơ sạch hơn hẳn trên đúng những chỗ đã cài cơ chế.
+
+**Bài học về cách đo.** `tools/rules.py` đếm **lệnh**, không đếm **lệnh bị chặn** — nên báo cáo của nó vẫn ghi
+"R1 2 lần" dù cả hai đều bị hook chặn. Đọc báo cáo mà không đọc transcript thì tưởng phiên vẫn phạm luật. Đo
+đúng là: `rules.py` + hai lần thông báo từ chối trong transcript.
+
