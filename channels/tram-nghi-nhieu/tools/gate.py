@@ -39,9 +39,10 @@ SHARED_EXCLUDE = ('timeline.js',)
 PLACEHOLDER = re.compile(r'placeholder|giữ chỗ', re.I)
 WHAT = {'outline': 'dàn ý (TREATMENT.md + FACTS.md)', 'script': 'lời kể', 'props': 'vật dựng (src/props.js)',
         'storyboard': 'khung hình (LOOK.md + src/film.js)',
-        'assets': 'bản đặc tả và dàn ý (COMPONENTS_SPEC.md + LOOK.md + src/*.js)', 'picture': 'hình'}
+        'assets': 'bản đặc tả và dàn ý (COMPONENTS_SPEC.md + LOOK.md + src/*.js)', 'picture': 'hình',
+        'final': 'nghiệm thu phim (.mp4)'}
 FLAG = {'outline': '--outline', 'script': '--script', 'props': '--props', 'storyboard': '--storyboard',
-        'assets': '--assets', 'picture': ''}
+        'assets': '--assets', 'picture': '', 'final': '--final'}
 
 
 # ——— what an episode holds ———
@@ -137,6 +138,15 @@ def digest(ep, kind, ch=None):
                  os.path.join(ep, 'src/props.js'), os.path.join(ep, 'src/film.js')]
     if kind == 'picture':
         files = [os.path.join(ep, 'src', f) for f in picture_files(ep, ch)] + [os.path.join(ep, 'index.html')]
+    if kind == 'final':
+        # The film itself is what the final QA judges. It is binary and large, so its identity is its size and
+        # the moment it was written: a re-render changes both, and hashing tens of megabytes on every status
+        # call would cost more than it proves.
+        for p in sorted(glob.glob(os.path.join(ep, '*.mp4'))):
+            st = os.stat(p)
+            h.update(f'{os.path.basename(p)}:{st.st_size}:{int(st.st_mtime)}'.encode())
+        h.update(words(ep, ch).encode())
+        return h.hexdigest()
     for f in files:
         if os.path.isfile(f): h.update(f.encode()[-80:] + open(f, 'rb').read())
     return h.hexdigest()
@@ -152,10 +162,15 @@ def sha(path): return hashlib.sha256(open(path, 'rb').read()).hexdigest()
 # gave. So a verdict followed by a choice ('|', '/', '+') is a template and not an answer, and a word that runs
 # on ('PASSED') is not a verdict either.
 PASS_RE = re.compile(r'^#*\s*[*_]{0,2}VERDICT: *[*_]{0,2} *PASS(?![A-Za-z_])(?!\s*[*_]{0,2}\s*[|/+])', re.M)
+# The final QA of step 7 answers in its own word: it does not "pass" a film, it accepts it for publication —
+# and the same rule holds: one verdict, and the template's own line is not a verdict.
+ACCEPT_RE = re.compile(r'^#*\s*[*_]{0,2}VERDICT: *[*_]{0,2} *ACCEPTED_FOR_PUBLISH(?![A-Za-z_])(?!\s*[*_]{0,2}\s*[|/+])', re.M)
 
 
-def passed(review):
-    return bool(PASS_RE.search(open(review, encoding='utf-8').read()))
+def passed(review, kind=None):
+    """a verdict of PASS — or, for the final QA, the word that step uses"""
+    text = open(review, encoding='utf-8').read()
+    return bool((ACCEPT_RE if kind == 'final' else PASS_RE).search(text))
 
 
 def stamp_path(ep, kind, ch=None):
@@ -198,7 +213,9 @@ def stale_cut(ep, kind, cut, ch=None):
 
 
 def stamp(ep, kind, review, ch=None, critic=''):
-    if not passed(review): sys.exit(f'gate: {review} does not say VERDICT: PASS')
+    if not passed(review, kind):
+        sys.exit(f'gate: {review} does not say '
+                 f'{"VERDICT: ACCEPTED_FOR_PUBLISH" if kind == "final" else "VERDICT: PASS"}')
     if not critic: sys.exit('gate: a stamp names who judged it (--critic); only review.sh writes stamps')
     os.makedirs(os.path.join(ep, 'review'), exist_ok=True)
     open(stamp_path(ep, kind, ch), 'w').write(
@@ -223,7 +240,7 @@ def valid(ep, kind, ch=None):
               f'Không bị mở lại, nhưng bản chấm không nói về {what} đang dùng.',
               file=sys.stderr)
     review = os.path.join(ep, head[2])
-    if not os.path.isfile(review) or sha(review) != head[1] or not passed(review):
+    if not os.path.isfile(review) or sha(review) != head[1] or not passed(review, kind):
         return f'bản chấm {head[2]} không còn là bản đã PASS (bị sửa hay mất)'
     return None
 
@@ -253,7 +270,7 @@ NEEDS = {'voice': ('outline', 'script'), 'render': ('outline', 'script', 'props'
 
 def status(ep):
     """where the episode stands: every stamp, whether it still holds, and the last verdict"""
-    for kind in ('outline', 'script', 'props', 'storyboard', 'assets', 'picture'):
+    for kind in ('outline', 'script', 'props', 'storyboard', 'assets', 'picture', 'final'):
         p = stamp_path(ep, kind)
         if not os.path.isfile(p):
             print(f'{kind:<11} chưa có PASS')
@@ -383,6 +400,14 @@ def selftest():
                                   ('chữ chạy tiếp (PASSED)', 'VERDICT: PASSED\n', False),
                                   ('phán quyết đúng, kèm ghi chú', 'VERDICT: PASS — cảnh 3 ổn\n', True)):
             got = passed(report(text))
+            cases.append((f'{label} thì {"đọc" if want else "không đọc"} đúng', got == want, got, ''))
+
+        # — nghiệm thu: chữ của nó là chữ của nó, và mẫu chưa điền vẫn không phải câu trả lời —
+        for label, text, want in (('nghiệm thu được nhận', 'VERDICT: ACCEPTED_FOR_PUBLISH\n', True),
+                                  ('mẫu nghiệm thu chưa điền', 'VERDICT: ACCEPTED_FOR_PUBLISH | REJECTED\n', False),
+                                  ('nghiệm thu bị từ chối', 'VERDICT: REJECTED\n', False),
+                                  ('nghiệm thu bằng chữ của PASS', 'VERDICT: PASS\n', False)):
+            got = passed(report(text, 'FINAL.md'), 'final')
             cases.append((f'{label} thì {"đọc" if want else "không đọc"} đúng', got == want, got, ''))
 
         # — một tập thật, đủ nhỏ —

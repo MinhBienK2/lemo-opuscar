@@ -10,6 +10,7 @@
 #   sh channels/tram-nghi-nhieu/review.sh <episode> --lines a-b               one scene just built (no stamp)
 #   sh channels/tram-nghi-nhieu/review.sh <episode> [--chapter n]             the picture of a chapter / of the film
 #   sh channels/tram-nghi-nhieu/review.sh <episode> --video [--chapter n]     after the render: four frames per line
+#   sh channels/tram-nghi-nhieu/review.sh <episode> --final                   the final QA of the finished mp4
 #
 # The judges' rules live directly in the skill: .agents/skills/tram-nghi-nhieu/step*/PROMPT_CRITIC.md
 # The reports go to <episode>/review/:
@@ -55,9 +56,9 @@ critic_images() {
   u=$(grep -oE '"file_path":"[^"]*/b_[0-9]{3}\.jpg"' "$f" 2>/dev/null | sort -u | wc -l | tr -d ' ')
   [ -n "$n" ] && echo "$n lần đọc ảnh riêng ($u ảnh khác nhau)"
 }
-EP=$1; [ -n "$EP" ] && [ -d "$EP" ] || die "usage: review.sh <episode> [--outline | --script | --props | --storyboard | --assets | --lines a-b | --chapter n] [--video]"
+EP=$1; [ -n "$EP" ] && [ -d "$EP" ] || die "usage: review.sh <episode> [--outline | --script | --props | --storyboard | --assets | --final | --lines a-b | --chapter n] [--video]"
 EP=$(cd "$EP" && pwd); shift
-LINES=""; VIDEO=0; SCRIPT=0; PROPS=0; OUTLINE=0; STORYBOARD=0; ASSETS=0; CHAPTER=""
+LINES=""; VIDEO=0; SCRIPT=0; PROPS=0; OUTLINE=0; STORYBOARD=0; ASSETS=0; FINAL=0; CHAPTER=""
 while [ $# -gt 0 ]; do
   case "$1" in
     --lines) LINES=$2; shift 2 ;;
@@ -68,6 +69,7 @@ while [ $# -gt 0 ]; do
     --outline) OUTLINE=1; shift ;;
     --storyboard) STORYBOARD=1; shift ;;
     --assets) ASSETS=1; shift ;;
+    --final) FINAL=1; shift ;;
     *) die "unknown: $1" ;;
   esac
 done
@@ -192,6 +194,7 @@ SCOPE_ID="film"
 [ "$PROPS" = 1 ] && SCOPE_ID="props"
 [ "$STORYBOARD" = 1 ] && SCOPE_ID="storyboard"
 [ "$ASSETS" = 1 ] && SCOPE_ID="assets"
+[ "$FINAL" = 1 ] && SCOPE_ID="final"
 [ -n "$LINES" ] && SCOPE_ID="lines-$LINES"
 [ -n "$CHAPTER" ] && SCOPE_ID="chapter-$CHAPTER"
 [ "$VIDEO" = 1 ] && SCOPE_ID="$SCOPE_ID-video"
@@ -576,6 +579,64 @@ Thư mục làm việc của bạn: $W. Đọc lines.json, FACTS.md, STRATEGY.md
     echo "review --script: PASS${CHID:+ (chương $CHID)}"; exit 0
   fi
   echo "review --script: FAIL (sửa lines.json theo $EP/review/SCRIPT-REVIEW${CHID:+-$CHID}.md, rồi chạy lại)"; exit 1
+fi
+
+# ——————————————————————————————————————————— the final QA ———————————————————————————————————————————
+# Step 7 used to have no tool: the final QA ran as a subagent whose report nothing read — no round number, no
+# signature, nobody asked whether the step passed (N51). Now it is a round like any other, and the machine says
+# what the critic cannot: a critic reads images, so it cannot hear whether the film has an audio track, how
+# loud it is, or where it falls silent.
+if [ "$FINAL" = 1 ]; then
+  MP4=$(ls -t "$EP"/*.mp4 2>/dev/null | head -1); [ -n "$MP4" ] || die "--final: chưa có phim .mp4 trong $EP"
+  $GATE check "$EP" --for render >/dev/null || { echo "review --final: các tem của bước trước chưa còn hiệu lực — chạy lại bước tương ứng trước" >&2; exit 1; }
+  if ! python3 "$CHANNEL/tools/check_delivery.py" "$EP"; then
+    echo "review --final: phim chưa giữ được những điều máy kiểm được — sửa theo dòng trên, dựng lại rồi chạy lại" >&2
+    exit 1
+  fi
+  n=$(next "FINAL-QA-REVIEW-")
+  if [ "$n" -gt 3 ]; then
+    echo "review --final: đã nghiệm thu 3 lượt mà phim vẫn chưa được nhận. Dừng: báo người dùng các lỗi còn lại trong $EP/review/FINAL-QA-REPORT.md và hỏi hướng đi." >&2; exit 1
+  fi
+  mkdir -p "$W/frames"
+  python3 "$CHANNEL/tools/check_delivery.py" "$EP" --facts > "$W/FILM-FACTS.md"
+  [ -f "$EP/research/FACTS.md" ] && cp "$EP/research/FACTS.md" "$W/"
+  [ -f "$EP/TREATMENT.md" ] && cp "$EP/TREATMENT.md" "$W/"
+  [ -f "$EP/voice/lines.json" ] && cp "$EP/voice/lines.json" "$W/"
+  # The frames come from the *rendered film*, not from the stills: the point of the last gate is to look at
+  # what the viewer gets. A sheet holds twelve frames, and the sheet is how the critic reads the whole film
+  # at once — sixty frames one by one is what the picture review learned not to do (N18).
+  python3 - "$W" "$MP4" "$LIB" <<'EOF'
+import glob, os, subprocess, sys
+W, mp4, LIB = sys.argv[1], sys.argv[2], sys.argv[3]
+out = subprocess.run(['ffprobe', '-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', mp4],
+                     capture_output=True, text=True).stdout.strip()
+dur = float(out or 0)
+n = max(12, min(36, int(round(dur / 5))))
+for k in range(n):
+    t = dur * (k + 0.5) / n
+    subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-ss', f'{t:.2f}', '-i', mp4,
+                    '-frames:v', '1', '-vf', 'scale=480:-1', f'{W}/frames/{k:02d}-{int(t):04d}s.jpg'], check=False)
+files = sorted(glob.glob(W + '/frames/*.jpg'))
+for p in range(0, len(files), 12):
+    subprocess.run([sys.executable, LIB + '/core/render/sheet.py', f'{W}/sheet_{p // 12 + 1}.jpg']
+                   + files[p:p + 12] + ['--cols', '4'], check=False)
+EOF
+  cd "$W"
+  at_work "review --final:"
+  critic "$(get_prompt "step7-delivery")
+
+Thư mục làm việc của bạn: $W. Đọc FILM-FACTS.md (những điều máy đo được về phim — độ dài, âm lượng, chỗ im lặng, sự kiện), FACTS.md, TREATMENT.md, lines.json, rồi mở từng tờ `sheet_N.jpg` — mỗi tờ là mười hai khung hình **trích từ phim đã dựng**, tên mỗi khung ghi số giây của nó trong phim. Rồi viết FINAL-QA-REPORT.md ở đó theo mẫu, và in lại nó."
+  [ -s FINAL-QA-REPORT.md ] || cp out.txt FINAL-QA-REPORT.md
+  set_round FINAL-QA-REPORT.md "$n" 3
+  sign "--final" FINAL-QA-REPORT.md
+  cp FINAL-QA-REPORT.md "$EP/review/FINAL-QA-REVIEW-$n.md"; cp FINAL-QA-REPORT.md "$EP/review/FINAL-QA-REPORT.md"
+  cat FINAL-QA-REPORT.md
+  # the gate owns the word: it accepts a report only when it really says ACCEPTED_FOR_PUBLISH, and it refuses
+  # the template's own line, so a critic that copies the template does not publish a film nobody judged
+  if $GATE stamp "$EP" final "$EP/review/FINAL-QA-REVIEW-$n.md" --critic "$CRITIC_ID"; then
+    echo "review --final: ACCEPTED_FOR_PUBLISH"; exit 0
+  fi
+  echo "review --final: REJECTED (sửa theo $EP/review/FINAL-QA-REPORT.md, dựng lại rồi chạy lại)"; exit 1
 fi
 
 # ——————————————————————————————————————————— the picture ———————————————————————————————————————————

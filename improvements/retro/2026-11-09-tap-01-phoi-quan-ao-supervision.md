@@ -1486,8 +1486,28 @@ luật cũ** như props và picture — viết trước lần sửa code cuối 
 thử: cổng nói *"đã chấm 5 lần mà bản đặc tả vẫn chưa khớp mã"* và chỉ đường chốt bằng bản cắt
 — tức là năm vòng soi tài liệu đã tốn công cũng được **đếm**.
 
-**Còn lại.** Bước 7 (nghiệm thu mp4) chưa có chế độ, và tem `ASSET.pass` chưa nằm trong
-`NEEDS['render']` — thêm vào là một dòng, nhưng làm sau khi hai tập đang chạy bàn giao xong.
+**Bước 7 cũng có công cụ, và nó khác mọi bước khác ở một điểm: người chấm bước 7 là người chấm
+*phim*, mà người chấm đọc **hình** — nên không ai nghe được phim có dải âm thanh không, âm lượng
+bao nhiêu, chỗ nào im lặng, và câu nào không có tiếng. Những điều đó là việc của máy, và trước đây
+không ai làm. Nay:
+
+- `channels/tram-nghi-nhieu/tools/check_delivery.py` — máy đo những điều người chấm không nghe
+  được: phim có hình và có tiếng, độ dài thật (và `film.json` có nói đúng không — N19), âm lượng
+  trung bình và đỉnh, những chỗ im lặng quá dài, **mỗi câu lời kể có một sự kiện giọng**, và
+  phim có tiếng động của riêng nó hay không. Sáu ca selftest, mỗi ca một phim dựng thật bằng
+  ffmpeg: phim đủ tiếng thì đạt; phim có dải âm nhưng im lặng thì không; phim không có dải âm thì
+  không; manifest nói sai độ dài thì không; tập chưa có phim thì không; câu lời kể không có tiếng
+  thì không.
+- `review.sh --final` — một vòng như mọi vòng: đọc mẫu, đánh số vòng, ký tên, đóng tem
+  `FINAL.pass` bám vào chính tệp phim (dựng lại là tem hết hiệu lực), trần 3 vòng.
+- Khung hình cho người chấm **trích từ phim đã dựng**, không phải từ ảnh tĩnh: một tờ sheet mười
+  hai khung, tên mỗi khung ghi số giây của nó trong phim (N18: xem tờ sheet, không mở từng ảnh).
+- Chữ phán quyết của bước 7 là chữ của nó — `ACCEPTED_FOR_PUBLISH`, không phải `PASS` — và nó
+  chịu **cùng luật**: dòng mẫu chưa điền không phải câu trả lời.
+
+**Còn lại.** Tem `ASSET.pass` chưa nằm trong `NEEDS['render']`, và tem `FINAL.pass` chưa nằm
+trong cổng bàn giao của thư viện — thêm vào là một dòng mỗi cái, nhưng làm sau khi hai tập đang
+chạy bàn giao xong, vì thêm sớm là chặn chính những tập đó.
 
 ## N52 — critical — Cổng chấm trả lời "PASS" về một thư mục không tồn tại
 
@@ -1793,7 +1813,7 @@ tiền (trước vòng chấm, trước lúc dựng, trước lúc bàn giao), c
 | 47 | Dàn ý hình (`LOOK.md`) phải khớp lời kể: nó trích nguyên văn từng câu (N48) | `channels/tram-nghi-nhieu/tools/check_storyboard.py`, `channels/tram-nghi-nhieu/tools/review.sh` | **xong** |
 | 48 | Một cách viết lệch lệch phải lộ ra, chứ không phải khi nó làm mất một vòng chấm (N49) | `channels/tram-nghi-nhieu/tools/check_reports.py` | **xong** — bài kiểm tra đi dọc mẫu và bản chấm, nói cách viết nào công cụ không đọc; 27/27 selftest |
 | 49 | Một tài liệu cũ không tự nói là cũ; phải có bài kiểm tra đọc nó cùng tài liệu nó phải khớp (N50) | `channels/tram-nghi-nhieu/tools/check_storyboard.py`, `check_voice_facts.py` | **xong** |
-| 50 | Hai bước không có công cụ: bản chấm viết ra không ai đọc, không ai đếm (N51) | `channels/tram-nghi-nhieu/tools/check_reports.py`, `channels/tram-nghi-nhieu/tools/review.sh` | **bước 4 xong** — `review.sh --assets` chấm `COMPONENTS_SPEC.md` cạnh `LOOK.md`, `lines.json` và `src/*.js`, ký bản chấm, đóng tem `ASSET.pass`, và bản cắt của nó chịu cùng luật cũ như props và picture. **Bước 7 còn thiếu** (nghiệm thu mp4), và tem `ASSET.pass` **chưa** nằm trong `NEEDS['render']` — thêm vào là một dòng, nhưng làm sau khi hai tập đang chạy bàn giao xong |
+| 50 | Hai bước không có công cụ: bản chấm viết ra không ai đọc, không ai đếm (N51) | `channels/tram-nghi-nhieu/tools/check_reports.py`, `channels/tram-nghi-nhieu/tools/review.sh` | **xong cả hai** — bước 4: `review.sh --assets` chấm `COMPONENTS_SPEC.md` cạnh `LOOK.md`, `lines.json` và `src/*.js`, ký bản chấm, đóng tem `ASSET.pass`, và bản cắt của nó chịu cùng luật cũ như props và picture. Bước 7: `review.sh --final` nghiệm thu chính tệp phim — `check_delivery.py` đo những điều người chấm không nghe được (có dải âm thanh, âm lượng, chỗ im lặng, mỗi câu lời kể có tiếng, có foley), khung hình trích từ phim đã dựng xếp thành sheet, đóng tem `FINAL.pass` bám vào chính tệp phim. **Còn lại:** hai tem đó chưa được cổng bàn giao đòi — thêm sau khi hai tập đang chạy bàn giao xong |
 | 51 | Cổng không được trả lời PASS về một thư mục không tồn tại (N52) | `channels/tram-nghi-nhieu/tools/gate.py` | **xong** — cờ và đối số tách riêng; thư mục không phải tập thì bị từ chối; 14 ca selftest |
 | 52 | Tem phải phủ đúng cái nó nói; bản cắt của bước storyboard cũng phải viết sau lần sửa code (N53) | `channels/tram-nghi-nhieu/tools/gate.py`, `channels/tram-nghi-nhieu/tools/review.sh` | **xong** |
 | 53 | Người giám sát phải hỏi cổng của kênh, không chỉ hỏi các tệp có đúng hình dạng không | `tools/supervise.sh` | **xong** — `gate.py status` in ra từng tem và phán quyết vòng chấm cuối; `check --for render` là FAIL khi phim đã dựng mà cổng đóng |
