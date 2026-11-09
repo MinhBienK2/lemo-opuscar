@@ -4163,3 +4163,107 @@ Khi máy quá tải, vòng chấm **không mở** (exit 2) và nói rõ: đợi 
 mở thêm một vòng cùng lúc. Trước đây cùng tình huống đó chỉ có một cách: kernel giết vòng chấm, và
 mất cả giờ.
 
+**Nhưng cái giá của việc từ chối phải nói được.** Vòng bị từ chối ra mã `2` — cùng mã với một vòng
+chết — và dấu vết của nó ghi: *"vòng chấm chết (exit 2) … đọc log của job nền rồi chạy lại"*. Người làm
+đọc vậy sẽ đi tìm một log của một vòng **chưa bao giờ chạy** — và tệ hơn, người làm sẽ tưởng vòng
+đó chết vì lỗi của tập. Tap-04 gặp đúng việc đó lúc 17:42 (vòng storyboard không mở vì máy hết chỗ),
+trong khi chính lúc đó máy đang dựng ảnh vật cho ba tập khác.
+
+Nay việc từ chối có mã riêng: **exit 3** — *vòng không mở*, không phải *vòng chết*. Dấu vết ghi rõ
+("vòng chấm không mở (exit 3) … máy hết chỗ để mở vòng chấm, đây không phải chết: đợi việc đang chạy
+xong rồi chạy lại"), và cổng (`gate.py`) in ra đúng câu đó thay vì "ĐÃ CHẾT … đọc log của job nền".
+Hai ca selftest mới kiểm tra đúng mã ra và đúng câu trong dấu vết.
+
+## N130 — medium — Số vật trong bản chấm **dịch chỗ** khi danh mục lớn lên, và đường dẫn bằng chứng đứt trong im lặng
+
+**Bằng chứng.** `src/props.js` của tap-01 sửa lúc 07:52 ngày 09-11: thêm một vật (bàn phơi gỗ có nan) vào
+danh mục. Từ đó **mọi vật đứng sau nó dịch một chỗ**: bàn tay người từ #25 thành #26.
+
+Bản chấm vòng 5 (`review/PROPS-REVIEW-5.md`, 02:08) nói: *"#25 bàn tay người — B — HỎNG"*. Bản cắt của
+đạo diễn (`review/PROPS-DIRECTORS-CUT.md`, 08:03 — viết **sau** lần sửa danh mục) lặp lại đúng số đó trong
+danh sách tám vật đã sửa: *"#25 bàn tay"*. Nhưng hôm nay #25 là *"bàn phơi gỗ có nan, trải quần áo ra để
+so sánh"*, và ảnh bằng chứng đi kèm nó (`review/props/p_25.jpg`) là **một cái bàn gỗ**; `p_26.jpg` mới là
+bàn tay.
+
+Cơ chế tem không thấy được. Tem của bản cắt bám vào hash của `src/props.js` — mà bản cắt được viết *sau*
+lần sửa danh mục nên hash khớp → tem hợp lệ → `gate status` nói *"props PASS còn hiệu lực"*. Không có gì
+hỏng, không có cảnh báo, và số sai trôi qua một cách êm ruột.
+
+**Vì sao đáng ghi riêng.** Bản chấm vật dựng dùng **số thứ tự** để chỉ vật, mà số thứ tự là thứ **duy
+nhất** thay đổi khi danh mục lớn lên. Mà danh mục lớn lên là điều **bình thường** — mỗi lần sửa một vật,
+người làm thêm vật mới. Nên mọi vòng chấm sau đó đều mang số của vòng trước, và số đó lệch đi một chỗ
+mỗi lần thêm vật. Người đọc bản chấm mở `p_25.jpg` để kiểm tra *"bàn tay đã sửa chưa"* và thấy một cái
+bàn; rồi kết luận bàn tay **chưa** được sửa — hoặc tệ hơn, kết luận bản chấm sai. Cả hai đều sai, vì bản
+chấm không sai: số của nó chỉ không còn chỉ vật đó nữa. Một số chỉ vào vật khác tệ hơn không có số, vì nó
+trông có vẻ đúng.
+
+**Đã làm.** `channels/tram-nghi-nhieu/tools/check_props_refs.py`:
+
+- đọc danh mục `src/props.js` theo thứ tự; đọc **bản chấm vòng cuối** và **bản cắt của đạo diễn** — hai
+  văn bản duy nhất mà phim dựa vào (các vòng cũ là lịch sử: số của chúng đúng cho danh mục hôm đó);
+- chỉ **bốn hình dạng** mới là cách viện dẫn tới vật: dòng phán quyết `#N tên — A — KHỚP`, dòng bảng
+  `**tên (#N)**`, mục đậm `**#N tên**`, danh sách trong ngoặc `(#N tên, …)`. Tên của người đoán mù
+  (`#N TÊN: …`) và dòng tổng hợp **không** phải cách viện dẫn tới danh mục — người đoán mù gọi tên bằng
+  lời của người xem, danh mục gọi tên bằng tên của phim;
+- hỏi một câu: số N còn mang đúng cái tên đã viết không? So trên **từ**: mọi từ có nghĩa của tên đã viết
+  phải có trong tên của vật thứ N trong danh mục. Nếu không, và cái tên đó thuộc về vật khác, thì báo
+  **vật nào nó là** — *"bàn tay người là vật #26, không phải #25"*;
+- 8 ca selftest; chạy trên năm tập: tap-01 báo **2** lỗi thật, bốn tập kia sạch.
+
+**Đã làm (tiếp).** `review.sh` gọi kiểm tra này ở **ba cửa**: trước khi đóng tem cho bản cắt, ngay sau khi
+bản chấm vòng mới được ghi, và trước khi nhận phim ở vòng `--final`. Vòng props FAIL nếu số trong bản chấm
+không còn trỏ vào vật cũ — người làm phải sửa số (hoặc dời vật để số không dịch) rồi chạy lại.
+
+**Còn lại.** Cơ chế này bắt được số dịch chỗ và tên không khớp danh mục, nhưng nó **không** bắt được trường
+hợp người làm đổi **tên** của một vật trong danh mục mà quên đổi ở bản chấm — lúc đó số vẫn đúng, tên thì
+lệch, và bản chấm trông đúng. Muốn bắt cả hai thì danh mục phải có một **mã** bền (không phải số thứ tự), và
+đó là việc lớn hơn một vòng chấm. Hiện tại, giá của việc sửa số trong bản chấm là rẻ: người làm đã có sẵn
+ảnh `p_NN.jpg` để đối chiếu.
+
+## Đánh giá khách quan phim tap-01 (60 câu, đọc từ chính phim đã dựng)
+
+**Cách đọc.** Không xem ảnh tĩnh của vật — xem phim. 60 câu được cắt từ **mp4 đã dựng** bằng
+`tools/frames_at.py` và dán bằng `core/render/sheet.py` thành ba tờ, thêm khung cuối và hai cận cảnh
+c55/c55b ở 1280 px. (Tự dựng tờ bằng ffmpeg thì không được: thư viện đã có công cụ, và R10 cấm vòng tay.)
+
+**Phim là gì.** Một diorama toon có thật: bàn phơi gỗ có nan, quần áo ướt và khô đặt cạnh nhau, bồn chậu,
+quạt bàn, cân nhà bếp, nhiệt kế, ẩm kế. Người kể có giọng tiếng Việt, phụ đề đọc được, nhãn trong khung
+chỉ **đúng vật** (nhãn mũi tên chỉ vào tâm vật), và máy quay **đi vào trong vật** — cận giọt nước sau vách
+bàn — chứ không lơ lửng bên ngoài. Câu hỏi của tập (*tại sao một cái áo ướt lại khô ở một nửa?*) được
+đặt ra rồi **để** người xem tự trả lời, không giảng. Đó là đúng ý của kênh.
+
+**Những gì đã làm việc.** Vòng chấm vật dựng tìm ra **8 vật HỎNG** — trong đó bàn tay người đọc thành *"bàn
+chân mannequin gắn vào một cán gỗ"*, và một móc xích đọc thành lọ thuỷ tinh. Đó là vòng chấm làm việc:
+không có nó, người xem sẽ thấy một bàn chân gỗ trong phim và tưởng đó là ý kể.
+
+**Những gì chưa đạt.** Sáu điểm, xếp theo mức độ:
+
+1. **c27 — khối xanh navy và một điểm cháy trắng.** Viền mực là hiệu ứng *sau-render*, nên bóng và cạnh
+   gradient không có viền, và đọc như **lỗ hình** trong tấm vải. Đây là lỗi mà N125/N129 đã đo được.
+2. **c48 và c58 — hai hình chữ nhật tối, sắc cạnh, nằm trên áo.** Cùng một nguyên nhân: vùng tối không có
+   viền nên đọc như lỗ đen, và người xem đọc nó như một vật khác đặt trên áo.
+3. **c55 — bàn tay đọc thành một búi ngón tay.** Bàn tay đọc *được* trong `p_26.jpg` (ảnh vật dựng cô lập,
+   tư thế nghỉ) nhưng hỏng trong phim, vì phim cho nó một tư thế khác. Đây là khoảng trống thật của vòng
+   chấm vật: nó chấm vật **cô lập**, không chấm vật **trong tư thế phim dùng**.
+4. **Hình cuối — hai bàn phơi có quần áo**, trái với TREATMENT đã hứa (*một cái áo úp còn ẩm trên sàn*).
+   Người xem đã đi theo cả phim rồi mà bị đưa ra bằng một hình khác hẳn câu chuyện.
+5. **Nhiều cặp khung liên tiếp gần như giống nhau.** Máy đã gắn cờ `SAME` trong tờ nhịp điện, nhưng
+   cờ đó là *cần mắt người phán* — chưa có luật nào giữ.
+6. **Chữ nhỏ trên vật không đọc được** (mặt cân in số 0–400 g): người xem thấy những con số không nói
+   với ai. Bản cắt của đạo diễn đã xử lý (bỏ số, chỉ giữ vạch và kim) — nghĩa là luật ở đây là **bản
+   cắt**, không phải một quy tắc chung.
+
+**Chỗ nào giữ lỗi nào, sau khi giám sát này.** Lỗi 1 và 2 → luật của N125 (bóng không có cạnh) và công cụ
+đo của N129, cộng luật *không có điểm cháy trắng* của N128. Lỗi 3 → luật của N128 (*cận cảnh phải đọc ra
+được đặc trưng của vật*). Lỗi 4 → luật của N128 ở `step7-delivery` (*hình kết là hình TREATMENT đã hứa —
+cho **mọi** cảnh, không riêng cảnh cuối*). Lỗi 5 **chưa** có luật: cờ `SAME` mới chỉ là một lời nhắc cho mắt
+người. Lỗi 6 **chưa** có luật chung: nó sống trong bản cắt của từng tập.
+
+**Nhìn lại toàn quá trình.** Điều làm tập này kéo dài không phải là phim khó — mà là **mỗi vòng chấm trả lời
+một câu khác nhau**: vòng vật hỏi *vật này là gì*, vòng storyboard hỏi *bố cục có đúng không*, vòng hình hỏi
+*khung hình này có đẹp và đúng không*, vòng cuối hỏi *cả phim có đúng không*. Không vòng nào hỏi *con số
+trong bản chấm còn trỏ đúng vật không* — và đó là lý do bàn tay sửa xong vẫn không có bằng chứng (N130).
+Cũng không vòng nào hỏi *vật trong tư thế phim dùng có đọc ra không* — nên bàn tay hỏng ở c55 mà vẫn
+được tem vật dựng (lỗi 3). Hai lỗ hổng đó có cùng một hình dạng: **một câu hỏi mà không ai hỏi**, và vì
+vậy không ai trả lời, và vì vậy phim vẫn "PASS".
+

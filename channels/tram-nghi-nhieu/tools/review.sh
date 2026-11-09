@@ -144,7 +144,9 @@ refuse_no_room() {   # says what the machine can take, and stops the round befor
   if [ "$RSTATE" = "OVER" ]; then
     echo "review: máy đang quá tải ($RDETAIL) — vòng chấm này không mở được, và một vòng mở trên máy hết chỗ chỉ bị kernel giết (tap-03 mất một giờ vòng storyboard vì thế)." >&2
     echo "review: đợi việc đang chạy xong rồi chạy lại lệnh này (một job nền, để harness báo khi xong) — đừng mở thêm một vòng cùng lúc." >&2
-    exit 2
+    # Exit 3 is its own word: the round did not open because the box was full. It is not a crash, and the
+    # trace must not send the next agent hunting for a crash log that was never written (tap-04, 17:42).
+    exit 3
   fi
   [ -n "$ROOM_REPORTED" ] && return 0
   ROOM_REPORTED=1
@@ -380,6 +382,8 @@ trap 'rc=$?; cd /;
     V=$(find "$EP/review" -maxdepth 1 -name "*.md" -newer "$RUNNING" 2>/dev/null | head -1)
     if [ -n "$V" ] && grep -qiE "VERDICT:" "$V" 2>/dev/null; then
       printf "vòng chấm có phán quyết (exit %s) lúc %s — không phải chết: đọc %s, sửa theo nó, rồi chạy vòng kế tiếp\n" "$rc" "$(date "+%H:%M:%S")" "${V##*/}" > "$DIED"
+    elif [ "$rc" -eq 3 ]; then
+      printf "vòng chấm không mở (exit 3) lúc %s — máy hết chỗ để mở vòng chấm, đây không phải chết: đợi việc đang chạy xong rồi chạy lại\n" "$(date "+%H:%M:%S")" > "$DIED"
     else
       printf "vòng chấm chết (exit %s) lúc %s — không có phán quyết: đọc log của job nền rồi chạy lại\n" "$rc" "$(date "+%H:%M:%S")" > "$DIED"
     fi
@@ -441,6 +445,12 @@ if [ "$PROPS" = 1 ]; then
   if [ -f "$CUT" ] && grep -qE "$VPASS" "$CUT"; then
     if ! python3 "$CHANNEL/tools/gate.py" cut "$EP" props "$CUT" >&2; then
       echo "review --props: bản cắt không còn nói về code hiện tại — viết lại bản cắt sau khi sửa code xong rồi chạy lại" >&2
+      exit 1
+    fi
+    # The numbers in the cut must still point at the same props: a prop inserted into the catalogue moves
+    # every later one, and a number that means something else is worse than no number (N130).
+    if ! python3 "$CHANNEL/tools/check_props_refs.py" "$EP" >&2; then
+      echo "review --props: bản cắt đang trỏ vào vật khác — số trong bản cắt phải là số của danh mục src/props.js hôm nay" >&2
       exit 1
     fi
     $GATE stamp "$EP" props "$CUT" --critic "$CRITIC_ID"
@@ -561,6 +571,12 @@ if flips:
           "hãy nhìn lại ảnh của vật đó (review/props/p_NN.jpg) và tự xác nhận trước khi sửa.")
 PY
   cp R.md "$EP/review/PROPS-REVIEW-$n.md"; cp R.md "$EP/review/PROPS-REVIEW.md"
+  # The report's numbers must still point at the same props. The catalogue grows as the film is fixed, so a
+  # number written two rounds ago can point at a different object today — and the image beside it is the new one.
+  if ! python3 "$CHANNEL/tools/check_props_refs.py" "$EP" >&2; then
+    echo "review --props: FAIL (các số trong bản chấm không còn trỏ vào vật cũ — sửa lại số trong bản chấm, hoặc dời vật để số không dịch)" >&2
+    exit 1
+  fi
   mkdir -p "$EP/review/props"; cp p/p_*.jpg "$EP/review/props/"
   cat R.md
   if grep -qE "$VPASS" R.md; then $GATE stamp "$EP" props "$EP/review/PROPS-REVIEW-$n.md" --critic "$CRITIC_ID"; echo "review --props: PASS"; exit 0; fi
@@ -784,6 +800,12 @@ if [ "$FINAL" = 1 ]; then
     exit 1
   fi
   n=$(next "FINAL-QA-REVIEW-")
+  # The last door of the same rule: the film is delivered with its props trail, so a broken trail is not a
+  # publishing matter — it is a matter of what the film claims about its own objects.
+  if ! python3 "$CHANNEL/tools/check_props_refs.py" "$EP" >&2; then
+    echo "review --final: các số vật trong bản chấm và bản cắt không còn trỏ vào vật cũ — sửa lại số rồi chạy lại" >&2
+    exit 1
+  fi
   ROUND_LABEL="lần chấm nghiệm thu thứ $n"
   # The last gate reads the whole film: its clock grows with the number of lines in it.
   scale_clock "$(lines_of "")"

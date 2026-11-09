@@ -45,3 +45,9 @@ Dựa trên `COMPONENTS_SPEC.md` đã được duyệt ở Bước 4, lập trì
    - Lặp lại tối đa 5 hiệp cho tới khi `VERDICT: PASS`. Hết lượt thì chốt bằng bản cắt của đạo diễn:
      `review/PROPS-DIRECTORS-CUT.md`, kết thúc bằng `VERDICT: PASS`, nêu rõ vật nào đã cắt, và **viết
      sau lần sửa `src/props.js` cuối cùng** — bản cắt cũ không nói gì về code hiện tại.
+5. **Thêm một vật làm dịch mọi số vật đứng sau nó.** Bản chấm và bản cắt chỉ vật bằng **số thứ tự**
+   (#25 bàn tay, ảnh `review/props/p_25.jpg`), nên sau khi thêm một vật vào `src/props.js`, số cũ trong bản
+   chấm trỏ sang vật khác — và không ai báo, vì mọi thứ vẫn hợp lệ. Khi thêm vật: sửa lại số trong
+   `review/PROPS-REVIEW-*.md` và `review/PROPS-DIRECTORS-CUT.md` theo danh mục mới, rồi chạy
+   `python3 channels/tram-nghi-nhieu/tools/check_props_refs.py <tập>` — nó nói **vật nào** mỗi số đang
+   chỉ. Vòng `--props` tự gọi kiểm tra này, nên một số lệch sẽ chặn vòng chấm thay vì lọt xuống phim.

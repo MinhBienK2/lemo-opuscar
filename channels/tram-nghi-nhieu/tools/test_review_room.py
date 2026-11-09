@@ -85,12 +85,21 @@ def selftest():
         run_review(ep, "--outline", state="OVER|load 25 trên 12 nhân|412|92")
         rc, out = run_review(ep, "--outline", state="OK|-|7093|76")
         check("vòng bị từ chối không giữ khoá", PAST in out, out.strip()[:200])
+
+        # 5. dấu vết của một vòng không mở không được nói là "chết": không có log để đọc
+        ep = make_episode(root, "tap-5")
+        rc, out = run_review(ep, "--outline", state="OVER|load 25 trên 12 nhân|412|92")
+        check("vòng không mở thì ra mã 3, không phải 2", rc == 3, "rc=%d" % rc)
+        marker = os.path.join(ep, "review", ".round-outline.died")
+        trace = open(marker, encoding="utf8").read() if os.path.isfile(marker) else ""
+        check("dấu vết nói là không mở, không phải chết",
+              "không phải chết" in trace and "đọc log của job nền" not in trace, trace.strip()[:200])
     finally:
         shutil.rmtree(root, ignore_errors=True)
 
     for f in failures:
         print("FAIL %s" % f)
-    print("%d ca đều đúng" % (4 - len(failures)) if not failures else "%d ca sai" % len(failures))
+    print("%d ca đều đúng" % (6 - len(failures)) if not failures else "%d ca sai" % len(failures))
     return 1 if failures else 0
 
 

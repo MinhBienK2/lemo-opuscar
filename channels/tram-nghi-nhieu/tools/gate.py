@@ -340,6 +340,11 @@ def status(ep):
         elif code == 1:
             print(f'vòng chấm dừng (exit 1), không phải chết: {scope} — {txt} — đọc bản chấm mới nhất trong '
                   f'{ep}/review/ và lời nhắc của công cụ, sửa rồi chạy vòng kế tiếp')
+        elif code == 3:
+            # The round did not open: the box was full (the room guard). There is no crash log to read —
+            # the instruction is to wait, not to dig (tap-04, 17:42).
+            print(f'vòng chấm không mở vì máy hết chỗ (exit 3), không phải chết: {scope} — {txt} — '
+                  'đợi việc đang chạy xong rồi chạy lại, đừng mở vòng thứ hai')
         else:
             print(f'vòng chấm ĐÃ CHẾT: {scope} — {txt} — đọc log của job nền rồi chạy lại, đừng mở vòng thứ hai')
     for scope, txt in killed_rounds(ep):
