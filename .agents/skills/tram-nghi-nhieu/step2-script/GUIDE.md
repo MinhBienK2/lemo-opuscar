@@ -7,6 +7,7 @@ Tạo ra `voice/lines.json` từ bảng ý → hình của Bước 1 đã đạt
 1. Viết từng câu thoại vào `voice/lines.json`:
    - Mỗi câu thoại tương ứng trực tiếp với 1 dòng trong bảng Ý → Hình.
    - Số đếm, năm, chỉ số nhiệt độ phải viết bằng CHỮ (ví dụ: "hai mươi mốt độ C", không viết "21°C").
+   - **Một số kèm đơn vị đứng trong một câu.** "Hai mươi" là một cụm, đừng chia nó ra: câu 54 kết bằng "…tối đa khoảng **hai**" và câu 55 là "**mươi** gam hơi nước" (tập 01, 1:58) — người xem đọc "mươi gam hơi nước" là cụt, và nó còn chống lại nhãn "20 g/kg" đang in trên màn hình.
    - Nhịp điệu: Câu ngắn gọn, tự nhiên, văn phong nói của người lớn điềm đạm, không giật gân, không câu view kiểu youtube nhảm nhí.
 2. **Vòng lặp Thẩm định Lời thoại (Max 5 rounds):**
    - Mở vòng chấm bằng **công cụ của kênh**: `sh channels/tram-nghi-nhieu/tools/review.sh <tập> --script`.

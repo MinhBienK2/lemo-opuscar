@@ -10,6 +10,8 @@ What it audits:
   3. Cadence & line length: lines over 30 words (strains single breath / TTS pacing) or under 3 words.
   4. Raw digits: numbers written as digits ("30") instead of spelled out ("ba mươi").
   5. Slide-deck numbered bullet points: lines starting with "Một —", "Hai —", "1.", etc.
+  6. Numbers split across two lines: "...tối đa khoảng hai" + "mươi gam hơi nước" — the viewer reads
+     "mươi gam hơi nước", a broken number.
 
 Exit code: 0 if passed; 1 if errors found (or warnings in --strict mode); 2 usage.
 
@@ -29,6 +31,22 @@ DIGIT_RE = re.compile(r'\b\d+\b')
 # "Một — ..." is a slide deck, and so is "1. ..." / "1 — ...". The period must be followed by a space,
 # so "3.5 độ" stays a number and not a bullet.
 BULLET_RE = re.compile(r'^(?:một|hai|ba|bốn|năm|sáu|bảy|tám|chín|mười)\s*[—–-]|^\d+\s*(?:[—–-]|\.\s)', re.I)
+
+# A number written in words can be cut in half between two lines: "...tối đa khoảng hai" + "mươi gam hơi nước".
+# The viewer reads "mươi gam hơi nước" — a broken number, and one that contradicts the number on screen.
+# The tail words below never start a Vietnamese phrase on their own, so a line that begins with one is a
+# continuation of the number the previous line ended.
+NUM_HEAD = {'một', 'hai', 'ba', 'bốn', 'năm', 'sáu', 'bảy', 'tám', 'chín', 'mười'}
+NUM_TAIL = {'mươi', 'lăm', 'trăm', 'nghìn', 'ngàn', 'triệu', 'tỷ'}
+
+
+def split_number_at_boundary(prev_text, text):
+    """True when the previous line ends with the head of a number and this line begins with its tail."""
+    prev_words = tokenize(prev_text or '')
+    words = tokenize(text or '')
+    if not prev_words or not words:
+        return False
+    return prev_words[-1] in NUM_HEAD and words[0] in NUM_TAIL
 
 
 def tokenize(text):
@@ -94,7 +112,16 @@ def audit_script(lines_data, strict=False):
             tri = [tg for tg in ngrams(toks, 3) if any(w not in STOPWORDS_VI for w in tg.split())]
             all_trigrams.extend(tri)
 
-    # 4. Consecutive echo / duplicate thought
+    # 4. A number cut in half between two lines
+    for i in range(len(lines_data) - 1):
+        a_text = lines_data[i].get('text', '')
+        b_text = lines_data[i+1].get('text', '')
+        if split_number_at_boundary(a_text, b_text):
+            warnings.append(f"Number split across two lines between #{i+1} and #{i+2}:\n"
+                            f"  #{i+1}: \"{a_text[-60:]}\"\n"
+                            f"  #{i+2}: \"{b_text[:60]}\" — the viewer reads a broken number; keep the whole number in one line")
+
+    # 5. Consecutive echo / duplicate thought
     for i in range(len(lines_data) - 1):
         set_a = line_content_sets[i]
         set_b = line_content_sets[i+1]
@@ -104,7 +131,7 @@ def audit_script(lines_data, strict=False):
                             f"  #{i+1}: \"{lines_data[i].get('text', '')[:60]}\"\n"
                             f"  #{i+2}: \"{lines_data[i+1].get('text', '')[:60]}\"")
 
-    # 5. Global over-density of phrases (repeating > 6 times across the script)
+    # 6. Global over-density of phrases (repeating > 6 times across the script)
     ngram_counts = Counter(all_trigrams + all_bigrams)
     for phrase, count in ngram_counts.most_common(12):
         if count >= 7:
@@ -204,6 +231,15 @@ def selftest():
     cases.append(('a phrase repeated seven times is caught', code == 0 and 'repeats 7 times' in out))
     code, out = run(lines(*[f'Nhiệt độ {i} ở đây.' for i in range(6)]))
     cases.append(('the same phrase in every line of a window is caught', code == 0 and 'Local repetition' in out))
+
+    # a number cut in half between two lines: the defect tap-01 shipped (1:58)
+    code, out = run(lines('Cái áo cần khoảng hai', 'mươi gam hơi nước để khô.'))
+    cases.append(('a number split across two lines is caught', code == 0 and 'Number split across two lines' in out))
+    code, out = run(lines('Cái áo cần khoảng hai mươi', 'gam hơi nước để khô.'))
+    cases.append(('a whole number in one line is left alone', code == 0 and 'Number split across two lines' not in out))
+    code, out = run(lines('Nhiệt độ cao nhất.', 'Trăm phần trăm hơi nước bay ra.'))
+    cases.append(('a line that ends in a number word but no tail follows is left alone',
+                  code == 0 and 'Number split across two lines' not in out))
 
     # the real repeated phrase of tap-01 is caught when the script says it seven times
     code, out = run(lines(*[r['text'] for r in REPEAT] * 3))

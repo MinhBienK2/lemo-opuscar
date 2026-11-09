@@ -49,6 +49,10 @@ Hoàn thiện toàn bộ hệ thống âm thanh (tiếng động foley, nhạc n
    Tờ là **bản đồ, không phải bằng chứng**: ô nhỏ mất tương phản và kích thước, nên một câu có thể trông
    vỡ trong tờ mà ngon trong phim — và ngược lại. **Đừng kết luận về một câu khi chưa mở khung gốc của nó.**
    Câu nào sai thì sửa và dựng lại; đừng sửa `beats.json` để tờ khớp.
+   **Hình kết phải là hình mà `TREATMENT.md` hứa.** Mở nhát cuối và đối chiếu với dòng cuối của bảng Ý → Hình:
+   tập 01 hứa "một cái áo úp còn ẩm trên sàn" nhưng dựng thành "hai cái bàn gỗ với bốn món quần áo trải trên đó" (2:53) —
+   người xem thấy một bức tranh khác với lời khuyên mà phim đưa ra. Cùng luật này áp cho **mọi nhát**, không riêng nhát cuối:
+   đạo cụ trong khung phải là đạo cụ `TREATMENT.md` nêu, không phải một bộ đạo cụ khác cùng chủ đề.
 6. **Cổng bàn giao của thư viện** — bắt buộc, phải thoát mã 0:
    `sh core/render/review.sh <tập>`
    Cổng này chạy những thứ cổng của kênh không chạy: `filmcheck` (tập là của riêng nó),

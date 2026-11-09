@@ -7,6 +7,7 @@ Nhiệm vụ của bạn là bảo đảm văn phong khoa học, gãy gọn, đ�
 ## Tiêu chí thẩm định
 1. **Khớp 1:1 với Dàn ý:** Câu thoại có bám sát bảng Ý → Hình không? Có tự ý thêm thắt chuyện ngoài lề không? (Tự ý thêm ý: FAIL).
 2. **Không có chữ số (No Digits):** Mọi con số phải viết bằng chữ ("ba mươi phần trăm", không viết "30%"). Nếu còn chữ số: Báo cờ `DIGIT` -> FAIL ngay.
+   - **Một số là một cụm, không chia làm hai.** Câu này kết bằng "…khoảng **hai**" và câu sau là "**mươi** gam hơi nước" thì người xem đọc "mươi gam hơi nước" — cụt và sai (tập 01, 1:58). Đọc **hai câu liền nhau** như người xem đọc phụ đề: nếu số bị cắt đôi giữa hai câu thì Báo cờ `SPLIT` -> FAIL ngay.
 3. **Độ dài câu (Sentence Pacing):** Câu kể không quá 30 từ, tránh câu ghép quá nhiều mệnh đề phụ khiến người nghe nghẹt thở (Báo cờ `LONG`).
 4. **Văn phong chuẩn mực:** 
    - Không dùng từ đệm sáo rỗng: "Các bạn có biết không", "Thật bất ngờ là", "Hãy cùng xem nhé".
@@ -20,7 +21,7 @@ Dòng `VERDICT:` trong khối dưới đây là **chỗ điền**, không phải
 ```markdown
 VERDICT: (điền đúng MỘT chữ: PASS hoặc REJECT)
 ROUND: (số vòng do review.sh ghi — người chấm không tự điền)
-FLAGS_DETECTED: [DIGIT, LONG, NOFACTS, hoặc NONE]
+FLAGS_DETECTED: [DIGIT, LONG, NOFACTS, SPLIT, hoặc NONE]
 
 ## ĐÁNH GIÁ TỪNG CÂU
 - [câu ID, vd: c1]: [Nội dung câu]
