@@ -2950,7 +2950,16 @@ báo lỗi. Vòng chấm in ra "three views of every object…" rồi chết, ex
 
 Đã sửa (`30926ba`): bỏ số 0 ở đầu trước khi đưa vào `printf`. Bài học rộng hơn con số 09: **một vòng
 chấm chết phải để lại dấu vết** — không có bản chấm thì cổng phải nói "vòng này chết, đọc log", chứ
-không phải im lặng như thể chưa ai chạy. Đây là việc còn làm (xem "Còn lại").
+không phải im lặng như thể chưa ai chạy.
+
+**Đã xong (`bfe1103`, 14:35).** `review.sh` ghi `review/.round-<scope>.died` kèm exit code khi vòng chết
+(`trap` ở EXIT: dọn khoá, rồi ghi dấu vết nếu mã thoát khác 0), và `gate.py status` in ra:
+
+```
+vòng chấm ĐÃ CHẾT: props — vòng chấm chết (exit 1) lúc 13:41:00 — đọc log của job nền rồi chạy lại, đừng mở vòng thứ hai
+```
+
+Sửa bằng `tools/replace.py` (nguyên tử) vì ba phiên đang chạy chính `review.sh` đó (R13).
 
 ## N91 — medium — Lời khuyên của cổng trái với luật của chính kênh, ngay trong một tệp
 
@@ -3384,6 +3393,50 @@ Kênh đã có phép đo khách quan cho đúng cái đó: `tools/check_motion.p
 
 Ta đã gửi cả hai ý này cho phiên tập 01; nó hứa gửi kèm số đo của `check_motion.py` khi dựng xong.
 
+## N107 — medium — Tờ sheet cũ hơn RIG: máy đo bằng trang của tập, nên rig cũng làm tờ sheet cũ
+
+**Bằng chứng.** `check_shots.py` so giờ tờ sheet với `src/*.js` để báo "tờ sheet CŨ HƠN mã". Nhưng
+tờ sheet được dựng bằng **chính trang của tập** — probe, camera, tầng hiệu ứng đều nằm trong
+`channels/tram-nghi-nhieu/rig/`. Nên khi tôi sửa probe (N104, 14:26) mà `src/` của tập 01 **không hề
+đụng**, tờ sheet dựng lúc 14:06 vẫn được coi là "mới nhất" — và nó chứa đúng những con số sai mà
+probe cũ sinh ra: 14 câu "máy KHÔNG nhìn thấy vật nào" (c13–c18, c22–c23, c27, c35, c39–c40, c44,
+c53), trong đó c13 sau khi sửa là 51 % chứ không phải 0 %.
+
+Hậu quả không chỉ là một dòng cảnh báo sai: người làm phim **đọc cờ sai rồi đi sửa phim** — tức là sửa
+nhầm thứ không hỏng. Phiên tập 01 đã mất một vòng chấm hình vì đúng lý do này (cờ `PTR` ở c17).
+
+**Đã sửa (`9b226a9`, 14:33).** `check_shots.py` giờ so giờ tờ sheet với cả `rig/*.js` của kênh (đi ngược
+lên tới `CHANNEL.md` để tìm rig), và báo:
+
+```
+check_shots: tờ sheet CŨ HƠN mã (tờ 14:06, mã 14:26) — những cờ này nói về một hình cũ hơn; dựng lại tờ sheet rồi chạy lại
+```
+
+Cảnh báo vẫn là lời nhắc, không chặn — nhưng nó nói đúng nguyên nhân, và giờ nó bắt được cả những đổi
+trong rig mà `src/` không biết.
+
+## Đánh giá khách quan phim tập 01 — xem trên bản dựng mới (14:23), không trên ô trong tờ sheet
+
+Cổng bàn giao lúc 12:45 đã đo trên chính phim: `action 77 %`, `big 46 %`, đoạn đứng yên dài nhất 6 s,
+55/60 nhịp đổi phần khung — tức là phim **không chết**. Cờ `SAME` mà máy báo là câu hỏi về **trình tự**,
+nên tôi xem thẳng ba câu liên tiếp ở kích thước gốc (`tools/frames_at.py … --cols 1 --w 1200`).
+
+**c4–c7 (hai cái áo, trước quạt / góc xa).** Cùng một chủ thể, nhưng bố cục **đổi thật**: c4 cận hai
+áo, c5 rộng ra có quạt và căn phòng, c6 trung cảnh, c7 góc cao có cả dây phơi. Cờ `SAME` của máy ở đây
+**bắn sai** — đây là N105 (hai câu hỏi khác nhau). Điều đáng nói là thứ khác: ở c4–c7, **hai cái áo
+trông y hệt nhau** — chưa thấy cái nào "nhạt màu dần". Lời kể của câu 7 nói đúng sự khác biệt đó, nhưng
+hình chưa nói. Người xem phải đợi tới đâu mới thấy một cái áo khô hơn cái kia — và đó là mấu chốt
+của cả phim.
+
+**c29–c31 (quạt).** Rõ ràng khác nhau: cận quạt (c29), toàn cảnh phòng với luồng gió vẽ thành vệt
+(c30), trung cảnh hai áo (c31). Vệt gió và các giọt hơi nước làm khung sống.
+
+**Kết luận sơ bộ (còn để viết nốt sau khi có phim cuối có tiếng).** Phim có nhịp, có bố cục đổi, có vật
+tự diễn. Điểm yếu thấy được: **hiệu ứng phân biệt hai cái áo xuất hiện muộn và mờ** — và máy đo
+độ phủ thì không đo được điều đó (nó đo được *khoảng trống*, không đo được *chủ thể có đủ lớn và đủ
+khác nhau không*). Đây là loại lỗi mà vòng chấm hình bằng mắt nên bắt, và nó nằm đúng chỗ phim cần
+đúng nhất.
+
 ## Còn lại
 
 - **[x]** N72: `core/render/still.mjs` chờ hai khung hình rồi mới chụp (12:47) — ảnh là của khung vừa dựng,
@@ -3411,6 +3464,12 @@ Ta đã gửi cả hai ý này cho phiên tập 01; nó hứa gửi kèm số đ
   `lessons.md` đã có một dòng về lệnh giết theo tên.
 - **[x]** N82: `channels/tram-nghi-nhieu/tools/check_film_claims.py` (mới, có selftest) — cảnh báo, không
   chặn; in ra câu gần nhất mà phim thật sự nói.
+- **[x]** N106: vòng chấm chết phải để lại dấu vết — `review.sh` ghi `.round-<scope>.died`, `gate.py status`
+  in ra "vòng chấm ĐÃ CHẾT" kèm lời nhắc đọc log của job nền (`bfe1103`).
+- **[x]** N107: tờ sheet cũ hơn rig cũng là "tờ sheet cũ hơn mã" — `check_shots.py` so cả `rig/*.js` của
+  kênh (`9b226a9`).
+- **[ ]** Còn lại: chờ phim cuối của tập 01 (có tiếng) để viết nốt đánh giá khách quan; chờ bốn tập về
+  tới DONE; rồi mở một phiên mới làm một tập mới và giám sát tiếp.
 - **[x]** N88 (nửa việc): `mux.sh` giờ **hỏi máy kia có mã hoá được không** trước khi giao việc cho nó
   (một khung đen, khoảng một giây). Trước đó một máy chỉ trả lời `ssh` cũng nhận việc, và phim chờ
   **sau khi** ảnh đã đi qua — tập 01 mắc đúng lỗi đó: `muse` bận, `muse2` nhận việc rồi mã hoá hỏng, và
