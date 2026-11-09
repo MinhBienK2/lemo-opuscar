@@ -4500,3 +4500,54 @@ nói là thư mục nào, và không ai hỏi xem ảnh đã tới chỗ vòng c
 là số nó được bảo soi, không phải số nó đã mở. Muốn biết thì phải đếm từ transcript của người chấm (đã có công cụ
 đếm cảnh: `critic_images()`), và nối số đó với số ảnh của vòng — việc này chưa làm.
 
+## N142 — medium — Một nhãn có thể **nói về vật này mà chỉ vào vật khác**, và không ai hỏi được
+
+**BẰNG CHỨNG.** Nghiệm thu cuối tap-01 bắt lỗi lúc 2:18 bằng mắt: nhãn **"CHỒNG LÊN NHAU"** chỉ vào *một cái áo
+đang treo cạnh chiếc khác trên cùng dây*, chứ không vào chỗ hai cái áo chồng lên nhau. Người xem đọc nhãn, thấy một
+cái áo, và hiểu sai cả câu. Nhưng hai công cụ nhãn có sẵn đều hỏi câu khác: `check_labels.py` hỏi nhãn **nằm ở câu
+nào** và con số trên nhãn **có được đọc không**; không công cụ nào hỏi **nhãn này chỉ vào vật nào** — và vòng nghiệm
+thu cuối, vòng quyết định phim có xuất bản, **không soi nhãn lần nào**.
+
+**CƠ CHẾ (nửa máy).** Mỗi thẻ trong `CARDS` mang thêm `anchor: '<tên vật trong src/props.js>'` — **khoá** của danh
+mục vật, tức chính là tên vật. `channels/tram-nghi-nhieu/tools/check_label_anchors.py` hỏi mỗi thẻ có mã neo ba
+câu: mã neo có thật trong danh mục không; chữ của nhãn có là của **đúng vật neo** không (hay khớp vật khác rõ hơn);
+chữ đó có đọc ra là của vật khác không (thì bắt buộc phải có phần định tính). `review.sh` chạy nó ở vòng dàn ý hình,
+vòng hình và **vòng nghiệm thu cuối**. Dựng lại lỗi 2:18 thì máy bắt được; thẻ đã sửa thì máy im.
+
+**KẾ HOẠCH MIGRATE (ba bước — không bật cờ một lần).**
+1. **Thêm neo cho mọi thẻ.** Đo bằng `check_label_anchors.py --survey`: nó in ra từng tập còn thiếu bao nhiêu thẻ
+   (09-11: **111 thẻ ở 7 tập**). "Hết thiếu" là một sự **đo được**, không phải một lời hứa.
+2. **Chế độ cảnh báo** (mặc định hôm nay): thẻ thiếu neo vẫn được đếm và in, **không** làm đỏ — sáu tập đang chạy,
+   và làm đỏ lúc này là chặn cả những tập đang đúng.
+3. **Chuyển sang đỏ** khi survey báo 0 ở mọi tập: đặt `STRICT = True` trong tệp đó — một sửa tệp có dấu vết trong
+   git, không phải một lần bật cờ rồi quên.
+
+**CÒN LẠI.** Không có cách nào biết người chấm đã **soi** nhãn bao nhiêu lần; máy chỉ biết nhãn có đúng vật nó
+không. Và đổi tên một khoá trong danh mục vật làm mất neo của mọi thẻ trỏ tới nó — hướng dẫn bước 6 nói rõ điều
+đó, nhưng không có máy nào biết khoá nào vừa bị đổi.
+
+## N147 — medium — Nửa người của một luật chỉ là **lời hứa** cho tới khi có máy hỏi
+
+**BẰNG CHỨNG.** Nửa máy của luật nhãn (N142) hỏi được "thẻ này có neo đúng vật không". Nửa còn lại — *"người xem
+có đọc nhầm nhãn nào không"* — chỉ mắt người chấm thấy được, và lời dặn "liệt kê mọi nhãn như vậy ở mục
+`## NHÃN ĐỌC NHẦM`" sống **chỉ trong mẫu**. Không ai hỏi mục đó có trong bản chấm không. Bằng chứng rõ nhất là
+chính bản nghiệm thu cuối tap-01 (16:31): nó bắt được lỗi 2:18 **bằng mắt** — và **không có mục `## NHÃN ĐỌC
+NHẦM` nào cả**. Bản chấm xanh, vòng đóng tem, phim xuất bản; nếu người chấm đó tinh ý hơn thì lỗi đó đi qua.
+
+**CƠ CHẾ.** `channels/tram-nghi-nhieu/tools/check_label_section.py` hỏi bản chấm vừa viết bốn câu: mục
+`## NHÃN ĐỌC NHẦM` **có** trong bản chấm không; mục đó **đã trả lời** chưa (rỗng thì đỏ, ghi `KHÔNG CÓ` thì qua);
+mọi mã câu nó nêu có thật trong `voice/lines.json` không; mọi nhãn nó nêu có phải là chữ mà phim thật sự vẽ ra
+không (`CARDS` **và** những chữ đạo cụ in lên mình — "HUMIDITY", "MAX", "CÓ GIÓ" — nếu không biết những chữ đó thì
+luật sẽ đỏ oan). `review.sh` chạy nó ở **vòng hình** và **vòng nghiệm thu cuối**: thiếu mục là **đỏ**, y như
+`check_labels.py`. Công cụ chỉ soi bản chấm **của vòng đang chạy**, nên những bản chấm cũ đã nằm trên đĩa không bị
+soi lại (đường migrate của N142).
+
+**KIỂM CHỨNG.** Bản nghiệm thu cuối thật của tap-01: đỏ — "bản chấm không liệt kê nhãn đọc nhầm". Bản dựng lại có
+mục và nêu nhãn thật: xanh. Bản dựng lại có mục mà nêu nhãn đã bị đổi tên ("CHỒNG LÊN NHAU" — phim nay gọi là
+"CHỒNG ÁO"): đỏ. Selftest của công cụ có 9 ca, gồm cả mục viết không dấu, tiêu đề bản chấm nhắc "nhãn đọc nhầm"
+trong câu đề (không được nuốt mất mục thật), và chữ in trên đạo cụ.
+
+**CÒN LẠI.** Không có cách nào biết người chấm đã **thật sự nhìn** nhãn hay chỉ đọc lại mã nguồn. Công cụ chỉ bắt
+được "anh ta không trả lời", không bắt được "anh ta trả lời mà không nhìn" — phần đó vẫn là niềm tin, và niềm tin thì
+không có số đo.
+

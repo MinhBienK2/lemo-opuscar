@@ -38,6 +38,23 @@ Thẻ **không** có mã neo thì máy không kiểm được gì về nó, và 
 (thay vì im lặng). Thẻ có mã neo thì ba câu hỏi trên áp dụng đầy đủ, và một
 lỗi làm vòng chấm **đỏ** — cùng kiểu với `check_labels.py`.
 
+**Kế hoạch migrate (ba bước, không bật cờ một lần).** Thẻ thiếu mã neo hiện
+chỉ được **đếm và in ra**, chưa làm đỏ: có sáu tập đang chạy, và làm đỏ ngay
+lúc này là chặn cả những tập đang đúng. Cách đi:
+
+  1. **Thêm mã neo** cho mọi thẻ của mọi tập. Đo bằng `--survey`: nó in ra
+     từng tập, còn thiếu bao nhiêu thẻ. "Hết thiếu" là một **sự đo được**, không
+     phải một lời hứa.
+  2. **Chạy ở chế độ cảnh báo** (mặc định hôm nay): thẻ thiếu mã neo vẫn được
+     đếm, vẫn in, vẫn không làm đỏ — cổng chấm vẫn xanh, nhưng ai đọc log cũng
+     thấy còn bao nhiêu thẻ chưa có neo.
+  3. **Chuyển sang đỏ** khi `--survey` báo "0 thẻ thiếu" ở **mọi** tập: đặt
+     `STRICT = True` trong tệp này, và từ đó thẻ thiếu mã neo cũng làm vòng
+     chấm đỏ, y như ba câu hỏi kia.
+
+Bước 3 là một sửa tệp có dấu vết trong git, không phải một lần bật cờ rồi
+quên. Xem N142.
+
 Mã ra: 0 không lỗi; 1 có lỗi; 2 dùng sai, hoặc tập chưa có bảng nhãn.
 """
 import os
@@ -54,9 +71,18 @@ STOP = {'va', 'cua', 'la', 'co', 'duoc', 'voi', 'nhu', 'mot', 'cai', 'chiec', 'c
 
 WORD = re.compile(r'[a-z]{2,}')
 
+# Bước 3 của kế hoạch migrate (xem docstring): đặt True khi `--survey` báo
+# "0 thẻ thiếu" ở mọi tập. Hôm nay vẫn False — thẻ thiếu mã neo chỉ được đếm.
+STRICT = False
+
+# `đ` không phải dấu phụ nên NFD không bỏ nó — mà tiếng Việt thì đầy `đ`.
+# Không sửa thì "đàn áo phơi chồng" thành "an ao phoi chong": từ "đàn" biến
+# mất, và tên vật khớp nhầm với nhau. Mọi so khớp dựa trên tên vật đều cần nó.
+D_STROKE = str.maketrans({'đ': 'd', 'Đ': 'D'})
+
 
 def strip_accents(s):
-    s = s.lower()
+    s = s.lower().translate(D_STROKE)
     return ''.join(c for c in unicodedata.normalize('NFD', s) if not unicodedata.combining(c))
 
 
@@ -191,9 +217,49 @@ def report(ep):
     else:
         print('check_label_anchors: %d nhãn có mã neo, không nhãn nào sai' % (total - no_anchor))
     if no_anchor:
-        print('  (%d/%d thẻ chưa có mã neo — máy không kiểm được chúng; thêm '
-              '`anchor: \'<tên vật trong src/props.js>\'` vào thẻ đó)' % (no_anchor, total))
+        msg = ('  (%d/%d thẻ chưa có mã neo — máy không kiểm được chúng; thêm '
+               '`anchor: \'<tên vật trong src/props.js>\'` vào thẻ đó)' % (no_anchor, total))
+        if STRICT:
+            # bước 3 của kế hoạch migrate: thiếu mã neo cũng làm đỏ
+            print(msg + ' — CHẾ ĐỘ NGHIÊM: thẻ thiếu mã neo cũng làm vòng chấm đỏ')
+            bad.append('%d/%d thẻ chưa có mã neo' % (no_anchor, total))
+            return 1
+        print(msg)
     return 1 if bad else 0
+
+
+def survey(channel_root):
+    """đo xem còn tập nào thiếu mã neo — bước 1 và 2 của kế hoạch migrate
+
+    In ra từng tập: còn thiếu bao nhiêu thẻ. Khi mọi dòng đều "0", bước 3 (đặt
+    STRICT = True trong tệp này) là an toàn.
+    """
+    import glob
+    eps = sorted(glob.glob(os.path.join(channel_root, 'series', '*', '*')))
+    eps = [e for e in eps if os.path.isdir(e)]
+    if not eps:
+        print('check_label_anchors --survey: không tìm thấy tập nào trong %s' % channel_root,
+              file=sys.stderr)
+        return 2
+    missing_total = 0
+    for ep in eps:
+        n, bad, no_anchor, total = check(ep)
+        if n is None:
+            print('  %s — chưa có bảng nhãn (%s)' % (os.path.basename(ep), bad[0] if bad else '?'))
+            continue
+        missing_total += no_anchor
+        if bad:
+            print('  %s — %d nhãn sai, %d/%d thẻ chưa có mã neo'
+                  % (os.path.basename(ep), len(bad), no_anchor, total))
+        else:
+            print('  %s — %d thẻ, %d chưa có mã neo' % (os.path.basename(ep), total, no_anchor))
+    print('check_label_anchors --survey: còn %d thẻ chưa có mã neo trong %d tập'
+          % (missing_total, len(eps)))
+    if missing_total:
+        print('  → bước 1 (thêm mã neo) chưa xong. Chế độ hiện tại: cảnh báo (không đỏ).')
+    else:
+        print('  → không còn thẻ thiếu mã neo: bước 3 (đặt STRICT = True) là an toàn.')
+    return 0
 
 
 def selftest():
@@ -244,8 +310,11 @@ def selftest():
 def main():
     if len(sys.argv) > 1 and sys.argv[1] == '--selftest':
         return selftest()
+    if len(sys.argv) > 1 and sys.argv[1] == '--survey':
+        here = os.path.dirname(os.path.abspath(__file__))
+        return survey(os.path.dirname(here))
     if len(sys.argv) < 2:
-        print('usage: check_label_anchors.py <tập>', file=sys.stderr)
+        print('usage: check_label_anchors.py <tập> | --survey', file=sys.stderr)
         return 2
     return report(sys.argv[1])
 

@@ -1006,6 +1006,16 @@ Thư mục làm việc của bạn: $W. Đọc FILM-FACTS.md (những điều m�
   set_round FINAL-QA-REPORT.md "$n" 3
   sign "--final" FINAL-QA-REPORT.md
   cp FINAL-QA-REPORT.md "$EP/review/FINAL-QA-REVIEW-$n.md"; cp FINAL-QA-REPORT.md "$EP/review/FINAL-QA-REPORT.md"
+  # The last gate now demands that the critic SAY which labels a viewer could read as another object's. The
+  # prompt asks for it; only the machine can know it was answered — and a section that was never written is
+  # the same as a label nobody looked at (tap-01, 2:18). Missing section = red, like check_labels.py.
+  LSC=0
+  LSB=$(python3 "$CHANNEL/tools/check_label_section.py" "$EP/review/FINAL-QA-REVIEW-$n.md" "$EP" 2>&1) || LSC=$?
+  echo "$LSB"
+  if [ "$LSC" = 1 ]; then
+    echo "review --final: bản chấm không liệt kê nhãn đọc nhầm, hoặc nêu nhãn không có trong phim — bản chấm đã lưu ở $EP/review/FINAL-QA-REVIEW-$n.md; chạy lại vòng nghiệm thu để người chấm ghi mục '## NHÃN ĐỌC NHẨM' (ghi KHÔNG CÓ nếu không nhãn nào mơ hồ)" >&2
+    exit 1
+  fi
   cat FINAL-QA-REPORT.md
   # the gate owns the word: it accepts a report only when it really says ACCEPTED_FOR_PUBLISH, and it refuses
   # the template's own line, so a critic that copies the template does not publish a film nobody judged
@@ -1204,6 +1214,15 @@ MODE="(cả phim)"; [ -n "$LINES" ] && MODE="--lines $LINES"; [ -n "$CHID" ] && 
 set_round R.md "$n" "$LIMIT"
 sign "$MODE" R.md
 cp R.md "$EP/review/REVIEW-$SCOPE$n.md"; cp R.md "$EP/review/REVIEW.md"
+# The picture critic is asked to list every label a viewer could read as another object's. Only the machine can
+# know it answered: a missing section is a label nobody looked at (tap-01, 2:18). Missing = red, like check_labels.py.
+LSC=0
+LSB=$(python3 "$CHANNEL/tools/check_label_section.py" "$EP/review/REVIEW-$SCOPE$n.md" "$EP" 2>&1) || LSC=$?
+echo "$LSB"
+if [ "$LSC" = 1 ]; then
+  echo "review: bản chấm không liệt kê nhãn đọc nhầm, hoặc nêu nhãn không có trong phim — bản chấm đã lưu ở $EP/review/REVIEW-$SCOPE$n.md; chạy lại vòng chấm để người chấm ghi mục '## NHÃN ĐỌC NHẨM' (ghi KHÔNG CÓ nếu không nhãn nào mơ hồ)" >&2
+  exit 1
+fi
 # what the last round fixed and what is still open: the next round must not start from zero
 python3 "$CHANNEL/tools/check_progress.py" "$EP" 2>/dev/null || true
 cat R.md
