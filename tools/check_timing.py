@@ -16,11 +16,41 @@ Two critical visual storytelling classes checked:
      or compoundClocks) to prevent 5-10s visual freezes.
 
 Exit code: 0 clean; 1 timing/spoiler defects found; 2 usage.
+
+    python3 tools/check_timing.py --selftest   proves the checker can still say "no"
 """
 import os
 import re
 import sys
 import json
+import io
+import contextlib
+import tempfile
+
+# the conclusion stamp: the two reds a film draws its verdict in. A film that names the colour for
+# itself (const RED = '#F0525B') draws the same stamp, so the name counts too.
+RED_HEXES = ('#F0525B', '#D8402F')
+
+
+def color_names(src):
+    """the colours the film names for itself: RED = '#F0525B' means RED is that red stamp"""
+    out = set()
+    for name, hexv in re.findall(r"\b([A-Za-z_][A-Za-z0-9_]*)\s*=\s*'(#[0-9A-Fa-f]{6})'", src):
+        if hexv.upper() in RED_HEXES:
+            out.add(name)
+    return out
+
+
+def red_text_re(names):
+    """the red conclusion texts of one shot: a red stamp carrying the film's own word for it.
+
+    The colour is written either as a literal (fill: '#F0525B') or as the name the film gives it
+    (fill: RED) — both are the same stamp, so both must be read.
+    """
+    fills = '|'.join(sorted(set(RED_HEXES) | set(names)))
+    return re.compile(r"text\(g,\s*['\"]([^'\"]*(?:không|thất bại|đảo chiều|biến mất)[^'\"]*)['\"]"
+                      r".*?fill:\s*(?:['\"](?:" + fills + r")['\"]|(?:" + fills + r")\b)", re.I)
+
 
 def audit_film_timing(folder):
     film_js = os.path.join(folder, "src", "film.js")
@@ -32,10 +62,11 @@ def audit_film_timing(folder):
     issues = []
 
     # 1. Anti-Spoiler Check
+    red_re = red_text_re(color_names(film_src))
     shots_raw = re.findall(r"\{\s*n:\s*'([^']+)'[\s\S]*?f\(g,\s*lt,\s*T\)\s*\{([\s\S]*?)\}\s*,\s*ev", film_src)
     for sname, body in shots_raw:
         # Match red/accent conclusion texts or negation punchlines
-        red_texts = re.findall(r"text\(g,\s*['\"]([^'\"]*(?:không|thất bại|đảo chiều|biến mất)[^'\"]*)['\"].*?fill:\s*['\"](?:#F0525B|#D8402F)", body, re.I)
+        red_texts = red_re.findall(body)
         for rt in red_texts:
             idx = body.find(rt)
             preceding = body[max(0, idx - 200):idx]
@@ -77,7 +108,118 @@ def audit_film_timing(folder):
 
     return issues
 
+def selftest():
+    """a check that answers "yes" to everything is not a check: prove it can still say "no".
+
+    The lines are the real lines of tap-01 (phơi quần áo) and the film.js is the format the check reads
+    (the shots of the 2D episodes: a name, a time, the drawing, the events). Every case runs on a film
+    folder built in a temporary directory, and the verdict is the issues the checker reports.
+    """
+    # the real lines of tap-01: the ids are what the board's ORDER maps onto
+    LINES = [
+        {"id": "c1", "text": "Quần áo ướt treo trên dây, nước vẫn còn đó, chưa đi đâu cả."},
+        {"id": "c2", "text": "Nó còn ở trên vải, và sẽ phải rời đi bằng một cách khác."},
+        {"id": "c3", "text": "Vì sao phơi quần áo cần gió? Mình làm thí nghiệm nhỏ."},
+    ]
+
+    def film_js(order, shots):
+        """the board's ORDER and its shots, in the format the check reads"""
+        head = "const RED = '#F0525B';\nconst ORDER = [\n  " \
+               + ",\n  ".join(f"['{s}', '{l}', .3]" for s, l in order) + ",\n];\n"
+        body = "".join(
+            "  { n: '%s', t: %s, f(g, lt, T) {\n%s\n    }, ev: () => [] },\n" % (n, t, b)
+            for n, t, b in shots)
+        return head + "const SHOTS = [\n" + body + "];\n"
+
+    def shot(name, body, t="0"):
+        return (name, t, body)
+
+    def run(order, shots, strict=True):
+        """dựng một tập phim trong thư mục tạm và chạy đúng bộ kiểm này; trả về (mã thoát, chữ in ra)"""
+        with tempfile.TemporaryDirectory() as td:
+            os.makedirs(os.path.join(td, 'src'))
+            os.makedirs(os.path.join(td, 'voice'))
+            with open(os.path.join(td, 'src', 'film.js'), 'w', encoding='utf-8') as f:
+                f.write(film_js(order, shots))
+            with open(os.path.join(td, 'voice', 'lines.json'), 'w', encoding='utf-8') as f:
+                json.dump(LINES, f, ensure_ascii=False)
+            argv = sys.argv
+            sys.argv = ['check_timing.py'] + (['--strict'] if strict else []) + [td]
+            buf = io.StringIO()
+            try:
+                with contextlib.redirect_stdout(buf):
+                    code = main()
+            finally:
+                sys.argv = argv
+        return code, buf.getvalue()
+
+    # a shot that draws the scene
+    NEUTRAL = ("      const t0 = L('c1').t0;\n"
+               "      g.save(); camera(g, 1.03, 960, 620);\n"
+               "      deskWall(g, T, { top: 520 });\n"
+               "      g.restore();")
+    # the same shot, but it also drives the second line
+    TWO_LINES = ("      const t0 = L('c1').t0, t1 = L('c2').t0;\n"
+                 "      g.save(); camera(g, 1.03, 960, 620);\n"
+                 "      deskWall(g, T, { top: 520 });\n"
+                 "      g.restore();")
+    # the conclusion of the episode, in the film's own red, drawn straight away
+    PUNCH = ("      const t0 = L('c3').t0;\n"
+             "      text(g, 'hơi nước không đổi', 960, 760, { font: font(900, 36), align: 'center', fill: RED });")
+    # the same conclusion, but it waits for the voice
+    PUNCH_GATED = ("      const t0 = L('c3').t0;\n"
+                   "      if (T >= t0 + 2) { text(g, 'hơi nước không đổi', 960, 760, { font: font(900, 36), align: 'center', fill: RED }); }")
+
+    ORDER_TWO = [('hook', 'c1'), ('result', 'c3')]
+
+    cases = []
+
+    # 1. the anti-spoiler rule
+    code, out = run(ORDER_TWO, [shot('hook', TWO_LINES), shot('result', PUNCH, "L('c3').t0")])
+    cases.append(('an un-gated red punchline is caught',
+                  code == 1 and "un-gated punchline text 'hơi nước không đổi'" in out))
+    code, out = run(ORDER_TWO, [shot('hook', TWO_LINES), shot('result', PUNCH_GATED, "L('c3').t0")])
+    cases.append(('the same punchline behind a gate is left alone', code == 0 and 'check_timing: PASS' in out))
+
+    # 2. the anchor-collapse rule
+    code, out = run(ORDER_TWO, [shot('hook', NEUTRAL), shot('result', NEUTRAL, "L('c3').t0")])
+    cases.append(('a shot that spans two lines but names only the first is caught',
+                  code == 1 and "line 'c2' is never referenced" in out))
+    code, out = run(ORDER_TWO, [shot('hook', TWO_LINES), shot('result', NEUTRAL, "L('c3').t0")])
+    cases.append(('a shot that names every line it spans is left alone', code == 0 and 'check_timing: PASS' in out))
+
+    # 3. a clean film
+    code, out = run([('hook', 'c1'), ('proof', 'c2'), ('result', 'c3')],
+                    [shot('hook', NEUTRAL), shot('proof', TWO_LINES, "L('c2').t0"),
+                     shot('result', PUNCH_GATED, "L('c3').t0")])
+    cases.append(('a clean film has nothing to report', code == 0 and 'check_timing: PASS' in out))
+
+    # 4. the command line itself
+    argv = sys.argv
+    sys.argv = ['check_timing.py']
+    buf = io.StringIO()
+    try:
+        with contextlib.redirect_stdout(buf):
+            code = main()
+    finally:
+        sys.argv = argv
+    cases.append(('the usage branch exits 2', code == 2 and 'usage' in buf.getvalue()))
+
+    failed = 0
+    for name, ok in cases:
+        print(f'{"ok  " if ok else "FAIL"} {name}' if ok else f'FAIL {name}')
+        if not ok: failed += 1
+    if failed:
+        print(f'FAIL: {failed} case(s)')
+        return 1
+    print('ok')
+    return 0
+
+
 def main():
+    if '--selftest' in sys.argv[1:]:
+        return selftest()
+
     args = [a for a in sys.argv[1:] if not a.startswith('-')]
     strict = '--strict' in sys.argv
     if not args:

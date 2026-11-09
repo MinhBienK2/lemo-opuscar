@@ -12,8 +12,10 @@ What it audits:
   5. Slide-deck numbered bullet points: lines starting with "Một —", "Hai —", "1.", etc.
 
 Exit code: 0 if passed; 1 if errors found (or warnings in --strict mode); 2 usage.
+
+    python3 tools/check_script.py --selftest   proves the checker can still say "no"
 """
-import json, os, re, sys
+import contextlib, io, json, os, re, sys, tempfile
 from collections import Counter
 
 STOPWORDS_VI = {
@@ -24,7 +26,9 @@ STOPWORDS_VI = {
 }
 
 DIGIT_RE = re.compile(r'\b\d+\b')
-BULLET_RE = re.compile(r'^(?:một|hai|ba|bốn|năm|sáu|bảy|tám|chín|mười|\d+)\s*[—–-]', re.I)
+# "Một — ..." is a slide deck, and so is "1. ..." / "1 — ...". The period must be followed by a space,
+# so "3.5 độ" stays a number and not a bullet.
+BULLET_RE = re.compile(r'^(?:một|hai|ba|bốn|năm|sáu|bảy|tám|chín|mười)\s*[—–-]|^\d+\s*(?:[—–-]|\.\s)', re.I)
 
 
 def tokenize(text):
@@ -77,8 +81,8 @@ def audit_script(lines_data, strict=False):
                 errors.append(msg)
             else:
                 warnings.append(msg)
-        if len(toks) > 32:
-            warnings.append(f"#{i} [{lid}] Line is very long ({len(toks)} words; >32 words strains breathing/pacing): \"{text[:50]}...\"")
+        if len(toks) > 30:
+            warnings.append(f"#{i} [{lid}] Line is very long ({len(toks)} words; >30 words strains breathing/pacing): \"{text[:50]}...\"")
         elif len(toks) < 3 and not re.search(r'\b(nhưng|và|rồi|đúng vậy|chính nó)\b', text, re.I):
             warnings.append(f"#{i} [{lid}] Line is unusually short ({len(toks)} words): \"{text}\"")
 
@@ -124,10 +128,116 @@ def audit_script(lines_data, strict=False):
     return errors, warnings, total_words
 
 
+def selftest():
+    """a check that answers "yes" to everything is not a check: prove it can still say "no".
+
+    Every line here is a real line of a real episode (tap-01 and tap-02 of the channel), so a change in
+    the helpers that makes the check pass everything shows up here instead of in a film. Each case is run
+    through the checker itself, on a file written in a temporary folder, and the exit code is the verdict.
+    """
+    # the real lines: tap-02 (điện thoại nóng lúc sạc) and tap-01 (phơi quần áo)
+    REAL = [
+        {"id": "c1", "text": "Điện thoại nằm sấp trên bàn cạnh giường, dây cắm thẳng vào ổ.", "gap": 2.4},
+        {"id": "c2", "text": "Cái đồng hồ sạc trên màn hình cứ nhích lên từng chút một.", "gap": 0.3},
+        {"id": "c3", "text": "Và cái máy này, mình vừa cầm lên.", "gap": 0.3},
+        {"id": "c4", "text": "Ấm. Rõ ràng là nóng ở mặt lưng.", "gap": 0.7},
+        {"id": "c5", "text": "Vì sao điện thoại nóng lúc sạc?", "gap": 0.9},
+    ]
+    # a real line of tap-01, with the two defects a script must never carry
+    BULLET = {"id": "c3", "text": "Vì sao phơi quần áo cần gió? Mình làm thí nghiệm nhỏ.", "gap": 0.45}
+    REPEAT = [
+        {"id": "c13", "text": "Muốn rời khỏi vải, nước phải đổi thành hơi nước.", "gap": 0.45},
+        {"id": "c23", "text": "Chỗ trống đó, hơi nước mới đi được.", "gap": 0.2},
+        {"id": "c28", "text": "Gió làm đường đi của hơi nước ngắn lại.", "gap": 0.2},
+    ]
+
+    def run(lines, strict=False):
+        """chạy chính checker này trên một lines.json trong thư mục tạm; trả về (mã thoát, chữ in ra)"""
+        with tempfile.TemporaryDirectory() as td:
+            path = os.path.join(td, 'lines.json')
+            with open(path, 'w', encoding='utf-8') as f:
+                json.dump(lines, f, ensure_ascii=False)
+            argv = sys.argv
+            sys.argv = ['check_script.py', path] + (['--strict'] if strict else [])
+            buf = io.StringIO()
+            try:
+                with contextlib.redirect_stdout(buf), contextlib.redirect_stderr(buf):
+                    code = main()
+            finally:
+                sys.argv = argv
+        return code, buf.getvalue()
+
+    def lines(*texts, start=1):
+        return [{"id": f'c{i}', "text": t, "gap": 0.3} for i, t in enumerate(texts, start)]
+
+    cases = []
+
+    # a real script is clean
+    code, out = run(REAL)
+    cases.append(('a real episode script passes', code == 0 and '[ERRORS]' not in out and 'PASS' in out))
+
+    # the slide-deck bullet: the one the channel's own rules forbid
+    code, out = run([dict(BULLET, text='Một — ' + BULLET['text'])])
+    cases.append(('a slide-deck bullet is an error', code == 1 and 'slide-deck bullet' in out))
+
+    code, out = run([dict(BULLET, text='1. ' + BULLET['text'])])
+    cases.append(('a numbered slide-deck bullet is an error', code == 1 and 'slide-deck bullet' in out))
+
+    # a number written as a digit: a warning by default, an error under --strict
+    digit = dict(BULLET, text=BULLET['text'] + ' Ở 30 ĐỘ.')
+    code, out = run([digit])
+    cases.append(('raw digits are a warning, and the script still passes', code == 0 and 'raw digits' in out))
+    code, out = run([digit], strict=True)
+    cases.append(('raw digits are an error under --strict', code == 1 and 'raw digits' in out))
+
+    # the cadence: too long, too short
+    long_line = ' '.join(['nước'] * 31)
+    code, out = run([dict(BULLET, text=long_line)])
+    cases.append(('a line of 31 words is too long', code == 0 and 'very long' in out))
+    code, out = run([dict(BULLET, text=' '.join(['nước'] * 30))])
+    cases.append(('a line of 30 words is left alone', code == 0 and 'very long' not in out))
+    code, out = run([dict(BULLET, text='Hai số.')])
+    cases.append(('a line of two words is too short', code == 0 and 'unusually short' in out))
+
+    # the repetition: the same phrase over and over
+    code, out = run(lines(*[f'Hơi nước đi lên {i}.' for i in range(7)]))
+    cases.append(('a phrase repeated seven times is caught', code == 0 and 'repeats 7 times' in out))
+    code, out = run(lines(*[f'Nhiệt độ {i} ở đây.' for i in range(6)]))
+    cases.append(('the same phrase in every line of a window is caught', code == 0 and 'Local repetition' in out))
+
+    # the real repeated phrase of tap-01 is caught when the script says it seven times
+    code, out = run(lines(*[r['text'] for r in REPEAT] * 3))
+    cases.append(('the real phrase of tap-01, said nine times, is caught', code == 0 and 'repeats' in out))
+
+    # the command line itself
+    argv = sys.argv
+    sys.argv = ['check_script.py']
+    buf = io.StringIO()
+    try:
+        with contextlib.redirect_stdout(buf), contextlib.redirect_stderr(buf):
+            code = main()
+    finally:
+        sys.argv = argv
+    cases.append(('the usage branch exits 2', code == 2 and 'usage' in buf.getvalue()))
+
+    failed = 0
+    for name, ok in cases:
+        print(f'{"ok  " if ok else "FAIL"} {name}' if ok else f'FAIL {name}')
+        if not ok: failed += 1
+    if failed:
+        print(f'FAIL: {failed} case(s)')
+        return 1
+    print('ok')
+    return 0
+
+
 def main():
+    if len(sys.argv) > 1 and sys.argv[1] == '--selftest':
+        return selftest()
+
     if len(sys.argv) < 2:
         print("usage: python3 tools/check_script.py <episode-dir-or-lines.json> [--strict]", file=sys.stderr)
-        sys.exit(2)
+        return 2
 
     target = sys.argv[1]
     strict = '--strict' in sys.argv[2:]
@@ -137,17 +247,17 @@ def main():
 
     if not os.path.isfile(lines_file):
         print(f"check_script: file not found: {lines_file}", file=sys.stderr)
-        sys.exit(2)
+        return 2
 
     try:
         data = json.load(open(lines_file, encoding='utf-8'))
     except Exception as e:
         print(f"check_script: invalid JSON in {lines_file}: {e}", file=sys.stderr)
-        sys.exit(1)
+        return 1
 
     if not isinstance(data, list):
         print(f"check_script: lines.json must be a list of objects", file=sys.stderr)
-        sys.exit(1)
+        return 1
 
     errors, warnings, total_words = audit_script(data, strict=strict)
     print(f"check_script: {len(data)} lines, {total_words} words audited in {lines_file}")
@@ -164,11 +274,11 @@ def main():
 
     if errors or (strict and warnings):
         print(f"\ncheck_script: FAILED ({len(errors)} error(s), {len(warnings)} warning(s))")
-        sys.exit(1)
+        return 1
 
     print("\ncheck_script: PASS (cadence and vocabulary density are clean)")
-    sys.exit(0)
+    return 0
 
 
 if __name__ == '__main__':
-    main()
+    sys.exit(main())
