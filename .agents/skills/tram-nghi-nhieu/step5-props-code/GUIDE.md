@@ -53,3 +53,12 @@ Dựa trên `COMPONENTS_SPEC.md` đã được duyệt ở Bước 4, lập trì
    `review/PROPS-DIRECTORS-CUT.md` theo danh mục mới, rồi chạy
    `python3 channels/tram-nghi-nhieu/tools/check_props_refs.py <tập>` — nó nói **vật nào** mỗi số đang
    chỉ. Vòng `--props` tự gọi kiểm tra này, nên một số lệch sẽ chặn vòng chấm thay vì lọt xuống phim.
+6. **Bản chấm vật có thể phán sai — và nó nói rõ khi nào.** Bản chấm có hai người đọc: người đoán mù (nhìn
+   ảnh, không biết tên người làm định dựng) và người chấm (mở ảnh, so với tên định dựng). Người đoán mù có
+   thể đọc sai: ở tap-01 một lưới sợi đan bị gọi thành "đống lọ thuỷ tinh" và một bàn tay bị gọi thành "bàn
+   chân", người chấm lấy đúng lời đó để phán HỎNG, và vòng FAIL vì tám vật — trong đó hai vật đang đúng.
+   Nên **trước khi sửa `src/props.js` theo bản chấm, hãy mở `review/props/p_NN.jpg` và tự nhìn**. Dòng phán
+   quyết nay có trường "ảnh cho thấy:" — lời của chính người chấm — nên khi hai bên lệch nhau thì thấy ngay;
+   còn số trong `BLIND.md` thì không đáng tin (một vòng đã hoán đổi #20/#21 và bỏ mất #25): tin ảnh, đừng tin
+   số. Thêm nữa, mỗi vật phải có **đúng một** dòng phán quyết — `channels/tram-nghi-nhieu/tools/props_report_check.py`
+   chặn vòng khi thiếu hoặc lặp, vì vật thiếu là vật chưa ai nhìn.
