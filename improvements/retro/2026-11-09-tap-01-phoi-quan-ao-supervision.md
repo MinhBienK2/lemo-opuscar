@@ -2122,6 +2122,7 @@ tiền (trước vòng chấm, trước lúc dựng, trước lúc bàn giao), c
 | 70 | Người chấm đã chấm phim bằng một prompt bị cắt cụt (N70) | `channels/tram-nghi-nhieu/tools/review.sh`, `channels/tram-nghi-nhieu/tools/check_prompts.py`, `channels/tram-nghi-nhieu/tools/test_review_props.py` | **xong** — 3 prompt bị cắt (83 % lời dặn của vòng chấm vật dựng mất); guard tĩnh đọc tệp shell, bài kiểm tra chạy trọn vòng chấm với người chấm giả (19 điều, 2 giây, không GPU) |
 | 71 | Hướng dẫn của bước vẫn bảo gọi subagent, và người làm phim làm đúng như vậy (N71) | `.agents/skills/tram-nghi-nhieu/step{1,2,3,4,5}-*/GUIDE.md`, `.agents/skills/tram-nghi-nhieu/SKILL.md`, `channels/tram-nghi-nhieu/tools/check_reports.py` | **xong** — mọi hướng dẫn gọi đúng lệnh `review.sh`, kèm hợp đồng của bản cắt; cảnh báo sai về hai bước đã có công cụ bị xoá, và bài kiểm tra bắt đúng lỗi thật (bản cắt tập 01 không có dòng phán quyết) |
 | 77 | Bài kiểm tra hình báo "60 câu vật quá nhỏ" về 54 câu chưa từng được dựng: tờ sheet vẽ cho một khoảng câu đánh dấu phần còn lại là `skipped`, mà máy coi `fill` thiếu là 0 — nên 54 câu không hề có lỗi biến thành 54 lỗi giả, ngay ở chỗ người làm phim phải tin trước khi mở một vòng chấm bốn mươi phút | high | `check_shots.py` phân biệt *chưa đo* với *đo được 0* (câu `skipped` không còn bị báo lỗi, được đếm riêng), báo lỗi thật cho câu thiếu sự kiện giọng (`VOICE`), ra mã 2 khi chưa đo hết, chọn tờ sheet nào đo được nhiều câu hơn, và `review.sh` không dùng lại tờ nửa vời cho vòng chấm cả phim |
+| 78 | Đánh giá khách quan phim tập 01: cờ máy bắt được `SAME` và `FILL`, nhưng không bắt được điều quan trọng nhất — vật chính có phải là thứ câu đó đang gọi tên không (`fill` đo vật *lớn nhất*, không phải vật *được gọi tên*), vật có đang làm việc không, và tiền đề của cả phim có đọc được không ("áo ướt" nhìn như áo khô). 42 nhãn không có bài kiểm tra nào ghép được với vật trong khung, vì rig không trả về chỗ của vật | medium | **proposed** — `window.SHOTPROBE` trả thêm vị trí màn hình của từng vật, một `window.LABELPROBE` raycast đuôi mũi tên để biết nhãn trỏ vào vật nào, `check_labels.py` báo nhãn trỏ vào không / trỏ nhầm / câu gọi tên vật A mà vật B chiếm khung nhiều hơn; chưa làm vì R13 — ba phiên đang dựng bằng rig này |
 
 ### Mỗi phát hiện đã có dòng riêng trong `improvements/lessons.md`
 
@@ -2305,6 +2306,81 @@ mà không được báo gì.
 **Đo lại sau khi sửa, trên chính tập 01:** `60 câu — đo được 60 câu, 36 câu có vấn đề máy thấy được`.
 Tờ sheet đầy đủ nằm ở `review/beatsheet/beats.json`; tờ nửa vời ở `out/beats/beats.json` là tờ
 `--lines` cũ, và công cụ nay bỏ qua nó.
+
+---
+
+# Phần bốn: đánh giá khách quan phim tập 01 (đọc trên tờ sheet 60 khung, 10:03)
+
+Lúc viết phần này tập 01 **chưa có file mp4** — phiên làm phim đang dựng lại tờ sheet sau khi sửa
+code. Nên đánh giá này làm trên **tờ sheet đầy đủ 60 khung** (`review/beatsheet/sheet_1..5.jpg`, dựng
+lúc 10:03), cộng với cờ máy trong `beats.json` và bảng nhãn trong `src/film.js`. Khi có mp4, phần này
+được đo lại trên chính phim.
+
+## Cách đọc
+
+Năm tờ sheet, mỗi tờ mười hai khung, đọc như đọc một truyện tranh: lần theo dòng lời kể, xem mình có
+đọc được hình không nếu tắt tiếng. Rồi đối chiếu với cờ máy, rồi với bảng nhãn.
+
+## Kết quả
+
+**Phần làm được.** Ánh sáng có chiều sâu, nét mực viền đúng kiểu toon, bảng màu ấm và dịu, phòng có
+bố cục rõ (dây phơi, quạt, bàn gỗ, cửa sổ, đồng hồ). Nhãn dựng đúng câu gọi tên nó, có số thì số trên
+nhãn khớp lời kể (`20 g/kg` ở c41, `30 °C` ở c44–c45, `90 %` và `×5` ở c46, `3 ÁO` ở c40 đúng câu "Ba
+cái áo phơi chồng lên nhau", `GÓC XA`/`TRƯỚC QUẠT` ở c34–c35 đúng với hai cái cân lệch nhau). Bốn mươi
+hai nhãn cho sáu mươi câu — hầu như không câu nào mà người xem không biết đang nhìn cái gì. Thí nghiệm
+hai tấm kính ở c35–c37 đọc được ngay, và đó là đoạn dạy tốt nhất của phim.
+
+**Bốn chỗ yếu, theo thứ tự nghiêm trọng.**
+
+1. **Cái áo không trông ướt.** Cả phim dựa vào tiền đề "quần áo ướt", nhưng ở c1 (khung mở đầu, `fill
+   8 %`) và c4, áo là một mảng bê-tông màu be, không có vệt ẩm, không có mép đậm, không có giọt. Người
+   xem tắt tiếng ở c1 thấy một căn phòng có quần áo treo — không thấy "ướt". Cùng kiểu lỗi ở c49: dõi
+   "áo úp" (không phơi một mặt) và "áo phơi rộng" bằng màu, màu áo úp và áo phơi rộng phải **khác nhau
+   một cách đọc được** (áo úp sẫm hơn, úp sát nhau, mép dính).
+2. **Ba đoạn dài hình gần như đứng yên.** Cờ `SAME` của máy rơi vào đúng ba đoạn, và đọc tay thấy nó
+   đúng: **c25–c32** (gió quét lớp ẩm), **c34–c37** và **c46–c60** (đoạn kết: ẩm, nhiệt, gió, chỗ
+   thoáng). Lời kể ở c27–c32 nói những việc **có chuyển động** — "lớp ẩm bị quét đi", "gió chở hơi nước
+   đi", "quét xa hơn" — mà hình thì chỉ đổi chút ánh sáng và góc máy. Người xem không thấy vật nào đang
+   làm việc. Đây đúng là lỗi mà luật của kênh cấm: *"chỉ lia máy thì vật vẫn đứng yên"*.
+3. **Hai mươi câu có vật chính dưới 15 % khung.** Tệ nhất là c13–c18: các nhát cận cảnh trong vải —
+   mấy cục cầu đỏ/trắng trên nền xanh — trông y hệt nhau và không có nhãn nào gọi tên chúng (nhãn
+   "PHÂN TỬ BAY LÊN" chỉ ở c17). Người xem tắt tiếng không biết đó là nước hay đường. Cùng kiểu:
+   c38 (`fill 0 %`, cảnh toàn phòng rộng trong lúc lời nói "còn lại, ba thứ quyết định tốc độ" —
+   ba thứ đó chưa hiện ra), c35, c45, c53, c55.
+4. **Cảnh trong vật thiếu dấu hiệu "nước".** C8–c12 và c22–c24 có bầu hơi và giọt, nhưng không có
+   màu nào nói đó là nước; cùng một vật liệu be xuyên suốt, nên "nước" và "vải" trông giống nhau.
+
+## Cái máy không thấy được, và vì sao
+
+Cờ máy bắt được `SAME` (đo bằng bố cục + sắc độ) và `FILL` (đo tỉ lệ vật lớn nhất). Nó **không** bắt
+được:
+- **vật chính có phải là thứ câu đó đang gọi tên không** — `fill` đo vật *lớn nhất* trong khung, chứ
+  không phải vật *được gọi tên*; nên một câu nói về "hai cái cân" mà khung có cây quạt to hơn vẫn xanh;
+- **vật có đang làm việc không** — `SAME` đo "khung có giống nhau không", không đo "chuyện câu đó kể
+  có xảy ra không";
+- **tiền đề của cả phim có đọc được không** — "áo ướt" không phải cờ máy nào đo được; người chấm phải
+  đọc bằng mắt, và vòng chấm hình đã bận với 22 cờ SAME nên không dừng lại nói.
+
+Đây là lý do vòng chấm hình không thay được một cái nhìn của người, và cũng là lý do **không nên** mở
+một vòng chấm hình trước khi các lỗi máy thấy đã sạch.
+
+## N78 — medium — Cổng chưa biết cái nhãn trỏ vào vật nào, nên không ai kiểm được chuyện quan trọng nhất
+
+**Bằng chứng.** `src/film.js` khai 42 nhãn, mỗi nhãn có `at:` (điểm neo) và `lines:` (những câu nó
+thuộc về). Rig (`window.SHOTPROBE`) trả về `shot.cast` — danh sách vật trong khung kèm tỉ lệ chiếm
+khung — nhưng **không trả về chỗ của từng vật trên màn hình**, nên không ai ghép được "cái nhãn này
+trỏ vào vật nào". Vì vậy:
+- không có bài kiểm tra nào bắt được **nhãn trỏ vào không** (đã từng xảy ra: c33/c39/c44/c49/c59/c60
+  trong các vòng trước);
+- không có bài kiểm tra nào bắt được **nhãn trỏ vào nhầm vật**;
+- không có bài kiểm tra nào bắt được **câu gọi tên vật A mà vật B lớn hơn nằm giữa khung**.
+
+**Đề xuất (chưa làm — R13: ba phiên đang dựng bằng rig này).** `window.SHOTPROBE` trả thêm vị trí màn
+hình của từng vật trong `cast`; một probe mới `window.LABELPROBE` raycast từ đuôi mũi tên của mỗi nhãn
+để biết nó trỏ vào vật nào (hoặc không vào vật nào); `check_labels.py` đọc kết quả đó và báo:
+nhãn không trỏ vào gì; nhãn trỏ vào vật không thuộc câu đó; và câu đó gọi tên vật A nhưng vật chiếm
+khung nhiều nhất lại là B. Khi đó `fill` của cờ `FILL` cũng nên đo **vật được gọi tên**, thay vì vật lớn
+nhất — cùng một số đo, đúng nghĩa hơn.
 
 ---
 
