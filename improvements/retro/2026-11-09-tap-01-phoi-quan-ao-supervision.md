@@ -3845,3 +3845,43 @@ tiếp. Ba lần REJECT thật (tập 03 storyboard lúc 15:34, tập 04 chươn
 **Đã làm.** `review.sh` tự phân biệt: vòng nào đã viết bản chấm có dòng `VERDICT:` thì ghi "vòng chấm có
 phán quyết … không phải chết", vòng nào không thì vẫn là "chết (exit N) — không có phán quyết". Cổng in
 lời dặn ứng với từng loại. `gate.py --selftest` có 3 ca mới (27/27). Commit `9f3cdfe`.
+
+## N121 — high — R1 là luật viết bằng văn xuôi, nên không phiên nào giữ được
+
+**Bằng chứng.** R1 nằm ngay trong prompt khởi đầu của mọi phiên làm phim ("sửa file bằng công cụ sửa
+file: `edit` / `write` … đừng dùng heredoc"). Số lần ghi file bằng shell đo được: tập 01 **370**, tập 02
+**42**, tập 03 3, tập 05 (mở sau các hook khác) **1**. Tập 02 còn có một heredoc đã **hỏng chữ tiếng Việt**
+trong lời kể của cả tập — đúng cái tai nạn R1 nói tới.
+
+**Vì sao quan trọng.** Ba luật đã thành cơ chế vì chúng đo được bằng máy: R5b (đọc log), R11 (đọc lại
+tệp lớn), R12 (mở lại ảnh). R1 thì chưa có cơ chế, dù nó là luật mà hậu quả nặng nhất: một lần ghi sai
+đặt là hỏng tệp nguồn của cả tập.
+
+**Đã làm.** Hook `PreToolUse` thứ ba trong `.claude/settings.json` của thư viện:
+`tools/hook_shell_write.py`. Nó chặn lệnh **ghi tệp nguồn của dự án bằng shell** — một heredoc có lệnh ghi
+trong thân, hoặc một chuyển hướng/`tee` trỏ vào tệp nguồn. Hẹp để không chặn nhầm: heredoc chỉ đọc, ghi ra
+`/tmp`, ghi vào `out/` hay `review/`, tệp log, và chính lệnh `python3 tools/replace.py --batch -` đều đi
+qua. Selftest 15 ca. Commit `7a12305`.
+
+**Nó chặn cả tôi.** Ngay sau khi commit, lượt `Bash` kế tiếp của chính tôi — `cat >> … <<'EOF'` vào đúng
+tệp retro này — bị chặn. Đó vừa là bằng chứng cơ chế chạy, vừa là hậu quả của việc tôi viết tài liệu
+bằng chính cách mà luật cấm. Từ đó tôi viết tài liệu bằng công cụ sửa file.
+
+## Kiểm chứng — chơi lại lịch sử thật qua các hook
+
+Các hook mới không chỉ "có vẻ đúng": tôi lấy **đúng những lệnh** mà các phiên đã chạy (theo thứ tự thời
+gian, từ transcript) rồi cho chúng qua bộ quyết định của hook, y như lúc chạy thật:
+
+| Phiên | `hook_bg_log` chặn | `hook_stale_read` chặn | `hook_shell_write` chặn |
+|---|---|---|---|
+| tập 01 | 211 lần đọc lại log | (đã có, N109) | 24 lệnh ghi tệp nguồn bằng shell |
+| tập 02 | 88 | (đã có) | 7 |
+| tập 03 | 74 | (đã có) | 1 |
+| tập 05 (mới) | 1 (đúng lần bị chặn lúc 16:0x) | 0 | 0 |
+
+Tức là 373 lần đọc lại log và 32 lệnh ghi tệp nguồn bằng shell — **tất cả đều xảy ra trước khi cơ chế có
+mặt**, và bây giờ đều bị chặn. Số "cho qua" (lần đầu, lần thứ hai của mỗi tệp) là số lần đọc *một* lần
+là đúng việc.
+
+Một con số đáng nói: tập 01 đọc lại log **211 lần** mà không lần nào bị chặn — và transcript của nó dài
+981 MB. Một nửa cái phim đó là công cốc.
