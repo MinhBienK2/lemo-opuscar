@@ -306,7 +306,20 @@ RUNNING="$EP/review/.round-$SCOPE_ID.running"
 mkdir -p "$EP/review"
 rm -f "$DIED"
 printf 'bắt đầu %s · pid %s\n' "$(date '+%H:%M:%S')" "$$" > "$RUNNING"
-trap 'rc=$?; cd /; rm -rf "$W" "$LOCK"; rm -f "$RUNNING"; if [ "$rc" -ne 0 ]; then printf "vòng chấm chết (exit %s) lúc %s\n" "$rc" "$(date "+%H:%M:%S")" > "$DIED"; fi' EXIT
+# A round that ends with a verdict is NOT a dead round. The gate used to call every non-zero exit "ĐÃ CHẾT" and
+# told the producer "don't open a second round" — but a REJECT is exactly the case where the producer must
+# open the next round after fixing. So the marker says which of the two happened: a round that wrote a report
+# with a verdict has answered; a round that did not has failed to answer.
+trap 'rc=$?; cd /;
+  if [ "$rc" -ne 0 ]; then
+    V=$(find "$EP/review" -maxdepth 1 -name "*.md" -newer "$RUNNING" 2>/dev/null | head -1)
+    if [ -n "$V" ] && grep -qiE "VERDICT:" "$V" 2>/dev/null; then
+      printf "vòng chấm có phán quyết (exit %s) lúc %s — không phải chết: đọc %s, sửa theo nó, rồi chạy vòng kế tiếp\n" "$rc" "$(date "+%H:%M:%S")" "${V##*/}" > "$DIED"
+    else
+      printf "vòng chấm chết (exit %s) lúc %s — không có phán quyết: đọc log của job nền rồi chạy lại\n" "$rc" "$(date "+%H:%M:%S")" > "$DIED"
+    fi
+  fi
+  rm -rf "$W" "$LOCK"; rm -f "$RUNNING"' EXIT
 
 # ——————————————————————————————————————————— the outline ———————————————————————————————————————————
 if [ "$OUTLINE" = 1 ]; then

@@ -305,7 +305,19 @@ def status(ep):
         why = valid(ep, kind)
         print(f'{kind:<11} {"PASS còn hiệu lực" if why is None else "PASS đã hết hiệu lực: " + why}')
     for scope, txt in dead_rounds(ep):
-        print(f'vòng chấm ĐÃ CHẾT: {scope} — {txt} — đọc log của job nền rồi chạy lại, đừng mở vòng thứ hai')
+        # A round that ended with a verdict has ANSWERED; only a round that ended without one has died. The old
+        # marker said "ĐÃ CHẾT" for both, and told the producer "don't open a second round" — which is the wrong
+        # instruction exactly when the judge said "no" and the producer must fix and try again (tap-03's
+        # storyboard, tap-04's chapters: three REJECTs, all reported as deaths).
+        m = re.search(r'exit (\d+)', txt)
+        code = int(m.group(1)) if m else None
+        if txt.startswith('vòng chấm có phán quyết'):
+            print(f'vòng chấm đã có phán quyết, không phải chết: {scope} — {txt}')
+        elif code == 1:
+            print(f'vòng chấm dừng (exit 1), không phải chết: {scope} — {txt} — đọc bản chấm mới nhất trong '
+                  f'{ep}/review/ và lời nhắc của công cụ, sửa rồi chạy vòng kế tiếp')
+        else:
+            print(f'vòng chấm ĐÃ CHẾT: {scope} — {txt} — đọc log của job nền rồi chạy lại, đừng mở vòng thứ hai')
     reports = sorted(glob.glob(os.path.join(ep, 'review', '*REVIEW*.md')) + glob.glob(os.path.join(ep, 'review', 'REVIEW*.md')),
                      key=os.path.getmtime)
     if reports:
@@ -538,6 +550,29 @@ def selftest():
                       'script      PASS còn hiệu lực' in txt, txt.replace('\n', ' | '), ''))
         cases.append(('tập có chương: cổng cũng mở cho bước đó',
                       kind_ok(ep2, 'script') is None, kind_ok(ep2, 'script'), ''))
+
+        # — một vòng chấm có phán quyết thì không phải vòng chấm chết —
+        # Ba lần REJECT (tập 03 storyboard, tập 04 chương 2 và 4) đều bị cổng gọi là "ĐÃ CHẾT" và dặn
+        # "đừng mở vòng thứ hai" — đúng lúc người làm phim phải sửa rồi chạy vòng kế tiếp.
+        for label, marker, want, unwanted in (
+                ('vòng chấm có phán quyết thì không phải chết',
+                 'vòng chấm có phán quyết (exit 1) lúc 15:34:41 — không phải chết: đọc X, sửa theo nó, rồi chạy vòng kế tiếp',
+                 'không phải chết', 'ĐÃ CHẾT'),
+                ('vòng chấm exit 1 thì không phải chết',
+                 'vòng chấm chết (exit 1) lúc 15:38:32',
+                 'không phải chết', 'ĐÃ CHẾT'),
+                ('vòng chấm chết thật thì báo là đã chết',
+                 'vòng chấm chết (exit 2) lúc 16:07:53 — không có phán quyết: đọc log của job nền rồi chạy lại',
+                 'ĐÃ CHẾT', 'không phải chết')):
+            mp = os.path.join(ep2, 'review/.round-storyboard.died')
+            open(mp, 'w', encoding='utf-8').write(marker + '\n')
+            buf = io.StringIO()
+            with contextlib.redirect_stdout(buf), contextlib.redirect_stderr(io.StringIO()):
+                status(ep2)
+            txt = buf.getvalue()
+            cases.append((label, want in txt and unwanted not in txt,
+                          [l for l in txt.split('\n') if 'vòng chấm' in l], ''))
+            os.unlink(mp)
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 
