@@ -371,7 +371,14 @@ def map_note(ep):
     reader to the wrong lines — and a map the reader has learned to distrust is worse than no map (N74).
     So the gate says so, in the place the director already reads, and never refuses."""
     src = os.path.join(ep, 'src')
+    if not os.path.isdir(src):
+        return
     if not os.path.isfile(os.path.join(src, 'MAP.md')):
+        # không có bản đồ thì không có gì để soi — nhưng **vắng mặt** của nó cũng là tin: bản đồ "tên hàm → dòng"
+        # là bắt buộc từ bước vật dựng, và không có nó thì người đọc phải đọc cả tệp để tìm một hàm (N74).
+        if any(f.endswith('.js') for f in os.listdir(src)):
+            print('ghi chú (bản đồ mã): chưa có src/MAP.md — bản đồ "tên hàm → dòng" của tập là bắt buộc từ bước vật dựng; '
+                  'không có nó thì người đọc phải đọc cả tệp mới tìm ra một hàm')
         return
     tool = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', 'tools', 'check_map.py')
     try:

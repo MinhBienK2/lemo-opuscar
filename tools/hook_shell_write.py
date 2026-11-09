@@ -33,12 +33,41 @@ SOURCE_EXT = ('.js', '.mjs', '.cjs', '.jsx', '.ts', '.py', '.md', '.json', '.htm
               '.sh', '.yaml', '.yml', '.txt', '.svg')
 # nơi không chặn: tệp sinh ra lúc chạy, không phải mã nguồn
 SKIP_DIR = ('/out/', '/review/', '/node_modules/', '/.git/', '/__pycache__/', '/dist/', '/build/')
+# …nhưng **script** không phải tệp sinh ra lúc chạy: một .review-local.sh viết bằng shell là mã nguồn lọt vào
+# thư mục của tập, và nó được commit cùng tập đó. Ngoại lệ cho out/ và review/ không áp dụng cho chúng.
+SCRIPT_EXT = ('.sh', '.py', '.bash', '.zsh')
 SKIP_EXT = ('.log', '.tmp', '.output', '.jpg', '.jpeg', '.png', '.webp', '.mp4', '.wav', '.mp3', '.jsonl')
 
 WRITE_API = re.compile(
     r"open\(\s*(?P<q1>['\"])(?P<p1>[^'\"]+)(?P=q1)\s*,\s*['\"]w"        # open('tệp', 'w')
     r"|\(\s*(?P<q2>['\"])(?P<p2>[^'\"]+)(?P=q2)\s*\)\s*\.\s*write_text\("  # Path('tệp').write_text(
     r"|\(\s*(?P<q3>['\"])(?P<p3>[^'\"]+)(?P=q3)\s*\)\s*\.\s*write_bytes\(")  # Path('tệp').write_bytes(
+
+# một heredoc ghi tệp qua một **biến** ("p = 'research/FACTS.md'; open(p, 'w')") không để lộ đường dẫn,
+# nên WRITE_API không nhìn thấy nó — và tệp bị ghi là tệp nguồn thật (FACTS.md là tệp mà cả phim trích dẫn,
+# và mà các kiểm tra claim/facts đọc). Đường dẫn được gán vào một biến rồi biến ấy được ghi vào thì chặn.
+ASSIGN = re.compile(r"(?m)^\s*(?P<v>[A-Za-z_]\w*)\s*=\s*(?P<q>['\"])(?P<p>[^'\"]+)(?P=q)")
+PROJECT_FILE = re.compile(
+    r"(?:channels|films|styles|core|tools|rig|src|research|voice|review|out)/[A-Za-z0-9_./-]*"
+    r"\.(?:md|json|js|mjs|cjs|jsx|ts|py|html|css|sh|yaml|yml|txt|svg)")
+
+
+def var_project_writes(body):
+    """Các tệp trong dự án mà thân heredoc ghi vào qua một biến"""
+    out = []
+    body = body or ''
+    for m in ASSIGN.finditer(body):
+        v, p = m.group('v'), m.group('p')
+        if not PROJECT_FILE.search(p):
+            continue
+        v = re.escape(v)
+        writes = (re.search(r"open\(\s*%s\s*,\s*['\"][wax]" % v, body)
+                  or re.search(r"Path\(\s*%s\s*\)\s*\.\s*write_(?:text|bytes)\(" % v, body)
+                  or re.search(r"\b%s\s*\.\s*write_(?:text|bytes)\(" % v, body))
+        if writes:
+            out.append(p)
+    return out
+
 
 HEREDOC = re.compile(r"<<-?\s*(['\"]?)([A-Za-z_]\w*)\1")
 REDIRECT = re.compile(r"(?:^|[^0-9<>])>>?\s*(?!&)(?P<p>[^\s|;&]+)")
@@ -73,7 +102,7 @@ def is_source(path, root):
     if not full.startswith(root + os.sep):
         return False
     low = full.replace('\\', '/')
-    if any(d in low for d in SKIP_DIR):
+    if ext not in SCRIPT_EXT and any(d in low for d in SKIP_DIR):
         return False
     return ext in SOURCE_EXT
 
@@ -125,6 +154,9 @@ def decide(command, root=None):
     for kind, path in targets(command):
         if is_source(path, root):
             return 2, MESSAGE % (f'{kind}: {path}')
+    for body in heredoc_bodies(command):
+        for path in var_project_writes(body):
+            return 2, MESSAGE % (f'heredoc (ghi qua biến): {path}')
     return 0, ''
 
 
@@ -147,6 +179,12 @@ def selftest():
         ("echo x > /dev/null", False),
         ("python3 - <<'PY'\nprint('sys.stdout.write is fine')\nPY", False),
         ("node channels/tram-nghi-nhieu/propcheck.mjs tap --out out/p", False),
+        # — ghi qua biến: đường dẫn không lộ ra nên WRITE_API không thấy —
+        ("python3 - <<'PY'\np='research/FACTS.md'\ns=open(p).read()\nopen(p,'w').write(s.replace('a','b'))\nPY", True),
+        ("python3 - <<'PY'\np='/tmp/ghi.txt'\nopen(p,'w').write('x')\nPY", False),
+        # — script trong thư mục của tập vẫn là mã nguồn, kể cả khi nằm trong review/ —
+        ("cat > review/.review-local.sh <<'EOF'\necho x\nEOF", True),
+        ("cat > out/helper.py <<'EOF'\nprint(1)\nEOF", True),
     ]
     failed = 0
     for cmd, want in cases:
