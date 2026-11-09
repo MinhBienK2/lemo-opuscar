@@ -3502,6 +3502,24 @@ quạt → khác biệt giữa hai cái áo → hơi nước và khí), bố c�
 Điểm yếu còn lại: **mấu chốt hiện ra muộn (giây 22) và ở cỡ nhỏ**, và **chi tiết ở mép khung thì phải
 nghe mới hiểu**.
 
+### Nơi cái nhìn của người xem thành luật (16:5x, skill v14.9.0)
+
+Một trong những điều tôi ghi ở trên là **không phải lỗi**: cái áo ướt không có thẻ ở c6. Nhưng "không phải
+lỗi" không có nghĩa là "không đáng sửa" — và ở đây có một **luật** đằng sau nó: người xem phải **nhớ** rằng
+cái áo ướt ở c6 chính là cái áo "KHÔNG CÓ GIÓ" ở c5. Người xem không có lý do để phải nhớ: hai cái áo
+giống nhau, máy đã lùi xa, và lời kể không nhắc tên.
+
+Luật sinh ra từ đó, đã đưa vào skill (v14.9.0):
+
+- **Người làm** (`step6-assembly/GUIDE.md`): nếu hai câu liên tiếp nói về cùng một vật mà câu sau không
+  nhắc lại tên nó, **giữ thẻ gọi tên vật đó ở câu sau** (tối đa 1 thẻ) — người xem khớp bằng mắt.
+- **Người chấm** (`step6-assembly/PROMPT_CRITIC.md`): vật phải còn nhận ra được ở câu sau — hoặc có thẻ,
+  hoặc đủ nổi bật để không cần thẻ. Khi máy đã lùi xa mà vật nhỏ đi, người xem không theo kịp: đó là lỗi
+  của phim, không phải của người xem.
+
+Đây là hình dạng chung của cả đợt giám sát này: **một cái nhìn bằng mắt trên phim thật sinh ra một luật
+cho tập sau** — không phải một lời khen, không phải một phán quyết về riêng tập này.
+
 ## N110 — medium — Cổng bàn giao đo được khoảng trống, không đo được thứ quan trọng nhất: hiện tượng có nhìn thấy được không
 
 - **Bằng chứng.** Ở tập 01, khác biệt giữa hai cái áo — mấu chốt của cả tập — chỉ hiện ra ở c6–c7
