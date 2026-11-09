@@ -46,19 +46,49 @@ def project_file(f, cmd, lib=''):
 
 # the files the command writes, as opposed to the files it merely names: a script that reads core/render/still.mjs
 # and writes src/film.js has written one file, not two.
+def variables(body):
+    """the simple assignments of a command body: NAME='literal'. A name the command writes to is often set
+    first — `p="src/film.js"; open(p,"w")` — and a rule that cannot follow the name says "R1?" and stops
+    there, leaving the reader with a line they cannot act on (N54)."""
+    out = {}
+    for m in re.finditer(r"([A-Za-z_]\w*)\s*=\s*['\"]([^'\"\n]{1,200})['\"]", body):
+        out[m.group(1)] = m.group(2)
+    return out
+
+
 def write_targets(cmd):
     tg = []
     body = cmd
     m = re.search(r"<<-?\s*['\"]?[A-Za-z_]\w*", cmd)
     if m:
         body = cmd[m.end():]
+    vars_ = variables(body)
+
+    def resolve(expr):
+        """a name in the command may stand for the path it was given earlier in the same command"""
+        expr = expr.strip().strip("'\"")
+        return vars_.get(expr, expr)
+
     for m2 in re.finditer(r"open\(\s*([^,)]{1,160}?)\s*,\s*['\"]w", body):
-        expr = m2.group(1).strip().strip("'\"")
-        if re.fullmatch(r"[\w./-]+", expr):
-            tg.append(expr)
+        expr = m2.group(1)
+        r = resolve(expr)
+        if re.fullmatch(r"[\w./-]+", r):
+            tg.append(r)
         else:
             for m3 in re.finditer(re.escape(expr) + r"\s*=\s*['\"]([^\"']+)\"", body):
                 tg.append(m3.group(1))
+    # a script that writes through a table of edits: {"file": "src/x.js", "old": …, "new": …}
+    for m4 in re.finditer(r"['\"]file['\"]\s*:\s*['\"]?([\w./-]+)['\"]?", body):
+        tg.append(m4.group(1))
+    for m5 in re.finditer(r"['\"]file['\"]\s*:\s*([A-Za-z_]\w*)", body):
+        r = resolve(m5.group(1))
+        if re.fullmatch(r"[\w./-]+", r):
+            tg.append(r)
+    # a file written without open(): Path(p).write_text(...), p.write_text(...)
+    for m6 in re.finditer(r"(?:write_text|write_bytes)\(\s*([^,)]{1,160}?)\s*\)", body):
+        r = resolve(m6.group(1))
+        if re.fullmatch(r"[\w./-]+", r):
+            tg.append(r)
     tg += re.findall(r"(?<![0-9&])>{1,2}\s*([\w./-]+)", cmd)
     tg += re.findall(r"\bsed\s+-i(?:\.\w+)?\s+(?:'[^']*'|\"[^\"]*\"|\S+)\s+([\w./-]+)", cmd)
     for m4 in re.finditer(r"\b(?:cp|mv)\s+(?:-\S+\s+)*([\w./-]+)\s+([\w./-]+)", cmd):
@@ -258,6 +288,15 @@ def selftest():
         _fake_transcript(session, ["cat > /tmp/scratch.py <<'EOF'\nx=1\nEOF"])
         got = '\n'.join(rules(session))
         cases.append(('tệp tạm trong /tmp thì không phải R1', 'R1 ' not in got, got, ''))
+
+        # a write through a name the command set first: the rule must follow the name, or it says "R1?" and
+        # leaves the reader with a line they cannot act on — and the count comes out ten times too small
+        _fake_transcript(session, [
+            "python3 - <<'PY'\np='src/film.js'\ns=open(p,encoding='utf-8').read()\nopen(p,'w').write(s)\nPY",
+        ])
+        got = '\n'.join(rules(session))
+        cases.append(('ghi qua một tên biến thì vẫn nêu đúng tệp', 'src/film.js' in got, got, ''))
+        cases.append(('ghi qua một tên biến thì không còn là R1?', 'R1?' not in got, got, ''))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 

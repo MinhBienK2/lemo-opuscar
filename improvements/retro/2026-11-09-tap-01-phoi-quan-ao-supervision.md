@@ -1732,6 +1732,42 @@ công cụ đáng lẽ phải là đường đi an toàn (R1: sửa bằng công
 
 ---
 
+## N59 — high — Báo cáo của người giám sát đếm thiếu một phần mười lần việc ghi bằng shell
+
+**Bằng chứng.** Luật R1 bỏ sót những lệnh ghi tệp qua một **tên biến**:
+
+```python
+p="src/film.js"; s=open(p,encoding="utf-8").read()
+...
+open(p,"w",encoding="utf-8").write(s)
+```
+
+Tệp đích nằm sau một phép gán, nên luật không theo được tên, và nó dừng ở dòng `R1?` — *"lệnh
+không nói tệp nào"*. Trên phiên tập 01, đó là **25 lần trong số 369** lần ghi bằng shell: báo
+cáo nói `R1 37 lần`, sự thật là `R1 369 lần`.
+
+**Vì sao nó quan trọng.** Một báo cáo đếm thiếu mười lần thì người đọc tưởng vấn đề nhỏ:
+*"37 lần"* nghe như một lỗi lặp lại, *"369 lần"* nghe như một **cách làm việc**. Đó là khác
+biệt giữa "sửa lỗi" và "đổi cách làm" — và người giám sát là người nên nhìn thấy cái thứ hai.
+
+**Đã sửa.** `write_targets()` nay theo các phép gán đơn giản trong cùng lệnh (`NAME='…'`), và
+đọc cả dạng bảng sửa (`{"file": …}`) lẫn `write_text(...)`. Hai ca selftest mới: *"ghi qua một
+tên biến thì vẫn nêu đúng tệp"* và *"ghi qua một tên biến thì không còn là R1?"*.
+
+**Đo lại trên ba phiên đang chạy:**
+
+| Tập | R1 (ghi bằng shell) | R10 (montage tự viết) | R11 (đọc lại) | R12 (mở ảnh) | Transcript |
+|---|---|---|---|---|---|
+| tap-01 | **369** — `src/film.js×167, src/props.js×62, src/set.js×46, LOOK.md×39, COMPONENTS_SPEC.md×18, TREATMENT.md×8, voice/lines.json×4` | 15 | 209 (77+73+59) | 763 lần mở, **321 lần mở lại** | **888 MB** |
+| tap-02 | 17 | 4 | 16 | 46 (16 lại) | 30 MB |
+| tap-03 | **0** | 0 | 0 | 0 | 8 MB |
+
+Bốn vòng dò của tap-01 lặp 8–12 lần mỗi vòng (`ls -l src/props.js; date`, `ls /tmp/…/beats | wc -l`).
+Tập 03 — phiên mới nhất — không vướng luật nào: đó là bằng chứng rằng các luật này **làm được**
+khác biệt, chứ không phải chỉ là đo.
+
+---
+
 ## Các guard đã bắt được gì (tính từ 08:00, hai tập còn chạy)
 
 Đây là bằng chứng rằng các guard không phải lý thuyết — mỗi cái đã bắt một lỗi thật, hoặc đã được một
@@ -1822,6 +1858,7 @@ tiền (trước vòng chấm, trước lúc dựng, trước lúc bàn giao), c
 | 56 | Người chấm chỉ in ở cuối: nói rõ điều đó, và một vòng không có phán quyết thì không phải một vòng (N56) | `channels/tram-nghi-nhieu/tools/review.sh` | **xong** |
 | 57 | Một tập, một vòng chấm: chốt theo từng phần (N57) | `channels/tram-nghi-nhieu/tools/review.sh` | **xong** |
 | 58 | Công cụ sửa file không được làm đổi cách tệp chạy (N58) | `tools/replace.py` | **xong** — quyền đi theo nội dung; một ca selftest |
+| 59 | Báo cáo phải đếm đúng, kể cả lệnh ghi tệp qua một tên biến (N59) | `tools/rules.py` | **xong** — theo phép gán trong lệnh; 10 ca selftest. Đo lại: tap-01 **369** lần (báo cáo cũ nói 37), tap-02 17, tap-03 0 |
 
 ### Mỗi phát hiện đã có dòng riêng trong `improvements/lessons.md`
 
