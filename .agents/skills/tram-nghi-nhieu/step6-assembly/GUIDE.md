@@ -41,5 +41,8 @@ Lắp các vật (`src/props.js`) vào bối cảnh (`src/film.js`), đặt máy
 4. **Chấm:** `sh channels/tram-nghi-nhieu/tools/review.sh <tập> picture`. Máy kiểm trước: nhãn đúng câu
    (`check_labels.py`), nhãn đúng vật (`check_label_anchors.py`), mỗi câu một nhát (`check_shots.py`), vật trong danh mục
    có lên hình (`check_props_used.py`). Người chấm chấm hình của từng câu theo `step6-assembly/RUBRIC.md`; cờ máy
-   (`DARK SAME RUN NUM`, độ phủ) đến tay người chấm như gợi ý. Câu phải sửa nằm trong `review/PICTURE.md`. Sửa rồi chạy
-   lại: chỉ những câu mà khung hình đổi mới được chấm lại.
+   (`DARK SAME RUN NUM`, độ phủ) đến tay người chấm như gợi ý. Câu phải sửa nằm trong `review/PICTURE.md`. Vòng sau
+   chỉ chấm lại những câu mà khung hình đổi.
+5. **Sửa:** `fixbrief.py <tập> picture` in bản giao việc, tối đa tám câu một bản, mỗi bản một subagent, lần lượt (SKILL,
+   "Sửa sau vòng chấm"). Một câu hỏng vì vật dựng sai thì người sửa trả về `CHƯA SỬA ĐƯỢC`: sửa vật ở bước 5 rồi chấm
+   lại `props` cho vật đó. Xong thì chạy lại bước 4.

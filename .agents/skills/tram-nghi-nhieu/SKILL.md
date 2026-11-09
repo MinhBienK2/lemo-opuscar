@@ -1,7 +1,7 @@
 ---
 name: tram-nghi-nhieu
 description: Đạo diễn và dựng một tập của kênh Trạm Nghĩ Nhiều — câu hỏi "tại sao" đời thường, trả lời bằng diorama 3D toon (three.js) có ánh sáng thật, viền mực vẽ tay, máy quay đi vào bên trong vật, mọi vật dựng đúng là nó, chỉ thứ vô hình mới thành hình minh hoạ; một giọng kể tiếng Việt. Dùng khi làm bất kỳ tập nào của kênh.
-version: 16.0.0
+version: 17.0.0
 ---
 
 # Một tập Trạm Nghĩ Nhiều
@@ -40,9 +40,25 @@ trả lời từng mục: dàn ý, từng câu lời, từng khung hình chính,
   rồi chạy lại bước đó. Chỉ những mục mới hay vừa đổi mới được chấm lại; mục đã ĐẠT giữ nguyên.
 - Muốn chấm lại một mục chưa đổi: `--again <mã>,<mã>` (hoặc `--again all`).
 - Một mục sai ba lần thì thành **MỞ**: bước đóng và đi tiếp, mục đó nằm trong báo cáo cho người dùng.
-- Người chấm có thể sai. Trước khi sửa theo nó, mở ảnh hay đoạn nó nói tới và tự nhìn.
 
 Cổng (`gate.py`) đọc các kết quả đó: giọng đọc cần `outline` và `script` xong; dựng phim cần cả năm bước chấm xong.
+
+## Sửa sau vòng chấm
+
+Người chấm chỉ chấm; người sửa là một subagent khác; vòng chấm sau là một người chấm mới. Ba vai tách nhau thì lời
+chấm vẫn độc lập: không ai chấm chính bản sửa của mình.
+
+- **`outline`, `script`**: lỗi nằm trong chữ, và `review/<BƯỚC>.md` có sẵn câu viết lại. Bạn tự sửa.
+- **`look`, `props`, `picture`**: `python3 channels/tram-nghi-nhieu/tools/fixbrief.py <tập> <bước>` in bản giao việc
+  cho các mục phải sửa: người chấm thấy gì, các câu phải ĐẠT, tệp được sửa, lệnh dựng lại để nhìn, mẫu trả lời. Mỗi
+  bản là trọn prompt của một subagent sửa (Agent tool):
+  - `props`, mỗi vật một tệp: mỗi bản (`=== BRIEF <mã> ===`) một subagent, chạy song song.
+  - `look`, `picture`: các mục chung mã của tập, nên một bản (tối đa tám mục) một subagent, chạy lần lượt. Dòng
+    `=== CÒN …` cuối bản là lệnh in bản kế tiếp.
+- Subagent trả về mỗi mục một dòng chữ. Bạn đọc các dòng đó, còn ảnh để người sửa nhìn:
+  - `ĐÃ SỬA` → chạy lại vòng chấm của bước;
+  - `NGƯỜI CHẤM SAI` → vòng sau `--again <mã>`, kèm điều người sửa thấy;
+  - `CHƯA SỬA ĐƯỢC` vì lỗi ở bước trước (một vật, một câu lời) → sửa ở bước đó.
 
 ## Xong (DONE)
 
@@ -58,8 +74,16 @@ tập sau, không mở lại bước nào. Đưa tóm tắt của nó cho ngư�
   chỗ trống của máy (mặc định hai chỗ cho cả máy) và in một dòng khi phải chờ. Cứ để nó chờ.
 - **Mọi thứ thử để trong `<tập>/out/scratch/`**: ảnh khung lẻ, tờ sheet, ảnh vật, bản đo rig. Tệp nào cũng có chỗ
   cố định (cây thư mục: `CHANNEL.md`, "Một tập"); `gate.py status` và mỗi vòng chấm in thứ nằm sai chỗ.
-- **Nhìn nhiều khung bằng tờ sheet**: `node core/render/still.mjs <tập> <mốc…> --out <tập>/out/scratch` rồi
-  `python3 core/render/sheet.py <tập>/out/scratch/sheet.jpg <tập>/out/scratch/t_*.jpg --cols 4`. Mở ảnh riêng cho
-  khung tờ sheet chỉ ra.
+- **Ngữ cảnh của bạn nhỏ thì phim rẻ.** Mỗi lượt đọc lại cả ngữ cảnh, nên một ảnh hay một log mở trong phiên của bạn
+  được trả tiền lại ở mọi lượt sau. Bạn nhìn hình qua tờ sheet (nhiều khung trong một ảnh):
+  `node core/render/still.mjs <tập> <mốc…> --out <tập>/out/scratch` rồi
+  `python3 core/render/sheet.py <tập>/out/scratch/sheet.jpg <tập>/out/scratch/t_*.jpg --cols 4`. Ảnh lẻ thì người sửa
+  và người chấm mở. Log dài thì grep đúng dòng cần.
+- **Công cụ đứng yên suốt một tập.** `core/`, `rig/` và `channels/tram-nghi-nhieu/tools/` giữ nguyên khi đang làm
+  tập: sửa chúng giữa chừng làm mọi phép đo trước đó thành cũ. Một công cụ sai thì đi vòng qua nó, và ghi lỗi cùng
+  cách đi vòng vào báo cáo cuối cho người dùng.
+- **Một chặng một phiên.** `python3 channels/tram-nghi-nhieu/tools/episode.py <tập> ["Câu hỏi?"]` làm cả tập, mỗi
+  chặng (bước 1, 2, 3, 4–5, 6, 7) trong một phiên `claude -p` mới, và ghi chi phí từng phiên vào
+  `out/sessions.jsonl`. Phiên được giao một chặng thì làm chặng đó tới khi cổng báo xong, rồi dừng.
 - **Sửa tệp bằng công cụ sửa file** (`Edit` / `Write`, hoặc `python3 tools/replace.py --batch -` cho nhiều sửa dài).
 - Trên máy này, `still.mjs`, `beatsheet.mjs` và `build.sh` cần `LEMO_ANGLE=vulkan` ở đầu lệnh (`review.sh` tự đặt).

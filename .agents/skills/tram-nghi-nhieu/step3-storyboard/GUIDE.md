@@ -23,3 +23,5 @@ Xác định bố cục hình ảnh, góc đặt máy quay (camera framing), c�
 5. **Chấm:** `sh channels/tram-nghi-nhieu/tools/review.sh <tập> look`. Người chấm so từng ảnh trong `review/hero/`
    với khung mẫu của kênh (`demo/stills/`) theo `step3-storyboard/RUBRIC.md`. `hero/` rỗng thì vòng không chạy.
    Dựng lại một ảnh thì chỉ ảnh đó được chấm lại.
+6. **Sửa:** `fixbrief.py <tập> look` in bản giao việc cho người sửa (SKILL, "Sửa sau vòng chấm"). Người sửa chép ảnh
+   mới đè lên ảnh cũ trong `review/hero/`, rồi bạn chạy lại bước 5.

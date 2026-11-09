@@ -327,6 +327,20 @@ seventh record had only proposed.
 | N146 — medium | A round killed by a signal leaves **only a dead pid**: SIGKILL does not run the trap, so no `.died` is written and the trace is the `.round-<part>.running` marker with a pid that is gone. The box was the cause — at 19:37 the swap stood at 80%, with six concurrent model sessions on the machine, four of them opened by the supervisor itself to measure the other sessions. — Guard: the gate names the trace when the round is gone (N126) and the channel refuses to open a round on a full box (exit 3); the supervisor must not open a fan-out of model sessions while critics run (09-11) |
 | N147 — medium | The half of the label rule that **only the critic can do was only ever a promise**: the machine half of N142 checks that a card's words match the object it points at, but *whether a viewer would read a label as another object* is an eye judgement — and the instruction to list every such label lived in the critic's template (`## NHÃN ĐỌC NHẨM`) with **nothing asking whether it had been answered**. A critic that never wrote the section produced a perfectly green report: tap-01's own final QA (16:31) caught the 2:18 misread by eye and had no such section at all, and the round that decides whether the film ships would have passed a report that never looked. — Guard: `channels/tram-nghi-nhieu/tools/check_label_section.py` asks four questions of the report the critic has just written (is the `## NHÃN ĐỌC NHẨM` section there; did it answer; does every line it names exist in `voice/lines.json`; is every label it names a text the film really draws), and `review.sh` runs it at the **picture** and **final** rounds — a missing section is **red**, like `check_labels.py`. It judges only the round in progress, so reports already on disk are not re-litigated; the migration path is in N142 (09-11) |
 
+## The ninth record: what one episode cost, step by step (Tập 01 Phơi quần áo, phần ba)
+
+[`retro/2026-11-10-tap-01-token-and-steps.md`](retro/2026-11-10-tap-01-token-and-steps.md) — the same session measured
+from its transcript: 1.43 billion tokens in and 55 compactions over 33.5 hours, half of it in step 6, and the five causes
+behind that.
+
+| # | Finding | Severity | Guard now |
+|---|---|---|---|
+| T1 | The critics' bar sat above the user's (the user shipped what every picture gate rejected), so the loops could not converge | high | `review.py` `BAR`: a CHẶN is LỖI only where a viewer would miss, misread or misunderstand; polish is GÓP Ý |
+| T2 | One session ran the whole episode; tokens in ≈ context size × turns, and the context only grew | critical | `channels/tram-nghi-nhieu/tools/episode.py`: one fresh `claude -p` session per leg, the leg done by the gate, cost per session in `out/sessions.jsonl` |
+| T3 | The director opened every image the critic named, and each image stayed in its context for every later turn | high | `channels/tram-nghi-nhieu/tools/fixbrief.py` + SKILL "Sửa sau vòng chấm": a fixer subagent looks and edits, a fresh critic re-judges |
+| T4 | Tools (rig, probe, mixer) changed mid-episode and made fresh measurements stale | medium | SKILL "Công cụ đứng yên suốt một tập" (recorded only: no check) |
+| T5 | An opening that showed the setting before the phenomenon was found only at the picture step | medium | outline rubric: `mo-dau` is CHẶN |
+
 ## The supervisor
 
 [`tools/supervise.sh`](../tools/supervise.sh) watches the episode that is being made: every fifteen minutes it finds

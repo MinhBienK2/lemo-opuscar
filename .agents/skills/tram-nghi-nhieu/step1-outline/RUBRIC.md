@@ -9,7 +9,8 @@ Mục chấm: một mục duy nhất, `dan-y` = `TREATMENT.md` (bảng Ý → H�
 | nguon | CHẶN | Mỗi mắt xích của câu trả lời có ít nhất một nguồn sơ cấp trong FACTS.md (sách chuyên ngành, bài bình duyệt, datasheet, sổ tay cơ quan chuẩn) không? Wikipedia chỉ tính là nguồn thứ hai. |
 | vat-that | CHẶN | Che cột Ý, chỉ đọc cột Hình: mỗi dòng có phải một vật thật hay một cảnh thật dựng được bằng 3D không? Chỉ thứ vô hình (hơi nước, nhiệt, phân tử) mới được là hình minh hoạ. |
 | du-mat-xich | CHẶN | Cơ chế có đủ mắt xích không: mỗi ý xuất hiện một lần, và mỗi khái niệm có hình ngay khi nó được nói? |
-| mo-dau | GÓP Ý | Ba giây đầu đã thấy hiện tượng quen thuộc đang xảy ra chưa? |
+| mo-dau | CHẶN | Dòng đầu của bảng có cho thấy hiện tượng quen thuộc đang xảy ra (vật đang đổi trước mắt), trước mọi bối cảnh và nguyên nhân không? |
+| khac-biet | GÓP Ý | Mỗi ý nói về một khác biệt (nhanh hơn, ướt hơn, nóng hơn) có hình cho thấy cả hai phía khác nhau không? |
 | ket | GÓP Ý | Cảnh kết có trả về cho người xem một góc nhìn mới hay một điều dùng được ngay không? |
 | gon | GÓP Ý | Có ý nào kéo dài mà không thêm mắt xích (ví von dài, lan man) không? |
 
