@@ -104,17 +104,36 @@ def batch(target, edits_path):
     """many small edits, in one file or in several: every one of them must match exactly, or nothing is written
 
     The edits are a list of {"old": ..., "new": ..., "count": N}. An edit may name its own "file", so one call
-    can edit several files — the file then need not be given on the command line at all. They are applied in
-    order, and each one is counted against the file *as it stands at that moment* — so two edits with the same
-    old snippet cannot both pass, and the second one says so instead of quietly doing nothing.
+    can edit several files — the file then need not be given on the command line at all. The two snippets may
+    also live in files ("old_file", "new_file"), which is the way to edit a long snippet with quotes and
+    newlines without hand-writing JSON. They are applied in order, and each one is counted against the file
+    *as it stands at that moment* — so two edits with the same old snippet cannot both pass, and the second one
+    says so instead of quietly doing nothing.
     """
     edits = load_edits(edits_path)
     if edits is None:
         return 1
     groups = {}                                  # file -> [(index, edit)]
     for i, e in enumerate(edits):
-        if not isinstance(e, dict) or not isinstance(e.get('old'), str) or not isinstance(e.get('new'), str):
-            print(f'replace: FAIL edit {i}: the edit must have "old" and "new" as strings')
+        if not isinstance(e, dict):
+            print(f'replace: FAIL edit {i}: the edit must be an object')
+            return 1
+        # The snippet may live in a FILE instead of inside the JSON. A long snippet with quotes and newlines is
+        # exactly where hand-written JSON breaks, and the usual workaround for that — a script that rewrites the
+        # JSON before the edit — is the very thing R1 forbids. The agent writes the snippet with the file-writing
+        # tool, and this tool does the replacement.
+        if 'old_file' in e or 'new_file' in e:
+            e = dict(e)
+            for key, sf in (('old', 'old_file'), ('new', 'new_file')):
+                if sf in e:
+                    try:
+                        e[key] = read(e[sf])
+                    except OSError as ex:
+                        print(f'replace: FAIL edit {i}: cannot read {sf} ({e[sf]}): {ex}')
+                        return 1
+        if not isinstance(e.get('old'), str) or not isinstance(e.get('new'), str):
+            print(f'replace: FAIL edit {i}: the edit must have "old" and "new" as strings, or name '
+                  f'"old_file"/"new_file" that hold them')
             return 1
         f = e.get('file') or target
         if not f:
@@ -179,6 +198,15 @@ def selftest():
         rc = batch(target, edits)
         body = read(target)
         cases.append(('hai sửa thì áp dụng cả hai', rc == 0 and "c1 nói A'" in body and "c2 nói B'" in body, body, ''))
+
+        # the snippet may live in a file: long snippets with quotes and newlines are where hand-written JSON breaks
+        open(target, 'w', encoding='utf-8').write('câu một "trích" dài\n')
+        open(os.path.join(tmp, 'old.txt'), 'w', encoding='utf-8').write('câu một "trích" dài')
+        open(os.path.join(tmp, 'new.txt'), 'w', encoding='utf-8').write('câu hai\n"trích"')
+        json.dump([{'old_file': os.path.join(tmp, 'old.txt'), 'new_file': os.path.join(tmp, 'new.txt')}], open(edits, 'w', encoding='utf-8'))
+        rc = batch(target, edits)
+        body = read(target)
+        cases.append(('đoạn sửa nằm trong tệp thì vẫn áp dụng', rc == 0 and 'câu hai' in body and '"trích"' in body, body, ''))
 
         # a snippet that appears twice must be refused, not applied to the wrong one
         open(target, 'w', encoding='utf-8').write('x\nx\n')

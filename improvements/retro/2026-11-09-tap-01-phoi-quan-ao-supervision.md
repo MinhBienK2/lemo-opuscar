@@ -3148,6 +3148,22 @@ trong ~10 s (kiểm bằng một reviewer giả).
 **Còn lại.** Hai vòng đang chạy (tập 02, tập 03) phải dừng và chạy lại với `review.sh` đã sửa; người
 làm phim không tự dừng được nên tôi đã nhắn cho cả hai phiên.
 
+## N101 — medium — Đoạn sửa dài không nằm được trong JSON, nên phiên tự viết script sửa JSON của chính nó
+
+**Bằng chứng.** Báo cáo luật của phiên tập 01 (13:4x) có dòng `R1t 58 lần sửa file qua
+tools/replace.py — an toàn, nhưng đi qua một chương trình trung gian`: 58 lần, phiên tự viết một
+script python để **sửa lại tệp JSON** trước khi gọi `tools/replace.py`. Nguyên nhân thì hiện ra
+ngay: một đoạn sửa dài có dấu nháy và xuống dòng, viết tay trong JSON thì vỡ — và cách vòng qua là
+đúng cái mà R1 cấm (tự viết script để làm việc của công cụ). Tôi cũng dính lỗi này một lần trong
+phiên giám sát này (lỗi "Expecting ',' delimiter"), và cách vòng qua của tôi cũng là dựng JSON
+bằng tay.
+
+**Guard đã có (13:5x).** `tools/replace.py --batch` nhận thêm hai khóa: `old_file` và `new_file` —
+tức là **đoạn sửa nằm trong một tệp**, do công cụ viết tệp viết ra (không phải JSON viết tay), và
+`replace.py` tự đọc tệp đó. Cách dùng: hai tệp đoạn sửa + một tệp JSON chỉ chứa
+`{"file": ..., "old_file": ..., "new_file": ...}`. Selftest có một ca (đoạn sửa có dấu nháy và xuống
+dòng nằm trong tệp, áp dụng đúng). R1 trong `CODING_STANDARDS.md` nói luôn điều đó.
+
 ## Còn lại
 
 - **[x]** N72: `core/render/still.mjs` chờ hai khung hình rồi mới chụp (12:47) — ảnh là của khung vừa dựng,
