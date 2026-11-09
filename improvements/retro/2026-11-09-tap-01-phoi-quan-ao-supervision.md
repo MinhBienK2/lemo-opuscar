@@ -1118,12 +1118,10 @@ khi tờ sheet không đủ trả lời câu hỏi, và ghi lại khung nào đ�
 
 ---
 
-## Mục chưa xử lý
-
-- **[~]** Chưa có phim: `out/` còn rỗng. Bản chấm cả phim đã đi hai vòng (vòng 1 REJECT với 22 câu FAIL,
-  vòng 2 REJECT với **6 câu FAIL** — xem bảng đối chiếu ở N26); vòng 3 đang chạy. Những gì vòng 2 còn
-  mở: c30, c41, c44, c48, c53, c60 (c60 đã sửa trong bộ khung 06:37, c41 thì chưa: mặt đồng hồ độ ẩm vẫn
-  chồng hai thang số lên nhau).
+- **[~]** Chưa có phim: `out/` còn rỗng. Bản chấm cả phim đã đi **ba** vòng: vòng 1 REJECT với 22 câu FAIL,
+  vòng 2 REJECT với 6 câu FAIL (bảng đối chiếu ở N26), vòng 3 REJECT OVERALL 5,9 với **4 lỗi CHẶN**
+  (c34, c39, c42, c22) và 3 câu FAIL (c6, c37, c55) — vòng 4 đang được làm. Ba lỗi "vẽ con số mà lời kể
+  không đọc" đã hết (`check_labels.py` xanh, 08:00).
 - **[x]** N10 (một phần): một phiên chấm mù chạy lại trên **cùng tập ảnh** đã làm — xem N20.
 - **[x]** `improvements/lessons.md` đã có dòng cho N1–N4 và N10 (xem bảng trên).
 - **[~]** `films/host-toon-test`: `.mp4` **đã cũ hơn code** — nó được commit ở `d5af2ce`, còn `src/film.js`
@@ -1131,12 +1129,16 @@ khi tờ sheet không đủ trả lời câu hỏi, và ghi lại khung nào đ�
   được, nhưng **cần dựng lại từ đầu**: các wav giọng đã xử lý (`voice/proc/*.wav`) bị `.gitignore` và
   không còn trên máy, nên phải sinh lại giọng trước (edge-tts, mạng) rồi mới dựng (GPU). Chưa làm: GPU
   đang bận cho hai tập của kênh, và việc này không chặn gì.
-- **[ ]** Bài kiểm tra dàn ý chưa hỏi kênh (N27): hôm nay vô hại, ngày nào bật lên thì một tập đúng
-  quy trình sẽ bị báo 16 lỗi giả.
-- **[ ]** Cổng của kênh gọi người chấm hình bằng `claude -p` mà **không có đồng hồ** (N25): một người
+- **[x]** Bài kiểm tra dàn ý đã hỏi kênh (N29): kênh có bài kiểm tra riêng
+  (`channels/tram-nghi-nhieu/tools/check_treatment.py`); phần hình dạng thuộc về người chấm của kênh.
+- **[x]** Cổng của kênh gọi người chấm hình bằng `claude -p` mà **không có đồng hồ** (N25): một người
   chấm treo là một vòng chấm không kết thúc, và trần 5 vòng thì bị nuốt hết. **[đã xong 09/11]** —
   `channels/tram-nghi-nhieu/tools/review.sh` giờ đặt đồng hồ cho người chấm (`CRITIC_TIMEOUT`, mặc định
   3600 s) và **thoát mã 2** khi bị giết, tức là "không chạy được", không phải phán quyết về phim.
-- **[ ]** Chưa có lượt sản xuất nào chạy với các guard mới (chặng đọc, vân tay nguồn, kiểm tra con trỏ, nhãn
-  đúng câu, bản cắt đúng code, đồng hồ của cổng, bảng đối chiếu vòng chấm): lượt sản xuất kế tiếp (tập 02)
-  là lần kiểm chứng đầu tiên của chúng.
+- **[~]** Chưa có lượt sản xuất nào chạy với các guard mới (chặng đọc, vân tay nguồn, kiểm tra con trỏ, nhãn
+  đúng câu, bản cắt đúng code, đồng hồ của cổng, bảng đối chiếu vòng chấm, file nghiên cứu phải được viết,
+  số vòng của bản chấm): lượt sản xuất kế tiếp (tập 02) là lần kiểm chứng đầu tiên của chúng.
+- **[ ]** Số vòng trong mẫu `PROMPT_CRITIC.md` vẫn ghi `[1-5]/5` trong sáu tệp; hai khối đã sửa bằng
+  `set_round` nên số vòng là của công cụ, bốn khối còn lại thì người chấm vẫn tự điền (N34).
+- **[ ]** `tools/supervise.sh` đếm lượt mở ảnh nhưng **chưa** báo dung lượng transcript của phiên — một con
+  số đơn giản sẽ cho thấy ngay một phiên đang đắt (N37).
