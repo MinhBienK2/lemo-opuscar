@@ -114,8 +114,8 @@ Trước khi dựng, đọc `improvements/lessons.md` ở gốc thư viện — 
 ### Bước 4: Bóc tách Linh kiện 3D chi tiết (3D Component Breakdown & Spec)
 *(Bắt buộc nằm sau Storyboard để bám sát góc nhìn camera thực tế)*
 - **Đạo diễn thực hiện:** Đọc `step4-component-breakdown/GUIDE.md`. Viết tài liệu đặc tả `COMPONENTS_SPEC.md` bóc tách từng chi tiết nhỏ: Đạo cụ (Props), Ruột máy (Internal parts), Bối cảnh (Sets), Đèn & FX.
-- **Review độc lập:** Dùng prompt `step4-component-breakdown/PROMPT_CRITIC.md` để Subagent rà soát chéo kịch bản và storyboard: đảm bảo không bỏ sót bất kỳ đồ vật/linh kiện nào.
-- **Vòng lặp:** Bổ sung dứt điểm mọi linh kiện thiếu trước khi code.
+- **Review độc lập:** chạy `sh channels/tram-nghi-nhieu/tools/review.sh <tập> --assets`. Cổng này đọc `COMPONENTS_SPEC.md`, `LOOK.md`, `voice/lines.json` và `src/*.js`, rồi đóng tem `ASSET.pass` khi bản đặc tả khớp mã. **Không** dùng subagent trần: báo cáo của nó rơi vào một tệp không ai đọc, không ai đếm vòng, không ai ký — năm vòng soi tài liệu của tập 01 đã thành 24 kB mà không ai mở.
+- **Vòng lặp:** Bổ sung dứt điểm mọi linh kiện thiếu trước khi code. Hết 5 vòng thì chốt bằng `review/ASSET-AUDIT-DIRECTORS-CUT.md` (kết thúc bằng `VERDICT: PASS`, nêu rõ mục nào đã cắt) **và viết lại sau lần sửa code cuối** — bản cắt cũ không nói gì về code hiện tại.
 
 ### Bước 5: Code Linh kiện 3D Độc lập (Modular 3D Coding)
 - **Đạo diễn/Coder thực hiện:** Đọc `step5-props-code/GUIDE.md`. Lập trình từng linh kiện độc lập vào `src/props.js` (hoặc module tương ứng). Chạy `propcheck.mjs`.

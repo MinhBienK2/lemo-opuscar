@@ -6,18 +6,22 @@
 #   sh channels/tram-nghi-nhieu/review.sh <episode> --script [--chapter n]    voice/lines.json, before any voice
 #   sh channels/tram-nghi-nhieu/review.sh <episode> --props                   every object of src/props.js, alone
 #   sh channels/tram-nghi-nhieu/review.sh <episode> --storyboard              the framing of the film, before it is built
+#   sh channels/tram-nghi-nhieu/review.sh <episode> --assets                  the documents against the code they describe
 #   sh channels/tram-nghi-nhieu/review.sh <episode> --lines a-b               one scene just built (no stamp)
 #   sh channels/tram-nghi-nhieu/review.sh <episode> [--chapter n]             the picture of a chapter / of the film
 #   sh channels/tram-nghi-nhieu/review.sh <episode> --video [--chapter n]     after the render: four frames per line
 #
 # The judges' rules live directly in the skill: .agents/skills/tram-nghi-nhieu/step*/PROMPT_CRITIC.md
 # The reports go to <episode>/review/:
-#   OUTLINE-REVIEW[-n].md, SCRIPT-REVIEW[-<ch>]-n.md, PROPS-REVIEW-n.md, REVIEW[-<ch>|-lines-a-b][-video]-n.md,
-# A PASS of --outline, --script, --props, of a chapter or of the whole film stamps what was judged (gate.py); the voice
-# (tts_vi.py), the mix (mix.py) and the render (core/render/video.mjs) refuse an episode whose stamps do not hold.
+#   OUTLINE-REVIEW[-n].md, SCRIPT-REVIEW[-<ch>]-n.md, PROPS-REVIEW-n.md, ASSET-AUDIT-REVIEW-n.md,
+#   REVIEW[-<ch>|-lines-a-b][-video]-n.md,
+# A PASS of --outline, --script, --props, --storyboard, --assets, of a chapter or of the whole film stamps what was
+# judged (gate.py); the voice (tts_vi.py), the mix (mix.py) and the render (core/render/video.mjs) refuse an episode
+# whose stamps do not hold.
 # An episode with src/chapters.js is judged chapter by chapter: --script --chapter n and --chapter n.
 #
-# Rounds: the outline 4, the words 6 (per chapter), the props 5, the storyboard 5, a scene 3, a chapter or the whole film 5. When the rounds are used
+# Rounds: the outline 4, the words 6 (per chapter), the props 5, the storyboard 5, the cross-check of the documents 5,
+# a scene 3, a chapter or the whole film 5. When the rounds are used
 # up the episode needs the user, not another round: the script says so and exits 1.
 #
 # A machine flag (script: DIGIT LONG NOFACTS; picture: DARK SAME RUN NUM) fails its line unless the reviewer cleared it
@@ -51,9 +55,9 @@ critic_images() {
   u=$(grep -oE '"file_path":"[^"]*/b_[0-9]{3}\.jpg"' "$f" 2>/dev/null | sort -u | wc -l | tr -d ' ')
   [ -n "$n" ] && echo "$n lần đọc ảnh riêng ($u ảnh khác nhau)"
 }
-EP=$1; [ -n "$EP" ] && [ -d "$EP" ] || die "usage: review.sh <episode> [--outline | --script | --props | --storyboard | --lines a-b | --chapter n] [--video]"
+EP=$1; [ -n "$EP" ] && [ -d "$EP" ] || die "usage: review.sh <episode> [--outline | --script | --props | --storyboard | --assets | --lines a-b | --chapter n] [--video]"
 EP=$(cd "$EP" && pwd); shift
-LINES=""; VIDEO=0; SCRIPT=0; PROPS=0; OUTLINE=0; STORYBOARD=0; CHAPTER=""
+LINES=""; VIDEO=0; SCRIPT=0; PROPS=0; OUTLINE=0; STORYBOARD=0; ASSETS=0; CHAPTER=""
 while [ $# -gt 0 ]; do
   case "$1" in
     --lines) LINES=$2; shift 2 ;;
@@ -63,6 +67,7 @@ while [ $# -gt 0 ]; do
     --props) PROPS=1; shift ;;
     --outline) OUTLINE=1; shift ;;
     --storyboard) STORYBOARD=1; shift ;;
+    --assets) ASSETS=1; shift ;;
     *) die "unknown: $1" ;;
   esac
 done
@@ -387,6 +392,52 @@ Viết STORYBOARD-REVIEW.md ở thư mục này theo mẫu, rồi in lại nó."
   cat R.md
   if grep -qE "$VPASS" R.md; then $GATE stamp "$EP" storyboard "$EP/review/STORYBOARD-REVIEW-$n.md" --critic "$CRITIC_ID"; echo "review --storyboard: PASS"; exit 0; fi
   echo "review --storyboard: REJECT (sửa theo $EP/review/STORYBOARD-REVIEW.md, rồi chạy lại)"; exit 1
+fi
+
+# ————————————————————————————— the cross-check of the documents ————————————————————————————————
+# Step 4 used to be a subagent whose report nobody read: five rounds and a 24 kB cross-check landed in a
+# file that no tool opened and no stamp counted. A step with no tool is a step nobody can skip and nobody
+# can count — so it gets one, with the same rules as the others: the report's verdict is read by the tool,
+# the round number is the tool's, the report is signed, and a director's cut stands for the step only when it
+# was written after the last change of the code it judges.
+if [ "$ASSETS" = 1 ]; then
+  [ -f "$EP/COMPONENTS_SPEC.md" ] || die "--assets: $EP/COMPONENTS_SPEC.md not written yet"
+  $GATE need "$EP" outline storyboard || { echo "review --assets: soi tài liệu sau khi dàn ý và dàn ý hình đã qua: sh channels/tram-nghi-nhieu/review.sh $EP --outline rồi --storyboard" >&2; exit 1; }
+  CUT="$EP/review/ASSET-AUDIT-DIRECTORS-CUT.md"
+  if [ -f "$CUT" ] && grep -qE "$VPASS" "$CUT"; then
+    if ! python3 "$CHANNEL/tools/gate.py" cut "$EP" assets "$CUT" >&2; then
+      echo "review --assets: bản cắt không còn nói về bản đặc tả và mã hiện tại — viết lại bản cắt (nêu rõ mục nào đã cắt) sau khi sửa code xong rồi chạy lại" >&2
+      exit 1
+    fi
+    $GATE stamp "$EP" assets "$CUT" --critic "$CRITIC_ID"
+    echo "review --assets: PASS (đạo diễn cắt: $CUT)"; exit 0
+  fi
+  # the round number is the highest one that exists, not the number of files: a session that deleted an
+  # early round must not be told it is on round 1 again
+  n=$(ls "$EP/review" 2>/dev/null | grep -oE "^ASSET-AUDIT-REVIEW-[0-9]+\.md$" | grep -oE "[0-9]+" | sort -n | tail -1)
+  n=$(( ${n:-0} + 1 ))
+  if [ "$n" -gt 5 ]; then
+    echo "review --assets: đã chấm 5 lần mà bản đặc tả vẫn chưa khớp mã. Dừng: báo người dùng các lỗi CHẶN còn lại của $EP/review/ASSET-AUDIT-REPORT.md, hoặc chốt bằng đạo diễn cắt (review/ASSET-AUDIT-DIRECTORS-CUT.md, kết thúc bằng 'VERDICT: PASS' và nêu rõ mục nào đã cắt) rồi chạy lại." >&2; exit 1
+  fi
+  cp "$EP/COMPONENTS_SPEC.md" "$W/"; [ -f "$EP/LOOK.md" ] && cp "$EP/LOOK.md" "$W/"
+  [ -f "$EP/voice/lines.json" ] && cp "$EP/voice/lines.json" "$W/"
+  mkdir -p "$W/src"; cp "$EP"/src/*.js "$W/src/" 2>/dev/null || true
+  p=$((n - 1)); [ -f "$EP/review/ASSET-AUDIT-REVIEW-$p.md" ] && cp "$EP/review/ASSET-AUDIT-REVIEW-$p.md" "$W/PREVIOUS.md"
+  cd "$W"
+  critic "$(get_prompt step4-component-breakdown)
+Thư mục làm việc của bạn: $W. Đọc COMPONENTS_SPEC.md (bản đặc tả), LOOK.md (dàn ý), voice/lines.json và src/*.js của tập. Soi xem bản đặc tả có nói đúng cái mã dựng không: mỗi linh kiện có thật trong mã chứ, mỗi cột "Xuất hiện ở" có đúng nhát không, mỗi mô tả và mỗi số đo có đúng hình không. Chấm đúng những tiêu chí trên, nhớ rằng đây là vòng $n/5 và những gì đã sửa từ vòng trước thì không nêu lại là lỗi.
+Viết ASSET-AUDIT-REPORT.md ở thư mục này theo mẫu, rồi in lại nó."
+  # the reviewer may write the report under the name in its template or the name of the round line; take
+  # either, or the round is lost in a file of warnings
+  if [ ! -s ASSET-AUDIT-REPORT.md ] && [ -s ASSET-AUDIT-REVIEW.md ]; then cp ASSET-AUDIT-REVIEW.md ASSET-AUDIT-REPORT.md; fi
+  [ -s ASSET-AUDIT-REPORT.md ] || cp out.txt ASSET-AUDIT-REPORT.md
+  { cat ASSET-AUDIT-REPORT.md; } > R.md
+  set_round R.md "$n" 5
+  sign "--assets" R.md
+  cp R.md "$EP/review/ASSET-AUDIT-REVIEW-$n.md"; cp R.md "$EP/review/ASSET-AUDIT-REPORT.md"
+  cat R.md
+  if grep -qE "$VPASS" R.md; then $GATE stamp "$EP" assets "$EP/review/ASSET-AUDIT-REVIEW-$n.md" --critic "$CRITIC_ID"; echo "review --assets: PASS"; exit 0; fi
+  echo "review --assets: REJECT (sửa theo $EP/review/ASSET-AUDIT-REPORT.md, rồi chạy lại)"; exit 1
 fi
 
 # ——————————————————————————————————————————— the words ———————————————————————————————————————————

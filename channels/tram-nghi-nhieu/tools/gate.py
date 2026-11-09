@@ -20,6 +20,7 @@ The stamps live in <episode>/review/:
   SCRIPT-<ch>.pass    the words of one chapter                               review.sh --script --chapter <n>
   PROPS.pass          src/props.js                                           review.sh --props
   STORYBOARD.pass     LOOK.md + src/film.js                                  review.sh --storyboard
+  ASSET.pass          COMPONENTS_SPEC.md + LOOK.md + src/props.js + src/film.js   review.sh --assets
   PICTURE.pass        the words, src/*.js but timeline.js, index.html        review.sh (whole film, no --lines/--video)
   PICTURE-<ch>.pass   the chapter's words, its own files, the shared files   review.sh --chapter <n>
 
@@ -37,8 +38,10 @@ import glob, hashlib, json, os, re, sys
 SHARED_EXCLUDE = ('timeline.js',)
 PLACEHOLDER = re.compile(r'placeholder|giữ chỗ', re.I)
 WHAT = {'outline': 'dàn ý (TREATMENT.md + FACTS.md)', 'script': 'lời kể', 'props': 'vật dựng (src/props.js)',
-        'storyboard': 'khung hình (LOOK.md + src/film.js)', 'picture': 'hình'}
-FLAG = {'outline': '--outline', 'script': '--script', 'props': '--props', 'storyboard': '--storyboard', 'picture': ''}
+        'storyboard': 'khung hình (LOOK.md + src/film.js)',
+        'assets': 'bản đặc tả và dàn ý (COMPONENTS_SPEC.md + LOOK.md + src/*.js)', 'picture': 'hình'}
+FLAG = {'outline': '--outline', 'script': '--script', 'props': '--props', 'storyboard': '--storyboard',
+        'assets': '--assets', 'picture': ''}
 
 
 # ——— what an episode holds ———
@@ -127,6 +130,11 @@ def digest(ep, kind, ch=None):
     # promises more than it holds.
     if kind == 'storyboard':
         files = [os.path.join(ep, 'LOOK.md'), os.path.join(ep, 'src/film.js')]
+    # The cross-check of step 4 judges the documents against the code they describe: the specification, the
+    # storyboard, the props and the shot code. A stamp that did not bind the code would pass a changed film.
+    if kind == 'assets':
+        files = [os.path.join(ep, 'COMPONENTS_SPEC.md'), os.path.join(ep, 'LOOK.md'),
+                 os.path.join(ep, 'src/props.js'), os.path.join(ep, 'src/film.js')]
     if kind == 'picture':
         files = [os.path.join(ep, 'src', f) for f in picture_files(ep, ch)] + [os.path.join(ep, 'index.html')]
     for f in files:
@@ -155,6 +163,9 @@ def newest_code_mtime(ep, kind, ch=None):
         files = [os.path.join(ep, 'src/props.js')]
     if kind == 'storyboard':
         files = [os.path.join(ep, 'LOOK.md'), os.path.join(ep, 'src/film.js')]
+    if kind == 'assets':
+        files = [os.path.join(ep, 'COMPONENTS_SPEC.md'), os.path.join(ep, 'LOOK.md'),
+                 os.path.join(ep, 'src/props.js'), os.path.join(ep, 'src/film.js')]
     if kind == 'picture':
         files = [os.path.join(ep, 'src', f) for f in picture_files(ep, ch)] + [os.path.join(ep, 'index.html')]
     ts = [os.path.getmtime(f) for f in files if os.path.isfile(f)]
@@ -168,7 +179,7 @@ def stale_cut(ep, kind, cut, ch=None):
     written before the last change of the code says nothing about that code: accepting it would stamp code
     nobody looked at. The cut therefore has to be written after the code it judges.
     """
-    if kind not in ('props', 'storyboard', 'picture'):
+    if kind not in ('props', 'storyboard', 'assets', 'picture'):
         return None
     t = newest_code_mtime(ep, kind, ch)
     if t is None or not os.path.isfile(cut):
@@ -236,7 +247,7 @@ NEEDS = {'voice': ('outline', 'script'), 'render': ('outline', 'script', 'props'
 
 def status(ep):
     """where the episode stands: every stamp, whether it still holds, and the last verdict"""
-    for kind in ('outline', 'script', 'props', 'storyboard', 'picture'):
+    for kind in ('outline', 'script', 'props', 'storyboard', 'assets', 'picture'):
         p = stamp_path(ep, kind)
         if not os.path.isfile(p):
             print(f'{kind:<11} chưa có PASS')

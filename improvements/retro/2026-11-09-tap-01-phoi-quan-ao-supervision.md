@@ -1465,11 +1465,29 @@ có `VERDICT: PASS` — khác hai bản cắt anh em (`PROPS-DIRECTORS-CUT.md`, 
 đều kết thúc bằng `## VERDICT: PASS`. Không phải vì người viết sai: **không ai đọc tệp đó**, nên
 cách viết của nó không quan trọng. Đó chính là hệ quả của việc thiếu công cụ.
 
+**Bằng chứng mạnh hơn, tìm ra sau.** Bước 4 của tập 01 đã chạy **năm vòng** và sinh ra một bản
+soi tài liệu 24 kB — bản soi tìm ra lỗi thật (linh kiện nằm dưới sàn, quạt đứng yên, 35 hàng
+`c_id` sai, đặc tả nói vạch đỏ nằm trên nhiệt kế còn hình thì không có). **Không ai mở tệp đó.**
+Cùng thư mục còn có `ASSET-AUDIT-DIRECTORS-CUT.md` — bản cắt đạo diễn chốt bước 4 — và nó
+**không có dòng phán quyết**, trong khi hai bản cắt anh em (`PROPS-DIRECTORS-CUT.md`,
+`STORYBOARD-DIRECTORS-CUT.md`) đều kết thúc bằng `## VERDICT: PASS`. Không phải vì người viết
+sai: **không ai đọc tệp đó**, nên cách viết của nó không quan trọng. Đó chính là hệ quả của việc
+thiếu công cụ, nói ra thành lời.
+
 **Guard đã có.** `channels/tram-nghi-nhieu/tools/check_reports.py` đi dọc bảy mẫu và mọi bản
 chấm đã sinh, rồi nói ba điều: mẫu của bước có công cụ có nêu đúng tên tệp công cụ đọc không;
 mọi bản chấm mà công cụ sẽ đọc có phán quyết mà công cụ đọc được không; và **bước nào chưa có
-công cụ** — hai bước 4 và 7 được nêu tên ngay trong đầu ra, và bài kiểm tra sẽ tự im đi khi
-kênh thêm chế độ cho chúng.
+công cụ** — hai bước 4 và 7 được nêu tên ngay trong đầu ra.
+
+**Bước 4 nay có công cụ.** `review.sh --assets`: chấm `COMPONENTS_SPEC.md` cạnh `LOOK.md`,
+`voice/lines.json` và `src/*.js`; phán quyết do công cụ đọc; số vòng của công cụ; báo cáo có
+chữ ký; đóng tem `ASSET.pass` bám vào bốn tệp nó chấm; và bản cắt của đạo diễn chịu **cùng
+luật cũ** như props và picture — viết trước lần sửa code cuối thì bị từ chối. Tập 01 chạy
+thử: cổng nói *"đã chấm 5 lần mà bản đặc tả vẫn chưa khớp mã"* và chỉ đường chốt bằng bản cắt
+— tức là năm vòng soi tài liệu đã tốn công cũng được **đếm**.
+
+**Còn lại.** Bước 7 (nghiệm thu mp4) chưa có chế độ, và tem `ASSET.pass` chưa nằm trong
+`NEEDS['render']` — thêm vào là một dòng, nhưng làm sau khi hai tập đang chạy bàn giao xong.
 
 ## N52 — critical — Cổng chấm trả lời "PASS" về một thư mục không tồn tại
 
@@ -1653,7 +1671,7 @@ tiền (trước vòng chấm, trước lúc dựng, trước lúc bàn giao), c
 | 47 | Dàn ý hình (`LOOK.md`) phải khớp lời kể: nó trích nguyên văn từng câu (N48) | `channels/tram-nghi-nhieu/tools/check_storyboard.py`, `channels/tram-nghi-nhieu/tools/review.sh` | **xong** |
 | 48 | Một cách viết lệch lệch phải lộ ra, chứ không phải khi nó làm mất một vòng chấm (N49) | `channels/tram-nghi-nhieu/tools/check_reports.py` | **xong** — bài kiểm tra đi dọc mẫu và bản chấm, nói cách viết nào công cụ không đọc; 27/27 selftest |
 | 49 | Một tài liệu cũ không tự nói là cũ; phải có bài kiểm tra đọc nó cùng tài liệu nó phải khớp (N50) | `channels/tram-nghi-nhieu/tools/check_storyboard.py`, `check_voice_facts.py` | **xong** |
-| 50 | Hai bước không có công cụ: bản chấm viết ra không ai đọc, không ai đếm (N51) | `channels/tram-nghi-nhieu/tools/check_reports.py` | **một nửa** — bài kiểm tra đã nêu tên hai bước đó; thêm chế độ cho chúng trong `tools/review.sh` thì còn lại nửa kia |
+| 50 | Hai bước không có công cụ: bản chấm viết ra không ai đọc, không ai đếm (N51) | `channels/tram-nghi-nhieu/tools/check_reports.py`, `channels/tram-nghi-nhieu/tools/review.sh` | **bước 4 xong** — `review.sh --assets` chấm `COMPONENTS_SPEC.md` cạnh `LOOK.md`, `lines.json` và `src/*.js`, ký bản chấm, đóng tem `ASSET.pass`, và bản cắt của nó chịu cùng luật cũ như props và picture. **Bước 7 còn thiếu** (nghiệm thu mp4), và tem `ASSET.pass` **chưa** nằm trong `NEEDS['render']` — thêm vào là một dòng, nhưng làm sau khi hai tập đang chạy bàn giao xong |
 | 51 | Cổng không được trả lời PASS về một thư mục không tồn tại (N52) | `channels/tram-nghi-nhieu/tools/gate.py` | **xong** — cờ và đối số tách riêng; thư mục không phải tập thì bị từ chối; 14 ca selftest |
 | 52 | Tem phải phủ đúng cái nó nói; bản cắt của bước storyboard cũng phải viết sau lần sửa code (N53) | `channels/tram-nghi-nhieu/tools/gate.py`, `channels/tram-nghi-nhieu/tools/review.sh` | **xong** |
 | 53 | Người giám sát phải hỏi cổng của kênh, không chỉ hỏi các tệp có đúng hình dạng không | `tools/supervise.sh` | **xong** — `gate.py status` in ra từng tem và phán quyết vòng chấm cuối; `check --for render` là FAIL khi phim đã dựng mà cổng đóng |
