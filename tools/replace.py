@@ -2,6 +2,8 @@
 
     python3 tools/replace.py <file> <old-snippet-file> <new-snippet-file> [--count N]
     python3 tools/replace.py <file> --batch <edits.json>
+    python3 tools/replace.py <file> --batch -            # the edits arrive on stdin
+    python3 tools/replace.py --batch -                   # every edit names its own file
 
 The rule R1 exists because a shell write can truncate a file before it fails, and leaves no record of what was
 intended. This is the sanctioned way to script an edit when the snippet is too long for an exact-match edit tool:
@@ -20,6 +22,20 @@ write its own python script to do it: a script it wrote itself is the thing R1 e
 no record of what it changed. This way the edits are a file, the count is checked, and the write is atomic.
 
     python3 tools/replace.py LOOK.md --batch edits.json
+
+Two forms make it one command instead of two, because the round trip through a JSON file is the reason a
+session ends up writing its own script instead of using this one:
+
+  - `--batch -` reads the edits from stdin, so the whole edit is one command and nothing is left on disk;
+  - an edit may name its own `"file"`, so one call can edit several files — the file then need not be given
+    on the command line at all:
+
+    python3 tools/replace.py --batch - <<'JSON'
+    [{"file": "src/film.js", "old": "...", "new": "..."},
+     {"file": "src/props.js", "old": "...", "new": "..."}]
+    JSON
+
+    Every edit is checked before any file is written: one snippet that does not match means no file is touched.
 
 The snippets are files, so the agent writes them with a file-editing tool (which is what R1 asks for) and this
 script does the replacement itself.
@@ -66,51 +82,85 @@ def write_atomic(path, body):
         raise
 
 
-def batch(target, edits_path):
-    """many small edits in one file: every one of them must match exactly, or nothing is written
-
-    The edits are a list of {"old": ..., "new": ..., "count": N}. They are applied in order, and each one is
-    counted against the file *as it stands at that moment* — so two edits with the same old snippet cannot
-    both pass, and the second one says so instead of quietly doing nothing.
-    """
+def load_edits(path):
+    """the list of edits: from a JSON file, or from stdin when the path is `-`"""
     try:
-        edits = json.loads(read(edits_path))
+        raw = sys.stdin.read() if path == '-' else read(path)
+    except OSError as e:
+        print(f'replace: FAIL cannot read {path}: {e}')
+        return None
+    try:
+        edits = json.loads(raw)
     except Exception as e:
-        print(f'replace: FAIL cannot read {edits_path}: {e}')
-        return 1
+        print(f'replace: FAIL cannot read {path}: {e}')
+        return None
     if not isinstance(edits, list) or not edits:
         print('replace: FAIL the batch file must be a non-empty list of {"old": ..., "new": ...} edits')
+        return None
+    return edits
+
+
+def batch(target, edits_path):
+    """many small edits, in one file or in several: every one of them must match exactly, or nothing is written
+
+    The edits are a list of {"old": ..., "new": ..., "count": N}. An edit may name its own "file", so one call
+    can edit several files — the file then need not be given on the command line at all. They are applied in
+    order, and each one is counted against the file *as it stands at that moment* — so two edits with the same
+    old snippet cannot both pass, and the second one says so instead of quietly doing nothing.
+    """
+    edits = load_edits(edits_path)
+    if edits is None:
         return 1
-    body = read(target)
-    problems = []
+    groups = {}                                  # file -> [(index, edit)]
     for i, e in enumerate(edits):
         if not isinstance(e, dict) or not isinstance(e.get('old'), str) or not isinstance(e.get('new'), str):
-            problems.append((i, 'the edit must have "old" and "new" as strings'))
+            print(f'replace: FAIL edit {i}: the edit must have "old" and "new" as strings')
+            return 1
+        f = e.get('file') or target
+        if not f:
+            print(f'replace: FAIL edit {i}: it does not name a file — give the file on the command line, or put '
+                  f'"file" in the edit')
+            return 1
+        if target and f != target:
+            print(f'replace: FAIL edit {i}: it names {f} but the command line says {target}')
+            return 1
+        groups.setdefault(f, []).append((i, e))
+
+    problems = []
+    bodies = {}                                  # file -> the body after its edits
+    for f, items in groups.items():
+        if not os.path.isfile(f):
+            problems.append((items[0][0], f'the file {f} does not exist'))
             continue
-        if e['old'] == e['new']:
-            problems.append((i, 'the old snippet and the new snippet are the same'))
-            continue
-        want = e.get('count', 1)
-        got = body.count(e['old'])
-        if got != want:
-            problems.append((i, f'the old snippet appears {got} time(s), {want} expected'))
+        body = read(f)
+        work = body
+        for i, e in items:
+            if e['old'] == e['new']:
+                problems.append((i, 'the old snippet and the new snippet are the same'))
+                continue
+            want = e.get('count', 1)
+            got = work.count(e['old'])
+            if got != want:
+                problems.append((i, f'the old snippet appears {got} time(s), {want} expected'))
+                continue
+            work = work.replace(e['old'], e['new'], want)
+        bodies[f] = work
     if problems:
         print(f'replace: FAIL {len(problems)} of {len(edits)} edits do not match — nothing was written')
         for i, why in problems:
             print(f'  edit {i}: {why}')
+            # where it sits: a snippet that is there but appears twice needs the line numbers to tell them apart
+            e = edits[i] if isinstance(edits[i], dict) else {}
+            f = e.get('file') or target
+            if f and os.path.isfile(f) and isinstance(e.get('old'), str) and e['old'].strip():
+                lines = where(read(f), e['old'])
+                if lines:
+                    print(f'    it sits on line(s): {", ".join(map(str, lines[:12]))}')
         print('  fix the snippet, or give it the count it really has')
         return 1
-    for i, e in enumerate(edits):
-        want = e.get('count', 1)
-        got = body.count(e['old'])
-        if got != want:
-            # an earlier edit changed the file under this one: the count no longer holds
-            print(f'replace: FAIL edit {i}: the old snippet now appears {got} time(s), {want} expected — '
-                  f'nothing was written')
-            return 1
-        body = body.replace(e['old'], e['new'], want)
-    write_atomic(target, body)
-    print(f'replace: {target} — {len(edits)} edit(s) applied')
+    for f, body in bodies.items():
+        write_atomic(f, body)
+        print(f'replace: {f} — {len(groups[f])} edit(s) applied')
     return 0
 
 
@@ -155,6 +205,43 @@ def selftest():
         write_atomic(script, read(script).replace('hi', 'hello'))
         mode = os.stat(script).st_mode & 0o111
         cases.append(('tệp thực thi vẫn thực thi sau khi sửa', mode != 0, oct(os.stat(script).st_mode), ''))
+
+        # one call, several files: each edit names its own file. This is the shape a session writes by hand
+        # when it edits a big source file and a doc in the same breath (N67).
+        a1 = os.path.join(tmp, 'a.js')
+        a2 = os.path.join(tmp, 'b.md')
+        open(a1, 'w', encoding='utf-8').write('const A = 1;\n')
+        open(a2, 'w', encoding='utf-8').write('# tiêu đề\n')
+        edits2 = os.path.join(tmp, 'edits2.json')
+        json.dump([{'file': a1, 'old': 'const A = 1;', 'new': 'const A = 2;'},
+                   {'file': a2, 'old': '# tiêu đề', 'new': '# tiêu đề mới'}], open(edits2, 'w', encoding='utf-8'))
+        rc = batch(None, edits2)
+        cases.append(('một lệnh sửa được nhiều tệp (mỗi sửa tự nêu tệp)',
+                      rc == 0 and 'const A = 2;' in read(a1) and '# tiêu đề mới' in read(a2), read(a1), ''))
+
+        # one bad edit in the second file: the first file must not be written either
+        open(a1, 'w', encoding='utf-8').write('const A = 1;\n')
+        json.dump([{'file': a1, 'old': 'const A = 1;', 'new': 'const A = 2;'},
+                   {'file': a2, 'old': 'không có trong tệp', 'new': 'x'}], open(edits2, 'w', encoding='utf-8'))
+        rc = batch(None, edits2)
+        cases.append(('một sửa hỏng ở tệp thứ hai thì tệp thứ nhất cũng không bị sửa',
+                      rc == 1 and read(a1) == 'const A = 1;\n', read(a1), ''))
+
+        # an edit that names a file the command line does not name: refuse, do not guess
+        json.dump([{'file': a1, 'old': 'x', 'new': 'y'}], open(edits2, 'w', encoding='utf-8'))
+        rc = batch(a2, edits2)
+        cases.append(('tệp trong sửa khác tệp trên dòng lệnh thì bị từ chối', rc == 1 and read(a1) == 'const A = 1;\n',
+                      read(a1), ''))
+
+        # the edits arrive on stdin: the whole edit is one command and nothing is left on disk
+        old_stdin = sys.stdin
+        import io
+        sys.stdin = io.StringIO(json.dumps([{'old': 'const A = 1;', 'new': 'const A = 3;'}]))
+        try:
+            rc = batch(a1, '-')
+        finally:
+            sys.stdin = old_stdin
+        cases.append(('sửa đọc từ stdin thì một lệnh là xong', rc == 0 and 'const A = 3;' in read(a1), read(a1), ''))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
     failed = 0
@@ -171,18 +258,20 @@ def selftest():
 
 def main():
     ap = argparse.ArgumentParser(description='replace a snippet in a file, exactly once')
-    ap.add_argument('file')
+    ap.add_argument('file', nargs='?', help='the file to edit (not needed when every edit names its own file)')
     ap.add_argument('old', nargs='?', help='the file holding the old snippet')
     ap.add_argument('new', nargs='?', help='the file holding the new snippet')
     ap.add_argument('--count', type=int, default=1, help='how many matches are expected (default 1)')
-    ap.add_argument('--batch', help='a JSON file: a list of {old, new, count} edits')
+    ap.add_argument('--batch', help='a JSON file, or - for stdin: a list of {old, new, count} edits')
     a = ap.parse_args()
 
+    if a.batch:
+        return batch(a.file, a.batch)
+    if not a.file:
+        ap.error('replace: give the file to edit, or use --batch')
     if not os.path.isfile(a.file):
         print(f'replace: FAIL {a.file} does not exist')
         return 1
-    if a.batch:
-        return batch(a.file, a.batch)
     if not a.old or not a.new:
         ap.error('replace: give the old and new snippet files, or --batch <edits.json>')
     old, new = read(a.old), read(a.new)

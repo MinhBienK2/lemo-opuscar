@@ -83,6 +83,16 @@ def project_file(f, cmd, lib=''):
     return not re.search(r"cd\s+/tmp\b", cmd)
 
 
+# the library's own edit tool. A command that hands its edits to it is writing through the tool R1 names as
+# the safe way to edit — it counts the matches and refuses an ambiguous snippet — so the rule must not count
+# it as a shell write. It only has to notice that the tool is being run (N66).
+SANCTIONED_EDIT = re.compile(r'\breplace\.py\b')
+
+
+def sanctioned_edit(cmd):
+    return bool(SANCTIONED_EDIT.search(cmd))
+
+
 # the files the command writes, as opposed to the files it merely names: a script that reads core/render/still.mjs
 # and writes src/film.js has written one file, not two.
 def variables(body):
@@ -95,7 +105,7 @@ def variables(body):
     return out
 
 
-def write_targets(cmd):
+def write_targets(cmd, tables=True):
     tg = []
     body = cmd
     m = re.search(r"<<-?\s*['\"]?[A-Za-z_]\w*", cmd)
@@ -117,12 +127,13 @@ def write_targets(cmd):
             for m3 in re.finditer(re.escape(expr) + r"\s*=\s*['\"]([^\"']+)\"", body):
                 tg.append(m3.group(1))
     # a script that writes through a table of edits: {"file": "src/x.js", "old": …, "new": …}
-    for m4 in re.finditer(r"['\"]file['\"]\s*:\s*['\"]?([\w./-]+)['\"]?", body):
-        tg.append(m4.group(1))
-    for m5 in re.finditer(r"['\"]file['\"]\s*:\s*([A-Za-z_]\w*)", body):
-        r = resolve(m5.group(1))
-        if re.fullmatch(r"[\w./-]+", r):
-            tg.append(r)
+    if tables:
+        for m4 in re.finditer(r"['\"]file['\"]\s*:\s*['\"]?([\w./-]+)['\"]?", body):
+            tg.append(m4.group(1))
+        for m5 in re.finditer(r"['\"]file['\"]\s*:\s*([A-Za-z_]\w*)", body):
+            r = resolve(m5.group(1))
+            if re.fullmatch(r"[\w./-]+", r):
+                tg.append(r)
     # a file written without open(): Path(p).write_text(...), p.write_text(...)
     for m6 in re.finditer(r"(?:write_text|write_bytes)\(\s*([^,)]{1,160}?)\s*\)", body):
         r = resolve(m6.group(1))
@@ -137,8 +148,30 @@ def write_targets(cmd):
     return tg
 
 
-def short(f, film=''):
-    """the file as a person would name it: relative to the film, and without a leading './'"""
+def short(f, film='', lib=''):
+    """the file as a person would name it: relative to the film, and without a leading './'
+
+    The same file arrives under two spellings — `src/film.js` (the session was in the episode folder) and
+    `channels/…/tap-01/src/film.js` (the session was in the library root). Counted as they arrive, one file
+    becomes two entries and the report says "90, 76" where the truth is "166". A relative path is relative to
+    the folder the session was in, so it is measured from the film first and from the library root second.
+    """
+    if lib and not os.path.isabs(f):
+        cands = []
+        if film:
+            cands.append(os.path.normpath(os.path.join(film, f)))
+        cands.append(os.path.normpath(os.path.join(lib, f)))
+        pick = ''
+        for c in cands:
+            if os.path.exists(c):
+                pick = c
+                break
+        if not pick and film:
+            # a file that does not exist yet: the folders the episode owns tell where it is going
+            top = f.split('/')[0] if '/' in f else ''
+            if top in ('src', 'voice', 'review', 'out', 'research', 'build'):
+                pick = cands[0]
+        f = pick or cands[-1]
     if film:
         try:
             r = os.path.relpath(f, film)
@@ -179,6 +212,7 @@ def rules(session, film='', lib=''):
     r1_n = 0
     r1_files = {}
     r10_n = 0
+    r1_via_tool = 0      # a command that writes through tools/replace.py: safe, but wrapped in a program
     reread = {}          # how often a project file is read (R11)
     imgread = {}         # every look at a frame, with the time (R12)
     writes = {}          # when a project file was written (the versions a look can see)
@@ -210,10 +244,12 @@ def rules(session, film='', lib=''):
             # then decides what to write), a redirect into a file, an in-place edit (sed -i), and a copy or a move.
             # The rule names the file the command **writes**, not every file the command mentions — a report that
             # names a file nobody wrote teaches the reader to ignore the report.
-            redirect = bool(re.search(r"(?<![0-9&])>{1,2}\s*[\w./-]+" + SRC_EXT, cmd))
-            in_place = bool(re.search(r"\bsed\s+-i\b|\bcp\b\s|\bmv\b\s", cmd))
-            # only the files a person edits count: a rendered frame copied into a review folder is a build step
-            targets = [f for f in write_targets(cmd) if project_file(f, cmd, lib) and re.search(SRC_EXT, f)]
+            # A command that runs `tools/replace.py` writes through the tool, not through the shell: the table of
+            # edits it carries is the tool's input, not a shell write (N66). A direct write in the same command
+            # (a redirect, an open(…,'w')) is still a violation and is still counted.
+            via_tool = sanctioned_edit(cmd)
+            targets = [f for f in write_targets(cmd, tables=not via_tool)
+                       if project_file(f, cmd, lib) and re.search(SRC_EXT, f)]
             is_r1 = bool(targets)
             # R10: a hand-rolled ffmpeg montage of frames. The library has core/render/sheet.py for this. A command
             # that both edits a file and tiles frames is reported once, as the edit.
@@ -222,10 +258,12 @@ def rules(session, film='', lib=''):
             if is_r1:
                 r1_n += 1
                 for f in set(targets):
-                    f = short(f, film)
+                    f = short(f, film, lib)
                     r1_files[f] = r1_files.get(f, 0) + 1
                     if when is not None:
                         writes.setdefault(f, []).append(when)
+            elif via_tool:
+                r1_via_tool += 1
             elif is_r10:
                 r10_n += 1
             elif re.search(r'\bpython3?\s+-\s*<<', cmd) and re.search(r"['\"][^'\"]*\.(js|json|md)['\"]", cmd):
@@ -252,7 +290,11 @@ def rules(session, film='', lib=''):
     if r1_n:
         top = ", ".join(f"{f}×{n}" for f, n in sorted(r1_files.items(), key=lambda kv: -kv[1])[:8])
         out.append(f"R1 {r1_n} lần — file của dự án bị ghi bằng shell, không bằng công cụ sửa file: {top}. "
-                   f"Dùng `edit`, hoặc `python3 tools/replace.py` khi đoạn cần thay quá dài.")
+                   f"Dùng `edit`, hoặc `python3 tools/replace.py --batch -` (một lệnh cho nhiều sửa, mỗi sửa tự nêu tệp) khi đoạn cần thay quá dài.")
+    if r1_via_tool:
+        out.append(f"R1t {r1_via_tool} lần sửa file qua `tools/replace.py` — an toàn (công cụ tự đếm số lần khớp và "
+                   f"ghi tệp nguyên tử), nhưng đi qua một chương trình trung gian thì lệnh dài và khó đọc: gọi thẳng "
+                   f"`python3 tools/replace.py --batch <edits.json>`.")
     if r10_n:
         out.append(f"R10 {r10_n} lần — montage ffmpeg tự viết: `core/render/sheet.py` xếp các khung lại và đặt tên từng khung.")
     # the cost of the session, in bytes. A transcript grows with every event, and a transcript that has grown
@@ -374,6 +416,41 @@ def selftest():
         got = '\n'.join(rules(session))
         cases.append(('ghi qua một tên biến thì vẫn nêu đúng tệp', 'src/film.js' in got, got, ''))
         cases.append(('ghi qua một tên biến thì không còn là R1?', 'R1?' not in got, got, ''))
+
+        # a write that goes through the library's own edit tool is not a shell write: the tool counts the matches
+        # and renames a whole new file over the target, so the file is never half-written (N66). The rule engine
+        # counted these as R1, and the number it printed was ten times the real number of unsafe writes.
+        _fake_transcript(session, [
+            "python3 - <<'PY'\nimport subprocess\n"
+            "edits = [{'file': 'src/film.js', 'old': 'a', 'new': 'b'}]\n"
+            "subprocess.run(['python3', 'tools/replace.py', '--batch', 'edits.json'])\nPY",
+        ])
+        got = '\n'.join(rules(session))
+        cases.append(('sửa qua tools/replace.py thì không phải R1', 'R1 ' not in got, got, ''))
+        cases.append(('sửa qua tools/replace.py thì báo riêng là R1t', 'R1t ' in got, got, ''))
+        # but a direct write in the same command is still a violation
+        _fake_transcript(session, [
+            "python3 - <<'PY'\nimport subprocess\n"
+            "subprocess.run(['python3', 'tools/replace.py'])\n"
+            "open('src/film.js','w').write('x')\nPY",
+        ])
+        got = '\n'.join(rules(session))
+        cases.append(('ghi thẳng cùng lệnh gọi replace.py thì vẫn là R1', 'R1 ' in got, got, ''))
+
+        # the same file under two spellings is one file: `src/film.js` (the session was in the episode folder)
+        # and `channels/…/tap-gia/src/film.js` (the session was in the library root). Counted as they arrive,
+        # one file becomes two entries and the reader cannot tell which one to go and look at.
+        film = os.path.join(tmp, 'channels', 'x', 'tap-gia')
+        os.makedirs(os.path.join(film, 'src'), exist_ok=True)
+        open(os.path.join(film, 'src', 'film.js'), 'w', encoding='utf-8').write('const A = 1;\n')
+        _fake_transcript(session, [
+            "python3 - <<'PY'\np='src/film.js'\nopen(p,'w').write('x')\nPY",
+            "python3 - <<'PY'\np='channels/x/tap-gia/src/film.js'\nopen(p,'w').write('x')\nPY",
+        ])
+        got = '\n'.join(rules(session, film=film, lib=tmp))
+        r1 = [l for l in got.split('\n') if l.startswith('R1 ')]
+        cases.append(('cùng một tệp dưới hai cách viết thì tính một lần',
+                      len(r1) == 1 and 'src/film.js×2' in r1[0], r1, ''))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 

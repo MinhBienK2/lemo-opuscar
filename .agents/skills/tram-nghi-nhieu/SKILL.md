@@ -38,6 +38,11 @@ Quy trình này thay cho bước 1–6 của `AGENTS.md` / `DIRECTOR.md` khi là
      (`[{"old": "...", "new": "..."}]`) rồi chạy `python3 tools/replace.py <file> --batch <edits.json>`.
      Mọi sửa phải khớp đúng số lần nêu trong nó, nếu không thì **không sửa gì cả**. Đừng tự viết script
      python để sửa tệp của tập: script tự viết là đúng cái R1 cấm, và nó không để lại dấu vết đã sửa gì.
+   - Một lệnh cho mọi sửa, không cần tệp JSON trên đĩa: `python3 tools/replace.py --batch - <<'JSON'`
+     với danh sách `[{"file": "src/film.js", "old": "...", "new": "..."}, {"file": "src/props.js", ...}]`.
+     Mỗi sửa tự nêu tệp của nó, công cụ kiểm tra **mọi** tệp trước khi ghi tệp nào, và mọi tệp đều được
+     ghi nguyên tệp mới đè lên tệp cũ. Đây là cách sửa nhiều tệp trong một lần, an toàn bằng công cụ —
+     không phải viết một chương trình python riêng để làm thay.
    - Heredoc của shell (`cat >> file <<EOF`) đã làm hỏng chữ tiếng Việt trong một tài liệu của phiên trước:
      shell ghi UTF-8 hỏng, không ai thấy ngay, và phải sửa lại bằng một lần ghi shell nữa.
 

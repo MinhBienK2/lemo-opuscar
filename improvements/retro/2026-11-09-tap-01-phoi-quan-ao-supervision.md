@@ -1784,6 +1784,82 @@ Và nó không chỉ là công cốc. Người chấm **dàn ý**, đọc dàn �
 
 ---
 
+## N66 — medium — Luật R1 của người giám sát không biết công cụ sửa file khỏi cách viết tay
+
+**Bằng chứng.** Trong phiên tập 01 có **25** lần sửa file đi qua `tools/replace.py` — công cụ mà R1
+chính thức chỉ định: nó đếm số lần khớp, từ chối khi khớp không đúng một lần, và ghi nguyên tệp mới
+đè lên tệp cũ. Nhưng luật R1 của người giám sát đọc bảng sửa `{"file": "src/film.js", …}` trong lệnh
+đó là *"ghi file dự án bằng shell"* và đếm vào R1. Tệp được ghi bởi **công cụ**, không phải bởi shell.
+
+Cái thật sự nguy hiểm là hình dạng còn lại: `open(p,'w').write(s)` — cắt tệp trước, ghi sau, và nếu
+ghi hỏng thì tệp cũ đã mất. Luật phải phân biệt hai cái đó, không phải gộp chung là "ghi bằng shell".
+
+**Đo lại, giải mã 369 lần ghi bằng shell của phiên tập 01:**
+
+| Hình dạng | Số lần | Nguy hiểm không? |
+|---|---|---|
+| `open(p,'w').write(...)` trong một chương trình python tự viết | 297 | **có** — tệp bị cắt trước |
+| `cat >> src/props.js <<EOF` | 20 | **có** — ghi thẳng, không đếm khớp |
+| `cp` / `mv` đè lên tệp dự án | 6 | có |
+| `sed -i` | 3 | có |
+| đi qua `tools/replace.py` | 25 | **không** — công cụ đếm khớp và ghi nguyên tệp |
+
+Nói cách khác: con số 369 là thật, nhưng **344 lần** trong đó là cách làm việc của chính phiên, và chỉ
+**25 lần** là công cụ. Tôi đã đoán ngược lại (ngỡ công cụ bị tính nhầm là nguy hiểm) và đoán sai; đo
+thì ra ngược lại.
+
+**Thêm một lỗi nhỏ trong cùng dòng báo cáo.** Cùng một tệp tới với hai cách viết — `src/film.js`
+(phiên đang ở thư mục tập) và `channels/…/tap-01/src/film.js` (phiên đang ở thư mục gốc) — và báo cáo
+tách thành hai mục: `src/film.js×90` và `channels/…/src/film.js×76`. Người đọc không biết đó là một
+tệp hay hai. Nay mọi đường dẫn được đo từ thư mục gốc của thư viện trước, rồi mới từ thư mục tập:
+`src/film.js×167` — một tệp, một con số.
+
+**Đã sửa.** `tools/rules.py`: một lệnh có gọi `tools/replace.py` thì bảng sửa trong đó là **đầu vào
+của công cụ**, nên không tính vào R1; nó được báo riêng là `R1t` (an toàn, nhưng đi qua chương trình
+trung gian thì lệnh dài và khó đọc). Một lệnh vừa gọi công cụ vừa ghi thẳng vẫn là R1. Bốn ca
+selftest mới: *"sửa qua tools/replace.py thì không phải R1"*, *"…thì báo riêng là R1t"*, *"ghi thẳng
+cùng lệnh gọi replace.py thì vẫn là R1"*, *"cùng một tệp dưới hai cách viết thì tính một lần"*.
+
+---
+
+## N67 — high — Đường đi an toàn phải là **một** lệnh, không phải hai
+
+**Bằng chứng.** 297 lần ghi bằng shell của phiên tập 01 gần như toàn bộ là **cùng một việc**:
+đọc tệp, thay một đoạn, ghi lại. Đó đúng là việc của `tools/replace.py --batch`. Nhưng công cụ bắt
+người dùng phải làm **hai** việc: đặt các sửa vào một tệp JSON trên đĩa, rồi gọi công cụ với tệp
+JSON đó — và mỗi lệnh chỉ sửa **một** tệp. Người dùng phải sửa ba tệp thì phải gọi ba lần, mỗi lần
+một tệp JSON.
+
+Phiên đó không làm thế. Nó tự viết chương trình python của riêng mình (297 lần), vì đó là cách
+**một** lệnh làm xong việc. Không phải phiên đó không biết công cụ — phiên đó dùng công cụ 25 lần —
+mà là công cụ đòi hai bước trong khi thói quen của nó là một bước.
+
+**Vì sao nó quan trọng.** R1 cấm "viết chương trình riêng để sửa file" — nhưng nếu công cụ được
+viện dẫn cần hai bước, thì luật đang cấm cách làm việc **rẻ nhất** mà người ta biết. Luật bị vô hiệu
+không phải vì người ta không đọc, mà vì cái được chỉ định đắt hơn cái thực tế. Một luật mà cách
+tuân thủ tốn hơn cách vi phạm thì sẽ bị vi phạm, và không phải vì người ta hỗng.
+
+**Đã sửa.** `tools/replace.py` nay nhận hai hình thức mới, và cả hai đều **một lệnh**:
+
+- `--batch -` đọc danh sách sửa từ stdin — không còn tệp JSON trên đĩa;
+- mỗi sửa được **tự nêu tệp của nó** (`{"file": "src/film.js", "old": …, "new": …}`), nên một lệnh sửa
+  được nhiều tệp, và tệp không cần nêu trên dòng lệnh nữa.
+
+```sh
+python3 tools/replace.py --batch - <<'JSON'
+[{"file": "src/film.js", "old": "...", "new": "..."},
+ {"file": "src/props.js", "old": "...", "new": "..."}]
+JSON
+```
+
+Mọi sửa được kiểm tra **trước**: một đoạn không khớp thì **không tệp nào** bị ghi. Mỗi tệp vẫn được
+ghi nguyên tệp mới đè lên tệp cũ, nên không bao giờ có tệp nửa vời. Bốn ca selftest mới: *"một lệnh
+sửa được nhiều tệp"*, *"một sửa hỏng ở tệp thứ hai thì tệp thứ nhất cũng không bị sửa"*, *"tệp trong
+sửa khác tệp trên dòng lệnh thì bị từ chối"*, *"sửa đọc từ stdin thì một lệnh là xong"*. `R1` trong
+`CODING_STANDARDS.md` và luật 5 của kỹ năng của kênh đều nêu đúng hình thức này.
+
+---
+
 ## Các guard đã bắt được gì (tính từ 08:00, hai tập còn chạy)
 
 Đây là bằng chứng rằng các guard không phải lý thuyết — mỗi cái đã bắt một lỗi thật, hoặc đã được một
@@ -1881,6 +1957,8 @@ tiền (trước vòng chấm, trước lúc dựng, trước lúc bàn giao), c
 | 63 | Lỗi máy thấy sẵn thì đừng để người chấm là người phát hiện (N63) | `channels/tram-nghi-nhieu/tools/check_shots.py`, `.agents/skills/tram-nghi-nhieu/step6-assembly/GUIDE.md` | **xong** — 8 ca selftest. Đo trên tap-01: **36/60 câu** có lỗi máy thấy được, trong đó 22 câu có cờ SAME |
 | 64 | Quy tắc phải phân biệt việc với lãng phí (N64) | `tools/rules.py` | **xong** — mỗi lần nhìn được xếp vào một phiên bản theo chính lúc ghi tệp trong transcript. Đo lại tap-01: 767 lần mở ảnh — **20** lần cùng pixel, **304** lần sau khi dựng lại (việc, không phải lãng phí); đọc lại `props.js` 79 lần — **37** lần đọc nội dung cũ, 41 lần đọc sau một lần sửa |
 | 65 | Cùng một tấm hình thì không phải trả tiền hai lần (N65) | `channels/tram-nghi-nhieu/tools/review.sh`, `.agents/skills/tram-nghi-nhieu/step6-assembly/GUIDE.md` | **xong** — vòng chấm dùng lại tờ sheet đã dựng nếu mã không đổi. Đo trên tap-01: tờ sheet được dựng **16 lần** cho cùng một bộ mã |
+| 66 | Luật R1 phải biết công cụ sửa file khỏi cách viết tay, và tính một tệp một lần (N66) | `tools/rules.py` | **xong** — 4 ca selftest (14/14). Đo lại tap-01: 369 lần ghi bằng shell = **344** lần script tự viết (297 `open(p,'w')`, 20 heredoc, 6 cp/mv, 3 sed -i) + **25** lần qua công cụ, nay báo riêng là `R1t`; `src/film.js` gộp lại `×167` thay vì `×90` và `×76` |
+| 67 | Đường đi an toàn phải là một lệnh (N67) | `tools/replace.py`, `CODING_STANDARDS.md` R1, `.agents/skills/tram-nghi-nhieu/SKILL.md` | **xong** — 4 ca selftest (9/9). `--batch -` đọc từ stdin, mỗi sửa tự nêu tệp: một lệnh sửa được nhiều tệp, mọi tệp được kiểm tra trước khi tệp nào bị ghi |
 
 ### Mỗi phát hiện đã có dòng riêng trong `improvements/lessons.md`
 
