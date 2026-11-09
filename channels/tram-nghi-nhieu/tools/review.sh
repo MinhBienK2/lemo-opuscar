@@ -91,6 +91,24 @@ CRITIC_ID="$CLI -p ${LEMO_CRITIC_MODEL:+--model $LEMO_CRITIC_MODEL}"; [ -n "$LEM
 # open; a CRITIC_TIMEOUT given by hand still wins.
 CRITIC_TIMEOUT_SET=${CRITIC_TIMEOUT:+1}
 CRITIC_TIMEOUT=${CRITIC_TIMEOUT:-3600}   # how long the reviewer may think; a hung reviewer ends the round, it does not eat it
+# The clock must fit the work, for the rounds that read a whole film as well: a reviewer that opens four frames
+# per line of a sixty-line film is a two-hour job, and a one-hour clock kills it half-way (N118 — the props round
+# of tap-02 died at exactly 3600 s). So the clock grows with the number of lines the round has to look at.
+scale_clock() {   # $1 = how many lines the round has to see
+  [ -n "$CRITIC_TIMEOUT_SET" ] && return 0
+  case "${1:-0}" in ''|*[!0-9]*) return 0 ;; esac
+  [ "$1" -gt 0 ] || return 0
+  CRITIC_TIMEOUT=$((3600 + 120 * $1))
+}
+lines_of() {   # $1 = "a-b" (a range) or empty (the whole film); prints the number of lines
+  if [ -n "$1" ]; then
+    a=${1%-*}; b=${1#*-}
+    case "$a$b" in ''|*[!0-9]*) echo 0; return ;; esac
+    echo $((b - a + 1))
+  else
+    python3 -c "import json,sys;print(len(json.load(open(sys.argv[1]))))" "$EP/voice/lines.json" 2>/dev/null || echo 0
+  fi
+}
 critic() {   # $1 = the prompt; $2 = "no-verdict" when the reviewer answers with a list, not with a verdict
   VERDICTLESS=${2:-}
   # Every reviewer is told the same three facts: which round this is, where it works, and that everything it
@@ -716,6 +734,8 @@ if [ "$FINAL" = 1 ]; then
   fi
   n=$(next "FINAL-QA-REVIEW-")
   ROUND_LABEL="lần chấm nghiệm thu thứ $n"
+  # The last gate reads the whole film: its clock grows with the number of lines in it.
+  scale_clock "$(lines_of "")"
   if [ "$n" -gt 3 ]; then
     echo "review --final: đã nghiệm thu 3 lượt mà phim vẫn chưa được nhận. Dừng: báo người dùng các lỗi còn lại trong $EP/review/FINAL-QA-REPORT.md và hỏi hướng đi." >&2; exit 1
   fi
@@ -773,6 +793,8 @@ if [ -n "$CHID" ]; then SCOPE="$CHID-"; SCOPE_NAME="một chương"; LIMIT=5
 elif [ -n "$LINES" ]; then SCOPE="lines-$LINES-"; SCOPE_NAME="một cảnh"; LIMIT=3
 else SCOPE=""; SCOPE_NAME="cả phim"; LIMIT=5; fi
 [ "$VIDEO" = 1 ] && SCOPE="${SCOPE}video-"
+# The clock fits what this round has to look at: a chapter, a scene, or the whole film.
+scale_clock "$(lines_of "$LINES")"
 # A long film judged as one picture is judged badly: the critic opens about twenty-five of its sixty frames, the
 # round costs forty minutes, and the whole film gets five rounds. The chapter route exists for exactly this, and
 # the tool says so before the budget is spent — not after.
