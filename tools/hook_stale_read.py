@@ -46,9 +46,15 @@ def mtime_of(path):
         return None
 
 
-def decide(path, session, state, now=None):
-    """(mã thoát, thông điệp) cho một lần đọc tệp."""
+def decide(path, session, state, now=None, ranged=False):
+    """(mã thoát, thông điệp) cho một lần đọc tệp.
+
+    `ranged` = lần đọc có `offset`/`limit`, tức đọc **một đoạn** — đó là cách làm đúng, nên nó
+    không bị đếm và không bị chặn. Chỉ lần đọc **cả tệp** mới tiêu token và mới bị đếm.
+    """
     if not path:
+        return 0, ''
+    if ranged:
         return 0, ''
     now = now if now is not None else time.time()
     mt = mtime_of(path)
@@ -102,8 +108,10 @@ def main():
     ti = data.get('tool_input') or {}
     path = ti.get('file_path') or ''
     session = data.get('session_id') or 'default'
+    # đọc một đoạn (offset/limit) là cách làm đúng: không đếm, không chặn
+    ranged = ('offset' in ti) or ('limit' in ti)
     state = load_state()
-    rc, message = decide(path, session, state)
+    rc, message = decide(path, session, state, ranged=ranged)
     if path:
         save_state(state)
     if rc != 0:
@@ -155,13 +163,19 @@ def selftest():
             rc, _ = decide(small, 's3', state2)
             assert rc == 0, rc
         print('ok   tệp nhỏ → rc=0')
+        # đọc một đoạn (offset/limit) thì không bị đếm, không bị chặn
+        state3 = {}
+        for i in range(6):
+            rc, _ = decide(big, 's4', state3, ranged=True)
+            assert rc == 0, rc
+        print('ok   đọc đoạn (offset/limit) → rc=0 (không bị đếm)')
     finally:
         for p in (big, small):
             try:
                 os.unlink(p)
             except OSError:
                 pass
-    print('%d ca đều đúng' % 9)
+    print('%d ca đều đúng' % 10)
     return 0
 
 
