@@ -15,6 +15,7 @@ The rules (R1–R5, R9–R12 of CODING_STANDARDS.md):
   R10 a hand-rolled ffmpeg montage (the library has core/render/sheet.py)
   R11 the same big file read again and again
   R12 the same frame opened again and again
+  R14 a wait pattern that matches the shell's own command line
   COST how big the transcript has grown — a session that has stopped making and started looking
 """
 import collections
@@ -240,6 +241,30 @@ def rules(session, film='', lib=''):
                 out.append(f"R5 {at} a long job is polled with sleep: {cmd[:120]}")
             if re.search(r'git\s+add\s+(-\S+\s+)*(-A|--all)\b', cmd):
                 out.append(f"R3 {at} every file is staged on a dirty tree: {cmd[:120]}")
+            # R14: a pattern that matches the shell's own command line. `until ! pgrep -f "x/build.sh"; do sleep 15; done`
+            # has "x/build.sh" in the command line of the very shell that runs it, so pgrep finds the loop itself: the
+            # condition never becomes true and the wait outlives the job it waits for. `pkill -f` in the same shape
+            # kills the shell that runs it. The pattern must really be in the command line — a pattern that is not
+            # there cannot match the shell — and the finding needs the shape of a wait (until/while/do sleep) or a
+            # kill, so that a plain `pgrep -af "node"` in a longer line is not reported.
+            for m in re.finditer(r'\b(pgrep|pkill)\b\s+(?:-\w+\s+)*-f\s+(?:"([^"]*)"|\'([^\']*)\'|(\S+))', cmd):
+                kind = m.group(1)
+                pat = m.group(2) or m.group(3) or m.group(4) or ''
+                if not pat:
+                    continue
+                try:
+                    hits = bool(re.search(pat, cmd))
+                except re.error:
+                    continue
+                if not hits:
+                    continue
+                waits = kind == 'pgrep' and re.search(r'\b(until|while)\b|\bdo\s+sleep\b', cmd)
+                if kind == 'pkill':
+                    out.append(f"R14 {at} pkill -f \"{pat}\" khớp với chính dòng lệnh này — lệnh giết theo mẫu có thể "
+                               f"giết chính vỏ shell đang chạy nó, và giết luôn job của tập khác cùng mẫu đó: {cmd[:120]}")
+                elif waits:
+                    out.append(f"R14 {at} pgrep -f \"{pat}\" khớp với chính dòng lệnh này — vòng chờ tự khớp lấy "
+                               f"chính nó nên điều kiện không bao giờ thành đúng và nó chờ mãi một việc đã xong: {cmd[:120]}")
             # R1: a file written by the shell. Four shapes: a heredoc (the shell hands a body to a program, which
             # then decides what to write), a redirect into a file, an in-place edit (sed -i), and a copy or a move.
             # The rule names the file the command **writes**, not every file the command mentions — a report that
@@ -402,6 +427,14 @@ def selftest():
         _fake_transcript(session, ["sleep 240; ls /tmp/x | wc -l"])
         got = '\n'.join(rules(session))
         cases.append(('việc dài được chờ bằng sleep thì báo R5', 'R5 ' in got, got, ''))
+
+        # a wait loop that matches its own command line never ends
+        _fake_transcript(session, ['until ! pgrep -f "episodes/tap-01/build.sh"; do sleep 15; done'])
+        got = '\n'.join(rules(session))
+        cases.append(('vòng chờ tự khớp với dòng lệnh của chính nó thì báo R14', 'R14 ' in got, got, ''))
+        _fake_transcript(session, ['until ! pgrep -f "[e]pisodes/tap-01/build.sh"; do sleep 15; done'])
+        got = '\n'.join(rules(session))
+        cases.append(('mẫu không tự khớp thì không báo R14', 'R14 ' not in got, got, ''))
 
         # a scratch file under /tmp is not a project file
         _fake_transcript(session, ["cat > /tmp/scratch.py <<'EOF'\nx=1\nEOF"])

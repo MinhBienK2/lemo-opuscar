@@ -1373,6 +1373,7 @@ những dòng dán câu cũ:
 | 85 | Bài kiểm tra liên kết tự báo lỗi ở chỗ không phải nguyên nhân: một khối code fence có dấu nháy lẻ làm `check_doc_links.py` ghép lệch mọi đoạn code **cả tệp**, nên lỗi báo ra ở cuối tài liệu, cách nguyên nhân hàng nghìn ký tự — người đọc sửa nhầm chỗ báo lỗi, rồi tắt luôn bài kiểm tra | medium | `check_doc_links.py` bỏ fence trước, rồi ghép đoạn code theo từng đoạn văn thay vì theo cả tệp; selftest có ca cho việc này |
 | 86 | Báo cáo đo nói "không có khoảng lặng" cho một tệp **không có tiếng nào**: `film_report.py` chạy trên bản dựng hình chưa ghép tiếng in ra "not measured" và "no silent stretch of 1.0 s or more" — đúng theo nghĩa đen, sai theo nghĩa đúng, và người đọc sẽ tưởng phim ổn | medium | `film_report.py` hỏi trước có luồng tiếng không: không có thì in `NO SOUND`, nói rõ ở phần khoảng lặng rằng đây là phim không có tiếng chứ không phải lời kể bị ngắt, và trả mã 1; selftest có ba ca |
 | 87 | Tờ sheet không phải là phim: đọc tờ sáu mươi ô (~480 px) rồi kết luận cho ba nhận định sai (c32 "tường tối, chỉ có vai áo" trong khi trên phim là một cái áo trắng lớn giữa khung; c7 "hai áo giống nhau" trong khi áo trái nhạt áo phải sẫm; nhãn "3 CÁI" thực ra là `3 ÁO`) — ô nhỏ làm mất đúng thứ phim dạy, tức tương phản sáng/tối và kích thước vật | medium | `tools/frames_at.py` (mới) cắt một khung cho mỗi câu **từ chính mp4**, đúng giữa câu lời kể, rồi dán bằng `core/render/sheet.py`; có `--cols`/`--w` để soi một câu ở kích thước đọc được; R12 trong `CODING_STANDARDS.md` nói rõ tờ sheet là bản đồ để tìm câu, phim mới là bằng chứng |
+| 90 | Vòng chờ tự khớp lấy chính nó: `until ! pgrep -f "x/build.sh"; do sleep 15; done` có chuỗi đó trong dòng lệnh của chính vỏ shell, nên `pgrep -f` tìm thấy chính nó và điều kiện không bao giờ thành đúng — job chờ mãi một việc đã xong | medium | luật **R14** trong `CODING_STANDARDS.md`; `tools/rules.py` báo R14 khi mẫu `pgrep -f`/`pkill -f` nằm ngay trong dòng lệnh, có ca selftest cho cả hai vỏ |
 | 88 | Bản dựng giữa được chuyển đi và về nguyên vẹn: `mux.sh` gửi 1 113 MB (52,9 Mbit/s) qua đường truyền ~1,3 MB/s — ~14 phút lên, ~12 phút encode, ~6 phút về — trong khi encode cuối **tại chỗ** chỉ tốn ~6,5 phút cho cả tập. Đường xa chậm hơn encode tại chỗ khoảng bốn lần, vì nó chuyển một bản trung gian *xa hơn nhiều* so với thứ bản cuối cần | medium | `mux.sh` thu nhỏ bản giữa một lần tại chỗ (`-preset veryfast -crf 20`): 239 MB thay vì 1 113 MB, đo thật PSNR 40,4 dB, bản cuối vẫn `crf 19` — tệp nhỏ dưới 200 MB thì gửi nguyên bản, thu nhỏ hỏng thì gửi bản gốc, và bản thu nhỏ bị xoá sau khi chuyển |
 Dàn ý trông vẫn đầy đặn, vẫn đúng về hình — nó chỉ nói về **những câu mà phim không còn nói**. Đây là
 cùng một lớp lỗi với N43, ở tầng khác: N43 là dàn ý (`TREATMENT.md`) bị bỏ lại; đây là **bản dàn ý
@@ -2773,6 +2774,74 @@ thứ được chuyển nhỏ đi — đừng làm cho máy xa mạnh hơn.* B�
 chỗ thắng rõ). Đó là đổi chính sách, không chỉ đổi cách làm, nên để người dùng quyết.
 
 ---
+
+## N90 — medium — Vòng chờ tự khớp lấy chính nó: một job nền chờ mãi một việc đã xong
+
+**Bằng chứng.** Lúc 12:24, phiên của tập 01 có một job nền:
+
+```
+until ! pgrep -f "tap-01-phoi-quan-ao/build.sh" >/dev/null 2>&1; do sleep 15; done
+echo "=== build xong ==="; … beatsheet.mjs …; check_shots.py …
+```
+
+Job đó chờ `build.sh` xong rồi dựng lại tờ beat và chạy `check_shots.py`. Nhưng dòng lệnh của **chính vỏ
+shell chạy job đó** chứa đúng chuỗi `tap-01-phoi-quan-ao/build.sh`, nên `pgrep -f` luôn tìm thấy chính
+nó. Khi `build.sh` thật đã xong, điều kiện vẫn không bao giờ thành đúng, và job quay mãi — không phải vì
+việc nó chờ còn chạy, mà vì nó tự nhìn thấy chính mình.
+
+**Vì sao quan trọng.** Đây là N24 ở dạng thứ ba: một việc *không thể thất bại* cũng *không thể kết
+thúc*, và từ bên ngoài nó trông y hệt một job đang chạy. Người làm phim chờ nó, job giữ mình sống mãi,
+và phần việc thật (dựng lại tờ beat, đo lại các câu) không bao giờ chạy. Khác với N81 (giết job của
+tập khác), ở đây không ai bị giết: job chỉ không bao giờ kết thúc.
+
+**Guard đã có.** Chưa có. **Đề xuất (đã làm):** luật **R14** trong `CODING_STANDARDS.md`, và
+`tools/rules.py` báo R14 khi mẫu của `pgrep -f`/`pkill -f` nằm ngay trong dòng lệnh (kèm ca selftest cho
+cả hai vỏ: có ngoặc vuông thì không báo). Tôi đã báo cho phiên của tập 01 biết và chỉ đích danh pid
+(2886362) để nó tự giết — tôi không giết tiến trình của phiên khác.
+
+## Đánh giá toàn bộ quá trình — bản cuối, đo bằng log của chính phiên
+
+Phim đã xong và qua cổng. Dưới đây là quá trình, đo bằng công cụ đọc log của chính phiên
+(`tools/rules.py` trên toàn bộ transcript 935 MB), không bằng cảm nhận.
+
+### Dòng thời gian thật (theo mốc sửa của tệp)
+
+| Bước | Từ | Đến | Vòng | Kết quả |
+|---|---|---|---|---|
+| Dàn ý | 08-11 10:57 | 11:20 | 4 | PASS |
+| Lời kể | 11:26 | 11:39 | 2 | PASS |
+| Vật dựng | 15:20 | 09-11 02:08 | 5 | REJECT cả 5 → Đạo diễn cắt → PASS lúc 08:04 |
+| Hình | 09-11 03:34 | 10:12 | 5 | REJECT cả 5 → Đạo diễn cắt → PASS lúc 11:27 |
+| Dựng rồi ghép tiếng | 04:27 | 12:21 | | phim 176,4 s |
+| Cổng bàn giao | 12:18 | | | |
+
+Tổng: **~25 giờ** cho một tập 176 giây. Vòng hình cuối vẫn REJECT, và ba câu chặn (c45, c49, c59) được
+sửa **sau** vòng cuối — nghĩa là giới hạn vòng chấm đếm số vòng, không đếm mức đủ: phim chỉ đủ hình sau
+khi vòng đã hết.
+
+### Log của chính phiên nói gì
+
+| Vấn đề | Số lần | Nghĩa là gì |
+|---|---|---|
+| R1 — ghi tệp của dự án bằng shell | **370** | `src/film.js` 166 (90 lần viết bằng đường dẫn tương đối + 76 bằng đường dẫn đầy đủ), `props.js` 59, `set.js` 45, `LOOK.md` 24, `COMPONENTS_SPEC.md` 16 |
+| R1t — sửa an toàn qua `tools/replace.py` | 53 | an toàn, nhưng đi qua chương trình trung gian |
+| R10 — montage ffmpeg tự viết | 15 | thay vì `core/render/sheet.py` |
+| R5 — chờ việc dài bằng `sleep` | 6 | |
+| R9 — lặp lệnh để dò | 4 mẫu (một lệnh 12 lần) | |
+| R11 — đọc lại tệp lớn | `set.js` 83, `props.js` 80, `film.js` 68 | 231 lần đọc lại ba tệp |
+| R12 — mở ảnh | **808**, trong đó 45 lần cùng đúng pixel | |
+| R14 — vòng chờ tự khớp lấy chính nó | **7** | 2 lần `pgrep -f` (vòng chờ build), 5 lần `pkill -f` (giết theo mẫu) |
+
+**Đọc.** Phần lớn thời gian của phiên nằm ở chỗ **nhìn**, không phải chỗ **làm**: 808 lần mở ảnh, 231
+lần đọc lại ba tệp mã nguồn, 370 lần ghi tệp bằng shell thay vì bằng công cụ sửa file. Ba tập nay chạy
+song song, nên `pkill -f "beatsheet.mjs"` — lệnh mà phiên này đã chạy 5 lần — giờ còn giết được tờ
+beat của tập bên cạnh. Guard đã có: `beatsheet.mjs` ghi tệp khoá `out/beats/beats.lock` với pid của
+nó, và **R14** báo mọi mẫu `pgrep -f`/`pkill -f` nằm ngay trong dòng lệnh.
+
+**Điều tập này dạy cho tập sau, đã thành luật:** R1 (ghi bằng công cụ), R10 (dùng công cụ của thư viện),
+R11 (bản đồ mã), R12 (xem tờ sheet, mở khung gốc khi cần), R14 (vòng chờ không tự khớp), và `beatsheet.mjs`
+giờ in tiến độ sau mỗi câu với đồng hồ từng câu — hai lượt chạy lành mạnh trước đây bị giết chỉ vì log
+rỗng.
 
 ## Còn lại
 

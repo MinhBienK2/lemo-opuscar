@@ -1,6 +1,10 @@
 // Picture against narration: one frame for every spoken line, taken while the line is being said, with the line printed under it.
 // Read it with the sound off in your head: does each frame show what its line says?
-//   node channels/tram-nghi-nhieu/beatsheet.mjs <episode> [--at .6] [--out dir] [--q 'k=v']
+//   node channels/tram-nghi-nhieu/tools/beatsheet.mjs <episode> [--at .6] [--out dir] [--q 'k=v'] [--lines a-b]
+// Every line prints its number as it goes, and every line has a clock of its own (60 s; BEATSHEET_CLOCK changes it):
+// a line that will not answer stops the sheet there, says which line it was, and exits non-zero. A sheet that stops
+// half way is finished again with --lines a-b, and a run that prints nothing is a run that is stuck, not a run that
+// is quiet (N73). One line costs ~20 s, so a 60-line sheet is ~19 minutes.
 // <at> is where in the line the frame is taken (0 = first word, 1 = last). Line starts come from window.EV voice events,
 // line lengths from voice/proc/dur.json, text from voice/lines.json. Prints the sheet paths (12 lines per sheet).
 // Each frame is also measured, and flagged in red on the sheet and in the printout:
@@ -38,9 +42,24 @@ if (linesArg) {
 requireDemo(dir);
 const out = take('--out') || path.join(dir, 'out', 'beats');
 fs.mkdirSync(out, { recursive: true });
+// the lock file says which episode is building its sheet and under which pid: a job is stopped by that pid, never
+// by a pattern — `pkill -f beatsheet.mjs` kills the sheet of the episode next door (N81)
+const lock = path.join(out, 'beats.lock');
+fs.writeFileSync(lock, String(process.pid));
+const dropLock = () => { try { fs.unlinkSync(lock); } catch {} };
+process.on('exit', dropLock);
 const read = f => JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8'));
 const lines = read('voice/lines.json'), dur = read('voice/proc/dur.json');
 
+// A line that hangs must not take the whole sheet with it, and a job that prints nothing looks dead from the
+// outside (N73). The clock is per line: the whole job may take as long as its lines take.
+const CLOCK_S = +(process.env.BEATSHEET_CLOCK ?? 60);
+const clock = (label, p) => new Promise((res, rej) => {
+  const id = setTimeout(() => rej(new Error(`line ${label}: no answer in ${CLOCK_S}s`)), CLOCK_S * 1000);
+  Promise.resolve(p).then(v => { clearTimeout(id); res(v); }, e => { clearTimeout(id); rej(e); });
+});
+// the frame must be on the screen before it is photographed, or the photo is of the frame before it (N72)
+const present = () => page.evaluate(() => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r))));
 const { browser, page } = await openDemo(dir, { q });
 const ev = await page.evaluate(() => (window.EV || []).filter(e => e.type === 'voice'));
 const start = Object.fromEntries(ev.map(e => [e.id, e.t]));
@@ -50,25 +69,39 @@ for (const [i, l] of lines.entries()) {
   if (lineNum < minLine || lineNum > maxLine) { beats.push({ n: lineNum, id: l.id, text: l.text, skipped: true }); continue; }
   if (!(l.id in start)) { beats.push({ n: lineNum, id: l.id, text: l.text, missing: true }); continue; }
   const t0 = start[l.id], d = dur[l.id] ?? 2, t = +(t0 + at * d).toFixed(2);
-  // what text is on screen while the line is said (the subtitle band excluded), for the NUM check
-  const shown = await page.evaluate(([a, b]) => {
-    const o = new Set();
-    for (let k = 0; k <= 6; k++) for (const x of (typeof window.TEXTS === 'function' && window.TEXTS(a + (b - a) * k / 6)) || [])
-      if (x && x.id !== 'sub' && x.y0 < 870) o.add(x.text);
-    return [...o];
-  }, [t0, t0 + d]);
-  await page.evaluate(x => { window.SHOTPROBE = 1; window.render(x); }, t);
-  const shot = await page.evaluate(() => window.SHOT || null);
-  const f = path.join(out, `b_${String(i + 1).padStart(3, '0')}.jpg`);
-  await page.screenshot({ path: f, type: 'jpeg', quality: 80 });
-  let mf = null;
-  if (motion) {
-    const t2 = +(t0 + d * .92).toFixed(2);
-    await page.evaluate(x => { window.SHOTPROBE = 1; window.render(x); }, t2);
-    mf = path.join(out, `m_${String(i + 1).padStart(3, '0')}.jpg`);
-    await page.screenshot({ path: mf, type: 'jpeg', quality: 80 });
+  const lineT0 = Date.now();
+  try {
+    // what text is on screen while the line is said (the subtitle band excluded), for the NUM check
+    const shown = await clock(lineNum, page.evaluate(([a, b]) => {
+      const o = new Set();
+      for (let k = 0; k <= 6; k++) for (const x of (typeof window.TEXTS === 'function' && window.TEXTS(a + (b - a) * k / 6)) || [])
+        if (x && x.id !== 'sub' && x.y0 < 870) o.add(x.text);
+      return [...o];
+    }, [t0, t0 + d]));
+    await clock(lineNum, page.evaluate(x => { window.SHOTPROBE = 1; window.render(x); }, t));
+    await present();
+    const shot = await clock(lineNum, page.evaluate(() => window.SHOT || null));
+    const f = path.join(out, `b_${String(i + 1).padStart(3, '0')}.jpg`);
+    await clock(lineNum, page.screenshot({ path: f, type: 'jpeg', quality: 80 }));
+    let mf = null;
+    if (motion) {
+      const t2 = +(t0 + d * .92).toFixed(2);
+      await clock(lineNum, page.evaluate(x => { window.SHOTPROBE = 1; window.render(x); }, t2));
+      await present();
+      mf = path.join(out, `m_${String(i + 1).padStart(3, '0')}.jpg`);
+      await clock(lineNum, page.screenshot({ path: mf, type: 'jpeg', quality: 80 }));
+    }
+    beats.push({ n: i + 1, id: l.id, text: l.text, t0, t1: +(t0 + d).toFixed(2), t, f, mf, shown, shot });
+  } catch (e) {
+    // a line that will not answer must say so, and must not take the rest of the sheet with it
+    console.error(`beatsheet: line ${lineNum} (${l.id}) failed: ${e.message}`);
+    console.error(`beatsheet: the frames written so far are in ${out}; the sheet is not finished`);
+    console.error(`beatsheet: this job's pid is ${process.pid} (${lock}) — stop it by that pid, not by a pattern`);
+    try { await Promise.race([browser.close(), new Promise(r => setTimeout(r, 5000))]); } catch {}
+    closeServer();
+    process.exit(1);
   }
-  beats.push({ n: i + 1, id: l.id, text: l.text, t0, t1: +(t0 + d).toFixed(2), t, f, mf, shown, shot });
+  console.log(`beatsheet: line ${lineNum}/${lines.length} t=${t}s  (${((Date.now() - lineT0) / 1000).toFixed(1)}s)`);
 }
 await browser.close(); closeServer();
 fs.writeFileSync(path.join(out, 'beats.json'), JSON.stringify(beats, null, 1));

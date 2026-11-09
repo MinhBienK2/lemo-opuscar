@@ -42,6 +42,8 @@ What no tool can decide is in R7: whether a copy of the channel's shared code in
 
 If a rule can be a check, write the check and leave here at most the sentence saying why the judgement is still needed.
 
+**R14 — A wait loop must not be able to match itself.** `until ! pgrep -f "episodes/tap-01/build.sh"; do sleep 15; done` — the shell that runs the loop carries that string in its own command line, so `pgrep -f` finds the loop itself, the condition never becomes true, and the wait outlives the job it was waiting for. The same shape in `pkill -f` kills the shell that runs it. Write the pattern so it cannot match itself (`pgrep -f "[t]ap-01/…/build.sh"`), or check a pid written to a lock file; and kill a job by pid, never by pattern.
+
 ## Recorded lessons
 
 The findings behind these rules, and the guard that now enforces each of them, are in [`improvements/README.md`](improvements/README.md); the distilled list is [`improvements/lessons.md`](improvements/lessons.md).

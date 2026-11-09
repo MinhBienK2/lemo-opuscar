@@ -1,6 +1,8 @@
 // Render stills: node core/render/still.mjs <demo> <t> [<t> ...] [--range a:b:step] [--q 'k=v&..'] [--prefix t_] [--out dir] [--size 1920x1080]
 // <demo> = the folder that holds index.html (e.g. styles/<slug>/demo, films/<name>, channels/<channel>/<episode>); the page must expose window.READY and window.render(t).
 // A page error or a 404 on a required file exits immediately (non-zero); giving no time points is a usage error
+// The frame is waited for before it is photographed: two animation frames, so the photo is of the frame that was
+// just drawn and not of the one before it (N72).
 import fs from 'fs'; import path from 'path';
 import { openDemo, closeServer, requireDemo, takeSize } from './page.mjs';
 const args = process.argv.slice(2);
@@ -18,7 +20,13 @@ const outDir = out || path.join(dir, 'stills'); fs.mkdirSync(outDir, { recursive
 const { browser, page } = await openDemo(dir, { w, h, q, warnings: true });   // one page, many stills
 for (const ts of times) {
   const t0 = Date.now();
-  await page.evaluate(t => window.render(t), parseFloat(ts));
+  // the frame must be on the screen before it is photographed: the browser presents the canvas a frame after
+  // the draw, so a photo taken the moment after the draw can be of the frame before it — and the reviewer then
+  // fixes the wrong thing (N72)
+  await page.evaluate(async t => {
+    window.render(t);
+    await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+  }, parseFloat(ts));
   const f = path.join(outDir, `${prefix}${ts}.jpg`);
   await page.screenshot({ path: f, type: 'jpeg', quality: 92 }); console.log(f, Date.now() - t0 + 'ms');
 }
