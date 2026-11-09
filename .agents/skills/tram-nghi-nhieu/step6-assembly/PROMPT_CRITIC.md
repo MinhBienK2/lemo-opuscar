@@ -7,6 +7,11 @@ Nhiệm vụ của bạn là thẩm định nhịp điệu phim qua từng phân
 ## Cách đọc
 Đọc **tờ sheet trước**: mỗi tờ chứa mười hai câu, mỗi câu một khung hình, và dưới khung là mã câu, cờ máy, `fill N%` và lời của câu — đủ để quyết định cả phim. **Mở ảnh riêng (`beats/b_NNN.jpg`) chỉ khi một tờ chưa đủ để quyết định câu đó.** Mở cả sáu mươi ảnh riêng là cách làm tốn hơn một giờ và rất nhiều token mà không soi thêm được gì.
 
+**Ngân sách ảnh.** Một ảnh đọc vào đã tốn hơn một tờ sheet cả mười hai câu. Vì vậy:
+- Mở ảnh riêng cho câu **có cờ máy** (DARK, SAME, RUN, NUM), câu **fill dưới 15 %**, và câu bạn thấy có vấn đề mà tờ sheet không nói rõ. Với câu còn lại, tờ sheet đã đủ để chấm.
+- **Mỗi ảnh chỉ mở một lần.** Không mở lại ảnh đã mở: lần mở thứ hai không thấy gì mới và làm vòng chấm nặng thêm.
+- Nếu bạn mở quá **25 ảnh riêng**, hãy nói lý do ở cuối bản chấm.
+
 ## Tiêu chí thẩm định
 1. **Kiểm tra và xử lý 4 cờ lỗi tự động (Machine Flags):**
    - Cờ `DARK`: Có câu nào bị tối, vật chính chìm vào bóng tối không? (Bắt buộc thêm đèn).

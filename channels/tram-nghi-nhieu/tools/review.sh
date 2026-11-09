@@ -38,6 +38,19 @@ CHANNEL=$(cd "$HERE" && while [ ! -f "CHANNEL.md" ] && [ "$PWD" != "/" ]; do cd 
 LIB=$(cd "$HERE" && while [ ! -f "AGENTS.md" ] && [ "$PWD" != "/" ]; do cd ..; done; pwd)
 GATE="python3 $CHANNEL/tools/gate.py"
 die() { echo "review: $*" >&2; exit 2; }
+
+# What a round cost in images. The reviewer runs in its own process, with its own transcript; that transcript
+# says how many single frames it opened. A round that opens every frame of the film pays for pictures it does
+# not look at twice — and the number is worth seeing, because it is the round's biggest cost.
+critic_images() {
+  d="$HOME/.claude/projects/$(printf "%s" "$1" | sed "s|/|-|g")"
+  [ -d "$d" ] || return 0
+  f=$(ls -t "$d"/*.jsonl 2>/dev/null | head -1)
+  [ -n "$f" ] || return 0
+  n=$(grep -oE '"file_path":"[^"]*/b_[0-9]{3}\.jpg"' "$f" 2>/dev/null | wc -l | tr -d ' ')
+  u=$(grep -oE '"file_path":"[^"]*/b_[0-9]{3}\.jpg"' "$f" 2>/dev/null | sort -u | wc -l | tr -d ' ')
+  [ -n "$n" ] && echo "$n lần đọc ảnh riêng ($u ảnh khác nhau)"
+}
 EP=$1; [ -n "$EP" ] && [ -d "$EP" ] || die "usage: review.sh <episode> [--outline | --script | --props | --storyboard | --lines a-b | --chapter n] [--video]"
 EP=$(cd "$EP" && pwd); shift
 LINES=""; VIDEO=0; SCRIPT=0; PROPS=0; OUTLINE=0; STORYBOARD=0; CHAPTER=""
@@ -553,6 +566,8 @@ Thư mục làm việc của bạn: $W. Mở từng ảnh của các câu trên,
 # task line (REVIEW.md); take either, or the round is lost in a file of warnings
 if [ ! -s REVIEW.md ] && [ -s SCENE-REVIEW.md ]; then cp SCENE-REVIEW.md REVIEW.md; fi
 [ -s REVIEW.md ] || cp out.txt REVIEW.md
+CI=$(critic_images "$W")
+[ -n "$CI" ] && echo "review: vòng này tốn $CI" >&2
 # the machine flags stand unless the reviewer cleared them with "CỜ SAI <FLAG>: <why>"
 FLAGGED=$(unflag REVIEW.md "$(cat flags.txt)" "DARK SAME RUN NUM")
 { cat REVIEW.md; [ -n "$FLAGGED" ] && printf '\n## Cờ máy chưa sửa (tự động FAIL)\n%s\n' "$FLAGGED"; } > R.md
