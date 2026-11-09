@@ -2979,6 +2979,55 @@ là** — thư mục được truyền vào, `src`, `src` + tên gốc, và `src
 không tìm thấy nay liệt kê **những đường dẫn đã thử**, để người đọc thấy máy đã đoán gì. Có ca selftest
 cho đúng trường hợp này. (Dòng `.strip('`')` là của chính phiên tập 02 thêm — họ tự sửa trước khi hỏi.)
 
+## N97 — medium — Phiên mở ra từ trong một phiên khác không để lại transcript của riêng nó, nên không ai giám sát được nó
+
+**Bằng chứng.** Để kiểm chứng "một phiên làm video mới" (tập 04), tôi mở nó từ trong phiên giám sát
+này: `script -q -c sh /tmp/tap04_launch.sh /tmp/tap04_tty.log`. Nhìn môi trường của tiến trình con
+(`/proc/<pid>/environ`) thì thấy nó **kế thừa** của phiên cha:
+
+```
+CLAUDE_CODE_SESSION_ID=faf986af-2974-49dd-8476-6e71ada05a88   # đúng id của phiên giám sát
+CLAUDE_CODE_CHILD_SESSION=1
+CLAUDE_CODE_SESSION_ATTENDED=1
+```
+
+Hệ quả đo được, không phải phỏng đoán:
+
+- **Không có tệp transcript nào của riêng nó.** Quét toàn bộ `~/.claude/projects` không thấy tệp
+  mới cho phiên tập 04.
+- **Các lượt của nó không nằm trong transcript của phiên cha.** Đếm `tool_use` tên `WebSearch` /
+  `WebFetch` trong tệp của phiên cha: **0** — trong khi tập 04 đang tìm nguồn (Joule 1857, Mooney
+  1948, bài IAS 2019) và log màn hình của nó ghi rõ những lần tìm đó. Ba lần khớp chuỗi `crossref`
+  trong tệp của phiên cha là do chính tôi đọc log màn hình rồi đưa vào ngữ cảnh.
+- **Nó không có trong danh sách phiên ngang hàng**, nên tôi không nhắn tin cho nó được.
+
+Đối chứng thử nghiệm (cùng máy, cùng lệnh, chỉ khác môi trường):
+
+| Cách mở | Transcript riêng? |
+|---|---|
+| `claude -p "…"` (giữ môi trường kế thừa) | **có** — `…/projects/-tmp-n97test2/<id>.jsonl` |
+| `env -u CLAUDE_CODE_SESSION_ID -u CLAUDE_CODE_CHILD_SESSION claude --dangerously-skip-permissions "…"` | **có** — `…/projects/-home-minhbien-Documents-lemo-opuscar/<id>.jsonl` (đã thử, tạo thật) |
+
+Tức là lỗi nằm ở **chế độ tương tác** khi kế thừa `CLAUDE_CODE_SESSION_ID`; ở chế độ in thì không sao.
+
+**Vì sao quan trọng.** Người giám sát mà không đọc được lượt của phiên thì chỉ còn nhìn được tệp
+phim. Mà tệp phim nói về **kết quả**, không nói về **quy trình** — và phần quy trình mới là phần
+cần cải thiện cho những lần sau. Ngoài ra `tools/rules.py` (bộ đo luật của phiên) đọc transcript:
+một phiên không có transcript thì không đo được luật nào, tức là nó **im lặng** trong báo cáo —
+trông như nó làm đúng.
+
+**Guard.** Khi mở một phiên làm phim từ trong một phiên khác, **gỡ hai biến môi trường kế thừa**:
+
+```sh
+env -u CLAUDE_CODE_SESSION_ID -u CLAUDE_CODE_CHILD_SESSION claude --dangerously-skip-permissions "<prompt>"
+```
+
+**Còn lại:** phiên tập 04 đã chạy từ trước khi tìm ra chỗ này, nên nó **không có transcript riêng**.
+Tôi không khởi động lại nó (công sức nghiên cứu nguồn đã bỏ ra còn nguyên), mà giám sát nó bằng
+**log màn hình** (`/tmp/tap04_tty.log`, có mã ANSI) và bằng chính phim + cổng. Đây là cách giám sát
+kém hơn hẳn — không chạy được `tools/rules.py` trên nó, không nhắn tin cho nó được — nên lần sau
+phải dùng đúng công thức trên.
+
 ## Còn lại
 
 - **[x]** N72: `core/render/still.mjs` chờ hai khung hình rồi mới chụp (12:47) — ảnh là của khung vừa dựng,
@@ -3031,6 +3080,9 @@ cho đúng trường hợp này. (Dòng `.strip('`')` là của chính phiên t�
   vật nào; trường hợp "chạm một vật lớn" đã bỏ vì báo sai với nhãn trỏ vào một *nhóm* vật). Còn thiếu:
   **tên vật** — rig trả `uuid` vì các vật chưa được đặt tên, nên máy biết nhãn trỏ vào *một vật* chứ chưa
   biết là vật *đúng*.
+- **[x]** N97: mở phiên mới từ trong một phiên khác thì **gỡ `CLAUDE_CODE_SESSION_ID` và
+  `CLAUDE_CODE_CHILD_SESSION`** — nếu không, phiên con (chế độ tương tác) không để lại transcript
+  riêng, không đo được bằng `tools/rules.py`, và không nhắn tin cho nó được. Đã thử cả hai đường.
 
 **Đã xong trong đợt này:** N77 (`check_shots.py` phân biệt *chưa đo* với *đo được 0 %*; `review.sh` không
 dùng lại tờ sheet nửa vời cho vòng chấm cả phim) — commit `c8856c6`.
