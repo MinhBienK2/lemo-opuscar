@@ -4,7 +4,8 @@ Kênh / channel: **tram-nghi-nhieu** · Tập / episode: `series/do-vat/tap-02-n
 
 ## Độ dài
 
-- **Bốn tầng của câu trả lời · 20 dòng ý (19 dòng của câu trả lời + 1 dòng lời khuyên) · khoảng 56 câu lời · ước tính 3 phút 6 giây** (đọc khoảng 155 từ mỗi phút, mỗi câu 9–17 từ, nghỉ 1,8–2,2 giây giữa hai câu). Thời điểm trong shot list là **ước lượng theo giọng đọc**, sẽ chốt lại ở bước 2 khi có giọng đã thu.
+- **Bốn tầng của câu trả lời · 20 dòng ý (19 dòng của câu trả lời + 1 dòng lời khuyên) · 48 câu lời trong `voice/lines.json` (48 dòng, mỗi dòng đúng một câu, 5–20 từ) · 544 từ, giọng đã thu dài **2 giây 08** (127,5 s đo từ `voice/proc/dur.json`), cộng 19,5 giây nghỉ giữa các câu ≈ 2 giây 27 lời kể** (giọng `vi-VN-NamMinhNeural`, rate +5%, pitch −8 Hz; giọng đọc nhanh hơn nhiều so với ước lượng 155 từ/phút ban đầu).
+- **Phim dài 2:30 theo shot list**: 20 nhát, mỗi nhát 4,6–11,0 giây. Nhát dài nhất là mảng lịch sử (nồi cơm đời đầu và thanh lưỡng kim, bốn câu); nhát ngắn nhất là lúc nói vạch sôi. Mọi mốc thời gian trong shot list lấy từ giọng đã thu, không ước lượng.
 - **Bốn tầng:** (1) nồi đo nhiệt độ đáy nồi bằng một đầu dò nhiệt, điện trở của nó tụt khi nóng lên; (2) mạch điện biến điện trở đó thành một con số nhiệt độ; (3) còn nước thì nhiệt độ bị ghim ở khoảng một trăm độ, còn cơm thì đã chín từ tầng nhiệt độ thấp hơn; (4) hết nước thì nhiệt độ nhảy vọt lên, và đó là tín hiệu. Dòng 16 là một mảng lịch sử, không phải tầng mới: nó cho thấy cái ý tưởng "đo nhiệt độ đáy nồi rồi cắt điện" có từ trước khi có vi mạch.
 - **Vì sao không ngắn hơn:** bỏ tầng nào là mất một mắt xích. Bỏ tầng 1 thì thành "nồi có cảm biến" — không trả lời *vì sao* biết được. Bỏ tầng 2 thì người xem tưởng nồi đo nhiệt độ bằng phép đoán. Bỏ tầng 3 thì "nhiệt độ nhảy lên" thành điều bất ngờ vô lý, vì không ai tin nồi nóng hơn một trăm độ khi còn nước. Bỏ tầng 4 thì không có tín hiệu nào cả.
 - **Vì sao không dài hơn:** những gì đã cố ý để ngoài — công thức Steinhart–Hart viết ra, mạch chia áp, tuần hoàn nhiệt của hệ sưởi, lý thuyết hồ hóa tinh bột, các ngưỡng nhiệt độ riêng của từng hãng trong bằng sáng chế, và lịch sử cụ thể của từng hãng nồi cơm. Phim giữ đúng những gì cần để hiểu vì sao nồi *biết*.
@@ -87,9 +88,9 @@ Kênh / channel: **tram-nghi-nhieu** · Tập / episode: `series/do-vat/tap-02-n
 | 6 | Hai dây đó chạy lên bo mạch. Ở đó, mạch điện đo điện trở đó và tính ra một con số nhiệt độ. | Máy đi theo hai dây lên bo mạch xanh dưới nồi: chip, tụ, điện trở; một dải sáng chạy dọc dây vào con chip | bo mạch, chip, dải sáng tín hiệu | N2 → N3 |
 | 7 | Và con số đó là nhiệt độ của **đáy nồi**, không phải của cơm. Cơm nằm trên cao, cái cảm biến nằm sát đáy. | Máy đi ngược lên: từ bo mạch lên qua thân nồi, lên miệng nồi, rồi nhìn xuống — cảm biến ở dưới cùng, lớp cơm ở trên cùng, cách nhau mấy tầng | nồi trong, lớp cơm, đầu dò nhiệt | N3 → N4 |
 | 8 | Cơm nấu lên thế này: dây điện trở trong mâm nhiệt nóng lên, đáy nồi ấm lên, nước và gạo nóng theo. | Cưa ngang cả nồi cơm: làn nhiệt màu cam chạy từ dây điện trở lên đáy nồi, xuyên qua lớp nước, tới lớp gạo; nước chuyển tông nóng | dây điện trở, nước, gạo, làn nhiệt | N4 |
-| 9 | Nước sôi ở khoảng một trăm độ. Nhiệt kế cắm trong nồi chỉ đúng một trăm độ. | Cận mặt nước: mặt nước sôi sùng sục, bọt bẩt lên; bên cạnh, nhiệt kế thủy ngữ **cắm trong lớp nước**, cột thủy ngữ ở vạch **một trăm độ** | nhiệt kế, mặt nước sôi, bọt | N4 |
+| 9 | Nước sôi ở khoảng một trăm độ. Nhiệt kế cắm trong nồi cũng chỉ ở vạch sôi ấy. | Cận mặt nước: mặt nước sôi sùng sục, bọt bẩt lên; bên cạnh, nhiệt kế thủy ngữ **cắm trong lớp nước**, cột thủy ngữ ở vạch **một trăm độ** | nhiệt kế, mặt nước sôi, bọt | N4 |
 | 10 | Mà cơm thì chín sớm hơn nhiều: tinh bột trong hạt gạo bắt đầu hồ hóa từ khoảng sáu mươi độ, và nước thì bị hút vào hạt gạo. | Cưa ngang nồi, khung rộng, hai tầng tách bạch: phía dưới là lớp nước đang sôi với nhiệt kế cắm trong nước, cột thủy ngữ vẫn ở vạch một trăm độ; phía trên là lớp gạo, có một hạt gạo cưa đôi với nhãn nhỏ **"HỒ HÓA 60 °C"**; hạt gạo trắng phình ra, nước quanh hạt đục lên thành hồ | lớp nước, nhiệt kế, hạt gạo cưa, nhãn hồ hóa | N4 |
-| 11 | Nên trong lúc nồi sôi, cơm đã chín rồi. Và vì nước còn trong nồi, nhiệt độ đáy nồi bị ghim ở một trăm độ, không lên được cao hơn. | Nồi nhìn ngang: mực nước hạ dần xuống, lớp gạo phồng lên chiếm chỗ của nước; nhiệt kế vẫn đứng ở vạch một trăm độ | mực nước, gạo, nhiệt kế | N4 |
+| 11 | Nên trong lúc nồi còn sôi, cơm đã chín rồi. Vì nước còn trong nồi, nhiệt độ đáy nồi bị ghim ở vạch sôi ấy, không lên được cao hơn. | Nồi nhìn ngang: mực nước hạ dần xuống, lớp gạo phồng lên chiếm chỗ của nước; nhiệt kế vẫn đứng ở vạch một trăm độ | mực nước, gạo, nhiệt kế | N4 |
 | 12 | Vậy nồi làm gì trong lúc đó? Nó đứng yên đó, chờ. Nhiệt độ đi ngang, đồng hồ cứ chạy. | Góc rộng lên trên: đồng hồ treo tường quay nhanh, cột thủy ngữ của nhiệt kế vẫn đứng yên ở vạch một trăm độ, hơi nước vẫn bốc | đồng hồ, nhiệt kế, hơi nước | N4 |
 | 13 | Rồi một ngày nọ, nước cạn. Không còn gì để hấp nhiệt nữa, và nhiệt độ đáy nồi nhảy vọt lên trên một trăm độ. | Mặt nước đã cạn, chỉ còn lớp gạo; cột thủy ngữ của nhiệt kế bỗng vươn lên trên vạch một trăm độ; dây điện trở ở dưới sáng hơn | nhiệt kế, gạo, dây điện trở | N4 |
 | 14 | Và đó chính là tín hiệu. Dải sáng chạy trên dây về bo mạch cũng chạy nhanh hơn; bo mạch ra lệnh tắt điện ở mâm nhiệt. | Dải sáng dọc hai dây chạy nhanh hơn hẳn; bo mạch; dây điện trở tắt đèn, nồi yên lại | dải sáng tín hiệu, bo mạch, dây điện trở | N4 → N3 |
@@ -106,27 +107,27 @@ Kênh / channel: **tram-nghi-nhieu** · Tập / episode: `series/do-vat/tap-02-n
 
 ## Shot list
 
-> Gom từ bảng ý → hình: thời điểm · cảnh · máy làm gì · vì sao. Máy chỉ đi khi có lý do. Thời điểm dưới đây là **ước lượng theo giọng đọc**, sẽ chốt lại ở bước 2.
+> Gom từ bảng ý → hình: thời điểm · cảnh · máy làm gì · vì sao. Máy chỉ đi khi có lý do. Mọi mốc thời gian dưới đây lấy từ **giọng đã thu** (`voice/proc/dur.json`), không ước lượng; nhất bắt đầu khi câu lời đầu tiên của dòng ý bắt đầu, kết thúc khi câu lời đầu tiên của dòng ý kế tiếp bắt đầu.
 
 | Thời điểm | Cảnh | Máy | Vì sao |
 |---|---|---|---|
-| 0:00–0:08 | bếp bếp, nồi cơm đang nấu, hơi thoát ở lỗ nắp, một bàn tay rải gạo bên cạnh | quét ngang mặt bàn rồi dừng ở nồi | người xem thấy ngay việc quen thuộc, và thấy phía "con người" đứng cạnh phía "cái nồi" |
-| 0:08–0:15 | cùng khung, đèn báo chuyển đỏ → hổ phách | đứng yên, không đi | sự kiện cần nhìn thấy rõ, không cần máy đi |
-| 0:15–0:22 | máy đi xuống thân nồi vào bên trong | đẩy thẳng xuống rồi đi xuyên | đi vào bên trong vật |
-| 0:22–0:33 | nồi cơm cưa ngang: mâm nhiệt, dây điện trở, lò xo ép đầu dò nhiệt | lùi lại rồi ngả xuống tầm đáy nồi | chỉ ra cái cảm biến nằm ở đâu |
-| 0:33–0:45 | cận viên cầu, cầu đo điện trở đọc mười kiloôm rồi khoảng một kiloôm | đẩy cận vào viên cầu, rồi ngả sang màn hình cầu đo | con số phải có vật mang |
-| 0:45–0:54 | hai dây chạy lên bo mạch, dải sáng chạy vào chip | đi theo dây lên trên | theo dây điện tới nơi nó tới |
-| 0:54–1:02 | máy đi ngược lên miệng nồi, nhìn xuống cảm biến ở đáy và lớp cơm ở trên | trôi lên rồi ngả nhìn xuống | chỉ ra cảm biến đo cái gì |
-| 1:02–1:12 | cưa ngang cả nồi, làn nhiệt chạy từ dây điện trở lên tới lớp gạo | lùi ra rồi quét dọc theo làn nhiệt | máy đi theo dòng nhiệt để chỉ đường đi của nó |
-| 1:12–1:22 | mặt nước sôi, nhiệt kế chỉ một trăm độ | ngang mặt nước, đứng yên | nhiệt độ có vật mang |
-| 1:22–1:32 | cưa ngang nồi, khung rộng: lớp gạo với hạt gạo cưa có nhãn sáu mươi độ, phía dưới là lớp nước sôi với nhiệt kế ở một trăm độ | lùi ra rộng cho thấy cả hai tầng | cơm chín ở nhiệt độ thấp hơn sôi, phải thấy cả hai phía cùng khung |
-| 1:32–1:44 | nồi nhìn ngang: mực nước hạ xuống, gạo phồng lên, nhiệt kế vẫn ở một trăm độ | lùi ra rộng, giữ yên | so sánh nước hết với nhiệt độ bị ghim |
-| 1:44–1:52 | đồng hồ treo tường quay nhanh, nhiệt kế đứng yên | ngả lên đồng hồ rồi quay lại nhiệt kế | thời gian trôi mà nhiệt độ không đổi |
-| 1:52–2:02 | nước cạn, cột thủy ngữ vượt vạch một trăm độ | đẩy vào nhiệt kế rồi lùi ra | thấy được cú nhảy nhiệt độ |
-| 2:02–2:11 | dải sáng trên dây chạy nhanh, bo mạch, dây điện trở tắt | trôi theo dải sáng rồi quay xuống dây điện trở | cái điện tử bắt được cú nhảy |
-| 2:11–2:20 | nhiệt kế tụt xuống và đứng ở bảy mươi độ, dây điện trở bật/tắt | đẩy vào nhiệt kế | nhiệt độ giữ ấm có vật mang |
-| 2:20–2:29 | trên bếp, nồi cơm đời đầu cạnh nồi hiện đại; máy đẩy vào thân nồi cũ để lộ thanh lưỡng kim | lùi ra rộng cho thấy cả hai nồi, rồi đẩy vào nồi cũ | hai thế hệ nồi cơm phải thấy cùng một khung, và cơ chế cơ phải thấy được bằng mắt |
-| 2:29–2:38 | hai nồi cạnh nhau trên bếp, mực nước khác nhau, cả hai nhiệt kế ở một trăm độ | lùi ra rộng, giữ yên | so sánh phải thấy cả hai bên trong một khung |
-| 2:38–2:48 | nồi phải tắt hơi và chuyển hổ phách, nồi trái vẫn sôi | ngang hai nồi, đứng yên | kết quả khác nhau phải thấy được |
-| 2:48–2:58 | mở nắp, hơi nước bùng ra, cơm trắng bên trong | lùi ra, đứng yên ở miệng nồi | quay lại hiện tượng với góc nhìn mới |
-| 2:58–3:06 | nồi đã giữ ấm, cạnh đó cái bát đong nước và túi gạo | ngả sang bát đong nước rồi kéo ra rộng | lời khuyên vừa được nói thành lời, vừa nằm ngay trong hình |
+| 0:02–0:10 | bếp bếp, nồi cơm đang nấu, hơi thoát ở lỗ nắp, một bàn tay rải gạo bên cạnh | quét ngang mặt bàn rồi dừng ở nồi | người xem thấy ngay việc quen thuộc, và thấy phía "con người" đứng cạnh phía "cái nồi" |
+| 0:10–0:17 | cùng khung, đèn báo chuyển đỏ → hổ phách | đứng yên, không đi | sự kiện cần nhìn thấy rõ, không cần máy đi |
+| 0:17–0:23 | máy đi xuống thân nồi vào bên trong | đẩy thẳng xuống rồi đi xuyên | đi vào bên trong vật |
+| 0:23–0:32 | nồi cơm cưa ngang: mâm nhiệt, dây điện trở, lò xo ép đầu dò nhiệt | lùi lại rồi ngả xuống tầm đáy nồi | chỉ ra cái cảm biến nằm ở đâu |
+| 0:32–0:40 | cận viên cầu, cầu đo điện trở đọc mười kiloôm rồi khoảng một kiloôm | đẩy cận vào viên cầu, rồi ngả sang màn hình cầu đo | con số phải có vật mang |
+| 0:40–0:47 | hai dây chạy lên bo mạch, dải sáng chạy vào chip | đi theo dây lên trên | theo dây điện tới nơi nó tới |
+| 0:47–0:53 | máy đi ngược lên miệng nồi, nhìn xuống cảm biến ở đáy và lớp cơm ở trên | trôi lên rồi ngả nhìn xuống | chỉ ra cảm biến đo cái gì |
+| 0:53–1:00 | cưa ngang cả nồi, làn nhiệt chạy từ dây điện trở lên tới lớp gạo | lùi ra rồi quét dọc theo làn nhiệt | máy đi theo dòng nhiệt để chỉ đường đi của nó |
+| 1:00–1:04 | mặt nước sôi, nhiệt kế chỉ một trăm độ | ngang mặt nước, đứng yên | nhiệt độ có vật mang |
+| 1:04–1:12 | cưa ngang nồi, khung rộng: lớp gạo với hạt gạo cưa có nhãn sáu mươi độ, phía dưới là lớp nước sôi với nhiệt kế ở một trăm độ | lùi ra rộng cho thấy cả hai tầng | cơm chín ở nhiệt độ thấp hơn sôi, phải thấy cả hai phía cùng khung |
+| 1:12–1:20 | nồi nhìn ngang: mực nước hạ xuống, gạo phồng lên, nhiệt kế vẫn ở một trăm độ | lùi ra rộng, giữ yên | so sánh nước hết với nhiệt độ bị ghim |
+| 1:20–1:27 | đồng hồ treo tường quay nhanh, nhiệt kế đứng yên | ngả lên đồng hồ rồi quay lại nhiệt kế | thời gian trôi mà nhiệt độ không đổi |
+| 1:27–1:35 | nước cạn, cột thủy ngữ vượt vạch một trăm độ | đẩy vào nhiệt kế rồi lùi ra | thấy được cú nhảy nhiệt độ |
+| 1:35–1:43 | dải sáng trên dây chạy nhanh, bo mạch, dây điện trở tắt | trôi theo dải sáng rồi quay xuống dây điện trở | cái điện tử bắt được cú nhảy |
+| 1:43–1:51 | nhiệt kế tụt xuống và đứng ở bảy mươi độ, dây điện trở bật/tắt | đẩy vào nhiệt kế | nhiệt độ giữ ấm có vật mang |
+| 1:51–2:02 | trên bếp, nồi cơm đời đầu cạnh nồi hiện đại; máy đẩy vào thân nồi cũ để lộ thanh lưỡng kim | lùi ra rộng cho thấy cả hai nồi, rồi đẩy vào nồi cũ | hai thế hệ nồi cơm phải thấy cùng một khung, và cơ chế cơ phải thấy được bằng mắt |
+| 2:02–2:08 | hai nồi cạnh nhau trên bếp, mực nước khác nhau, cả hai nhiệt kế ở một trăm độ | lùi ra rộng, giữ yên | so sánh phải thấy cả hai bên trong một khung |
+| 2:08–2:15 | nồi phải tắt hơi và chuyển hổ phách, nồi trái vẫn sôi | ngang hai nồi, đứng yên | kết quả khác nhau phải thấy được |
+| 2:15–2:22 | mở nắp, hơi nước bùng ra, cơm trắng bên trong | lùi ra, đứng yên ở miệng nồi | quay lại hiện tượng với góc nhìn mới |
+| 2:22–2:30 | nồi đã giữ ấm, cạnh đó cái bát đong nước và túi gạo | ngả sang bát đong nước rồi kéo ra rộng | lời khuyên vừa được nói thành lời, vừa nằm ngay trong hình |

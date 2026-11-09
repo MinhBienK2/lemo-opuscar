@@ -1,0 +1,10 @@
+# Những dòng mà Whisper (mô hình tiếng Anh, faster-whisper small) đọc sai thanh điệu tiếng Việt, đã kiểm tra tay.
+# Mỗi dòng: mã câu — lý do. Không sửa lời trong lines.json để chiều theo máy.
+# (Xem core/render/review.sh: đọc file này để biết dòng nào được tha; dòng chưa được tha thì phim FAIL.)
+# Đã đối chiếu lại bằng mô hình medium: cùng một cách nghe sai, nên là lỗi của máy, không phải của bản thu.
+c11 — "mười kiloôm" bị nghe thành "10 kg" (Whisper viết số thành chữ số); "khoảng một kiloôm" thành "khoảng 1 kg": số và đơn vị đọc đúng.
+c18 — "một trăm độ" bị nghe thành "100 độ": số đọc đúng.
+c19 — "nhiệt kế / cắm / vạch sôi" bị đổi thanh thành "nhịt kế / cám / vặt xôi": sai thanh điệu, âm thanh đúng.
+c30 — "nhiệt độ / nhảy vọt" bị nghe thành "nhịc độ / nhảy vọc", "một trăm độ" thành "100 độ": sai thanh điệu, số đọc đúng.
+c33 — "mạch ra lệnh" bị nghe thành "mặt tra lệnh", "dây" thành "giây": sai thanh điệu, âm thanh đúng.
+c39 — "mạch mở" bị nghe thành "mặt mở": sai thanh điệu, âm thanh đúng.
