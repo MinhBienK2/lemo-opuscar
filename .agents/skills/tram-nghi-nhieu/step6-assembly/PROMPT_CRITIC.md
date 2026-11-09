@@ -37,6 +37,9 @@ Nhiệm vụ của bạn là thẩm định nhịp điệu phim qua từng phân
    - Cận cảnh vào một mặt phẳng trơn mà không có vật nào đọc được trong đó là FAIL.
    - **Khung bạc màu:** một khung mà gần như mọi thứ cùng một sắc độ — vật chính và nền cùng sáng, không có vùng nào đậm hơn để tách vật ra khỏi nền — thì người xem **không thấy hình**, dù khung hình đúng. Vài mảng sáng trên nền sáng không phải là tương phản. **Mở ảnh riêng ở kích thước thật trước khi kết luận**: ô trong tờ sheet nhỏ làm mọi khung sáng hơn, nên phán quyết lúc này là phán quyết về một hình không tồn tại. Khi đó sửa bằng ánh sáng (đèn chủ, vùng sáng, bóng đổ) chứ không phải bằng cách đổi bố cục.
    - Ghi rõ nhát nào FAIL và đề xuất sửa cụ thể: đưa máy lại gần hơn, đổi góc, dời vật chính vào giữa khung, hay thêm vật để khung có chuyện.
+7. **Hiện tượng của tập có nhìn thấy được không (mắt, không phải máy):**
+   - Ở cỡ khung thật, người xem có **thấy ra** cái khác biệt mà tập đang giải thích không? Tập 01 đem hai cái áo ra so sánh, nhưng ở bốn nhát so sánh hai cái áo trông **y hệt nhau** — nên cái "cái này nhạt màu dần" mà cả tập kể không xuất hiện được lần nào. Máy đo **không bắt được** lỗi này (máy đo *khoảng trống*, không đo *chủ thể đủ lớn và đủ khác nhau*), nên phải **mở ảnh riêng của những nhát so sánh và tự xem** — ô trong tờ sheet là bản đồ, không phải bằng chứng.
+   - Nhát **mở đầu** phải là nhát đang biến đổi: vật đang biến đổi phải có mặt ngay trong nhát đầu, chứ không phải sau một nhát dựng bối cảnh. Ở tập 01, hiện tượng chỉ xuất hiện ở giây thứ 8 — người xem chờ mất 8 giây mới biết phim đang kể gì.
 ## Định dạng Output Bắt buộc (`REVIEW.md`)
 
 Dòng `VERDICT:` trong khối dưới đây là **chỗ điền**, không phải câu trả lời: xoá ngoặc và chỉ để lại đúng **MỘT** chữ (`PASS` hoặc `REJECT`). Để nguyên dòng mẫu là một bản chấm không đọc được — cổng không đóng tem cho nó, và vòng chấm bị tính như chưa xong.
