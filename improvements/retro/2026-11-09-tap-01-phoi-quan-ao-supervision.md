@@ -2557,11 +2557,20 @@ lăm độ"* như một lời hứa về bức tranh.
 phải nghiên cứu, nó là thứ đã lỡ. Nhân vật số trên màn hình và tài liệu đang lệch nhau ngay trong tập
 đang dựng.
 
-**Guard đã có.** Chưa có. **Đề xuất:** một bài kiểm tra cho kênh đọc các câu "Dùng trong phim" và "Phim
-nói:" của `research/FACTS.md`, lấy các con số trong đó, rồi đối chiếu với các thẻ chữ trong `src/*.js`
-và với `voice/lines.json`; số nào ở tài liệu mà không có ở phim thì báo. (Thư viện đã có
-`tools/check_claims.py` cho phim một tập, nhưng nó hỏi câu khác và không phủ câu "tài liệu nói về
-dàn cảnh".)
+**Guard đã có (13:05).** `channels/tram-nghi-nhieu/tools/check_film_claims.py` (mới, có selftest) đọc các
+dòng "Dùng trong phim:" và "Phim nói:" của `research/FACTS.md`, lấy các con số trong đó (số viết bằng
+chữ tiếng Việt được đổi ra số; số trong ngoặc ngay sau là cách viết khác của cùng một giá trị; số nằm
+trong một biểu thức tính là công thức chứ không phải giá trị phim phải chiếu), rồi đối chiếu với thẻ
+chữ trong `src/*.js` và với `voice/lines.json`. Khi câu hứa không có nguyên văn trong lời kể, bài này
+in ra **câu gần nhất mà phim thật sự nói**. Cảnh báo, không chặn (`--strict` mới chặn): một lời hứa chưa
+được giữ nguyên văn có thể là file nghiên cứu trích lại ý, và chặn ở chỗ không phải nguyên nhân thì
+tệ hơn không có bài kiểm tra.
+
+Chạy trên ba tập và nó tìm ra ngay: tập 01 hứa **0,32 kPa** mà phim không có; tập 02 hứa **3,7** mà phim
+không có; tập 03 hứa nguyên văn *"nước nóng làm thành chai co lại"* và *"một hướng co nhiều hơn hướng
+kia, nên thành chai không co đều mà bị nhăn"*, còn lời kể thật là *"Vậy nước nóng làm chai co lại vì cái
+gì?"* và *"Có lẽ vì hai hướng đó co lại không giống nhau"*. (Thư viện đã có `tools/check_claims.py` cho
+phim một tập, nhưng nó hỏi câu khác và không phủ câu "tài liệu nói về dàn cảnh".)
 
 ## N83 — high — Máy đo "vật chính quá nhỏ" ở ba kiểu cảnh mà nó không nhìn thấy
 
@@ -2886,8 +2895,8 @@ rõ*, và nói thẳng rằng máy không đo được chủ thể có đủ l�
 - **[x]** N81: `beatsheet.mjs` ghi tệp khoá `out/beats/beats.lock` với pid của nó (12:47), và lời của R14
   trong `CODING_STANDARDS.md` nói rõ giết job bằng pid đọc từ tệp khoá, không `pkill` theo mẫu chung.
   `lessons.md` đã có một dòng về lệnh giết theo tên.
-- **[ ]** N82: bài kiểm tra của kênh đối chiếu các câu "Dùng trong phim" / "Phim nói:" của
-  `research/FACTS.md` với thẻ chữ trong `src/*.js` và với `voice/lines.json`.
+- **[x]** N82: `channels/tram-nghi-nhieu/tools/check_film_claims.py` (mới, có selftest) — cảnh báo, không
+  chặn; in ra câu gần nhất mà phim thật sự nói.
 - **[ ]** N88 (nửa việc): cho `mux.sh` tự ưu tiên encode **tại chỗ** khi phim ngắn — đo được: encode
   cuối tại máy này tốn ~6,5 phút cho một tập 176 giây, còn đường xa là ~32 phút. Đó là đổi *chính sách*
   (đường xa có để máy này rảnh tay khi nhiều tập dựng cùng lúc), nên để người dùng quyết, không tự đổi.
