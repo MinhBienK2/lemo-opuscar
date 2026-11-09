@@ -15,6 +15,10 @@ This check says what is missing, in the file's own lines, before a review round 
      identifier, the same test the library's `check_citations.py` uses.
 
 Exit code: 0 the research file is written; 1 it is not; 2 usage.
+
+The shape asked here is **this channel's**: a claim is a numbered heading, `## 1. …`. A channel that keeps
+its research file in another shape needs its own check — a check that asks one channel's shape and is run on
+another channel's file reports errors on a file that was written correctly (N29).
 """
 import os
 import re
