@@ -743,8 +743,12 @@ thứ nó thấy ("**Cờ `SAME` ở cặp thí nghiệm** → … Cách sửa: 
 tra đòi.
 
 **Còn phải làm.** Bài kiểm tra nên hỏi kênh, không tự đoán: một file nhỏ ở thư mục kênh khai báo dàn ý
-của kênh cần những mục nào, và bài kiểm tra đọc nó. Chưa làm, vì hôm nay bài kiểm tra chưa chạy cho kênh
-này — nhưng nó là một quả bom có dây.
+của kênh cần những mục nào, và bài kiểm tra đọc nó. **Đã làm một nửa [09/11]** — bài kiểm tra của **kênh**
+nay là `channels/tram-nghi-nhieu/tools/check_treatment.py`: nó hỏi **khuôn** (còn chỗ `<viết: …>` nào
+chưa viết), còn **hình dạng** của dàn ý (năm tầng, một nơi cho mỗi tầng, bảng ý → hình) thì người chấm
+dàn ý của kênh đọc `STRATEGY.md` và phán — việc đó máy không làm thay được. Phần còn lại: bài kiểm tra của
+thư viện vẫn hỏi hình dạng của `DIRECTOR.md`, nên nếu ngày nào kênh bật `board_rules.json` thì 16 lỗi giả
+quay lại; nó nên đọc hình dạng mà kênh khai.
 
 ---
 
