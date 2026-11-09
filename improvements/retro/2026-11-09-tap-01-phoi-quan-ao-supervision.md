@@ -3431,12 +3431,33 @@ của cả phim.
 **c29–c31 (quạt).** Rõ ràng khác nhau: cận quạt (c29), toàn cảnh phòng với luồng gió vẽ thành vệt
 (c30), trung cảnh hai áo (c31). Vệt gió và các giọt hơi nước làm khung sống.
 
-**Kết luận sơ bộ (còn để viết nốt sau khi có phim cuối có tiếng).** Phim có nhịp, có bố cục đổi, có vật
-tự diễn. Điểm yếu thấy được: **hiệu ứng phân biệt hai cái áo xuất hiện muộn và mờ** — và máy đo
-độ phủ thì không đo được điều đó (nó đo được *khoảng trống*, không đo được *chủ thể có đủ lớn và đủ
-khác nhau không*). Đây là loại lỗi mà vòng chấm hình bằng mắt nên bắt, và nó nằm đúng chỗ phim cần
-đúng nhất.
+**c16–c17 (cận vào trong sợi — mấu chốt của phim).** Đây là phần đẹp nhất của phim: cảnh cận trong
+sợi vải, phân tử nước (đỏ-trắng) bám trên bề mặt, giọt hơi nước (xanh) bốc lên, nền xanh lạnh đối với
+phòng ấm bên ngoài. Nhãn "1 PHẦN NHỎ" chỉ đúng vào phân tử, nhãn "PHÂN TỬ BAY LÊN" chỉ vào phân tử
+đang bốc lên (có quầng sáng). **Máy đo lại đây sai**: cờ `PTR` ở c17 và `fill 0 %` ở c16–c18 là hậu
+quả của probe chỉ thấy layer 0 (N104) — sau khi sửa, c16 đo được 16 % và cờ `PTR` biến mất. Khung
+này rõ ràng **không** trống.
 
+**c59–c60 (kết).** c59 ra một nơi khác hẳn (gác hiên, sào treo, túi vải buộc, vệt gió), nhãn "CHỖ THOÁNG
+GIÓ" chỉ đúng vào túi; c60 là bàn gỗ với cái áo trải ra, "TÁCH RIÊNG" và "CẢ HAI MẶT" chỉ đúng chỗ.
+Hai cái kết không lặp lại hình của phần đầu.
+
+**Kết luận.** Phim có **bố cục đổi thật** (cận → rộng → cận trong vật → góc cao → nơi khác), vật tự
+diễn (vệt gió, giọt hơi nước, phân tử bốc lên), và chất toon có nét mực vẽ tay nhất quán. Cổng đo
+`action 77 %`, `big 46 %`, đoạn đứng yên dài nhất 6 s, 55/60 nhịp đổi phần khung — phim **không chết**.
+
+Điểm yếu thấy được, xếp theo mức độ:
+
+1. **Hiệu ứng phân biệt hai cái áo xuất hiện muộn và mờ.** Ở c4–c7 hai cái áo trông y hệt nhau, chưa
+   thấy cái nào "nhạt màu dần" — mà đó là mấu chốt của cả phim. Người xem phải đợi tới đâu mới thấy
+   một cái khô hơn cái kia? Máy đo độ phủ **không đo được** điều đó (nó đo được *khoảng trống*, không
+   đo được *chủ thể có đủ lớn và đủ khác nhau không*) — đây đúng là loại lỗi mà vòng chấm hình bằng
+   mắt phải bắt, và nó nằm đúng chỗ phim cần đúng nhất.
+2. **Cờ `SAME` của máy ở c4–c7 bắn sai** (cùng chủ thể, khác bố cục) — đây là N105: "cảnh giống
+   nhau" và "cảnh đứng yên" là hai câu hỏi khác nhau, và một ảnh tĩnh không trả lời được câu nào.
+3. **Khoảnh khắc mở đầu hơi lạnh.** Khung 0:00 chỉ có dây trên nắp hũ; hiện tượng "siết chặt hơn"
+   xuất hiện ở 0:08 — người xem phải chờ 8 giây mới thấy điều phim kể. (Đây cũng là lỗi NHẸ mà người
+   chấm tập 04 đã nêu cho chính mình: mở đầu nên có sẵn một cái áo đang siết.)
 ## Còn lại
 
 - **[x]** N72: `core/render/still.mjs` chờ hai khung hình rồi mới chụp (12:47) — ảnh là của khung vừa dựng,
