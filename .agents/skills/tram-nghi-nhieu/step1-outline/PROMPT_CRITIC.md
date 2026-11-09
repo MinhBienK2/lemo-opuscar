@@ -32,6 +32,11 @@ Chấm theo 5 nhóm A, B, C, D, E từ 1 đến 5 điểm:
 - Thiếu mắt xích cơ chế: CHẶN.
 - Độn ý (ví von dài dòng, lan man): CHẶN nếu làm dài gấp rưỡi.
 - Nơi chốn bối cảnh phải có lý do gắn liền với tầng giải thích.
+- **Dàn ý dài hơn khoảng 30 câu thì phải chia chương, và phải nói ra ngay ở đây** (mục "KHUYẾN NGHỊ"): một
+  vòng chấm hình cả phim soi được khoảng 25 khung và có 5 lượt cho cả phim, nên một tập 60 câu không thể
+  hội tụ theo đường cả phim — mỗi chương có 5 lượt riêng và cổng mở khi mọi chương PASS. Việc này phải quyết
+  ở dàn ý (viết `src/chapters.js`), không phải đợi tới lúc chấm hình: chia chương sau khi đã chấm lời thì
+  phải chấm lại lời theo từng chương.
 
 ### Nhóm E: Mở đầu & Kết thúc
 - Khung đầu: Thấy ngay hiện tượng quen thuộc trong 3 giây đầu.
@@ -56,5 +61,8 @@ ROUND: (số vòng do review.sh ghi — người chấm không tự điền)
 
 ## Ý LẶP (NẾU CÓ)
 - [Ý lặp]: Xuất hiện ở các dòng [a, b, c], đề xuất chỉ giữ ở dòng [a].
+
+## KHUYẾN NGHỊ
+- [Cấu trúc cho đạo diễn: ví dụ "chia thành 6 chương, ghi src/chapters.js" — hoặc "ngắn lại còn N câu"]
 ```
 *Điều kiện PASS: Không còn lỗi CHẶN, tối đa 1 lỗi NẶNG, và tất cả điểm nhóm A-E >= 4.*

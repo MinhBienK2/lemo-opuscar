@@ -659,7 +659,11 @@ if [ -z "$CHID" ] && [ -z "$LINES" ] && [ "$VIDEO" = 0 ] && [ ! -f "$EP/src/chap
   case "$NL" in ''|*[!0-9]*) NL=0;; esac
   if [ "$NL" -gt 30 ]; then
     echo "review: phim dài ($NL câu) mà chưa có src/chapters.js — vòng chấm cả phim soi được khoảng 25 khung, tốn ~40 phút, và có 5 lượt cho cả phim." >&2
-    echo "review: chia câu thành các chương (src/chapters.js) rồi chấm từng chương (--chapter <id>): mỗi chương có 5 lượt riêng và cổng mở khi mọi chương PASS." >&2
+    if [ -f "$EP/review/SCRIPT.pass" ]; then
+      echo "review: chia chương bây giờ cũng mở lại tem lời (mỗi chương một tem lời riêng) — thường rẻ hơn là chốt bằng đạo diễn cắt." >&2
+    else
+      echo "review: chia câu thành các chương (src/chapters.js) rồi chấm từng chương (--chapter <id>): mỗi chương có 5 lượt riêng và cổng mở khi mọi chương PASS. Quyết việc này lúc dàn ý thì rẻ hơn nhiều." >&2
+    fi
   fi
 fi
 # The director's cut ends the step: a written scope of what was cut, ending in VERDICT: PASS, stands for the
