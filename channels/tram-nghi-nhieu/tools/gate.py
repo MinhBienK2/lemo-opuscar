@@ -33,7 +33,7 @@ the pass breaks it, as does a review edited after the stamp. A src file that sti
 renders. No switch turns the gate off. The gate catches mistakes, not forgery: a stamp or a review written by hand is
 not a review, and an episode built from one has not passed.
 """
-import glob, hashlib, json, os, re, sys
+import glob, hashlib, json, os, re, subprocess, sys
 
 SHARED_EXCLUDE = ('timeline.js',)
 PLACEHOLDER = re.compile(r'placeholder|giữ chỗ', re.I)
@@ -297,6 +297,30 @@ def status(ep):
         print(f'last verdict: {verdict.group(0).strip() if verdict else "?"} ({os.path.relpath(last, ep)})')
     movies = [f for f in glob.glob(os.path.join(ep, '*.mp4')) + glob.glob(os.path.join(ep, 'out', '*.mp4'))]
     print('movie:', ', '.join(os.path.basename(m) for m in movies) if movies else 'chưa có')
+    map_note(ep)
+
+
+def map_note(ep):
+    """A stale code map is a NOTE, not a block: it does not make the film worse, but it sends the next
+    reader to the wrong lines — and a map the reader has learned to distrust is worse than no map (N74).
+    So the gate says so, in the place the director already reads, and never refuses."""
+    src = os.path.join(ep, 'src')
+    if not os.path.isfile(os.path.join(src, 'MAP.md')):
+        return
+    tool = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', 'tools', 'check_map.py')
+    try:
+        r = subprocess.run([sys.executable, tool, src], capture_output=True, text=True, timeout=60)
+    except (OSError, subprocess.SubprocessError):
+        return
+    for line in (r.stdout or '').splitlines():
+        line = line.strip()
+        if not line or line.startswith('check_map: bản đồ khớp mã'):
+            continue
+        if line.startswith('check_map:'):
+            line = line[len('check_map:'):].strip()
+        if line.endswith(':'):
+            line = line[:-1]
+        print('ghi chú (bản đồ mã): ' + line)
 
 
 def check(ep, step='render'):

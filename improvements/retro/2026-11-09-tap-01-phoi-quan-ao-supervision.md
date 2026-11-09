@@ -3201,8 +3201,10 @@ vá. Theo R7, một cách làm chung chỉ nên có **một** bản: ở tầng 
   bọc bước dựng tờ trong `timeout` — nhưng đồng hồ trong chính công cụ đã đủ: một câu treo thì công cụ dừng,
   nói câu nào, và thoát mã khác 0 thay vì treo cả vòng chấm.
 - **[x]** N74: `tools/check_map.py` (mới, có selftest) đối chiếu bản đồ với mã; hướng dẫn của bước 5 gọi nó.
-  Chưa nối vào `gate.py`: một bản đồ thối không làm phim xấu hơn, nên nó là ghi chú chứ không phải
-  chặn — quyết định đó là của người dùng, xem phần "Còn lại".
+  **Đã nối vào `gate.py` (13:5x)** — `gate.py status` in ra dòng `ghi chú (bản đồ mã): …` khi bản đồ lệch
+  mã. Đây là **ghi chú, không chặn**: một bản đồ thối không làm phim xấu hơn, nên cổng không được từ chối
+  bước nào; và bản đồ sai còn tệ hơn không có bản đồ, vì người đọc học được cách bỏ qua nó rồi không
+  đọc gì nữa.
 - **[x]** N75: báo cáo đã đếm đúng. Chạy `tools/rules.py` trên toàn bộ transcript của phiên tập 01:
   3 932 lệnh bash, trong đó **642 lệnh có hình dạng ghi file** (heredoc, `open(...,'w')`, `tee`, `sed -i`,
   `cp`, `mv`); báo cáo giờ nói **370 lần ghi tệp của dự án bằng shell** (tệp nào, bao nhiêu lần), cộng
