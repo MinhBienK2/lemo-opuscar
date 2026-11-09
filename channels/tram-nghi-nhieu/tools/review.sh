@@ -470,7 +470,7 @@ if [ "$PROPS" = 1 ]; then
   [ -n "$CRITIC_TIMEOUT_SET" ] || CRITIC_TIMEOUT=$((3600 + 180 * N))
   # 1. blind: this session never sees the names
   cd "$W/blind"
-  critic "Trong thư mục này có $N ảnh p_01.jpg … Mỗi ảnh là MỘT vật dựng 3D kiểu hoạt hình, nhìn từ ba phía (chéo, ngang, trên xuống), đặt trên nền trơn. Mở từng ảnh. Với mỗi ảnh, nói nó là vật gì như một người xem bình thường sẽ gọi: một cụm danh từ tiếng Việt cụ thể (\"quả chuối chín\", \"con chip máy tính\", \"cục pin điện thoại bị cắt đôi\"), cả trạng thái nếu thấy (xanh/chín, nguyên/cắt đôi). Đừng đoán theo một câu chuyện nào. Nếu không chắc, viết KHÔNG RÕ và nói nó giống những gì. Viết BLIND.md ở đây, mỗi ảnh một dòng:
+  critic "Trong thư mục này có $N ảnh p_01.jpg … Mỗi ảnh là MỘT vật dựng 3D kiểu hoạt hình, nhìn từ ba phía (chéo, ngang, trên xuống), đặt trên nền trơn. Mở 4 ảnh cùng lúc (một lượt, bốn ảnh), rồi đọc từng ảnh một. Với mỗi ảnh, nói nó là vật gì như một người xem bình thường sẽ gọi: một cụm danh từ tiếng Việt cụ thể (\"quả chuối chín\", \"con chip máy tính\", \"cục pin điện thoại bị cắt đôi\"), cả trạng thái nếu thấy (xanh/chín, nguyên/cắt đôi). Đừng đoán theo một câu chuyện nào. Nếu không chắc, viết KHÔNG RÕ và nói nó giống những gì. Viết BLIND.md ở đây, mỗi ảnh một dòng:
 #n (p_NN.jpg) TÊN: <tên> | CHẮC: cao|vừa|thấp | THẤY: <những chi tiết làm bạn gọi tên như vậy; chi tiết nào lạ>
 Ghi tên file ảnh vào đầu dòng — tên file là sự thật, số bạn tự đánh thì không. Một ảnh, một dòng: đừng bỏ ảnh nào.
 rồi in lại nó." no-verdict
@@ -505,7 +505,7 @@ PY
     # Lần đoán thứ hai là phép đo BỔ SUNG: nếu nó không trả lời, vòng này đi tiếp với một lần đoán và nói rõ là thiếu —
     # đoán mù là phép đo của một người, lần đoán thứ hai là phép đo của một người khác; mất lần thứ hai thì mất
     # phép đo của người khác, nhưng không được để một phép đo phụ giết vòng chấm của cả vật dựng.
-    if ! (cd "$W/blind2" && critic "Trong thư mục này có $M ảnh: $(ls "$W/blind2" | tr '\n' ' '). Mỗi ảnh là MỘT vật dựng 3D kiểu hoạt hình, nhìn từ ba phía (chéo, ngang, trên xuống), đặt trên nền trơn. Hãy gọi tên từng vật như một người xem bình thường sẽ gọi: một cụm danh từ tiếng Việt cụ thể, có cả trạng thái nếu thấy. Đừng đoán theo một câu chuyện nào. Đây là lần đoán thứ hai, độc lập: không ai cho bạn xem lần đoán trước. Nếu không chắc, viết KHÔNG RÕ và nói nó giống những gì. Viết BLIND2.md ở đây, mỗi ảnh một dòng:
+    if ! (cd "$W/blind2" && critic "Trong thư mục này có $M ảnh: $(ls "$W/blind2" | tr '\n' ' '). Mỗi ảnh là MỘT vật dựng 3D kiểu hoạt hình, nhìn từ ba phía (chéo, ngang, trên xuống), đặt trên nền trơn. Mở 4 ảnh cùng lúc (một lượt, bốn ảnh), rồi đọc từng ảnh một. Hãy gọi tên từng vật như một người xem bình thường sẽ gọi: một cụm danh từ tiếng Việt cụ thể, có cả trạng thái nếu thấy. Đừng đoán theo một câu chuyện nào. Đây là lần đoán thứ hai, độc lập: không ai cho bạn xem lần đoán trước. Nếu không chắc, viết KHÔNG RÕ và nói nó giống những gì. Viết BLIND2.md ở đây, mỗi ảnh một dòng:
 #n (p_NN.jpg) TÊN: <tên> | CHẮC: cao|vừa|thấp | THẤY: <những chi tiết làm bạn gọi tên như vậy>
 Ghi tên file ảnh vào đầu dòng — tên file là sự thật, số bạn tự đánh thì không. Một ảnh, một dòng: đừng bỏ ảnh nào.
 rồi in lại nó." no-verdict); then
