@@ -22,6 +22,10 @@ Quy trình này thay cho bước 1–6 của `AGENTS.md` / `DIRECTOR.md` khi là
    - **Hiệu chỉnh & Đánh giá lại:** Lặp lại tối đa 5 hiệp cho tới khi đạt `PASS` (hoặc sau vòng 5 Đạo diễn dùng quyền tối hậu Director's Cut để chốt phương án an toàn nhất và chuyển bước).
 
 4. **Nhìn nhiều khung hình bằng sheet, không bằng từng ảnh.**
+   - **Bản sao thử của một tập không nằm trong thư viện.** Thư viện coi *mọi* thư mục dưới `channels/` là một
+     tập: một bản sao tạm sẽ vào bảng phim, vào `FILMS.md`, và làm đỏ kiểm tra "tập này là của riêng nó" của
+     chính tập gốc. Cần một bản thử (đo rig, dựng thử, thử một bản vá) thì để ở `/tmp`; nếu buộc phải nằm trong
+     thư viện thì đặt tên thư mục bắt đầu bằng `_` — thư viện bỏ qua thư mục đó.
    - Một tập có 60 nhát. Đọc 60 ảnh một-lẻ là hơn 250 MB ảnh và hàng trăm nghìn token, và con mắt không so sánh được hai khung cạnh nhau.
    - Dựng sheet rồi nhìn sheet:
      `python3 core/render/sheet.py <scratch>/sheet.jpg <scratch>/t_*.jpg --cols 4`

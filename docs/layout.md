@@ -43,6 +43,10 @@ about them. This file is the contract the tools are built against; the glossary 
 **Two roots, one rule.** `films/` holds the one-shots, `channels/<channel>/` holds the episodes.
 Nothing else in the repository holds a film.
 
+**A folder whose name begins with `_` is not a film.** It is a scratch copy, and the discovery skips it. A copy of
+an episode left inside the library would otherwise join the index and the manifest, and would make the check
+"this film is its own" fail for the film it was copied from.
+
 ## What is what
 
 | Folder | It is a | Because it holds |

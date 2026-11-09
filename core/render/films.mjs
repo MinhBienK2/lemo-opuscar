@@ -42,6 +42,9 @@ export const MANIFEST_NAME = 'film.json';     // the film's own facts
 
 // the folders the walk does not enter: build outputs, dependencies and hidden folders
 const SKIP = new Set(['node_modules', 'out', 'dist', 'build']);
+// A folder whose name begins with an underscore is a **scratch copy**, not a film: the library takes every folder
+// under films/ and channels/ for a film, so a copy left inside it joins the index, the manifest, and the check
+// "this film is its own" — and the copy breaks the check of the film it was copied from.
 
 const isDir = p => { try { return fs.lstatSync(p).isDirectory(); } catch { return false; } };
 const isFile = p => { try { return fs.statSync(p).isFile(); } catch { return false; } };
@@ -59,7 +62,7 @@ function* walk(root) {
   try { entries = fs.readdirSync(root, { withFileTypes: true }); } catch { return; }
   for (const entry of entries) {
     const name = entry.name;
-    if (name.startsWith('.') || SKIP.has(name)) continue;
+    if (name.startsWith('.') || name.startsWith('_') || SKIP.has(name)) continue;
     if (!entry.isDirectory()) continue;
     const dir = path.join(root, name);
     yield dir;
