@@ -98,9 +98,12 @@ for (const arg of args) {
   for (const rel of IDENTITY_FILES) {
     const mine = read(path.join(folder, rel));
     if (mine === null) continue;
-    // 2a. template placeholder check: an unexpanded scaffold is not a written file
+    // 2a. template placeholder check: an unexpanded scaffold is not a written file.
+    // A mention inside `…` is a mention, not a slot: the treatment's own first line names the placeholder it
+    // asks for, and a finished treatment was once turned away for that mention.
+    const unfilled = mine.replace(/`[^`]*`/g, '');
     for (const ph of TEMPLATE_PLACEHOLDERS) {
-      if (mine.includes(ph)) {
+      if (unfilled.includes(ph)) {
         fail(name, `${rel} still contains unexpanded template placeholder "${ph}" — write the file before delivery`);
         copied++;
         break;

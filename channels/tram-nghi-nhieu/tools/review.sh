@@ -160,7 +160,20 @@ fi
 # ——————————————————————————————————————————— the outline ———————————————————————————————————————————
 if [ "$OUTLINE" = 1 ]; then
   [ -f "$EP/TREATMENT.md" ] && [ -f "$EP/research/FACTS.md" ] || die "--outline needs TREATMENT.md and research/FACTS.md"
-  grep -q '<viết:' "$EP/TREATMENT.md" && die "TREATMENT.md still holds '<viết: …>' placeholders of the template: write them first"
+  # The treatment must be written, not copied. A slot of the template is a `<viết: …>` outside backticks;
+  # a mention inside `…` is a mention, not a slot — the template's own first line mentions the slot, and
+  # a finished treatment was once turned away for that mention.
+  if ! python3 "$CHANNEL/tools/check_treatment.py" "$EP"; then
+    echo "review --outline: TREATMENT.md còn chỗ của khuôn chưa viết — điền vào rồi chạy lại." >&2
+    exit 1
+  fi
+  # The research file must be written, not copied. The outline judge reads it and asks whether every claim has
+  # a source; a file that is still the template gives the judge nothing to object to, and a file with no
+  # source is a film with nothing behind it. The gate says it here, before a review round is spent on it.
+  if ! python3 "$CHANNEL/tools/check_research.py" "$EP"; then
+    echo "review --outline: research/FACTS.md chưa được viết — còn dòng mẫu, hoặc chưa có mục (claim) nào, hoặc chưa có nguồn nào. Viết lại file rồi chạy lại." >&2
+    exit 1
+  fi
   n=$(next OUTLINE-REVIEW-)
   if [ "$n" -gt 4 ]; then
     echo "review --outline: đã chấm 4 lần mà dàn ý vẫn chưa PASS. Dừng: báo người dùng các lỗi CHẶN còn lại của $EP/review/OUTLINE-REVIEW.md (câu hỏi có cần hẹp lại, đổi định dạng, dữ kiện nào thiếu nguồn) và hỏi hướng đi." >&2; exit 1

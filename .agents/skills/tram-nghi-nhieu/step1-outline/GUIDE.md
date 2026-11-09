@@ -14,6 +14,11 @@ Tạo ra `research/FACTS.md` và `TREATMENT.md` với chuỗi nhân quả hoàn 
 2. Viết `research/FACTS.md`:
    - Chuỗi nguyên nhân - kết quả có nguồn tài liệu rõ ràng.
    - Các số liệu, mốc thời gian, nhiệt độ, kích thước cụ thể.
+   - **Mỗi mục là một claim, mỗi claim có nguồn tra được** (tác giả + năm + DOI/URL), và **không còn dòng mẫu
+     nào** của khuôn: `<Author>`, `<doi or link>`, `<value>`, `<first page>`, `<the sentence of the source,
+     quoted>`… là dòng chưa được viết. Cổng dàn ý dừng ở đây:
+     `python3 channels/tram-nghi-nhieu/tools/check_research.py <tập>` — file còn dòng mẫu, hoặc chưa có
+     mục nào, hoặc chưa có nguồn nào, thì dàn ý chưa được chấm.
 3. Viết `TREATMENT.md`:
    - Tách câu hỏi: Chủ thể thay đổi là gì? Thay đổi thế nào?
    - Câu trả lời tóm tắt trong đúng 1 câu.
