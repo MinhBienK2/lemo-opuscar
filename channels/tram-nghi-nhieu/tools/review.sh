@@ -342,6 +342,16 @@ if [ "$STORYBOARD" = 1 ]; then
     echo "review --storyboard: nhãn lệch câu, hoặc nhãn vẽ một con số mà lời kể không nói — sửa src/film.js (nhãn phải nằm ở câu gọi tên nó; mọi con số trên nhãn phải có lời kể đọc) rồi chạy lại" >&2
     exit 1
   fi
+  # The storyboard quotes the words of each line. When the words are rewritten, the quotes go stale and the
+  # board describes a film that no longer exists — the same mistake as a treatment left behind by a new script.
+  # The words are the standard; the board is what has to follow.
+  SRC2=0
+  STB=$(python3 "$CHANNEL/tools/check_storyboard.py" "$EP" 2>&1) || SRC2=$?
+  echo "$STB"
+  if [ "$SRC2" = 1 ]; then
+    echo "review --storyboard: dàn ý lệch lời kể — sửa LOOK.md cho khớp voice/lines.json (lời kể là chuẩn) rồi chạy lại" >&2
+    exit 1
+  fi
   # The director's cut ends the step: a written scope of what was cut, ending in VERDICT: PASS, stands for the
   # storyboard. It must be at least as new as the last round it answers, or a cut from an earlier state of the
   # film would pass a later one.
@@ -391,6 +401,14 @@ if [ "$SCRIPT" = 1 ]; then
   [ -f "$EP/review/script-lines-$TAG$p.json" ] && cp "$EP/review/script-lines-$TAG$p.json" "$W/PREVIOUS-lines.json"
   cp "$EP/voice/lines.json" "$EP/review/script-lines-$TAG$n.json"
   python3 "$LIB/tools/check_script.py" "$EP" > "$W/SCRIPT-AUDIT.txt" 2>&1 || true
+  # the words the research file forbids: caught before a round is spent, not after
+  VRC=0
+  VF=$(python3 "$CHANNEL/tools/check_voice_facts.py" "$EP" 2>&1) || VRC=$?
+  echo "$VF"
+  if [ "$VRC" = 1 ]; then
+    echo "review --script: lời kể nói cụm mà file nghiên cứu cấm — sửa voice/lines.json (và TREATMENT.md) theo $EP/research/FACTS.md rồi chạy lại" >&2
+    exit 1
+  fi
   python3 - "$W" "$EP" "$n" "$LINES" <<'PY'
 import json, sys, os, re
 W, EP, n, rng = sys.argv[1], sys.argv[2], int(sys.argv[3]), sys.argv[4]
@@ -502,6 +520,13 @@ LAB=$(python3 "$CHANNEL/tools/check_labels.py" "$EP" 2>&1) || LRC=$?
 echo "$LAB"
 if [ "$LRC" = 1 ]; then
   echo "review: nhãn lệch câu, hoặc nhãn vẽ một con số mà lời kể không nói — sửa src/film.js (nhãn phải nằm ở câu gọi tên nó; mọi con số trên nhãn phải có lời kể đọc) rồi chạy lại" >&2
+  exit 1
+fi
+SRC=0
+SH=$(python3 "$CHANNEL/tools/check_shots.py" "$EP" 2>&1) || SRC=$?
+echo "$SH"
+if [ "$SRC" = 1 ]; then
+  echo "review: mỗi câu lời kể phải có đúng một nhát hình, và các nhát phải đi đúng thứ tự của lời — sửa src/film.js rồi chạy lại" >&2
   exit 1
 fi
 echo "review: beat frames…" >&2

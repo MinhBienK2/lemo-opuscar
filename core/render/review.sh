@@ -59,15 +59,23 @@ else
   run drawcheck node "$HERE/core/render/drawcheck.mjs" "$FOLDER"
 fi
 # the numbers on screen against the numbers the research file supports
+# The channel an episode belongs to: the folder above the episode that holds CHANNEL.md.
+BCH=$(cd "$FOLDER" && while [ ! -f CHANNEL.md ] && [ "$PWD" != / ]; do cd ..; done && pwd)
 if [ -f "$FOLDER/research/FACTS.md" ]; then
   run claims python3 "$HERE/tools/check_claims.py" "$FOLDER"
   run facts python3 "$HERE/tools/check_facts.py" "$FOLDER/research/FACTS.md"
   run citations python3 "$HERE/tools/check_citations.py" "$FOLDER/research/FACTS.md"
-  run timing python3 "$HERE/tools/check_timing.py" "$FOLDER"
+  # A channel knows how its own episodes bind a line to a shot — the 3D episodes declare their shots in
+  # their own SHOTS array, a shape the library's 2D timing check does not read. When the channel ships a
+  # checker of its own, the channel's checker wins, the same way the treatment check does below.
+  if [ -f "$BCH/tools/check_shots.py" ]; then
+    run timing python3 "$BCH/tools/check_shots.py" "$FOLDER"
+  else
+    run timing python3 "$HERE/tools/check_timing.py" "$FOLDER"
+  fi
 fi
 # the storyboard as data: a film that has a board.json, or that belongs to a channel asking for one (board_rules.json),
 # is checked against it — beats on words, a signal for every line, a cause for every sound, a film built from the board
-BCH=$(cd "$FOLDER" && while [ ! -f CHANNEL.md ] && [ "$PWD" != / ]; do cd ..; done && pwd)
 if [ -f "$FOLDER/board.json" ] || [ -f "$BCH/board_rules.json" ]; then
   run board "$PY" "$HERE/tools/check_board.py" "$FOLDER"
   # …and directed before it was drawn: benchmark, three structures, cue map, sound, content review, the look rounds
