@@ -288,12 +288,16 @@ r1_n = 0
 r1_files = {}
 r10_n = 0
 reread = {}          # how often a project file is read (R11)
+imgread = {}         # how often the same frame is looked at again (R12)
 for at, tool, args in transcript.events(sys.argv[1]):
     cmd = " ".join((args.get("command", "") or "").split())   # one line: a heredoc must not spill into the report
     at = at[11:19] if 'T' in at else at
     if tool == "read":
         p = args.get("path", "")
-        if p and not p.startswith("/tmp/"):
+        if p.lower().endswith(('.jpg', '.jpeg', '.png', '.webp')):
+            # by name, not by path: the same frame is looked at from a different scratch folder each time
+            imgread[os.path.basename(p)] = imgread.get(os.path.basename(p), 0) + 1
+        elif p and not p.startswith("/tmp/"):
             reread[p] = reread.get(p, 0) + 1
     if tool == "bash":
         # a settle of a second after a kill is not a poll; a wait of half a minute is
@@ -354,6 +358,14 @@ for f, n in sorted(reread.items(), key=lambda kv: -kv[1]):
     if n >= 15:
         out.append(f"R11 {n} lần đọc lại {f} — đọc cả tệp để tìm một chỗ sửa: grep tên rồi đọc đoạn (`offset`, `limit`), "
                    f"và giữ một bản đồ mã (tên hàm → dòng) bên cạnh mã nguồn.")
+# R12: the same frame looked at again and again. An image is a megabyte of context, so a session that opens one
+# frame twenty times pays for that picture twenty times; the sheet of twelve frames would have shown it once.
+if imgread:
+    again = sum(n - 1 for n in imgread.values())
+    out.append(f"R12 {sum(imgread.values())} lần mở ảnh, {again} lần là mở lại một tệp đã xem — ảnh vào ngữ cảnh là ~1 MB mỗi lần.")
+for f, n in sorted(imgread.items(), key=lambda kv: -kv[1]):
+    if n >= 10:
+        out.append(f"R12 {n} lần xem lại {f} — mở `sheet_*.jpg` (mười hai khung một tờ) thay vì mở từng khung, và ghi lại khung nào đã xem để không xem lại.")
 print("\n".join(out[-40:] + polls))
 PY
 if [ -s "$RULES" ]; then

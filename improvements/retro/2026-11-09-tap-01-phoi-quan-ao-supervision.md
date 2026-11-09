@@ -1020,6 +1020,41 @@ một ca thật bên cạnh (một `FACTS.md` đã viết mà nhắc `<Author>` 
 
 ---
 
+## N37 — high — Căn cứ của một phiên là ảnh, và cùng một khung hình được mở mười bảy lần
+
+**Bằng chứng.** Transcript của phiên tập 01 nặng **860 MB**. Đo từng thành phần:
+
+| Phần | Dung lượng |
+|---|---|
+| Kết quả công cụ (text) | 8,5 MB |
+| Suy nghĩ (thinking) | 10,9 MB |
+| Văn bản trả lời | 4,4 MB |
+| Đầu vào công cụ | 3,0 MB |
+| **Kết quả là ảnh (base64)** | **436 MB — 1 032 lần** |
+
+Nửa còn lại của transcript là ảnh. Và ảnh thì lặp: `p_142.jpg` **17 lần**, `sheet_2.jpg` 16 lần,
+`sheet_1.jpg` 13 lần, `p_172.jpg` 12 lần, `p_24.jpg` 12 lần. Trong 727 lần mở ảnh, **311 lần là mở lại
+một tệp đã xem**.
+
+Số lệnh shell cũng cho thấy đúng hình dạng của chi phí: 3 269 lệnh `bash`, trong đó **1 772 lần là đi
+xem hệ thống tệp** (`ls`, `cat`, `find`, `stat`), 1 053 lần đọc tệp, 515 lần sửa. Chỉ **2 %** lệnh là
+lặp nguyên văn — đây không phải một câu lệnh kẹt, đây là **một phiên dùng vô hạn cái vỏ bọc**.
+
+**Nghĩa là gì.** Ảnh vào ngữ cảnh đắt hơn tệp văn bản khoảng hai mươi lần. Kênh này đã có sẵn đúng cái
+công cụ cần: `beatsheet.mjs` dựng `sheet_*.jpg`, **mười hai khung một tờ**. Một tờ là một lần mở ảnh
+và nhìn được mười hai khung. Mở từng khung một là mười hai lần mở ảnh cho cùng một thông tin. Và mở
+*lại* cùng một khung (17 lần cho `p_142.jpg`) là trả tiền hai mươi lần cho một bức ảnh.
+
+**Đã sửa.** `CODING_STANDARDS.md` có **R12**: xem **tờ sheet**, không xem lại một khung; mở khung riêng chỉ
+khi tờ sheet không đủ trả lời câu hỏi, và ghi lại khung nào đã xem. `tools/supervise.sh` đếm lượt mở
+ảnh **theo tên tệp** (cùng một khung hay được xem từ thư mục tạm khác nhau) và báo từ mười lần trở lên.
+
+**Còn phải làm.** `tools/supervise.sh` mới đếm ảnh; nó **chưa** tính chi phí theo byte, và chưa phân biệt
+"mở ảnh để soi" với "mở ảnh để dán vào báo cáo". Một con số đơn giản hơn nên có trong báo cáo giám sát:
+**dung lượng transcript của phiên**, để một người đọc thấy ngay một phiên đang đắt.
+
+---
+
 ## Đề xuất thứ tự xử lý
 
 | # | Việc | File cần sửa | Trạng thái |
@@ -1062,6 +1097,7 @@ một ca thật bên cạnh (một `FACTS.md` đã viết mà nhắc `<Author>` 
 | 36 | Số vòng trong bản chấm là của công cụ, không phải trí nhớ của người chấm (N34) | `channels/tram-nghi-nhieu/tools/review.sh` | **xong** |
 | 37 | File nghiên cứu phải được viết, không phải copy khuôn — cổng dàn ý canh trước khi tốn một vòng chấm (N35) | `channels/tram-nghi-nhieu/tools/check_research.py`, `tools/review.sh` | **xong** |
 | 38 | Lời nhắc trong ngoặc ngược không phải chỗ cần điền (N36) | `channels/tram-nghi-nhieu/tools/check_treatment.py`, `core/render/filmcheck.mjs` | **xong** |
+| 39 | Xem tờ sheet, không mở lại một khung hình: 436 MB ảnh, 311 lần mở lại (N37) | `CODING_STANDARDS.md` R12, `tools/supervise.sh` | **xong** |
 
 ### Mỗi phát hiện đã có dòng riêng trong `improvements/lessons.md`
 
