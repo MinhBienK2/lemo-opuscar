@@ -174,6 +174,9 @@ Bối cảnh vòng chấm: ${ROUND_LABEL:-vòng chấm này}. Bạn làm việc 
   # leaves nothing behind but a trace. The box is asked here too, at the moment the reviewer is about to start —
   # after the round's own renders, which is where the memory actually goes.
   refuse_no_room
+  # Every opening is counted, including the ones that end in silence: a round that never answers must not be
+  # free, or the loop it causes is endless.
+  bump_attempt
   if command -v timeout >/dev/null 2>&1; then
     timeout -k 30 "$CRITIC_TIMEOUT" "$CLI" -p ${LEMO_CRITIC_MODEL:+--model "$LEMO_CRITIC_MODEL"} --dangerously-skip-permissions "$PROMPT" < /dev/null > out.txt 2>&1 &
   else
@@ -277,6 +280,21 @@ set_round() {  # <file> <n> <limit>
 }
 # next number of a report: next <prefix> → n for <prefix>n.md
 next() { n=$(ls "$EP/review" 2>/dev/null | grep -cE "^$1[0-9]+\.md$" || true); echo $((n + 1)); }
+# How many times this round has been OPENED, apart from how many reports it left. A round that comes back with
+# no verdict is not filed as a report — nobody ever read it — so the report count does not move, and a maker
+# who keeps re-opening a dying round never reaches the limit: tap-02 opened the props round twelve times in
+# nine hours and it never stamped. The attempt count is what bounds that loop.
+attempt_count() { a=$(cat "$EP/review/.attempts-$SCOPE_ID" 2>/dev/null) || a=0; case "$a" in ''|*[!0-9]*) a=0;; esac; printf '%s' "$a"; }
+bump_attempt() { printf '%s\n' "$(( $(attempt_count) + 1 ))" > "$EP/review/.attempts-$SCOPE_ID"; }
+# The guard: too many openings for too few reports. It has to say what to do, because the failure it catches
+# (a round that never answers) leaves nothing in the episode to read — no report, no trace but a dead pid.
+too_many_attempts() {  # <limit of rounds> <reports so far>
+  a=$(attempt_count)
+  [ "$a" -gt $(( $1 + 2 )) ] || return 1
+  printf 'review: vòng "%s" đã mở %s lần mà chỉ %s bản chấm còn lại — %s lượt không để lại báo cáo nào (người chấm không trả lời, hoặc vòng bị hệ điều hành giết).\n' "$SCOPE_ID" "$a" "$2" "$((a - $2))" >&2
+  printf 'review: đọc %s và %s (nếu có) để biết vì sao; đừng mở vòng này lần nữa — sửa nguyên nhân, hoặc chốt bằng đạo diễn cắt, hoặc hỏi người dùng.\n' "$EP/review/.round-$SCOPE_ID.died" "$EP/review/.round-$SCOPE_ID.running" >&2
+  return 0
+}
 # the flags still standing after the reviewer's "CỜ SAI": unflag <review> "<#n:A+B …>" "<flags it may clear>"
 # The reviewer releases a machine flag in two shapes, and both are read here:
 #   a heading "#17" then a line "CỜ SAI SAME: <why>", or
@@ -460,6 +478,14 @@ if [ "$OUTLINE" = 1 ]; then
   if [ "$n" -gt 4 ]; then
     echo "review --outline: đã chấm 4 lần mà dàn ý vẫn chưa PASS. Dừng: báo người dùng các lỗi CHẶN còn lại của $EP/review/OUTLINE-REVIEW.md (câu hỏi có cần hẹp lại, đổi định dạng, dữ kiện nào thiếu nguồn) và hỏi hướng đi." >&2; exit 1
   fi
+  if too_many_attempts 4 $((n - 1)); then exit 1; fi
+  # The clock of this round fits what it has to read: the treatment and the facts, claim by claim. At this
+  # stage the film has no lines yet, so the line-based clock of the other rounds is zero and this round got a
+  # flat hour — tap-06's outline was killed at exactly 3600 s, mid-reading, with no report and no trace.
+  if [ -z "$CRITIC_TIMEOUT_SET" ]; then
+    DL=$(cat "$EP/TREATMENT.md" "$EP/research/FACTS.md" 2>/dev/null | wc -l)
+    CRITIC_TIMEOUT=$((3600 + 45 * DL))
+  fi
   cp "$EP/TREATMENT.md" "$EP/research/FACTS.md" "$CHANNEL/STRATEGY.md" "$W/"
   p=$((n - 1)); [ -f "$EP/review/OUTLINE-REVIEW-$p.md" ] && cp "$EP/review/OUTLINE-REVIEW-$p.md" "$W/PREVIOUS.md"
   cd "$W"
@@ -504,6 +530,7 @@ if [ "$PROPS" = 1 ]; then
   if [ "$n" -gt 5 ]; then
     echo "review --props: đã chấm 5 lần mà vật dựng vẫn chưa PASS. Dừng: hoặc báo người dùng các lỗi CHẶN còn lại của $EP/review/PROPS-REVIEW.md — vật nào nhóm A chưa đúng tên, vật nào nhóm B còn đọc thành vật thật khác — và hỏi hướng đi (bỏ vật đó khỏi danh sách, đổi cách dựng, hay hạ tiêu chuẩn nhóm B); hoặc chốt bằng đạo diễn cắt: viết $EP/review/PROPS-DIRECTORS-CUT.md, kết thúc bằng 'VERDICT: PASS' và nêu rõ vật nào cắt, rồi chạy lại. Đừng chấm lần thứ sáu." >&2; exit 1
   fi
+  if too_many_attempts 5 $((n - 1)); then exit 1; fi
   # The three views of every object. The renderer can be swapped, so the whole round can be run by a test
   # without a GPU, without a browser and without spending a reviewer's time.
   (cd "$LIB" && ${PROPCHECK:-node channels/tram-nghi-nhieu/propcheck.mjs} "$EP" --out "$W/p" >/dev/null) || exit 2
@@ -688,6 +715,7 @@ if [ "$STORYBOARD" = 1 ]; then
   if [ "$n" -gt 5 ]; then
     echo "review --storyboard: đã chấm 5 lần mà khung hình vẫn chưa PASS. Dừng: báo người dùng các lỗi CHẶN còn lại của $EP/review/STORYBOARD-REVIEW.md, hoặc chốt bằng đạo diễn cắt (review/STORYBOARD-DIRECTORS-CUT.md, kết thúc bằng 'VERDICT: PASS' và nêu rõ nhát nào đã cắt) rồi chạy lại." >&2; exit 1
   fi
+  if too_many_attempts 5 $((n - 1)); then exit 1; fi
   mkdir -p "$W/hero"
   cp "$EP"/review/hero/*.jpg "$W/hero/" 2>/dev/null || true
   # The clock must fit the work: this round opens EVERY hero frame of the film. tap-01's storyboard round has 59
@@ -745,6 +773,7 @@ if [ "$ASSETS" = 1 ]; then
   if [ "$n" -gt 5 ]; then
     echo "review --assets: đã chấm 5 lần mà bản đặc tả vẫn chưa khớp mã. Dừng: báo người dùng các lỗi CHẶN còn lại của $EP/review/ASSET-AUDIT-REPORT.md, hoặc chốt bằng đạo diễn cắt (review/ASSET-AUDIT-DIRECTORS-CUT.md, kết thúc bằng 'VERDICT: PASS' và nêu rõ mục nào đã cắt) rồi chạy lại." >&2; exit 1
   fi
+  if too_many_attempts 5 $((n - 1)); then exit 1; fi
   cp "$EP/COMPONENTS_SPEC.md" "$W/"; [ -f "$EP/LOOK.md" ] && cp "$EP/LOOK.md" "$W/"
   [ -f "$EP/voice/lines.json" ] && cp "$EP/voice/lines.json" "$W/"
   mkdir -p "$W/src"; cp "$EP"/src/*.js "$W/src/" 2>/dev/null || true
@@ -779,6 +808,7 @@ if [ "$SCRIPT" = 1 ]; then
   if [ "$n" -gt 6 ]; then
     echo "review --script: đã chấm 6 lần ${CHID:+chương $CHID }mà lời vẫn chưa PASS. Dừng: báo người dùng các lỗi CHẶN còn lại của $EP/review/SCRIPT-REVIEW${CHID:+-$CHID}.md và hỏi hướng đi (bỏ ý, đổi câu hỏi, dữ kiện nào cần nguồn). Đừng chấm lần thứ bảy." >&2; exit 1
   fi
+  if too_many_attempts 6 $((n - 1)); then exit 1; fi
   cp "$EP/voice/lines.json" "$CHANNEL/STRATEGY.md" "$W/"; [ -f "$EP/research/FACTS.md" ] && cp "$EP/research/FACTS.md" "$W/"
   p=$((n - 1)); [ -f "$EP/review/SCRIPT-REVIEW-$TAG$p.md" ] && cp "$EP/review/SCRIPT-REVIEW-$TAG$p.md" "$W/PREVIOUS.md"
   [ -f "$EP/review/script-lines-$TAG$p.json" ] && cp "$EP/review/script-lines-$TAG$p.json" "$W/PREVIOUS-lines.json"
@@ -898,6 +928,7 @@ if [ "$FINAL" = 1 ]; then
   if [ "$n" -gt 3 ]; then
     echo "review --final: đã nghiệm thu 3 lượt mà phim vẫn chưa được nhận. Dừng: báo người dùng các lỗi còn lại trong $EP/review/FINAL-QA-REPORT.md và hỏi hướng đi." >&2; exit 1
   fi
+  if too_many_attempts 3 $((n - 1)); then exit 1; fi
   mkdir -p "$W/frames"
   python3 - "$W" "$MP4" "$LIB" "$EP" <<'EOF'
 import glob, json, os, subprocess, sys
@@ -1034,6 +1065,7 @@ if [ "$n" -gt "$LIMIT" ]; then
   fi
   exit 1
 fi
+if too_many_attempts "$LIMIT" $((n - 1)); then exit 1; fi
 
 mkdir -p "$W/beats" "$W/ref"
 # the same machine check as the storyboard gate: a label off its line must not reach the renderer
