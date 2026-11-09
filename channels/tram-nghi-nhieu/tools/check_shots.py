@@ -135,6 +135,30 @@ def load(path):
         return None, p
 
 
+def rig_dir(episode):
+    """Thư mục rig của kênh: đi ngược lên tới nơi có CHANNEL.md, rồi lấy `rig/`."""
+    d = os.path.dirname(os.path.abspath(episode))
+    while d and d != '/':
+        if os.path.isfile(os.path.join(d, 'CHANNEL.md')):
+            return os.path.join(d, 'rig')
+        d = os.path.dirname(d)
+    return ''
+
+
+def newest_code_in(folder):
+    """Giờ mới nhất của một tệp .js trong thư mục (0 nếu không có tệp nào)."""
+    newest = 0
+    if not folder or not os.path.isdir(folder):
+        return 0
+    for name in os.listdir(folder):
+        if not name.endswith('.js'):
+            continue
+        p = os.path.join(folder, name)
+        if os.path.isfile(p):
+            newest = max(newest, os.path.getmtime(p))
+    return newest
+
+
 def sheet_older_than_code(episode, beats_path):
     """(giờ của tờ sheet, giờ của mã) nếu tờ sheet cũ hơn mã — không thì None.
 
@@ -155,6 +179,10 @@ def sheet_older_than_code(episode, beats_path):
             p = os.path.join(src, name)
             if os.path.isfile(p):
                 newest = max(newest, os.path.getmtime(p))
+    # RIG CŨNG LÀ MÃ: tờ sheet đo bằng chính trang của tập (probe, camera, tầng hiệu ứng), nên một đổi trong
+    # rig làm mọi phép đo trên tờ sheet cũ sai — kể cả khi `src/` không hề đụng tới (N104: đổi probe mà
+    # `src/` y nguyên thì tờ sheet vẫn phải dựng lại, nếu không người làm phim đi sửa những lỗi không có)
+    newest = max(newest, newest_code_in(rig_dir(episode)))
     if newest <= os.path.getmtime(beats_path):
         return None
     import datetime
