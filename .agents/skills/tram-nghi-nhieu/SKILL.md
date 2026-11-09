@@ -80,6 +80,12 @@ Trước khi dựng, đọc `improvements/lessons.md` ở gốc thư viện — 
 
 ### Bước 2: Kịch bản lời thoại (Script & Lines)
 - **Đạo diễn thực hiện:** Đọc `step2-script/GUIDE.md`. Viết `voice/lines.json` khớp 1:1 với dàn ý, số viết thành chữ.
+- **Lời kể không được nói câu mà `FACTS.md` cấm:** file nghiên cứu có những câu kiểu *"không nói 'chỗ nóng nhất
+  trong máy'"* — đó là những xếp hạng mà nguồn không đứng sau. Cổng lời kể chạy `tools/check_voice_facts.py`:
+  nó đọc các cụm bị cấm và so với lời kể (sau khi bình thường hoá, nên *"chỗ nóng nhất trong cả cái máy"*
+  khớp với *"chỗ nóng nhất trong máy"*). Viết `FACTS.md` thì viết rõ cái phim **không** được nói — rồi đừng nói.
+- **Dàn ý phải khớp với lời kể:** `TREATMENT.md` là cái cổng dàn ý chấm. Sửa lời kể mà để nguyên dàn ý cũ
+  thì cổng trả tập về vì một tài liệu lỗi thời trong khi phim đã đúng.
 - **Review độc lập:** Dùng prompt `step2-script/PROMPT_CRITIC.md` để bắt lỗi cờ `DIGIT`, `LONG`, `NOFACTS`.
 - **Vòng lặp:** Đạo diễn hiệu chỉnh câu văn hoặc phản biện từ ngữ chuyên môn. Sau khi `PASS`, chạy `tts_vi.py` sinh `src/timeline.js`.
 
@@ -88,6 +94,9 @@ Trước khi dựng, đọc `improvements/lessons.md` ở gốc thư viện — 
 - **Review độc lập:** Dùng prompt `step3-storyboard/PROMPT_CRITIC.md` thẩm định độ tương phản, góc đặt ống kính.
 - **Nhãn nằm đúng câu:** mỗi nhãn trong `src/film.js` gắn với câu lời kể gọi tên nó. `review.sh --storyboard` kiểm
   bằng máy (`tools/check_labels.py`) và dừng trước khi tốn một vòng chấm nếu có nhãn lệch câu.
+- **Mỗi câu một nhát, đúng thứ tự của lời:** `tools/check_shots.py` kiểm tra rằng mỗi câu lời kể có đúng một
+  nhát hình, mỗi nhát gọi đúng câu, và các nhát không lùi về sau. Một câu không có hình nghĩa là người xem
+  nhìn một khung đứng yên trong lúc người kể vẫn nói.
 - **Vòng lặp:** Điều chỉnh góc máy, tiêu cự cho tới khi `PASS`.
 
 ### Bước 4: Bóc tách Linh kiện 3D chi tiết (3D Component Breakdown & Spec)
@@ -113,6 +122,9 @@ Trước khi dựng, đọc `improvements/lessons.md` ở gốc thư viện — 
   (≤ 30 %) và phần khung vật thể đổi (≥ 55 %). `rig/motion.js` có `sway()`, `breathe()`, `motor()`; bước 6 phải gọi
   hàm cập nhật của chúng mỗi khung hình.
 - **Vòng này sửa được gì so với vòng trước:** sau mỗi vòng chấm hình, cổng in bảng đối chiếu (`tools/check_progress.py`): câu nào đã qua, câu nào **còn mở**, câu nào mới phát hiện, và điểm đi đâu. Sửa đúng những câu còn mở; đừng làm lại những câu đã qua. Nếu hai vòng liên tiếp không tiến, đó là lúc viết đạo diễn cắt.
+- **Vòng chấm hình tốn ảnh, và cổng đo điều đó:** người chấm đọc **tờ sheet** trước (một tờ đáng giá bằng khoảng
+  một ảnh riêng), mở ảnh riêng chỉ cho câu có cờ máy, câu fill dưới 15 %, hoặc câu nó nghi ngờ, và **mỗi ảnh một
+  lần**. Sau mỗi vòng, cổng in ra số ảnh vòng đó đã mở — đó là khoản lớn nhất của vòng chấm.
 - **Vòng lặp:** Đạo diễn sửa lỗi diễn hoạt/ánh sáng cho tới khi `PASS`.
 
 ### Bước 7: Âm thanh, Mux & Nghiệm thu Tổng thể (Audio, Mux & Delivery)
