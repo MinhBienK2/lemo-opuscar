@@ -4348,3 +4348,31 @@ thấy một vật thật khác" — nhưng dòng phán quyết **không có l�
 HỎNG thật: ảnh là một cây chải, không phải mặt nước), `#2`, `#9`, `#17`, `#18`, `#19`, `#24`. Với `#17` và `#26`
 tôi đã mở và xác nhận là HỎNG **sai**; người làm đã được báo trước khi sửa.
 
+## N134 — medium — Cổng bàn giao đỏ trên một cái tiêu đề đúng
+
+**EVIDENCE.** `node core/render/filmcheck.mjs` cho tap-05: `film.json title "Tại sao rắc muối lên đá lạnh thì đá tan
+nhanh hơn?" does not match TREATMENT.md heading "Dàn ý — Tại sao rắc muối lên đá lạnh thì đá tan nhanh hơn?"`.
+Năm tập viết `# TREATMENT — <câu hỏi>`, tap-05 viết `# Dàn ý — <câu hỏi>`, và **không tài liệu nào** nói tiêu đề dàn ý
+phải viết thế nào.
+
+**IMPACT.** Một cái tiêu đề hoàn toàn đúng làm cổng bàn giao đỏ; phiên làm sẽ đi sửa một tiêu đề không sai, hoặc
+đi tìm xem cổng muốn gì, thay vì làm phim.
+
+**GUARD.** `core/render/filmcheck.mjs` đọc tiêu đề dàn ý thành **tập ứng viên**: cả tiêu đề, và tiêu đề bỏ nhãn ngắn
+trước dấu nháy dài; dấu nháy bên trong câu hỏi không phải nhãn (phần còn lại phải bắt đầu bằng chữ hoa), nên cổng vẫn
+bắt được lệch thật — và nó đã bắt: tap-03 để tiêu đề “rót **nước nóng**” còn dàn ý viết “rót **nước sôi**”, cùng một
+câu hỏi viết hai kiểu. Tôi đã báo phiên của tap-03. Selftest 4 ca mới.
+
+## N135 — high — Cái chặn R1 không thấy cách ghi qua biến, và bản đồ mã thiếu thì không ai nói
+
+**EVIDENCE.** `improvements/supervision/session-latest.txt` (vòng giám sát của chính thư viện) báo hai việc: một heredoc
+python lúc 08:51 ghi `research/FACTS.md` — **tệp mà cả phim trích dẫn và mà các kiểm tra claim/facts đọc** — và một
+`.review-local.sh` viết bằng shell trong thư mục của tập. `tools/hook_shell_write.py` chỉ nhìn thấy `open('tệp', 'w')`
+**có đường dẫn viết thẳng**; `p = 'research/FACTS.md'; open(p, 'w')` không lộ đường dẫn nên đi qua. Cùng lúc đó,
+`gate.py`'s `map_note()` **im lặng** khi `src/MAP.md` không có, dù bước vật dựng bắt buộc có bản đồ — tap-05 không
+có, và phiên của nó đọc `src/props.js` **năm lần** săn một tên hàm mà một trang bản đồ đã ghi kèm số dòng (R11, N74).
+
+**GUARD.** Hook: ghi qua biến thì dùng **đúng luật của ghi trực tiếp** (`out/` và `review/` vẫn qua được), và `.sh`/`.py`
+không còn được miễn trừ bởi `SKIP_DIR` — một script lọt vào thư mục của tập là mã nguồn, và nó được commit cùng tập.
+Cổng: nói ra khi tập có mã mà không có bản đồ. Selftest hook: 22 ca.
+
