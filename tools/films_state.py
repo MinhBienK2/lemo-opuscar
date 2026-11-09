@@ -60,8 +60,12 @@ def parse_state(text):
                 state['stale'].append(head)
             elif 'chưa có PASS' in s:
                 state['missing'].append(head)
-        elif s.startswith('vòng chấm') and ('chết' in s or 'GIẾT' in s or 'ĐÃ CHẾT' in s):
-            # "vòng chấm ĐÃ CHẾT: storyboard — …" → the scope is what follows the colon
+        elif s.startswith('vòng chấm') and 'ĐÃ CHẾT' in s:
+            # Only the real death counts. The gate also says "vòng chấm … không phải chết" for a round
+            # that answered with a verdict, for a round that stopped, and for a round that never opened
+            # (exit 3) — and every one of those contains the word "chết" inside "không phải chết".
+            # Counting those as deaths made the board cry wolf: tap-04's storyboard round had REJECTed,
+            # and the board said the round died.
             scope = s.split(':', 1)[1].split('—')[0].strip() if ':' in s else s
             state['dead'].append(scope)
         elif s.startswith('last verdict:'):
@@ -120,6 +124,8 @@ script      PASS còn hiệu lực
 props       PASS đã hết hiệu lực: bản chấm PROPS-DIRECTORS-CUT.md không còn là bản đã PASS
 storyboard  chưa có PASS
 vòng chấm ĐÃ CHẾT: storyboard — vòng chấm chết (exit 2) lúc 17:42:26
+vòng chấm dừng (exit 1), không phải chết: storyboard — đọc bản chấm mới nhất
+vòng chấm không mở vì máy hết chỗ (exit 3), không phải chết: props — đợi
 last verdict: VERDICT: REJECTED (review/FINAL-QA-REVIEW-1.md)
 movie: a.mp4
 """
@@ -129,6 +135,7 @@ movie: a.mp4
     check("tem hết hiệu lực không bị tính là còn", st['stale'] == ['props'], str(st['stale']))
     check("bước chưa chấm được đếm riêng", st['missing'] == ['storyboard'], str(st['missing']))
     check("vòng chết được nhận", st['dead'] == ['storyboard'], str(st['dead']))
+    check("vòng có phán quyết không bị đếm là chết", len(st['dead']) == 1, str(st['dead']))
     check("phán quyết được đọc", 'REJECTED' in (st['verdict'] or ''), str(st['verdict']))
     check("phim được đọc", st['movie'] == 'a.mp4', str(st['movie']))
     line = one_line('tap-x', st)
@@ -137,7 +144,7 @@ movie: a.mp4
           '2/7 tem còn hiệu lực' in line, line)
     for f in failures:
         print("FAIL %s" % f)
-    print("%d ca đều đúng" % (7 - len(failures)) if not failures else "%d ca sai" % len(failures))
+    print("%d ca đều đúng" % (8 - len(failures)) if not failures else "%d ca sai" % len(failures))
     return 1 if failures else 0
 
 
