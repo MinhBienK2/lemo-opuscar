@@ -4007,8 +4007,9 @@ thì vòng đó đã bị giết**, và cổng in ra "vòng chấm bị GIẾT g
 dặn chạy lại chính vòng đó. Hai ca selftest mới (29/29). Đây là dấu vết còn lại duy nhất của một vòng
 bị giết — và nó đủ để nói lên sự thật.
 
-**Còn lại.** Tệp `.round-<phần>.running` của một vòng đã chết nên được dọn khi vòng sau mở; hiện
-khoá đã tự dọn (theo pid) nhưng tệp `.running` thì chưa.
+**Còn lại.** Tệp `.round-<phần>.running` của một vòng đã chết tự lành khi vòng sau của **cùng phần**
+mở (nó ghi đè đúng tệp đó, rồi trap xoá lúc thoát bình thường) — nên chỉ cần dọn khi một tập bị bỏ
+dở giữa chừng. Khoá thì đã tự dọn theo pid từ trước.
 
 ## Kiểm chứng — phiên mới (tập 05) đo bằng chính bộ đo luật, so với các phiên cũ
 
@@ -4038,3 +4039,27 @@ nền, để harness báo). Nay lời cảnh báo dạy đúng công thức:
 
 Một lần gọi công cụ, không vòng dò, được báo khi xong. Đây là hình dạng chung của các cơ chế: **một
 lời cảnh báo phải đi kèm cách làm đúng**, nếu không nó chỉ dạy phiên làm sai theo một cách khác.
+
+## N127 — medium — Hai luật còn lại chỉ nằm trong báo cáo: **dò trạng thái** và **tự dựng tờ ảnh**
+
+**Bằng chứng.** Bộ đo luật đọc lại log của ba phiên:
+
+| Luật | tập 01 | tập 02 | tập 03 |
+|---|---|---|---|
+| R9 dò trạng thái (cùng một lệnh lặp lại) | `ls -l … props.js; date` ×12, `ls …/beats | wc -l` ×8 | 5 | 23 |
+| R9 đọc lại output của job nền | 5 tệp × 5–7 lần | — | 3 tệp × 5–12 lần |
+| R10 tự dựng tờ ảnh bằng ffmpeg | **15** | **4** | 0 |
+
+Cả hai luật đều đã có trong `CODING_STANDARDS.md` và trong `tools/rules.py` (bộ đo báo cáo) — nhưng
+không có cơ chế nào chặn. Và R10 nói rõ hơn cả: **thư viện đã có công cụ** (`core/render/sheet.py`,
+`tools/frames_at.py`), nên tự viết bằng ffmpeg là tự làm lại một thứ đã có, vừa tốn lượt vừa dán sai.
+
+**Đã làm.** Hook `PreToolUse` thứ năm: `tools/hook_poll.py`.
+- **R10**: một lệnh `ffmpeg` có `-filter_complex` hoặc `tile=` bị chặn ngay, kèm đường dẫn hai công cụ
+  của thư viện.
+- **R9**: một lệnh vừa hỏi trạng thái tệp (`ls`/`stat`/`wc`/`du`) vừa hỏi giờ (`date`) là dấu hiệu của
+  một vòng dò; lần thứ **ba** trở đi của cùng một hình dạng lệnh trong phiên đó bị chặn, kèm lời dặn
+  "chạy ở chế độ nền rồi đợi harness báo xong, hoặc hỏi **một lần** bằng `ps -o etime= -p <pid>`".
+
+Selftest 11 ca. Cơ chế này không bắt được *mọi* hình dạng dò (một vòng dò không kèm `date` thì lọt), và
+nó cố ý hẹp: chặn sau ba lần lặp, để một lệnh hợp lệ chạy hai lần vẫn qua.
