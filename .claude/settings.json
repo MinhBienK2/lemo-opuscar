@@ -7,6 +7,10 @@
           {
             "type": "command",
             "command": "python3 \"${CLAUDE_PROJECT_DIR:-.}/tools/hook_bg_log.py\""
+          },
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PROJECT_DIR:-.}/tools/hook_shell_write.py\""
           }
         ]
       },
