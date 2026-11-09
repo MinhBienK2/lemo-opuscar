@@ -37,6 +37,7 @@ channels/tram-nghi-nhieu/
 │   ├── review.sh     #   chấm theo từng mục: outline, script, look, props, picture, final (review.py)
 │   ├── gate.py       #   cổng: giọng và dựng phim chỉ chạy khi các bước chấm đã xong
 │   ├── props_catalog.py # danh mục vật của tập (src/props/<mã>.js), sinh src/props.js
+│   ├── layout.py     #   thứ nằm sai chỗ so với cây của một tập (mục "Một tập")
 │   ├── mix.py        #   nhạc, ambience, foley, master -14 LUFS
 │   ├── beatsheet.mjs #   kiểm tra nhịp điệu khung hình & cờ máy
 │   ├── propcheck.mjs #   xuất ảnh 3 phía kiểm tra linh kiện 3D
@@ -45,7 +46,31 @@ channels/tram-nghi-nhieu/
 └── series/<cột>/<tập>/
 ```
 
-Một tập chỉ giữ phần riêng của nó (`TREATMENT.md`, `research/FACTS.md`, `voice/`, `src/`, `index.html`, `build.sh`, `review/`) và gọi code kênh bằng đường dẫn tương đối, không sao chép:
+## Một tập
+
+Mọi tập có cùng một cây. Tệp nào cũng có chỗ của nó; thứ không có tên dưới đây thì không nằm trong tập.
+`tools/layout.py <tập>` kiểm cây này (`gate.py status` và mỗi vòng `review.sh` in kết quả).
+
+```
+series/<cột>/<tập>/
+├── TREATMENT.md, research/        bước 1: dàn ý, FACTS.md và nguồn
+├── voice/                         bước 2: lines.json (người viết), giọng và words.json (máy sinh)
+├── LOOK.md                        bước 3
+├── COMPONENTS_SPEC.md             bước 4
+├── src/                           chỉ mã .js, và MAP.md (bản đồ mã, mọi ghi chú về mã gộp vào đây)
+│   ├── props/<mã>.js, props/_*.js bước 5: mỗi vật một tệp, phần dùng chung trong tệp _
+│   ├── props.js, timeline.js      máy sinh: props_catalog.py --write-index, mk_timeline.py
+│   └── film.js, set.js, …         bước 6: film.js là cửa vào, chia tệp cảnh tuỳ ý
+├── index.html, build.sh, film.json, CREDITS, events.json
+├── review/                        chỉ những gì công cụ chấm đọc hay ghi
+│   ├── hero/                      khung hình chính (bước 3 chấm đúng các ảnh này)
+│   ├── beatsheet/                 tờ nhịp (bước 6)
+│   └── <bước>.json, <BƯỚC>.md, <bước>-<vòng>.md, FINAL-QA.md
+├── out/                           mọi thứ dựng ra; mọi bản thử trong out/scratch/. Không commit, xoá được
+└── <tên>.mp4, <tên>.transcript.srt, poster.jpg    phim thành phẩm
+```
+
+Một tập gọi code kênh bằng đường dẫn tương đối, không sao chép công cụ hay rig vào tập:
 
 ```js
 import { film, label, subtitle, toScreen } from '../../../../rig/render.js';   // từ series/<cột>/<tập>/src/

@@ -56,8 +56,10 @@ tập sau, không mở lại bước nào. Đưa tóm tắt của nó cho ngư�
 
 - **Dựng hình xếp hàng.** Mọi lệnh mở trình duyệt (`still.mjs`, `beatsheet.mjs`, `propcheck.mjs`, `video.mjs`) chờ một
   chỗ trống của máy (mặc định hai chỗ cho cả máy) và in một dòng khi phải chờ. Cứ để nó chờ.
-- **Nhìn nhiều khung bằng tờ sheet**: `node core/render/still.mjs <tập> <mốc…>` rồi
-  `python3 core/render/sheet.py <scratch>/sheet.jpg <scratch>/t_*.jpg --cols 4`. Mở ảnh riêng cho khung tờ sheet chỉ ra.
+- **Mọi thứ thử để trong `<tập>/out/scratch/`**: ảnh khung lẻ, tờ sheet, ảnh vật, bản đo rig. Tệp nào cũng có chỗ
+  cố định (cây thư mục: `CHANNEL.md`, "Một tập"); `gate.py status` và mỗi vòng chấm in thứ nằm sai chỗ.
+- **Nhìn nhiều khung bằng tờ sheet**: `node core/render/still.mjs <tập> <mốc…> --out <tập>/out/scratch` rồi
+  `python3 core/render/sheet.py <tập>/out/scratch/sheet.jpg <tập>/out/scratch/t_*.jpg --cols 4`. Mở ảnh riêng cho
+  khung tờ sheet chỉ ra.
 - **Sửa tệp bằng công cụ sửa file** (`Edit` / `Write`, hoặc `python3 tools/replace.py --batch -` cho nhiều sửa dài).
-- **Bản thử** (đo rig, thử một bản vá) để ở thư mục tạm; trong thư viện thì tên thư mục bắt đầu bằng `_`.
 - Trên máy này, `still.mjs`, `beatsheet.mjs` và `build.sh` cần `LEMO_ANGLE=vulkan` ở đầu lệnh (`review.sh` tự đặt).

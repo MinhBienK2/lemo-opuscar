@@ -188,6 +188,10 @@ def status(ep):
         if opened: print(f"         mở (đã sai 3 lần, ghi vào báo cáo): {', '.join(opened)}")
     movies = glob.glob(os.path.join(ep, '*.mp4')) + glob.glob(os.path.join(ep, 'out', '*.mp4'))
     print('phim:', ', '.join(os.path.relpath(m, ep) for m in movies) if movies else 'chưa có')
+    import layout
+    R = layout.report(ep)
+    print('bố cục: ' + ('đúng' if not R else 'có thứ nằm sai chỗ (chi tiết: tools/layout.py <tập>)'))
+    for r in R: print('  ' + r)
 
 
 def main(argv=None):

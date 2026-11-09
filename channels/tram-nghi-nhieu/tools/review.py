@@ -486,6 +486,8 @@ def main(argv):
         why = gate.why_open(ep, prev)
         if why:
             say(f'bước trước ({prev}) chưa xong: {why}. Chạy trước: {gate.run_cmd(ep, prev)}'); return 2
+    import layout
+    for r in layout.report(ep): say('bố cục: ' + r)   # never blocks: the round goes on
     os.makedirs(os.path.join(ep, 'review'), exist_ok=True)
     lock = open(os.path.join(ep, 'review', f'.lock-{step}'), 'w')
     try:

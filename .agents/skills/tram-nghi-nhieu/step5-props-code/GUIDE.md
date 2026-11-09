@@ -27,7 +27,7 @@ Dựa trên `COMPONENTS_SPEC.md` của Bước 4, dựng mọi vật, bộ phậ
 
 ## Quy trình thực hiện
 1. Viết từng vật vào tệp của nó, rồi `props_catalog.py <tập> --write-index`.
-2. Tự nhìn trước: `LEMO_ANGLE=vulkan node channels/tram-nghi-nhieu/tools/propcheck.mjs <tập> --out <scratch>/props`
+2. Tự nhìn trước: `LEMO_ANGLE=vulkan node channels/tram-nghi-nhieu/tools/propcheck.mjs <tập> --out <tập>/out/scratch/props`
    (ảnh ba phía của từng vật; `--only <tệp.json>` với một mảng tên để chỉ dựng vài vật).
 3. **Chấm:** `sh channels/tram-nghi-nhieu/tools/review.sh <tập> props`. Công cụ kiểm danh mục
    (`props_catalog.py --check`), dựng ảnh của những vật mới hay vừa đổi, cho một người gọi tên mù (không biết tên định

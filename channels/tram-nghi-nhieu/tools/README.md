@@ -11,6 +11,7 @@ Mọi lệnh chạy từ **gốc thư viện**.
 | `… <bước> --again <mã>,<mã>` | chấm lại những mục đó dù chúng chưa đổi (`--again all`: mọi mục) |
 | `python3 channels/tram-nghi-nhieu/tools/gate.py status <tập>` | từng bước: xong hay chưa, bao nhiêu mục đạt, mở, phải sửa, chưa chấm |
 | `python3 channels/tram-nghi-nhieu/tools/gate.py check <tập> --for voice\|render` | cổng: được làm giọng / được dựng chưa (mã 1 kèm lý do) |
+| `python3 channels/tram-nghi-nhieu/tools/layout.py <tập>` | thứ gì nằm sai chỗ so với bố cục của một tập (`CHANNEL.md`), và chỗ đúng của nó; không chặn, không xoá gì. `gate.py status` và mỗi vòng `review.sh` in tóm tắt của nó |
 
 `review.sh` ra mã **0** khi bước đã xong, **1** khi còn mục phải sửa, **2** khi vòng không chạy được (lý do in ra; đó
 không phải phán quyết về phim). Nó ghi vào `review/` của tập:
