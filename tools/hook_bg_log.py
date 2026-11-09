@@ -74,6 +74,13 @@ def kind_of(path):
     return 'job' if JOB_OUTPUT.match(path) else 'log'
 
 
+def mtime_of(path):
+    try:
+        return os.stat(path).st_mtime
+    except OSError:
+        return None
+
+
 def decide(command, session, state):
     """(mã thoát, thông điệp) cho một lệnh. `state` là dict phiên → {đường dẫn: (lần đầu, số lần)}."""
     paths = paths_in(command)
@@ -83,11 +90,16 @@ def decide(command, session, state):
     seen = state.setdefault(session, {})
     blocked = None
     for p in paths:
-        first, count = seen.get(p, (now, 0))
+        rec = seen.get(p, (now, 0))
+        first, count = rec[0], rec[1]
+        last_mt = rec[2] if len(rec) > 2 else None
+        mt = mtime_of(p)
         if now - first > WINDOW:          # quá cửa sổ thời gian: coi như lần đầu
             first, count = now, 0
+        if mt != last_mt:                 # tệp đã được ghi thêm từ lần đọc trước: đọc lại là có tin mới
+            count = 0
         count += 1
-        seen[p] = (first, count)
+        seen[p] = (first, count, mt)
         if count >= LIMIT and blocked is None:
             blocked = (p, count)
     if blocked is None:
@@ -165,7 +177,7 @@ def selftest():
     rc, _ = decide('cat /tmp/y.log', 's1', state)
     assert rc == 0, rc
     print('ok   tệp khác → rc=0')
-    state['s1']['/tmp/x.log'] = (time.time() - WINDOW - 10, 99)
+    state['s1']['/tmp/x.log'] = (time.time() - WINDOW - 10, 99, None)
     rc, _ = decide('cat /tmp/x.log', 's1', state)
     assert rc == 0, rc
     print('ok   quá cửa sổ thời gian → rc=0')
@@ -175,7 +187,20 @@ def selftest():
         assert rc == (0 if i < 2 else 2), (i, rc)
     assert 'job' in msg, msg
     print('ok   đọc lại output của job nền lần thứ 3 → rc=2, lời nhắc nói về job (R9)')
-    print('%d ca đều đúng' % (len(cases) + 7))
+    import tempfile
+    with tempfile.TemporaryDirectory() as d:
+        lg = os.path.join(d, 'grow.log')
+        open(lg, 'w').write('a')
+        st = {}
+        for i in range(4):
+            os.utime(lg, (1000 + i, 1000 + i))      # log còn lớn lên: mỗi lần đọc thấy mtime mới
+            rc, _ = decide('cat ' + lg, 's7', st)
+            assert rc == 0, (i, rc)
+        print('ok   log còn lớn lên (mtime đổi) đọc lại được → rc=0')
+        rcs = [decide('cat ' + lg, 's7', st)[0] for _ in range(3)]
+        assert rcs == [0, 2, 2], rcs
+        print('ok   log đứng yên (mtime không đổi) đọc đến lần thứ 3 → rc=2')
+    print('%d ca đều đúng' % (len(cases) + 9))
     return 0
 
 

@@ -1,8 +1,7 @@
-// Machine-wide render throttling (optional): at most RENDER_SLOTS full-film renders at a time; queues when a render is already running and free memory is below RENDER_MIN_FREE% (default 30).
-// video.mjs calls it only when RENDER_SLOTS is set; it can also wrap any command: node core/render/slot.mjs -- <command…> (3 slots when RENDER_SLOTS is unset)
-// Environment variables: RENDER_SLOTS (integer ≥1), RENDER_MIN_FREE (0–100), RENDER_SLOT_DIR (lock directory, default <tmp>/lemo-opuscar-render-slots-<uid>, shared by all clones, works with a read-only repo too).
-//   RENDER_SLOT_HELD=1 means an outer process already holds a slot: acquire() passes straight through, and slot.mjs -- <cmd> just runs the command.
-//   So several video.mjs started in parallel inside one outer slot.mjs take one slot between them (to have one each, don't wrap them in an outer one).
+// Machine-wide render queue: at most RENDER_SLOTS (default 2) GPU/browser jobs at a time across all processes and clones; the others wait inside the tool (one "[slot] waiting…" line on stderr, then silence) and start when a slot frees. Also holds back one more job while free memory is below RENDER_MIN_FREE% (default 30) and another render is running.
+// Every browser entry point takes a slot through openDemo() in page.mjs (video, still, readcheck, scenecheck, beatsheet, propcheck…), once per process; video.mjs's workers live in that one process and share its slot. It can also wrap any command: node core/render/slot.mjs -- <command…>
+// Environment variables: RENDER_SLOTS (integer; 0 = no limit, default 2), RENDER_MIN_FREE (0–100), RENDER_SLOT_DIR (lock directory, default <tmp>/lemo-opuscar-render-slots-<uid>, shared by all clones, works with a read-only repo too).
+//   RENDER_SLOT_HELD=1 means an outer process already holds a slot: acquire() passes straight through, and slot.mjs -- <cmd> just runs the command (children of slot.mjs get it set).
 // One slot = one directory under the lock directory, holding pid (the owner) and beat (a heartbeat the owner touches every 15 seconds).
 // If the owner process is gone (EPERM counts as still there), or the heartbeat hasn't moved for over 90 seconds, the slot is stale and can be taken over.
 // Every "check state → take over / take a slot" action happens inside a very short mutex (the .mutex directory), so at any moment a slot has only one holder.
@@ -74,12 +73,23 @@ export function tryTake(slots, free, minFree) {   // exported for tests only
   });
 }
 
-export async function acquire({ slots, minFree } = {}) {
+// Default 2 slots (a 6 GB GPU holds two headless Chromium renders); RENDER_SLOTS=0 means no limit. One slot per process: calling it again returns the same release.
+let held = null;
+export function acquire(opts = {}) { return held ??= acquireSlot(opts); }
+export async function withSlot(fn, opts) { await acquire(opts); return fn(); }   // the slot is released at process exit
+function holders(slots) {
+  const pids = [];
+  for (let i = 0; i < slots; i++) { const p = readPid(path.join(DIR, `slot${i}`)); if (Number.isInteger(p) && p > 0) pids.push(p); }
+  return pids;
+}
+async function acquireSlot({ slots, minFree } = {}) {
   if (process.env.RENDER_SLOT_HELD === '1') return () => {};
-  slots ??= envNum('RENDER_SLOTS', 3, n => Number.isInteger(n) && n >= 1 && n <= 256);
+  slots ??= envNum('RENDER_SLOTS', 2, n => Number.isInteger(n) && n >= 0 && n <= 256);
+  if (slots === 0) return () => {};   // opt-out: no limit
   minFree ??= envNum('RENDER_MIN_FREE', 30, n => Number.isFinite(n) && n >= 0 && n <= 100);
   fs.mkdirSync(DIR, { recursive: true });
-  for (let waited = 0; ; waited++) {
+  let told = false;
+  for (;;) {
     const d = tryTake(slots, freePct(), minFree);
     if (d) {
       const timer = setInterval(() => { try { const n = new Date(); fs.utimesSync(path.join(d, 'beat'), n, n); } catch {} }, BEAT_EVERY); timer.unref();
@@ -91,7 +101,7 @@ export async function acquire({ slots, minFree } = {}) {
       process.on('exit', release);
       return release;
     }
-    if (waited % 30 === 0) console.log(`waiting for a render slot (max ${slots}, free memory ≥ ${minFree}% while others render)…`);
+    if (!told) { told = true; const p = holders(slots); console.error(`[slot] waiting for a render slot (${p.length} in use: pids ${p.join(', ') || '?'})`); }
     await new Promise(r => setTimeout(r, 2000));
   }
 }

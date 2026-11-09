@@ -48,7 +48,7 @@ MESSAGE = (
     'và giữ `src/MAP.md` (tên hàm → dòng) bên cạnh mã — `python3 tools/check_map.py <tập>` kiểm tra nó.\n')
 
 IMAGE_MESSAGE = (
-    'Bạn đã mở ảnh %s %d lần mà ảnh không đổi. Mỗi lần mở ảnh là ~1 MB ngữ cảnh, và lần mở thứ hai '
+    'Bạn đã mở ảnh %s %d lần mà ảnh không đổi. Mỗi lần mở ảnh là ~1 MB ngữ cảnh, và lần mở thứ ba '
     'trở đi không thấy gì mới (luật R12: mỗi ảnh riêng chỉ mở một lần).\n'
     'Cách làm đúng: nhìn **tờ sheet** trước để quyết định cả phim; chỉ mở ảnh riêng cho câu có cờ máy, '
     'câu phủ dưới 15 %%, hoặc câu bạn nghi ngờ. Muốn xem lại cùng một ảnh thì dùng công cụ xem ảnh '

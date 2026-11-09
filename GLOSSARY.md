@@ -46,6 +46,20 @@ may not say.
 
 **The gate** — `sh core/render/review.sh <film-folder>`: the checks that must pass before a film is finished.
 
+**Rubric** — a step's `RUBRIC.md` in a channel skill: a table of questions, each CHẶN (blocks) or GÓP Ý (advice). The
+critic answers every question for every item, with what it saw; the tool, not the critic, decides the verdict.
+
+**Item** — the unit a step is judged in: the outline, one spoken line, one hero still, one prop, the picture of one
+line. An item passes when every CHẶN question is ĐẠT; only an item that is new or changed is judged again.
+
+**Open item** — an item that failed three times. The step closes anyway, and the item is listed for the user.
+
+**Done** — a film is done when its first movie exists and the gate exits 0. The user is told then; a final QA after
+that is a report, it reopens nothing.
+
+**Render slot** — one of the machine-wide places a browser render may run in (`core/render/slot.mjs`, two by
+default). A render that finds no free slot waits inside the tool.
+
 **The channel map** — a channel's `CHANNEL.md`: how its episodes are made, where its voice model lives, which file
 holds which part of the pipeline.
 

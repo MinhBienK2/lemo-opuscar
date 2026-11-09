@@ -42,6 +42,9 @@ import re
 import sys
 import unicodedata
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import props_catalog as pc  # noqa: E402  the one module that knows both props layouts
+
 # the words that are not part of a name: they glue a phrase together
 STOP = {'và', 'của', 'là', 'có', 'được', 'với', 'như', 'một', 'cái', 'chiếc', 'con', 'bị',
         'thay', 'cho', 'hay', 'hoặc', 'để', 'khi', 'ở', 'này', 'đó', 'nên', 'đã', 'sẽ', 'vẫn'}
@@ -69,15 +72,8 @@ def catalogue_names(ep):
     not a crash: there is nothing to check yet, and a traceback here would send the next agent
     hunting for a broken tool instead of reading the message.
     """
-    try:
-        src = open(os.path.join(ep, 'src', 'props.js'), encoding='utf8').read()
-    except OSError:
-        return None
-    i = src.find('export const PROPS')
-    if i < 0:
-        return None
-    body = src[i:]
-    return re.findall(r"^\s{2}'([^']+)'\s*:", body, re.M)
+    names = [it['name'] for it in pc.catalog(ep)]      # both layouts, in PROPS order
+    return names or None
 
 
 def prop_words(name):

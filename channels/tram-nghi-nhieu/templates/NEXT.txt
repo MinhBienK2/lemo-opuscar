@@ -1,6 +1,6 @@
-Tiếp theo: làm đúng thứ tự trong .agents/skills/tram-nghi-nhieu/SKILL.md.
-  1. research/FACTS.md, rồi TREATMENT.md (mẫu của kênh), rồi: sh channels/tram-nghi-nhieu/tools/review.sh <tập> --outline
-  2. voice/lines.json, rồi: sh channels/tram-nghi-nhieu/tools/review.sh <tập> --script   (tập có chương: --chapter n)
-  3. giọng: tts_vi.py chỉ chạy khi lời đã PASS
-  4. src/props.js, rồi --props; dựng cảnh; chấm từng cảnh, rồi cả phim (hay từng chương)
-  5. sh build.sh: chỉ dựng khi mọi con dấu còn đúng
+Tiếp theo: làm đúng thứ tự trong .agents/skills/tram-nghi-nhieu/SKILL.md (chấm: sh channels/tram-nghi-nhieu/tools/review.sh <tập> <bước>).
+  1. research/FACTS.md, rồi TREATMENT.md (mẫu của kênh), rồi chấm: outline
+  2. voice/lines.json, chấm: script; rồi giọng (tts_vi.py chạy khi outline và script đã xong)
+  3. khung hình chính vào review/hero/ và LOOK.md, chấm: look
+  4. COMPONENTS_SPEC.md, rồi mỗi vật một tệp src/props/<mã>.js (props_catalog.py <tập> --write-index), chấm: props
+  5. src/film.js, chấm: picture; rồi sh build.sh và sh core/render/review.sh <tập> — phim đầu tiên qua cổng là XONG

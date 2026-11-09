@@ -20,6 +20,9 @@ import os
 import re
 import sys
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import props_catalog as pc  # noqa: E402  the one module that knows both props layouts
+
 # the words that look like calls but are not
 NOT_A_CALL = {'if', 'for', 'while', 'switch', 'return', 'function', 'new', 'get', 'set', 'add',
               'push', 'visible', 'group', 'update', 'setState', 'await', 'typeof', 'of', 'in'}
@@ -27,20 +30,10 @@ NOT_A_CALL = {'if', 'for', 'while', 'switch', 'return', 'function', 'new', 'get'
 
 def catalogue(src):
     """[(name, body)] of the catalogue, or [] when there is none"""
-    p = os.path.join(src, 'props.js')
-    if not os.path.isfile(p):
-        return [], ''
-    text = open(p, encoding='utf-8').read()
-    i = text.find('export const PROPS')
-    if i < 0:
-        return [], text
-    end = text.find('\n};', i)
-    if end < 0:
-        return [], text
-    body = text[i:end]
-    entries = re.findall(r"^\s*'([^']+)'\s*:\s*\(\)\s*=>\s*([\s\S]{0,500}?)(?=^\s*'[^']+'\s*:|\Z)",
-                          body, re.M)
-    return entries, text[:i] + text[end:]
+    ep = os.path.dirname(os.path.abspath(src))
+    items = pc.catalog(ep)       # both layouts: src/props.js in one piece, or src/props/<id>.js
+    entries = [(it['name'], re.sub(r'^\s*\(\)\s*=>\s*', '', pc.view_source(ep, it))[:500]) for it in items]
+    return entries, pc.strip_catalogue(ep)
 
 
 def called_elsewhere(name, text):
@@ -50,10 +43,7 @@ def called_elsewhere(name, text):
 
 def dead_props(src):
     """the catalogue props the film never calls"""
-    entries, outside = catalogue(src)
-    for f in sorted(os.listdir(src)):
-        if f.endswith('.js') and f != 'props.js':
-            outside += open(os.path.join(src, f), encoding='utf-8').read()
+    entries, outside = catalogue(src)    # outside: every src/*.js (and src/props/*.js) minus the catalogue entries
     dead = []
     for name, entry in entries:
         factories = [n for n in re.findall(r'\b([a-zA-Z_]\w*)\s*\(', entry) if n not in NOT_A_CALL]

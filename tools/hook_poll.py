@@ -37,14 +37,8 @@ WINDOW = 7200      # quên lệnh dò cũ hơn 2 giờ
 HAS_DATE = re.compile(r'\bdate\b')
 HAS_CHECK = re.compile(r'\b(?:ls|stat|wc|du)\b')
 
-# Tự dựng tờ ảnh: ffmpeg với filter phức tạp, hoặc dán khung bằng `tile=`.
-MONTAGE = re.compile(r'ffmpeg[^\n]*?(?:-filter_complex|\btile=)')
-
-# Một vòng lặp **chờ** trong shell: nó giữ lượt của phiên mà không làm ra gì, và việc nặng vẫn chưa xong.
-# Tap-05 đã đứng chờ tải máy bằng `while … ; do awk … /proc/loadavg …; sleep 30; done` — 30 phút lượt của
-# phiên dùng để đứng yên. R5: chờ việc xong, đừng dò file, và đừng đứng chờ.
-LOOP = re.compile(r'\b(?:while|until|for)\b')
-SHELL_SLEEP = re.compile(r'(?:^|[;&|]\s*|\b(?:then|do|else)\s+)sleep\s+\d')
+# Tự dựng tờ ảnh: dán khung đã thu nhỏ bằng `tile=`. (ffmpeg trộn âm, nối tệp, `-filter_complex` nói chung: cho qua.)
+MONTAGE = re.compile(r'ffmpeg[^\n]*?\btile=')
 
 POLL_MESSAGE = (
     'Bạn đã chạy lệnh dò trạng thái này %d lần trong phiên này:\n'
@@ -53,15 +47,6 @@ POLL_MESSAGE = (
     'và câu trả lời chưa đổi, mỗi lần lại tốn một lượt của phiên.\n\n'
     'Cách làm đúng: chạy việc đó ở chế độ nền (`run_in_background=true`) rồi **đợi harness báo xong**; '
     'cần hỏi tiến độ thì hỏi **một lần** bằng `ps -o etime= -p <pid>`, đừng hỏi lại.\n')
-
-WAIT_MESSAGE = (
-    'Lệnh này là một **vòng lặp chờ** trong shell:\n'
-    '    %s\n\n'
-    'Đứng chờ trong lượt của mình là lượt không làm ra gì, và việc nặng vẫn chưa xong (luật R5). Trong '
-    'phiên tap-05 có một vòng chờ tải máy như thế, mất 30 phút lượt của phiên.\n\n'
-    'Cách làm đúng: chạy việc nặng bằng `run_in_background=true` rồi **đừng làm gì** cho tới khi harness báo xong; '
-    'máy đang bận thì làm việc nhẹ khác thay vì đứng chờ; cần hỏi tiến độ thì hỏi **một lần** bằng '
-    '`ps -o etime= -p <pid>`.\n')
 
 MONTAGE_MESSAGE = (
     'Bạn đang tự dựng một tờ ảnh bằng ffmpeg. Thư viện đã có sẵn công cụ làm đúng việc này '
@@ -83,8 +68,6 @@ def decide(command, session, state, now=None):
         return 0, ''
     if MONTAGE.search(command):
         return 2, MONTAGE_MESSAGE
-    if LOOP.search(command) and SHELL_SLEEP.search(command):
-        return 2, WAIT_MESSAGE % command.strip()[:160]
     if not (HAS_DATE.search(command) and HAS_CHECK.search(command)):
         return 0, ''
     now = now if now is not None else time.time()
@@ -154,17 +137,15 @@ def selftest():
         ('cat src/props.js | head -40', 0, 0),
         ('node --check src/props.js && echo OK', 0, 0),
         # tự dựng tờ ảnh: chặn ngay, không cần đến lần thứ ba
-        ('ffmpeg -i a.mp4 -filter_complex "tile=3x2" b.jpg', 0, 2),
+        ('ffmpeg -i a.mp4 -vf "tile=3x2" b.jpg', 0, 2),
         ('ffmpeg -i a.mp4 b.mp4', 0, 0),
         ('ffmpeg -i a.mp4 -vf scale=320:-1 b.jpg', 0, 0),
-        # vòng lặp chờ: chặn ngay, không cần đến lần thứ ba
-        ('while [ $i -lt 60 ]; do sleep 30; i=$((i+1)); done', 0, 2),
-        ('until [ -f /tmp/x ]; do sleep 15; done', 0, 2),
-        ('i=0; while [ $i -lt 60 ]; do awk \'{exit !($1 < 8)}\' /proc/loadavg && break; i=$((i+1)); sleep 30; done', 0, 2),
-        # một vòng lặp không chờ thì không phải là đứng chờ
+        # -filter_complex để trộn âm / nối tệp thì cho qua; vòng lặp có sleep cũng cho qua
+        ('ffmpeg -i a.wav -i b.wav -filter_complex "amix=inputs=2" c.wav', 0, 0),
+        ('ffmpeg -i a.mp4 -filter_complex "[0:v]scale=320:-1,tile=3x2" b.jpg', 0, 2),
+        ('until [ -f /tmp/x ]; do sleep 15; done', 0, 0),
         ('for f in *.jpg; do echo $f; done', 0, 0),
         ('sleep 5', 0, 0),
-        ('python3 - <<\'PY\'\nimport time\nwhile True:\n    time.sleep(1)\nPY', 0, 0),
     ]
     bad = 0
     for cmd, seen_before, want in cases:

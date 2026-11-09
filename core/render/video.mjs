@@ -1,11 +1,12 @@
 // Render video: node core/render/video.mjs <demo> [--fps 24] [--workers 3] [--q 'k=v'] [--out <demo>/out/video.mp4] [--size 1920x1080]
 // when several films are in production in parallel, use 3 workers (the default); a render on its own can go up to 6
 // each worker has its own browser; JPEG screenshots are piped to ffmpeg; the segments are joined losslessly at the end
-// with the environment variable RENDER_SLOTS (an integer) set, the machine runs at most that many full-film renders at once (slot.mjs); unset means no limit. Segment files go in a hidden directory next to --out, unique to each render, deleted when the render finishes (or fails, or is interrupted).
+// the machine runs at most RENDER_SLOTS (default 2; 0 = no limit) browser jobs at once and a render waits for its turn (slot.mjs); its workers share one slot. Segment files go in a hidden directory next to --out, unique to each render, deleted when the render finishes (or fails, or is interrupted).
 // The same demo can render several versions in parallel, but each version needs its own --out: two renders writing the same --out fail with an error instead of silently overwriting each other.
 // <out>.lock holds the owner's pid; if the owner is gone, or the lock file hasn't been refreshed for over 12 hours (the pid was reused by another process), it counts as stale and a new render takes over.
 import fs from 'fs'; import path from 'path'; import { spawn, execFileSync } from 'child_process';
 import { openDemo, closeServer, requireDemo, takeSize } from './page.mjs';
+import { acquire } from './slot.mjs';
 import { fingerprintOf } from './sourcewatch.mjs';
 const args = process.argv.slice(2), { w: W, h: H } = takeSize(args), opt = (k, d) => { const i = args.indexOf(k); return i >= 0 ? args[i + 1] : d; };
 const dir = args[0]; requireDemo(dir);
@@ -57,7 +58,7 @@ process.on('exit', cleanup);
 for (const sig of ['SIGINT', 'SIGTERM']) process.on(sig, () => { cleanup(); process.exit(128 + (sig === 'SIGINT' ? 2 : 15)); });
 const fail = msg => { console.error(msg); cleanup(); process.exit(1); };
 
-const release = process.env.RENDER_SLOTS ? await (await import('./slot.mjs')).acquire() : () => {};   // with RENDER_SLOT_HELD=1 (an outer process already holds a slot), pass straight through
+const release = await acquire();   // machine-wide render queue (slot.mjs): waits for a slot (default 2; RENDER_SLOTS=0 = no limit); the workers below run in this process and share this one slot
 segDir = fs.mkdtempSync(path.join(outDir, `.${base}_segs-`)); fs.writeFileSync(path.join(segDir, 'pid'), String(process.pid));
 const probe = await openDemo(dir, { w: W, h: H, q: Q }); const DUR = await probe.page.evaluate(() => window.DUR); await probe.browser.close();
 if (!(DUR > 0)) fail(`window.DUR must be a positive number of seconds (got ${DUR})`);

@@ -1,64 +1,37 @@
 # Bước 5: Code Linh kiện 3D Độc lập (Modular 3D Coding)
 
 ## Mục tiêu
-Dựa trên `COMPONENTS_SPEC.md` đã được duyệt ở Bước 4, lập trình toàn bộ các linh kiện, đạo cụ vào `src/props.js` (hoặc các file module thành phần) dưới dạng các hàm độc lập.
+Dựa trên `COMPONENTS_SPEC.md` của Bước 4, dựng mọi vật, bộ phận và đạo cụ của tập, mỗi vật một tệp.
 
 ## Quy chuẩn kỹ thuật Three.js của kênh
-- **Vật thật dựng đúng là nó:** Không dùng các khối hình học nguyên sinh trơn tuột (cấm cylinder hoặc box trơ trọi để biểu diễn đồ vật phức tạp).
-- **Vật liệu Toon:** Dùng `MeshToonMaterial` của Three.js với `color`, `gradientMap`, `toonMat`, hoặc `canvasTex` có hạt ngẫu nhiên (`seed`). **LƯU Ý:** `MeshToonMaterial` không phải PBR shader, KHÔNG khai báo `roughness` hoặc `metalness` để tránh cảnh báo rác log.
-- **Ruột máy móc:** Tận dụng `channels/tram-nghi-nhieu/rig/parts.js` (lò xo, chip, bánh răng, cuộn cảm, pin).
-- **Vật phải biết cử động:** một vật đứng yên là một vật chết, và phim sẽ chỉ còn camera trượt qua những
-  đạo cụ đứng chết. Mỗi vật trong `src/props.js` phải có phần cập nhật theo thời gian: vải đung đưa theo
-  gió, quạt xoay, giọt nước co lại, kim đồng hồ chạy, hạt hơi bay, nước chảy. `channels/tram-nghi-nhieu/rig/motion.js`
-  có sẵn `sway()`, `breathe()`, `spinUp()`… để dùng, hoặc tự viết bằng `Math.sin` như `demo/room.js` làm.
-  Bước 6 phải gọi hàm cập nhật này mỗi khung hình; vật nào không được gọi thì vật đó đứng yên trong phim.
-- **Cấu trúc xuất khẩu chuẩn:**
+- **Vật thật dựng đúng là nó:** dựng đủ bộ phận đặc trưng của vật; một khối trụ hay hộp trơn không đứng thay cho một đồ vật.
+- **Vật liệu Toon:** `toon()` của `rig/kit.js` (MeshToonMaterial), hoặc `canvasTex` có hạt ngẫu nhiên (`seed`). MeshToonMaterial
+  không phải PBR: không khai báo `roughness` hay `metalness`.
+- **Ruột máy móc:** tận dụng `channels/tram-nghi-nhieu/rig/parts.js` (lò xo, chip, bánh răng, cuộn cảm, pin).
+- **Vật phải biết cử động:** mỗi vật có phần cập nhật theo thời gian: vải đung đưa theo gió, quạt xoay, giọt nước co
+  lại, kim đồng hồ chạy, hạt hơi bay. `rig/motion.js` có sẵn `sway()`, `breathe()`, `spinUp()`…; bước 6 gọi hàm cập
+  nhật đó mỗi khung hình.
+- **Mỗi vật một tệp** — `src/props/<mã>.js`, mã là chữ thường không dấu (`ao-phong-uot.js`):
   ```javascript
-  export const PROPS = {
-    'tên_đạo_cụ_kèm_trạng_thái': (opts) => {
-      const group = new THREE.Group();
-      // logic dựng hình chi tiết
-      return group;
-    }
-  };
+  import * as THREE from 'three';
+  import { toon, PAL } from '../../../../../rig/kit.js';
+  import { vaiDet } from './_vai.js';            // phần dùng chung của nhiều vật: src/props/_<tên>.js
+  export function aoPhongUot(opts = {}) { const g = new THREE.Group(); /* … */ return g; }
+  export const PROP = { name: 'áo phông còn ướt', view: () => aoPhongUot() };
   ```
+  `PROP.name` là tên vật như lời kể gọi nó, và cũng là mã neo của nhãn ở bước 6. `view` dựng vật đứng một mình cho ảnh
+  ba phía. Tệp `_*.js` không có `PROP`; sửa nó là sửa mọi vật dùng nó, nên các vật đó được chấm lại.
+- **`src/props.js` do máy sinh** (`export *` từ mọi tệp, và `PROPS = {tên: view}`). Thêm, đổi tên hay xoá một tệp vật
+  thì chạy lại `python3 channels/tram-nghi-nhieu/tools/props_catalog.py <tập> --write-index`. `film.js` vẫn
+  `import { … } from './props.js'`.
 
 ## Quy trình thực hiện
-1. Viết code độc lập từng linh kiện vào `src/props.js`.
-2. **Ghi `src/MAP.md`**: một bảng ngắn "tên hàm → dòng" cho `props.js`, `set.js`, `film.js`. Tệp mã của tập
-   này lớn hơn hai trăm kB; một lần đọc lại nó để tìm một chỗ sửa là mất hàng chục nghìn dòng ngữ cảnh, và
-   tập sau sẽ phải trả giấy đó nhiều lần. Có bản đồ thì tìm chỗ sửa là một lệnh `grep`.
-   **Bản đồ mà không khớp mã thì tệ hơn không có bản đồ** — nó đưa người đọc tới nhầm chỗ, và người đọc
-   đã học được cách bỏ qua nó thì không đọc gì nữa. Kiểm bằng `python3 tools/check_map.py <tập>` (đối
-   chiếu số dòng trong tiêu đề và vị trí từng tên trong bảng với mã thật), và chạy lại **sau lần sửa code
-   cuối cùng** — tập 01 để bản đồ thối ngay khi được kiểm.
-3. Kiểm tra trực quan bằng công cụ propcheck chuyên biệt của kênh:
-   `LEMO_ANGLE=vulkan node channels/tram-nghi-nhieu/tools/propcheck.mjs <tập>`
-   (Công cụ này xuất ra ảnh xoay 3 phía của từng vật thể đứng riêng lẻ).
-4. **Vòng lặp Thẩm định Linh kiện 3D (Max 5 rounds):**
-   - Mở vòng chấm bằng **công cụ của kênh**: `sh channels/tram-nghi-nhieu/tools/review.sh <tập> --props`.
-     Công cụ nạp mẫu `step5-props-code/PROMPT_CRITIC.md`, dựng ảnh ba góc nhìn của từng vật, gọi người
-     gọi tên mù, đánh số vòng, ký tên người chấm và đóng tem `review/PROPS.pass`. **Không** tự gọi
-     subagent: báo cáo của nó rơi vào một tệp không ai đọc, không ai đếm vòng, không ai ký.
-   - Thử nghiệm nhận diện gián tiếp (Blind recognition test): Subagent nhìn ảnh render của vật thể (không nhìn tên file) xem có nhận diện đúng đồ vật không. Nếu nhận diện sai $\rightarrow$ Dựng chưa tới, phải sửa hình khối.
-   - **Đạo diễn tiếp nhận:** Tinh chỉnh tỷ lệ, thêm rãnh, viền, độ bo góc (`cushionGeo`), chỉnh màu vật liệu.
-   - Lặp lại tối đa 5 hiệp cho tới khi `VERDICT: PASS`. Hết lượt thì chốt bằng bản cắt của đạo diễn:
-     `review/PROPS-DIRECTORS-CUT.md`, kết thúc bằng `VERDICT: PASS`, nêu rõ vật nào đã cắt, và **viết
-     sau lần sửa `src/props.js` cuối cùng** — bản cắt cũ không nói gì về code hiện tại.
-5. **Thêm một vật làm dịch mọi số vật đứng sau nó.** Bản chấm và bản cắt chỉ vật bằng **số thứ tự**
-   (#25 bàn tay, ảnh `review/props/p_25.jpg`), nên sau khi thêm một vật vào `src/props.js`, số cũ trong bản
-   chấm trỏ sang vật khác — và không ai báo, vì mọi thứ vẫn hợp lệ. **Vì vậy hãy thêm vật mới vào CUỐI
-   danh mục**: thứ tự trong danh mục không quyết định gì trong phim (phim gọi vật **theo tên**), còn số thứ
-   tự thì giữ cho mọi bản chấm cũ. Nếu đã chèn giữa rồi, sửa lại số trong `review/PROPS-REVIEW-*.md` và
-   `review/PROPS-DIRECTORS-CUT.md` theo danh mục mới, rồi chạy
-   `python3 channels/tram-nghi-nhieu/tools/check_props_refs.py <tập>` — nó nói **vật nào** mỗi số đang
-   chỉ. Vòng `--props` tự gọi kiểm tra này, nên một số lệch sẽ chặn vòng chấm thay vì lọt xuống phim.
-6. **Bản chấm vật có thể phán sai — và nó nói rõ khi nào.** Bản chấm có hai người đọc: người đoán mù (nhìn
-   ảnh, không biết tên người làm định dựng) và người chấm (mở ảnh, so với tên định dựng). Người đoán mù có
-   thể đọc sai: ở tap-01 một lưới sợi đan bị gọi thành "đống lọ thuỷ tinh" và một bàn tay bị gọi thành "bàn
-   chân", người chấm lấy đúng lời đó để phán HỎNG, và vòng FAIL vì tám vật — trong đó hai vật đang đúng.
-   Nên **trước khi sửa `src/props.js` theo bản chấm, hãy mở `review/props/p_NN.jpg` và tự nhìn**. Dòng phán
-   quyết nay có trường "ảnh cho thấy:" — lời của chính người chấm — nên khi hai bên lệch nhau thì thấy ngay;
-   còn số trong `BLIND.md` thì không đáng tin (một vòng đã hoán đổi #20/#21 và bỏ mất #25): tin ảnh, đừng tin
-   số. Thêm nữa, mỗi vật phải có **đúng một** dòng phán quyết — `channels/tram-nghi-nhieu/tools/props_report_check.py`
-   chặn vòng khi thiếu hoặc lặp, vì vật thiếu là vật chưa ai nhìn.
+1. Viết từng vật vào tệp của nó, rồi `props_catalog.py <tập> --write-index`.
+2. Tự nhìn trước: `LEMO_ANGLE=vulkan node channels/tram-nghi-nhieu/tools/propcheck.mjs <tập> --out <scratch>/props`
+   (ảnh ba phía của từng vật; `--only <tệp.json>` với một mảng tên để chỉ dựng vài vật).
+3. **Chấm:** `sh channels/tram-nghi-nhieu/tools/review.sh <tập> props`. Công cụ kiểm danh mục
+   (`props_catalog.py --check`), dựng ảnh của những vật mới hay vừa đổi, cho một người gọi tên mù (không biết tên định
+   dựng), rồi người chấm chấm từng vật theo `step5-props-code/RUBRIC.md`. Vật phải sửa nằm trong `review/PROPS.md`.
+   Sửa đúng tệp của vật đó rồi chạy lại: vật không đổi không được chấm lại.
+4. **Người gọi tên mù có thể đọc sai** (một bàn tay bị gọi là "bàn chân"). Câu `dung-vat` vẫn ĐẠT khi ảnh có đủ bộ
+   phận đặc trưng của vật. Trước khi sửa một vật theo bản chấm, mở ảnh của nó và tự nhìn.
