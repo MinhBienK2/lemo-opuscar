@@ -1249,6 +1249,37 @@ nào cũng phải chịu được việc công cụ ghi ra tệp cảnh báo khi
 
 ---
 
+---
+
+## N45 — high — Một bài kiểm tra chặn một phim đúng, vì nó đọc "bốn mươi năm" thay vì "bốn mươi lăm"
+
+**Bằng chứng.** `check_labels.py` so con số vẽ trên nhãn với con số lời kể đọc, bằng cách đổi con số
+thành chữ qua `number_words()`. Hàm đó dựng số ghép bằng cách ghép chục với chữ của hàng đơn vị:
+
+```python
+tens = {..., 4: 'bốn mươi', ...}.get(t, '')
+return (tens + ' ' + WORDS.get(u, '')).strip()
+```
+
+Nên 45 ra **"bốn mươi năm"**, trong khi tiếng Việt là **"bốn mươi lăm"** (trong số ghép, con số năm là
+"lăm"). Tập 02 vẽ "45 °C" trên thang nhiệt kế và nói "Quanh bốn mươi lăm độ, tế bào pin không nên sạc
+nữa" — đúng theo chính luật của `FACTS.md` mục 7 (*"Cách nói: …"*, số phải nói thành chữ cho khó nghe).
+Bài kiểm tra báo: **"45 °C — con số 45 không có trong lời kể"**, và cổng hình sẽ trả tập về để sửa một
+lỗi không có.
+
+Tệp `WORDS` có sẵn "mười lăm" (15) nên 15 đúng; 45 thì không có trong bảng, rơi vào nhánh số ghép —
+và nhánh đó sai. Ba vòng chấm hình của tập 01 không bắt được vì tập 01 không vẽ con số nào đuôi 5.
+
+**Đã sửa.** `number_words()` dùng "lăm" cho hàng đơn vị 5 trong số ghép (và cho "một trăm lăm"), kèm
+bốn ca thử mới: dạng ghép của 5, 15, 45, 55, 105; lời kể nói "bốn mươi lăm độ" thì 45 **đã** được đọc;
+lời kể nói "bốn mươi độ" thì 45 **chưa** được đọc.
+
+**Còn phải làm.** `check_labels.py` còn một hàm chết: `said_numbers()` (gom chữ số thành cụm) không được
+gọi ở đâu; lời kể được so nguyên cả câu. Nó viết ra một đường kiểm tra thứ hai cho cùng một luật, và
+đường đó có thể sai mà không ai biết.
+
+---
+
 ## Các guard đã bắt được gì (tính từ 08:00, hai tập còn chạy)
 
 Đây là bằng chứng rằng các guard không phải lý thuyết — mỗi cái đã bắt một lỗi thật, hoặc đã được một
