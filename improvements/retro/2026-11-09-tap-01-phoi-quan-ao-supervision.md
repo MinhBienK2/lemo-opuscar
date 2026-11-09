@@ -3752,4 +3752,49 @@ tìm số vòng là **lỗi của lời dặn**, không phải lỗi của ngư�
   này — nó là luật của kênh, có chủ ý, và đổi nó là việc của người dùng.
 - **`readcheck` là bước chậm nhất của cổng bàn giao** (N111): nó dựng lại mọi khung hình của phim trong
   Chromium. Giữ nguyên: một cổng chậm còn hơn một cổng sai.
+- **Tập 04 nằm ngoài tầm đo của người giám sát** (N116): phiên của nó không có tên trong
+  `~/.claude/sessions` và không để lại transcript trong `~/.claude/projects/…`, nên không đo được luật
+  nào và không nhắn tin được. Tôi theo dõi nó qua dấu vết của tập (tem, phán quyết, tệp phim) — nhưng
+  không đo được hành vi của nó.
+
+## N116 — medium — Cơ chế chặn chỉ ràng buộc phiên mở **sau** khi nó được cài, và một phiên đang chạy thì không đo được
+
+**Bằng chứng.** Hai hook `PreToolUse` được cài vào `.claude/settings.json` của thư viện lúc **14:47–15:07**
+hôm nay (`96616db`, `5d00635`, `9dec09d`, `e4d6d60`). Đo transcript của các phiên:
+
+| Phiên | Mở lúc | Số lần vi phạm đo được | Lỗi hook trong transcript |
+|---|---|---|---|
+| tập 02 | ~08:00, **trước** hook | R5b 114 · R11 102 · R12 157 · R1 42 | **0** |
+| tập 03 | ~10:00, **trước** hook | R5b 81 · R11 69 · R12 149 · R9 23 | **0** |
+| tập 05 | 14:56, **sau** hook | — | **1** (lần đọc thứ 3 của `/tmp/tap05-outline-round1.log` bị chặn) |
+
+Hai phiên đầu vi phạm hàng trăm lần mà hook **không một lần** kêu — không phải vì luật sai, mà vì Claude
+Code nạp hook lúc **phiên bắt đầu**. Cơ chế có một mốc thời gian, và mốc đó là lúc phiên mở.
+
+**Vì sao quan trọng.** N99/N103 đã chỉ ra rằng luật viết bằng văn xuôi không cứu được một phiên đang
+làm: cả ba tập đều có luật "chạy job nền không có `>`, đọc output một lần" trong prompt khởi đầu, và cả
+ba đều đọc lại log hàng chục lần. Hook thì cứu được — nhưng **chỉ phiên sau đó**. Nên "cài hook" và
+"giám sát được phiên đang chạy" là hai việc khác nhau, và việc thứ hai chỉ làm được bằng cách **nhắn
+tay**.
+
+**Đã làm.** 16:10 tôi nhắn cho hai phiên đang chạy (tập 02, tập 03) kèm số đo của chính chúng và cách
+làm thay thế; cả hai nhận được tin trong hộp thư của phiên.
+
+**Còn mù.** Tập 04: phiên `pid 3107449` không có tên trong `~/.claude/sessions` và không để lại transcript
+trong bất kỳ thư mục project nào — đúng bệnh N97 (phiên mở từ trong phiên khác kế thừa
+`CLAUDE_CODE_SESSION_ID`, nên không có transcript của riêng nó). Hậu quả: **không đo được luật, không
+nhắn tin được**; tôi chỉ theo dõi được dấu vết của tập.
+
+## N117 — medium — Vòng dò output của job nền là bệnh khác R5b, và hook chưa bắt
+
+**Bằng chứng.** `tools/hook_bg_log.py` bắt tệp `.log` (`cat|tail|head|grep|rg|awk|sed`). Nhưng output của
+một job nền mà harness quản lý nằm ở `/tmp/claude-1000/…/tasks/<mã>.output` — **không** phải `.log`.
+Phiên tập 03 dò đúng những tệp đó: `bie3m0iil.output` 12 lần, `bw0bxn6vc.output` 6 lần,
+`bxeb9ymh4.output` 5 lần (**23 lần**), trong khi bộ đo `tools/rules.py` ghi R9 vì lệnh khác nhau mỗi
+lần.
+
+**Đã làm.** Hook giờ bắt cả hai dạng, và lời nhắc nói đúng việc cần làm cho dạng job (đợi harness báo xong
+rồi đọc một lần; cần biết job còn sống thì hỏi bằng `ps -o etime= -p <pid>`), chứ không lặp lại lời nhắc
+về tệp log. Selftest 16/16. Commit `1aaafc2`.
+
 
