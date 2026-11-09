@@ -1089,6 +1089,33 @@ lượng của nguồn sơ cấp vẫn là việc của người chấm. Và c�
 
 ---
 
+## N39 — medium — Bản so sánh hai vòng im lặng về phần điểm, vì lớp ký tự của nó không đọc được tiếng Việt
+
+**Bằng chứng.** `check_progress.py` — bài in ra *"vòng này có gần lên không, và lỗi nào của vòng trước vẫn
+còn"* — đọc dòng điểm bằng biểu thức thường `([A-ZĐỘ_]+)=(\d+)`. Ba khoá điểm của kênh là **tiếng Việt**
+(`NHỊP_ĐIỆU`, `CHUYỂN_ĐỘNG`, `ÁNH_SÁNG`); `Ị`, `Ệ`, `Ộ` có dấu không thuộc lớp `[A-ZĐỘ_]`, nên khoá bị
+cắt thành mảnh: `NHỊP_ĐIỆU` → `U`, `CHUYỂN_ĐỘNG` → `N_ĐỘNG`, `ÁNH_SÁNG` → `NG`. Không khoá nào khớp, và
+**phần so điểm giữa hai vòng không bao giờ được in ra** — bản so sánh chỉ còn câu FAIL và cờ máy.
+
+Hậu quả đúng như mong đợi từ một bài kiểm tra hỏng trong im lặng: bài in ra ít hơn nó biết, nên người
+đọc tưởng bản so sánh là trọn vẹn. Người chấm vòng 4 của tập 01 chỉ thấy *"câu FAIL chặn: 6 → 4"*, và
+không thấy rằng **CHUYỂN_ĐỘNG rớt 4 → 2** trong khi điểm tổng lên 3.4 → 5.9: một vòng điểm tổng cao
+hơn mà nhịp chuyển động kém hơn là chuyện đáng hỏi, và không ai hỏi.
+
+**Đã sửa.** Biểu thức đọc khoá là `(\w+)=(\d+)` (`\w` của Python 3 đã gồm chữ tiếng Việt), và bài có
+`--selftest` với sáu ca thật. Chạy lại trên tập 01, bài nay in ra đúng:
+
+```
+điểm tổng: 3.4/5 → 5.9/5 (+2.5)
+  NHỊP_ĐIỆU    3 → 3
+  CHUYỂN_ĐỘNG  4 → 2 (-2)
+  ÁNH_SÁNG     4 → 4
+```
+
+**Còn phải làm.** Các khoá tiếng Việt còn ở chỗ khác trong bộ công cụ cũng có thể bị cắt theo cách
+này — một lớp ký tự ASCII viết tay là mẫu của lỗi này. Việc chắc chắn là: **mọi bài kiểm tra phải có
+một ví dụ nó phải bắt** (N30), và bài nào không có thì bài đó chưa từng được chứng minh là bắt được gì.
+
 ---
 
 ## Các guard đã bắt được gì (tính từ 08:00, hai tập còn chạy)
@@ -1105,6 +1132,7 @@ phiên chấp nhận và dùng:
 | `set_round` (số vòng) | ba bản chấm cả phim đều ghi `ROUND: 1/5` — công cụ đã biết số vòng, báo cáo thì không | sửa xong, vòng kế tiếp ghi đúng |
 | `R11` + `R12` (đọc lại) | 186 lần đọc lại ba tệp mã; 1 032 lần mở ảnh, 311 lần mở lại một tệp đã xem | phiên tập 01 đã tự viết `src/MAP.md` (bản đồ mã: tên hàm → dòng) |
 | `markBeat` / mốc nhịp | kênh **không** ghi mốc nhịp, nên cổng không đo được "nhịp này có đổi phần khung của nó không" | phiên tập 01 đã viết vòng lặp ghi mốc cho cả 60 câu; `rig/render.js` nay có `markBeats` cho các tập sau |
+| `check_progress.py` (điểm so hai vòng) | phần so điểm **im lặng**: khoá tiếng Việt bị lớp ký tự cắt thành mảnh, nên không khoá nào khớp và "CHUYỂN_ĐỘNG 4 → 2" không bao giờ được in ra | sửa xong; vòng 4 của tập 01 nhận đủ danh sách năm chỗ còn mở (c6, c37, c55, c60, c22:RUN) |
 
 Bốn trong bảy dòng trên là lỗi **đã** bị bắt và **đã** được sửa trong lúc hai phiên còn chạy. Đó là câu trả lời
 cho câu hỏi lớn nhất của đợt đúc kết này: các guard có tác dụng thật, khi chúng nằm **trước** bước tốn
@@ -1156,6 +1184,8 @@ tiền (trước vòng chấm, trước lúc dựng, trước lúc bàn giao), c
 | 38 | Lời nhắc trong ngoặc ngược không phải chỗ cần điền (N36) | `channels/tram-nghi-nhieu/tools/check_treatment.py`, `core/render/filmcheck.mjs` | **xong** |
 | 39 | Xem tờ sheet, không mở lại một khung hình: 436 MB ảnh, 311 lần mở lại (N37) | `CODING_STANDARDS.md` R12, `tools/supervise.sh` | **xong** |
 | 40 | Một mốc không được đứng trên Wikipedia một mình — bách khoa là dẫn chiếu (N38) | `channels/tram-nghi-nhieu/tools/check_research.py`, `step1-outline/PROMPT_CRITIC.md` | **xong** |
+| 41 | Bản so sánh hai vòng phải nói được phần điểm; lớp ký tự ASCII viết tay cắt mất tiếng Việt (N39) | `channels/tram-nghi-nhieu/tools/check_progress.py` | **xong** |
+| 42 | Mọi bài kiểm tra phải có ví dụ nó phải bắt — và phải có ai chạy ví dụ đó | `tools/run_selftests.sh`, `.github/workflows/films.yml`, `tools/check_*.py` | **đang làm** |
 
 ### Mỗi phát hiện đã có dòng riêng trong `improvements/lessons.md`
 
