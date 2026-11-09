@@ -312,7 +312,9 @@ def main(argv=None):
         return 0
     print(f'check_storyboard: {len(bad)} dòng dàn ý lệch lời kể')
     for kind, no, cid, q, why in bad:
-        what = 'dán nhầm câu' if kind == 'drift' else 'nói cái bị cấm'
+        what = {'drift': 'dán nhầm câu',
+                'stale': 'trích câu phim không còn nói',
+                'forbidden': 'nói cái bị cấm'}[kind]
         print(f'  LOOK.md:{no} ({cid}) {what}: "{q}" — {why}')
     print('  → sửa LOOK.md cho khớp voice/lines.json (lời kể là chuẩn), rồi chạy lại')
     return 1
