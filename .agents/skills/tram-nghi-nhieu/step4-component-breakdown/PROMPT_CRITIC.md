@@ -25,7 +25,7 @@ Nhiệm vụ của bạn là soi chéo cực kỳ khắt khe giữa:
 
 ```markdown
 VERDICT: PASS | REJECT
-ROUND: [1-5]/5
+ROUND: (số vòng do review.sh ghi — người chấm không tự điền)
 MISSING_ASSETS_COUNT: [Số lượng linh kiện bị bỏ sót]
 
 ## DANH SÁCH LINH KIỆN BỊ THIẾU HOẶC MÔ TẢ SƠ SÀI

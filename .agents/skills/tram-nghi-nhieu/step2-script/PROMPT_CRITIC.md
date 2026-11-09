@@ -17,7 +17,7 @@ Nhiệm vụ của bạn là bảo đảm văn phong khoa học, gãy gọn, đ�
 
 ```markdown
 VERDICT: PASS | REJECT
-ROUND: [1-5]/5
+ROUND: (số vòng do review.sh ghi — người chấm không tự điền)
 FLAGS_DETECTED: [DIGIT, LONG, NOFACTS, hoặc NONE]
 
 ## ĐÁNH GIÁ TỪNG CÂU

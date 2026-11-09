@@ -21,7 +21,7 @@ Nhiệm vụ của bạn là thẩm định bố cục các khung hình chính (
 
 ```markdown
 VERDICT: PASS | REJECT
-ROUND: [1-5]/5
+ROUND: (số vòng do review.sh ghi — người chấm không tự điền)
 SCORES: BỐ_CỤC=[1-5] ÁNH_SÁNG=[1-5] GÓC_MÁY=[1-5]
 
 ## NHẬN XÉT CHI TIẾT THEO CẢNH

@@ -29,7 +29,7 @@ Nhiệm vụ của bạn là thẩm định code 3D và các ảnh chụp propch
 
 ```markdown
 VERDICT: PASS | REJECT
-ROUND: [1-5]/5
+ROUND: (số vòng do review.sh ghi — người chấm không tự điền)
 
 ## ĐÁNH GIÁ TỪNG LINH KIỆN
 - [Tên linh kiện]:

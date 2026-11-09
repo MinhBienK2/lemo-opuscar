@@ -42,7 +42,7 @@ Chấm theo 5 nhóm A, B, C, D, E từ 1 đến 5 điểm:
 ```markdown
 SCORES: A=[1-5] B=[1-5] C=[1-5] D=[1-5] E=[1-5]
 VERDICT: PASS | REJECT
-ROUND: [1-5]/5
+ROUND: (số vòng do review.sh ghi — người chấm không tự điền)
 
 ## NHẬN XÉT CHI TIẾT
 - Lỗi CHẶN (Bắt buộc sửa):

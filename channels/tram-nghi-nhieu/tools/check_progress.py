@@ -61,7 +61,10 @@ def parse(path):
     scores = {}
     s = re.search(r'^SCORES:\s*(.+)$', text, re.M)
     if s:
-        for k, n in re.findall(r'([A-ZĐỘ_]+)=(\d+)', s.group(1)):
+        # \w, not [A-Z]: the keys are Vietnamese ("NHỊP_ĐIỆU"), and a class of ASCII capitals splits
+        # them into fragments ("U", "N_ĐỘNG", "NG") — so no score ever matched, and the comparison
+        # between two rounds silently said nothing about the scores.
+        for k, n in re.findall(r'([\w]+)=(\d+)', s.group(1)):
             scores[k] = int(n)
 
     overall = None
@@ -158,7 +161,56 @@ def show(a, b):
         print('lỗi còn mở nằm ở trên: sửa đúng những câu đó, đừng làm lại những câu đã qua.')
 
 
+def selftest():
+    """The shapes a reviewer really writes must all be read — each one a line from a real report.
+
+    The parsers here are the ones that say "what did the last round fix", so a parser that stops
+    reading a shape the reviewers use makes the next round start from zero again.
+    """
+    import tempfile
+    cases = [
+        ('a failure written as a beat bullet is a failure',
+         'VERDICT: REJECT\n\n- [c41]: **FAIL** vật chính chìm trong một mảng trống.\n',
+         lambda r: r['fails'] == {'c41'} and r['verdict'] == 'REJECT'),
+        ('a failure named in the running text is a failure',
+         'VERDICT: REJECT\n\n#37 là câu FAIL rõ ràng nhất của vòng này.\n',
+         lambda r: 'c37' in r['fails']),
+        ('a machine flag is read',
+         'VERDICT: REJECT\n\n## Cờ máy chưa sửa (tự động FAIL)\n#41:SAME\n',
+         lambda r: r['flags'].get('c41') == {'SAME'}),
+        ('a flag the reviewer called wrong is not open',
+         'VERDICT: REJECT\n\n- SAME: c5 không giống c6\n  CỜ SAI SAME: hai nhát khác góc máy\n',
+         lambda r: 'c5' not in r.get('flags', {})),
+        ('the scores and the overall are read',
+         'VERDICT: REJECT\nSCORES: NHỊP_ĐIỆU=4 CHUYỂN_ĐỘNG=3 ÁNH_SÁNG=4\nOVERALL: 5.9/5\n',
+         lambda r: r['scores'].get('CHUYỂN_ĐỘNG') == 3 and r['overall'] == 5.9),
+        ('a report with no failures has none',
+         'VERDICT: PASS\n\n## Nhận xét\n- Mọi thứ ổn.\n',
+         lambda r: not r['fails'] and not r['flags']),
+    ]
+    bad = 0
+    with tempfile.TemporaryDirectory() as d:
+        for i, (name, text, ok) in enumerate(cases):
+            p = os.path.join(d, 'r%d.md' % i)
+            open(p, 'w', encoding='utf-8').write(text)
+            try:
+                r = parse(p)
+                good = bool(ok(r))
+            except Exception as e:                       # a parser that raises must not pass
+                good = False
+                r = {'error': str(e)}
+            if not good:
+                bad += 1
+            print(('ok   ' if good else 'FAIL ') + name)
+            if not good:
+                print('      got: %r' % (r,))
+    print('ok' if not bad else 'FAIL: %d case(s)' % bad)
+    return 0 if not bad else 1
+
+
 def main():
+    if '--selftest' in sys.argv:
+        return selftest()
     args = [a for a in sys.argv[1:] if not a.startswith('--')]
     if not args:
         print(__doc__)
