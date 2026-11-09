@@ -24,6 +24,10 @@ lần đọc rẻ đến mức lời nhắc "dùng grep" là vô nghĩa.
 Lời nhắc trong lời cảnh báo nói cách làm đúng: `grep -n "<tên hàm>" <tệp>` rồi đọc đúng đoạn
 (`offset`/`limit`), và giữ `src/MAP.md` bên cạnh mã.
 
+**Ảnh là một trường hợp riêng.** Một lần mở ảnh tốn ~1 MB ngữ cảnh, và người chấm hình mở lại
+đúng một tờ sheet 13–17 lần trong một vòng (tập 01) — nên chặn cả ảnh là đúng (luật R12). Nhưng
+lời nhắc "dùng `grep`" với một tấm ảnh là vô nghĩa, nên ảnh có lời nhắc riêng.
+
     python3 tools/hook_stale_read.py --selftest     # chứng minh bằng ví dụ
 """
 import json
@@ -43,12 +47,24 @@ MESSAGE = (
     'Cách làm đúng: `grep -n "<tên hàm>" %s` rồi đọc đúng đoạn cần (Read với `offset`/`limit`); '
     'và giữ `src/MAP.md` (tên hàm → dòng) bên cạnh mã — `python3 tools/check_map.py <tập>` kiểm tra nó.\n')
 
+IMAGE_MESSAGE = (
+    'Bạn đã mở ảnh %s %d lần mà ảnh không đổi. Mỗi lần mở ảnh là ~1 MB ngữ cảnh, và lần mở thứ hai '
+    'trở đi không thấy gì mới (luật R12: mỗi ảnh riêng chỉ mở một lần).\n'
+    'Cách làm đúng: nhìn **tờ sheet** trước để quyết định cả phim; chỉ mở ảnh riêng cho câu có cờ máy, '
+    'câu phủ dưới 15 %%, hoặc câu bạn nghi ngờ. Muốn xem lại cùng một ảnh thì dùng công cụ xem ảnh '
+    'của riêng bạn, đừng mở lại vào ngữ cảnh.\n')
+
 
 def mtime_of(path):
     try:
         return os.path.getmtime(path)
     except OSError:
         return None
+
+
+def is_image(path):
+    """Ảnh thì lời nhắc phải khác: `grep` không áp dụng cho một tấm ảnh."""
+    return os.path.splitext(path)[1].lower() in ('.jpg', '.jpeg', '.png', '.gif', '.webp', '.bmp')
 
 
 def decide(path, session, state, now=None, ranged=False):
@@ -82,6 +98,8 @@ def decide(path, session, state, now=None, ranged=False):
     seen[path] = (first, mt, count)
     if count < LIMIT:
         return 0, ''
+    if is_image(path):
+        return 2, IMAGE_MESSAGE % (path, count)
     return 2, MESSAGE % (path, count, time.strftime('%H:%M:%S', time.localtime(mt)), count, path)
 
 
@@ -174,6 +192,24 @@ def selftest():
             rc, _ = decide(big, 's4', state3, ranged=True)
             assert rc == 0, rc
         print('ok   đọc đoạn (offset/limit) → rc=0 (không bị đếm)')
+        # ảnh: vẫn chặn lần thứ ba, nhưng lời nhắc phải nói về ảnh chứ không nói "dùng grep"
+        img = None
+        try:
+            with tempfile.NamedTemporaryFile('wb', suffix='.jpg', delete=False) as f:
+                f.write(b'x' * (BIG + 500))
+                img = f.name
+            state4 = {}
+            for i in range(3):
+                rc, msg = decide(img, 's5', state4)
+                assert rc == (0 if i < 2 else 2), (i, rc)
+            assert 'ảnh' in msg and 'grep' not in msg, msg
+            print('ok   ảnh mở lại lần thứ 3 → rc=2, lời nhắc nói về ảnh (không nói "grep")')
+        finally:
+            if img:
+                try:
+                    os.unlink(img)
+                except OSError:
+                    pass
     finally:
         for p in (big, small):
             try:
