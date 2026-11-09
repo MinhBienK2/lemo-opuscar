@@ -1280,6 +1280,29 @@ gọi ở đâu; lời kể được so nguyên cả câu. Nó viết ra một �
 
 ---
 
+---
+
+## N46 — high — Người chấm trả lời bằng chữ đậm, và công cụ không đọc được phán quyết của nó
+
+**Bằng chứng.** Cùng vòng 4 của tập 01: người chấm in ra phán quyết trong câu trả lời của nó —
+**"VERDICT: REJECT"** (in đậm) — và `review.sh` tìm phán quyết bằng
+`grep -qE '^#*[[:space:]]*VERDICT: *PASS'`. Dấu `**` ở trước làm mẫu không khớp, nên **bản chấm không
+có dòng phán quyết nào đọc được**: cổng không đọc được phán quyết thì coi như chưa có phán quyết, và
+một vòng chấm người ta đã trả lời **REJECT** bị ghi lại như một bản chấm không có kết luận.
+
+Điều này nguy hiểm ở chiều ngược lại: nếu người chấm viết **"VERDICT: PASS"** in đậm, cổng cũng đọc
+không được, và **một vòng chấm đạt sẽ bị coi là chưa đạt** — mất trọn một vòng, và tệ hơn: người đọc
+không biết vì sao.
+
+**Đã sửa.** Cả `review.sh` và `gate.py` đọc phán quyết bằng một mẫu chịu được cả hai kiểu:
+`^#*[[:space:]]*[*_]{0,2}VERDICT: *[*_]{0,2} *PASS`.
+
+**Còn phải làm.** Còn những chỗ khác đọc bản chấm bằng tay: `check_progress.py` (điểm, câu FAIL) và
+`check_voice_facts.py`. Chúng cùng một loại: **một bản chấm là do người viết, nên công cụ phải đọc được
+cả những cách người ta viết** — không chỉ đúng một hình dạng.
+
+---
+
 ## Các guard đã bắt được gì (tính từ 08:00, hai tập còn chạy)
 
 Đây là bằng chứng rằng các guard không phải lý thuyết — mỗi cái đã bắt một lỗi thật, hoặc đã được một
