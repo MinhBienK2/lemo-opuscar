@@ -52,7 +52,7 @@ FILM=$HERE "$LIB/.venv/bin/python" "$CHANNEL/mix.py"
 # episode's first master came out 0.6 dB too hot for the channel's delivery check (peak ≤ −3 dBFS) and was
 # refused after the whole render. The shared mix.py now guarantees that ratio; this check stops the build
 # **before** a 30-minute render if the guarantee ever breaks.
-"$LIB/.venv/bin/python" "$HERE/check_headroom.py" "$OUT/mix.wav"
+"$LIB/.venv/bin/python" "$CHANNEL/tools/check_headroom.py" "$OUT/mix.wav"
 # 2 worker, không phải 4: mỗi worker vẽ ở 3840×2160 (siêu lấy mẫu 2×) và GPU này chỉ có 6 GB
 node core/render/video.mjs "$HERE" --workers 2 --out "$OUT/video.mp4"
 node --input-type=module -e "

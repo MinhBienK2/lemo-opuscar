@@ -133,7 +133,7 @@ hẹp (`beam`) dẫn vào đúng cơ chế đang được nói. Không khung nà
 - **Thấy:** dàn ý có 26 dòng ý và 34 nhát theo nhịp ý, nhưng lời kể dài **95 câu**. Một nhát
   gánh cả một đoạn lời sẽ khiến người xem phải nhìn một bố cục quá bốn giây, và câu nào cũng
   phải dùng lại hình của câu trước — đúng cái lỗi mà tập 01 bị chấm.
-- **Sửa:** tách thành **một câu một hình** (`src/SHOTS.md` là bảng nháp, `LOOK.md` là bản
+- **Sửa:** tách thành **một câu một hình** (bảng nhát trong `src/MAP.md` là bảng nháp, `LOOK.md` là bản
   chính). Mỗi nhát một bố cục riêng, rộng – trung – cận – siêu cận xen kẽ, và **mỗi câu có
   một vật thật đang làm việc trong khung**.
 
