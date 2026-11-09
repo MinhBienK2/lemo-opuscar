@@ -64,6 +64,16 @@ Quy trình này thay cho bước 1–6 của `AGENTS.md` / `DIRECTOR.md` khi là
    - Một tập, một vòng chấm cho mỗi phần. `review.sh` giữ chốt: nếu nó nói còn một vòng đang chạy trên tập
      này, hãy chờ — mở vòng thứ hai là hai bản chấm đè lên nhau, hai vòng bị tính, và ngân sách bị tiêu hai lần.
 
+8. **Hết lượt thì chốt bằng bản cắt của đạo diễn, đúng hình dạng.**
+   - Một bước có ngân sách vòng (xem `channels/tram-nghi-nhieu/tools/README.md`) sẽ nói bằng chữ khi hết
+     lượt. Khi đó **đừng mở vòng thứ sáu**: ba lối ra là `--lines a-b` cho đúng câu vừa sửa, chia chương rồi
+     chấm từng chương, hoặc **bản cắt của đạo diễn**.
+   - Bản cắt là một tệp trong `review/` (`PROPS-DIRECTORS-CUT.md`, `STORYBOARD-DIRECTORS-CUT.md`,
+     `ASSET-AUDIT-DIRECTORS-CUT.md`, `REVIEW-DIRECTORS-CUT.md`), nêu rõ cái gì đã cắt, và **kết thúc bằng
+     dòng `VERDICT: PASS`** — không có dòng đó thì cổng không đọc được và vòng chấm mất.
+   - Bản cắt phải **viết sau lần sửa code cuối cùng**: cổng so mốc và từ chối một bản cắt cũ, vì bản cắt
+     viết trước lần sửa đó không nói gì về code hiện tại.
+
 Mọi lệnh dưới đây chạy từ gốc thư viện. Trên máy này, mọi lệnh dựng hình (`still.mjs`, `beatsheet.mjs`, `review.sh`, `build.sh`) cần `LEMO_ANGLE=vulkan` ở đầu lệnh.
 
 **Công cụ của kênh: đọc `channels/tram-nghi-nhieu/tools/README.md` (ở gốc thư viện) trước khi đọc mã nguồn của chúng.** Nó có lệnh của từng công cụ, thứ tự các bước, ngân sách vòng chấm, hợp đồng của đạo diễn cắt, và bảng "khi công cụ từ chối thì làm gì". Một phiên đã đọc `review.sh` 85 lần và mất 350 nghìn token ngữ cảnh chỉ để biết những thứ đó.
@@ -99,7 +109,7 @@ Trước khi dựng, đọc `improvements/lessons.md` ở gốc thư viện — 
   chấm** — file còn dòng mẫu, chưa có mốc nào, hoặc chưa có nguồn nào thì dừng ngay. Mỗi mốc cần một **nguồn sơ cấp**
   (sách chuyên ngành, bài báo bình duyệt, đặc tả, datasheet, sổ tay cơ quan chuẩn); **Wikipedia là dẫn chiếu, không phải
   nguồn**: một mốc mà nguồn duy nhất là Wikipedia thì cổng dừng.
-- **Review độc lập:** Lấy prompt từ `step1-outline/PROMPT_CRITIC.md` gọi Subagent thẩm định.
+- **Review độc lập:** chạy `sh channels/tram-nghi-nhieu/tools/review.sh <tập> --outline`. Công cụ nạp mẫu `step1-outline/PROMPT_CRITIC.md`, đánh số vòng, ký tên người chấm và đóng tem `review/OUTLINE.pass`. **Không** gọi subagent trần: báo cáo của nó không ai đọc, không ai đếm vòng.
 - **Vòng lặp:** Đạo diễn sửa lỗi lặp ý / thiếu mắt xích hoặc phản biện. Đạt `PASS` mới sang Bước 2.
 
 ### Bước 2: Kịch bản lời thoại (Script & Lines)
@@ -113,12 +123,12 @@ Trước khi dựng, đọc `improvements/lessons.md` ở gốc thư viện — 
 - **Sửa lời kể xong thì sửa cả hai bản dàn ý.** `TREATMENT.md` *và* `LOOK.md` đều trích lời kể. Sửa lời
   kể mà không sửa chúng thì hai tài liệu đó mô tả một phim không còn tồn tại — và chúng trông vẫn
   đúng, nên không ai tự thấy.
-- **Review độc lập:** Dùng prompt `step2-script/PROMPT_CRITIC.md` để bắt lỗi cờ `DIGIT`, `LONG`, `NOFACTS`.
+- **Review độc lập:** chạy `sh channels/tram-nghi-nhieu/tools/review.sh <tập> --script` (nạp mẫu `step2-script/PROMPT_CRITIC.md`, bắt lỗi cờ `DIGIT`, `LONG`, `NOFACTS`, đóng tem `review/SCRIPT.pass`).
 - **Vòng lặp:** Đạo diễn hiệu chỉnh câu văn hoặc phản biện từ ngữ chuyên môn. Sau khi `PASS`, chạy `tts_vi.py` sinh `src/timeline.js`.
 
 ### Bước 3: Storyboard & Khung hình Hero (Visual Framing & Camera)
 - **Đạo diễn thực hiện:** Đọc `step3-storyboard/GUIDE.md`. Xác định góc máy, vùng nhìn frustum, ánh sáng qua tường có lỗ `wallWithHole`. Xuất still tham chiếu và ghi `LOOK.md`.
-- **Review độc lập:** Dùng prompt `step3-storyboard/PROMPT_CRITIC.md` thẩm định độ tương phản, góc đặt ống kính.
+- **Review độc lập:** chạy `sh channels/tram-nghi-nhieu/tools/review.sh <tập> --storyboard` (nạp mẫu `step3-storyboard/PROMPT_CRITIC.md`, thẩm định độ tương phản và góc đặt ống kính, đóng tem `review/STORYBOARD.pass`).
 - **Nhãn nằm đúng câu:** mỗi nhãn trong `src/film.js` gắn với câu lời kể gọi tên nó. `review.sh --storyboard` kiểm
   bằng máy (`tools/check_labels.py`) và dừng trước khi tốn một vòng chấm nếu có nhãn lệch câu.
 - **Dàn ý hình phải khớp lời kể:** `LOOK.md` trích nguyên văn từng câu lời kể trong dấu nháy. Khi lời kể
@@ -139,12 +149,12 @@ Trước khi dựng, đọc `improvements/lessons.md` ở gốc thư viện — 
 
 ### Bước 5: Code Linh kiện 3D Độc lập (Modular 3D Coding)
 - **Đạo diễn/Coder thực hiện:** Đọc `step5-props-code/GUIDE.md`. Lập trình từng linh kiện độc lập vào `src/props.js` (hoặc module tương ứng). Chạy `propcheck.mjs`.
-- **Review độc lập:** Dùng prompt `step5-props-code/PROMPT_CRITIC.md` thực hiện bài kiểm tra nhận diện gián tiếp (Blind test) qua ảnh xoay 3 phía.
+- **Review độc lập:** chạy `sh channels/tram-nghi-nhieu/tools/review.sh <tập> --props` — công cụ dựng ảnh ba góc nhìn của từng vật, gọi một người gọi tên mù (blind test) trước khi chấm theo nhóm A/B, rồi đóng tem `review/PROPS.pass`.
 - **Vòng lặp:** Đạo diễn tinh chỉnh hình khối, vật liệu toon, viền mực cho tới khi `PASS`.
 
 ### Bước 6: Lắp ghép Cảnh, Diễn hoạt & Nhịp điệu (Assembly, Animation & Beatsheet)
 - **Đạo diễn thực hiện:** Đọc `step6-assembly/GUIDE.md`. Ghép linh kiện vào `src/film.js`, viết keyframes diễn hoạt theo từ `V.w()`. Chạy kiểm tra `beatsheet.mjs`.
-- **Review độc lập:** Dùng prompt `step6-assembly/PROMPT_CRITIC.md` thẩm định nhịp điệu, triệt tiêu các cờ `DARK`, `SAME`, `NUM`, `RUN`.
+- **Review độc lập:** chạy `sh channels/tram-nghi-nhieu/tools/review.sh <tập> --chapter <id>` (phim dài), `… --lines a-b` (một cảnh vừa sửa), hoặc `… <tập>` cho cả phim. Công cụ nạp mẫu `step6-assembly/PROMPT_CRITIC.md` và triệt tiêu các cờ `DARK`, `SAME`, `NUM`, `RUN`.
 - **Nhãn nằm đúng câu:** cổng chấm hình cũng chạy `tools/check_labels.py` — một nhãn lệch câu phải sửa trước khi dựng.
 - **Mốc nhịp cho từng câu:** mỗi câu lời kể gắn một mốc vào `window.EV` (`markBeats(ev, V, (id, t) => [x, y])`), điểm
   trên khung 1920×1080. Nhờ đó cổng đo được câu hỏi mà đếm pixel không trả lời được: **nhịp này có làm thay đổi phần
@@ -161,7 +171,7 @@ Trước khi dựng, đọc `improvements/lessons.md` ở gốc thư viện — 
 
 ### Bước 7: Âm thanh, Mux & Nghiệm thu Tổng thể (Audio, Mux & Delivery)
 - **Đạo diễn thực hiện:** Đọc `step7-delivery/GUIDE.md`. Đăng ký `window.EV` (foley, ambience), chạy `mix.py`, render headless và mux `build.sh`.
-- **Review độc lập:** Dùng prompt `step7-delivery/PROMPT_CRITIC.md` nghiệm thu toàn diện chất lượng video mp4 cuối cùng.
+- **Review độc lập:** chạy `sh channels/tram-nghi-nhieu/tools/review.sh <tập> --final` — công cụ nạp mẫu `step7-delivery/PROMPT_CRITIC.md`, đưa cho người chấm những điều máy đo được về phim (độ dài, âm lượng, chỗ im lặng, sự kiện) bên cạnh các tờ trích từ phim đã dựng, rồi đóng tem `review/FINAL.pass`.
 
 ## Hướng dẫn Vận hành & Cổng Thẩm định (Verification & Gatekeeper)
 

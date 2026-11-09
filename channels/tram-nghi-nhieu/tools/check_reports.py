@@ -27,6 +27,9 @@ Ba việc, mỗi việc một luật:
      đóng tem, không ai đếm — không ai có thể bỏ qua nó, và không ai biết nó đã qua
      (N4 của đợt đúc kết này). Bước này là *cảnh báo*, không phải lỗi: nó là khoảng
      trống đã biết, và nó sẽ tự biến mất khi kênh thêm chế độ cho bước đó.
+     Bước 4 (`--assets`) và bước 7 (`--final`) **đã có** chế độ, nên danh sách khoảng trống
+     phải trống: một cảnh báo về một bước đã có công cụ là cảnh báo sai, và người đọc nó
+     sẽ quen bỏ qua cả những cảnh báo đúng.
 
 Dùng:  python3 channels/tram-nghi-nhieu/tools/check_reports.py [<tập> ...]
         (không có đối số: kiểm cả kênh — mẫu và mọi bản chấm đã sinh)
@@ -61,10 +64,11 @@ VERDICT_WORD = re.compile(r'^#*\s*[*_]{0,2}VERDICT: *[*_]{0,2} *(\w+)(?![A-Za-z_
 DECLARED = re.compile(r'Định dạng Output Bắt buộc\s*\(`([^`]+)`\)')
 
 # Bản cắt của đạo diễn: một đường thay thế để đóng dấu, và review.sh đọc nó.
-CUT_RE = re.compile(r'^(OUTLINE|SCRIPT|PROPS|STORYBOARD|REVIEW)(?:-ch\d+)?-DIRECTORS-CUT$')
+CUT_RE = re.compile(r'^(OUTLINE|SCRIPT|PROPS|STORYBOARD|REVIEW|ASSET-AUDIT)(?:-ch\d+)?-DIRECTORS-CUT$')
 # Bản chấm thường, sau khi bỏ số vòng và phạm vi.
 REVIEW_RE = re.compile(r'^(OUTLINE-REVIEW|SCRIPT-REVIEW|PROPS-CODE-REVIEW|PROPS-REVIEW'
-                        r'|STORYBOARD-REVIEW|REVIEW)$')
+                        r'|STORYBOARD-REVIEW|REVIEW|ASSET-AUDIT-REPORT|ASSET-AUDIT-REVIEW'
+                        r'|FINAL-QA-REPORT|FINAL-QA-REVIEW)$')
 
 # Bảy bước của kênh, và bước nào có công cụ đóng tem. `None` = bước chưa có công cụ.
 # Danh sách này đi cùng các chế độ của review.sh: --outline --script --props
@@ -73,10 +77,10 @@ STEP_KIND = {
     'step1-outline': 'outline',
     'step2-script': 'script',
     'step3-storyboard': 'storyboard',
-    'step4-component-breakdown': None,
+    'step4-component-breakdown': 'assets',
     'step5-props-code': 'props',
     'step6-assembly': 'picture',
-    'step7-delivery': None,
+    'step7-delivery': 'final',
 }
 # Tên tệp mà mỗi bước có công cụ phải khai báo, vì đó là tên review.sh đọc.
 EXPECTED = {
@@ -85,6 +89,8 @@ EXPECTED = {
     'storyboard': 'STORYBOARD-REVIEW.md',
     'props': 'PROPS-REVIEW.md',
     'picture': 'REVIEW.md',
+    'assets': 'ASSET-AUDIT-REPORT.md',
+    'final': 'FINAL-QA-REPORT.md',
 }
 
 
@@ -201,8 +207,9 @@ def selftest():
                      ('OUTLINE-REVIEW.md', True), ('OUTLINE-REVIEW-2.md', True),
                      ('PROPS-DIRECTORS-CUT.md', True), ('STORYBOARD-DIRECTORS-CUT.md', True),
                      ('REVIEW-DIRECTORS-CUT.md', True), ('REVIEW-ch1-DIRECTORS-CUT.md', True),
-                     ('ASSET-AUDIT-REPORT.md', False), ('ASSET-AUDIT-DIRECTORS-CUT.md', False),
-                     ('FINAL-QA-REPORT.md', False), ('BLIND.md', False)):
+                     ('ASSET-AUDIT-REPORT.md', True), ('ASSET-AUDIT-REVIEW-3.md', True),
+                     ('ASSET-AUDIT-DIRECTORS-CUT.md', True), ('FINAL-QA-REPORT.md', True),
+                     ('FINAL-QA-REVIEW-2.md', True), ('BLIND.md', False)):
         got = is_gated_report(name)
         cases.append((f'"{name}" là bản chấm công cụ đọc: {ok}', got == ok, got, ''))
 

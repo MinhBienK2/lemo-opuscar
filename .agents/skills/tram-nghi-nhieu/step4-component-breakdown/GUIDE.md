@@ -21,7 +21,12 @@ Dựa trên Storyboard (Bước 3) và Kịch bản (Bước 2), bóc tách toà
    - Trạng thái động (Tĩnh hay có Animation khớp nối)
    - Tên hàm code dự kiến (vd: `createThermosFlask()`)
 3. **Vòng lặp Audit Linh kiện (Max 5 rounds):**
-   - Nạp `step4-component-breakdown/PROMPT_CRITIC.md` triệu hồi Subagent Asset Auditor.
+   - Mở vòng chấm bằng **công cụ của kênh**: `sh channels/tram-nghi-nhieu/tools/review.sh <tập> --assets`.
+     Công cụ nạp mẫu `step4-component-breakdown/PROMPT_CRITIC.md`, đánh số vòng, ký tên người chấm và đóng
+     tem `review/ASSET.pass`. **Không** tự gọi subagent: báo cáo của nó rơi vào một tệp không ai đọc,
+     không ai đếm vòng, không ai ký.
    - Subagent đối chiếu chéo kịch bản và danh mục component: Bắt lỗi thiếu sót đồ vật, cơ chế chưa có linh kiện biểu diễn.
    - **Đạo diễn tiếp nhận:** Bổ sung ngay các linh kiện còn thiếu.
-   - Lặp lại tối đa 5 hiệp cho tới khi `VERDICT: PASS`.
+   - Lặp lại tối đa 5 hiệp cho tới khi `VERDICT: PASS`. Hết lượt thì chốt bằng bản cắt của đạo diễn:
+     `review/ASSET-AUDIT-DIRECTORS-CUT.md`, kết thúc bằng `VERDICT: PASS` (không có dòng đó thì cổng
+     không đọc được, và vòng chấm mất), nêu rõ mục nào đã cắt, và **viết sau lần sửa code cuối**.

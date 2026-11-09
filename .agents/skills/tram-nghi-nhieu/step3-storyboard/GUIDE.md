@@ -19,7 +19,12 @@ Xác định bố cục hình ảnh, góc đặt máy quay (camera framing), c�
    `LEMO_ANGLE=vulkan node core/render/still.mjs <tập> <t…> --out <scratch>`
 4. Ghi nhật ký phân tích vào `LOOK.md`.
 5. **Vòng lặp Thẩm định Storyboard (Max 5 rounds):**
-   - Nạp `step3-storyboard/PROMPT_CRITIC.md` triệu hồi Subagent Visual Critic.
+   - Mở vòng chấm bằng **công cụ của kênh**: `sh channels/tram-nghi-nhieu/tools/review.sh <tập> --storyboard`.
+     Công cụ nạp mẫu `step3-storyboard/PROMPT_CRITIC.md`, đánh số vòng, ký tên người chấm và đóng tem
+     `review/STORYBOARD.pass`. **Không** tự gọi subagent: báo cáo của nó rơi vào một tệp không ai đọc,
+     không ai đếm vòng, không ai ký.
    - Subagent soi: Bố cục có rối không, vật chính có nằm ở điểm vàng không, góc máy có che lấp cơ chế không.
    - **Đạo diễn tiếp nhận:** Điều chỉnh góc máy, độ nghiêng (pitch/yaw), tiêu cự camera.
-   - Lặp lại tối đa 5 hiệp cho tới khi `VERDICT: PASS`.
+   - Lặp lại tối đa 5 hiệp cho tới khi `VERDICT: PASS`. Hết lượt thì chốt bằng bản cắt của đạo diễn:
+     `review/STORYBOARD-DIRECTORS-CUT.md`, kết thúc bằng `VERDICT: PASS`, nêu rõ nhát nào đã cắt, và
+     **viết sau lần sửa code cuối** — bản cắt cũ không nói gì về code hiện tại.

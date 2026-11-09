@@ -9,7 +9,10 @@ Tạo ra `voice/lines.json` từ bảng ý → hình của Bước 1 đã đạt
    - Số đếm, năm, chỉ số nhiệt độ phải viết bằng CHỮ (ví dụ: "hai mươi mốt độ C", không viết "21°C").
    - Nhịp điệu: Câu ngắn gọn, tự nhiên, văn phong nói của người lớn điềm đạm, không giật gân, không câu view kiểu youtube nhảm nhí.
 2. **Vòng lặp Thẩm định Lời thoại (Max 5 rounds):**
-   - Nạp nội dung file `step2-script/PROMPT_CRITIC.md` triệu hồi Subagent Script Critic.
+   - Mở vòng chấm bằng **công cụ của kênh**: `sh channels/tram-nghi-nhieu/tools/review.sh <tập> --script`.
+     Công cụ nạp mẫu `step2-script/PROMPT_CRITIC.md`, đánh số vòng, ký tên người chấm và đóng tem
+     `review/SCRIPT.pass`. **Không** tự gọi subagent: báo cáo của nó rơi vào một tệp không ai đọc,
+     không ai đếm vòng, không ai ký.
    - Nhận báo cáo thẩm định:
      - Bắt lỗi lặp từ ngữ, câu quá dài, từ ngữ sáo rỗng.
      - Kiểm tra cờ máy: `DIGIT` (còn số), `LONG` (câu đọc quá dài), `NOFACTS` (ý không có trong nghiên cứu).

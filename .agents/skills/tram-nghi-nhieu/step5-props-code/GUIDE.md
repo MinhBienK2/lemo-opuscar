@@ -32,7 +32,12 @@ Dựa trên `COMPONENTS_SPEC.md` đã được duyệt ở Bước 4, lập trì
    `LEMO_ANGLE=vulkan node channels/tram-nghi-nhieu/tools/propcheck.mjs <tập>`
    (Công cụ này xuất ra ảnh xoay 3 phía của từng vật thể đứng riêng lẻ).
 4. **Vòng lặp Thẩm định Linh kiện 3D (Max 5 rounds):**
-   - Nạp `step5-props-code/PROMPT_CRITIC.md` triệu hồi Subagent 3D Code Critic.
+   - Mở vòng chấm bằng **công cụ của kênh**: `sh channels/tram-nghi-nhieu/tools/review.sh <tập> --props`.
+     Công cụ nạp mẫu `step5-props-code/PROMPT_CRITIC.md`, dựng ảnh ba góc nhìn của từng vật, gọi người
+     gọi tên mù, đánh số vòng, ký tên người chấm và đóng tem `review/PROPS.pass`. **Không** tự gọi
+     subagent: báo cáo của nó rơi vào một tệp không ai đọc, không ai đếm vòng, không ai ký.
    - Thử nghiệm nhận diện gián tiếp (Blind recognition test): Subagent nhìn ảnh render của vật thể (không nhìn tên file) xem có nhận diện đúng đồ vật không. Nếu nhận diện sai $\rightarrow$ Dựng chưa tới, phải sửa hình khối.
    - **Đạo diễn tiếp nhận:** Tinh chỉnh tỷ lệ, thêm rãnh, viền, độ bo góc (`cushionGeo`), chỉnh màu vật liệu.
-   - Lặp lại tối đa 5 hiệp cho tới khi `VERDICT: PASS`.
+   - Lặp lại tối đa 5 hiệp cho tới khi `VERDICT: PASS`. Hết lượt thì chốt bằng bản cắt của đạo diễn:
+     `review/PROPS-DIRECTORS-CUT.md`, kết thúc bằng `VERDICT: PASS`, nêu rõ vật nào đã cắt, và **viết
+     sau lần sửa `src/props.js` cuối cùng** — bản cắt cũ không nói gì về code hiện tại.

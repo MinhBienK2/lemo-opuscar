@@ -1987,6 +1987,37 @@ chính là hai lời dặn nằm sau dấu `"` bị cắt.
 
 ---
 
+## N71 — high — Hướng dẫn của bước nói "gọi subagent", và người làm phim làm đúng như vậy
+
+**Bằng chứng.** `review.sh` có công cụ cho **cả bảy bước** của kênh. Nhưng năm hướng dẫn bước (1, 2, 3, 4,
+5) vẫn bảo người làm phim *"Nạp `PROMPT_CRITIC.md` để triệu hồi Subagent"* — tức là gọi người chấm bằng tay,
+đúng như trước khi công cụ có. Hướng dẫn bước 6 và 7 thì đã nói công cụ.
+
+Phiên tập 01 làm đúng theo hướng dẫn: nó chạy subagent trần cho những bước mà hướng dẫn còn bảo vậy. Hậu quả
+đo được: `review/ASSET-AUDIT-DIRECTORS-CUT.md` của tập 01 **không có dòng `VERDICT: PASS` ở cuối** — nên cổng
+không đọc được nó, và bước 4 không thể đóng tem bằng bản cắt đó. Người làm phim không có cách nào biết:
+SKILL.md có nói dòng `VERDICT: PASS`, còn hướng dẫn của bước thì không, và hướng dẫn là thứ được đọc khi
+làm bước đó.
+
+**Một cảnh báo sai làm hỏng cả những cảnh báo đúng.** `check_reports.py` bảo *"bước 4 và bước 7 chưa có
+công cụ"* — trong khi `review.sh --assets` và `review.sh --final` đã có từ lâu. Bảng đó là một cái danh sách
+viết tay không được cập nhật. Và vì nó sai, nó cũng làm **hỏng phần hữu ích**: danh sách "bản chấm nào
+công cụ đọc" không có `ASSET-AUDIT-REPORT.md` và `FINAL-QA-REPORT.md`, nên phán quyết của hai bản chấm đó
+chưa bao giờ được kiểm.
+
+**Đã sửa.**
+
+- Cả năm hướng dẫn bước (và dòng "Review độc lập" của từng bước trong `SKILL.md`) nay **gọi đúng lệnh**:
+  `sh channels/tram-nghi-nhieu/tools/review.sh <tập> --<phần>`, kèm câu *"không tự gọi subagent trần: báo cáo
+  của nó không ai đọc, không ai đếm vòng, không ai ký"*, và kèm **hợp đồng của bản cắt** cho những bước có nó
+  (tên tệp, dòng `VERDICT: PASS`, viết sau lần sửa code cuối).
+- `check_reports.py`: bước 4 và bước 7 không còn là "chưa có công cụ"; `ASSET-AUDIT-REPORT.md`,
+  `ASSET-AUDIT-REVIEW-*`, `FINAL-QA-REPORT.md`, `FINAL-QA-REVIEW-*` và `ASSET-AUDIT-DIRECTORS-CUT.md` nay
+  vào danh sách bản chấm mà phải có phán quyết đọc được. Cảnh báo sai biến mất, và ngay sau đó bài kiểm tra
+  bắt đúng lỗi thật: bản cắt của tập 01 không có dòng phán quyết.
+
+---
+
 ## Các guard đã bắt được gì (tính từ 08:00, hai tập còn chạy)
 
 Đây là bằng chứng rằng các guard không phải lý thuyết — mỗi cái đã bắt một lỗi thật, hoặc đã được một
@@ -2089,6 +2120,7 @@ tiền (trước vòng chấm, trước lúc dựng, trước lúc bàn giao), c
 | 68 | Công cụ của kênh phải có sổ tay (N68) | `channels/tram-nghi-nhieu/tools/README.md`, `channels/tram-nghi-nhieu/CHANNEL.md`, `.agents/skills/tram-nghi-nhieu/SKILL.md`, `.agents/skills/tram-nghi-nhieu/step6-assembly/GUIDE.md` | **xong** — sổ tay: lệnh của từng công cụ, thứ tự bước, ngân sách vòng, hợp đồng đạo diễn cắt, bảng "khi công cụ từ chối". Đo trước: **449** lệnh đọc mã công cụ, **350 nghìn token** (15 % output của phiên) |
 | 69 | Một kiểm tra hỏi sai câu giết đúng vòng chấm đã làm xong (N69) | `channels/tram-nghi-nhieu/tools/review.sh`, `channels/tram-nghi-nhieu/tools/test_review_critic.py` | **xong** — `critic()` biết pha nào hỏi phán quyết và pha nào hỏi danh sách; ca selftest chạy chính hàm đó với một người chấm giả (6 ca). Đo trên tap-02: hai vòng chấm vật dựng chết oan, mỗi vòng 9 phút; ngân sách vòng không mất |
 | 70 | Người chấm đã chấm phim bằng một prompt bị cắt cụt (N70) | `channels/tram-nghi-nhieu/tools/review.sh`, `channels/tram-nghi-nhieu/tools/check_prompts.py`, `channels/tram-nghi-nhieu/tools/test_review_props.py` | **xong** — 3 prompt bị cắt (83 % lời dặn của vòng chấm vật dựng mất); guard tĩnh đọc tệp shell, bài kiểm tra chạy trọn vòng chấm với người chấm giả (19 điều, 2 giây, không GPU) |
+| 71 | Hướng dẫn của bước vẫn bảo gọi subagent, và người làm phim làm đúng như vậy (N71) | `.agents/skills/tram-nghi-nhieu/step{1,2,3,4,5}-*/GUIDE.md`, `.agents/skills/tram-nghi-nhieu/SKILL.md`, `channels/tram-nghi-nhieu/tools/check_reports.py` | **xong** — mọi hướng dẫn gọi đúng lệnh `review.sh`, kèm hợp đồng của bản cắt; cảnh báo sai về hai bước đã có công cụ bị xoá, và bài kiểm tra bắt đúng lỗi thật (bản cắt tập 01 không có dòng phán quyết) |
 
 ### Mỗi phát hiện đã có dòng riêng trong `improvements/lessons.md`
 
