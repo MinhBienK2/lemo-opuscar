@@ -1,7 +1,7 @@
 ---
 name: tram-nghi-nhieu
 description: Đạo diễn và dựng một tập của kênh Trạm Nghĩ Nhiều — câu hỏi "tại sao" đời thường, trả lời bằng diorama 3D toon (three.js) có ánh sáng thật, viền mực vẽ tay, máy quay đi vào bên trong vật, mọi vật dựng đúng là nó, chỉ thứ vô hình mới thành hình minh hoạ; một giọng kể tiếng Việt. Dùng khi làm bất kỳ tập nào của kênh.
-version: 14.2.0
+version: 14.3.0
 ---
 
 # Một tập Trạm Nghĩ Nhiều: Quy trình Đạo diễn & Phản biện Độc lập Phân tầng
@@ -160,6 +160,15 @@ Trước khi dựng, đọc `improvements/lessons.md` ở gốc thư viện — 
 - **Đạo diễn thực hiện:** Đọc `step6-assembly/GUIDE.md`. Ghép linh kiện vào `src/film.js`, viết keyframes diễn hoạt theo từ `V.w()`. Chạy kiểm tra `beatsheet.mjs`.
 - **Review độc lập:** chạy `sh channels/tram-nghi-nhieu/tools/review.sh <tập> --chapter <id>` (phim dài), `… --lines a-b` (một cảnh vừa sửa), hoặc `… <tập>` cho cả phim. Công cụ nạp mẫu `step6-assembly/PROMPT_CRITIC.md` và triệt tiêu các cờ `DARK`, `SAME`, `NUM`, `RUN`.
 - **Nhãn nằm đúng câu:** cổng chấm hình cũng chạy `tools/check_labels.py` — một nhãn lệch câu phải sửa trước khi dựng.
+- **Hai thẻ chữ không được nằm đè lên nhau:** người xem không đọc được thẻ nào, và câu kể đi mất nghĩa. Cổng
+  bàn giao đo trên **chính phim đã dựng** (`core/render/readcheck.mjs --overlap`; luật và ngưỡng ở
+  `core/render/overlap.mjs`), còn tờ nhịp điệu ghi cặp chữ đè nhau vào `beats.json` nên vòng chấm hình thấy
+  trước khi dựng. Tờ báo cờ `OVERLAP` thì dời thẻ (vị trí `at` trong `src/film.js`) hoặc bỏ bớt một thẻ
+  trong cùng nhát — đừng sửa bằng cách làm thẻ nhỏ lại cho vừa.
+- **Thẻ phải hiện đủ lâu để đọc trọn:** cổng bàn giao đo thời gian đọc theo cỡ chữ (chữ 26–30 px cần
+  ~1,8–2,6 s). Thẻ hiện từ lúc máy cắt sang nhát của câu và tắt khi câu hết, nên **câu nào ngắn thì thẻ
+  không đủ lâu** — giữ thẻ lâu hơn, và chỉ giữ khi vật thẻ bám vào vẫn còn trong khung (giữ lâu hơn thì
+  mũi tên có thể chỉ vào chỗ trống).
 - **Mốc nhịp cho từng câu:** mỗi câu lời kể gắn một mốc vào `window.EV` (`markBeats(ev, V, (id, t) => [x, y])`), điểm
   trên khung 1920×1080. Nhờ đó cổng đo được câu hỏi mà đếm pixel không trả lời được: **nhịp này có làm thay đổi phần
   khung của nó không** (cổng đòi ≥ 75 % nhịp đổi). Không có mốc thì cổng chỉ đo "có gì đó động", không đo "câu này
