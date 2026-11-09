@@ -3275,6 +3275,49 @@ mình 111 lần mà báo cáo vẫn bảo "0 lần".
 **Còn lại.** Chỉ các phiên *đang chạy* mới đọc được luật mới; chúng đã chạy quá nửa đời tập nên tôi
 đã nhắn trực tiếp cho hai phiên tập 02 và tập 03 (không phải yêu cầu, chỉ là thông tin đo được).
 
+## N104 — high — Nhãn trỏ vào *hiệu ứng* thì máy không thấy: tia của probe chỉ bắt layer 0, còn hiệu ứng nằm ở layer 1
+
+Cả hai cờ máy báo sai mà ta cứ tưởng là lỗi thật — `PTR` ở c17 và `fill 0 %` ở 14 câu — có **cùng một
+nguyên nhân**, và nguyên nhân này nằm trong rig chứ không phải trong tập.
+
+Phiên tập 01 phản biện lại cờ `PTR` ở c17: mở `review/beatsheet/b_017.jpg` (dựng lúc 14:06, sau lần sửa)
+thì mũi tên "PHẦN TỬ BAY LÊN" **chạm đúng** vào ô xi đỏ của phân tử đang bay; bản cũ lúc 13:27 mới là
+cái mũi tên rơi vào vùng sáng trống. Nguyên nhân thật:
+
+- phân tử được dựng bằng `fxLayer()` (`rig/kit.js:158`) → `c.layers.set(1)`;
+- probe của rig là `const probe = new THREE.Raycaster(); probe.layers.set(0)` (`rig/render.js:104`) →
+  tia **không bao giờ thử layer 1**;
+- nên: nhãn trỏ vào một hiệu ứng → máy không thấy gì ở điểm mũi tên → báo `PTR`;
+  và cùng lý do đó, **hiệu ứng không bao giờ được đếm** trong phép đo độ phủ → những cảnh cận cảnh
+  phân tử / hơi nước / giọt nước đều ra `fill 0 %`.
+
+Hai hệ quả, một là tiêu tiền thật: phiên tập 01 đã **mất một vòng chấm hình** vì cờ `PTR` ở c17, và
+sau khi sửa mã thì cờ vẫn còn (đúng như máy nói — máy vẫn không thấy). Tức là cờ sai **không tự biến mất
+khi người làm sửa đúng**, và nó đẩy phiên đi sửa tiếp một lần nữa.
+
+**Cách sửa (một dòng):** `probe.layers.enableAll()` thay cho `probe.layers.set(0)`. Đây là công cụ đo,
+không phải hình vẽ — nó không đổi một pixel nào của phim, chỉ đổi con số.
+
+**Chưa áp dụng, và vì sao:** rig là mã dùng chung, ba tập đang dựng (R13). Sẽ sửa **sau khi các tập đang
+chạy giao phim xong**, rồi chứng minh bằng cách dựng lại tờ sheet của tập 04 (tập kiểm chứng của tôi)
+trước và sau, để thấy: 14 câu `fill 0 %` có số thật, và cờ `PTR` ở c17 biến mất.
+
+## N105 — medium — Hai thứ khác nhau bị gọi cùng một tên: "cảnh giống nhau" và "cảnh đứng yên"
+
+Phiên tập 01 phản biện cờ `SAME` rất đúng chỗ: `SAME` so **hai ảnh tĩnh**, còn phim có thời gian —
+cánh quạt quay, dải ẩm mạnh dần rồi bị gió quét, giọt trượt, kim đồng hồ dịch, cột thuỷ ngân chạy vạch.
+Kênh đã có phép đo khách quan cho đúng cái đó: `tools/check_motion.py --mp4` đo trên **chính phim đã dựng**
+(action ≥ 55 %, big ≥ 45 %, dead ≤ 10 s, beats ≥ 75 %, camera ≤ 30 %). Vậy nên:
+
+- **"cảnh đứng yên"** (đo được, chặn được) → phải trả lời bằng số của `check_motion.py`;
+- **"cảnh giống nhau"** (cờ `SAME` trên tờ sheet) → là câu hỏi về **trình tự**: ba câu liên tiếp có
+  cùng một chủ thể thì người xem có thấy ba hình hay thấy một hình kéo dài? Câu này **không trả lời được
+  bằng ảnh tĩnh** và cũng không trả lời được bằng "phim có chuyển động": một phim rất động vẫn có thể
+  quay người xem đi ba lần quanh cùng một cái áo. Cách kiểm đúng: **xem ba câu đó liên tiếp trong phim**,
+  không xem ba ô trong tờ.
+
+Ta đã gửi cả hai ý này cho phiên tập 01; nó hứa gửi kèm số đo của `check_motion.py` khi dựng xong.
+
 ## Còn lại
 
 - **[x]** N72: `core/render/still.mjs` chờ hai khung hình rồi mới chụp (12:47) — ảnh là của khung vừa dựng,
