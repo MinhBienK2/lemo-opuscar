@@ -48,7 +48,13 @@ if [ ! -f "$HERE/voice/proc/dur.json" ]; then
   exit 1
 fi
 FILM=$HERE "$LIB/.venv/bin/python" "$CHANNEL/mix.py"
-node core/render/video.mjs "$HERE" --workers 4 --out "$OUT/video.mp4"
+# The master lifts the mix to −14 LUFS, so the film's peak follows the mix's peak-to-loudness ratio: this
+# episode's first master came out 0.6 dB too hot for the channel's delivery check (peak ≤ −3 dBFS) and was
+# refused after the whole render. The shared mix.py now guarantees that ratio; this check stops the build
+# **before** a 30-minute render if the guarantee ever breaks.
+"$LIB/.venv/bin/python" "$HERE/check_headroom.py" "$OUT/mix.wav"
+# 2 worker, không phải 4: mỗi worker vẽ ở 3840×2160 (siêu lấy mẫu 2×) và GPU này chỉ có 6 GB
+node core/render/video.mjs "$HERE" --workers 2 --out "$OUT/video.mp4"
 node --input-type=module -e "
 import fs from 'fs'; const { build } = await import('$HERE/src/timeline.js');
 const r = p => JSON.parse(fs.readFileSync('$HERE/' + p)); const T = build(r('voice/proc/dur.json'), r('voice/words.json'), r('voice/lips.json'));
@@ -59,6 +65,27 @@ sh core/render/mux.sh "$OUT/video.mp4" "$OUT/mix.wav" "$OUT/$NAME.mp4" 24 0
 PS=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$OUT/$NAME.mp4" 2>/dev/null | cut -d, -f1)
 if [ -n "$PS" ]; then PS=$(LC_ALL=C awk -v d="$PS" 'BEGIN { printf "%.1f", d * 0.4 }'); else PS=1; fi
 ffmpeg -y -ss "$PS" -i "$OUT/$NAME.mp4" -vframes 1 -q:v 2 "$OUT/poster.jpg" >/dev/null 2>&1 || true
+# the length of the film is measured from the movie that was just built, never written by hand: the index
+# publishes this number, and a guess is a lie with a timestamp on it
+DUR=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$OUT/$NAME.mp4" 2>/dev/null | cut -d, -f1)
+if [ -n "$DUR" ]; then
+  "$LIB/.venv/bin/python" - "$HERE/film.json" "$DUR" <<'PY'
+import re, sys
+path, secs = sys.argv[1], float(sys.argv[2])
+mm, ss = int(secs // 60), int(round(secs - 60 * (secs // 60)))
+if ss == 60:
+    mm, ss = mm + 1, 0
+rt = f"{mm}:{ss:02d}"
+try:
+    body = open(path, encoding="utf-8").read()
+except OSError:
+    sys.exit(0)
+new = re.sub(r'("runtime"\s*:\s*)"[^"]*"', lambda m: m.group(1) + f'"{rt}"', body, count=1)
+if new != body:
+    open(path, "w", encoding="utf-8").write(new)
+    print(f"film.json: runtime {rt} (measured from the movie)")
+PY
+fi
 # the deliverables stay in the project folder, where they are committed and where the review finds them.
 # The captions are already burned into the picture: the .srt is the transcript for the platform, and it is not
 # named like the film so that a player does not load it on top of the captions that are in the picture.

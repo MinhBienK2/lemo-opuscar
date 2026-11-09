@@ -111,18 +111,19 @@ export function clothesClip({ color = '#e8e2d4' } = {}) {
   // bản lề: một trụ gỗ nhỏ, hai hàm quanh nó
   const hinge = mesh(new THREE.CylinderGeometry(.0042, .0042, .0090, 10), mat, [0, -.0175, ZO], { rot: [Math.PI / 2, 0, 0] });
   body.add(hinge);
-  // lò xo dây xoắn ốc thật quanh bản lề: vài vòng đồng xếp chồng, nằm trước bản lề
+  // lò xo dây xoắn ốc thật quanh bản lề: vài vòng THÉP nhỏ xếp sát nhau, nằm trước bản lề
+  // (lò xo to, xoắn ra ngoài hàm, đọc ra là một đĩa có rãnh đồng tâm như móc khóa)
   const hp = [];
   for (let i = 0; i <= 130; i++) {
     const t = i / 130, a = t * Math.PI * 2 * 4.2;
-    const rr = .0034 + t * .0052;
-    hp.push(new THREE.Vector3(Math.cos(a) * rr, -.0175 + Math.sin(a) * rr, ZO + .0026 + t * .0060));
+    const rr = .0023 + t * .0019;
+    hp.push(new THREE.Vector3(Math.cos(a) * rr, -.0175 + Math.sin(a) * rr, ZO + .0014 + t * .0030));
   }
-  const coil = new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(hp), 180, .0013, 6, false), brass);
+  const coil = new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(hp), 180, .0009, 6, false), toon('#c6ccd6'));
   coil.castShadow = true; body.add(coil);
   // hai đầu dây xoắn nằm trên hàm
-  body.add(mesh(new THREE.CylinderGeometry(.0012, .0012, .0052, 6), brassDark, [.0062, -.0140, ZO + .0058], { rot: [0, 0, .8] }));
-  body.add(mesh(new THREE.CylinderGeometry(.0012, .0012, .0050, 6), brassDark, [-.0056, -.0132, ZO + .0068], { rot: [0, 0, -.9] }));
+  body.add(mesh(new THREE.CylinderGeometry(.0010, .0010, .0044, 6), toon('#8f96a3'), [.0050, -.0140, ZO + .0044], { rot: [0, 0, .8] }));
+  body.add(mesh(new THREE.CylinderGeometry(.0010, .0010, .0042, 6), toon('#8f96a3'), [-.0046, -.0132, ZO + .0052], { rot: [0, 0, -.9] }));
   // sống răng cưa ở mặt trong: các gờ ngang chặn vải
   const innerX = (y) => y <= -.012 ? (.0006 + (y + .024) * .0250)
     : y < -.002 ? (.0009 + (y + .012) * .0500)
@@ -406,9 +407,12 @@ export function tShirt({ color = '#f2f0e6', wetColor = '#b3bac9', w = .62, h = .
   const mixC = dryC.clone().lerp(dampC, .34).lerp(dryC, .15);               // pha nhẹ khoảng 1/3, giữ sắc kem
   const lum = (c) => c.r * .299 + c.g * .587 + c.b * .114;
   const wetMul = mixC.clone();
-  if (lum(wetMul) > 1e-3) wetMul.multiplyScalar(lum(dryC) * .64 / lum(wetMul));   // chuẩn hoá: ướt chỉ sẫm ~1/3
+  // vải ướt phải TỐI HƠN NHIỀU: hiên nắng sớm làm mặt áo chói lên, nếu chỉ sẫm 1/3
+  // thì sau bậc "soft shoulder" của bộ màu, vùng ướt và vùng khô ra cùng một sắc —
+  // người xem không thấy chỗ nào ướt. Sẫm còn ~2/3 mới đọc ra mảng ẩm.
+  if (lum(wetMul) > 1e-3) wetMul.multiplyScalar(lum(dryC) * .34 / lum(wetMul));
   // sắc bạc nhạt của vải ướt: hơi lạnh, nhưng không bao giờ ra tím hay xanh lam đậm
-  wetMul.r *= .975; wetMul.g *= .995; wetMul.b *= 1.055;
+  wetMul.r *= .965; wetMul.g *= .995; wetMul.b *= 1.085;
   const tex = fabricTex();
   tex.repeat.set(2.2, 2.6); tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
   const mat = toon('#ffffff', { side: THREE.DoubleSide, map: tex, bumpMap: fabricTex.fold(), bumpScale: .05, vertexColors: true });
@@ -950,7 +954,7 @@ export function hemDrop() {
     geo.computeVertexNormals();
   }
   // vải nhạt, mờ: để giọt nước là thứ đọc ra trước
-  const cmat = toon('#d6c79b', { side: THREE.DoubleSide, map: gE_hemClothTex() });
+  const cmat = toon('#e7dcbc', { side: THREE.DoubleSide, map: gE_hemClothTex() });
   const cmesh = mesh(geo, cmat, [0, CH / 2, 0]);
   cmesh.castShadow = true; cloth.add(cmesh);
   // mép khăn dệt dày: một cuộn vải tròn dọc theo mép dưới, có đường chỉ may ngay trên
@@ -960,14 +964,14 @@ export function hemDrop() {
       const x = (i / 12 - .5) * CW * .96;
       rp.push(new THREE.Vector3(x, .0012 + Math.sin(x * 18 + .4) * .0018, .0013 + Math.sin(x * 10.5) * .0010));
     }
-    const roll = new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(rp), 24, .0030, 8, false), toon('#b79a4a'));
+    const roll = new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(rp), 24, .0022, 8, false), toon('#e7dcbc'));
     roll.castShadow = false; cloth.add(roll);
     const sp = rp.map(p => new THREE.Vector3(p.x, p.y + .0028, p.z + .0017));
-    const st = new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(sp), 24, .0009, 5, false), toon('#efe3c2'));
+    const st = new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(sp), 24, .0007, 5, false), toon('#c3b492'));
     st.castShadow = false; cloth.add(st);
   }
   {
-    const sm = mesh(new THREE.PlaneGeometry(CW * .96, .0055, 12, 1), toon('#b4633a', { side: THREE.DoubleSide }), [0, .0042, .0024]);
+    const sm = mesh(new THREE.PlaneGeometry(CW * .96, .0030, 12, 1), toon('#b4633a', { side: THREE.DoubleSide }), [0, .0030, .0024]);
     sm.castShadow = false; cloth.add(sm);
   }
   // vệt nước chảy dọc mặt khăn: một dải bóng ướt, dẹt, loe dần xuống mép
@@ -987,18 +991,6 @@ export function hemDrop() {
       h.renderOrder = 6; bead.add(h);
     }
   }
-  // vài núm xù terry ở mép: mềm, tròn — KHÔNG phải tua tua cứng
-  {
-    const fr = mulberry(83);
-    const loopMat = toon('#efe0b4');
-    for (let i = 0; i < 14; i++) {
-      const x = (fr() - .5) * CW * .92;
-      const y = .0026 + fr() * .0075;
-      const b = mesh(new THREE.SphereGeometry(.0016 + fr() * .0008, 7, 5), loopMat, [x, y, .0019 + fr() * .0014]);
-      b.castShadow = false; cloth.add(b);
-    }
-  }
-
   // ── giọt nước đang rơi: chủ thể — thân dài, trong suốt, có đuôi cong lệch ──
   const dropG = new THREE.Group();
   dropG.position.set(0, .013, 0);
@@ -1485,7 +1477,7 @@ export function thinTee({ color = '#9fd8e8' } = {}) {
 }
 
 // khăn tắm: tấm chữ nhật dày, vân xù terry, mép rua mềm ở một cạnh ngắn
-export function towel({ color = '#f2c14e' } = {}) {
+export function towel({ color = '#f2c14e', wetColor = '#c08f2c' } = {}) {
   const g = new THREE.Group();
   const t = new THREE.Group(); t.position.z = .018; g.add(t);   // khăn đứng trước dây phơi
   const W = .40, H = .46;                       // rộng × dài thân khăn
@@ -1640,8 +1632,8 @@ export function towel({ color = '#f2c14e' } = {}) {
   let wetK = 1;
   const setWet = (k) => {
     wetK = clamp(k);
-    mat.color.copy(new THREE.Color(color)).lerp(new THREE.Color('#c08f2c'), wetK);
-    matBack.color.copy(backBase).lerp(new THREE.Color('#b5842a'), wetK * .8);
+    mat.color.copy(new THREE.Color(color)).lerp(new THREE.Color(wetColor), wetK);
+    matBack.color.copy(backBase).lerp(new THREE.Color(wetColor).lerp(new THREE.Color('#141018'), .12), wetK * .8);
     hemBlot.visible = wetK > .05;
     hemBlot.material.opacity = .46 * wetK;
   };
@@ -1650,7 +1642,7 @@ export function towel({ color = '#f2c14e' } = {}) {
 }
 
 // đàn áo phơi chồng trên dây thứ hai
-export function shirtPile({ n = 3 } = {}) {
+export function shirtPile({ n = 3, yAt: yAtExt = null } = {}) {
   const g = new THREE.Group();
   const shirts = [], clips = [];
   // dây phơi nằm ngang qua đỉnh đàn áo: thấy rõ ở cả ba góc nhìn
@@ -1659,7 +1651,7 @@ export function shirtPile({ n = 3 } = {}) {
   const ropeMat = toon('#ffffff', { map: gA_ropeTex() });
   const ropeG = gA_ropeGroup(curve, { r: .0098, twist: .0022, pitch: .05, mat: ropeMat });
   g.add(ropeG);
-  const yAt = (x) => -SAG * (1 - Math.min(1, (2 * x / LEN) ** 2));
+  const yAt = (x) => yAtExt ? yAtExt(x) : -SAG * (1 - Math.min(1, (2 * x / LEN) ** 2));
   const COLORS = ['#f2f0e6', '#b9d8ef', '#e8b7c8'];
   for (let i = 0; i < n; i++) {
     const x = (i - (n - 1) / 2) * .26;
@@ -1694,49 +1686,46 @@ export function shirtPile({ n = 3 } = {}) {
 // ── bồn chậu + nước ────────────────────────────────────────────────────
 export function basin() {
   const g = new THREE.Group();
-  const R = .235, H = .112, OVAL = .90;        // đường kính ~0.47 m, chậu rộng và nông
-  const matBody = toon('#a9ccdd', { map: gC_plasticTex() });
+  const R = .215, H = .150, OVAL = .90;        // chậu sâu ~1/3 đường kính: là CHẬU, không phải đĩa
+  const matBody = toon('#e9eef0', { map: gC_plasticTex() });
   // thân chậu: quét ngoài → lên vành cuộn → quét vào trong, thành dày thấy ngay ở miệng
   const prof = [
-    new THREE.Vector2(0, .010), new THREE.Vector2(.088, .010), new THREE.Vector2(.126, .018),
-    new THREE.Vector2(.172, .043), new THREE.Vector2(.209, .078), new THREE.Vector2(.228, .101),
+    new THREE.Vector2(0, .010), new THREE.Vector2(.0805, .010), new THREE.Vector2(.1153, .0177),
+    new THREE.Vector2(.1574, .0512), new THREE.Vector2(.1912, .0979), new THREE.Vector2(.2086, .1289),
     new THREE.Vector2(R, H - .008), new THREE.Vector2(R + .004, H), new THREE.Vector2(R - .020, H),
-    new THREE.Vector2(.206, .100), new THREE.Vector2(.172, .070), new THREE.Vector2(.136, .040),
-    new THREE.Vector2(.112, .024), new THREE.Vector2(.086, .022), new THREE.Vector2(0, .022),
+    new THREE.Vector2(.1885, .1275), new THREE.Vector2(.1574, .0872), new THREE.Vector2(.1244, .0470),
+    new THREE.Vector2(.1025, .0256), new THREE.Vector2(.0787, .0230), new THREE.Vector2(0, .0230),
   ];
   const bowl = new THREE.Mesh(new THREE.LatheGeometry(prof, 48), matBody);
   bowl.scale.set(OVAL, 1, OVAL);
   bowl.castShadow = true; bowl.receiveShadow = true; g.add(bowl);
   // viền miệng: cuộn tròn dày, cùng chất liệu nhựa — không phải quai dây
-  const rimGeo = new THREE.TorusGeometry(R - .010, .0145, 10, 48);
+  const rimGeo = new THREE.TorusGeometry(R - .010, .0155, 10, 48);
   rimGeo.scale(OVAL, OVAL, 1); rimGeo.rotateX(-Math.PI / 2);
   const rim = new THREE.Mesh(rimGeo, matBody);
   rim.position.y = H - .004; rim.castShadow = true; rim.receiveShadow = true; g.add(rim);
-  // hai tay cầm nhựa liền khối: một bản đề chụp vào thành, một nắm tròn ngang
+  // hai quai cầm liền thành: một bản đề chụp vào thành, một nắm tròn ngang, to và rõ
   for (const sx of [-1, 1]) {
-    const web = mesh(rbox(.030, .058, .048, .011), matBody, [sx * .208, .078, 0]);
+    const web = mesh(rbox(.030, .066, .052, .011), matBody, [sx * .190, .120, 0]);
     g.add(web);
-    const grip = mesh(rbox(.074, .026, .038, .012), matBody, [sx * .250, .078, 0]);
+    const grip = mesh(rbox(.092, .034, .042, .013), matBody, [sx * .232, .120, 0]);
     g.add(grip);
-    // lỗ tay cầm: một khoảng hở nhỏ dưới nắm, đọc ra là chậu có quai
-    const hole = mesh(rbox(.052, .016, .026, .006), toon('#5d92ad'), [sx * .246, .062, 0]);
+    // hở tay cầm: một khoảng hở nhỏ dưới nắm, đọc ra là chậu có quai
+    const hole = mesh(rbox(.058, .020, .030, .006), toon('#5d92ad'), [sx * .228, .101, 0]);
     hole.castShadow = false; g.add(hole);
   }
-  // chân nâng ở đáy
-  for (const [x, z] of [[-.110, -.095], [.110, -.095], [-.110, .095], [.110, .095]])
-    g.add(mesh(new THREE.CylinderGeometry(.021, .023, .013, 8), matBody, [x, .005, z]));
 
   // ── nước trong chậu: mặt nước PHẲNG, lặng, xanh nước nhạt ──
-  const RW = .186, WY = .086;
+  const RW = .166, WY = .118;
   // mực nước nằm ở cao độ này: thành trong của chậu ở đó rộng .190
   const wtex = canvasTex(512, 512, (c, cw, ch) => {
     const cx = cw / 2, cy = ch / 2;
     // nền xanh nước nhạt, hơi trong; sâu ở giữa, nhạt ở mép
     const gg = c.createRadialGradient(cx, cy, cw * .02, cx, cy, cw * .52);
-    gg.addColorStop(0, '#3d95b6');
-    gg.addColorStop(.42, '#57a9c4');
-    gg.addColorStop(.78, '#79c4d8');
-    gg.addColorStop(1, '#a2dbe8');
+    gg.addColorStop(0, '#2b7fa0');
+    gg.addColorStop(.42, '#3f96b8');
+    gg.addColorStop(.78, '#63b3ce');
+    gg.addColorStop(1, '#93d3e4');
     c.fillStyle = gg; c.fillRect(0, 0, cw, ch);
     // gợn nhẹ, đều, tương phản thấp: mặt nước lặng chứ không lấp lánh
     c.lineCap = 'round';
@@ -1780,12 +1769,12 @@ export function basin() {
   water.position.y = WY; water.receiveShadow = true; g.add(water);
   // vòng mực nước: đường ẩm trên thành trong của chậu, ngay tại mặt nước
   {
-    const wg2 = new THREE.TorusGeometry(.1900, .0034, 8, 72);
+    const wg2 = new THREE.TorusGeometry(.1675, .0034, 8, 72);
     wg2.scale(OVAL, OVAL, 1); wg2.rotateX(-Math.PI / 2);
     const line = new THREE.Mesh(wg2, toon('#4e93ab'));
     line.position.y = WY; line.castShadow = false; line.receiveShadow = true; g.add(line);
     // mép nước sáng mảnh ngay trên mực: lớp căng bề mặt
-    const wg3 = new THREE.TorusGeometry(.1878, .0013, 6, 72);
+    const wg3 = new THREE.TorusGeometry(.1653, .0013, 6, 72);
     wg3.scale(OVAL, OVAL, 1); wg3.rotateX(-Math.PI / 2);
     const surf = new THREE.Mesh(wg3, toon('#e2f6fc'));
     surf.position.y = WY + .0004; surf.castShadow = false; g.add(surf);
@@ -1837,6 +1826,37 @@ export function deskFan() {
     rib.castShadow = false; blade.add(rib);
   }
 
+  // ── vệt quét của cánh quạt ──────────────────────────────────────────
+  // Một khung hình đứng không bao giờ cho thấy cánh đang quay: cánh luôn sắc
+  // nét, nên người xem tắt tiếng đọc thành "quạt đang tắt". Vì vậy khi quạt
+  // chạy phải có MỘT vệt quét: một đĩa mờ đứng giữa cánh và lưới, cộng vài
+  // cung mờ là dấu vết của cánh. Tắt quạt thì vệt quét biến mất.
+  const blurTex = canvasTex(256, 256, (c, w, h) => {
+    c.clearRect(0, 0, w, h);
+    const g0 = c.createRadialGradient(w / 2, h / 2, w * .05, w / 2, h / 2, w * .49);
+    g0.addColorStop(0, 'rgba(255,247,226,.10)');
+    g0.addColorStop(.42, 'rgba(255,244,220,.34)');
+    g0.addColorStop(.86, 'rgba(255,240,206,.22)');
+    g0.addColorStop(1, 'rgba(255,240,206,0)');
+    c.fillStyle = g0; c.fillRect(0, 0, w, h);
+    c.lineCap = 'round';
+    for (let i = 0; i < 3; i++) {           // dấu vết của từng cánh khi quay
+      c.strokeStyle = `rgba(255,251,236,${.34 - i * .07})`;
+      c.lineWidth = 16 - i * 4;
+      c.beginPath();
+      c.arc(w / 2, h / 2, w * (.26 + i * .07), i * 2.09, i * 2.09 + 1.75);
+      c.stroke();
+    }
+  });
+  const blurMat = new THREE.MeshBasicMaterial({
+    map: blurTex, transparent: true, opacity: 0, depthWrite: false,
+    side: THREE.DoubleSide, toneMapped: false,
+  });
+  const blurDisc = new THREE.Mesh(new THREE.CircleGeometry(.152, 40), blurMat);
+  blurDisc.position.set(0, 0, .014);        // sau lưới (.050), trước cánh (-.020)
+  blurDisc.castShadow = false; blurDisc.receiveShadow = false;
+  head.add(blurDisc);
+
   // ── vỏ motor sau: trụ tròn + khe tản nhiệt; nan không xuyên vào đây ──
   head.add(mesh(new THREE.CylinderGeometry(.160, .160, .086, 26), mCase, [0, 0, -.075], { rot: [Math.PI / 2, 0, 0] }));
   head.add(mesh(new THREE.CylinderGeometry(.160, .118, .046, 26), mCase, [0, 0, -.141], { rot: [Math.PI / 2, 0, 0] }));
@@ -1856,8 +1876,10 @@ export function deskFan() {
   // nút xoay tốc độ ở chân đế (không đặt ở tâm lồng quạt)
   g.add(mesh(new THREE.CylinderGeometry(.011, .011, .013, 14), toon('#e0453f'), [.050, .029, .028]));
   return {
-    group: g, head, blades,
-    setSpeed: (k) => { speed = clamp(k); },
+    group: g, head, blades, blurDisc,
+    // tốc độ > 0 thì vệt quét hiện ra: độ đậm theo tốc độ, để "quạt đang chạy"
+    // đọc được ngay ở một khung hình đứng
+    setSpeed: (k) => { speed = clamp(k); blurMat.opacity = speed > .04 ? Math.min(.92, speed * .46) : 0; },
     spin: (t) => { angle += speed * .34; blades.rotation.z = angle; },
     setAim: (a) => { head.rotation.y = a; },
   };
@@ -2029,20 +2051,12 @@ export function kitchenScale() {
       c.lineTo(cx + Math.cos(a) * 296, cy - Math.sin(a) * 296);
       c.stroke();
     }
-    // số 0–400 g, to và rõ
-    c.fillStyle = '#222a48'; c.font = 'bold 104px sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle';
-    for (let k = 0; k <= 4; k++) {
-      const a = 3.927 - 4.712 * (k / 4);
-      c.fillText(String(k * 100), cx + Math.cos(a) * 176, cy - Math.sin(a) * 176);
-    }
-    // đơn vị viết sát số lớn nhất: đọc được 0–400 g
-    c.font = 'bold 56px sans-serif'; c.fillStyle = '#2b3352';
-    c.textAlign = 'left'; c.textBaseline = 'middle';
-    c.fillText('g', cx + 220, cy + 125);
-    // nhãn ở đáy mặt đồng hồ, không đè lên hai số dưới cùng
-    c.textAlign = 'center';
-    c.font = 'bold 46px sans-serif'; c.fillStyle = '#8d93a4';
-    c.fillText('MAX 400', cx, cy + 224);
+    // KHÔNG in số trên mặt cân: phim không nói con số gam nào (FACTS.md), và một
+    // mặt cân in "400" khiến người xem đọc nhầm thành số đo của câu kể. Cân đo
+    // bằng vạch và kim — thấy hai kim lệch nhau là đủ để kể.
+    c.textAlign = 'center'; c.textBaseline = 'middle';
+    c.font = 'bold 44px sans-serif'; c.fillStyle = '#8d93a4';
+    c.fillText('CÂN', cx, cy + 224);
     // vạch đỏ ở mức tối đa
     c.strokeStyle = '#d1443c'; c.lineWidth = 16;
     const am = 3.927 - 4.712;
@@ -2134,7 +2148,24 @@ export function thermometer() {
     col.position.y = -.115 + H / 2;
   };
   setTemp(.5);                                           // ban đầu ở 30 °C
-  return { group: g, setTemp };
+  // ── cột "ma" ──: thanh đỏ mờ đứng cạnh nhiệt kế, đỉnh ở đúng mức nhiệt
+  // độ cần so sánh. Nhiệt kế trong cảnh chỉ đọc hai mươi lăm độ (FACTS.md),
+  // nên ba mươi độ cần một phương tiện so sánh riêng, không phải đổi số trên
+  // chính thiết bị đang treo trong phòng.
+  const ghost = mesh(new THREE.CylinderGeometry(.0075, .0075, 1, 12),
+    toon(PAL.red, { transparent: true, opacity: .40, depthWrite: false }),
+    [.066, 0, .004], { cast: false, recv: false, parent: g });
+  const setGhost = (k) => {
+    if (k === undefined || k === null) { ghost.visible = false; return; }
+    ghost.visible = true;
+    const top = Y10 + 40 * clamp(k) * (Y50 - Y10) / 40;
+    const base = WY - WH / 2;                        // đáy cửa sổ
+    const H = Math.max(.012, top - base);
+    ghost.scale.y = H;
+    ghost.position.y = base + H / 2;
+  };
+  setGhost(null);
+  return { group: g, setTemp, setGhost };
 }
 
 // ── ẩm kế treo tường: mặt đồng hồ, kim, vạch phần trăm ──────────────
@@ -2169,22 +2200,50 @@ export function hygrometer() {
       c.lineTo(cx + Math.cos(a) * 246, cy - Math.sin(a) * 246);
       c.stroke();
       if (big) {
-        c.font = 'bold 64px sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle';
-        c.fillText(String(i * 10), cx + Math.cos(a) * 148, cy - Math.sin(a) * 148);
+        // số phần trăm đẩy ra xa thêm: không chồng lên số của vòng g/kg bên trong
+        c.font = 'bold 54px sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle';
+        c.fillText(String(i * 10), cx + Math.cos(a) * 170, cy - Math.sin(a) * 170);
       }
     }
-    // ký hiệu % to, nằm giữa hai số dưới cùng, không đè lên số nào
-    c.font = 'bold 96px sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle';
+    // ký hiệu % đặt dưới trục, không đè lên số nào
+    c.font = 'bold 60px sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle';
     c.fillStyle = '#252d50';
-    c.fillText('%', cx, cy + 80);
+    c.fillText('%', cx, cy + 52);
     // chữ HUMIDITY ở đáy mặt đồng hồ, to và đọc được
-    c.font = 'bold 54px sans-serif'; c.fillStyle = '#5c6478';
-    c.fillText('HUMIDITY', cx, cy + 186);
+    c.font = 'bold 40px sans-serif'; c.fillStyle = '#5c6478';
+    c.fillText('HUMIDITY', cx, cy + 208);
+    // ── vòng phụ "gam hơi nước trên mỗi kilogam không khí khô" ──────────
+    // Thang % một mình không nói được "20 g/kg": người xem tắt tiếng không có
+    // chỗ nào để đặt con số đó. Vì vậy trên cùng mặt đồng hồ phải có một vòng
+    // phụ ghi gam/kg, chạy cùng một góc với thang %.
+    const gkAng = (v) => 1.22 * Math.PI - 1.44 * Math.PI * (v / 20);   // 0 → 20 g/kg
+    c.strokeStyle = '#3f7d72'; c.lineWidth = 6;
+    c.beginPath();
+    c.arc(cx, cy, 138, gkAng(20), gkAng(0), false);
+    c.stroke();
+    c.font = 'bold 30px sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle';
+    for (let v = 0; v <= 20; v += 2.5) {
+      const a = gkAng(v), big = (v % 5 === 0);
+      c.strokeStyle = '#2f6a60'; c.lineWidth = big ? 8 : 5;
+      c.beginPath();
+      c.moveTo(cx + Math.cos(a) * 138, cy - Math.sin(a) * 138);
+      c.lineTo(cx + Math.cos(a) * (big ? 112 : 122), cy - Math.sin(a) * (big ? 112 : 122));
+      c.stroke();
+      if (big) {
+        c.fillStyle = '#2f6a60';
+        c.fillText(String(v), cx + Math.cos(a) * 95, cy - Math.sin(a) * 95);
+      }
+    }
+    // nhãn g/kg đứng ở KHE HỞ dưới mặt đồng hồ: cả vòng % và vòng g/kg đều
+    // quét qua đỉnh, nên đáy mặt đồng hồ không có số nào — đặt ở đây thì
+    // không chữ nào của đồng hồ bị đè lên nhau.
+    c.fillStyle = '#2f6a60'; c.font = 'bold 30px sans-serif';
+    c.fillText('g/kg', cx, cy + 122);
     // vạch đỏ ở mức tối đa: "đó là trần của nó"
     const am = ang(10);
     c.strokeStyle = '#d1443c'; c.lineWidth = 15;
     c.beginPath();
-    c.moveTo(cx + Math.cos(am) * 190, cy - Math.sin(am) * 190);
+    c.moveTo(cx + Math.cos(am) * 202, cy - Math.sin(am) * 202);
     c.lineTo(cx + Math.cos(am) * 248, cy - Math.sin(am) * 248);
     c.stroke();
   });
@@ -2277,6 +2336,7 @@ export function labTable() {
   const clipMat = toon('#9fa8ba');
   const plates = [];
   const drops = [];
+  const tags = [];
   for (const sx of [-1, 1]) {
     const p = new THREE.Group(); p.position.set(sx * .34, 0, 0); g.add(p);
     const PW = .30, PH = .34;
@@ -2310,8 +2370,37 @@ export function labTable() {
     const smear = mesh(new THREE.CircleGeometry(.026, 20), toon('#cdeff9', { transparent: true, opacity: .22, depthWrite: false }), [0, cy - .020, .010], { cast: false, recv: false });
     smear.scale.set(1, .55, 1);
     p.add(smear);
+    // ── vòng tròn NÉT ĐỨT in sẵn trên kính: kích thước giọt lúc ĐẦU ──────
+    // Đây là thước đo thật của câu "tốc độ bay hơi rơi còn một nửa": giọt nằm
+    // trong vòng tròn, và mỗi giọt nhỏ đi một phần — người xem tắt tiếng
+    // thấy ngay giọt nào co nhanh hơn, không cần đọc số.
+    const ghostMat = toon('#e0664f', { transparent: true, opacity: .85, depthWrite: false });
+    for (let i = 0; i < 14; i++) {
+      const a0 = i / 14 * Math.PI * 2, a1 = a0 + (Math.PI * 2 / 14) * .55;
+      const gg = mesh(new THREE.TorusGeometry(.030, .0016, 4, 8, a1 - a0), ghostMat,
+        [0, cy + .030, .019], { rot: [0, 0, a0], cast: false, recv: false });
+      p.add(gg);
+    }
     plates.push(p);
     drops.push(td.group);
+    // nhãn có in trên mặt bàn: nửa nào có gió, nửa nào không — người xem đọc
+    // được ngay mà không cần ai giải thích
+    {
+      const tag = (txt, bg) => canvasTex(512, 128, (c, w, h) => {
+        c.fillStyle = bg; c.fillRect(0, 0, w, h);
+        c.strokeStyle = '#2b3352'; c.lineWidth = 8; c.strokeRect(6, 6, w - 12, h - 12);
+        c.fillStyle = '#1d2444'; c.font = 'bold 54px sans-serif';
+        c.textAlign = 'center'; c.textBaseline = 'middle';
+        c.fillText(txt, w / 2, h / 2 + 2);
+      });
+      // nhãn ĐỨNG sau mỗi mặt kính (không phải nằm ngang trên mặt bàn: nằm ngang
+      // thì máy nhìn gần mặt nước không đọc được chữ), nửa nào có gió, nửa nào
+      // không — người xem đọc được ngay mà không cần ai giải thích
+      const lab = mesh(new THREE.PlaneGeometry(.34, .085), toon('#ffffff', { map: tag(sx < 0 ? 'KHÔNG CÓ GIÓ' : 'CÓ GIÓ', sx < 0 ? '#f3e2cf' : '#dcefe2') }),
+        [0, SURF + .052, -.17], { rot: [-.16, 0, 0], cast: false, recv: false });
+      p.add(lab);
+      tags.push(lab);
+    }
   }
   // ── vách ngăn: tấm kính rộng trải hết chiều sâu bàn ──
   const DIVH = .46, DIVD = .68;
@@ -2325,7 +2414,7 @@ export function labTable() {
     g.add(mesh(new THREE.CylinderGeometry(.008, .008, .10, 10), frameMat, [0, SURF + .062, sz]));
     g.add(mesh(rbox(.022, .026, .036, .004), clipMat, [0, SURF + .013, sz]));
   }
-  return { group: g, plates, divider, drops };
+  return { group: g, plates, divider, drops, tags };
 }
 
 const FIB_N = 13;
@@ -2423,12 +2512,12 @@ export function wovenFibres() {
   const bOf = (p) => (p.x - O.x) * F.x + (p.y - O.y) * F.y + (p.z - O.z) * F.z;
 
   // ── khung ổn định dọc sợi (điểm trên đường tâm + pháp tuyến) ──
-  const framesOf = (curve, steps) => {
+  const framesOf = (curve, steps, t0 = 0, t1 = 1) => {
     const fr = [];
     const p = new THREE.Vector3(), t = new THREE.Vector3();
     let n = null, len = 0, prev = null;
     for (let i = 0; i <= steps; i++) {
-      const s = i / steps;
+      const s = t0 + (t1 - t0) * (i / steps);
       curve.getPointAt(s, p); curve.getTangentAt(s, t);
       if (!n) {
         n = new THREE.Vector3(0, 0, 1).cross(t);
@@ -2448,7 +2537,7 @@ export function wovenFibres() {
   };
   // ── ống tròn, hai đầu bo tròn kín (không lộ ruột rỗng, không như nan tre) ──
   const tubeGeo = (fr, r, opt = {}) => {
-    const { radial = 12, tip = .035 } = opt;
+    const { radial = 12, tip = .035, flat = 1 } = opt;
     const steps = fr.length - 1;
     const surf = (i, j) => {
       const f = fr[i], th = (j / radial) * Math.PI * 2;
@@ -2458,10 +2547,11 @@ export function wovenFibres() {
       // sợi mềm: gợn nhẹ, không gợn đều như cuộn giấy
       const rad = r * cap * (1 + .03 * Math.sin(f.l * 11 + 1.3) + .015 * Math.sin(f.l * 26));
       const cx = Math.cos(th), sy = Math.sin(th);
+      // sợi dệt là DẢI MỎNG nằm ngang (b dọc trục sợi), không phải ống tròn: ống tròn đọc ra là lọ thuỷ tinh
       return new THREE.Vector3(
-        f.p.x + (f.n.x * cx + f.b.x * sy) * rad,
-        f.p.y + (f.n.y * cx + f.b.y * sy) * rad,
-        f.p.z + (f.n.z * cx + f.b.z * sy) * rad);
+        f.p.x + (f.n.x * cx + f.b.x * sy * flat) * rad,
+        f.p.y + (f.n.y * cx + f.b.y * sy * flat) * rad,
+        f.p.z + (f.n.z * cx + f.b.z * sy * flat) * rad);
     };
     const pos = [], uvs = [], idx = [];
     for (let i = 0; i <= steps; i++) for (let j = 0; j <= radial; j++) {
@@ -2537,9 +2627,9 @@ export function wovenFibres() {
       c.beginPath(); c.moveTo(x, y); c.lineTo(x + L, y + (r() - .5) * 3.2); c.stroke();
     }
   });
-  const matWarp = toon('#f7f1e3', { map: fibreTex, grad: gradSoft });
-  const matWeft = toon('#e9dfc8', { map: fibreTex, grad: gradSoft });
-  const matHero = toon('#fdf9ee', { map: fibreTex, grad: gradSoft });
+  const matWarp = toon('#ece0c6', { map: fibreTex, grad: gradSoft });
+  const matWeft = toon('#dccfb0', { map: fibreTex, grad: gradSoft });
+  const matHero = toon('#f2e7d2', { map: fibreTex, grad: gradSoft });
   const matFuzz = toon('#f4ecdd', { side: THREE.DoubleSide, grad: gradSoft });
 
   // ── nếp dệt: sợi dọc luồn qua sợi ngang, thay phiên trên dưới, vuông vắn ──
@@ -2564,7 +2654,7 @@ export function wovenFibres() {
     const c = curveFrom(b => P(w.a, b, warpZ(w.k, b)), B0 - PITCH, B1 + PITCH, 150);
     w.c = c;
     const rr = w.hero ? RAD : RAD * .90;
-    const m = new THREE.Mesh(tubeGeo(framesOf(c, 150), rr, { radial: 12 }), w.hero ? matHero : matWarp);
+    const m = new THREE.Mesh(tubeGeo(framesOf(c, 150), rr, { radial: 12, flat: .70 }), w.hero ? matHero : matWarp);
     m.castShadow = true; m.receiveShadow = true;
     m.userData.role = w.hero ? 'hero' : 'aux';      // hai sợi lớn tách riêng khỏi lưới nền
     g.add(m);
@@ -2575,7 +2665,7 @@ export function wovenFibres() {
     const c = curveFrom(a => P(a, w.b, weftZ(w.j, a)), -.096, .096, 130);
     w.c = c;
     const rr = RAD * .84;
-    const m = new THREE.Mesh(tubeGeo(framesOf(c, 130), rr, { radial: 12 }), matWeft);
+    const m = new THREE.Mesh(tubeGeo(framesOf(c, 130), rr, { radial: 12, flat: .70 }), matWeft);
     m.castShadow = true; m.receiveShadow = true;
     m.userData.role = 'aux';
     g.add(m);
@@ -2716,7 +2806,7 @@ export function wovenFibres() {
   }
   const q = heroR.cur.getPointAt(bu), tg = heroR.cur.getTangentAt(bu);
   const ang = Math.atan2(tg.y, tg.x);
-  const inw = inwR(q, tg).multiplyScalar(RAD * .55);
+  const inw = inwR(q, tg).multiplyScalar(RAD * 1.04);   // vệt nằm TRÊN mặt sợi, không chuim vào trong
   const off = q.clone().add(inw).sub(anchor);
   // vệt nước: một VỆT dài, mềm, chạy dọc theo sợi — không phải một quầng tròn
   const streakTex = canvasTex(64, 256, (c, w, h) => {
@@ -2732,14 +2822,24 @@ export function wovenFibres() {
     c.fillRect(-h / 2, -h / 2, h, h);
     c.restore();
   });
-  const streak = mesh(new THREE.PlaneGeometry(.0070, .0230), new THREE.MeshBasicMaterial({
-    color: new THREE.Color('#b6ecfb'), map: streakTex, transparent: true, opacity: .50, depthWrite: false,
+  const streak = mesh(new THREE.PlaneGeometry(.0250, .0700), new THREE.MeshBasicMaterial({
+    color: new THREE.Color('#2f6cb4'), map: streakTex, transparent: true, opacity: .88, depthWrite: false,
   }), [off.x, off.y, off.z + .0035], { cast: false, recv: false });
   streak.rotation.z = ang; fxLayer(streak); fuzzG.add(streak);
-  const wet2 = mesh(new THREE.PlaneGeometry(.0045, .0150), new THREE.MeshBasicMaterial({
-    color: new THREE.Color('#d8f4ff'), map: streakTex, transparent: true, opacity: .30, depthWrite: false,
+  const wet2 = mesh(new THREE.PlaneGeometry(.0060, .0230), new THREE.MeshBasicMaterial({
+    color: new THREE.Color('#cdeeff'), map: streakTex, transparent: true, opacity: .55, depthWrite: false,
   }), [off.x, off.y, off.z + .0050], { cast: false, recv: false });
   wet2.rotation.z = ang; fxLayer(wet2); fuzzG.add(wet2);
+  // cụm xơ thật sự quanh vệt: vài sợi lông tỏa ra, để vệt nước nằm TRONG xơ
+  // chứ không phải một vệt thẳng trên một mặt phẳng trơn
+  for (let i = 0; i < 6; i++) {
+    const a = ang + (i - 2.5) * .26 + Math.sin(i * 2.3) * .08;
+    const len = .010 + (i % 3) * .005;
+    const fz = mesh(new THREE.PlaneGeometry(.0011, len), new THREE.MeshBasicMaterial({
+      color: new THREE.Color('#eaf1ff'), transparent: true, opacity: .20, depthWrite: false,
+    }), [off.x + Math.cos(a) * len * .55, off.y + Math.sin(a) * len * .55, off.z + .0026], { rot: [0, 0, a - Math.PI / 2], cast: false, recv: false });
+    fxLayer(fz); fuzzG.add(fz);
+  }
   return { group: g, filmG, fuzzG, film, beads, streak };
 }
 // hình giọt: tròn ở dưới, thắt lên trên, có mặt meniscus lõm ở đỉnh
@@ -2866,8 +2966,8 @@ export function wovenCloth({ n = 44, size = .34, r = null } = {}) {
       c.beginPath(); c.moveTo(x, y); c.lineTo(x + L, y + (r() - .5) * 3.2); c.stroke();
     }
   });
-  const matWarp = toon('#f8f2e5', { map: tex, grad: gradSoft });
-  const matWeft = toon('#e9e2d0', { map: tex, grad: gradSoft });
+  const matWarp = toon('#ece0c6', { map: tex, grad: gradSoft });
+  const matWeft = toon('#dcd0b2', { map: tex, grad: gradSoft });
 
   // ── tấm vải có một nếp gấp: mặt vải không phẳng như tấm bảng ──
   const drape = (a, b) => .022 * Math.tanh((a - size * .13) / (size * .070))
@@ -2888,7 +2988,7 @@ export function wovenCloth({ n = 44, size = .34, r = null } = {}) {
     const a = a0 + k * PITCH;
     const c = curveFrom(b => P(a, b, warpZ(k, b)), b0 - PITCH * .5, -b0 + PITCH * .5, 130);
     warpCurves.push(c);
-    const m = new THREE.Mesh(tubeGeo(framesOf(c, 150), rWarp, { radial: 10 }), matWarp);
+    const m = new THREE.Mesh(tubeGeo(framesOf(c, 150), rWarp, { radial: 10, flat: .72 }), matWarp);
     m.castShadow = true; m.receiveShadow = true; g.add(m);
   }
   // sợi ngang (weft): luồn ngược pha, nằm dưới sợi dọc ở điểm giao
@@ -2896,7 +2996,7 @@ export function wovenCloth({ n = 44, size = .34, r = null } = {}) {
     const b = b0 + j * PITCH;
     const c = curveFrom(a => P(a, b, weftZ(j, a)), a0 - PITCH * .5, -a0 + PITCH * .5, 130);
     weftCurves.push(c);
-    const m = new THREE.Mesh(tubeGeo(framesOf(c, 130), rWeft, { radial: 10 }), matWeft);
+    const m = new THREE.Mesh(tubeGeo(framesOf(c, 130), rWeft, { radial: 10, flat: .72 }), matWeft);
     m.castShadow = true; m.receiveShadow = true; g.add(m);
   }
 
@@ -2957,7 +3057,7 @@ export function wovenCloth({ n = 44, size = .34, r = null } = {}) {
 export function dropOnThread() {
   const g = new THREE.Group();
   const R = .0009;                                  // bán kính sợi: chỉ bông/len, mảnh như sợi thật
-  const LEN = .064;
+  const LEN = .042;
 
   // ── khung ổn định dọc sợi ──
   const framesOf = (curve, steps) => {
@@ -2985,7 +3085,7 @@ export function dropOnThread() {
   };
   // ── ống tròn, hai đầu bo tròn (không nhọn như gai) ──
   const tubeGeo = (fr, r, opt = {}) => {
-    const { radial = 12, tip = .05 } = opt;
+    const { radial = 12, tip = .05, flat = 1 } = opt;
     const steps = fr.length - 1;
     const surf = (i, j) => {
       const f = fr[i], th = (j / radial) * Math.PI * 2;
@@ -2994,10 +3094,11 @@ export function dropOnThread() {
       const cap = e >= 1 ? 1 : Math.sqrt(Math.max(0, 1 - (1 - e) * (1 - e)));
       const rad = r * cap;
       const cx = Math.cos(th), sy = Math.sin(th);
+      // sợi là một DẢI MỎNG nằm ngang, không phải que tròn: que tròn đọc ra là que đo có vạch số
       return new THREE.Vector3(
-        f.p.x + (f.n.x * cx + f.b.x * sy) * rad,
-        f.p.y + (f.n.y * cx + f.b.y * sy) * rad,
-        f.p.z + (f.n.z * cx + f.b.z * sy) * rad);
+        f.p.x + (f.n.x * cx + f.b.x * sy * flat) * rad,
+        f.p.y + (f.n.y * cx + f.b.y * sy * flat) * rad,
+        f.p.z + (f.n.z * cx + f.b.z * sy * flat) * rad);
     };
     const pos = [], uvs = [], idx = [];
     for (let i = 0; i <= steps; i++) for (let j = 0; j <= radial; j++) {
@@ -3048,18 +3149,18 @@ export function dropOnThread() {
   const threadMat = toon('#f2e6cc', { map: threadTex, grad: gradSoft });
   const threadWetMat = toon('#c9b892', { map: threadTex, grad: gradSoft });   // đoạn dưới giọt bị ướt: tối hơn
   // hai nửa sợi: nửa trên khô, nửa dưới ướt
-  const dryCurve = new THREE.CatmullRomCurve3(pts.slice(0, 16));
-  const wetCurve = new THREE.CatmullRomCurve3(pts.slice(15));
-  const dry = new THREE.Mesh(tubeGeo(framesOf(dryCurve, 90), R, { radial: 10, tip: .03 }), threadMat);
+  // hai nửa sợi lấy từ CÙNG một đường cong (cùng tham số hoá) — cắt riêng hai đường cong làm sợi
+  // gãy khúc ở chỗ tiếp nối, và sợi gãy đọc ra là que đo
+  const dry = new THREE.Mesh(tubeGeo(framesOf(curve, 90, 0, .48), R, { radial: 10, tip: .03, flat: .52 }), threadMat);
   dry.castShadow = true; dry.receiveShadow = true; g.add(dry);
-  const wet = new THREE.Mesh(tubeGeo(framesOf(wetCurve, 90), R, { radial: 10, tip: .03 }), threadWetMat);
+  const wet = new THREE.Mesh(tubeGeo(framesOf(curve, 90, .48, 1), R, { radial: 10, tip: .03, flat: .52 }), threadWetMat);
   wet.castShadow = true; wet.receiveShadow = true; g.add(wet);
 
   // vài sợi xơ mềm lệch ra từ sợi chính
   {
     const r2 = mulberry(71);
     const fPos = [], fIdx = [];
-    for (let i = 0; i < 34; i++) {
+    for (let i = 0; i < 22; i++) {
       const t = .06 + r2() * .88, p = curve.getPointAt(t), tg = curve.getTangentAt(t);
       const a = r2() * Math.PI * 2;
       const out = new THREE.Vector3(Math.cos(a), Math.sin(a), (r2() - .5) * .5).normalize()
@@ -3089,7 +3190,7 @@ export function dropOnThread() {
   const mid = curve.getPointAt(.5);
   const up = new THREE.Vector3(0, 1, 0);
   const dg = new THREE.Group();
-  const DR = .0026;                                       // bán kính lớn nhất của giọt
+  const DR = .0042;                                       // bán kính lớn nhất của giọt
   // đáy giọt ăn vào sợi: sợi đi xuyên qua thân giọt, không treo lủng lẳng bên dưới
   dg.position.copy(mid.clone().addScaledVector(up, DR * .30));
   // hình giọt dạt: bụng tròn, đáy bẹp, đỉnh nhọn nhẹ
@@ -3098,13 +3199,13 @@ export function dropOnThread() {
   const lathe = [];
   for (const [x, y] of prof) lathe.push(new THREE.Vector2(x * DR, y * DR));
   const body = new THREE.Mesh(new THREE.LatheGeometry(lathe, 22),
-    toon('#a9dff2', { transparent: true, opacity: .60, depthWrite: false }));
+    toon('#93ddf6', { transparent: true, opacity: .58, depthWrite: false }));
   body.castShadow = false; body.receiveShadow = false;
   body.renderOrder = 2;
   dg.add(body);
   // lõi đậm hơn ở giữa: giọt có thân, vẫn thấy sợi xuyên qua
   const core2 = new THREE.Mesh(new THREE.SphereGeometry(DR * .62, 16, 12),
-    toon('#63b9dd', { transparent: true, opacity: .40, depthWrite: false }));
+    toon('#5cc3e6', { transparent: true, opacity: .30, depthWrite: false }));
   core2.position.set(0, DR * .45, 0); core2.scale.set(1, .95, 1);
   core2.renderOrder = 1;
   dg.add(core2);
@@ -3163,9 +3264,25 @@ export function waterSurface({ w = 1.6, d = 1.0 } = {}) {
       c.stroke();
     }
     c.restore();
+    // bờ foam: một mép trắng bám theo đường bờ — dấu hiệu rõ nhất của MẶT NƯỚC
+    // (không có nó, mặt nước đọc ra là một chùm sợi xanh)
+    c.save(); c.lineCap = 'round';
+    for (const [wd, al] of [[.020, .55], [.011, .80]]) {
+      c.beginPath();
+      for (let i = 0; i <= 90; i++) {
+        const z = -D / 2 + (i / 90) * D;
+        const px = (shoreX(z) + .004 + W / 2) / W * cw;
+        const py = ((D / 2 - z) / D) * ch;
+        i ? c.lineTo(px, py) : c.moveTo(px, py);
+      }
+      c.strokeStyle = `rgba(244,252,255,${al})`;
+      c.lineWidth = wd / W * cw * 2;
+      c.stroke();
+    }
+    c.restore();
     // gợn sóng: các ĐƯỜNG NGANG song song, xen kẽ vệt sáng và vệt tối, chạy suốt chiều ngang
     const r = mulberry(701);
-    const NB = 44;
+    const NB = 26;
     for (let i = 0; i < NB; i++) {
       const y = (i + .5) / NB * ch;
       const hgt = ch / NB * (.40 + (i % 3 === 0 ? .14 : 0));
@@ -3173,15 +3290,15 @@ export function waterSurface({ w = 1.6, d = 1.0 } = {}) {
       const gg = c.createLinearGradient(0, y - hgt, 0, y + hgt);
       if (light) {
         gg.addColorStop(0, 'rgba(255,255,255,0)');
-        gg.addColorStop(.5, 'rgba(255,255,255,.22)');
+        gg.addColorStop(.5, 'rgba(255,255,255,.13)');
         gg.addColorStop(1, 'rgba(255,255,255,0)');
       } else {
         gg.addColorStop(0, 'rgba(16,62,92,0)');
-        gg.addColorStop(.5, 'rgba(16,62,92,.17)');
+        gg.addColorStop(.5, 'rgba(16,62,92,.10)');
         gg.addColorStop(1, 'rgba(16,62,92,0)');
       }
       c.fillStyle = gg; c.fillRect(0, y - hgt, cw, hgt * 2);
-      c.strokeStyle = light ? 'rgba(255,255,255,.15)' : 'rgba(10,50,78,.15)';
+      c.strokeStyle = light ? 'rgba(255,255,255,.07)' : 'rgba(10,50,78,.07)';
       c.lineWidth = 1.5 + (i % 3);
       c.beginPath(); c.moveTo(0, y); c.lineTo(cw, y); c.stroke();
     }
@@ -3281,6 +3398,9 @@ export function waterSurface({ w = 1.6, d = 1.0 } = {}) {
   };
   wave(0);
 
+  // các phân tử cố định ở mép nước (khai báo ngoài khối bờ để set.js đổi màu được)
+  const fixedMols = [];
+
   // ── bờ: dải đất/cát cong, mép nước ướt, sườn bờ lên rồi tụt xuống ──
   {
     const sandTex = canvasTex(512, 512, (c, cw, ch) => {
@@ -3355,6 +3475,32 @@ export function waterSurface({ w = 1.6, d = 1.0 } = {}) {
       b.renderOrder = 3;
       fxLayer(b); g.add(b);
     }
+    // BA PHÂN TỬ CỐ ĐỊNH ở mép nước: nhát siêu cận phải nhìn thấy đúng vật mà thẻ "1 PHÂN TỬ" chỉ vào.
+    // Hình của phân tử nước: một ô xi (đỏ) + hai nguyên tử hiđro (trắng) xếp chữ V.
+    // Kích thước CỐ Ý to hơn thật: đây là hình minh hoạ, phân tử phải đọc được
+    // trong một khung cận cảnh, không phải một chấm nhỏ trên mảng nước trống.
+    const molO = toon('#d9503f', { transparent: true, opacity: .95, depthWrite: false });
+    const molH = toon('#f6feff', { transparent: true, opacity: .96, depthWrite: false });
+    const waterMol = (mr) => {
+      const c = new THREE.Group();
+      const o = mesh(new THREE.SphereGeometry(mr, 16, 12), molO, [0, 0, 0], { cast: false, recv: false });
+      c.add(o);
+      const a = 52.25 * Math.PI / 180, d = mr * 1.42;
+      for (const s of [1, -1]) {
+        c.add(mesh(new THREE.SphereGeometry(mr * .44, 12, 8), molH,
+          [d * Math.cos(a), d * Math.sin(a) * s, 0], { cast: false, recv: false }));
+      }
+      return c;
+    };
+    const fixedMolsLocal = [];
+    for (const [mx, my, mz, mr] of [[-.985, .042, .020, .0300], [-1.045, .030, -.052, .0198], [-.930, .034, .078, .0172]]) {
+      const m = waterMol(mr);
+      m.position.set(mx, my, mz);
+      m.renderOrder = 3;
+      fxLayer(m); g.add(m);
+      fixedMolsLocal.push({ m, o: m.children[0] });
+    }
+    for (const q of fixedMolsLocal) fixedMols.push(q);
     // vệt bọt trắng: dải bọt mỏng chạy song song mép nước, xen kẽ vệt sáng và vệt tối
     {
       const foamTex = canvasTex(512, 128, (c, cw, ch) => {
@@ -3395,45 +3541,61 @@ export function waterSurface({ w = 1.6, d = 1.0 } = {}) {
   }
 
   // ── phân tử nước: hạt nhỏ trong lớp nước, một hạt bứt ra ngoài ──
-  const cluster = (m0, m1, m2, s = 1) => {
+  // Hình của phân tử: một ô xi (đỏ) + hai nguyên tử hiđro (trắng) xếp chữ V.
+  const molO2 = toon('#d9503f', { transparent: true, opacity: .90, depthWrite: false });
+  const molH2 = toon('#eefbff', { transparent: true, opacity: .92, depthWrite: false });
+  const cluster = (s = 1) => {
     const c = new THREE.Group();
-    c.add(mesh(new THREE.SphereGeometry(.019 * s, 10, 8), m0, [0, 0, 0], { cast: false }));
-    c.add(mesh(new THREE.SphereGeometry(.014 * s, 8, 6), m1, [.016 * s, .011 * s, .005], { cast: false }));
-    c.add(mesh(new THREE.SphereGeometry(.012 * s, 8, 6), m1, [-.014 * s, -.008 * s, .008], { cast: false }));
+    c.add(mesh(new THREE.SphereGeometry(.019 * s, 10, 8), molO2, [0, 0, 0], { cast: false }));
+    c.add(mesh(new THREE.SphereGeometry(.010 * s, 8, 6), molH2, [.016 * s, .011 * s, .005], { cast: false }));
+    c.add(mesh(new THREE.SphereGeometry(.010 * s, 8, 6), molH2, [-.014 * s, -.008 * s, .008], { cast: false }));
     return c;
   };
-  const molMat = toon('#9adff2', { transparent: true, opacity: .50 });
-  const molBright = toon('#bfeaf8', { transparent: true, opacity: .66 });
   const molecules = [];
   const r = mulberry(17);
   for (let i = 0; i < 20; i++) {
-    const c = cluster(molMat, molMat, molMat, .13);
+    const c = cluster(.13);
     c.position.set((r() - .5) * w * .8, ASUM - .010 - r() * .040, (r() - .5) * d * .8);
     fxLayer(c); c.renderOrder = 3;
     g.add(c);
     molecules.push({ m: c, x: c.position.x, y: c.position.y, z: c.position.z, ph: r() * 9, sp: .6 + r() * 1.6 });
   }
   const surf = [];
-  const FIX = [[.02, .01], [-.07, -.05], [.09, -.04], [-.02, .08]];
+  const FIX = [[-.060, .020], [-.075, -.050], [.095, -.040], [-.020, .080]];
+  // các phân tử NẰM trên mặt nước: phải to đủ để đọc được trong khung cận,
+  // và vài cái phải NẰM KHÔNG TRÊN MẶT (đang nhảy lên) — không có phân tử
+  // nào ở trạng thái bay thì câu "các phân tử cứ nhảy lung tung" không có hình.
   for (let i = 0; i < 12; i++) {
-    const c = cluster(molBright, molBright, molBright, .15);
+    const c = cluster(.40);
     const f = FIX[i];
     c.position.set(f ? f[0] : (r() - .5) * w * .7, ASUM + .002, f ? f[1] : (r() - .5) * d * .7);
     fxLayer(c); c.renderOrder = 3;
     g.add(c);
-    surf.push({ m: c, x: c.position.x, z: c.position.z, ph: r() * 9, sp: .8 + r() * 1.2, hop: i % 5 === 0 });
+    // vệt mờ dọc: dấu vết của phân tử khi nó nhảy lên khỏi mặt nước
+    const trail = mesh(new THREE.SphereGeometry(.010, 10, 8), toon('#cfeeff', { transparent: true, opacity: .38, depthWrite: false }),
+      [0, 0, 0], { cast: false, recv: false });
+    trail.scale.set(.55, 2.2, .55); trail.visible = false; trail.renderOrder = 2;
+    fxLayer(trail); g.add(trail);
+    surf.push({ m: c, trail, x: c.position.x, z: c.position.z, ph: r() * 9, sp: .8 + r() * 1.2, hop: i % 3 === 0 });
   }
   const esc = [];
   {
-    const c = cluster(glowMat('#d8f6ff', .48), glowMat('#bfe9fb', .40), glowMat('#d8f6ff', .48), .40);
+    const c = cluster(.40);
     c.position.set(0, ASUM + .004, .01);
     fxLayer(c); c.renderOrder = 4; g.add(c);
     esc.push({ m: c, x: 0, z: .01, ph: 0, t0: 0 });
   }
-  // các nhịt bay lên: 43.6–47.4, 48.4–52.0, 52.4–56.0 (đúng các nhát cận mặt nước)
-  const FLIGHTS = [[43.6, 47.4], [48.4, 52.0], [52.4, 56.0]];
+  // các nhịt bay lên: 48.6–51.6 (nhát c16) và 51.7–54.0 (nhát c17)
+  const FLIGHTS = [[48.6, 51.6], [51.7, 54.0]];
   return {
-    group: g, water, molecules, surf, esc, glints,
+    group: g, water, molecules, surf, esc, glints, fixedMols,
+    // phần nước còn lại MÁT ĐI: ô xi của các phân tử ở mép nước chuyển từ
+    // đỏ ấm sang xanh lạnh — đó là mã hình cho chữ "mát đi".
+    setCool: (k) => {
+      const c = new THREE.Color('#d9503f').lerp(new THREE.Color('#5fa8e8'), clamp(k));
+      for (const q of fixedMols) q.o.material.color.copy(c);
+      for (const q of surf) q.m.children[0].material.color.copy(c);
+    },
     update: (t) => {
       wave(t);
       for (const q of glints) {
@@ -3445,11 +3607,16 @@ export function waterSurface({ w = 1.6, d = 1.0 } = {}) {
       for (const q of molecules) {
         q.m.position.set(q.x + Math.sin(t * q.sp + q.ph) * .022, q.y + Math.cos(t * q.sp * .8 + q.ph) * .014, q.z + Math.sin(t * q.sp * .6 + q.ph * 1.3) * .022);
       }
-      // nằm yên sát mặt; vài hạt nhảy nhẹ
+      // nằm yên sát mặt; vài hạt nhảy nhẹ — hạt đang nhảy thì có vệt mờ dọc
       for (const q of surf) {
         const k = ((t * q.sp * .35 + q.ph) % 1);
-        const h = q.hop ? Math.max(0, Math.sin(k * Math.PI)) * .010 : 0;
+        const h = q.hop ? Math.max(0, Math.sin(k * Math.PI)) * .026 : 0;
         q.m.position.set(q.x + Math.sin(t * q.sp + q.ph) * .006, ASUM + .002 + h, q.z + Math.cos(t * q.sp * .7 + q.ph) * .006);
+        if (q.trail) {
+          q.trail.visible = h > .004;
+          q.trail.position.set(q.m.position.x, q.m.position.y - .016, q.m.position.z);
+          q.trail.material.opacity = .10 + .30 * (h / .026);
+        }
       }
       // một phân tử bứt ra ngoài rồi rơi xuống
       let fl = null;
@@ -3462,6 +3629,34 @@ export function waterSurface({ w = 1.6, d = 1.0 } = {}) {
       }
     },
   };
+}
+
+// ── bàn phơi gỗ: mặt phẳng có nan, đặt quần áo trải ra để so sánh ────
+// Hai câu cuối (#49, #60) cần hai cái áo nằm cạnh nhau để đối chiếu.
+// Trước đây chúng nằm trên sàn gạch — lệch với mọi cảnh khác trong phim
+// (mọi cảnh còn lại đều treo trên dây). Bàn phơi là một đạo cụ đứng riêng:
+// khung hình có mặt bàn gỗ, không phải nền gạch trơn.
+export function dryBench({ w = 2.30, d = .82, h = .42 } = {}) {
+  const g = new THREE.Group();
+  const woodMat = toon('#ffffff', { map: TEX.wood() });
+  // mặt bàn: năm nan gỗ, kẽ hở giữa các nan
+  const NS = 5, SW = w / NS;
+  for (let i = 0; i < NS; i++) {
+    const x = -w / 2 + SW / 2 + i * SW;
+    g.add(mesh(rbox(SW - .018, .028, d, .006), woodMat, [x, h, 0]));
+  }
+  // đà dọc hai bên + đà giữa
+  g.add(mesh(rbox(w, .05, .05, .008), M.woodDark, [0, h - .04, -d / 2 + .05]));
+  g.add(mesh(rbox(w, .05, .05, .008), M.woodDark, [0, h - .04, d / 2 - .05]));
+  g.add(mesh(rbox(w, .05, .05, .008), M.woodDark, [0, h - .04, 0]));
+  // bốn chân
+  for (const [x, z] of [[-w / 2 + .12, -d / 2 + .10], [w / 2 - .12, -d / 2 + .10],
+                        [-w / 2 + .12, d / 2 - .10], [w / 2 - .12, d / 2 - .10]])
+    g.add(mesh(new THREE.CylinderGeometry(.030, .036, h - .04, 8), M.woodDark, [x, (h - .04) / 2, z]));
+  // chân ngang giữa, cho bàn thấy vững
+  for (const z of [-d / 2 + .10, d / 2 - .10])
+    g.add(mesh(new THREE.CylinderGeometry(.020, .020, w - .30, 6), M.woodDark, [0, .13, z], { rot: [0, 0, Math.PI / 2] }));
+  return { group: g };
 }
 
 // ── bàn tay người ─────────────────────────────────────────────────────
@@ -3501,10 +3696,17 @@ export function hand({ skin = '#f0c39a', size = 1 } = {}) {
   });
   skinTex.wrapS = skinTex.wrapT = THREE.RepeatWrapping;
   skinTex.repeat.set(2.4, 2.4);
-  const S = toon(skin, { map: skinTex });
-  const SV = toon('#ffffff', { map: skinTex, vertexColors: true });   // da nhiều tông: đầu ngón đỏ, kẽ ngón tối
-  const N = toon('#f8d6c6', { map: skinTex });                        // móng tay: nhạt hơn, bo tròn
-  const K = toon(new THREE.Color(skin).multiplyScalar(.80));         // nếp da: tối hơn, KHÔNG phải vòng đen
+  // da: bảng chuyển sáng MỀM — bóng toon mặc định (0.22) biến cẳng tay thành một cán gỗ nâu
+  const gradSkin = (() => {
+    const d = new Uint8Array([176, 176, 172, 255, 206, 202, 196, 255, 228, 224, 218, 255, 250, 248, 244, 255]);
+    const t = new THREE.DataTexture(d, 4, 1, THREE.RGBAFormat);
+    t.minFilter = t.magFilter = THREE.NearestFilter; t.needsUpdate = true;
+    return t;
+  })();
+  const S = toon(skin, { map: skinTex, grad: gradSkin });
+  const SV = toon('#ffffff', { map: skinTex, vertexColors: true, grad: gradSkin });   // da nhiều tông: đầu ngón đỏ, kẽ ngón tối
+  const N = toon('#f8d6c6', { map: skinTex, grad: gradSkin });                        // móng tay: nhạt hơn, bo tròn
+  const K = toon(new THREE.Color(skin).multiplyScalar(.80), { grad: gradSkin });     // nếp da: tối hơn, KHÔNG phải vòng đen
   // bốn tông da: gốc / đỏ hơn ở đầu ngón và mu bàn tay / hồng ở lòng bàn tay / tối ở kẽ ngón
   const C_BASE = new THREE.Color(skin);
   const C_TIP = new THREE.Color(skin).lerp(new THREE.Color('#d8794f'), .55);
@@ -3569,7 +3771,9 @@ export function hand({ skin = '#f0c39a', size = 1 } = {}) {
   };
   // màu da cẳng tay: ấm hơn, không đỏ như đầu ngón
   const armColor = (x, y, z, out) => {
-    out.copy(C_BASE);
+    // cẳng tay sáng hơn bàn tay: bóng toon + ánh sáng mặt đất (nâu) làm cẳng tay tối thành màu gỗ
+    out.copy(C_BASE).multiplyScalar(1.45);
+    out.lerp(new THREE.Color(1, 1, 1), .10);
     if (y >= 0) out.lerp(C_TIP, .10); else out.lerp(C_PALM, .22);
   };
   // nếp da: một vòng cong mảnh bọc mặt lòng bàn tay của một đốt ngón
@@ -3647,17 +3851,35 @@ export function hand({ skin = '#f0c39a', size = 1 } = {}) {
       { x: -.042, yc: -.003, ry: .0126, rz: .0258 },
       { x: -.058, yc: -.003, ry: .0132, rz: .0257 },
       { x: -.080, yc: -.002, ry: .0152, rz: .0259 },
-      { x: -.110, yc: -.001, ry: .0180, rz: .0264 },
-      { x: -.145, yc: .000, ry: .0206, rz: .0270 },
-      { x: -.185, yc: .001, ry: .0230, rz: .0276 },
-      { x: -.220, yc: .002, ry: .0248, rz: .0282 },
-      { x: -.248, yc: .003, ry: .0256, rz: .0286 },
-      { x: -.262, yc: .003, ry: .0232, rz: .0258 },
-      { x: -.271, yc: .003, ry: .0168, rz: .0188 },
-      { x: -.276, yc: .003, ry: .0086, rz: .0096 },
-      { x: -.278, yc: .003, ry: .0020, rz: .0022 },
+      { x: -.106, yc: -.001, ry: .0176, rz: .0263 },
+      { x: -.132, yc: .000, ry: .0198, rz: .0268 },
+      { x: -.156, yc: .001, ry: .0214, rz: .0272 },
+      { x: -.176, yc: .002, ry: .0212, rz: .0268 },
+      { x: -.190, yc: .002, ry: .0188, rz: .0244 },
+      { x: -.200, yc: .002, ry: .0128, rz: .0170 },
+      { x: -.205, yc: .002, ry: .0064, rz: .0090 },
+      { x: -.207, yc: .002, ry: .0016, rz: .0024 },
     ];
     g.add(mesh(sweep(armRings, 20, armColor), SV, [0, 0, 0]));
+    // tay áo vải cuộn lên: cẳng tay không phải một CÁN GỖ (người xem đọc cẳng tay trần là bàn chân mannequin)
+    {
+      const sleeveMat = toon('#8d98a9', { grad: gradSkin });
+      const sleeveRings = [
+        { x: -.170, yc: .002, ry: .0170, rz: .0224 },
+        { x: -.162, yc: .002, ry: .0200, rz: .0256 },
+        { x: -.152, yc: .002, ry: .0232, rz: .0286 },
+        { x: -.156, yc: .001, ry: .0234, rz: .0290 },
+        { x: -.132, yc: .000, ry: .0218, rz: .0286 },
+        { x: -.112, yc: -.001, ry: .0198, rz: .0274 },
+        { x: -.098, yc: -.002, ry: .0182, rz: .0266 },
+        { x: -.090, yc: -.002, ry: .0172, rz: .0260 },
+      ];
+      g.add(mesh(sweep(sleeveRings, 18), sleeveMat, [0, 0, 0]));
+      // mép cuộn: một vòng vải dày ở cổ tay áo
+      const cuff = mesh(new THREE.TorusGeometry(.0180, .0034, 8, 22), toon('#7f8a9b'), [-.090, -.002, 0]);
+      cuff.rotation.y = Math.PI / 2; cuff.scale.set(1, 1, 1.42);
+      g.add(cuff);
+    }
   }
 
   // các ngón: 4 ngón dài + 1 ngón cái, mỗi ngón có nếp khớp và móng tay
@@ -3726,8 +3948,8 @@ export function hand({ skin = '#f0c39a', size = 1 } = {}) {
   };
   // mặc định: bàn tay mở, ngón hơi cong — đọc ra là bàn tay người
   fingers.forEach(([a, b, c], i) => {
-    const k = i === 3 ? .10 : .16;
-    a.rotation.set(0, (i - 1.5) * .17, -k); b.rotation.z = -k * 1.2; c.rotation.z = -k * .9;
+    const k = i === 3 ? .08 : .13;
+    a.rotation.set(0, (i - 1.5) * .30, -k); b.rotation.z = -k * 1.2; c.rotation.z = -k * .9;
   });
   th.rotation.set(-.30, -.50, .10); t2.rotation.z = -.50; t3.rotation.z = -.42;
   g.traverse(o => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } });
@@ -3738,7 +3960,8 @@ export { glowMat, fxLayer, PAL };
 
 // ── danh mục đạo cụ: propcheck dựng từng vật một, ba góc nhìn ────────
 const gE_hemClothTex = () => canvasTex(256, 256, (c, w, h) => {
-  c.fillStyle = '#f2c14e'; c.fillRect(0, 0, w, h);
+  // khăn trắng/cream: màu cam đậm làm mảnh vải đọc ra là một tấm ván gỗ
+  c.fillStyle = '#ece3cf'; c.fillRect(0, 0, w, h);
   const r = mulberry(96);
   // nền xù terry: các núm vòng nhỏ
   for (let y = 0; y < h; y += 6) {
@@ -3746,13 +3969,13 @@ const gE_hemClothTex = () => canvasTex(256, 256, (c, w, h) => {
     for (let x = 0; x < w; x += 6) {
       const px = x + off + r() * 1.4, py = y + r() * 1.4, rad = 2.2 + r() * 1.3;
       const g2 = c.createRadialGradient(px - rad * .3, py - rad * .35, rad * .1, px, py, rad);
-      g2.addColorStop(0, 'rgba(255,255,255,.55)');
-      g2.addColorStop(.55, 'rgba(196,150,60,.28)');
-      g2.addColorStop(1, 'rgba(150,110,40,.20)');
+      g2.addColorStop(0, 'rgba(255,255,255,.60)');
+      g2.addColorStop(.55, 'rgba(206,192,160,.30)');
+      g2.addColorStop(1, 'rgba(178,162,128,.22)');
       c.fillStyle = g2; c.beginPath(); c.arc(px, py, rad, 0, 7); c.fill();
     }
   }
-  // mép ướt sẫm: vệt nâu ở đáy tấm vải (canvas đáy = v = 0 = mép khăn), mép trên méo mó
+  // mép ướt sẫm: vệt ẩm ở đáy tấm vải (canvas đáy = v = 0 = mép khăn), mép trên méo mó
   const edge = (u) => h - (26 + 8 * Math.sin(u * 9.1) + 5 * Math.sin(u * 21.3 + 1.2));
   c.save();
   c.beginPath();
@@ -3760,15 +3983,15 @@ const gE_hemClothTex = () => canvasTex(256, 256, (c, w, h) => {
   for (let i = 0; i <= 40; i++) { const u = i / 40; c.lineTo(u * w, edge(u)); }
   c.lineTo(w, h); c.closePath();
   const wet = c.createLinearGradient(0, h, 0, h * .55);
-  wet.addColorStop(0, 'rgba(66,52,20,.80)');
-  wet.addColorStop(.45, 'rgba(120,92,30,.32)');
-  wet.addColorStop(1, 'rgba(150,116,40,0)');
+  wet.addColorStop(0, 'rgba(84,74,50,.72)');
+  wet.addColorStop(.45, 'rgba(140,126,96,.30)');
+  wet.addColorStop(1, 'rgba(170,158,128,0)');
   c.fillStyle = wet; c.fill();
   c.restore();
   // vài vệt ướt loang trên vải
   for (let i = 0; i < 26; i++) {
     c.globalAlpha = .08 + r() * .14;
-    c.fillStyle = '#4a3a16';
+    c.fillStyle = '#6a5f46';
     c.beginPath(); c.ellipse(r() * w, h * .62 + r() * h * .34, 8 + r() * 26, 4 + r() * 10, r() * 3, 0, 7); c.fill();
   }
   c.globalAlpha = 1;
@@ -4286,5 +4509,6 @@ export const PROPS = {
   'áo phơi rộng: cả hai mặt phơi ra': () => spreadShirt().group,
   'áo úp: mép dưới úp lên, mảng ẩm nằm trên mặt gấp': () => foldedShirt().group,
   'giọt nước rơi từ mép khăn': () => hemDrop().group,
+  'bàn phơi gỗ có nan, trải quần áo ra để so sánh': () => dryBench().group,
   'bàn tay người': () => hand().group,
 };
