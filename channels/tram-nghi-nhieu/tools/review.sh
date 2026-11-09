@@ -712,7 +712,32 @@ if [ "$PU" = 1 ]; then
 fi
 echo "review: beat frames…" >&2
 REL=$(python3 -c "import os,sys; print(os.path.relpath(sys.argv[1], sys.argv[2]))" "$EP" "$LIB")   # the page server serves the library root
-(cd "$LIB" && node channels/tram-nghi-nhieu/beatsheet.mjs "$REL" --out "$W/beats" ${LINES:+--lines "$LINES"} >/dev/null)
+# The beat sheet is sixty rendered frames — the most expensive single step of a review, and the director has
+# usually built one already (step 3 of the guide). If nothing in the film changed since that sheet was built, it is
+# the same picture: use it, instead of paying for the same sixty frames twice in one round.
+NEWEST=$(python3 -c "
+import os, sys, glob
+ep = sys.argv[1]
+files = glob.glob(os.path.join(ep, 'src', '*.js')) + [os.path.join(ep, 'voice', 'lines.json'), os.path.join(ep, 'voice', 'proc', 'dur.json')]
+print(max([os.path.getmtime(f) for f in files if os.path.isfile(f)] or [0]))" "$EP")
+REUSED=""
+if [ -z "$LINES" ]; then
+  for CAND in "$EP/out/beats" "$EP/review/beatsheet"; do
+    if [ -f "$CAND/beats.json" ] && ls "$CAND"/sheet_*.jpg >/dev/null 2>&1; then
+      if python3 -c "import os,sys; sys.exit(0 if os.path.getmtime(sys.argv[1]) >= float(sys.argv[2]) else 1)" "$CAND/beats.json" "$NEWEST"; then
+        REUSED="$CAND"
+        break
+      fi
+    fi
+  done
+fi
+if [ -n "$REUSED" ]; then
+  echo "review: dùng lại tờ sheet đã dựng ở $REUSED — không có mã nào đổi sau lần dựng đó." >&2
+  cp "$REUSED"/*.jpg "$W/beats/" 2>/dev/null || true
+  cp "$REUSED/beats.json" "$W/beats/" 2>/dev/null || true
+else
+  (cd "$LIB" && node channels/tram-nghi-nhieu/beatsheet.mjs "$REL" --out "$W/beats" ${LINES:+--lines "$LINES"} >/dev/null)
+fi
 cp "$EP/voice/lines.json" "$W/"; [ -f "$EP/research/FACTS.md" ] && cp "$EP/research/FACTS.md" "$W/"
 cp "$W/beats/beats.json" "$W/"
 for f in set_kitchen inside_banana flow cutaway_3; do [ -f "$CHANNEL/demo/stills/$f.jpg" ] && cp "$CHANNEL/demo/stills/$f.jpg" "$W/ref/"; done

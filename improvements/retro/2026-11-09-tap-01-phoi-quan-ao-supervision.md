@@ -1879,6 +1879,8 @@ tiền (trước vòng chấm, trước lúc dựng, trước lúc bàn giao), c
 | 61 | Cái khoá phải biết chặn được ai (N61) | `channels/tram-nghi-nhieu/tools/test_review_lock.py` | **xong** — 5 ca selftest: khoá sống chặn, khoá chết được lấy lại, khoá phần khác không chặn, khoá được dọn |
 | 62 | Hướng dẫn và cổng phải nói cùng một cách chấm phim (N62) | `channels/tram-nghi-nhieu/tools/review.sh`, `.agents/skills/tram-nghi-nhieu/step6-assembly/GUIDE.md` | **xong** — công cụ cảnh báo **trước** khi hết lượt; hướng dẫn nói đường đi theo độ dài tập |
 | 63 | Lỗi máy thấy sẵn thì đừng để người chấm là người phát hiện (N63) | `channels/tram-nghi-nhieu/tools/check_shots.py`, `.agents/skills/tram-nghi-nhieu/step6-assembly/GUIDE.md` | **xong** — 8 ca selftest. Đo trên tap-01: **36/60 câu** có lỗi máy thấy được, trong đó 22 câu có cờ SAME |
+| 64 | Quy tắc phải phân biệt việc với lãng phí (N64) | `tools/rules.py` | **xong** — mỗi lần nhìn được xếp vào một phiên bản theo chính lúc ghi tệp trong transcript. Đo lại tap-01: 767 lần mở ảnh — **20** lần cùng pixel, **304** lần sau khi dựng lại (việc, không phải lãng phí); đọc lại `props.js` 79 lần — **37** lần đọc nội dung cũ, 41 lần đọc sau một lần sửa |
+| 65 | Cùng một tấm hình thì không phải trả tiền hai lần (N65) | `channels/tram-nghi-nhieu/tools/review.sh`, `.agents/skills/tram-nghi-nhieu/step6-assembly/GUIDE.md` | **xong** — vòng chấm dùng lại tờ sheet đã dựng nếu mã không đổi. Đo trên tap-01: tờ sheet được dựng **16 lần** cho cùng một bộ mã |
 
 ### Mỗi phát hiện đã có dòng riêng trong `improvements/lessons.md`
 

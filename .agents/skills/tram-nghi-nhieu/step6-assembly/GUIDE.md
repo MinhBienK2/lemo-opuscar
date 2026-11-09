@@ -25,9 +25,10 @@ Lắp ráp các linh kiện (từ `src/props.js`) vào bối cảnh hoàn chỉn
 1. Dựng bối cảnh phòng (Set): Đặt các props vào đúng tọa độ, gắn camera, thiết lập đèn chính in bóng qua lỗ tường (`wallWithHole`).
 2. Viết keyframes diễn hoạt với `keys()` và easing tự nhiên (có lấy đà và vung đà).
 3. Chạy công cụ kiểm tra nhịp điệu khung hình (Beatsheet):
-   `LEMO_ANGLE=vulkan node channels/tram-nghi-nhieu/tools/beatsheet.mjs <tập> --out <scratch>`
+   `LEMO_ANGLE=vulkan node channels/tram-nghi-nhieu/tools/beatsheet.mjs <tập> --out <tập>/out/beats`
+   Dựng vào đúng đường dẫn đó: bước chấm sẽ **dùng lại** tờ sheet này nếu không có mã nào đổi sau lần dựng, thay vì dựng lại sáu mươi khung.
    Rồi đọc những lỗi máy đã thấy sẵn, **trước khi** mở một vòng chấm:
-   `python3 channels/tram-nghi-nhieu/tools/check_shots.py <scratch>` — nó liệt kê câu có cờ
+   `python3 channels/tram-nghi-nhieu/tools/check_shots.py <tập>/out/beats` — nó liệt kê câu có cờ
    SAME/RUN/NUM/DARK và câu có vật chính quá nhỏ, kèm đề xuất sửa. Một vòng chấm tốn ~40 phút và
    người chấm chỉ mở được khoảng 25/60 khung, nên lỗi máy thấy sẵn thì đừng để người chấm là
    người phát hiện ra.

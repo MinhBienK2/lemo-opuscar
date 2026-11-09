@@ -18,6 +18,7 @@ The rules (R1–R5, R9–R12 of CODING_STANDARDS.md):
   COST how big the transcript has grown — a session that has stopped making and started looking
 """
 import collections
+import datetime
 import json
 import os
 import re
@@ -29,6 +30,44 @@ import transcript  # noqa: E402  (the path is set above)
 
 REPO_FILE = r"[\w./-]+\.(?:md|js|mjs|py|json|sh|html|txt|css|yml|yaml|toml|mp4|srt)\b"
 SRC_EXT = r"\.(?:md|js|mjs|py|json|sh|html|txt|css|yml|yaml|toml)\b"
+
+
+def _epoch(stamp):
+    """the transcript's timestamp as seconds, so it can be compared with a file's mtime"""
+    try:
+        return datetime.datetime.fromisoformat(str(stamp).replace('Z', '+00:00')).timestamp()
+    except (TypeError, ValueError):
+        return None
+
+
+def versions(reads, changes):
+    """(same, changed): how many of these looks saw a version another look had already seen.
+
+    A file that was written again in between is a different picture: looking at it again is work, not waste — the
+    director edits a source file and looks at it again, or re-renders a shot and looks at the new frame. The
+    transcript says when the file was written, so the looks sort into versions, and only the looks inside one
+    version can be repeats of the same pixels. Without the times of the writes, every look after the first counts
+    as a repeat — the honest reading when nothing proves the content changed.
+    """
+    n = len(reads)
+    if n <= 1:
+        return 0, 0
+    ts = [t for t, _ in reads if t is not None]
+    if not ts:
+        return n - 1, 0
+    ch = sorted(t for t in changes if t is not None)
+    seen = {sum(1 for c in ch if c <= t) for t in ts}
+    return n - len(seen), len(seen) - 1
+
+
+def mtime_of(reads):
+    """the last write time of the file the looks point at, if it is still there"""
+    for _, p in reversed(reads):
+        try:
+            return os.path.getmtime(p)
+        except OSError:
+            continue
+    return None
 
 
 # is the file the command names a file of the project, or a scratch file under /tmp? R1 is about the project's own
@@ -141,18 +180,27 @@ def rules(session, film='', lib=''):
     r1_files = {}
     r10_n = 0
     reread = {}          # how often a project file is read (R11)
-    imgread = {}         # how often the same frame is looked at again (R12)
+    imgread = {}         # every look at a frame, with the time (R12)
+    writes = {}          # when a project file was written (the versions a look can see)
+    renders = []         # (kind, time): when a frame was rendered again — a beat sheet and a prop sheet
+                                  # are different renders, so they only change their own frames
     for at, tool, args in transcript.events(session):
         cmd = " ".join((args.get("command", "") or "").split())   # one line: a heredoc must not spill into the report
+        when = _epoch(at)
         at = at[11:19] if 'T' in at else at
         if tool == "read":
             p = args.get("path", "")
             if p.lower().endswith(('.jpg', '.jpeg', '.png', '.webp')):
                 # by name, not by path: the same frame is looked at from a different scratch folder each time
-                imgread[os.path.basename(p)] = imgread.get(os.path.basename(p), 0) + 1
+                imgread.setdefault(os.path.basename(p), []).append((when, p))
             elif p and not p.startswith("/tmp/"):
-                reread[p] = reread.get(p, 0) + 1
+                reread.setdefault(p, []).append((when, p))
         if tool == "bash":
+            if when is not None:
+                if re.search(r'beatsheet\.mjs|still\.mjs|sheet\.py|render\.mjs|build\.sh', cmd):
+                    renders.append(('film', when))
+                elif re.search(r'propcheck\.mjs', cmd):
+                    renders.append(('props', when))
             # a settle of a second after a kill is not a poll; a wait of half a minute is
             if re.search(r'(^|[;&|]\s*)sleep\s+([5-9]|\d{2,})', cmd):
                 out.append(f"R5 {at} a long job is polled with sleep: {cmd[:120]}")
@@ -176,6 +224,8 @@ def rules(session, film='', lib=''):
                 for f in set(targets):
                     f = short(f, film)
                     r1_files[f] = r1_files.get(f, 0) + 1
+                    if when is not None:
+                        writes.setdefault(f, []).append(when)
             elif is_r10:
                 r10_n += 1
             elif re.search(r'\bpython3?\s+-\s*<<', cmd) and re.search(r"['\"][^'\"]*\.(js|json|md)['\"]", cmd):
@@ -185,6 +235,8 @@ def rules(session, film='', lib=''):
                            f"trước khi tin): {cmd[:120]}")
         if tool in ("write", "edit"):
             p = args.get("path", "")
+            if p and when is not None:
+                writes.setdefault(p, []).append(when)
             if "/src/" in p and p.endswith(".js") and p not in drawn:
                 try:
                     src = open(p, encoding="utf8").read()
@@ -215,18 +267,43 @@ def rules(session, film='', lib=''):
                    f"transcript that grows by hundreds of megabytes is a session looking, not making.")
     # R11: the same big file read again and again. The read is the cost: a 200 kB source file read to find one
     # function buys nothing, and a session that reads it fifteen times is paying for the same context over and over.
-    for f, n in sorted(reread.items(), key=lambda kv: -kv[1]):
+    for f, reads in sorted(reread.items(), key=lambda kv: -len(kv[1])):
+        n = len(reads)
         if n >= 15:
-            out.append(f"R11 {n} lần đọc lại {f} — đọc cả tệp để tìm một chỗ sửa: grep tên rồi đọc đoạn (`offset`, `limit`), "
+            ch = list(writes.get(f, []))
+            m = mtime_of(reads)
+            if m is not None:
+                ch.append(m)
+            same, changed = versions(reads, ch)
+            out.append(f"R11 {n} lần đọc lại {f} (ít nhất {same} lần đọc đúng nội dung cũ, {changed} lần đọc sau một lần sửa) — đọc cả tệp để tìm một chỗ sửa: grep tên rồi đọc đoạn (`offset`, `limit`), "
                        f"và giữ một bản đồ mã (tên hàm → dòng) bên cạnh mã nguồn.")
     # R12: the same frame looked at again and again. An image is a megabyte of context, so a session that opens one
     # frame twenty times pays for that picture twenty times; the sheet of twelve frames would have shown it once.
+    # A frame that was rendered again in between is a different picture: looking at it again is work, not waste.
     if imgread:
-        again = sum(n - 1 for n in imgread.values())
-        out.append(f"R12 {sum(imgread.values())} lần mở ảnh, {again} lần là mở lại một tệp đã xem — ảnh vào ngữ cảnh là ~1 MB mỗi lần.")
-    for f, n in sorted(imgread.items(), key=lambda kv: -kv[1]):
+        total = same_all = changed_all = 0
+        for f, reads in imgread.items():
+            total += len(reads)
+            kind = 'props' if f.startswith('p_') else 'film'
+            ch = [t for k, t in renders if k == kind]
+            m = mtime_of(reads)
+            if m is not None:
+                ch.append(m)
+            same, changed = versions(reads, ch)
+            same_all += same
+            changed_all += changed
+        out.append(f"R12 {total} lần mở ảnh: ít nhất {same_all} lần là mở lại đúng những pixel đã xem (ảnh vào ngữ cảnh ~1 MB mỗi lần), "
+                   f"và ít nhất {changed_all} lần là mở lại một khung vừa được dựng lại — cái sau là việc, không phải lãng phí.")
+    for f, reads in sorted(imgread.items(), key=lambda kv: -len(kv[1])):
+        n = len(reads)
         if n >= 10:
-            out.append(f"R12 {n} lần xem lại {f} — mở `sheet_*.jpg` (mười hai khung một tờ) thay vì mở từng khung, và ghi lại khung nào đã xem để không xem lại.")
+            kind = 'props' if f.startswith('p_') else 'film'
+            ch = [t for k, t in renders if k == kind]
+            m = mtime_of(reads)
+            if m is not None:
+                ch.append(m)
+            same, changed = versions(reads, ch)
+            out.append(f"R12 {n} lần mở {f} (ít nhất {same} lần cùng pixel, {changed} lần sau khi dựng lại) — mở `sheet_*.jpg` (mười hai khung một tờ) thay vì mở từng khung, và ghi lại khung nào đã xem để không xem lại.")
     return out[-40:] + polls
 
 
