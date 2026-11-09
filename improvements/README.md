@@ -296,3 +296,14 @@ when the session has been still for 45 minutes. The per-cycle files are local (`
 the curated record is what enters the repository.
 
 It never edits the film, never commits and never touches the running session.
+
+**Mở một phiên làm phim mới thì phải gỡ hai biến môi trường kế thừa.** Một phiên Claude Code mở từ
+trong một phiên khác kế thừa `CLAUDE_CODE_SESSION_ID` của phiên cha; ở chế độ tương tác thì phiên con
+**không để lại transcript riêng** — không ai đọc được lượt của nó, `tools/rules.py` không đo được luật
+nào (nên nó im lặng trong báo cáo, trông như làm đúng), và không nhắn tin cho nó được. Mở như thế này:
+
+```sh
+env -u CLAUDE_CODE_SESSION_ID -u CLAUDE_CODE_CHILD_SESSION claude --dangerously-skip-permissions "<prompt>"
+```
+
+Đã thử cả hai đường (xem N97 trong bản ghi giám sát của tập 01).
