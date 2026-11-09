@@ -1089,6 +1089,29 @@ lượng của nguồn sơ cấp vẫn là việc của người chấm. Và c�
 
 ---
 
+---
+
+## Các guard đã bắt được gì (tính từ 08:00, hai tập còn chạy)
+
+Đây là bằng chứng rằng các guard không phải lý thuyết — mỗi cái đã bắt một lỗi thật, hoặc đã được một
+phiên chấp nhận và dùng:
+
+| Guard | Nó bắt được gì | Ai sửa |
+|---|---|---|
+| `check_labels.py` (con số vẽ mà lời không đọc) | 3 lỗi thật ở tập 01: `288 g`, `88 g`, `50 %` | phiên tập 01 tự bỏ số in trên mặt cân và mặt đồng hồ, thay bằng kim chạy trên vạch |
+| `check_labels.py` (nhãn lệch câu) | 0 lỗi — và đó là kết quả đúng, không phải im lặng: `--selftest` có sáu ca thật | — |
+| `check_research.py` (file nghiên cứu) | tập 02 đi tới bước lời kể mà **file nghiên cứu vẫn là nguyên khuôn**; cổng dừng nó trước khi tốn một vòng chấm | phiên tập 02 viết lại file (11 mốc, trích dẫn, "Phạm vi" cho từng mốc) trong vòng một phút |
+| `check_research.py` (Wikipedia một mình) | 5 mốc của tập 02 đứng trên Wikipedia không có nguồn khác | đang sửa |
+| `set_round` (số vòng) | ba bản chấm cả phim đều ghi `ROUND: 1/5` — công cụ đã biết số vòng, báo cáo thì không | sửa xong, vòng kế tiếp ghi đúng |
+| `R11` + `R12` (đọc lại) | 186 lần đọc lại ba tệp mã; 1 032 lần mở ảnh, 311 lần mở lại một tệp đã xem | phiên tập 01 đã tự viết `src/MAP.md` (bản đồ mã: tên hàm → dòng) |
+| `markBeat` / mốc nhịp | kênh **không** ghi mốc nhịp, nên cổng không đo được "nhịp này có đổi phần khung của nó không" | phiên tập 01 đã viết vòng lặp ghi mốc cho cả 60 câu; `rig/render.js` nay có `markBeats` cho các tập sau |
+
+Bốn trong bảy dòng trên là lỗi **đã** bị bắt và **đã** được sửa trong lúc hai phiên còn chạy. Đó là câu trả lời
+cho câu hỏi lớn nhất của đợt đúc kết này: các guard có tác dụng thật, khi chúng nằm **trước** bước tốn
+tiền (trước vòng chấm, trước lúc dựng, trước lúc bàn giao), chứ không phải sau khi phim đã xong.
+
+---
+
 ## Đề xuất thứ tự xử lý
 
 | # | Việc | File cần sửa | Trạng thái |
