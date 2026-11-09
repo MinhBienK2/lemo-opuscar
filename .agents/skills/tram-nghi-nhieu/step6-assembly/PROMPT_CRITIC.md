@@ -12,6 +12,7 @@ Nhiệm vụ của bạn là thẩm định nhịp điệu phim qua từng phân
    - Cờ `DARK`: Có câu nào bị tối, vật chính chìm vào bóng tối không? (Bắt buộc thêm đèn).
    - Cờ `SAME`: Có 2 câu liên tiếp mà góc máy và vật thể đứng yên không đổi không? (Bắt buộc đổi góc hoặc cho vật chuyển động).
    - Cờ `NUM`: Câu thoại nhắc đến số đo, thời gian, nhiệt độ nhưng màn hình không có thước đo trực quan? (Bắt buộc thêm đồng hồ/chỉ số).
+   - **Chiều ngược lại của `NUM` — con số trên đạo cụ mà lời kể không đọc.** Nếu một đồ đo (mặt cân, đồng hồ, thang, màn hình máy) **in ra một con số**, thì con số đó phải có lời kể đọc ra; không thì CHẶN — người xem đọc ra một số mà phim không giải thích, và phim tự mâu thuẫn với `research/FACTS.md` của nó. Một ngoại lệ duy nhất: **số ghi trên thang đo** (10, 20, 30… của một vạch chia) là vạch của dụng cụ, không phải một lần đo. Nhưng **số đang được chỉ** (kim chỉ 90 %) thì phải được đọc. Phim của kênh "Trạm Nghĩ Nhiều" tập 01 đã dính lỗi này: mặt cân in `288 g` và mặt đồng hồ in `88 g` trong khi không câu nào đọc số nào.
    - Cờ `RUN`: Cảnh quay kéo dài lê thê không có điểm dừng nhịp?
    *(Ghi chú: Nếu bạn thấy cờ cảnh báo sai vì hình ảnh thực tế đã rất rõ ràng, bạn có quyền ghi chú `CỜ SAI <FLAG>: <lý do>` để giải phóng cờ).*
 2. **Diễn hoạt nội tại của vật thể (Props Acting vs Camera Drift):**
@@ -34,7 +35,7 @@ Nhiệm vụ của bạn là thẩm định nhịp điệu phim qua từng phân
 
 ```markdown
 VERDICT: PASS | REJECT
-ROUND: [1-5]/5
+ROUND: (số vòng do review.sh ghi — người chấm không tự điền)
 SCORES: NHỊP_ĐIỆU=[1-5] CHUYỂN_ĐỘNG=[1-5] ÁNH_SÁNG=[1-5]
 FLAGS_STATUS:
 - DARK: [ĐÃ XỬ LÝ | CÒN Ở CÂU ...]
