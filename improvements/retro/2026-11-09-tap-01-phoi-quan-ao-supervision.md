@@ -1878,6 +1878,7 @@ tiền (trước vòng chấm, trước lúc dựng, trước lúc bàn giao), c
 | 60 | Danh mục vật dựng và phim phải là cùng một danh sách (N60) | `channels/tram-nghi-nhieu/tools/check_props_used.py`, `channels/tram-nghi-nhieu/tools/review.sh` | **xong** — 4 ca selftest; chạy trong bước chấm hình. Đo: tap-01 0, tap-02 0, tap-03 **1** — và nó là cái nắp rời mà người chấm dàn ý đã xin |
 | 61 | Cái khoá phải biết chặn được ai (N61) | `channels/tram-nghi-nhieu/tools/test_review_lock.py` | **xong** — 5 ca selftest: khoá sống chặn, khoá chết được lấy lại, khoá phần khác không chặn, khoá được dọn |
 | 62 | Hướng dẫn và cổng phải nói cùng một cách chấm phim (N62) | `channels/tram-nghi-nhieu/tools/review.sh`, `.agents/skills/tram-nghi-nhieu/step6-assembly/GUIDE.md` | **xong** — công cụ cảnh báo **trước** khi hết lượt; hướng dẫn nói đường đi theo độ dài tập |
+| 63 | Lỗi máy thấy sẵn thì đừng để người chấm là người phát hiện (N63) | `channels/tram-nghi-nhieu/tools/check_shots.py`, `.agents/skills/tram-nghi-nhieu/step6-assembly/GUIDE.md` | **xong** — 8 ca selftest. Đo trên tap-01: **36/60 câu** có lỗi máy thấy được, trong đó 22 câu có cờ SAME |
 
 ### Mỗi phát hiện đã có dòng riêng trong `improvements/lessons.md`
 
