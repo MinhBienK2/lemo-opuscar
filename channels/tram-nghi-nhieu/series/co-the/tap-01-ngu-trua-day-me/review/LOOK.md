@@ -1,0 +1,100 @@
+# look: tóm tắt sau vòng 2
+
+42 ĐẠT · 0 MỞ · 10 PHẢI SỬA
+
+## Phải sửa (lỗi CHẶN)
+- t_127.36 — lần sai 1/3
+  - chu-the: Vật chính là khối mô não nhưng khung chỉ cho thấy một khối mauve low-poly tròn như tảng đá: không có nếp cuộn, không có rãnh giữa hai bán cầu, không có tiểu não hay thân não; các vệt sáng cam ở (880,450) và (1060,290) trông như khe lửa của đá chứ không phải não. → SỬA: dựng lại bề mặt có nếp cuộn rõ có bóng, thêm rãnh giữa hai bán cầu, tiểu não và thân não để nhìn là biết não.
+  - dung-phong-cach: Cả khung là một khối tím phẳng không texture, không chất liệu, đặt trên mặt bàn navy với đường chân trời cứng; điểm sáng nhất lại là các vệt cam tự phát sáng nằm trên bề mặt vật chứ không phải vùng sáng của điểm nhìn — không giống diorama toon ấm có ánh sáng thật của kênh. → SỬA: cho một đèn chính ấm rọi tạo vệt sáng trên nếp não, thêm texture da não, bỏ các khe sáng cam tự phát.
+  - vat-that: Não được dựng thành khối trơn không có bộ phận đặc trưng nào — hình dáng thuộc về một vật khác (đá), chứ không phải não. → SỬA: dựng đủ nếp cuộn, hai bán cầu, tiểu não, thân não.
+- t_129.54 — lần sai 1/3
+  - chu-the: Câu nói cần thấy "nếp não" nhưng trong khung không có nếp nào: bề mặt là các mặt phẳng low-poly lấm tấm với những nét mực mảnh rải rác như vết nứt đá (600–1500, 300–900), và các khe sáng cam ở (1120,180) và (965,540) đọc như vệt lửa trong đá. → SỬA: dựng nếp cuộn to, tròn, có bóng đổ để đọc ra là não; bỏ các khe sáng cam.
+  - dung-phong-cach: Khung là một khối tím đều tăm tắp không texture, không có đèn chính có hướng, điểm sáng nhất là các vệt cam tự phát sáng nằm trên vật — không giống diorama toon ấm có ánh sáng thật, bóng và viền mực. → SỬA: thêm đèn chính chiếu xiên tạo bóng trên nếp, texture da não, bỏ vệt sáng tự phát.
+  - vat-that: Bề mặt não được dựng như đá nứt chứ không phải nếp não; không có hình dáng não nào để nhận ra trong một giây. → SỬA: dựng nếp não dạng ống uốn có bờ và rãnh, có bóng đổ.
+- t_132.25 — lần sai 2/3
+  - chu-the: Tờ đồ thị vẫn không đọc được mốc 20: trên trục chỉ đọc rõ số "10" (1500,790), số kế tiếp bị cắt cụt thành mảnh "0" ở góc dưới-trái tờ (1120,855); đuôi thẻ "HAI MƯỜI PHÚT" chỉ vào vùng bóng tím dưới thân máy (1420,480) chứ không chạm dải tô/vạch nào trên giấy, và đường đồ thị không thấy dừng ở 20 phút. → SỬA: in rõ các mốc 10–20–30–40 dọc theo trục và đặt vạch "20" ở chỗ sáng; cho đường đồ thị kết thúc đúng tại vạch 20; kéo đuôi nhãn về vạch 20.
+- t_140.94 — lần sai 2/3
+  - dung-phong-cach: Cả khung vẫn không có viền mực trên vật thể: vành túi thụ thể màu hổ phách (x≈900–1110, y≈300–390) và các quả cầu phân tử đều trơn, ranh giới vành với nền tím chỉ là dải chuyển sắc mềm — khác hẳn ref/ có nét mực vẽ tay quanh mọi vật (thẻ “CAFFEINE” có viền mực rõ, nên hệ viền hiện mới chỉ áp cho sprite). → SỬA: Bật viền mực cho túi thụ thể và cho các quả cầu/liên kết của phân tử.
+- t_27.27 — lần sai 1/3
+  - vat-that: Vật chính là mô não nhưng bề mặt chỉ là các mặt phẳng faceted với nét mực gấp khúc như vết nứt, không có nếp cuộn, đường giữa hay tiểu não; khung không có thẻ nào gọi tên nên dễ đọc là đá/đất chứ không phải não. → SỬA: Dựng bề mặt theo nếp cuộn thật (gyri/sulci) và thêm thẻ “NÃO”.
+- t_29.98 — lần sai 1/3
+  - vat-that: Cận cảnh chỉ thấy mặt đá faceted với các nét mực gấp khúc, không có nếp cuộn hay đường giữa; không có thẻ nào gọi tên vật nên người xem không đọc ra đây là mô não. → SỬA: Dựng nếp cuộn thật và thêm thẻ “NÃO” để vật được nhận ra ngay.
+- t_32.41 — lần sai 2/3
+  - vat-that: Hai vật vẫn là hai viên đá faceted: không có nếp cuộn, không có rãnh giữa hai bán cầu, không có tiểu não/thân não, và không có thẻ nào gọi tên — trong khi câu này nói về hai bên của cùng một não. → SỬA: Dựng lại thành hai bán cầu có nếp cuộn, có rãnh giữa và tiểu não.
+- t_35.95 — lần sai 2/3
+  - vat-that: Hai vật vẫn là hai khối đá faceted không có nếp cuộn, không có rãnh giữa hai bán cầu, không có tiểu não/thân não; không có thẻ nào nói đây là hai bản não nên nhìn là đá. → SỬA: Dựng lại thành hai bán cầu có nếp cuộn, rãnh giữa và tiểu não.
+- t_76.21 — lần sai 1/3
+  - vat-that: Hai mặt tế bào ở tiền cảnh chỉ là hai mảng đen phẳng: dải đen dọc mép trái (x 0–340, y 0–1080, mép phải là đường cong trơn) và mặt đen ở đáy (x 0–1200, y 690–1080) không có vân, không có nếp, không có màng; củ tế bào (x 460–1080, y 640–1080) là một quả cầu tím nhạt trơn chỉ có 4 núm tròn. → SỬA: dựng hai mặt tế bào thành màng có vân sợi/lỗ chân tăm và có phản xạ sáng ở mép để đọc ra là bề mặt tế bào, thêm nếp nhăn và organelle cho củ tế bào thay vì quả cầu trơn.
+- t_99.92 — lần sai 1/3
+  - dung-phong-cach: Khung không có viền mực ở bất cứ đâu: sợi trục là một khối tím phẳng không texture — đo pixel tại mép trên (y 250, x 1300–1310) thấy nền (56,56,106) nhảy thẳng sang thân (106,72,169), không có dải mực tối nào như ref/; mép ở góc phải (x 1600–1920, y 230–290) là đoạn thẳng đa giác; không có bóng đổ, không có vân, không có màu nhấn nào trong bảng màu ngoài ba chấm sáng. → SỬA: cho sợi trục đi qua pass viền mực navy, thêm texture vân sợi và các bầu myelin, tăng độ phân giải để mép không bị góc đa giác, và đặt một nguồn sáng có hướng để có bóng đổ kể nơi chốn.
+
+## Góp ý (không chặn)
+- t_101.88
+  - cho-chu: Thẻ "CÀ PHÊ" (1060–1350, 430–610) đè lên phân tử: che mất một nguyên tử N cyan bên phải và một que nối; đuôi nhãn cắm thẳng vào nguyên tử C ở giữa phân tử nên không biết nhãn trỏ vào phần nào. → SỬA: dời thẻ "CÀ PHÊ" ra nền navy trống bên trái và cho đuôi nhãn kết thúc ở mép phân tử thay vì ở giữa cấu trúc.
+- t_103.83
+  - dep: Góc dưới-trái là một khối tím lavender trơn không texture, không bóng, chiếm ~25% khung; góc dưới-phải là mảng navy đen phẳng — mắt bị kẹp giữa hai mảng phẳng trong khi đám phân tử ở giữa rất rối. → SỬA: cho mặt tế bào góc dưới-trái có texture màng và bóng đổ, thu gọn mảng navy đen góc dưới-phải để đám adenosine thành tâm.
+- t_110.42
+  - dep: Phân tử adenosine bị đẩy ra nằm sát mép phải khung (1650–1900, 400–760) và bị cắt mất phần nửa — đây lại là vật mang chủ đề của câu nói nhưng đọc không trọn. → SỬA: lùi máy sang trái khoảng 10% hoặc giảm bán kính để phân tử adenosine nằm trọn trong khung.
+- t_114.31
+  - dep: Nhãn trên bảng đo bị lưới đèn cắt cụt: đọc được "LẦN ĐO" và "ĐO ĐƯỚC" (chữ "ĐO ĐƯỜNG" bị che nửa), trông như chữ vừa bị đứt; thêm nữa khung chỉ có một tách cà phê trong khi câu nói so hai người. → SỬA: viết lại nhãn ở khoảng trống trên panel (LẦN ĐO 1 / LẦN ĐO 2 — ĐO PHẢN XẠ) để không bị đèn cắt, và thêm tách thứ hai cạnh bảng còn lại.
+- t_118.30
+  - cho-chu: Đuôi thẻ "BUỔI CHIỀU" nằm đè lên vành đồng hồ và chỉ vào khoảng trống trên mặt, không chỉ vào dải hồng mà kim đen đang chỉ; phụ đề đè lên đồng hồ báo thức đỏ và các bảng đo ở đáy khung. | SỠA: kéo đuôi thẻ xuống dải hồng (830–900, 400–460) và để phụ đề nằm dưới vùng bảng đo.
+- t_12.43
+  - dep: Thẻ "BA MƯỜI PHÚT" có đuôi chỉ vào mặt đồng hồ đang chỉ 12:00 (mặt chỉ có một kim ở vị trí 12, không có dấu 30 phút) trong khi chỗ đáng lẽ phải chỉ là mốc "30" trên dải giấy (vạch đỏ quanh 1280–1300, 900). → SỬA: kéo đuôi nhãn "BA MƯỜI PHÚT" sang mốc 30 trên giấy, hoặc đặt kim đồng hồ chỉ đúng 30 phút để nhãn có chỗ bám thật.
+  - cho-chu: Phụ đề tràn ngang qua giữa tờ giấy (700–1150, 930–1000) che vùng tô tím và đường đồ thị; chữ "TRƯỚC KHI NGỦ" in dọc ở mép dưới bị cắt bởi mép khung. → SỬA: nâng tờ giấy lên trong khung để chữ ở mép dưới không bị cắt, và đẩy phụ đề xuống sát đáy khung.
+- t_121.63
+  - cho-chu: Đuôi thẻ "NHÍP NGÀY" chỉ vào mảng mặt giấy trống ngay trên chữ "BUỔI CHIỀU", không chỉ vào kim đen hay dải hồng nên không biết nhãn dính vào cái gì; phụ đề đè lên vạch "12" ở đáy mặt đồng hồ. → SỬA: cho đuôi thẻ "NHÍP NGÀY" chỉ vào dải hồng ở góc dưới-trái mặt đồng hồ, và hạ phụ đề khỏi vạch 12.
+- t_124.61
+  - dep: Thẻ "KHÔNG ĂN" chỉ vào một mảng gỗ trống không có gì, dễ bị hiểu là nhãn của cả mặt bàn chứ không phải bằng chứng "không có gì ăn"; nhãn trên bảng đo lại bị lưới đèn che ("LẦN ĐO", "ĐO ĐƯỚC"). → SỬA: đặt một chiếc đĩa rỗng ở góc bàn và cho thẻ "KHÔNG ĂN" chỉ vào đĩa đó; viết lại nhãn bảng ở chỗ không bị đèn che.
+- t_127.36
+  - dep: Bố cục không có gì để định danh: một khối trơn giữa khung trên nền tối, không có vật thứ hai, không có vệt sáng dẫn mắt. → SỬA: đặt não lệch một phần ba khung, thêm vệt sáng rõ trên nếp và cho mặt bàn có chiều sâu.
+- t_129.54
+  - goc-may: Máy đẩy sát vào một mảng bề mặt nên không còn gốc để nhận ra đây là não — người xem chỉ thấy đá. → SỬA: lùi máy ra để thấy cả khối não có nếp trong khung.
+- t_132.25
+  - goc-may: Tờ giấy vẫn chỉ chiếm khoảng 1/4 khung và nằm sát rìa phải; 45% bên trái là mặt bàn gỗ trống, và nửa phải của tờ rơi vào bóng của thân máy nên phần đồ thị quan trọng không đọc được. → SỬA: hạ máy xuống góc nhìn nghiêng sát mặt giấy và lùi/nghiêng lại để tờ chiếm giữa khung, nằm trọn trong vệt nắng.
+- t_136.24
+  - dep: Tiêu đề in trên bảng ở góc trên-trái là “LẦN ĐO / ĐO ĐƯỢ” (x≈600–880, y≈190–300), chữ vô nghĩa; tấm đế ở tiền cảng (x≈250–900, y≈740–1080) vẫn là mảng nâu đỏ đều tăm, không texture. → SỬA: Đổi tiêu đề thành thuật ngữ đúng (vd “ĐO PHẢN XẠ”), và cho tấm đế một chất liệu (vân gỗ/vải) hoặc đổi góc máy để nó không chiếm 1/4 khung.
+- t_14.71
+  - goc-may: Núm vặn thứ hai ở mép phải bị cắt (chỉ còn khoảng 40%, x≈1830–1920, y≈390–520) vì máy đứng quá sát. → SỬA: Lùi máy hoặc nới fov một chút để cả hai núm vặn nằm trọn trong khung.
+  - dep: Mặt số vẫn là đĩa kem gần trống (chỉ có vạch và kim, không có số) và chiếm ~1/3 khung; ở góc trên-phải có một khối đỏ hình nón (x≈1740–1820, y≈250–410) không rõ là bộ phận gì. → SỬA: In số/vạch đậm hơn lên mặt số và thay khối đỏ hình nón bằng một bộ phận đọc ra được (cần báo hiệu, đèn, hay nút ấn).
+- t_140.94
+  - dep: Cả ba lõi túi gần đen nên khung bị nặng, trong khi nửa phải là mảng tím tối trống không chi tiết (x≈1300–1920). → SỬA: Sáng nhẹ lòng túi (nền không đen tuyệt đối) và đưa thêm chi tiết/khối mô vào nửa phải.
+- t_143.74
+  - goc-may: Bảng đo vẫn chiếm 1/3 khung bên trái, nghiêng và rất tối, còn bàn tay — thứ câu này cần — bị đẩy ra sau tách và chỉ lộ nửa. → SỬA: Đổi góc máy để tách và bàn tay chiếm trung tâm khung, thu bảng đo ra khỏi khung.
+- t_145.60
+  - goc-may: Máy đứng hơi xa nên dãy đốm rất nhỏ (đường kính ~15–25 px), khó đọc là một dãy tín hiệu đang bò trên nếp. → SỬA: Đẩy máy sát vào dãy đốm để chúng to và tách bạch.
+  - dep: Các nét mực gấp khúc rời rạc như vết nứt/sét phủ khắp mặt não (rõ ở vùng x≈600–950, y≈250–450), các vệt sáng cam dạng lưỡi lửa (x≈845,y≈560 và x≈1070,y≈345) như lỗi loé, và khối não bị cắt cụt ở mép dưới khung (x≈420–1000, y=1080). → SỬA: Dọn các nét mực lạc thành nếp cuộn liên tục, xoá các vệt loé, và lùi máy để não nằm trọn trong khung.
+- t_148.74
+  - dep: Cửa sổ là một mảng cam-trắng loang không chi tiết và lại là vùng sáng nhất khung trong khi đối tượng (giường, bàn) chỉ được sáng dịu; góc trên-trái gần 40% khung là tường trống; trên bảng đo vẫn ghi "LÀN ĐO" → SỬA: cho cửa sổ có khung/khung cửa sổ và ngoài trời, dời điểm sáng chính về phía bàn đầu giường, sửa lại chữ trên bảng
+- t_20.69
+  - goc-may: Máy quá xa: dãy đốm chỉ là những hạt nhỏ lấm tấm trên đỉnh khối não, khó thấy là tín hiệu đang “bò” và khó thấy nếp não phồng/xẹp. → SỬA: Đẩy máy sát vào vùng đỉnh có đốm để dãy tín hiệu to và rõ.
+  - dep: Nét mực gấp khúc rời rạc trông như vết cào trên mặt não (x≈500–900, y≈250–450), các vệt loé sáng cam dạng lưỡi (x≈845,y≈560; x≈1070,y≈345) là lỗi render, và khối não bị cắt cụt ở mép dưới khung (x≈420–1000). → SỬA: Dọn nét mực lạc, xoá vệt loé, lùi máy cho não nằm trọn.
+- t_23.90
+  - dep: Cả hai bảng đo bên phải in chữ vô nghĩa “LẪN ĐO / ĐO ĐƯỢ” (bảng trên x≈1560–1920, y≈280–400; bảng dưới x≈1650–1920, y≈630–900); hai chuông đỏ vẫn bị cắt bởi mép trên khung (y=0, x≈510–1420); và trong khung không có dấu hiệu rung dù lời dẫn là “đồng hồ reo”. → SỬA: Sửa tiêu đề thành thuật ngữ đúng, lấy lại khung cho trọn hai chuông, và thêm dấu hiệu rung (vệt chấn động, chuông lắc, hoặc sóng âm).
+- t_27.27
+  - dep: Nét mực rời rạc còn nhiều trên mặt não (x≈550–950, y≈250–460), các vệt loé sáng cam dạng lưỡi (x≈800,y≈565; x≈1060,y≈295) trông như lỗi loé, và khối não bị cắt cụt ở mép dưới khung (x≈550–950). → SỬA: Dọn nét mực lạc, xoá vệt loé, lùi máy cho não nằm trọn trong khung.
+- t_29.98
+  - dep: Các vệt sáng cam/ trắng hình lưỡi lửa nằm dán trên mặt não (x≈1160,y≈380; x≈1040,y≈460; x≈790,y≈915) trông như lỗi loé/bloom, không giống đốm sáng tròn; nét mực gấp khúc rải khắp mặt vẫn như vết cào. → SỬA: Xoá các vệt loé, thay bằng đốm sáng tròn đồng nhất, và dọn nét mực lạc.
+- t_32.41
+  - dep: Các nét mực gấp khúc như vết nứt phủ khắp hai khối (rõ ở x≈120–330, y≈600–860 và x≈1250–1400, y≈450–620); mặt bàn phẳng và trống chiếm phần lớn khung, không có một mảng màu nhấn nào trong toàn ảnh. → SỬA: Dọn nét mực lạc thành nếp cuộn liên tục và đưa một chút sáng ấm vào bàn để khung có tiêu điểm màu.
+  - cho-chu: Nửa trên và khe giữa hai khối trống trơn, rất dễ đặt thẻ, nhưng không có thẻ nào nói đây là hai bên của cù một não. → SỬA: Đặt thẻ “HAI BÊN CỦA NÃO” ở khe giữa hoặc nhãn riêng cho từng khối.
+- t_35.95
+  - dep: Nét mực gấp khúc rải rác như vết cào trên cả hai khối (x≈250–700, y≈380–700); khối bên phải tối đến mức mép phải chìm vào bóng nền (x≈1800–1860), và toàn khung tối đơn sắc tím–xanh không có màu nhấn. → SỬA: Dọn nét mực lạc, giữ một chút sáng viền cho khối phải để tách khỏi nền, và đưa màu ấm nhỏ vào vùng sáng bên trái.
+  - cho-chu: Có chỗ trống rộng ở nửa trên và dưới khung nhưng không có thẻ nào gọi tên hai bản, nên người xem không biết vì sao một bên sáng một bên tối. → SỬA: Đặt nhãn “BÊN THẤY” trên khối sáng và “BÊN KHÔNG THẤY” trên khối tối.
+- t_73.99
+  - goc-may: Máy vẫn đứng ngoài: còn dải nền tối trống ở góc trái trên (x 0–1000, y 0–200) và tường kèm bóng đổ bên phải (x 1250–1920, y 60–700); cả khối não nhìn trọn vẹn từ bên ngoài, không có dấu hiệu đang đi vào, "bên trong não" chỉ được gợi bằng vài vết sáng nứt nhỏ. → SỬA: đẩy máy sát bề mặt để nếp cuộn chiếm gần hết khung và bỏ dải nền trống bên trái trên, hoặc đặt mép não cắt ngang khung để thấy rõ máy đang ở bên trong.
+  - dep: Bề mặt não là tập hợp các mặt phẳng đa giác lớn sắc cạnh (rõ ở x 300–900, y 450–950 và x 1000–1400, y 200–400), đọc ra như đá/thủy tinh chứ không phải mô não mềm; nét mực là các nét gạch rời rạc chứ không viền liên tục theo đường viền; cả khung chỉ một tông tím-mauve lạnh. → SỬA: dựng lại nếp não bằng noise mượt để hết góc đa giác, cho nét mực viền liên tục theo đường viền, thêm chất liệu da não và một mảng màu nhấn rõ hơn ở điểm nhìn.
+- t_76.21
+  - dep: Hơn nửa khung là một mảng tím phẳng gần như không có chi tiết; hai mảng đen mép thẳng ở trái và đáy nhìn như lỗ hình học; hai phân tử trôi trong khe chỉ rộng ~100 px nên khó đọc là phân tử. → SỬA: đưa một phân tử lớn hơn vào khung, thêm chi tiết cho màng và dựng lại mặt sau bằng một lớp có chiều sâu.
+- t_78.06
+  - dep: Góc trái trên là một tấm đen phẳng mép thẳng (x 0–480, y 0–800) chiếm gần 1/5 khung, đọc như mảng bìa đen chứ không phải bề mặt tế bào; mảng màng ở giữa khung khá trơn. → SỬA: thay tấm đen bằng mặt màng có vân sợi và nếp, có phản xạ sáng ở mép để lớp tiền cảnh đọc được.
+- t_83.16
+  - dep: Hàng túi thụ thể bị cắt cụt ở mép trên (x 0–450, y 0–210) thành một mảng vàng–đen không rõ là gì; các phân tử chồng lên nhau thành mạng que xám khó tách từng phân tử. → SỬA: thu nhỏ hoặc lùi hàng túi thụ thể ở mép trên để thấy trọn miệng túi, và giãn khoảng cách các phân tử ở vùng giữa khung.
+- t_9.90
+  - dep: Cả khung chìm trong tím-tối, tường phía sau (x 0–1200, y 0–250) đều tối, không có vệt nắng xiên qua cửa sổ như ref/, nguồn ấm duy nhất là một vệt cam nhỏ bị cắt ở mép dưới (x 780–890, y 1000–1080) nên không dẫn mắt vào giường. → SỬA: cho đèn chính ấm xiên qua cửa sổ in bóng lên tường và sàn như ref/, đặt vệt sáng đúng lên gối và chăn.
+- t_93.59
+  - dep: Các phân tử xuyên vào nhau: một que xám đi thẳng qua nguyên tử cyan ở x 838–852, y 602–617 và một que kết thúc bên trong nguyên tử đỏ ở x 853–870, y 697–708; cả khung thành một mạng que xám khó tách từng phân tử, hàng túi thụ thể phía trên bị cắt cụt. → SỬA: giãn khoảng cách các phân tử để không cắt qua nhau và tách bạch từng phân tử, đồng thời đưa túi thụ thể vào khung rõ hơn.
+- t_97.06
+  - dep: Một phần ba khung phía trên (y 0–380) trống tối hoàn toàn; sợi trục là một khối tím phẳng không vân; củ đầu cuối (x 1370–1730, y 380–740) là quả cầu trơn có núm, không đọc ra túi nang tiếp xúc; dãy đốm sáng nhỏ đến mức khó thấy trên điện thoại; lại có một chữ "C" lơ lửng vô nghĩa ở x 1550–1590, y 635–680. → SỬA: đưa máy sát lại để dãy đốm sáng to và đủ tương phản, thêm nếp và bầu myelin cho sợi trục, cho túi nang có túi bọc bên trong, và bỏ chữ "C" thừa.
+- t_99.92
+  - dep: Khung gần như trống: một dải tím phẳng và ba chấm sáng, không có chiều sâu, không có bóng, không có lớp trước–giữa–sau. → SỬA: đưa thêm một lớp chi tiết (túi nang, nút thần kinh, phân tử) vào khung và cho một nguồn sáng có hướng để dải sợi trục có bóng và chiều sâu.

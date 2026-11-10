@@ -48,9 +48,12 @@ if [ ! -f "$HERE/voice/proc/dur.json" ]; then
   exit 1
 fi
 FILM=$HERE "$LIB/.venv/bin/python" "$CHANNEL/mix.py"
-# two workers, not four: at ss=2 (3840×2160) four browsers overrun the 6 GB of a small GPU, the
-# browser dies mid-film, ffmpeg closes the segment — and the film loses frames in silence.
-# A machine with more VRAM can raise this; a machine with less should lower it.
+# The master lifts the mix to −14 LUFS, so the film's peak follows the mix's peak-to-loudness ratio: this
+# episode's first master came out 0.6 dB too hot for the channel's delivery check (peak ≤ −3 dBFS) and was
+# refused after the whole render. The shared mix.py now guarantees that ratio; this check stops the build
+# **before** a 30-minute render if the guarantee ever breaks.
+"$LIB/.venv/bin/python" "$CHANNEL/tools/check_headroom.py" "$OUT/mix.wav"
+# 2 worker, không phải 4: mỗi worker vẽ ở 3840×2160 (siêu lấy mẫu 2×) và GPU này chỉ có 6 GB
 node core/render/video.mjs "$HERE" --workers 2 --out "$OUT/video.mp4"
 node --input-type=module -e "
 import fs from 'fs'; const { build } = await import('$HERE/src/timeline.js');

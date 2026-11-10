@@ -37,7 +37,8 @@ Fischer, D., Elmenhorst, E. M., Benderoth, S. & van Drongelen, A. (2023), *Durat
 
 Signal, T. L., van den Berg, M. J., Mulrine, H. M. & Gander, P. H. (2012), *Duration of sleep inertia after napping during simulated night work and in extended operations*, **Chronobiology International** 29(6), p. 769–779. DOI: 10.3109/07420528.2012.686547
 
-- **Dùng trong phim:** một thanh ngủ kéo dài; phần đầu của thanh đổi màu và dày lên thành mười lăm phút ngủ sóng chậm, phần còn lại là ngủ nông. Lời kể đọc: mười lăm phút. Lời kể nói thêm: đây là cách giải thích quen thuộc, nhưng các nghiên cứu thì chia làm đôi — có bên thấy có bên không thấy.
+- **Dùng trong phim:** một máy ghi giấc ngủ trên bàn đầu giường; giấy chạy ra từ khe máy, trên giấy là đường bậc đi xuống từng giai đoạn ngủ; đoạn thấp nhất được tô đậm. Lời kể đọc: mười lăm phút. Lời kể nói thêm: đây là cách giải thích quen thuộc, nhưng các nghiên cứu thì chia làm đôi — có bên thấy có bên không thấy.
+- **Vật đo:** các nghiên cứu trong mục này đo giấc ngủ bằng đa ký (polysomnography) — "seven 2-hour naps during which polysomnographical recordings were made" (Van Dongen 2001). Máy ghi trong phim là đúng cái dụng cụ đó, và đường bậc trên giấy là bản ghi các giai đoạn ngủ.
 - **Phạm vi:** bài 2016 đo giấc ngủ ban đêm mô phỏng ca trực lúc 4 giờ sáng, lúc đó áp lực ngủ lớn hơn buổi chiều, nên con số mười lăm phút là mức lớn, không phải mức thường gặp buổi chiều. Bài 2012 nói rõ *lượng* ngủ sóng chậm không quyết định độ nặng của cơn lờ đờ; phim vì thế không được nói "ngủ sâu là nguyên nhân" như một sự thật đã chốt.
 
 ## 3. Cảm thấy thì tỉnh, đo thì tệ

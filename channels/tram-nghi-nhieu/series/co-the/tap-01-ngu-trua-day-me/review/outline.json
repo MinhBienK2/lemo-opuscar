@@ -1,55 +1,55 @@
 {
  "step": "outline",
- "round": 1,
+ "round": 2,
  "items": {
   "dan-y": {
-   "key": "121e11cae501528504ac82c4dca2bd36a023ae3569cad55449bf5f3636aae2e6",
-   "verdict": "FAIL",
+   "key": "1176e2c57d999b9c223327bf63031af2ef27034996e06be05a442994d9790881",
+   "verdict": "PASS",
    "fails": 1,
-   "round": 1,
+   "round": 2,
    "rows": {
     "tra-loi": [
      "ĐẠT",
-     "Câu trả lời một câu (TREATMENT.md:17) nêu đúng chủ thể (\"Một giấc ngủ trưa ngắn…\" → \"bạn dậy lại mệt hơn lúc chưa ngủ\") và đúng chuỗi nhân quả: ngủ trưa → ngủ sóng chậm → lúc mở mắt não còn chậm (phản xạ chưa kịp chạy lại) + adenosine đang tín hiệu buồn ngủ → mệt hơn lúc chưa ngủ. Mỗi mắt xích đều có nguồn trong FACTS:30 phút tụt dưới cả lúc chưa ngủ + inertia 0–35 phút (FACTS.md:7, :11, Fischer/EASA); 30-NAP có 14,7 phút ngủ sóng chậm, 10-NAP gần như không (FACTS.md:20, Hilditch/Sleep); cảm thấy tỉnh–đo thì tệ (FACTS.md:33, :37); \"increased adenosine in the brain upon awakening may be the cause of sleep inertia\" (FACTS.md:54, Van Dongen 2001). Mắt xích còn tranh cãi cũng được giữ lời: bảng tự hạt ở TREATMENT.md:72 (\"đây là cách kể, không phải điều đã chắc\") và TREATMENT.md:80 kèm \"bản ghi chú nhỏ… đây mới là giả thuyết\", đúng như FACTS.md:63 yêu cầu phải nói \"có thể\".",
+     "Câu trả lời một câu ở TREATMENT.md:17 nêu đúng chủ thể của câu hỏi (:15 — \"ngủ trưa buổi chiều xong, dậy lại thấy mệt hơn lúc chưa ngủ\"): \"Một giấc ngủ trưa ngắn đưa bạn vào giấc ngủ sóng chậm, và lúc bạn mở mắt, não vẫn còn chậm — phản xạ chưa kịp chạy lại, còn lượng adenosine vừa tích lại trong não thì đang tín hiệu buồn ngủ — nên bạn dậy lại mệt hơn lúc chưa ngủ\". Chuỗi này đứng sau FACTS.md:7 (ngủ trưa từ 30 phút trở lên → điểm phản xạ tụt dưới cả lúc chưa ngủ), FACTS.md:24 (30-NAP có 14,7 phút ngủ sóng chậm), FACTS.md:59 (adenosine ngoài bào tích lại theo hoạt động) và FACTS.md:67 (Van Dongen 2001: adenosine tăng lúc dậy \"có thể\" là nguyên nhân cơn lờ đờ); phần \"có thể\" được câu 15 (TREATMENT.md:80) nói rõ như FACTS.md:76 yêu cầu.",
      ""
     ],
     "nguon": [
-     "LỖI",
-     "Hai mắt xích ở TREATMENT.md:69 (\"Giấc ngủ sóng chậm nằm ở *đầu* mỗi giai đoạn ngủ\") và TREATMENT.md:70 (\"Nên đồng hồ báo thức thường reo đúng lúc não đang ở giấc ngủ sóng chậm\") không có mục nào trong FACTS.md đứng sau. FACTS.md chỉ nói \"phần đầu của thanh đổi màu và dày lên thành mười lăm phút ngủ sóng chậm\" (FACTS.md:28) — tức đầu *giấc ngủ trưa*, không phải đầu *mỗi giai đoạn ngủ*; không có mục nào nói về vòng ngủ–REM hay về mốc đồng hồ báo thứng, và FACTS.md:29 còn yêu cầu rõ \"phim vì thế không được nói 'ngủ sâu là nguyên nhân' như một sự thật đã chốt\". Mâu thuẫn nội bộ: TREATMENT.md:68 đặt ngủ sóng chậm ở *phần đầu* thanh ba mươi phút, nên đồng hồ reo ở mốc ba mươi phút (TREATMENT.md:74) rơi vào đuôi thanh — theo chính hình đó là ngủ nông, đúng cái ý ở TREATMENT.md:70 đang nói là không có. Các mắt xích còn lại đều có nguồn sơ cấp thật (EASA D-4 Fischer 2023, Hilditch 2016, Signal 2012, Peng 2020 Science, Van Dongen 2001, McCauley 2024, Hsu 2010, Monk 2005, Hayashi 1999, Dhand & Sohal 2006 — không có Wikipedia nào)",
-     "Bổ sung vào FACTS.md một mục có nguồn sơ cấp cho kiến trúc vòng ngủ (ngủ sóng chậm chiếm phần đầu mỗi chu kỳ NREM) và cho việc đồng hồ báo thức ba mươi phút thường rơi vào lúc nào, rồi trích dẫn mục đó ở hai dòng 69–70; hoặc sửa TREATMENT.md:69 thành \"đầu *giấc ngủ trưa*\" (đúng FACTS.md:28) và bỏ mệnh đề \"thường reo đúng lúc não đang ở giấc ngủ sóng chậm\" ở TREATMENT.md:70, thay bằng phát biểu có nguồn (ba mươi phút ngủ trưa có phần lớn ngủ sóng chậm nằm ở nửa đầu)."
+     "ĐẠT",
+     "Hai mắt xích bị gọi lỗi ở lần trước đã có nguồn: TREATMENT.md:69 \"Giấc ngủ sóng chậm dồn lên mạnh ở đầu giấc ngủ, rồi giảm dần\" đứng sau FACTS.md:28-30 (Borbély 2022, Journal of Sleep Research: hoạt động sóng chậm cao ở đầu kỳ ngủ rồi giảm); TREATMENT.md:70 giờ chỉ còn là hành vi thuần hình (\"Đồng hồ báo thức reo, cắt ngang giấc ngủ\") — mệnh đề \"reo đúng lúc não đang ở giấc ngủ sóng chậm\" đã bị gỡ, nên cũng hết mâu thuẫn với chính hình giấy ở TREATMENT.md:68. Các mắt xích còn lại đều có nguồn sơ cấp trong FACTS.md: Fischer/EASA D-4 2023 (FACTS.md:9,13,17), Hilditch 2016 (:26), Signal 2012 (:38), Van Dongen 2001 (:69,:82), McCauley 2024 (:73), Peng 2020 Science (:61), Hsu 2010 (:86), Monk 2005 (:99), Hayashi 1999 (:103), Dhand & Sohal 2006 (:107); FACTS.md không có mục Wikipedia nào.",
+     ""
     ],
     "vat-that": [
      "ĐẠT",
-     "Che cột Ý, đọc cột Hình: 19/19 dòng đều là vật thật hoặc cảnh thật dựng được bằng 3D — phòng ngủ + đồng hồ báo thứng + tay người + tách cà phê (dòng 66), hai thanh ngủ (67), mảnh ngủ sóng chậm trồi từ đáy thanh (68), khối mô não trên bàn tối (69), lưới chấm đo phản xạ (73), dải thời gian + cổng chặn + hai vạch đo (74), hai cột gỗ \"mình thấy\"/\"đo được\" (76), khe synapse với hàng cửa thụ thể (78–82), phân tử vàng hai vòng – ba nhóm metyl (81), vạch sáng hình chữ V trên tường (83). Những thứ vô hình chỉ xuất hiện ở dạng minh hoạ: đám quả cầu adenosine (78–80), phân tử caffeine (81–82), sóng chậm (69), điện trên đuôi tế bào (71, 82) — đều là thứ vô hình thật, không có ý nào biến cảm giác hay ý tưởng thành vật. Nhỏ: mục \"Thứ vô hình\" (TREATMENT.md:50–54) không liệt kê \"điện trên đuôi tế bào\" dù dòng 71 và 82 dùng nó, nên danh mục vật trong tệp chưa khớp với bảng.",
+     "Đọc riêng cột \"Trên màn hình thấy gì\" của cả 20 dòng, mọi dòng đều là vật thật hoặc cảnh thật dựng được: phòng ngủ + đồng hồ báo thức + tay người + tách cà phê (:66), máy ghi giấc ngủ và cuộn giấy (:67), khối mô não trên bàn tối (:69), đồng hồ trên bàn đầu giường (:70), hai bản não (:72), lưới chấm trên nền phòng (:73), dải thời gian + cái cổng chặn + hai vạch đo (:74), mặt số đồng hồ và vệt sáng trên tường (:75), hai cột gỗ (:76), khe synapse với quả cầu adenosine, khía thụ thể, phân tử caffeine vàng (:78-82), hai tách cà phê với hai đường đo (:83), vạch sáng hình chữ V trên tường + bàn đầu giường trống (:84), nếp nhăn nhấp nhô và khía bị chặn (:85). Thứ vô hình chỉ hiện dưới dạng minh hoạ bám trên vật thật (sóng chậm trên mặt cắt não :69, điện trên đuôi tế bào :71, phân tử trong khe :78).",
      ""
     ],
     "du-mat-xich": [
      "ĐẠT",
-     "19 dòng = 19 mắt xích, không ý nào lặp lại (dòng 1 hiện tượng, 2–3 \"giấc ngủ thật\"/\"mười lăm phút sóng chậm\", 4–7 cơ chế quen thuộc rồi phản biện, 8–9 cái đo được, 10–11 cảm giác, 12–17 tầng phân tử, 18 nhịp ngày, 19 lời khuyên). Mỗi khái niệm có hình ngay lúc được nói: \"ngủ sóng chậm\" → mảnh dày đổi màu trên thanh (68) và biên độ sóng lớn nhất ở đầu (69); \"phản xạ tụt\" → lưới chấm tụt thành vệt (73); \"mười lăm phút sóng chậm\" → mảnh mười lăm phút trên thanh dài (68); \"adenosine bám khía, cửa sáng\" → quả cầu dừng trong khía, cửa sáng (79); \"cà phê chiếm chỗ\" → phân tử vàng nằm khít trong khía (81); \"cửa tắt, cơn lờ đờ biến mất\" → phân tử xanh bị đẩy ra, điện chạy đều (82); \"ngủ nông + cà phê rồi nằng\" → nếp nhăn nhấp nhô nhẹ và khía bị chặn (84). Khi khái niệm còn tranh cãi, hình cũng có hình riêng: hai bản não, một sáng một không (72).",
+     "Mỗi khái niệm có hình ngay khi được nói: \"một giấc ngủ thật\" → máy ghi giấc ngủ (:67); \"15 phút ngủ sóng chậm\" → đoạn tô đậm dài 15 phút trên giấy (:68); \"phản xạ tụt\" → lưới chấm (:73); \"thấp hơn cả lúc chưa ngủ, ranh giới ở 30 phút\" → cổng chặn + hai vạch đo (:74); \"cảm thấy thì tỉnh, đo thì tệ\" → hai cột chạy ngược chiều (:76); \"adenosine tích lại\" → đám quả cầu (:78); \"bám vào khía\" → quả cầu nằm trong khía, cửa sáng (:79); \"cà phê chiếm chỗ\" → phân tử vàng nằm khít trong khía (:81); \"nghiên cứu chia làm đôi\" → hai bản não (:72); \"thí nghiệm cà phê\" → hai tách + hai đường đo (:83). Không ý nào lặp lại; câu 5 chỉ là cú cắt nối sang hình ở câu 4.",
      ""
     ],
     "mo-dau": [
      "ĐẠT",
-     "Dòng đầu bảng (TREATMENT.md:66) đưa đúng hiện tượng quen thuộc đang xảy ra trước mắt: \"Buổi chiều ngủ trưa xong, dậy lại thấy nặng đầu hơn lúc chưa ngủ\", hình là phòng ngủ có đồng hồ báo thứng reo, tay với ra chặn chuông, người ngồi dậy với tách cà phê; \"Vật nào làm gì\" ghi rõ có biến động nhìn thấy được — \"Đồng hồ rung chân; chăn phập phồng rồi đứng lại\". Dòng này chỉ có hiện tượng, chưa có bối cảnh lẫn nguyên nhân (sóng chậm, adenosine, chỉ số phản xạ đều từ dòng 2 trở đi), và shot list 0:00/0:08 (TREATMENT.md:96–97) ghi rõ lý do: \"Đưa người xem vào đúng nơi câu hỏi xảy ra, trước mọi lý do\" và \"Hiện tượng đang xảy ra trước mắt\".",
+     "Dòng đầu bảng (:66) mở bằng hiện tượng quen thuộc đang xảy ra trước mắt: nắng chiều xiên qua cửa sổ, đồng hồ báo thức reo, tay người với ra chặn chuông, người ngồi dậy với cốc cà phê trên tay; shot list đặt cảnh này ở 0:00 và 0:06 (:99-100), trước mọi bối cảnh (máy ghi giấc ngủ 0:08, :101) và trước mọi nguyên nhân (khối mô não 0:20, :103).",
      ""
     ],
     "khac-biet": [
-     "ĐẠT",
-     "Các ý nói về khác biệt đều có cả hai phía trong hình: 30 phút vs 10 phút — một thanh ngắn, một thanh dài gấp ba (67); có vs không ngủ sóng chậm — thanh dài đổi màu dày lên, thanh ngắn giữ nguyên một màu (68); tệ hơn cả lúc chưa ngủ — hai vạch đo \"dậy lên\" tụt xuống dưới \"chưa ngủ\" (74); cảm thấy vs đo được — hai cột chạy ngược chiều (76); ngủ sâu vs ngủ nông — nếp nhăn nhấp nhô nhẹ, sóng nhỏ, đối chiếu trực tiếp với khung sóng to (84); cửa sáng vs cửa tắt (79, 82); tụt sản vs đi lên — vạch chữ V (83). Điểm mềm: ý ở TREATMENT.md:70 (\"alarm thường reo đúng lúc não đang ở ngủ sóng chậm\") không có hình cho thấy phía \"ngủ sóng chậm\" — hình đó gần như trùng ảnh dòng 1 (đồng hồ reo, tay với ra chặn), phần \"não đang sâu\" chỉ có ở khung trước (dòng 69) qua cú cắt.",
-     ""
+     "LỖI",
+     "Ý ở TREATMENT.md:72 nói về một khác biệt rõ ràng (các nghiên cứu chia làm đôi) nhưng hình không cho thấy rõ hai phía khác nhau: cột Hình viết \"bản bên trái có sóng to rồi tắt, bản bên phải có sóng to nhưng không có gì xảy ra\" — đọc thì hai bản gần như giống nhau, đều là sóng to rồi không có gì xảy ra; trong khi cột \"Vật nào làm gì\" lại viết \"hai bản dùng chung một sóng, nhưng chỉ một bản sáng lên\" và shot list :106 nói \"một bản sáng một bản không\", không nói bản nào sáng. Người xem không xác định được bản nào là bên \"thấy có quan hệ\", bên nào là \"không thấy\".",
+     "Chọn rõ một bản não sóng to rồi bật sáng (nghiên cứu thấy có quan hệ) và một bản sóng to nhưng vẫn tối (không thấy quan hệ), rồi giữ đúng thứ tự đó ở cả ba chỗ (cột Hình :72, \"Vật nào làm gì\" :72, shot list :106), thêm nhãn ngắn \"có quan hệ / không quan hệ\" để người xem không phải đoán."
     ],
     "ket": [
      "ĐẠT",
-     "Cảnh kết vừa đổi góc nhìn vừa dùng được ngay: dòng 84 đưa hai việc làm ngay (\"giữ giấc trưa ở mức ngủ nông, hoặc uống cà phê rồi nằng\") với hình riêng cho cả hai (nếp nhăn nhấp nhô nhẹ; phân tử vàng nằm trong khía, cửa tắt), và mở đầu/kết (TREATMENT.md:22, 86) trả khung cảnh lại phòng ngủ với cửa sổ sáng hơn và câu chốt đổi cách nhìn: \"bạn không hỏng, bạn chỉ dậy đúng lúc não còn chưa chạy được — và cơn lờ đờ đó tự qua trong nửa tiếng\", khớp với mốc 0–35 phút ở FACTS.md:11.",
+     "Cảnh kết (:87, mô tả khung mở/kết :22) trả về cả hai thứ: một góc nhìn mới về chính câu hỏi (\"bạn không hỏng, bạn chỉ dậy đúng lúc não còn chưa chạy được\") và một việc dùng được ngay (câu 20, :85 — giữ giấc trưa ở mức ngủ nông, hoặc uống cà phê rồi nằng), với hai nguồn đứng sau là định nghĩa \"caffeine-nap\" trong EASA D-4 (FACTS.md:88) và Dhand & Sohal 2006 (FACTS.md:105-107).",
      ""
     ],
     "gon": [
      "ĐẠT",
-     "Không thấy ý nào kéo dài: mỗi dòng bảng ý→hình bổ sung đúng một mắt xích và một vật, không có ví von dài; dòng 10 (cơn lờ đờ tự qua trong nửa tiếng) là mắt xích thời lượng có nguồn (FACTS.md:11), dòng 18 (nhịp ngày) là mắt xích có nguồn (FACTS.md:84, Monk 2005), và các con số đều có vật mang số theo yêu cầu của STRATEGY.md:36 (thanh ngủ, dải thời gian, cổng chặn ba mươi phút). Chỗ hơi dồn là bốn dòng 4–7 đều dùng chung set piece khối mô não, nhưng mỗi dòng vẫn mang một hình riêng (sóng phồng, điện chạy chậm, hai bản não, cắt về đồng hồ).",
+     "Không thấy ý nào kéo dài: cả 20 dòng đều mang một mắt xích riêng, các hình dùng lại đều là đối chiếu có chủ đích (vệt điện trên đuôi tế bào ở :71 và :80; sóng lớn ở :69 và sóng nhỏ ở :85, shot list :125 ghi rõ \"cùng góc với lúc trước\") chứ không phải ví von hay lan man.",
      ""
     ]
    }
   }
  },
- "closed": false
+ "closed": true
 }

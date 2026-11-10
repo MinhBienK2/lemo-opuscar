@@ -101,7 +101,31 @@ def catalogue_names(ep):
     i = src.find('export const PROPS')
     if i < 0:
         return None
-    return re.findall(r"^\s{2}'([^']+)'\s*:", src[i:], re.M)
+    names = re.findall(r"^\s{2}'([^']+)'\s*:", src[i:], re.M)
+    if names:
+        return names
+    # bản sinh mới (mỗi vật một tệp trong src/props/): tên vật nằm trong
+    # `PROP.name` của từng tệp, không có trong barrel — đọc ở đó.
+    return _split_names(ep)
+
+
+def _split_names(ep):
+    """tên vật trong `src/props/<mã>.js` — thứ tự tệp, bỏ tệp dùng chung (`_`)"""
+    d = os.path.join(ep, 'src', 'props')
+    out = []
+    if not os.path.isdir(d):
+        return out
+    for f in sorted(os.listdir(d)):
+        if not f.endswith('.js') or f.startswith('_'):
+            continue
+        try:
+            t = open(os.path.join(d, f), encoding='utf8').read()
+        except OSError:
+            continue
+        m = re.search(r"export\s+const\s+PROP\s*=\s*\{[^}]*?\bname\s*:\s*(['\"])(.*?)\1", t, re.S)
+        if m:
+            out.append(m.group(2))
+    return out
 
 
 def cards_of(ep):
