@@ -7,4 +7,4 @@ c18 — "một trăm độ" bị nghe thành "100 độ": số đọc đúng.
 c19 — "nhiệt kế / cắm / vạch sôi" bị đổi thanh thành "nhịt kế / cám / vặt xôi": sai thanh điệu, âm thanh đúng.
 c30 — "nhiệt độ / nhảy vọt" bị nghe thành "nhịc độ / nhảy vọc", "một trăm độ" thành "100 độ": sai thanh điệu, số đọc đúng.
 c33 — "mạch ra lệnh" bị nghe thành "mặt tra lệnh", "dây" thành "giây": sai thanh điệu, âm thanh đúng.
-c39 — "mạch mở" bị nghe thành "mặt mở": sai thanh điệu, âm thanh đúng.
+# c39 từng bị nghe sai ("mạch mở" → "mặt mở"); câu đã thu lại ("Mạch mở, dây điện trở tắt.") nên Whisper đọc lại đúng, không còn cần tha.

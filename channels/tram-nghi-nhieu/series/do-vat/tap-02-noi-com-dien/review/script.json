@@ -1,6 +1,6 @@
 {
  "step": "script",
- "round": 1,
+ "round": 2,
  "items": {
   "c1": {
    "key": "f156f5f15b63ff02e519573cc5a690c7266bfa7faf6fb4566ca33b5916969c97",
@@ -877,24 +877,29 @@
    }
   },
   "c39": {
-   "key": "e63a151e5414b04a61656491c0e5c4ac13bdcadd00faa3bff7afb76fdfa4231b",
+   "key": "4e41726c834c66eb4cb13da838d6a54e0524f46e7fd357f7d4b3e548a16cc812",
    "verdict": "PASS",
    "fails": 0,
-   "round": 1,
+   "round": 2,
    "rows": {
     "khop-dan-y": [
      "ĐẠT",
-     "Ý 16 (TREATMENT hàng 16): \"mạch mở, trở cò tắt\" — nguyên văn dàn ý, đúng chỗ này.",
+     "Dàn ý hàng 16 (TREATMENT.md, bảng ý → hình) đặt đúng chuỗi \"một thanh lưỡng kim, nóng lên thì cong ra, bấm tách tiếp điểm, mạch mở, dây điện trở tắt\". c37 + c38 đã phủ \"công tắc nhiệt cơ ở đáy nồi\" và \"thanh lưỡng kim… bấm tách tiếp điểm\"; c39 chỉ đóng đúng hai ý còn lại (\"Mạch mở, dây điện trở tắt\") và không thêm ý nào ngoài dàn ý (không kéo sang giữ ấm, không kéo sang vi mạch — c40 mới mở sang thử nghiệm nước).",
      ""
     ],
     "dung-du-kien": [
      "ĐẠT",
-     "Cơ chế công tắc nhiệt cơ cắt nguồn có trong FACTS mục 4; không có số, không thuộc danh sách \"Giá trị không được nói\".",
+     "Câu không có con số nào, nên không có gì vượt ngoài FACTS; quan hệ nhân quả \"tiếp điểm bị bấm tách → mạch hở → dây điện trở tắt\" có nguồn ở FACTS mục 4 (Sano et al. 1970: bimetalic relay \"switching off a large current for boiling rice and water\"; Ma 1990: \"The heaters are connected with bimetal thermal switches\"). Không vi phạm danh sách \"Giá trị không được nói\": không nói \"nồi đời đầu không có điện tử\" (chỉ nói cơ chế lưỡng kim), không nói ngưỡng nhiệt nào, không nói thời gian nấu.",
      ""
     ],
     "nghe-mot-lan": [
      "ĐẠT",
-     "5 từ, không có số.",
+     "Câu 6 từ (\"Mạch mở, dây điện trở tắt\"), không có chữ số viết bằng ký hiệu; c38 kết bằng \"bấm tách tiếp điểm\" và c39 mở bằng \"Mạch mở\" nên không có con số nào bị cắt đôi giữa hai câu; nghe một lần là hiểu ngay mạch hở nên dây điện trở tắt.",
+     ""
+    ],
+    "noi-cau": [
+     "ĐẠT",
+     "Câu nối trực tiếp với c38: \"bấm tách tiếp điểm\" → \"Mạch mở\", nên quan hệ nhân quả hiện ra ngay cho người xem. Góp ý nhỏ (không chặn): ở cảnh nồi đời đầu, \"dây điện trở\" có thể bị nhầm với điện trở của đầu dò nhiệt đã nói ở c10–c11 (\"điện trở của nó tụt xuống khi nó nóng lên\"); có thể rõ hơn bằng \"Mạch mở, dây điện trở trong nồi tắt luôn\", nhưng người xem vẫn hiểu đúng câu hiện tại.",
      ""
     ]
    }

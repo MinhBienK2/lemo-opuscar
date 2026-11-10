@@ -1,3 +1,3 @@
-# script: tóm tắt sau vòng 1
+# script: tóm tắt sau vòng 2
 
 48 ĐẠT · 0 MỞ · 0 PHẢI SỬA
