@@ -14,18 +14,18 @@ Tên vật trong bảng là tên như lời kể gọi nó; mã tệp là `src/p
 
 ## 1. Danh mục vật
 
-| Mã tệp | Tên vật | Câu kể | Cự ly | Trạng thái động |
-|---|---|---|---|---|
-| `noi-com-dien.js` | nồi cơm điện | c1–c6, c24–c27, c33–c35 | trung → cận | đèn trên thân đổi đỏ → hổ phách; vỏ bật/tắt |
-| `noi-cat-ngang.js` | nồi cơm điện bị cưa ngang | c7–c23, c28–c35 | cận → siêu cận | dây điện trở nóng đỏ, mâm nhiệt đổi màu, dòng hạt |
-| `noi-com-doi-dau.js` | nồi cơm đời đầu | c36 | trung | chỉ hiện ở c36 |
-| `noi-cu-cat-ngang.js` | nồi cơm đời đầu bị cưa ngang | c37–c39 | cận | thanh lưỡng kim cong, hai tiếp điểm tách |
-| `cau-do-dien-tro.js` | máy đo điện trở | c11 | siêu cận | dải sáng chạy trên dây, số đo nhảy |
-| `nhiet-ke.js` | nhiệt kế thủy ngữ | c19, c27, c42, c43 | cận | cột thủy ngân đổi chiều cao, vạch số |
-| `nuoc.js` | lớp nước trong nồi | c17–c24, c40–c43 | cận | mực nước hạ, sôi lăn tăn, hơi bay |
-| `gao.js` | hạt gạo | c20–c23 | siêu cận | hạt hút nước (trưng ra), nở ra |
-| `bat-dong-nuoc.js` | bát đong nước | c47 | trung | nước sôi nhẹ |
-| `tui-gao.js` | túi gạo | c47 | trung | tĩnh |
+| Mã tệp | Tên vật | Câu kể | Cự ly | Trạng thái động | Hàm dựng | Bộ phận đặc trưng phải thấy |
+|---|---|---|---|---|---|---|
+| `noi-com-dien.js` | nồi cơm điện | c1–c6, c24–c27, c33–c35 | trung → cận | đèn trên thân đổi đỏ → hổ phách; vỏ bật/tắt | `noiComDien()` | thân nồi tròn, nắp có núm, đèn báo trên thân, công tắc đỏ-trắng, dây điện có phích, chân đế |
+| `noi-cat-ngang.js` | nồi cơm điện bị cưa ngang | c7–c23, c28–c35 | cận → siêu cận | dây điện trở nóng đỏ, mâm nhiệt đổi màu, dòng hạt | `noiCatNgang()` | mâm nhiệt tròn có lõ, dây điện trở xoắn quanh vành, lò xo, viên cầu đầu dò nhiệt, hai dây mảnh, bo mạch, con chip, nồi trong có thành |
+| `noi-com-doi-dau.js` | nồi cơm đời đầu | c36 | trung | chỉ hiện ở c36 | `noiComDoiDau()` | thân sành tròn có vạng sơn, nắp có núm, phích cắm, công tắc nhỏ ở thân |
+| `noi-cu-cat-ngang.js` | nồi cơm đời đầu bị cưa ngang | c37–c39 | cận | thanh lưỡng kim cong, hai tiếp điểm tách | `noiCuCatNgang()` | thân sành cưa, thanh lưỡng kim hai lớp, lá đồng bản lề, hai tiếp điểm, dây điện trở dưới đáy |
+| `cau-do-dien-tro.js` | máy đo điện trở | c11 | siêu cận | dải sáng chạy trên dây, số đo nhảy | `cauDoDienTro()` | vỏ vàng có hạt nhựa, màn hình số, nút xoay có vạch, hai que chạm (đỏ và đen) |
+| `nhiet-ke.js` | nhiệt kế thủy ngữ | c19, c27, c42, c43 | cận | cột thủy ngân đổi chiều cao, vạch số | `nhietKe()` | ống kính có khung, cột thủy ngân đỏ, bọt ở đáy, bảng thang chia có vạch và số, chữ "SÔI" ở vạch 100 |
+| `nuoc.js` | lớp nước trong nồi | c17–c24, c40–c43 | cận | mực nước hạ, sôi lăn tăn, hơi bay | `nuocNoi()` | mặt nước có gợn, mép meniscus ở mặt cưa, mặt cắt có sắc độ, bong bóng ở đáy |
+| `gao.js` | hạt gạo | c20–c23 | siêu cận | hạt hút nước (trưng ra), nở ra | `gachGao()`, `gachGaoCat()`, `lopGao()` | hạt dài có nếp dọc, hạt bị cưa có núm tinh bột, lớp cơm có hạt nằm chồng và mặt cắt hạt thật |
+| `bat-dong-nuoc.js` | bát đong nước | c47 | trung | nước sôi nhẹ | `batDongNuoc()` | thành bát trắng có vân, mặt nước có gợn sóng |
+| `tui-gao.js` | túi gạo | c47 | trung | tĩnh | `tuiGao()` | túi giấy có nắp gấp, nhãn "GẠO", vài hạt rơi quanh |
 
 Bối cảnh (không phải vật, không vào danh mục): bếp buổi sáng (bàn gỗ, tường gạch, cửa sổ có lỗ, đồng hồ treo
 tường), hai nồi thí nghiệm bị cưa trên bàn.
@@ -130,3 +130,31 @@ Sau khi dựng xong, chạy `props_catalog.py <tập> --write-index` rồi
 `LEMO_ANGLE=vulkan node channels/tram-nghi-nhieu/tools/propcheck.mjs <tập> --out <tập>/out/scratch/props`
 để tự nhìn trước ảnh ba phía của từng vật, rồi chấm bằng
 `sh channels/tram-nghi-nhieu/tools/review.sh <tập> props`.
+
+## 7. Vòng chấm props số 1 (10/11/2026): đã sửa gì
+
+Vòng chấm props đầu tiên trả về 6 ĐẠT, 4 phải sửa. Bốn mục đó đã được sửa trong
+mã (mỗi mục một người sửa riêng), đừng sửa ngược lại:
+
+| Tệp | Người chấm thấy | Đã sửa |
+|---|---|---|
+| `src/props/gao.js` | hạt gạo đọc ra là "khối trắng dẹp", không có rãnh dọc, không có độ dày | hạt dựng bằng lưới vòng kín: thân thuôn 3:1, hai đầu nhọn, bụng có rãnh khía; vỏ trấu có vân và bảng sáng dốc riêng; `gachGaoCat()` và `lopGao()` dựng lại theo cùng hình hạt; `PROP.view` dựng **một nhóm hạt rơi trên mặt bàn** (một hạt ngửa bụng lên để thấy nếp, một hạt tựa nghiêng để thấy bụng cong, hai hạt nhỏ lệch quanh) |
+| `src/props/noi-cat-ngang.js` | đọc ra là "hộp kem dạng bát tưới", không có nắp vòm, nồi trong, bảng công tắc, dây điện | dựng lại đúng vỏ nồi cơm điện (thân + nắp vòm + núm + lỗ thoát hơi + tay cầm + bảng công tắc + chân + dây điện có phích) rồi cưa ngang cả vỏ trên **một** mặt phẳng z = 0; mâm nhiệt có vành đứng, dây điện trở xoắn sát vành, mặt trong nồi trong dùng vật liệu tối (không cháy trắng) |
+| `src/props/noi-cu-cat-ngang.js` | mặt trong vỏ cháy trắng, cơ lưỡng kim trôi lơ lửng, vỏ khác hẳn vỏ vòm của `noi-com-doi-dau.js` | thân dựng theo vỏ vòm của `noi-com-doi-dau.js` (nắp vòm có núm, vạng sơn ôm thân, nút bấm hông), có lòng vỏ tối, đáy lòng vỏ là mặt đáy thật có bóng đỡ cơ lưỡng kim; thêm mâm nhiệt + nồi trong + dây điện trừ ép dưới mâm |
+| `src/props/nuoc.js` | đọc ra là "khay thủy tinh rỗng", không có mặt nước, không có meniscus | dựng lại thành khối nước thật: mặt nước phẳng ngang, mép meniscus cong lên ở chỗ nước chạm thành, thân nước bán trong suốt, mặt cắt z = 0 có sắc độ; thêm đoạn thành nồi nhôm (cờ `pot`) — **phim không bật cờ này** vì trong nồi đã có thành sẵn |
+| `src/props/cau-do-dien-tro.js` | hai que đo là dải dẹt mọc ra từ núm xoay, che núm | que đo là tay cầm tròn **cắm vào hai lỗ ở đáy vỏ**, đầu kim chỉ nhô lên tới miệng lỗ; màn hình trong ảnh ba phía hiện số `1.0 kΩ` thay vì gạch ngang |
+
+Những lỗi CHẶN còn lại sau vòng 1: không. Vòng 2 (11/11/2026) trả về **10 ĐẠT,
+0 MỞ, 0 phải sửa** — bước 5 (dựng vật) đã xong.
+
+Những điểm người chấm góp ý mà **chưa sửa** (không chặn, để vòng sau hoặc bước 6 xử lý): bát đong nước đọc là bát
+thủy tinh trong khi dựng là bát nhựa có vạch (người chấm đoán theo tên mù —
+bát có vạch chia và nước là bát đong lượng, đúng như cảnh c47 cần); que đo của máy đo điện trở chưa có dây rủ;
+vỏ nồi cơm điện và nồi cơm đời đầu chỉ chiếm ~1/5 khung ảnh ba phía vì dây điện kéo tới ổ cắm làm khung rộng
+ra (góc máy của công cụ ba phía là góc cố định, không sửa được từ tệp vật); hạt gạo trong ảnh ba phía còn
+tương phản thấp với nền bàn và một hạt đứng riêng chưa có bóng chạm bàn; bóng đỏ ở đáy nhiệt kế còn méo;
+túi gạo còn cứng như hộp carton; hạt gạo rơi quanh túi còn là vòng viền rỗng.
+
+Những điều này **không chặn bước 5**, nhưng chúng là những chỗ phim sẽ bị soi ở bước 6 (và ở vòng chấm
+hình sau này): bát đong nước và túi gạo lên hình ở c47, nhiệt kế ở c19/c27/c42/c43, hạt gạo ở c20–c23,
+máy đo điện trở ở c11, hai nồi cơm ở c1–c6 và c36.

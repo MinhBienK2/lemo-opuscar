@@ -62,16 +62,22 @@ export function cauDoDienTro(opts = {}) {
     g.add(mesh(new THREE.CylinderGeometry(.008, .008, .012, 12), dark, [s * .035, -.088, .014], { rot: [Math.PI / 2, 0, 0] }));
   }
 
-  // hai que chạm: tay cầm, dây, đầu nhọn
+  // hai que chạm: tay cầm, dây, đầu nhọn.
+  // Que chạm phải CẮM vào hai lỗ ở đáy vỏ: tay cầm nằm dưới, đầu kim loại
+  // nhọn thò lên đúng lỗ. Que dài quá thì đầu kim vượt lên che núm xoay ở
+  // giữa mặt máy, và cả máy đọc ra là hai dải dẹt vắt ngang.
   const probes = [];
   for (const [i, s] of [[0, -1], [1, 1]]) {
     const p = new THREE.Group();
-    const bodyP = mesh(new THREE.CylinderGeometry(.010, .013, .085, 12), toon(i ? '#d94f3d' : '#33383f'), [0, 0, 0]);
+    const bodyP = mesh(new THREE.CylinderGeometry(.010, .013, .080, 14), toon(i ? '#d94f3d' : '#33383f'), [0, -.055, 0]);
     p.add(bodyP);
-    p.add(mesh(new THREE.CylinderGeometry(.0022, .0045, .055, 10), toon('#cfd4da'), [0, .068, 0]));
+    // vành nhựa ở chỗ que ra khỏi lỗ cắm
+    p.add(mesh(new THREE.CylinderGeometry(.0115, .0115, .014, 14), toon('#25292f'), [0, -.012, 0]));
+    // đầu kim nhọn: chỉ nhô lên tới miệng lỗ, không vượt lên núm xoay
+    p.add(mesh(new THREE.CylinderGeometry(.0020, .0042, .030, 10), toon('#cfd4da'), [0, .003, 0]));
     p.position.set(s * .035, -.088, .014);
-    p.rotation.z = s * .35;
-    p.userData.tip = new THREE.Vector3(0, .095, 0);
+    p.rotation.set(.20, 0, s * .22);
+    p.userData.tip = new THREE.Vector3(0, .018, 0);
     g.add(p); probes.push(p);
   }
 
@@ -82,4 +88,9 @@ export function cauDoDienTro(opts = {}) {
   return g;
 }
 
-export const PROP = { name: 'máy đo điện trở', view: () => cauDoDienTro() };
+// Trong ảnh ba phía, màn hình phải có một con số: màn hình trống đọc ra là
+// một mảng xanh, và máy đo không có số thì không thấy là máy đo.
+export const PROP = {
+  name: 'máy đo điện trở',
+  view: () => { const g = cauDoDienTro(); g.setReading('1.0 kΩ'); return g; },
+};

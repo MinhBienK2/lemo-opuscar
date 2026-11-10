@@ -1,93 +1,205 @@
-// Lớp nước trong nồi: nửa vòng nước phía sau mặt cắt, mặt cắt ở z = 0, mực nước
-// hạ được dần (setLevel), kèm bọt bốc lên khi nước sôi (setBoil).
+// Lớp nước trong nồi: một khối nước thật nằm trong nồi.
+//  - mặt nước phẳng ngang ở mực `level`, mép meniscus cong lên ở chỗ nước
+//    chạm thành, gợn sóng chạy trên mặt nước
+//  - thân nước bán trong suốt; mặt cắt ở z = 0 có sắc độ đi từ sâu (tối) ra
+//    nông (sáng) để đọc ra một thể chất lỏng chứ không phải một tấm bạc hà
+//  - mực nước hạ được dần (setLevel), bọt bốc lên khi nước sôi (setBoil)
+// Khi bật `opts.pot`, dựng thêm một đoạn thành nồi nhôm đứng quanh phía trên
+// và phía sau lớp nước: không có nó, lớp nước đứng một mình đọc ra là một
+// khay thủy tinh rỗng đặt trên bàn, chứ không phải nước TRONG nồi.
 import * as THREE from 'three';
-import { toon, mesh, fxLayer, mulberry, clamp, canvasTex } from '../../../../../rig/kit.js';
+import { toon, mesh, mulberry, clamp, canvasTex } from '../../../../../rig/kit.js';
 import { fizz } from '../../../../../rig/cutaway.js';
 
 export function nuocNoi(opts = {}) {
-  const R = opts.R || .136;          // bán kính trong của nồi
-  const r0 = opts.r0 || R * .72;     // bán kính ở đáy lớp nước
-  const bottom = opts.bottom || 0;
+  const R = opts.R || .136;          // bán kính nước ở chỗ chạm thành nồi
+  const r0 = opts.r0 || R * .72;     // bán kính nước ở đáy
+  const bottom = opts.bottom || 0;   // cao độ đáy lớp nước
+  const withPot = !!opts.pot;        // có dựng thêm đoạn thành nồi nhôm không
   const g = new THREE.Group();
 
-  const bodyMat = toon('#63bcd8', { transparent: true, opacity: .80, depthWrite: false });
+  const MEN_RISE = R * .022;         // meniscus dâng lên ở chỗ nước chạm thành
+  const MEN_W = R * .10;             // bề rộng mép meniscus
+  const WALL_T = R * .10;            // độ dày thành nồi nhôm
+  const POT_UP = R * .17;            // phần thành nồi nhô lên trên mặt nước
+
+  // ── chất liệu ──
   // Mặt cắt của lớp nước có sắc độ: sâu thì tối, nông thì sáng. Một tấm bạc hà
   // đồng nhất đọc ra là một mảng màu dán, không phải một thể chất lỏng.
   const faceTex = canvasTex(64, 256, (c, w, h) => {
     const r = mulberry(17);
     const grd = c.createLinearGradient(0, h, 0, 0);   // v = 0 ở đáy nồi
-    grd.addColorStop(0, '#1f6b88');
-    grd.addColorStop(.40, '#3f9cbd');
-    grd.addColorStop(.82, '#74c0dd');
-    grd.addColorStop(1, '#a8dced');
+    grd.addColorStop(0, '#0f4f68');
+    grd.addColorStop(.35, '#237fa2');
+    grd.addColorStop(.78, '#4fb2d1');
+    grd.addColorStop(1, '#9adcee');
     c.fillStyle = grd; c.fillRect(0, 0, w, h);
     // vài vệt sáng nằm ngang: mặt nước có phản chiếu, không phải một tấm nhựa
-    for (let i = 0; i < 30; i++) {
-      const y = h - Math.pow(r(), 1.7) * h;
-      c.fillStyle = `rgba(232,250,255,${.05 + r() * .10})`;
-      c.fillRect(0, y, w, 1.5 + r() * 4);
+    for (let i = 0; i < 26; i++) {
+      const y = h - Math.pow(r(), 1.6) * h;
+      c.fillStyle = `rgba(232,250,255,${.04 + r() * .07})`;
+      c.fillRect(0, y, w, 1 + r() * 3);
     }
   });
-  const faceMat = toon('#ffffff', { map: faceTex, transparent: true, opacity: .90, side: THREE.DoubleSide });
+  const faceMat = toon('#ffffff', { map: faceTex, transparent: true, opacity: .92, side: THREE.DoubleSide });
+  // Thân nước bán trong suốt: nhìn xuyên qua lớp nước thấy được thành nồi
+  // phía sau, đó là thứ làm cho nó đọc ra là nước chứ không phải nhựa.
+  const bodyMat = toon('#6dc3de', { transparent: true, opacity: .50, depthWrite: false });
+  // Mặt nước: sáng hơn thân, có gợn sóng đồng tâm và một vệt phản chiếu.
+  const surfTex = canvasTex(256, 256, (c, w, h) => {
+    const r = mulberry(23);
+    c.fillStyle = '#7fc8e1'; c.fillRect(0, 0, w, h);
+    for (let i = 0; i < 26; i++) {          // gợn sóng: vòng đồng tâm
+      const y = r() * h;
+      c.fillStyle = `rgba(255,255,255,${.10 + r() * .18})`;
+      c.fillRect(0, y, w, 1 + r() * 3);
+    }
+    c.save(); c.translate(w * .5, h * .5); c.rotate(-.32);   // vệt phản chiếu
+    c.fillStyle = 'rgba(255,255,255,.24)';
+    c.fillRect(-w, -h * .09, w * 2, h * .18);
+    c.restore();
+  });
+  const surfMat = toon('#ffffff', { map: surfTex, transparent: true, opacity: .90, side: THREE.DoubleSide });
+
   const body = new THREE.Mesh(new THREE.BufferGeometry(), bodyMat);
   const face = new THREE.Mesh(new THREE.BufferGeometry(), faceMat);
-  body.renderOrder = 3; face.renderOrder = 3;
-  g.add(body, face);
-  // đường meniscus: một vòng sáng ở mặt nước, nằm đúng nửa sau (nửa đã bị cưa mất)
-  const lineGeo = new THREE.TorusGeometry(R, .004, 6, 48, Math.PI);
-  lineGeo.rotateZ(Math.PI);            // quay nửa vòng sang phía sau, khớp với mặt cắt
-  const line = mesh(lineGeo, toon('#e8faff', { emissive: new THREE.Color('#8fd8ee').multiplyScalar(.5) }), [0, 0, 0], { rot: [Math.PI / 2, 0, 0] });
-  g.add(line);
+  const surf = new THREE.Mesh(new THREE.BufferGeometry(), surfMat);
+  body.renderOrder = 2; surf.renderOrder = 3; face.renderOrder = 4;
+  g.add(body, face, surf);
+
+  // mép meniscus: một đường sáng mảnh nằm trên mặt nước, sát chỗ nước chạm
+  // thành. Không sáng quá: một vành trắng ở miệng cháy thành vệt mờ làm mất
+  // viền mực quanh miệng.
+  const beadGeo = new THREE.TorusGeometry(R, .0011, 6, 48, Math.PI);
+  beadGeo.rotateZ(Math.PI);          // quay nửa vòng sang phía sau, khớp mặt cắt
+  const bead = mesh(beadGeo, toon('#a9dcec'), [0, 0, 0], { rot: [Math.PI / 2, 0, 0] });
+  g.add(bead);
   // mép mặt nước ở mặt cắt: một sáng mảnh chạy ngang theo đường kính. Không có
   // nó thì lớp nước chỉ là một tấm bạc hà với mép trên thẳng tuyệt đối, đọc ra
   // là một mảng bìa dán, không phải mặt nước.
-  const surf = mesh(new THREE.CylinderGeometry(.0016, .0016, 1, 8),
-    toon('#dff2fb', { emissive: new THREE.Color('#8fd8ee').multiplyScalar(.14) }), [0, 0, .0018], { rot: [0, 0, Math.PI / 2] });
-  fxLayer(surf);
-  g.add(surf);
+  const edge = mesh(new THREE.BoxGeometry(1, .0009, .0010), toon('#bfe4f2'), [0, 0, .0009]);
+  g.add(edge);
+  // gợn sóng nổi trên mặt nước: hai vòng lệch tâm, mảnh và nhạt
+  const ripples = [];
+  for (const [i, k] of [[0, .42], [1, .70]]) {
+    const rg = new THREE.TorusGeometry(R * k, .0011, 6, 40, Math.PI);
+    rg.rotateZ(Math.PI);
+    const t = mesh(rg, toon('#c6e8f6'), [R * (i ? .04 : -.03), 0, R * (i ? .03 : -.05)],
+      { rot: [Math.PI / 2, 0, 0] });
+    t.scale.set(1, .92, 1);
+    ripples.push(t);
+    g.add(t);
+  }
+
+  // ── đoạn thành nồi nhôm đứng quanh lớp nước ──
+  const pot = new THREE.Group();
+  pot.visible = withPot;
+  g.add(pot);
+  const potMat = toon('#8b929e');       // mặt ngoài thành
+  const potFaceMat = toon('#7f8792');   // mặt cắt của thành
+  const potBody = new THREE.Mesh(new THREE.BufferGeometry(), potMat);
+  const potCutL = new THREE.Mesh(new THREE.BufferGeometry(), potFaceMat);
+  const potCutR = new THREE.Mesh(new THREE.BufferGeometry(), potFaceMat);
+  pot.add(potBody, potCutL, potCutR);
 
   let level = 0;
+  // cao độ mặt nước tại một điểm trên mặt cắt (meniscus cong lên ở hai mép)
+  const surfY = x => {
+    const ax = Math.abs(x);
+    if (ax <= R - MEN_W) return level;
+    const t = clamp((ax - (R - MEN_W)) / MEN_W);
+    return level + MEN_RISE * (1 - t) * (1 - t);
+  };
+  // bán kính lớp nước ở một cao độ (dùng cho bong bóng)
+  const rAt = yy => {
+    const fil = Math.min(.010, (level + MEN_RISE - bottom) * .30);
+    if (yy <= bottom + fil) return r0 + (R - r0) * Math.sin(clamp((yy - bottom) / fil) * Math.PI / 2);
+    return R;
+  };
+
   const rebuild = y => {
     level = y;
-    const pts = [];
-    const N = 12;
-    for (let i = 0; i <= N; i++) {
-      const yy = bottom + (y - bottom) * i / N;
-      const rr = r0 + (R - r0) * Math.min(1, (yy - bottom) / Math.max(.001, y - bottom));
-      pts.push(new THREE.Vector2(Math.max(.004, rr), yy));
+    const topY = y + MEN_RISE;              // mực nước ở chỗ chạm thành
+    // Thành lớp nước: bo tròn ở đáy rồi thẳng lên — đúng hình nồi, nên mặt
+    // nước phẳng ngang thật sự.
+    const wallPts = [];
+    const fil = Math.min(.010, (topY - bottom) * .30);
+    const NF = 5;
+    for (let i = 0; i <= NF; i++) {
+      const t = i / NF;
+      wallPts.push(new THREE.Vector2(r0 + (R - r0) * Math.sin(t * Math.PI / 2), bottom + fil * t));
     }
-    const outline = [new THREE.Vector2(0, bottom), ...pts, new THREE.Vector2(0, y)];
+    const NW = 6;
+    for (let i = 1; i <= NW; i++) {
+      wallPts.push(new THREE.Vector2(R, bottom + fil + (topY - bottom - fil) * i / NW));
+    }
+    // mép meniscus: cong lên ở chỗ nước chạm thành, rồi mới xuống mặt nước
+    const menPts = [];
+    const NM = 7;
+    for (let i = 0; i <= NM; i++) {
+      const t = i / NM;
+      menPts.push(new THREE.Vector2(R - MEN_W * t, y + MEN_RISE * (1 - t) * (1 - t)));
+    }
+    // thân nước: nửa sau, mặt cắt ở z = 0
     body.geometry.dispose();
-    body.geometry = new THREE.LatheGeometry(outline, 48, Math.PI / 2, Math.PI);
+    body.geometry = new THREE.LatheGeometry([new THREE.Vector2(0, bottom), ...wallPts], 48, Math.PI / 2, Math.PI);
+    // mặt nước phẳng + meniscus
+    surf.geometry.dispose();
+    surf.geometry = new THREE.LatheGeometry([...menPts, new THREE.Vector2(0, y)], 48, Math.PI / 2, Math.PI);
     // mặt cắt ở z = 0: hình giữa đáy nồi và mặt nước
     const s = new THREE.Shape();
-    s.moveTo(-pts[pts.length - 1].x, y);
-    for (let i = pts.length - 1; i >= 0; i--) s.lineTo(-pts[i].x, pts[i].y);
-    s.lineTo(0, bottom); s.lineTo(pts[0].x, bottom);
-    for (let i = 0; i < pts.length; i++) s.lineTo(pts[i].x, pts[i].y);
-    s.lineTo(pts[pts.length - 1].x, y);
+    s.moveTo(0, bottom);
+    s.lineTo(-wallPts[0].x, bottom);
+    for (const p of wallPts) s.lineTo(-p.x, p.y);
+    for (const p of menPts) s.lineTo(-p.x, p.y);
+    s.lineTo(menPts[menPts.length - 1].x, y);
+    for (let i = menPts.length - 1; i >= 0; i--) s.lineTo(menPts[i].x, menPts[i].y);
+    for (let i = wallPts.length - 1; i >= 0; i--) s.lineTo(wallPts[i].x, wallPts[i].y);
+    s.closePath();
     face.geometry.dispose();
     face.geometry = new THREE.ShapeGeometry(s);
     // toạ độ vân của mặt cắt: v đo chiều sâu, u đo chiều ngang, để sắc độ đi
     // đúng từ đáy nồi lên mặt nước
     const FP = face.geometry.attributes.position, FUV = face.geometry.attributes.uv;
     for (let i = 0; i < FP.count; i++) {
-      FUV.setXY(i, (FP.getX(i) + R) / (2 * R), (FP.getY(i) - bottom) / Math.max(.001, y - bottom));
+      FUV.setXY(i, (FP.getX(i) + R) / (2 * R), (FP.getY(i) - bottom) / Math.max(.001, topY - bottom));
     }
     FUV.needsUpdate = true;
-    // mép mặt nước nơi cắt: một sáng mảnh chạy ngang, đọc ra là mặt chất lỏng
-    // ống nằm dọc theo trục y của nó, nên phải kéo dài theo y (trục ống), không
-    // phải theo x
-    surf.position.set(0, y, .0018);
-    surf.scale.set(1, 2 * R, 1);
-    line.position.y = y;
-    line.scale.setScalar(1);
+    // mép meniscus và mép mặt nước ở mặt cắt đi theo mực nước
+    const br = R - MEN_W * .30;
+    bead.position.y = surfY(br);
+    bead.scale.setScalar(br / R);
+    edge.position.set(0, y + .0007, .0009);
+    edge.scale.set(2 * (R - MEN_W), 1, 1);
+    for (const rp of ripples) rp.position.y = y + .0005;
+    // ── đoạn thành nồi nhôm: đứng quanh phía trên và phía sau lớp nước ──
+    if (withPot) {
+      const Ri = R - .0006, Ro = Ri + WALL_T;   // lùi vào trong một chút để che
+      const yB = bottom - .0006, yT = topY + POT_UP;   // thành nhô lên trên nước
+      const prof = [
+        new THREE.Vector2(Ri, yT),
+        new THREE.Vector2(Ri, yB),
+        new THREE.Vector2(Ro, yB),
+        new THREE.Vector2(Ro, yT),
+        new THREE.Vector2(Ri, yT),
+      ];
+      potBody.geometry.dispose();
+      potBody.geometry = new THREE.LatheGeometry(prof, 48, Math.PI / 2, Math.PI);
+      const cut = (sgn) => {
+        const sh = new THREE.Shape();
+        sh.moveTo(sgn * Ri, yB); sh.lineTo(sgn * Ro, yB);
+        sh.lineTo(sgn * Ro, yT); sh.lineTo(sgn * Ri, yT); sh.closePath();
+        return new THREE.ShapeGeometry(sh);
+      };
+      potCutL.geometry.dispose(); potCutL.geometry = cut(-1);
+      potCutR.geometry.dispose(); potCutR.geometry = cut(1);
+    }
   };
   rebuild(opts.level ?? bottom + .05);
 
   // bọt bốc lên ở mặt nước
   let boil = 0;
-  const V = { rIn: yy => (r0 + (R - r0) * clamp((yy - bottom) / Math.max(.001, V.level - bottom))) * .90, level: level, bottom, cut: Math.PI };
+  const V = { rIn: yy => rAt(yy) * .90, level: level, bottom, cut: Math.PI };
   const F = fizz(V, { n: 110, sites: 10, seed: 9, rate: () => boil, r0: .0022, rDetach: .007, grow: .009, rise: .55, acc: 1.4 });
   // bọt nằm trên lớp hiệu ứng: không có viền mực, nếu không mỗi bọt lại thành một
   // vòng đen và cả lớp nước trông như đám mây
@@ -111,7 +223,7 @@ export function nuocNoi(opts = {}) {
   g.add(foam);
   const fr = mulberry(5);
   const foams = [];
-  for (let i = 0; i < foamN; i++) foams.push({ x: (i / (foamN - 1) - .5) * 2 * R * .94, p: fr(), s: .6 + fr() * .8 });
+  for (let i = 0; i < foamN; i++) foams.push({ x: (i / (foamN - 1) - .5) * 2 * (R - MEN_W) * .94, p: fr(), s: .6 + fr() * .8 });
   const fM = new THREE.Matrix4(), fP = new THREE.Vector3(), fQ = new THREE.Quaternion(), fS = new THREE.Vector3();
 
   // Dải bọt cũng phải có vị trí ngay từ lúc dựng, lý do như bong bóng ở trên.
@@ -120,8 +232,8 @@ export function nuocNoi(opts = {}) {
     for (let i = 0; i < foamN; i++) {
       const f = foams[i];
       const w = Math.sin(t * 2.4 + f.p * 6.3) * .5 + .5;
-      const rr = (.0011 + .0012 * w) * f.s * (.38 + .62 * k);
-      fP.set(f.x, level - .0022 - rr * .3, .0026);
+      const rr = (.0011 + .0012 * w) * f.s * k;   // nước chưa sôi thì không có bọt
+      fP.set(f.x, surfY(f.x) - .0016 - rr * .3, .0026);
       fS.set(rr * 1.5, rr * .60, rr);
       fM.compose(fP, fQ, fS);
       foam.setMatrixAt(i, fM);
@@ -141,8 +253,13 @@ export function nuocNoi(opts = {}) {
     layoutFoam(t);
   };
   layoutFoam(0);
-  g.faceMat = faceMat; g.bodyMat = bodyMat;
+  g.faceMat = faceMat; g.bodyMat = bodyMat; g.surfMat = surfMat;
   return g;
 }
 
-export const PROP = { name: 'lớp nước trong nồi', view: () => nuocNoi() };
+export const PROP = {
+  name: 'lớp nước trong nồi',
+  // Vật đứng một mình: dựng thêm đoạn thành nồi nhôm, không có nó thì lớp
+  // nước đọc ra là một khay thủy tinh rỗng đặt trên bàn.
+  view: () => nuocNoi({ R: .138, r0: .132, bottom: .055, level: .115, pot: true }),
+};

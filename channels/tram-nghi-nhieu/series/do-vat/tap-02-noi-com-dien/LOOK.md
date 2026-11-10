@@ -116,3 +116,124 @@ hình (nhiệt, tín hiệu điện, hơi nước) mới thành vật minh hoạ
 - **Đỉnh cột thủy ngữ là mặt trên của bọt tròn, không phải tâm của nó.** Tâm bọt nằm thấp hơn một bán
   kính dưới vạch; nếu đặt tâm bọt đúng vạch thì bọt lọt lên trên và người xem đọc cột cao hơn thật
   vài độ (ở khung siêu cận, đỉnh cột chạm vạch 120 trong khi câu kể nói cột đang ở 112).
+
+## Vòng 1
+
+- **Thấy:** dựng đủ 48 khung hình chính vào `review/hero/` và chấm từng khung một. Lần đầu nhìn tờ sheet có
+  nhiều mục sai ngay từ đầu.
+- **Sửa:** sửa hết những mục này ở vòng 2.
+
+Những gì nhìn ra sai:
+
+- **Mũi tên đỏ và vạch "SÔI" cứ cắt ngang chữ "100"** trên thẻ thang đo (t_108.24, t_60.53, t_62.71, t_65.21,
+  t_73.03, t_76.74, t_80.37, t_82.21, t_92.56). Người xem điện thoại không đọc được nhiệt độ nào đang ghim nồi.
+- **Vạch "SÔI" không nằm bằng vạch 100** — nó cao hơn một nấc, nên thang tự mâu thuẫn với lời kể.
+- **Cảnh bên trong nồi không có gì đọc được là đáy nồi** (t_114.11, t_30.65): bộ công tắc nhiệt cơ nằm trên một
+  mặt be phẳng không giới hạn.
+- **Mặt nước là một mảng bạc hà phẳng**, không sóng, không bọt, không phản chiếu (t_129.71, t_138.08).
+- **Nền gạo là một bức tường nâu phẳng**, hạt gạo không đổ bóng, đốm tinh bột là hình tròn trắng phẳng dán lên
+  mặt hạt và tràn ra ngoài viền (t_67.69, t_70.23).
+- **Ba trụ xanh-trắng đứng không lý do trên mâm nhiệt** (t_54.83, t_28.01) và một mũi tên đỏ phẳng không viền mực
+  bay trên mâm nhiệt.
+- **Phụ đề đè lên bảng điều khiển của nồi** (t_4.23, t_18.59).
+
+## Vòng 2
+
+- **Thấy:** chấm lại những mục đã sửa. Phần lớn đã qua; hai mục còn sai.
+- **Sửa:** sửa hai mục này ở vòng 3.
+
+Còn lại:
+
+- **t_129.71** — mặt nước còn mảng vệt tối/răng cưa tỏa ra như nan quạt, và bên phải vũng nước có vệt vân gỗ
+  chạy ngang trên mặt nước. Sửa: đổi texture mặt nước sang gợn mềm đều, bỏ vân gỗ.
+- **t_138.08** — vệt nước trên thành kết thúc bằng mũi nhọn như mẩu băng keo bị xé, và thiếu thẻ "ĐÁY NỒI"
+  chỉ vào đáy nồi đã cạn.
+
+## Vòng 3
+
+- **Thấy:** chấm lại toàn bộ 48 khung sau vòng sửa.
+- **Sửa:** sửa những mục này ở vòng 4.
+
+Còn lại:
+
+- **t_44.39** — dây nối ra khỏi chip được dựng thành dải đỏ dẹt rộng trượt đè lên hàng chân IC, tấm phẳng thay
+  cho sợi dây. Sửa: dựng hai sợi dây tròn mảnh đi từ viên cầu xuống chân chip.
+- **t_67.69, t_70.23** — hai khung cận cảnh trong nồi đọc như tranh 2D: nền gạo phẳng, hạt không đổ bóng, mặt
+  nước là tấm bạc hà đồng nhất, tinh bột là hình tròn phẳng dán lên mặt hạt.
+- **t_41.29, t_97.84** — cùng lỗi dây đỏ dẹt như t_44.39.
+
+## Vòng 4
+
+- **Thấy:** chấm lại riêng năm mục vừa nêu.
+- **Sửa:** sửa ở vòng 5.
+
+Cả năm mục vẫn mở, và nguyên nhân là chung: **hai dây đỏ vẫn là hai dải dẹt như băng keo** thay vì hai sợi dây
+tròn, và hai khung cận cảnh trong nồi vẫn không có bóng, không có chiều sâu.
+
+## Vòng 5
+
+- **Thấy:** người chấm trả lời thiếu — cả 48 mục đều ghi "người chấm chưa trả lời đủ".
+- **Sửa:** không sửa gì theo vòng này; chấm lại từ đầu ở vòng 6.
+
+Một vòng chấm hỏng thì không phải vòng chấm. Phải chấm lại.
+
+## Vòng 6
+
+- **Thấy:** chấm lại toàn bộ; đa số đã qua.
+- **Sửa:** sửa hai mục còn lại ở vòng 7.
+
+Còn lại:
+
+- **t_76.74** — câu nói về "nhiệt độ đáy nồi bị ghim ở vạch sôi" nhưng trong khung không thấy đáy nồi; dải cơ
+  chế dưới đáy là vùng tối nhất khung, còn con số "100" chỉ cao mười mấy pixel và bị mũi tên đỏ cắt ngang.
+  Sửa: đưa máy xuống sát đáy nồi, rọi vệt sáng vào cơ chế, làm số "100" và nhãn vạch sôi to đủ đọc.
+- **t_90.04** — câu cần thấy "đáy nồi trơn" nhưng khung không có chỗ nào đọc được là đáy nồi: một mảng kem gần
+  như không đổi sắc, không mép cưa, không vệt nước, không mâm nhiệt. Sửa: hạ máy vào trong miệng cưa, nhìn
+  chéo xuống khoảng trống đáy, đưa đĩa mâm nhiệt và vệt nước cũ vào khung, tách hai dây thành hai sợi tròn.
+
+## Vòng 7
+
+- **Thấy:** chấm lại toàn bộ sau vòng sửa lớn (nền thang đo tối lại, số "100" to hơn, vạch "SÔI" bỏ chữ, hai
+  dây tách thành hai sợi tròn).
+- **Sửa:** sửa hai mục còn lại ở vòng 8; các mục mở ghi lại để rút kinh nghiệm.
+
+Hai mục còn phải sửa đúng như vòng 6:
+
+- **t_76.74** — vẫn không thấy đáy nồi; "100" và "SÔI" quá nhỏ và bị mũi tên cắt; 30% khung là tường tím
+  trống.
+- **t_90.04** — đáy nồi đọc ra là một tấm kem phẳng: không đĩa mâm nhiệt, không vệt nước cũ, không độ dày vỏ,
+  không texture kim loại; hai dây đọc thành một dải đỏ liền khối.
+
+Sáu mục mở (sai 3 lần, không chặn bước): t_41.29, t_44.39, t_67.69, t_70.23, t_95.40, t_97.84 — chủ yếu vẫn là
+hai dây đỏ và hai khung cận cảnh trong nồi.
+
+## Vòng 8
+
+- **Thấy:** chấm lại những khung vừa đổi. Hai mục dây đỏ đã qua.
+- **Sửa:** sửa hai mục CHẶN còn lại ở vòng 9.
+
+- **t_41.29, t_44.39 — ĐẠT**: hai dây giờ là hai sợi tròn riêng biệt có bóng đổ, tách khỏi nhau; chip
+  `IC-7404 / 2416` và mặt bo xanh đọc rõ; nhãn "BO MẠCH" cắm đúng vào bo, không vào mặt chip.
+
+Còn lại hai mục chặn, cùng lý do: **đáy nồi vẫn chưa đọc ra.**
+
+- **t_76.74** — máy phải xuống sát đáy nồi, số "100" và nhãn vạch sôi phải to đủ đọc trên điện thoại.
+- **t_90.04** — đáy nồi phải có đĩa mâm nhiệt, vệt nước cũ, độ dày vỏ và texture kim loại; lớp gạo và nhiệt kế
+  phải khớp với c28; hai dây phải là hai sợi tròn có bóng.
+
+## Vòng 9
+
+- **Thấy:** chấm lại những khung vừa đổi. **Hai mục chặn đã qua.**
+- **Sửa:** không còn mục chặn; các mục mở ghi lại ở báo cáo để rút kinh nghiệm.
+
+- **t_76.74 — ĐẠT**: đỉnh cột thủy ngữ dừng đúng vạch SÔI và chữ "100"; mặt cưa lớp nước nằm ngay trên đáy
+  nồi; viên cầu trên lò xo ép lên đáy; thẻ "TRĂM ĐỘ" nằm sang bên phải, không đè lên số "120".
+- **t_90.04 — ĐẠT**: đáy nồi là một đĩa nhôm nõng có vân xoắn đồng tâm, có dải vệt nước cũ nằm ngang trên
+  thành — đọc ra ngay một đáy nồi đã cạn; hai dây nối chip với viên cầu là hai sợi riêng biệt có bóng đổ.
+
+Còn ba mục MỞ (không chặn bước, đã sai 4–6 lần):
+
+- **t_67.69, t_70.23** — hai khung siêu cận hạt gạo: nền gạo vẫn phẳng, hạt chưa đổ bóng, mặt nước vẫn là
+  một dải bạc hà đồng nhất.
+- **t_95.40** — khung cận đỉnh cột thủy ngữ: ánh sáng đều tải, vùng sáng nhất chưa rơi vào đỉnh cột, và còn
+  một mũi tên đỏ thừa chĩa vào ống kính ở cao độ thấp hơn đỉnh cột.

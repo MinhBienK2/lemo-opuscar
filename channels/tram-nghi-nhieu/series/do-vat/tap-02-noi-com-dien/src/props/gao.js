@@ -1,9 +1,216 @@
-// Hạt gạo: một hạt trắng dài có nếp nhăn, một hạt bị cưa đôi để thấy tinh bột
+// Hạt gạo: một hạt khô dài có nếp dọc ở bụng, một hạt bị cưa đôi để thấy tinh bột
 // bên trong, và một lớp gạo trong nồi (lớp dày lên và trắng hơn khi chín).
 import * as THREE from 'three';
 import { toon, mesh, mulberry, clamp, canvasTex } from '../../../../../rig/kit.js';
 
-const RICE = '#f2ead8';
+// Kích thước thật của một hạt gạo khô: dài 7,6 mm, rộng 2,4 mm, dày 2,2 mm.
+// Thân thuôn 3:1, hai đầu nhọn, mặt bụng dẹt có một nếp dọc (nếp gạo), mặt
+// lưng tròn hơn.
+const GRAIN = { L: .0076, W: .0024, H: .0022 };
+// Hạt bị cưa đôi trong phim là một hạt phóng to: cùng một hình dáng, to hơn.
+const GRAIN_BIG = { L: .0182, W: .0058, H: .0053 };
+
+// ── vỏ trấu ──────────────────────────────────────────────────────────────
+// Vỏ trấu không phải một mặt trơn: màu ngà hơi trong, vài vân mảnh chạy dọc
+// theo thân hạt, xen vài mảng sáng và mảng nâu nhạt. Vân vẽ theo chiều ngang
+// của tờ (tức là dọc theo hạt, vì trục u của tờ là chiều dài hạt).
+let _huskTex = null, _huskMat = null;
+function huskTex() {
+  if (_huskTex) return _huskTex;
+  _huskTex = canvasTex(512, 256, (g, w, h) => {
+    const r = mulberry(19);
+    g.fillStyle = '#e2d7bb'; g.fillRect(0, 0, w, h);
+    // vân dọc của vỏ trấu
+    for (let k = 0; k < 110; k++) {
+      const y = r() * h;
+      g.strokeStyle = `rgba(${142 + r() * 46 | 0},${122 + r() * 40 | 0},${82 + r() * 34 | 0},${.04 + r() * .12})`;
+      g.lineWidth = .6 + r() * 1.8;
+      g.beginPath(); g.moveTo(0, y);
+      for (let x = 0; x <= w; x += 24) g.lineTo(x, y + Math.sin(x * .017 + k) * 2.2 + (r() - .5) * 1.4);
+      g.stroke();
+    }
+    // mảng ngà sáng và nâu nhạt lốm đốm: vỏ trấu có mảng, không đều một màu
+    for (let k = 0; k < 260; k++) {
+      g.fillStyle = r() > .5
+        ? `rgba(255,250,232,${.03 + r() * .09})`
+        : `rgba(${126 + r() * 60 | 0},${108 + r() * 50 | 0},${72 + r() * 40 | 0},${.03 + r() * .08})`;
+      g.beginPath(); g.ellipse(r() * w, r() * h, 5 + r() * 30, 2 + r() * 8, r() * 3, 0, 7); g.fill();
+    }
+  });
+  return _huskTex;
+}
+// Bảng sáng riêng cho hạt. Bảng chung của kênh dốc nhẹ: mặt trên và mặt
+// nghiêng của một hạt gần bằng nhau, hạt đọc ra là một hình phẳng có viền.
+// Hạt gạo dùng bảng dốc hơn: mặt trên bắt sáng, mặt nghiêng và rãnh nếp rõ.
+const GRAIN_GRAD = (() => {
+  const steps = [.22, .40, .60, 1.0];
+  const d = new Uint8Array(steps.length * 4);
+  steps.forEach((v, i) => { const c = Math.round(v * 255); d.set([c, c, c, 255], i * 4); });
+  const t = new THREE.DataTexture(d, steps.length, 1, THREE.RGBAFormat);
+  t.minFilter = t.magFilter = THREE.NearestFilter; t.needsUpdate = true;
+  return t;
+})();
+
+// Vật liệu của hạt: màu ngà hạ nhẹ (không trắng bệch — trắng bệch thì đỉnh
+// cháy trắng, mất đường viền mực) và có vân của vỏ trấu.
+function huskMat(color) {
+  if (color) return toon(color, { grad: GRAIN_GRAD });
+  if (!_huskMat) _huskMat = toon('#ffffff', { map: huskTex(), grad: GRAIN_GRAD });
+  return _huskMat;
+}
+
+// đường viền thân hạt: siêu elip, hai đầu nhọn hơn elip thường
+const PROF = 1.7;
+
+// ── thân hạt gạo ─────────────────────────────────────────────────────────
+// Một hạt gạo khô là một vật thể có khối: thân thuôn dài, hai đầu nhọn, bụng
+// dẹt có một nếp dọc, lưng tròn. Dựng bằng lưới vòng dọc theo thân: mỗi vòng
+// là một tiết diện elip, thu nhỏ dần về hai đầu, và bụng bị khía một rãnh dọc.
+// `half` dựng nửa hạt bị cưa: mặt cắt ở z = 0 quay về phía máy quay (+z),
+// thân hạt quay vào sau.
+function grainGeo({ L = GRAIN.L, W = GRAIN.W, H = GRAIN.H, half = false, ns = 34, nr = 26, bulge = 0 } = {}) {
+  const pos = [], uvs = [], idx = [];
+  // đường viền thân: siêu elip, hai đầu nhọn hơn elip thường
+  const prof = x => Math.pow(Math.max(0, 1 - Math.pow(Math.abs(x), PROF)), 1 / PROF);
+  const j0 = half ? nr / 2 : 0;                 // nửa hạt: chỉ giữ nửa sau (z ≤ 0)
+  const MF = half ? 6 : 0;                      // số cột của mặt cắt
+
+  // tiết diện tại một vị trí dọc theo thân
+  const ring = x => {
+    const f = prof(x), w = W / 2 * f, h = H / 2 * f, pts = [];
+    for (let j = 0; j <= nr; j++) {
+      const a = -Math.PI / 2 + 2 * Math.PI * j / nr;
+      const c = Math.cos(a), s = Math.sin(a);
+      const n = s < 0 ? 2.4 : 2.0;              // bụng dẹt hơn, lưng tròn hơn
+      const rr = Math.pow(Math.pow(Math.abs(c), n) + Math.pow(Math.abs(s), n), -1 / n);
+      const u = rr * c;
+      let v = rr * s;
+      if (v < 0) v *= .90;                       // bụng dẹt
+      let y = v * h, z = u * w;
+      if (v < 0) {                               // nếp gạo: rãnh dọc ở giữa bụng
+        const gr = Math.exp(-Math.pow(u / .40, 2)) * Math.min(1, -v / .30);
+        y += .00048 * f * gr;
+      }
+      pts.push({ x: x * L / 2, y, z, u: (x + 1) / 2, v: j / nr });
+    }
+    return { f, w, h, pts };
+  };
+  const add = (p, u, v) => { pos.push(p.x, p.y, p.z); uvs.push(u, v); return pos.length / 3 - 1; };
+  // quads của thân hạt: mặt nhìn ra ngoài
+  const quad = (a, b, c, d) => { idx.push(a, c, b, b, c, d); };
+  // quads của mặt cắt: chiều ngược lại, vì mặt cắt quay về phía máy quay
+  const quadF = (a, b, c, d) => { idx.push(a, b, c, b, d, c); };
+
+  const tipL = add({ x: -L / 2, y: 0, z: 0 }, 0, 0);
+  const tipR = add({ x: L / 2, y: 0, z: 0 }, 1, 0);
+  const rings = [];
+  for (let i = 1; i <= ns; i++) {
+    const x = -1 + 2 * i / (ns + 1);
+    const r = ring(x);
+    const base = pos.length / 3;
+    for (let j = j0; j <= nr; j++) {
+      const p = r.pts[j];
+      add(p, p.u, p.v);
+    }
+    rings.push({ base, n: nr - j0 + 1, r, x });
+  }
+  // thân hạt
+  for (let i = 0; i < rings.length - 1; i++) {
+    const A = rings[i], B = rings[i + 1];
+    for (let j = 0; j < A.n - 1; j++) quad(A.base + j, A.base + j + 1, B.base + j, B.base + j + 1);
+  }
+  // hai đầu nhọn
+  const R0 = rings[0], RN = rings[rings.length - 1];
+  for (let j = 0; j < R0.n - 1; j++) idx.push(tipL, R0.base + j, R0.base + j + 1);
+  for (let j = 0; j < RN.n - 1; j++) idx.push(RN.base + j + 1, RN.base + j, tipR);
+
+  // mặt cắt (nửa hạt): mặt phẳng z = 0, hơi lồi ở giữa để bắt sáng
+  if (half) {
+    const face = rings.map(R => {
+      const top = R.base, bot = R.base + R.n - 1;
+      const yT = R.r.pts[j0].y, yB = R.r.pts[nr].y;
+      const col = [top];
+      for (let s = 1; s < MF; s++) {
+        const f = s / MF;
+        const y = yT + (yB - yT) * f;
+        const z = bulge * R.r.f * Math.sin(Math.PI * f);
+        col.push(add({ x: R.r.pts[j0].x, y, z }, R.r.pts[j0].u, (j0 + (nr - j0) * f) / nr));
+      }
+      col.push(bot);
+      return col;
+    });
+    for (let i = 0; i < face.length - 1; i++) {
+      const A = face[i], B = face[i + 1];
+      for (let s = 0; s < MF; s++) quadF(A[s], A[s + 1], B[s], B[s + 1]);
+    }
+    for (let s = 0; s < MF; s++) idx.push(tipL, face[0][s + 1], face[0][s]);
+    for (let s = 0; s < MF; s++) idx.push(face[face.length - 1][s], face[face.length - 1][s + 1], tipR);
+  }
+
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  geo.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
+  geo.setIndex(idx);
+  geo.computeVertexNormals();
+  return geo;
+}
+
+// toạ độ trên mặt cắt của nửa hạt: dùng để đặt các đốm tinh bột
+function faceZ(g, x, y) {
+  const L = g.userData.L, H = g.userData.H, bulge = g.userData.bulge;
+  const xn = Math.max(-1, Math.min(1, x / (L / 2)));
+  const f = Math.pow(Math.max(0, 1 - Math.pow(Math.abs(xn), PROF)), 1 / PROF);
+  const h = H / 2 * f, yT = h * .90 * 0 + h, yB = -h * .90;
+  const s = Math.max(0, Math.min(1, (y - yB) / Math.max(1e-6, yT - yB)));
+  return bulge * f * Math.sin(Math.PI * s);
+}
+
+export function gachGao(opts = {}) {
+  const g = new THREE.Group();
+  const s = opts.scale || 1;
+  // một hạt gạo khô: thân thuôn, hai đầu nhọn, nếp dọc ở bụng, vỏ trấu có vân
+  const grain = mesh(grainGeo(), huskMat(opts.color), [0, 0, 0]);
+  grain.scale.setScalar(s);
+  grain.castShadow = true;
+  grain.receiveShadow = true;
+  g.add(grain);
+  return g;
+}
+
+// một hạt bị cưa đôi: mặt cắt trắng, các tinh bột phình ra.
+// Hạt được cưa theo chiều dài: mặt cắt là một mặt phẳng ở z = 0, quay về phía máy quay (+z).
+// Mặt cắt là một mặt hơi lồi, không phải một đĩa phẳng, và các tinh bột là những núm
+// nhỏ có khối, nên dưới đèn chính chúng bắt sáng và có bóng: đọc ra là một hạt gạo thật.
+export function gachGaoCat(opts = {}) {
+  const g = new THREE.Group();
+  const s = opts.scale || 1;
+  const geo = grainGeo({ ...GRAIN_BIG, half: true, bulge: .0012 });
+  geo.userData = { L: GRAIN_BIG.L, H: GRAIN_BIG.H, bulge: .0012 };
+  // hạt phải đổ bóng xuống mặt gạo: một hạt phẳng dán lên nền không có bóng
+  // thì đọc ra là một hình vẽ, không phải một vật trong không gian
+  const body = new THREE.Mesh(geo, huskMat());
+  body.castShadow = true;
+  body.receiveShadow = true;
+  g.add(body);
+  // các tinh bột: những núm nhỏ trồi lên trên mặt cắt, màu trắng, to đủ để thấy.
+  // Núm phải nằm đúng trên mặt cắt: mặt cắt cong nên độ cao mỗi núm tính theo
+  // vị trí của nó, đặt cùng một độ cao thì núm ở rìa sẽ lơ lửng.
+  const r = mulberry(4);
+  const nGr = opts.grains ?? 44;
+  for (let i = 0; i < nGr; i++) {
+    const x = (r() - .5) * .0150, y = (r() - .5) * .0042;
+    const z = faceZ(geo, x, y);
+    const m = mesh(new THREE.SphereGeometry(.00055, 10, 8), toon('#f4e8ca'),
+      [x, y, z + .0002], { cast: true });
+    m.scale.z = .38;
+    // núm tinh bột không có viền mực riêng: một núm trắng viền đậm đọc ra là một
+    // viên sỏi trắng đặt trên hình, không phải tinh bột trong hạt gạo
+    m.layers.set(1);
+    g.add(m);
+  }
+  g.scale.setScalar(s);
+  return g;
+}
 
 // Vân của một mớ cơm: vẽ sẵn hạt trên texture để mặt trên của lớp gạo trông như
 // một mớ hạt dồn kín, chứ không phải một mặt trơn có vài hạt rơi vương trên.
@@ -19,11 +226,11 @@ function riceGrainTex(count = 1400, len = 20) {
       const x = r() * w, y = r() * h, a = r() * Math.PI, L = len + r() * len;
       g.save(); g.translate(x, y); g.rotate(a);
       g.fillStyle = 'rgba(112,90,55,.60)';                    // kẽ giữa các hạt
-      g.beginPath(); g.ellipse(0, 0, L * .5, L * .22, 0, 0, 7); g.fill();
+      g.beginPath(); g.ellipse(0, 0, L * .5, L * .17, 0, 0, 7); g.fill();
       g.fillStyle = r() > .5 ? '#f7eeda' : '#e6d5ad';          // thân hạt
-      g.beginPath(); g.ellipse(0, 0, L * .5, L * .21, 0, 0, 7); g.fill();
+      g.beginPath(); g.ellipse(0, 0, L * .5, L * .16, 0, 0, 7); g.fill();
       g.fillStyle = 'rgba(255,252,240,.40)';                  // sáng trên hạt
-      g.beginPath(); g.ellipse(-L * .06, -L * .07, L * .30, L * .10, 0, 0, 7); g.fill();
+      g.beginPath(); g.ellipse(-L * .06, -L * .05, L * .30, L * .08, 0, 0, 7); g.fill();
       g.strokeStyle = 'rgba(98,78,46,.60)'; g.lineWidth = 1.8; g.stroke();
       g.restore();
     }
@@ -44,84 +251,16 @@ function riceCutTex(count = 1400, len = 46, hpx = 680) {
       const x = r() * w, y = r() * h, a = (r() - .5) * 1.1, L = len * (.7 + r() * .6);
       g.save(); g.translate(x, y); g.rotate(a);
       g.fillStyle = 'rgba(84,66,38,.55)';
-      g.beginPath(); g.ellipse(1.2, 1.6, L * .5, L * .23, 0, 0, 7); g.fill();
-      const grd = g.createLinearGradient(0, -L * .22, 0, L * .22);
+      g.beginPath(); g.ellipse(1.2, 1.6, L * .5, L * .17, 0, 0, 7); g.fill();
+      const grd = g.createLinearGradient(0, -L * .17, 0, L * .17);
       grd.addColorStop(0, '#fff8e6'); grd.addColorStop(.55, r() > .5 ? '#f2e7c8' : '#eadfc0');
       grd.addColorStop(1, '#cdbb93');
       g.fillStyle = grd;
-      g.beginPath(); g.ellipse(0, 0, L * .5, L * .22, 0, 0, 7); g.fill();
+      g.beginPath(); g.ellipse(0, 0, L * .5, L * .16, 0, 0, 7); g.fill();
       g.strokeStyle = 'rgba(104,84,50,.65)'; g.lineWidth = 1.6; g.stroke();
       g.restore();
     }
   });
-}
-
-export function gachGao(opts = {}) {
-  const g = new THREE.Group();
-  const s = opts.scale || 1;
-  const grain = mesh(new THREE.SphereGeometry(1, 14, 10), toon(opts.color || RICE), [0, 0, 0]);
-  grain.scale.set(.0080 * s, .0034 * s, .0048 * s);
-  g.add(grain);
-  // nếp nhăn dọc theo hạt: một gờ thấp nằm áp trên mặt hạt. Nếu để nó là một
-  // thanh hộp thẳng, hai đầu thang lơ lửng trên mặt hạt và hạt đọc ra là một
-  // viên trắng có cây gạt bên trên, không phải một hạt gạo. Gờ này không có viền
-  // mực: một vòng mực quanh gờ đọc ra là một vòng trôi lơ lửng trên hạt.
-  const crease = mesh(new THREE.SphereGeometry(1, 14, 8), toon('#c9bb98'), [0, 0, 0]);
-  crease.scale.set(.0050 * s, .00055 * s, .00075 * s);
-  crease.position.set(0, .0029 * s, 0);
-  crease.layers.set(1);
-  g.add(crease);
-  return g;
-}
-
-// một hạt bị cưa đôi: mặt cắt trắng, các tinh bột phình ra.
-// Hạt được cưa theo chiều dài: mặt cắt là một mặt phẳng ở z = 0, quay về phía máy quay (+z).
-// Mặt cắt là một mặt hơi cong, không phải một đĩa phẳng, và các tinh bột là những núm
-// nhỏ có khối, nên dưới đèn chính chúng bắt sáng và có bóng: đọc ra là một hạt gạo thật.
-export function gachGaoCat(opts = {}) {
-  const g = new THREE.Group();
-  const s = opts.scale || 1;
-  // nửa hạt kín: vòm quay vào sau, mặt cưa ở z = 0 quay về phía máy quay
-  const prof = [new THREE.Vector2(0, 0), new THREE.Vector2(1, 0)];
-  for (let i = 1; i <= 14; i++) {
-    const t = i / 14 * Math.PI / 2;
-    prof.push(new THREE.Vector2(Math.cos(t), -Math.sin(t)));
-  }
-  const geo = new THREE.LatheGeometry(prof, 22);
-  geo.rotateX(Math.PI / 2);
-  const body = new THREE.Mesh(geo, toon('#dbc9a0'));
-  body.scale.set(.0090 * s, .0038 * s, .0054 * s);
-  // hạt phải đổ bóng xuống mặt gạo: một hạt phẳng dán lên nền không có bóng
-  // thì đọc ra là một hình vẽ, không phải một vật trong không gian
-  body.castShadow = true;
-  g.add(body);
-  // mặt cưa hơi lồi: mặt phẳng tuyệt đối thì không bắt sáng, đọc ra là một
-  // hình bầu dẹt vẽ tay
-  const cap = new THREE.Mesh(new THREE.SphereGeometry(1, 24, 16), toon('#e6d7b0'));
-  cap.scale.set(.0090 * s, .0038 * s, .0016 * s);
-  cap.position.z = .0006 * s;
-  cap.castShadow = true;
-  g.add(cap);
-  // các tinh bột: những núm nhỏ trồi lên trên mặt cắt, màu trắng, to đủ để thấy.
-  // Núm phải nằm đúng trên mặt cắt: mặt cắt cong nên độ cao mỗi núm tính theo
-  // vị trí của nó, đặt cùng một độ cao thì núm ở rìa sẽ lơ lửng.
-  const r = mulberry(4);
-  const nGr = opts.grains ?? 44;
-  const capZ = (x, y) => {
-    const u = x / (.0090 * s), v = y / (.0038 * s);
-    return .0006 * s + .0016 * s * Math.sqrt(Math.max(0, 1 - u * u - v * v));
-  };
-  for (let i = 0; i < nGr; i++) {
-    const x = (r() - .5) * .0150 * s, y = (r() - .5) * .0050 * s;
-    const m = mesh(new THREE.SphereGeometry(.00050 * s, 10, 8), toon('#f4e8ca'),
-      [x, y, capZ(x, y) + .0002 * s], { cast: true });
-    m.scale.z = .38;
-    // núm tinh bột không có viền mực riêng: một núm trắng viền đậm đọc ra là một
-    // viên sỏi trắng đặt trên hình, không phải tinh bột trong hạt gạo
-    m.layers.set(1);
-    g.add(m);
-  }
-  return g;
 }
 
 // một lớp gạo trong nồi: nhiều hạt nằm chồng, co lại dần theo bán kính nồi.
@@ -193,19 +332,15 @@ export function lopGao({ R = .130, y = 0, h = .055, n = 520, seed = 5, cooked = 
     const cutFace = mesh(cutGeo, toon('#ffffff', { map: cutTex }), [0, 0, -.0012], { parent: g });
     cutFace.receiveShadow = true;
 
-    // các nửa hạt: một nửa hạt kín (vòm + mặt cưa phẳng), vòm quay vào trong
-    // lớp gạo, mặt cưa phẳng quay về phía máy quay
-    const prof2 = [new THREE.Vector2(0, 0), new THREE.Vector2(1, 0)];
-    for (let i = 1; i <= 6; i++) {
-      const t = i / 6 * Math.PI / 2;
-      prof2.push(new THREE.Vector2(Math.cos(t), -Math.sin(t)));
-    }
-    const halfGeo = new THREE.LatheGeometry(prof2, 10);
-    halfGeo.rotateX(Math.PI / 2);       // đáy phẳng quay về phía máy quay, vòm quay vào trong
-    const cutMat = toon('#f0e5c8');
+    // các nửa hạt: một nửa hạt kín (thân hạt + mặt cưa phẳng), thân quay vào
+    // trong lớp gạo, mặt cưa quay về phía máy quay. Nửa hạt dùng đúng hình
+    // dáng của hạt gạo, nên mặt cắt của lớp gạo đọc ra là những hạt gạo thật.
+    const halfGeo = grainGeo({ ...GRAIN, half: true, ns: 12, nr: 12 });
+    const cutMat = huskMat();
     // hạt phải kín kẽ: hạt nằm sát nhau như một mớ cơm, kẽ hở nhiều thì đọc ra
-    // là những miếng bánh rời rạc trên một mặt nâu
-    const cols = 52, rows = 26;
+    // là những miếng bánh rời rạc trên một mặt nâu. Ô lưới phải nhỏ hơn hạt:
+    // hạt dài 7,6 mm, nên một ô rộng 6 mm thì các hạt còn lấn vào nhau.
+    const cols = 44, rows = 44;
     const cutIm = new THREE.InstancedMesh(halfGeo, cutMat, cols * rows);
     cutIm.castShadow = true; cutIm.receiveShadow = true; cutIm.frustumCulled = false;
     // nửa hạt phải nằm ở lớp 0: lớp 1 không được vẽ vào bản đồ bóng, hạt ở
@@ -226,7 +361,7 @@ export function lopGao({ R = .130, y = 0, h = .055, n = 520, seed = 5, cooked = 
         cP.set(xx, yy + (r() - .5) * .0012, .0004 + (r() - .5) * .0008);
         cE.set(0, 0, (r() - .5) * .38);
         cQ.setFromEuler(cE);
-        cS.set(.0035 * gs, .0015 * gs, .0026 * gs);
+        cS.setScalar(gs);
         cM.compose(cP, cQ, cS);
         cutIm.setMatrixAt(ci++, cM);
       }
@@ -248,7 +383,7 @@ export function lopGao({ R = .130, y = 0, h = .055, n = 520, seed = 5, cooked = 
   // mớ cơm dồn nhẹ, không phải một hàng đá sỏi viền mực đậm.
   // Hạt phải nằm TRÊN mặt đĩa tròn (bán kính .80R), không phải chuim xuống dưới
   // nó: hạt chìm hơn thì bị đĩa che mất, mớ cơm trông như một mặt trơn.
-  const geo = new THREE.SphereGeometry(1, 8, 6);
+  const geo = grainGeo({ ...GRAIN, ns: 12, nr: 12 });
   const mat = toon('#e6dcc2');
   const im = new THREE.InstancedMesh(geo, mat, n);
   // các hạt rời nằm trên lớp hiệu ứng: không có viền mực. Một hạt nhỏ có viền mực
@@ -288,7 +423,7 @@ export function lopGao({ R = .130, y = 0, h = .055, n = 520, seed = 5, cooked = 
       const sc = gr.s * (1 + .18 * c);
       P.set(gr.x, gr.y * sw, gr.z);
       E.set(gr.rx, gr.ry, gr.rz); Q.setFromEuler(E);
-      Sc.set(.0058 * sc * gs, .0021 * sc * gs, .0034 * sc * gs);
+      Sc.setScalar(sc * gs);
       M.compose(P, Q, Sc);
       im.setMatrixAt(i, M);
     }
@@ -302,4 +437,54 @@ export function lopGao({ R = .130, y = 0, h = .055, n = 520, seed = 5, cooked = 
   return g;
 }
 
-export const PROP = { name: 'hạt gạo', view: () => gachGao() };
+// Danh mục cho thấy một nhóm hạt gạo rơi trên mặt bàn: một hạt to ở giữa, vài
+// hạt nhỏ lệch quanh nằm nghiêng các hướng khác nhau. Một hạt đơn đứng một
+// mình trên nền trơn sẽ chiếm trọn khung và đọc ra như một khối trắng vô danh;
+// có vài hạt quanh thì người xem mới biết đó là hạt gạo, và so được tỉ lệ thật.
+export const PROP = {
+  name: 'hạt gạo',
+  view: () => {
+    const g = new THREE.Group();
+    const r = mulberry(17);
+    // đặt một hạt nằm trên mặt bàn: cao độ lấy theo chính hạt đó, để hạt nằm
+    // sát mặt bàn chứ không chạm hoặc lơ lửng
+    const place = (gr, x, z) => {
+      gr.position.set(x, 0, z);
+      g.add(gr);
+      g.updateMatrixWorld(true);
+      const b = new THREE.Box3().setFromObject(gr);
+      gr.position.y -= b.min.y;
+    };
+    // Hạt được dựng to: một hạt gạo thật chỉ dài 7,6 mm, mà xưởng quay tự
+    // đóng khung theo bán kính vật, nên một hạt nhỏ sẽ chỉ chiếm một vệt trắng
+    // mỏng, không đọc ra là hạt. Dựng to không làm hạt nhỏ đi trong khung (máy
+    // quay tự lùi xa theo kích thước), mà làm hạt đủ dày để đổ bóng xuống mặt
+    // bàn — một hạt không có bóng đọc ra là một hình phẳng có viền.
+    const K = 30;
+    // hạt to ở giữa, nằm sấp mặt bụng xuống: hạt gạo khô thường nằm ngửa lưng
+    const hero = gachGao({ scale: K });
+    hero.rotation.set(.06, .45, .04);
+    place(hero, 0, 0);
+    // hạt thứ hai dựng nghiêng tựa vào hạt to: hạt đứng nghiêng mới thấy rõ
+    // bụng cong, độ dày và nếp gạo ở mặt bụng — hạt nằm phẳng trên bàn thì
+    // chỉ thấy một mặt trên, đọc ra là một vỏ trắng dẹt.
+    const belly = gachGao({ scale: K * .85 });
+    belly.rotation.set(1.05, -.8, .22);
+    place(belly, .052, .030);
+    // hạt nằm ngửa bụng lên: nếp gạo ở mặt bụng phải thấy được, không thì đặc
+    // điểm của hạt gạo chỉ nằm trên giấy
+    const flat = gachGao({ scale: K * .78 });
+    flat.rotation.set(Math.PI + .08, -.55, .05);
+    place(flat, -.118, .075);
+    // vài hạt nhỏ lệch quanh, nằm nghiêng các hướng khác nhau
+    const spots = [
+      [.128, -.092, K * .72, 2.0, .06], [-.092, -.118, K * .66, 1.2, -.05],
+    ];
+    for (const [x, z, s, yaw, tilt] of spots) {
+      const gr = gachGao({ scale: s });
+      gr.rotation.set(tilt, yaw, tilt * .8);
+      place(gr, x + (r() - .5) * .007, z + (r() - .5) * .007);
+    }
+    return g;
+  },
+};

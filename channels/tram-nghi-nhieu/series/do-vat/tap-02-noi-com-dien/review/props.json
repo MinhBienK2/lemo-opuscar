@@ -1,0 +1,406 @@
+{
+ "step": "props",
+ "round": 2,
+ "items": {
+  "bat-dong-nuoc": {
+   "name": "bát đong nước",
+   "src": "77e94b3475c73e29eca1497d66fe95afa60e03cbd9559f6833fbb9c8fbe707b1",
+   "key": "",
+   "fp": "qrXAy9Ta3+Lh3trTysC0qZ+ps73Eyc7Pz83KxLy0qKCotcDM1dvh5OLf2tPKwLSrrLfDztfd4uXk4t7XzsO3q6Krtr/HzM/R0dDNyL+2q6Krt8PO2N/k5+bj3tfNw7etr7rH0trh5efo5uHa0ce6raStucPJztHS09LQysO6rqStusfS2+Ln6+zn4dnRx7qusb3K1N3l6Orr6OPd1Mq9r6WwvMXM0tPT1dTSzsa9saavvcrV3uXR1O3r49zUyr2ws8DM1+Dn7O7u6+bg18zAsaizvsjP0tTU1dXU0ci+s6ixwMzX4djF6fLt5d/Wy7+ztsLO2uLp8fT08Ojh2s7CtKu1wMrQ09TU1tbV0svAtqu0ws7a4sfi/Pzv5eDZzcK2uMTQ2+Ps9fj39Ovi29DEtay3wcvR09TV1tjZ083Ct6y1xNDc38j1+vrz4eHb0MS3ucXS3OTu+f39+Ojj3NPGt664w8zR1NTV2Nze1c3Fua23xdLc29b59PPw3+Hb0sa4u8jU3uXu/f38/Ojk3dXHt6+6xc3Tz9TW3Obq2M/Guq64yNTe2+L16uro3+Ld1Ma5vMnW4OTv/Pn5+urk39XJubG9yNHTzOHk8Prz2tLIvbG6ydbg2+jx6OXk3+He1ci7vMrX3+Tm9Ovr8+Hl4NXKvLrI1Nzf0N/m7/nt5d3Uybu8ytfg3evs29bi3eHe1cq9vcrX4OXj4OPr7ejm39fLvbzJ1d3h0Nzm7fjt5d/Wy729ytfg4Onn5Nnd1t/e1su+vsvX4OXm6+Xw9+Tl4NjLvb3K1t7h0Nrm6/bu5N/Xyr29y9fg4+Xj4eTaz97f18q+vsvY4OXk8vv87eHk4NfLvb3K1t7h0tfl6e3h49/Xyr29y9jh4uLj29/Uzt7f18q+vsrY4OTZ7fj68ejl4NfLvb3K197h1dPk6Ojf49/Wyr29y9jg4t/h1tnU0ODf1sq+vsrX4OXT5/X87eHl4NfLvL3K1t7i2Mzi6Obi49/Wyry9ytfg49zh1NjP0uLf1sq9vcrV3+TT4PHv1eDk39bKu7zJ1NzStsLf5+De4t7Vybu8ytXf5NnZz8bQ1uPe1cm8vMjU3uPV2e3r2d/k3tXJu7vH09ilkLna5eLh4t3Uybu7yNTd49fO19bM3OPd1Mm7u8fU3uLd0+vi1OLk3dPHurrH09zNsa/AzMXf4tzTx7q6yNTe4t7G1tTK4+Lc08e7ucXS3OLjzdnZz+Tj3NLGubjF0tvg39XKzdri4NvSxbm4xtLc4ePWzcrc5OLb0sW5t8TR2+Dj38fH3uTg29HEt7bD0Nnf4uLi4uHh39rQw7e3xNDa4OPk3d/k49/a0MO4tsLP2d/j5OTk5OLf2c/CtbXCztjd4eLi4uLg3tjOwrW1ws7Y3uLj5eXk4d7YzsK2sr/L1t7i5OPk4+He18y/s7K/y9Xc4OLh4uHg3dbLv7Oyv8vV3eHj4+Tj4d3Wy7+0sb3J09zg4+Pj4uDb1Mm+sLG9yNLa3+Hh4uHf2tPIvrCwvcnS29/i4+Pi39vTyb6xr7rG0dne4eLh4d7Y0Ma7r666xtDY3eDh4ODd18/Guq+uusbR2d7h4uHh3djQxrqvrLfEztbb3uDg3tvVzcO3rKu3w83V2t3f3t3a1czCtqyst8PO1tve39/e29XMw7atqrTAytPY293e3NnSysC0qqq0wMrS2Nvd3dvY0srAtKqqtMDK0tjb3d3c2NLKwLSq",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "dung-vat": [
+     "ĐẠT",
+     "Bát kem miệng loe, trong có mặt nước xanh nhạt và một sợi xoắn ốc mảnh nổi (rõ nhất ở góc từ trên xuống, panel phải) — đúng tên mù \"bát chứa nước xanh nhạt có xoắn ốc\".",
+     ""
+    ],
+    "nguyen-ven": [
+     "ĐẠT",
+     "Mảng xám ở góc trên-trái của góc nhìn từ trên xuống là mặt ngoài loe của chính bát, nối liền vành; viền mực khép kín, không mảnh rời trôi lơ lửng.",
+     ""
+    ],
+    "khoi-3d": [
+     "ĐẠT",
+     "Góc ngang tầm mắt cho thấy thành bát có độ dày, vành tròn và lòng bát sáng ở mép trước, tối ở phía sau; không phải tấm phẳng.",
+     ""
+    ],
+    "mau": [
+     "LỖI",
+     "Tên mù là \"bát thủy tinh trong suốt\" nhưng bát dựng là sứ trắng đục hoàn toàn, không thấy nước xuyên qua thành; cũng không có vân kính để gợi chất liệu.",
+     "dựng bát kính trong (pha lê mờ, viền sáng mảnh) để đọc đúng là bát thủy tinh đựng nước."
+    ],
+    "muc-sang": [
+     "LỖI",
+     "Ba vạch xám ngắn trên thành phải của bát (góc chéo và góc ngang) bị cắt cụt giữa chừng, trông như nét vẽ hở; giữa bát có một vệt trắng mờ phủ làm mất mảng tối.",
+     "bỏ ba vạch hoặc đổi thành vân hoa văn liền mạch, giữ một dải tối ở lòng bát."
+    ],
+    "dep": [
+     "ĐẠT",
+     "Xoắn ốc trên mặt nước là một sợi trắng có độ dày, vẫn đọc được là xoắn ốc nổi trên mặt nước.",
+     ""
+    ]
+   }
+  },
+  "cau-do-dien-tro": {
+   "name": "máy đo điện trở",
+   "src": "340af5e2828bff8a9a42e1eb35746ddb4a3e05ec11fbbbd0fd4d5416ccbd768d",
+   "key": "",
+   "fp": "qbS/ytLX29zc2tfRyb+zqZ+ps73Eyc3OzszJxLyzqKCotL/J0tfb3dza19HJv7SrrLbCzNXZ0Mzd3drVzMK2qqKrtr/Hy8/R0M/Mx7+2q6KqtsLM0NDd397d2tXMwrasrrnG0NfcwZmlydvXz8a6rKOtucPJzMnKy8rNycK5rqSsucbQyp7H3uDf3NfQxrqusLzJ0tresayvlsTa08m9rqawvMXMzZ58fKDMzMW8saauvMnSyY6RweHh3trSyb2ws7/L1d3fj02Escbd1cu/saizvsfOzoZDRIzPz8e+sqixv8vV0JCFoN3h4N3Vyr+ztsLN197fmlBHn8ne183CtKu1wMrQzpFeZ6fQ0MrAtau0wc3X15Fmitni4N7XzcK2t8PP2d7goGNvqcve2c/Etay3wcvQzpNXV57R0MvCt6y1w8/Z26agc7Hf4d7Z0MS3ucXR2d/ilUhzrMzf2tLFtq64w8vR0INAQIfR0czEuK22xNDZ3rW+tYCj3N/a0sW4usfT2+HivG9So83g29PGt6+6xc3T0LKko7XR0s3Gua64x9Pb4b+2wryIqeDb08a5u8jV3eHgyrmTp83h3NTIubG8yNDTz768vcHR08/HvLC5yNXd4MN6ocC/uOHc1Mi7vMnV3eHhx7S8ts/i3dTJvLnH09re2b2xscHb39rSx7q7ydXd4c1yVZS9yeLd1Mm9vcnV3eHhxZSwttDh3dXKvbzJ1d3h27yPj8De4d3Vyr28ydXd4dSMXlGVzuHd1cq+vsrW3uHhvoCXtNHh3tbKvb3K1t7h27l+fr3d4d7Wyr29ytbe4du5imWQ0uHe1sq+vsrW3uHhvXeNtNLg3tbKvb3K1t7h27NnZ7fe4N7Wyr29ytbe4d+1c4ih1uDe1sq9vcrX3uHiwmV9sdPh3tbKvb3K197g3LpwcL7e4d7Wyr29ytfe4eG0Ynq52uHe1sq9vcrW3uLiv3iWstTh3tbKvL3K1t7i3LeRkbve4t7Wyry9ytbe4uK/kXu73uHe1sq9vcnU3eLiroCosNTh3dXJu7zJ1N3h3LCjo7Pd4d3Vybu8ydTd4eLg3qqy4OHd1cm7vMfT3OHhrG6Lq9Th3NTIu7vH09zh3ZyOjp7d4dzUyLu7x9Pc4eHi4tHF4eHc1Mi7u8fT3ODhsnBsrN7h29LHurrH09zg4bKvtLri4dzSx7q6x9Pc4OHi4uHh4uHb0se6uMXS2+DiwHqAtuHg2tHFuLjF0drg4a66x7/h4NrRxbi4xdHa4OLi4uHh4eDa0cW5t8PQ2d/hw6KUs+De2dDDt7bD0MOtr4q/yrng3tnQw7e2w9DZ3+Hi4uLg4d7Z0MO4tcLO193h3Neoud/d187BtbXBzseUiWmjyLPf3dfOwbW1wc7X3eHh4uHh393XzsG1sr/L1dzg4uG9st/c1cu/s7K/y9TCkmWDpKze3NXLv7Oyv8vV3ODh4eHh39zVy7+zsb3I0tre4eHWyN7a08i+sLG9yNLZy4+7r7Ld2tPIvrCwvcjS2t7h4eHg3trTyL6xr7nG0Njd4OHg393Xz8W6rq65xtDY3Nrg3dvc18/Fuq6uucbQ2Nzf4eDf3NfPxbqvrLbDztXa3d/e3drUzMK2rKu3w83V2d3e3t3a1MzCtqyrtsPN1drd3t7d2tTMwratqrTAytLX2tzc29fSyr+0qaq0wMrS19rc3NvX0sq/s6mqtL/K0tfa3N3b19LKwLSq",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 2,
+   "rows": {
+    "dung-vat": [
+     "ĐẠT",
+     "Góc chính diện: màn LCD xanh lá hiện rõ \"1.0 kΩ\", một núm xoay tròn có 8 vạch chuyển vạch và vạch chỉ trắng, hai que đo đen/đỏ cắm vào hai lỗ jack tối ở cạnh dưới vỏ — đúng dạng đồng hồ vạn năng như tên mù.",
+     ""
+    ],
+    "nguyen-ven": [
+     "ĐẠT",
+     "Nét viền mực liền mạch quanh vỏ, màn hình, núm xoay; hai que đo nối liền với jack ở đáy chứ không rời; không có mảnh vỡ, mặt thủng hay vệt nhấp nháy.",
+     ""
+    ],
+    "khoi-3d": [
+     "ĐẠT",
+     "Vỏ là tấm dày có khối: góc chéo lộ dải lưng navy sau mặt vàng ở cạnh phải, góc thứ ba lộ rõ mặt sau/lưng và cạnh dày; núm xoay là khối cầu có sáng mặt tối rõ.",
+     ""
+    ],
+    "nho-van-doc": [
+     "ĐẠT",
+     "Thu góc chính diện còn ~400px (cỡ điện thoại) vẫn đọc được \"1.0 kΩ\", núm xoay và hai que đo vẫn tách bạch — điểm \"1/5 khung, không đọc nổi\" đã hết.",
+     ""
+    ],
+    "dep": [
+     "LỖI",
+     "Hai que đo vẫn là que trụ đầu tròn, không có thân/đầu đo kim loại nhọn và không có dây nối; góc thứ ba chỉ là góc chính diện xoay nghiêng ~25° trong mặt phẳng (như máy đang ngã) nên không cho góc nhìn mới, và không lộ mặt trên vỏ.",
+     "cho que đo có thân tròn + đầu kim loại nhọn cắm vào jack ở mặt đáy với dây rủ xuống; góc thứ ba đặt máy nằm nghiêng để lộ mặt trên và cạnh dày."
+    ]
+   }
+  },
+  "gao": {
+   "name": "hạt gạo",
+   "src": "3e4ac62dd01b3d4e7c2c3eeb27cf6103c24726f229fb676599118fbee8d4c0ea",
+   "key": "",
+   "fp": "qrS/ytLX29zc2tfRycC0qZ+os7zEyc3OzszJw7yzqKCotL/J0tfb3dza19HJv7OrrLbCzNXZ3d7e3drVzMK2qqKrtr/Hy8/Q0M/Mx7+2qqKqtsLM1dnd397d2tTMwrasrrnG0Nfc3t/g39zX0Ma6rKStucPJztDR0tHOycK5rqOsucbQ19ze3+Df3NfPxrqusLzJ0trf4ODh4d7a08m9rqWxvMXM0dLS09LQzMW8saWuvMnS2t/g4OHg3trSyb2ws7/L1dzg4eHh4d/d1cu/saizvsfO0tPT09PRz8e9s6ixv8vV3ODh4eHh393Vyr+ztsHN197g4uHi4uDe183Cs6u1wMrQ0tTT09TS0Mm/tau0wc3X3uDi4eHh4N7XzcK2t8PP2d7g4eLi4uHe2c/Dtay3wcvQ0tPU09PT0MvCt6y1w8/Z3uDh4uHh4d7Zz8O3ucTR2d/i4eLi4uLf2tLFtq64w8vR1NPU09PT0MzEuK22xNDZ3+Lh4OHh4d/a0cW4usfT2+Hi4uHh4eHg29PGt6+6xc3T1NTU09PT0s3Fua64x9Pb4eLh2t/h4eDb08a5vMjV3eDh4uDh4eHh3dTIubC8x8/T09TT09TT08/Gu7C5yNXd4OHe3N/h4eHc1Mi7vMnV3eDh4eHi4eHi3dTJvLnH09re39/f39/f39vSx7q7ydXd4OHd2uHY2uLd1Mm8vcnV3eHh4eDf4uLh3dXKvbzJ1d3h4eHe2eHi4d3Vyry8ydXd4eDZxN/W2+Hd1cq9vsrW3uHh4dvb4eLh3tbKvb3K1t7h4eHc0t7i4d7Wyr29ytXe4eDduNXY3ODd1sq9vsrW3uHh4Nbc4eHg3tbKvb3K1t7h4eLex93h4N7Wyr29ytbe4eHhvsXU3eDe1sq9vcrX3uDd2sjc3tzg3tbKvb3K197g4d7ZwdHe4d7Wyry9ytbe4OHYvdTW3eDe1sq9vsrW3tva2tve2d7h3tbKvLzK1t7h29bcwrfY4d7Wyry9ytbe4djL2d7Y3OHd1sq9vcnU3dbW1dXa0Nzg3dXJu7zJ1N3c2NfIpq3I4N3Vybu8ydTd39LZ2Nvb2uHd1Mm8vMfT3N3R0sPHyNvg3NTJu7vH09zaubvGtsTf4dzUyLu7x9Pc3Nna1tff4OHc1Mi7usfT3ODh4tbC3tzh29LHurnH09zf297i4d7h4dvTx7q6x9Pc3dbd4drf4uDb0sa6uMXR2+Dh4t663OHg2tHFuLjF0tvg4eLi4eHh4NrRxbi4xdLb4OHi4dza4eDa0cW5t8PQ2d/h4uLY3+De2dDDt7bD0Nnf4eLi4eDg3tnQw7e2w9DZ3+Hi4uDc4N7Z0MO3tcHO193h4eHh4d/d187BtbXBztfd4eHh4uHf3dfOwbW1wc7X3eHh4uHh393XzcG1s7/L1dzg4uHh4d/c1cu/s7K/y9Xc4OLh4eHf3NXLv7Oyv8vV3ODh4eHh39zVyr+zsb3I0tre4eHh4N7a08i+sLC9yNLa3uHh4eDe2tPIvrCwvcjS2t7g4eHh3trTyL2wr7nG0Njd3+Hg39zXz8W6rq65xtDY3eDh4N/c18/Fuq6uucbQ2N3f4eDf3NfPxbqvrLfDzdXa3d7e3drUzMK2rKu3w83V2t3e3t3a1MzCtqyrtsPN1drd3t7d2tTMwratqrS/ytLX2tzc29fSysCzqaq0wMrS19rc3NvX0cm/s6mptL/J0dfa3Nzb19LJv7Oq",
+   "verdict": "PASS",
+   "fails": 1,
+   "round": 2,
+   "rows": {
+    "dung-vat": [
+     "ĐẠT",
+     "Nhiều hạt thuôn dài, hai đầu nhọn, màu kem nhạt, có vân dọc chạy theo chiều dài, nằm rải rác trên mặt bàn có hạt chồng hạt và một hạt dựng nghiêng — đúng nhóm hạt gạo như tên mù.",
+     ""
+    ],
+    "nguyen-ven": [
+     "ĐẠT",
+     "Mọi hạt có nét viền liền, hạt nghiêng giữa góc chéo có bóng đổ chạm mặt bàn, hạt nằm ở góc từ trên xuống có sườn dày viền đen và bóng riêng; không có mảnh rời trôi lơ lửng, không mặt thủng, không chồng mặt nhấp nháy.",
+     ""
+    ],
+    "khoi-3d": [
+     "ĐẠT",
+     "Hạt có thân cong và gân lưng: hạt dựng nghiêng ở góc ngang tầm mắt có mặt bụng tối, mặt lưng sáng và cạnh sườn dày viền đen; hạt nằm ở góc từ trên xuống lộ mặt bên dày — không còn là đa giác trắng phẳng như lần trước.",
+     ""
+    ],
+    "mau": [
+     "LỖI",
+     "Hạt có màu kem-beige gần trùng tông nền bàn, chỉ khác nhau ở độ sáng; texture vỏ trấu chỉ là vài nét dọc rất mờ, không ra vỏ trấu bán nguyệt của gạo.",
+     "đưa hạt về kem/trắng ngà sáng hơn, tăng tương phản với nền và vẽ rõ vân vỏ trấu mảnh + vài vết nâu nhạt."
+    ],
+    "muc-sang": [
+     "LỖI",
+     "Vệt vàng chạy ngang đã hết, nhưng mảng sáng tối toon trên mặt hạt gần như không đổi (cùng một tông kem), viền mực mỏng và nhạt nên hạt không tách được khỏi nền bàn, nhất là ở góc từ trên xuống.",
+     "tăng bậc sáng trên mặt lưng và hạ bậc mặt bụng, đậm nét viền quanh hạt."
+    ],
+    "dep": [
+     "LỖI",
+     "Dáng hạt là lá/hạt hạnh nhân (hai đầu nhọn sắc, một đường gân giữa mặt) chứ không phải thân hạt gạo mập; riêng hạt đứng bên phải góc chéo không có bóng đổ và không có chỗ tiếp xúc với mặt bàn nên trông như trôi lơ lửng.",
+     "bo tròn hai đầu hạt, đưa rãnh dọc xuống mặt bụng, thêm bóng đổ chạm bàn cho hạt đứng riêng."
+    ],
+    "nho-van-doc": [
+     "LỖI",
+     "Ở cỡ điện thoại cụm hạt chỉ chiếm ~1/4 khung và tương phản thấp, đọc ra là một vệt hạt màu kem chứ không ra là hạt gạo.",
+     "đưa vài hạt sát camera để chiếm phần lớn khung, giữ tương phản kem/nền."
+    ]
+   }
+  },
+  "nhiet-ke": {
+   "name": "nhiệt kế thủy ngữ",
+   "src": "a31a75526afc3e66ae4d950c66e8768be10c584e151891ca3fe40ac64dd64ed6",
+   "key": "",
+   "fp": "qbS/ydLX29zc2tfRyb+0qZ+os73Eyc3OzszJw7yzqKCntL/J0tfb3Nza19HJv7SrrLbCzNXZysbb3drUzMK2qqGrtr/Hy8/Q0M/Mx7+2qqKqtsLM09fd397d2tXMwrasrrnG0NfcqWONw9rXz8a6rKOtucLJyqOYlKDKycK5rqSsucbQzLDV3+Df3NfPxrqusLzJ0tnfultDZ8va0sm9rqWwvMXMyHBUSG3GzMW8sKWuvMjS0pef0eHg3trSyb2ws7/L1dzgvWlWZcjd1cq/saizvsfOyHBkXYbIz8e9sqixv8vV2Z+JrODh393Vyr6ztsHN197gv15Wdsre18zBs6u1wMnQyXBVQmjJz8q/tau0wc3X3aN1nd7h4N7XzMG2t8PO2d7gv1w+Ws3e2c/Dtay2wcvQyXBVSnDK0MvCt6y1w87Z3qtPdNDh4d7Zz8O3ucTQ2d/iwWVaZM7f2tHFtq64w8vRy3FhZYjL0czEuK22xNDZ37hQUn/M4d/a0cW4usfT2+HiwmBaeNDg29PGt6+6xc3Sy3FVQGXK0s3Fua64x9Lb4cV8WEVwx+Db08a5u8jV3eDhw2A+XdHh3NTIubG8yNDTynFWRXXL1M/HvLC5yNXd4M6BWUZdq+Hc1Mi7vMnV3eDhw2hNadLi3dTJu7nH09re1XNiUIXW4NvSx7q7ydXd4NaFWUxptOLd1Mm8vcnV3eHgw2FNd9Th3dXKvLzJ1d3h13NVPGbY4d3Vyry8ydXd4duMXk5lvuHd1cq9vsrV3uHgxGdAYNXg3dbKvb3K1d7h13RZSX3Y4N3Wyr29ytbe4d+XXkVnx+De1sq9vsrW3uHhxGVQc9bg3tbKvb3K1t7h2HRgTYHY4N7Wyr29ytbe4eGjX0Ztz+De1sq9vcrW3uDhxGFHctfg3tbKvLzJ1t7g2HRVO2XZ4N7Wyry9ydbe4OG2ZUdz1uDe1sq9vcrV3uHhxWpEZtjh3dbKvLzK1d7h2HVbS4LZ4d3Wyry8ytbe4eHKc0p72+Hd1sq9vcnU3eHixmJQfNjh3dXJu7zJ1N3h2XVbSHrY4d3Vybu8ydTd4eLOqH+G3uHd1cm7u8fT3ODhym5Cbdnh3NTIurvH09zg2HVWPWnY4dzUyLq7x9Pc4eHf2tfJ4eHc1Mi7usfT3ODhzW5Mdtrh29LHubnH09zg2HdgTYbZ4NvSx7q6x9Pc4OHi4uHi4uDb0se6uMXR2uDiz3BJedvg2tHFuLfF0drg2XtgRHPY4NrRxbi3xdHa4OHi4uHg4d/a0cW5t8PQ2d/hznBAb9ve2dDDt7bD0M7AunVcPGvY3tnQw7e2w9DZ3+Hi4eHg4N7Z0MO3tcHO193gzpZge9rd187BtLXBzs2dhmhqRHvX3dfOwbW0wc7X3eDh4eHh393XzcG1sr/L1dzg39m1hdvc1cu/srK/y9TLlGZZPWrX3NXLv7Kyv8rV3ODh4eHh39zVyr+zsb3I0tre4OHfz93a08i9sLC9yNLaxYF9fqDb2tPIvbCwvcjS2t7g4eHg3trTyL2wr7nG0Nfc3+Hg39zXz8W6rq65xtDX28nN293c18/Fuq6uucbQ2Nzf4eDf3NfPxbqvrLbDzdXZ3d7e3drUzMK2rKu2w83V2t3e3t3a1MzCtqyrtsPN1dnd3t7d2tTMwratqrS/ydHX2tzc29fRyb+zqam0v8nR19rc3NvX0cm/s6mptL/J0dfa3Nzb19HJv7Oq",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "dung-vat": [
+     "ĐẠT",
+     "Thước dài nền xanh đen, thang số 0–120, nhãn đỏ \"SÔI\" ở mốc 100, ống kính bên trái có cột đỏ và bóng đỏ ở đáy — khớp tên mù \"nhiệt kế thủy ngữ\".",
+     ""
+    ],
+    "nguyen-ven": [
+     "ĐẠT",
+     "Ống kính, cột đỏ và bóng đỏ đều liền với thước, viền mực khép kín, không có mảnh rời.",
+     ""
+    ],
+    "khoi-3d": [
+     "ĐẠT",
+     "Góc chéo cho thấy bảng thước có mặt bên dày (dải navy bên phải), ống kính là trụ tròn có vệt sáng chạy dọc.",
+     ""
+    ],
+    "dep": [
+     "LỖI",
+     "Bóng đỏ ở đáy là khối đỏ méo lổm bổm, chảy đè lên chân ống xám; cột thủy ngân là sơn hồng phẳng dán ngay trên mặt ống nên không có thể tích.",
+     "dựng bóng đỏ như một bóng tròn có khối, cột thủy ngân là ống kính có mặt trước/mặt sau riêng."
+    ],
+    "muc-sang": [
+     "LỖI",
+     "Ranh giới giữa cột đỏ và ống xám rất yếu, cột đỏ như một sơn dán; chữ \"SÔI\" đỏ cũng lẫn vào vạch thang đo.",
+     "tách cột đỏ bằng đường viền mực rõ, dùng nhãn \"SÔI\" nền kem viền mực."
+    ]
+   }
+  },
+  "noi-cat-ngang": {
+   "name": "nồi cơm điện bị cưa ngang",
+   "src": "ee7cd8a32889c079c5ae9fbe80698b5201cef64935b161711cbb5bf589bc8dc2",
+   "key": "",
+   "fp": "qbS/ydLW29zc2tfRyb+0qZ+os73Eyc3OzszJw7yzqKCntL/K0tfb3dzb2NHJv7SrrLbCzNXZ3d/e3drVzMK2qqGqtr/Hy8/Q0M/Mx7+2q6GqtsLM1drd397e2tXMwrasrrnG0Nfc3t/g393X0Ma6rKOtucLJztDR0tHOycK5rqOsucbQ19zf4OHg3dfQxrqusLzI0trf4OHi4d7a08m9rqWwvMXM0dLS09LQzMS8sKWuvMnS2uDh4eLh3trTyb2ws7/L1d3g4eHh4eDd1cq/saizvsfO0tPS09LRz8e9sqixv8vV3eHi4eLh4N3Vy7+ztsHN197g4uLi4uDe18zCs6u1wMnQ0tPT09PSz8q/tau0wc3Y3uHi4uLi4d7YzcK2t8PP2d7g4eLi4uLe2c/Dtay2wcvQ0tPTytPT0MvCt6y1w8/Z3+Hi4+Pj4t/az8S3ucTR2d/i4uPj4uLf2tHFtq63w8vR1NPPlMzT0MzEuK23xNDZ3+Pg2+Hj4+Da0sW4usfT2+Hi49jh4+Lg29PGt6+6xc3S1NTLh8fT0s3Fua64x9Pb4eG4ncLk4+Hc08a5u8jV3eDh4KLW5OLh3dTIubC7x87S0s6ca5bL0s7GurC5yNXd4dKXj6Dc4+Ld1Mi7vMnV3eHew5LM5eLi3dTJu7fEz9fa265mWV6h2tfPxLe6ydXd4b2AkIrB5OPe1Mq8vcnV3eHRkYPb6uPi3dXKvLzJ1d3g3pprX2GK3d3Vyry8ydXd4Z1tzd7S5ePe1sq9vsrW3uHTnWma5uHh3tbKvb3K1t7h3qJgTU+D2t7Wyb29ytbe4Z+t8/jl5OLe18q+vsrW3uHUmXxmwN3g3tbKvb3K1t7h3J9wR0+C2N7Wyr29ytbe4arH+vPv4uLf1sq9vcrW3uHWmYtnlt7h3tbKvLzJ1t7g3JuDX19+1d7Wyry9ytfe4cLP7+z14uPf1sq9vcnW3uLYmo1/nuLi3tbKvLzK1t7h3ZyJg2N2zt3Wyry8ydbe4taoucz44+Tf1sq9vMnU3eHWlY+Hmdvi3tXJu7zJ1N3h3ZqJhVd0zd3Vybu8ydTd4t2jtcn13OPe1cm8u8fT3OHSmaqXktni3NTIurvH09zg1JyNkml90dzUyLq6x9Pc4d6wtMHO2+Pd1Mm7usfT3ODToKekldbi3NLHurnH09zPeouKeYWY19vSx7q5x9Pc4OLcs7CbzOLc08e6uMXR2+DevY6ai8zh2tHFuLjF0drSjJusjqqx2NrRxbi4xdLb4OPk0qySxOHb0sW5t8PP2d/h2ZiKisze2dDDt7bDz9ndyLG1rbW/29nQw7e2w9DZ3+Lj5OC9zuDa0MO4tcHO193g4cuxoNDd2M7BtbTBztfd4ODg3+Df3dfNwbW0wc7X3uHi4+Ti4N7YzsG1sr/L1dzg4eHRrNnd1cu/srK/y9Xc4OHh4eHf3NXLv7Kyv8vV3ODi4uPj4d7Vy7+zsb3I0tre4eHh197a08i9sLC9yNLa3uDh4eDe2tPIvbCwvcjS2t/h4uPi39vTyL6xrrnG0Njc3+Hg393Xz8W6rq65xtDY3N/h39/c18/Fuq6uucbQ2N3g4eDg3djQxrqvq7bDzdXa3d7e3drUzMK2rKu2w83V2t3e3t3a1MzCtqyrtsPN1drd39/e2tXMwratqrS/ytHX2tzd29fSyr+zqam0v8nR19rc3NvX0cm/s6mptL/K0tja3N3c2NLKwLOq",
+   "verdict": "PASS",
+   "fails": 1,
+   "round": 2,
+   "rows": {
+    "dung-vat": [
+     "ĐẠT",
+     "Vỏ nồi cơm kem dạng vòm có núm xanh navy và lỗ thông hơi tròn trên nắp, mặt trước cưa mở lộ tấm kính lớn, mạch xanh lá chạy ngang đáy có nút chọn màu navy, dây đen kéo trên sàn, có tay cầm bên hông — khớp với tên mù \"nồi cơm điện bị cưa ngang (bản hiện đại)\".",
+     ""
+    ],
+    "nguyen-ven": [
+     "ĐẠT",
+     "Mép cắt giờ là một mặt phẳng thẳng (đường viền sọc dọc bên trái, mép vòm sạch ở góc từ trên xuống); bo mạch, nút chọn, dây đen, tay cầm và chân đều nối liền với vỏ, không mảnh rời, không mặt thủng.",
+     ""
+    ],
+    "khoi-3d": [
+     "ĐẠT",
+     "Vỏ có khối thật: bo góc có mép dày ở cạnh trái/phải, vòm nắp cong có dày, núm navy là khối tròn có sáng tối, kính lõm vào trong khung vỏ.",
+     ""
+    ],
+    "muc-sang": [
+     "LỖI",
+     "Tấm kính xám là một mảng phẳng không có mảng sáng tối toon và không có viền mực ở đường tiếp giáp với vỏ kem; mảng phản chiếu navy ở giữa kính không có nét viền nên đọc như vết loang.",
+     "chia tấm kính thành 2–3 bậc sáng, vẽ viền mực quanh mép kính và quanh mảng phản chiếu."
+    ],
+    "dep": [
+     "LỖI",
+     "Bo mạch chỉ là một dải xanh lá mảnh không có rờ/đường mạch/đầu nối; không thấy nồi trong, mâm nhiệt hay bảng công tắc, và ở góc chính diện vật đọc như một lò nướng có cửa kính chứ không thấy \"bị cưa ngang\".",
+     "cho bo mạch có chi tiết và bố trí ở góc cắt sao cho thấy khoang trong; thêm nồi trong và mâm nhiệt phía sau tấm kính để thấy rõ mặt cưa."
+    ],
+    "nho-van-doc": [
+     "LỖI",
+     "Ở cỡ điện thoại chỉ còn thấy một hộp kem có ô kính và núm navy, dấu hiệu \"bị cưa ngang\" và bo mạch biến thành một nét xanh 1 px nên không đọc được.",
+     "đưa vật sát camera, ưu tiên góc nào lộ rõ mặt cưa, bo mạch và nồi trong."
+    ]
+   }
+  },
+  "noi-com-dien": {
+   "name": "nồi cơm điện",
+   "src": "bbe248452d680b16673a7d44110cdf1b5277acb2c1958deaacccaa400eb059e4",
+   "key": "",
+   "fp": "qbS/ydLX293c2tfRyb+0qJ+os7zDyMzOzszJw7uzp6CntL/J0dbb3Nza19HJv7OqrLbCzNXZ3d/e3drVzMK2qqGqtr/Gy87Qz8/Lxr61qqGqtsLM1Nnd397d2tTMwrasrrnG0Nfc3t/g393X0Ma6rKOtucLJztDR0tHOycK5raOsucXQ19ze3+Df3NfPxrqusLzI0trf4ODh4d7a08m9rqWwvMXM0dLS09LPzMS7sKWuvMjS2Nzg4OHg3trSybyws7/L1dzg4eHh4eDd1cu/saizvsfO0tPS0tLRzse9sqewv8vV1MLg4eHh4N3Vyr+ztsHN197g4uHi4uHe2M3CtKu1wMnQ0tTT09PSz8m/taqzwc3X2Z7Y4eLi4d7YzcG1t8PP2d7g4eLi4uLe2c/Dtay2wcvQ0tPT09PT0MvBt6y1w87Z3bvQ4uLi4t7Zz8O3ucTQ2d/hzuDi4uLf2tLFtq24w8vR1NPU1NPT0MzDuK22xNDZ39XQ4uLi4t/a0cW4usfT2+Hht9fi4uLh29PGt6+6xc3S1NTT09PT0c3Fua63xtLb4NfP4uHi4+Hb08a5u8jV3eDh1tri4+Pi3dTIubC7x8/S0tPS083Q0s7Fuq+5yNTd4NfN4ca33+Ld1Mi7vMnV3eDh0Nvj5OTj3tTJu7XCztXQwtna2r7N2tbNwra6ydXd4NrM3KCQweTe1Mm8vcnV3eHhydrjyODj3dXKvbzJ1d3WuNzi297h393Vyry8ydXd4d7L1ZrAzOPe1cq9vsrW3uHhz9vgzuLi3tbKvb3K1t7h09niy7rA2N3Wyby8ytXd4eDLz6nu6eHf1sq9vsrW3uHh0tjh+O/e39bKvb3K1t7h1tjh1cXL4t7Wyby9ytbe4OHQxrrm6uHf1sq9vcrW3uHh0NPQ9OXc39bKvbzJ1t7g2NPgzaKy297Wyry8ytbd4OHZq7zh6ODf1sq9vcnW3uLi1MHRxdLi39bKvLzK1t3f3Mbdxcjd197Wyry8ytXd4eHh0cj29Nzf1sq9vcnU3eHi372p4e3e3tXJu7zJ1Nzd3MKfkcjV1N3Vybu8ydTd4eLh3tD08Nvf1cm7u8fT3OHh4tmT1uLW3dTIu7vH09zh4NzOoYqWzdzUyLq7x9Pc4OHh4dPl5ODe1Mi7usfT3ODh4trE6dXX3NPHurrH09zg4eLi4NfZ4NvSxrm6x9Pc4OHi4tXK2ODc0se6uMXR2uDi4t+10b7b29HFuLfF0drg4eLh4eDh4NrRxbi3xdHb4OLi4s2g3eHb0cW5t8PP2d/h4uLLnLze2dDDt7bDz9nf4eLh4eDg3tnQw7e2w9DZ3+Hi4t3A3+Da0MO3tcHO193h4eLi39/e2M7BtbXBztfd4OHh4eHf3dfOwbW1wc7X3eHh4uLi4d7YzsG1sr/L1dzg4eHi4eDd1su/srK/ytXc4OHh4eHf3NXLv7Kyv8vV3ODi4eLi4N3Wyr6zsb3I0tre4eHh4d/a08i+sLC9yNLa3uDh4eDe2tPIvbCwvcjS2t7h4eLh39rTyL2wrrnG0Njc4OHg393Xz8W6rq65xtDX3N/h39/c18/Fuq6uucbQ2N3g4eDg3dfPxbqvq7bDzdXa3d7e3drUzMK2rKu2w83V2tze3t3a1MzCtqyrtsPN1drd3t7d2tXMwrasqrS/ytHX2tzd29fSyr+zqam0v8nR19rc3NvX0cm/s6mptL/K0dfa3N3b2NLJv7Op",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "dung-vat": [
+     "ĐẠT",
+     "Thân nồi tròn màu kem, nắp phẳng viền navy với núm tròn, ô công tắc navy trên thân, đáy có vành navy, dây điện đen kéo ra có phích cắm — khớp tên mù \"nồi điện\".",
+     ""
+    ],
+    "nguyen-ven": [
+     "ĐẠT",
+     "Nắp, núm, công tắc, dây và phích đều liền thân, viền mực khép kín, không mảnh rời trôi lơ lửng.",
+     ""
+    ],
+    "khoi-3d": [
+     "ĐẠT",
+     "Góc chéo cho thấy vòm nắp có khối, núm nổi, thân có mặt sáng phía trước và dải tối ở đáy.",
+     ""
+    ],
+    "dep": [
+     "LỖI",
+     "Nồi chỉ chiếm ~1/5 chiều ngang khung và phần lớn diện tích là nền trống; dây điện thẳng cứng như que, không có độ võng.",
+     "đưa nồi chiếm 2/3 khung, cho dây điện có độ võng và một đoạn cuộn."
+    ],
+    "mau": [
+     "LỖI",
+     "Núm nắp ở góc từ trên xuống ra màu xám ô-liu, lệch bảng màu navy của vật.",
+     "giữ núm navy ở mọi góc."
+    ],
+    "muc-sang": [
+     "LỖI",
+     "Bóng của dây điện là một sợi mảnh cứng nét mực nằm sát sàn, không mềm như bóng.",
+     "làm bóng mềm, to hơn, nhoè theo hướng ánh sáng."
+    ],
+    "nho-van-doc": [
+     "LỖI",
+     "Ở cỡ điện thoại nút đỏ và bảng công tắc bên phải chỉ là vết màu nhỏ, không đọc ra là gì.",
+     "phóng to nồi, cho nút đỏ và núm xoay to rõ."
+    ]
+   }
+  },
+  "noi-com-doi-dau": {
+   "name": "nồi cơm đời đầu",
+   "src": "5514b8838920c24584019d58e83f2ae16881dd6aa6c7b106b5d28a68402d465a",
+   "key": "",
+   "fp": "qbS/ydLX293c29jRyb+zqJ+osrzEyM3OzszJw7uzp6CntL/J0tfb3dzb2NLJv7OrrLbCzNXZ3d/e3trVzMK2qqGqtb/Hy8/Q0M/Mx7+2qqGqtsLM1drd397e29XMwrasrrnF0Nfc3+Dh4N3Y0Ma6rKOtucLJztDR0tHPycK5rqOsucXQ19zf4OHg3djQxrqusLzI0trg4eLj4t/b08m9rqWwu8TL0dLT09PQzMW8sKWuvMjS2uDh4eLh39vTyb2wsr/L1d3g4uLj4+He1cu/sKiyvsfO0tPT09PSz8e9sqiwv8vV3eHi4uLi4d7Vy7+ztsHN197h4+Pl5ePf2M3Cs6q0v8nP0tPU1NXT0Mq/taqzwc3X3uHj4+Pk4t/YzcK1t8LO2d7h4uXl5uTg2s/Dtay2wcvQ0tPU1dbU0cvBt6u1ws/Z3uHi5OTk5ODa0MS3uMTQ2d/i4+Xo6Obh29LFtq23w8vR09PU1tjW0czEuK22xNDZ3+Pj19nl5eHb0sW4usbT2+Hj5Obq6+fj3NTGt666xc3S09TU2d/Y083Fua63xtLb4ePfoKPi5uPd1Ma5u8jU3eDh5Ofu8enk3tTIua+7xs7R0tPT5vLe1M7Fuq+5yNTd4d61h5PX6OXe1Mi7u8nV3eHi4+f3+O3l3tTJu7XBzdTY2dnX5/Hl29XMwbW6ydXd4dWimcPn6ubf1cm8vMnV3eHh4ur8/PDl3tbKvLzJ1d3g4ODOsr7a493Vyry8ydXd4eDNp+v47+ff1sq9vcrV3uHh4eT6++/l39fKvLzK1d3g4OHf6e/t4t3Wyby8ytXe4eHStfb88ufg18q9vcrW3uHi0srr9e3k39bKvLzK1t7g4eHZ5vDr4d7Wyby8ytbe4eLUwfr89Ofg18q9vcnW3uHivc7S7e/l39bKvLzJ1t3g4eG/zd3U3t7Wyry8ydbe4eLWyfr99Ofg1sq9vcnV3uLi2uP0+erl39bKvLzJ1d3h4eCtkJW0393Vyry8ydXe4uLbz/n88ufg1sq9vMnU3eLj2tby89rk3tXJurvJ1Nzhw6yxxsPj4N3Uybq7ydTd4uPg0vT77+fg1sm8u8fT3OHi27HW0Mvk3dTIurrH0tvgtLCorMLa4NzTyLq6x9Pc4eLj1Ob06+fe1Mm7usbT3ODh3bemt93j3NPHubnG09zf2rWHepXO4NvSxrm5xtPc4OLk1uDn5ubd08e6uMTR2uDi37Xc4dzi29HFuLfF0drg4du0kqPU39rRxbi3xdHb4OLk1dLa4uTc0sW5tsPP2d/h4bCtwdrf2tDDt7bDz9ne4eHg2dzg3tnPw7a2w8/Z3+Lj3r3S5OHb0MO3tcHN193h4dbD0+De187BtLTBzdfd4OHh4eHf3dfNwbS0wc7X3eHi4M/k4+DYzsG1sr7K1dzg4uHi4eDd1su/srG+ytTb3+Hg4eHf3NXKvrKxvsrV3ODi4uLj4t7Wy7+zsbzI0trf4eHi4d/a08i9sLC8yNHa3uDg4eDe2dLIvbCwvMjS2t/h4uPi4NvTyL6wrrnF0Njd4OHg4N3Xz8W6rq25xc/X3N/g39/c18/Fuq6uucXQ2N3g4uHh3tjQxrqvq7bCzdXa3d7f3drVzMK2rKu2ws3V2dze3t3Z1MzCtqurtsPN1drd39/e29XMwratqrO/ydHX2tzd29fSyb+zqamzv8nR19rb3NvX0cm/s6mps7/J0tjb3d3c2NLKwLOq",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "dung-vat": [
+     "ĐẠT",
+     "Nắp vòm trắng có núm tròn ở đỉnh, vành teal ở đáy nắp và quanh thân, công tắc cam ở mặt trước, chân nhỏ và dây điện có phích cắm — khớp tên mù \"nồi cơm điện\".",
+     ""
+    ],
+    "nguyen-ven": [
+     "ĐẠT",
+     "Vành teal, núm, công tắc, chân và dây đều liền thân, không có mảnh rời trôi lơ lửng.",
+     ""
+    ],
+    "khoi-3d": [
+     "ĐẠT",
+     "Góc chéo cho thấy vòm nắm có khối với núm nổi, mặt trước sáng và mặt phải tối, chân có bóng đổ xuống mặt bàn.",
+     ""
+    ],
+    "dep": [
+     "LỖI",
+     "Công tắc cam là một khối méo như bong bóng chứ không ra hình nút bấm; dây điện thẳng cứng như que; ở góc từ trên xuống núm nắp gần như biến mất (chỉ còn một cung vòng mờ) nên vật trông như một đĩa trắng tròn.",
+     "dựng công tắc cam thành nút bấm có núm, cho dây điện có độ võng, và giữ bóng núm rõ trong góc nhìn từ trên."
+    ],
+    "nho-van-doc": [
+     "LỖI",
+     "Nồi nhỏ ở giữa khung, dây điện và vệt bóng chiếm hơn nửa khung; công tắc cam không đọc nổi ở cỡ điện thoại.",
+     "cắt bớt dây, đưa nồi sát camera."
+    ]
+   }
+  },
+  "noi-cu-cat-ngang": {
+   "name": "nồi cơm đời đầu bị cưa ngang",
+   "src": "361f5926117b2df187faed2a1697df77e99607bfdb71ba91796187b262473ca6",
+   "key": "",
+   "fp": "qbS/ydLX293c29fRyb+zqJ+osrzEyMzOzszJw7uzqKCntL/J0tfc3d3b2NLJv7OrrLbCzNXa3t/f3trVzMK2qqGqtb/Hy87Qz8/Mxr61qqGqtsLM1dre39/e29XMwrasrrnG0Nfc3+Hh4N3Xz8a6rKOtucLJztDR0tHOycK5rqOsucbQ193f4OHg3djQxrqusLzI0trg4eLj4t/a08m9rqWwu8TL0dHS09LPzMS8sKWuvMnT2uDh4eLh39vTyb2wsr/L1d3h4+Pj4+Hd1cq/sKizvsfO0tPS0tLRzse9sqewv8vV3eHi4uLi4d7Vy7+ztcHN197h5OXl5OLe2M3Bs6q1wMnP0tPT09PRz8m/taqzwc3Y3uLk4+Tj4t/YzcK1t8PO2d/h4uXn5ePf2c/DtKy2wcvQ0tPP0NPS0MvBt6u1w8/Z39zN3+Xk49/az8O3uMTQ2d/j4ebr5uTg2tHFtq23w8vR08ygpM7T0MvDuK22xNDa4LyVuuXl5ODb0sW4usbS2+Hf0ubx6eTh29PGt666xc3S0qVgX6XR0czFua63x9Pc26GSot3m5eLc1Ma5u8jU3eHKmcz27OXi3dTIuLC7xs7Sx39fXHXI0s7Fuq+5yNXd0ZWYrNbo5ePe1Mi7u8nV3d/GfpDr8OXj3dTJu7fEz9fbwXdlYGm93NjPxLi6ydXdzZXA7Onq5uTe1Mm8vMnV3eCmdn3G8ebj3dXKvLzJ1d3gs1xNRVi84dzVyry8ydXdzqLk9/bs6OTe1sq9vcrV3t6PnJmm6ubi3tbJvLzK1d3gm36BXWeq4N3Wyby8ytbez7fx/Pzx6eTf18q9vcrW3tyFnqSi2+bh3tbKvLzK1t7fin+ciGqc393Wyby8ytbe0cn1/Pz16uPf1sq9vcnW3tp+nKWi3+bi3tbKvLzJ1t7dfH6eiWaQ393Vyby8ydfe1bHS8fz26uTf1sq9vcnV3th4nKiX2eXj3tbKvLzJ1d3dc3yhjGeI393Vyru8ydbe2oyu1Pf36eXf1sq9vMnU3duAlamQxeLi3tXJurvJ1NzXa3KTjnJ/2t3Uybq7ydTd35Ciw+L05uXf1cm7u8fT3NyIiJuOtdzi3NTIurrH0tzUbnV9e3J92dzUyLq6x9Pc4biFrMbi4+Td1Mm7usbT3N6WjISPqtni3NLHubnG09zYdWVcVV2E2tvSxrm5x9Pd4eCyhaa63+Td08e6uMXR2t+sbm57kdTg2tHFuLfE0dnLdnFvZl6B2NrRxLi3xdLb4eTjvIeQ0+Pb0sW5tsPP2d/WkFRlidXe2dDDtrbDz9CceHtqXGKO29jPwra2w9DZ4OPl5cWW1ODa0MO4tcHN193gz39kkNXd183BtLTBzdOlkJmXlZKw3NfNwbS0wc7Y3uLk5eXb4d/YzsG1sr7K1dzg4cSAktfc1cq+srG+ytTSydPU1NLU3NXKvrKxvsvV3eHj5OXk4t7Wy7+zsbzI0trf4d+5qtva08i9sLC8yNHa3uHi4uHe2dLIvbCwvMjS29/i4+Pj4NvTyL2wrrnF0Njd4OHa09zXz8W6rq25xdDX3ODh4N/c18/Fua6uucbQ2N3h4uHh3tjQxrqvq7bDzdXa3d/f3drUzMK2rKu2w83V2t3e3t3Z1MzCtqurtsPN1tre39/e29XMwrasqrS/ydHX2tzd29fRyb+zqamzv8nR19rc3NvX0cm/s6mptL/K0tjb3d3c2NLKwLOp",
+   "verdict": "PASS",
+   "fails": 1,
+   "round": 2,
+   "rows": {
+    "dung-vat": [
+     "ĐẠT",
+     "Vỏ nhôm kem dạng vòm với núm nắp tròn, mặt cưa lộ nồi trong kim loại, thanh điện trở màu cam nằm trên gốm ở đáy, dây đỏ, công tắc/núm cam bên hông và đai xanh quanh thân — đủ bộ phận đặc trưng của nồi cơm đời đầu.",
+     ""
+    ],
+    "nguyen-ven": [
+     "ĐẠT",
+     "Lỗi cũ đã hết: mặt trong vỏ không còn cháy trắng mà thành vùng nâu-đen có sọc, thanh đồng-cam đã gắn vào hai đầu đầu nối trên gốm (không trôi lơ lửng), đai xanh cắt ngang đúng mép vỏ không hở.",
+     ""
+    ],
+    "khoi-3d": [
+     "ĐẠT",
+     "Vỏ vòm có độ cong và độ dày thật (thấy cả mặt ngoài lẫn mặt trong ở mép cắt), nồi trong có thành và miệng, thanh nhiệt có khối, có sáng mặt tối rõ.",
+     ""
+    ],
+    "muc-sang": [
+     "LỖI",
+     "Vùng trong vỏ là nâu-đen có sọc dọc nhưng không có viền mực, ranh giới giữa vỏ kem với nồi trong và với thanh cam gần như mất nét; mặt nồi trong sáng xám với mép mỏng.",
+     "vẽ viền mực quanh nồi trong và thanh điện trở, giữ các bậc sáng khác nhau trong lòng vỏ."
+    ],
+    "dep": [
+     "LỖI",
+     "Nồi trong ở góc chéo đọc như một tấm kính phẳng trong suốt, không có miệng/đáy cong; không thấy bảng nhiệt lò xo và công tắc như mô tả của vật, chỉ thấy một thanh cam.",
+     "dựng nồi trong có miệng và đáy cong, thêm bảng nhiệt lò xo và công tắc rõ ràng ở bên hông."
+    ]
+   }
+  },
+  "nuoc": {
+   "name": "lớp nước trong nồi",
+   "src": "5131a13547bd056592fb665a6cab6a64c46c7e66036eae074871db91b2bd0f15",
+   "key": "",
+   "fp": "qbO/ydHW29zc2tfRyL+zqJ6osrzDyMzOzczJw7uzqKCns77J0dba3Nva19HIv7OrrLbCzNTZ3N7e3dnUzMK2qqGqtb/Gy87Qz87Lxr+1qqGqtsLM1Nnc3t7d2dTMwrasrrnF0Nbc3t/g39zWz8W5rKOtucLJztDR0dHOycK5rqOsucXQ1tve3+Df3NbPxbmusLzI0tnf3+Dh4N7a0si8rqWwu8TL0dHS09LPzMS8sKWuvMjS2d/g4OHg3drSyLyws7/L1Nzg4eDg4N/c1cq+sKizvsfO0tPS0tLRzse9sqixv8rV3ODh4ODg39zUyr6ytcHM193g4eHh4eDd18zBs6q1v8nP0tPT09PRz8m/taqzwczX3eDg3+Hh393XzMG1t8LO2N7g4eHh4eHe2c/DtKy2wcvQ0tLT09PS0MvBt6u0w87Z3tWsqdTh4N7Zz8O3uMTQ2d/i4OHh4eHe2dHFtq23w8vR09PT09PT0MvDuK22xNDZ26mHjabZ4d7Z0cW4usbS293Hr63A3OHf2tPGt666xczS09PT0tPT0c3Fua63xtLbyo6ZpJi34N/a08a5u8jU2rWanJqWsN3g3NPHubG9ydHT0tPS0dLT1NDIvLG5yNTcrpS8x7ee1eDc08e6u8nV1aGpubmoksXh3dTJu7rI1NSxrqyrpKKep9TTyLq7ydXXnK7Hyceqw+Hd08m8vMnV1rDDwcXHp6rf3NXKvLvJ1dGen5ubkI2DidHVyry8ydXPmr/S29O8s9/c1cq9vcrV2LK3tLXDwKXa3dbJvLzK1dKko5SZkpKYntLWyby8ytXJosnQzNDHrdvd1sm9vcrW2qSkvMTDyK/Y3dbJvLzK1tOkoKGhoKGgo9PVyby8ytbKrs3KwszMr9Td1sm9vcnW2piMqb/FybXZ3dXJvLzJ1tOWioqKioqKltPVyby8ydbLt83CwcTNtM3d1cm9vcnV3KF3jqbBw6na3dXKvLzJ1dKJdHR0dHR0idPVyry8ydXVrcLEx8PMuMnd1cq9vMnU3NaPd4+os6Ta3dTJurvJ1L12ZGZmZmVkfdLUybq7ydTbs5y9zMTMusbd1Mi7u8fS2+DRiHiPo6Xc3NPIurrH0s+yrK2srKytttfTyLq6x9Lb3LWawsTNvMXc08i7usbT3N/gzIF5j6Pc29LGubnG09zf4OHh4eLh4NvSxrm5xtPc3968mbTPvsXb0sa6uMTR2t/h4cV8eqDc2tHEuLfE0drf4eLh4eDh39rRxbi3xdHa3+Hgwpi4vMba0cW5tsPP2d7h4eC+eaHb2c/CtrbDz9ne4eHh4eDg3dnPwra2w8/Z3uHh4MeXosXZz8K3tcHN193g4eHfubPc183BtLTBzdfd4OHh4eDf3dfNwbS0wc3X3eDh4eDLn8zXzcG1sr7K1Nzf4eDh3tnc1cq+srG+ytTc3+Hg4eDf3NTKvrKxvsrU3N/h4OHg19nVyr6zsbzI0dre4ODh4N7Z0si9sLC8yNLa3uDg4eDe2dLIvbCwvMjR2t7g4OHg3tnSyL2wrrnF0Nfc3+Df39zWz8W6rq25xdDX3N/g39/c1s7Fua6tucXP19zf4N/f3NbPxbqvq7bCzdXZ3N7e3dnUy8K2q6u2wszV2dze3t3Z1MzCtqurtsLN1dnc3t7d2dTMwrasqbO/ydHX2tvc29fRyb+zqamzv8nR19rb3NvX0cm/s6mps7/J0dfa29zb19HJv7Op",
+   "verdict": "PASS",
+   "fails": 1,
+   "round": 2,
+   "rows": {
+    "dung-vat": [
+     "ĐẠT",
+     "Có khối nước thật: mặt nước phẳng ngang với các vòng gợn đồng tâm, một cạnh thẳng bị cưa lộ cột nước, và phần cong viền xám là thành nồi cưa ngang nằm cao hơn mặt nước — đúng tên mù \"lớp nước trong nồi\".",
+     ""
+    ],
+    "nguyen-ven": [
+     "ĐẠT",
+     "Khối nước liền khối với thành xám, mép cắt thẳng, mặt nước và vòng gợn không đứt; không còn vành trắng mảnh kiểu khay, không có mảnh rời trôi lơ lửng, không mặt thủng hay nhấp nháy.",
+     ""
+    ],
+    "khoi-3d": [
+     "ĐẠT",
+     "Nước là khối đặc có mặt trên phẳng, mặt cắt đứng thành cột nước bên trước và thành xám có bề dày (hai đường viền ở góc từ trên xuống), có sáng mặt tối chứ không phải mảng kính phẳng.",
+     ""
+    ],
+    "muc-sang": [
+     "LỖI",
+     "Viền mực ở mực nước bị vẽ đè lên nhau thành dải đen đứt quãng có lỗ trắng (rõ ở góc ngang tầm mắt, bên trái); mặt nước nhìn từ trên gần như trắng nên mất đường viền với thành xám.",
+     "gộp và làm sạch nét mực ở mực nước, hạ bloom mặt nước để giữ đường viền với thành."
+    ],
+    "mau": [
+     "LỖI",
+     "Mặt nước ở góc từ trên xuống là xanh nhạt gần trắng trong khi thân nước ở góc chéo là xanh lam bão hoà, hai mặt cùng một vật lệch tông rõ rệt, đọc như lớp băng/thủy tinh.",
+     "đồng bộ tông mặt nước với thân nước, chỉ để sáng hơn một chút để ra chiều sâu nước."
+    ],
+    "dep": [
+     "LỖI",
+     "Góc chính diện đọc như một bể cá/khay nước hình chữ nhật: thành nồi chỉ là một dải xám phẳng không có đặc trưng, mặt nước không có meniscus ở chỗ chạm thành.",
+     "cho thành có miệng và vành nhô, thêm meniscus ở đường chạm thành và chi tiết nồi trong để đọc ra là nồi cơm."
+    ],
+    "nho-van-doc": [
+     "LỖI",
+     "Ở cỡ điện thoại chỉ thấy một chậu nước xanh trong khung xám, chữ \"nước trong nồi\" không đọc ra; vòng gợn và meniscus gộp thành một nét.",
+     "đưa khối nước sát camera và giữ rõ đường mực nước cùng vòng gợn."
+    ]
+   }
+  },
+  "tui-gao": {
+   "name": "túi gạo",
+   "src": "706f9927063321296074cb567dd0eb60887912fb6858f5d0672b0fed5309104f",
+   "key": "",
+   "fp": "qbS/ydHW2tzc2tfRyL+zqJ+osrzEyMzOzczJw7yzp6CntL7J0dba3Nza19HIv7OrrLbCzNTZ3N7e3dnUzMK2qqGqtb/Gy87Qz8/Lxr61qqGqtsLM1Nnc3t3d2dTMwrasrrnF0Nfc3t/g39zWz8W5rKOtucLIztDR0tHOycG5raOsucXQx8jd3+Df3NbPxbmusLzI0tne2+Dh4N3a0sm8rqWwu8TL0dLS09LPzMS7sKWuvMjStJTD3+Hg3drSybywsr/L1dzXz9fe4N/c1Mq+sKiyvcfOzs7P0dLRzse9sqiwv8vUqoqRxeDg39zUyr6ytcHM19zc2s7U3t/d18zBs6q1v8nPzs3Ly9LSz8m/taqzwczVorKhreDh4N3XzMG1t8LO2N3U3d/V3ODe2c7DtKy2wcrOztLU1NPTz8vBt6y0ws7Xqcrcvd3h4d7Zz8O2uMTQ2d7d1dra1uHe2dHFtq23wsvQ2NzZ1tPT0MvDuK22xNDZt8bf5Nvf4d7Z0cS4usbS296729bT2uHf2tPGt666xc3OscnPyNDT0czFua63xtLayczS3uTe4d/a08a5u8jU3N6dr9rYyuHg3NPHuLC7x8/LhJqhgsPT0s7Gu7C5yNTc2eLXz9nc4eDc08e6u8nV3N+kqKGkv+Hh3dPJu7jG0tnVhaaogcze3trRxrm6ydXc2+Lm2c7a4eHd1Mm8vMnV3ODOqYuAxOHh3NXKvLzJ1d3bqqWhk9Ph4dzVyry8ydXd29bh6N3c4uHc1cq9vcrV3eDa1JOH0+Hg3dbJvLzK1d3e3OHh3N7h4N3Wyby8ytXd1bHW4uPe4eDd1sm9vcrW3uDe4dLB2+Hf3dbKvLzK1t7e2+Hg3d/h393Wyby8ytbe3LW919rf4uDd1sm9vcnW3eDd1t7a3OHg3tXJvLzJ1t3e39fW4d/h4N3Vyby8ydbd39zIuMzf4uDe1cm9vcnV3eHe3N7Z2+Lh3dXJu7zJ1d3f39vX4t/h4d3Vyby8ydXd4d7bvqLc4uHd1cq8vMnU3OHe3eLd3OHg3dTJurvJ1Nze4ODg4t7h4N3Uybq7ydTc4d3b39Xe4eHd1Mm7u8fS2+Dc4uTc3OHg3NPIurrH0tvd3+Dd4t/h4NzTyLq6x9Lb4ODb3t7i4uDc08i7usbS29/d4+Xe3uHg29LGubnG09jY3efm4uDh4NvSxrm5xtPc3+Dh3Nvg4uDb0sa6uMTR2t/c4OHc3uHg2tHEuLfEz6udzd7e3d/h39rRxLi3xNHa3+Hi4eDd4N/a0cW5tsLP2d7g2+Hd3+Le2c/DtrbDzq+O0ufm4tnf3tnPwra2w8/Z3uDi4eHd3t7Zz8O3tcHN193g39nc4ODd183BtLTBzdKqyNvd3dXW29fNwbS0wc3X3eDh4eHh393XzcG1sr7K1Nzf4d3d4eDc1cq+srG+ytTU0dPQ0t3Z2tXKvrKxvsrU3N/h4OHg39zVyr6zsLzI0dre4ODg3d7a0si9sLC8yNHa3uDg4eDe2dLIvbCwvMjR2t7g4OHg3tnSyL2wrrnFz9fc3+Df3NvXz8W6rq25xc/X3N/g39/c1s/Fua6tucXQ19zf4N/f3NbPxbmvq7bCzdXZ3N7e3drUy8K2rKu2ws3V2dze3t3Z1MvCtqyrtsLN1dnc3t7d2dTMwrasqrO/ydHX2tzc29fRyb+zqamzv8nR19rb3NvX0cm/s6mps7/J0dfZ3Nzb19HJv7Op",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "dung-vat": [
+     "ĐẠT",
+     "Bao gạo in \"GẠO / Hạt Móc / 5 kg\", miệng túi gập xuống, có hạt gạo rơi vương vãi quanh chân — người xem đọc đúng là bao gạo 5 kg.",
+     ""
+    ],
+    "nguyen-ven": [
+     "ĐẠT",
+     "Miệng gập liền thân, các hạt rơi nằm sát chân túi, không có mảnh nào trôi lơ lửng.",
+     ""
+    ],
+    "khoi-3d": [
+     "ĐẠT",
+     "Góc chéo cho thấy thân có mặt trước, mặt bên và nắp gập dày với sáng/tối tách bạch.",
+     ""
+    ],
+    "dep": [
+     "LỖI",
+     "Vỏ cứng như hộp carton, mép vuông, không có nếp nhăn hay độ phồng đặc trưng của túi nilông gạo 5 kg; hạt gạo rơi chỉ là vòng viền rỗng không có thân hạt.",
+     "cho vỏ mềm, phình nhẹ, thêm nếp gấp và đường chỉ may; dựng hạt rơi có thân trắng đục chứ không chỉ là vòng viền."
+    ],
+    "muc-sang": [
+     "LỖI",
+     "Vòng viền của các hạt rơi bị đứt ở chỗ chồng lên nhau (giữa khung ngang tầm mắt), nhìn như lỗi viền.",
+     "vẽ hạt rơi dạng khối có viền kín, không chồng viền lên nhau."
+    ]
+   }
+  }
+ }
+}
