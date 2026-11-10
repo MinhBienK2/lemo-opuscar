@@ -65,7 +65,25 @@ export function buildPhongNgu() {
     const cl = mesh(new THREE.SphereGeometry(ms, 14, 10), toon('#ffe6c4'), [mx, my, -2.45], { cast: false });
     cl.scale.set(1.9, .55, .3);
     scene.add(cl);
+    // lớp dưới tối hơn: mây là một khối có bóng, không phải một miếng bánh dẹt
+    // dán trên trời. Không có lớp này mây đọc ra là mảng sơn.
+    const cl2 = mesh(new THREE.SphereGeometry(ms, 14, 10), toon('#e7b78e'), [mx, my - ms * .30, -2.44], { cast: false });
+    cl2.scale.set(1.75, .42, .28);
+    scene.add(cl2);
   }
+
+  // Tranh treo tường: khoảng tường giữa đầu giường và đồng hồ trống trơn,
+  // nhát mở đầu nhìn vào là một mảng tím lớn không có gì. Một khung tranh
+  // nhỏ treo ở độ cao ngang vai người nằm làm khoảng trống có chủ đề.
+  const tranh = new THREE.Group(); tranh.position.set(-1.62, 1.74, .03); scene.add(tranh);
+  tranh.add(mesh(rbox(.56, .42, .05, .012), toon('#7a4526'), [0, 0, 0]));
+  tranh.add(mesh(new THREE.PlaneGeometry(.46, .32), toon('#ffffff', { map: canvasTex(256, 180, (c, w, h) => {
+    c.fillStyle = '#f0dcb4'; c.fillRect(0, 0, w, h);
+    c.fillStyle = '#e8b06a'; c.beginPath(); c.arc(w * .68, h * .34, 22, 0, 7); c.fill();
+    c.fillStyle = '#7d9a7a'; c.beginPath(); c.moveTo(0, h); c.lineTo(w * .34, h * .52); c.lineTo(w * .66, h); c.fill();
+    c.fillStyle = '#5d7a68'; c.beginPath(); c.moveTo(w * .34, h); c.lineTo(w * .72, h * .38); c.lineTo(w, h); c.fill();
+  }) }), [0, 0, .032]));
+  tranh.add(mesh(rbox(.50, .36, .012, .004), toon('#efe2c8'), [0, 0, .021]));
 
   // rèm buổi chiều: một mảnh vải héo bên phải cửa sổ
   const curtainTex = canvasTex(256, 256, (c, w, h) => {
@@ -87,7 +105,9 @@ export function buildPhongNgu() {
   const key = keyLight(scene, { from: new THREE.Vector3(7.13, 3.27, -1.36), to: new THREE.Vector3(-2.24, .56, .85), color: '#ffc48c', intensity: 3.3, size: 8.5, far: 26 });
   const amb = ambience(scene, { sky: '#cbc0d4', ground: '#8a6350', fill: .72, rim: '#a07cff', rimI: .38, rimFrom: [-3, 2.4, 3] });
   const shaft = beam(scene, key, { ...WIN, length: 3.2, alpha: .12, color: '#ffc890' });
-  // vệt sáng riêng trên bàn đầu giường: vùng sáng nhất khung luôn là thứ đang kể
+  // vệt sáng riêng trên bàn đầu giường: vùng sáng nhất khung luôn là thứ đang kể.
+  // Đèn này phải ẤM: nắng buổi chiều là nguồn sáng duy nhất của căn phòng, đèn
+  // trắng lạnh làm mặt vật trông như đồ điện tử, không phải đồ gỗ buổi chiều.
   const spot = pool(scene, { from: new THREE.Vector3(2.1, 1.7, 1.4), to: focus, intensity: .85, angle: .52 });
   // đèn riêng cho đồng hồ treo tường: nắng từ cửa sổ xiên vào nó, đủ để mặt
   // giấy đọc ra màu kem và để bóng của đồng hồ rơi xuống tường. Không có đèn
@@ -126,9 +146,11 @@ export function buildPhongNgu() {
   // máy ghi giấc ngủ ở cuối bàn: mặt giấy chạy ra, trục thời gian chạy từ trái sang phải
   const rec = mayGhiGiacNgu(); rec.position.set(.70, .50, -.43); rec.rotation.y = .10; table.add(rec);
   // một chiếc đĩa rỗng: bằng chứng cụ thể cho "không có gì ăn", thay vì một
-  // mảng gỗ trống mà thẻ "không ăn" chỉ vào
+  // mảng gỗ trống mà thẻ "không ăn" chỉ vào. Đĩa đặt ở TRƯỚC bảng đèn đã tắt
+  // (bảng trước), không phải dưới bảng đèn còn sáng (bảng sau) — đặt sai chỗ thì
+  // người xem ghép "không ăn" với bảng không bị tụt, ngược ý câu nói.
   const plate = diaRong();
-  plate.position.set(-.62, .50, .15);
+  plate.position.set(-.45, .50, .55);
   table.add(plate);
 
   // đồng hồ 24 giờ trên tường (đặt hẳn ra trước tường để nó đổ được bóng)
@@ -145,7 +167,7 @@ export function buildPhongNgu() {
   const S = {
     scene, key, amb, focus, spot, bed, table, clock, rec, board, board2, clock24, mug, mug2, hand, curtain, plate,
     // đèn riêng của đồng hồ treo tường: k = 0…1 là độ sáng của nó
-    clockLit: k => { clockLight.intensity = 3.4 * k; },
+    clockLit: k => { clockLight.intensity = 2.2 * k; },
     // đèn riêng cho mặt giấy đồ thị: k = 0…1 là độ sáng của nó
     paperLit: k => { paperLight.intensity = 1.4 * k; },
     // giờ hiện trên mặt đồng hồ báo thức và trên đồng hồ 24 giờ
@@ -186,22 +208,64 @@ export function buildKhongMao() {
   // bàn của phòng não không phải một tấm navy trơn: đổi thành gỗ ấm, để
   // khối não (hồng) có một nền khác màu, và cả khung không còn một tông
   // tím lạnh.
-  const woodTex = canvasTex(256, 256, (c, w, h) => {
+  const woodTex = canvasTex(512, 512, (c, w, h) => {
     c.fillStyle = '#5a3722'; c.fillRect(0, 0, w, h);
-    for (let i = 0; i < 260; i++) {
-      c.strokeStyle = `rgba(${60 + Math.random() * 40 | 0},${34 + Math.random() * 26 | 0},${16 + Math.random() * 20 | 0},${.06 + Math.random() * .16})`;
-      c.lineWidth = 1 + Math.random() * 3;
+    // Vân gỗ phải ĐỦ ĐẬM để đọc ra là gỗ. Trước đây nét vân nhạt quá, cả mặt
+    // bàn thành một mảng nâu trơn — người chấm gọi đó là "mảng phẳng không
+    // texture gỗ".
+    for (let i = 0; i < 460; i++) {
+      c.strokeStyle = `rgba(${46 + Math.random() * 48 | 0},${24 + Math.random() * 32 | 0},${11 + Math.random() * 24 | 0},${.16 + Math.random() * .32})`;
+      c.lineWidth = 1 + Math.random() * 6;
       const y = Math.random() * h;
       c.beginPath(); c.moveTo(0, y);
-      c.bezierCurveTo(w * .3, y + (Math.random() - .5) * 22, w * .7, y + (Math.random() - .5) * 22, w, y + (Math.random() - .5) * 14);
+      c.bezierCurveTo(w * .3, y + (Math.random() - .5) * 28, w * .7, y + (Math.random() - .5) * 28, w, y + (Math.random() - .5) * 18);
       c.stroke();
     }
+    // mắt gỗ
+    for (let i = 0; i < 6; i++) {
+      const x = Math.random() * w, y = Math.random() * h, rot = Math.random() * 3;
+      for (let j = 6; j > 0; j--) {
+        c.strokeStyle = `rgba(34,18,9,${.08 + j * .05})`; c.lineWidth = 2;
+        c.beginPath(); c.ellipse(x, y, j * 10, j * 4.5, rot, 0, 7); c.stroke();
+      }
+    }
   });
+  // vân lặp lại trên cả mặt bàn: một ảnh 512 trải trên 9×7 m thì vân bị
+  // nong ra thành vệt mờ, đọc ra là một mảng phẳng
+  woodTex.repeat.set(3, 2.4);
   scene.traverse(o => {
     if (o.isMesh && o.material && o.material.color && o.material.color.getHexString() === '252d50') {
       o.material = toon('#ffffff', { map: woodTex });
+      // bàn không kéo dài tới vách sau: rút lại để vách không cắt qua mặt bàn
+      o.scale.z = .74;
     }
   });
+  // ── vách sau của không gian não ────────────────────────────────────────
+  // Nửa trên khung trước đây là một dải navy trống: không có gì đứng sau bàn,
+  // nên khối não bị đặt lơ lửng. Vách này là một màng mô có vân, có nếp, và
+  // nó nhận bóng đổ — để có một nơi chốn thật thay vì một nền đen.
+  const wallTex = canvasTex(512, 512, (c, w, h) => {
+    c.fillStyle = '#191434'; c.fillRect(0, 0, w, h);
+    for (let i = 0; i < 1200; i++) {
+      const x = Math.random() * w, y = Math.random() * h, r = 8 + Math.random() * 36;
+      c.fillStyle = `rgba(${44 + Math.random() * 44 | 0},${34 + Math.random() * 38 | 0},${92 + Math.random() * 56 | 0},${.06 + Math.random() * .13})`;
+      c.beginPath(); c.ellipse(x, y, r, r * (.4 + Math.random() * .8), Math.random() * 3, 0, 6.3); c.fill();
+    }
+    c.strokeStyle = 'rgba(150,124,210,.07)'; c.lineWidth = 3;
+    for (let i = 0; i < 34; i++) {
+      c.beginPath();
+      let x = Math.random() * w, y = Math.random() * h;
+      c.moveTo(x, y);
+      for (let k = 0; k < 5; k++) { x += (Math.random() - .5) * 110; y += (Math.random() - .5) * 110; c.lineTo(x, y); }
+      c.stroke();
+    }
+  });
+  wallTex.repeat.set(4, 3);
+  // Vách PHẢI TỐI hơn mặt bàn: nếu vách sáng hơn, đường nối giữa bàn và
+  // vách thành một đường ngang sắc, đọc ra là một màn phông.
+  const back = mesh(new THREE.PlaneGeometry(24, 9), toon('#ffffff', { map: wallTex }), [0, 1.4, -2.75]);
+  back.receiveShadow = true;
+  scene.add(back);
   // khối mô xoay một góc nhỏ: trục dài của nó (trục nằp ngang) nằm ngang
   // khung, để các nếp não chạy ngang qua mà không bị hội tụ ở một đầu
   const ROT = 0.15;
@@ -258,9 +322,11 @@ export function buildKhongMao() {
       dots.count = 14; dots.instanceMatrix.needsUpdate = true;
     },
     update: (t, o = {}) => {
-      B.key.intensity = 1.30 * (o.dim ?? 1);
-      B.amb.hemi.intensity = .30 * (o.dim ?? 1);
-      B.amb.rim.intensity = .34 * (o.dim ?? 1);
+      B.key.intensity = 1.75 * (o.dim ?? 1);
+      // Đèn phụ quá tay thì mọi mặt đều mềm: dải toon của não tan vào nhau,
+      // não đọc ra là hình vẽ màu mà có dải sắc. Bớt đèn phụ, thêm đèn chính.
+      B.amb.hemi.intensity = .19 * (o.dim ?? 1);
+      B.amb.rim.intensity = .17 * (o.dim ?? 1);
       B.lamp.intensity = .55 * (o.focus ?? 1) * (o.dim ?? 1);
     },
   };
@@ -404,6 +470,8 @@ export function buildKhe() {
     // vị trí phân tử caffeine và phân tử adenosine bám, để thẻ thuật ngữ bám đúng chỗ
     cafePos: (k = 0) => CAFE_FROM.clone().lerp(notch.clone(), ss(k)),
     dockPos: (k = 0) => FROM.clone().lerp(notch.clone(), ss(k)),
+    // vị trí adenosine bị đẩy ra khỏi túi — thẻ thuật ngữ bám vào đây
+    pushedPos: (k = 0) => notch.clone().add(new THREE.Vector3(-.24 * k, .10 * k, -.38 * k)),
     // đám phân tử: k = 0…1 là mật độ (người thức càng lâu thì càng nhiều);
     // sc = kích thước — nhát rộng thì phân tử phải to ra, không thành bụi lấm tấm
     crowd: (t, k = 0, sc = 1) => {

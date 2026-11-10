@@ -10,7 +10,7 @@ export const SEQ = [
   ['c5', 0.3],
   ['c6', 0.2],
   ['c7', 0.5],
-  ['c8', 0.4],
+  ['c8', 0.424],
   ['c9', 0.4],
   ['c10', 0.3],
   ['c11', 0.4],
@@ -22,7 +22,7 @@ export const SEQ = [
   ['c17', 0.3],
   ['c18', 0.3],
   ['c19', 0.2],
-  ['c20', 0.5],
+  ['c20', 0.701],
   ['c21', 0.2],
   ['c22', 0.5],
   ['c23', 0.2],
@@ -37,7 +37,7 @@ export const SEQ = [
   ['c32', 0.3],
   ['c33', 0.6],
   ['c34', 0.3],
-  ['c35', 0.3],
+  ['c35', 0.962],
   ['c36', 0.5],
   ['c37', 0.2],
   ['c38', 0.3],
@@ -51,7 +51,7 @@ export const SEQ = [
   ['c46', 0.3],
   ['c47', 0.3],
   ['c48', 0.3],
-  ['c49', 0.7],
+  ['c49', 1.123],
   ['c50', 0.3],
   ['c51', 0.3],
   ['c52', 0.8],
@@ -77,7 +77,7 @@ export const SUBS = {
     'Người ta đo được phần bên trong của nó.',
   ],
   c7: [
-    'Trong ba mươi phút đó có mười lăm phút ngủ sóng chậm.',
+    'Trong nửa đầu giấc ngủ có mười lăm phút ngủ sóng chậm.',
   ],
   c8: [
     'Ngủ sóng chậm dồn lên mạnh ở đầu giấc ngủ, rồi giảm dần.',
@@ -116,8 +116,7 @@ export const SUBS = {
     'Và ranh giới nằm ở ba mươi phút.',
   ],
   c19: [
-    'Giấc ngủ trưa từ ba mươi phút trở lên thì phản xạ',
-    'tụt rõ rệt.',
+    'Giấc ngủ trưa từ mốc đó trở lên thì phản xạ tụt rõ rệt.',
   ],
   c20: [
     'Dưới ngưỡng đó thì hiệu ứng lờ đờ nhẹ hơn nhiều.',
@@ -164,8 +163,7 @@ export const SUBS = {
     'và khía đó báo cho não biết buồn ngủ.',
   ],
   c34: [
-    'Lúc bạn dậy, lượng adenosine vừa tích lại được là',
-    'nhiều nhất.',
+    'Lúc bạn dậy, áp lực ngủ vẫn chưa được xả hết.',
   ],
   c35: [
     'Có lý thuyết rằng chính lượng đó làm não chậm lúc',
@@ -213,7 +211,7 @@ export const SUBS = {
   ],
   c48: [
     'Một thí nghiệm đo được:',
-    'giấc ngủ trưa hai mươi phút buổi chiều kết ở giấc ngủ nhẹ.',
+    'giấc ngủ trưa buổi chiều kết ở giấc ngủ nhẹ.',
   ],
   c49: [
     'Hoặc uống cà phê ngay trước khi nằm,',

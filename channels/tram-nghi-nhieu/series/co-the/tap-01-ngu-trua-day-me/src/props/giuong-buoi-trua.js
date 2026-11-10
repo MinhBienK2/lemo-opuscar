@@ -1,7 +1,39 @@
 // Chiếc giường buổi trưa: đầu giường có nan, nệm, gối bẹp, chăn nhàu lệch một bên.
 // Giường nằm dọc theo tường, đầu giường quay về góc phòng.
 import * as THREE from 'three';
-import { PAL, toon, TEX, rbox, mesh, cushionGeo, surface, mulberry } from '../../../../../rig/kit.js';
+import { PAL, toon, TEX, rbox, mesh, cushionGeo, surface, mulberry, canvasTex } from '../../../../../rig/kit.js';
+
+// Chăn: vải sọc sóng, không phải vải ô vuông. Một tấm ô vuông đều tăm đọc
+// ra là một mảng bàn trải, không phải chăn đã có người nằm. Chỉ có sọc dọc
+// — sọc ngang cùng với sọc dọc thành lưới ô vuông, vẫn là ô vuông.
+const blanketTex = () => {
+  const t = canvasTex(512, 512, (c, w, h) => {
+    const r = mulberry(23);
+    c.fillStyle = '#c98f55'; c.fillRect(0, 0, w, h);
+    const BAND = 34;
+    for (let x = 0; x < w; x += BAND) {
+      c.fillStyle = '#b9763c';
+      c.fillRect(x, 0, BAND * .45, h);
+    }
+    // mép sọc cong theo vân vải: hai sọc liền nhau lệch nhau một chút
+    c.globalAlpha = .5;
+    for (let x = 0; x < w; x += BAND) {
+      c.strokeStyle = '#e0a771'; c.lineWidth = 3; c.beginPath();
+      for (let y = 0; y <= h; y += 16) {
+        const dx = Math.sin(y * .014 + x * .05) * 4;
+        y ? c.lineTo(x + dx, y) : c.moveTo(x + dx, y);
+      }
+      c.stroke();
+    }
+    c.globalAlpha = 1;
+    for (let i = 0; i < 2600; i++) {                    // sợi dệt
+      c.fillStyle = `rgba(90,50,20,${r() * .08})`;
+      c.fillRect(r() * w, r() * h, 2, 2);
+    }
+  });
+  t.repeat.set(1.4, 1.4);
+  return t;
+};
 
 export function giuongBuoiTrua({ seed = 11 } = {}) {
   const g = new THREE.Group();
@@ -12,8 +44,7 @@ export function giuongBuoiTrua({ seed = 11 } = {}) {
   wood.map.repeat.set(1.6, 1);
   const sheet = toon('#ffffff', { map: TEX.sheet() });
   const pillowTex = toon('#ffffff', { map: TEX.pillow() });
-  const blanketTex = toon('#ffffff', { map: TEX.blanket() });
-  blanketTex.map.repeat.set(1.4, 1.4);
+  const blanketTex2 = toon('#ffffff', { map: blanketTex() });
 
   // ── khung giường: bốn chân, hai thanh dọc, hai thanh ngang ──
   for (const sx of [-1, 1]) for (const sz of [-1, 1]) {
@@ -33,14 +64,30 @@ export function giuongBuoiTrua({ seed = 11 } = {}) {
   }
 
   // ── nệm ──
-  const mat = mesh(cushionGeo(W - 0.06, 0.24, L - 0.08, 0), sheet, [0, H + 0.14, 0]);
+  // Nệm bị dùng nên có chỗ lõm hình người nằm. Lõm trên nệm thật, không
+  // lõm riêng trên chăn: nếu chăn lõm mà nệm không lõm, chăn lọt xuống dưới
+  // mặt nệm và để lộ mảng vải trắng — đọc ra là vết ố trên chăn.
+  const matGeo = cushionGeo(W - 0.06, 0.24, L - 0.08, 0);
+  {
+    const p = matGeo.attributes.position, v = new THREE.Vector3();
+    for (let i = 0; i < p.count; i++) {
+      v.fromBufferAttribute(p, i);
+      if (v.y <= 0) continue;
+      const e = Math.exp(-Math.pow(v.x / 0.42, 2)) * Math.exp(-Math.pow((v.z + 0.15) / 0.85, 2));
+      p.setY(i, v.y - e * 0.07);
+    }
+    matGeo.computeVertexNormals();
+  }
+  const mat = mesh(matGeo, sheet, [0, H + 0.14, 0]);
   g.add(mat);
   // nẹp nệm ở đầu giường
   g.add(mesh(rbox(W - 0.06, 0.20, 0.06, 0.02), sheet, [0, H + 0.14, -L / 2 + 0.07]));
 
   // ── gối: bẹp một bên, như gối đã nằm ──
-  const pil = mesh(cushionGeo(W * 0.68, 0.20, 0.52, 0.05), pillowTex, [0.06, H + 0.26, -L / 2 + 0.42]);
-  pil.rotation.set(0.03, -0.07, 0.04);
+  // Gối lệch hẳn sang một bên và xoay: gối đặt ngay giữa đầu giường, vuông
+  // vắn, là giường chưa ai nằm — cảnh mở đầu nói là "người ta nằm xuống".
+  const pil = mesh(cushionGeo(W * 0.68, 0.20, 0.52, 0.11), pillowTex, [0.17, H + 0.26, -L / 2 + 0.44]);
+  pil.rotation.set(0.05, -0.14, 0.10);
   g.add(pil);
 
   // ── chăn: một mảnh vải rủ trên nệm, mép trên gấp lộ mặt trong ──
@@ -49,13 +96,19 @@ export function giuongBuoiTrua({ seed = 11 } = {}) {
     const z = z0 + (z1 - z0) * v;
     // mép trên: vải gấp lại ở đầu, lộ mặt dưới (màu sáng hơn)
     const fold = Math.max(0, 1 - v * 7);
-    const wrinkle = Math.sin(u * 9 + v * 4) * 0.018 * (0.25 + v);
+    // lõm người nằm: chăn nằm theo đúng chỗ lõm của nệm. Chăn trải phẳng
+    // như mặt bàn thì đọc ra là giường chưa ai nằm — cả mở đầu phim là cảnh
+    // vừa ngủ dậy.
+    const body = Math.exp(-Math.pow((u - 0.5) * (W + 0.10) / 0.42, 2)) * Math.exp(-Math.pow((z + 0.15) / 0.85, 2));
+    const dent = body * 0.040;
+    // nếp nhăn quanh rìa lõm: vải bị dồn lên, không phẳng lì như cao su
+    const wrinkle = Math.sin(u * 9 + v * 4) * 0.018 * (0.25 + v) * (1 + body * 2.4);
     const side = Math.max(0, Math.abs(u - 0.5) - 0.42) / 0.08;
     const drop = Math.min(1, side) * 0.16;
     const x = (u - 0.5) * (W + 0.10);
-    const y = H + 0.24 - drop + wrinkle - fold * 0.055;
+    const y = H + 0.27 - drop + wrinkle - fold * 0.055 - dent;
     return [x, y, z + fold * 0.02];
-  }), blanketTex, [0, 0, 0], { rot: [0, 0, 0] });
+  }), blanketTex2, [0, 0, 0], { rot: [0, 0, 0] });
   blanket.material.side = THREE.DoubleSide;
   g.add(blanket);
 
@@ -63,7 +116,7 @@ export function giuongBuoiTrua({ seed = 11 } = {}) {
   const turned = mesh(surface(26, 6, (u, v) => {
     const z = z0 + 0.02 + v * 0.30;
     const wrinkle = Math.sin(u * 11) * 0.012;
-    return [(u - 0.5) * (W + 0.10), H + 0.245 + wrinkle - v * 0.045, z];
+    return [(u - 0.5) * (W + 0.10), H + 0.275 + wrinkle - v * 0.045, z];
   }), sheet, [0, 0, 0]);
   turned.material.side = THREE.DoubleSide;
   g.add(turned);

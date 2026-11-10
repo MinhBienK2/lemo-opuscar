@@ -33,7 +33,7 @@ tập trung sáng hơn, nhát toàn cảnh thì để lại.
 | 4 | c4 | 8.80–11.00 | N1 · fov 44: cận cái giường: chăn nhàu, gối lệch — lời: "Nhiều người tưởng ngủ trưa chỉ là nghỉ chút cho mắt." | ngủ một chút phải thấy cái giường đã nằm, không phải một cái giường vuông vắn |
 | 5 | c5 | 11.30–13.56 | N1 · fov 36: cận máy ghi giấc ngủ trên bàn, mặt giấy chạy ra — lời: "Nhưng ba mươi phút nằm ngủ là một giấc ngủ thật." | đo được phần bên trong: máy phải là một cái máy có mặt số và hai nút |
 | 6 | c6 | 13.76–15.67 | N1 · fov 30: siêu cận mặt máy: đồng hồ nhỏ và hai nút vặn — lời: "Người ta đo được phần bên trong của nó." | người xem phải thấy đây là máy đo, nên đẩy thẳng vào mặt nó |
-| 7 | c7 | 16.17–18.68 | N1 · fov 36: nhìn xuống mặt giấy: đường đồ thị, vùng ngủ sóng chậm được tô đậm — lời: "Trong ba mươi phút đó có mười lăm phút ngủ sóng chậm." | mười lăm phút ngủ sóng chậm phải đếm được ngay trên giấy |
+| 7 | c7 | 16.17–18.65 | N1 · fov 36: nhìn xuống mặt giấy: đường đồ thị, vùng ngủ sóng chậm được tô đậm — lời: "Trong nửa đầu giấc ngủ có mười lăm phút ngủ sóng chậm." | mười lăm phút ngủ sóng chậm phải đếm được ngay trên giấy |
 | 8 | c8 | 19.08–22.30 | N2 · fov 34: khối mô não trên bàn tối, nếp não phồng lên rồi xẹp dần — lời: "Ngủ sóng chậm dồn lên mạnh ở đầu giấc ngủ, rồi giảm dần." | sóng chậm dồn lên ở đầu rồi giảm: máy phải thấy được hình dạng nếp thay đổi |
 | 9 | c9 | 22.70–25.10 | N1 · fov 32: cận đồng hồ báo thức rung trên bàn — lời: "Đồng hồ báo thức reo, cắt ngang giấc ngủ." | chuông cắt ngang giấc ngủ: cùng một vật, nhưng rung |
 | 10 | c10 | 25.40–29.13 | N2 · fov 28: dãy đốm sáng bò trên nếp não, bò chậm — lời: "Cách kể quen thuộc là: dậy giữa ngủ sâu, não chưa kịp chạy lại." | não chưa kịp chạy lại thì tín hiệu vẫn bò |
@@ -45,7 +45,7 @@ tập trung sáng hơn, nhát toàn cảnh thì để lại.
 | 16 | c16 | 43.39–46.15 | N1 · fov 26: lưới đèn trong bảng tắt dần — lời: "Ngay sau khi dậy, phản xạ của người ta tụt rõ rệt." | phản xạ tụt: đèn tắt dần là cách đo, không phải một câu chữ |
 | 17 | c17 | 46.45–48.50 | N1 · fov 24: siêu cận đồng hồ kim chùy xuống — lời: "Tụt tới mức thấp hơn cả lúc chưa ngủ." | tụt tới mức thấp hơn cả lúc chưa ngủ: kim là thứ đọc được |
 | 18 | c18 | 48.80–50.50 | N1 · fov 34: cổng gạch đậm ở mốc ba mươi phút trên mặt giấy — lời: "Và ranh giới nằm ở ba mươi phút." | ranh giới ba mươi phút phải là một vạch trên giấy |
-| 19 | c19 | 50.70–53.76 | N1 · fov 42: rộng: máy ghi, cổng và cả dải giấy — lời: "Giấc ngủ trưa từ ba mươi phút trở lên thì phản xạ tụt rõ rệt." | cả dòng thời gian phải hiện trong một khung |
+| 19 | c19 | 50.70–53.56 | N1 · fov 42: rộng: máy ghi, cổng và cả dải giấy — lời: "Giấc ngủ trưa từ mốc đó trở lên thì phản xạ tụt rõ rệt." | cả dòng thời gian phải hiện trong một khung |
 | 20 | c20 | 54.26–56.69 | N1 · fov 30: bảng đo với đèn vẫn sáng gần hết — lời: "Dưới ngưỡng đó thì hiệu ứng lờ đờ nhẹ hơn nhiều." | dưới ngưỡng thì hiệu ứng nhẹ hơn: cùng bảng, đèn chưa tắt |
 | 21 | c21 | 56.89–58.96 | N1 · fov 32: cận kim đồng hồ báo thức — lời: "May mà cơn lờ đờ đó không kéo dài." | may mà cơn lờ đờ không kéo dài: đồng hồ chạy nửa tiếng |
 | 22 | c22 | 59.46–62.17 | N1 · fov 46: cửa sổ sáng hơn, phòng ấm lên — lời: "Nó tự qua trong nửa tiếng, có khi còn không có." | nó tự qua trong nửa tiếng: ánh sáng trong phòng dịch chuyển |
@@ -60,7 +60,7 @@ tập trung sáng hơn, nhát toàn cảnh thì để lại.
 | 31 | c31 | 81.33–84.98 | N3 · fov 42: đám phân tử đông dần lên — lời: "Người ta gọi nó là áp lực ngủ: bạn thức bao lâu, nó càng nhiều." | thức bao lâu thì nó càng nhiều: đám phải dày lên ngay trong khung |
 | 32 | c32 | 85.28–87.00 | N3 · fov 30: một phân tử rời đám, bay về phía thụ thể — lời: "Nó không bay lơ lửng vô nghĩa." | nó không bay lơ lửng vô nghĩa: phải thấy nó đi |
 | 33 | c33 | 87.60–91.64 | N3 · fov 32: phân tử bám vào túi của thụ thể, miệng túi mở ra khe — lời: "Nó bám vào một khía trên thụ thể, và khía đó báo cho não biết buồn ngủ." | bám vào một khía: cận vào đúng chỗ bám |
-| 34 | c34 | 91.94–95.25 | N3 · fov 46: rộng: khe chật ních phân tử — lời: "Lúc bạn dậy, lượng adenosine vừa tích lại được là nhiều nhất." | lúc dậy lượng tích lại được là nhiều nhất: toàn cảnh khe |
+| 34 | c34 | 91.94–94.59 | N3 · fov 46: rộng: khe chật ních phân tử — lời: "Lúc bạn dậy, áp lực ngủ vẫn chưa được xả hết." | lúc dậy lượng tích lại được là nhiều nhất: toàn cảnh khe |
 | 35 | c35 | 95.55–98.58 | N3 · fov 32: cận sợi trục có dãy đốm sáng yếu — lời: "Có lý thuyết rằng chính lượng đó làm não chậm lúc bạn vừa mở mắt." | có lý thuyết: dấu hiệu phải yếu, không sáng trưng |
 | 36 | c36 | 99.08–100.76 | N3 · fov 24: siêu cận sợi trục — lời: "Lý thuyết thôi, chưa ai chắc." | lý thuyết thôi, chưa ai chắc: hình cũng phải e dè |
 | 37 | c37 | 100.96–102.79 | N3 · fov 28: một phân tử mới xuất hiện trong khe — lời: "Còn cà phê thì làm một việc rất khôn." | cà phê làm một việc rất khôn: vật mới phải nổi bật |
@@ -74,7 +74,7 @@ tập trung sáng hơn, nhát toàn cảnh thì để lại.
 | 45 | c45 | 126.19–128.53 | N2 · fov 44: khối mô não, nếp chỉ thở nhẹ — lời: "Vậy muốn dậy mà không bị lờ đờ thì làm gì?" | muốn dậy mà không bị lờ đờ thì làm gì: hình phải bình thản |
 | 46 | c46 | 128.83–130.24 | N2 · fov 30: cận nếp não không sâu xuống — lời: "Đừng để mình rơi quá sâu." | đừng rơi quá sâu: nếp phẳng, không phồng |
 | 47 | c47 | 130.54–133.96 | N1 · fov 34: mặt giấy dừng ở hai mươi phút — lời: "Giữ giấc trưa ở mức ngủ nông, khoảng hai mươi phút, là đủ." | giữ giấc trưa ở mức ngủ nông: dòng đồ thị dừng sớm |
-| 48 | c48 | 134.26–138.22 | N1 · fov 28: bảng đo với đèn vẫn sáng gần hết — lời: "Một thí nghiệm đo được: giấc ngủ trưa hai mươi phút buổi chiều kết ở giấc ngủ nhẹ." | hai mươi phút kết ở giấc ngủ nhẹ: cùng bảng, đèn chưa tắt |
+| 48 | c48 | 134.26–137.80 | N1 · fov 28: bảng đo với đèn vẫn sáng gần hết — lời: "Một thí nghiệm đo được: giấc ngủ trưa buổi chiều kết ở giấc ngủ nhẹ." | hai mươi phút kết ở giấc ngủ nhẹ: cùng bảng, đèn chưa tắt |
 | 49 | c49 | 138.92–142.96 | N3 · fov 34: phân tử caffeine nằm chặn trong túi, adenosine đã bị đẩy ra — lời: "Hoặc uống cà phê ngay trước khi nằm, để cà phê bắt đầu tác dụng đúng lúc bạn mở mắt." | uống cà phê ngay trước khi nằm: phân tử mới nằm chặn đúng chỗ |
 | 50 | c50 | 143.26–144.22 | N1 · fov 32: bàn tay đặt xuống bàn, tách cà phê bên cạnh — lời: "Bạn không hỏng." | bạn không hỏng: hình phải nhẹ, tay đặt xuống |
 | 51 | c51 | 144.52–146.68 | N2 · fov 34: dãy đốm sáng trên nếp não vẫn đang bò — lời: "Bạn chỉ dậy đúng lúc não còn chưa chạy được." | bạn chỉ dậy đúng lúc não còn chưa chạy được: tín hiệu còn bò |
@@ -239,4 +239,136 @@ Máy đo báo 12 câu có vấn đề (độ phủ thấp, hai câu gần giốn
 - **Câu 13 dựng lại khung** (`film.js`): máy lùi ra và cao hơn (fov 32, `[-1.75, 1.15, 2.75]`).
   Nay **cả hai bản não nằm trọn trong khung**, phụ đề rơi xuống mảng bàn trống dưới não (trước nó
   cắt ngang mép dưới khối não sáng), và dải tường tối ở trên không còn nuốt mất nửa khung.
+
+## Vòng 9
+
+Ba vòng sửa liên tiếp (9, 10, 11) trên ba lỗi chặn của vòng 8.
+
+Vòng 8 còn ba khung hình bị chấm sai. Ba lỗi đều có cùng một nguyên nhân: **vật thể không có
+đường viền mực và không có bề mặt có chất** — nên chúng đọc ra là hình vẽ mềm kiểu sơn dầu, không
+phải vật dựng trong phòng thật.
+
+### 1 · Não và bàn trong không gian của não (câu 12, câu 13)
+
+- **Viền mực đậm trên não**: bộ viền mực của riêng tập này (`_ink-rim.js`) được dùng cho vỏ não,
+  và khoảng cách quy chiếu của bộ viền mực ở hai nhát não được nới rộng (`.5 → 2.4`) — trước đó
+  nét viền chỉ rộng chừng một pixel nên não có đường viền nhưng mờ nhạt. Nay đường viền bám
+  sát đường viền thật của khối não và đậm như các vật khác của kênh.
+- **Bàn có vân gỗ**: vân gỗ được tô đậm hơn và lặp lại trên mặt bàn (một ảnh 512 trải trên
+  9×7 m thì vân bị nong thành vệt mờ). Nay mặt bàn đọc ra là gỗ, không phải một mảng nâu trơn.
+- **Có một vách sau**: nửa trên khung trước đây là một dải navy trống — không có gì đứng sau
+  bàn, nên khối não bị đặt lơ lửng. Nay là một màng mô có vân, tối hơn mặt bàn, để khung có một
+  nơi chốn thật thay vì một nền đen.
+- **Dải toon của não đọc ra rõ hơn**: bớt đèn phụ, thêm đèn chính (`set.js`), và rãnh não được
+  tô đậm hơn trên da. Trước đó mọi mặt não đều mềm, dải toon tan vào nhau.
+
+### 2 · Tách cà phê (câu 18, câu 3, câu 41, câu 50)
+
+Quai tách trước đây là một vòng xoắn áp sát thân tách, đọc ra là một nét xoắn vẽ trên tách.
+Nay là một vòng C thật nằm trong mặt phẳng chứa trục tách, và **phim quay cả tách theo ống
+kính** (`film.js`): nhìn dọc theo hướng quai thì quai thành một nét xoắn, nên mỗi nhát có thể
+quay tách sao cho quai luôn nằm ngang với khung. Thân tách tròn xoay nên quay không đổi gì.
+
+### 3 · Cánh bút của máy ghi giấc ngủ (câu 18)
+
+Cánh bút trước đây là một ống xám uốn khúc với đầu đỏ nhọn — đọc ra là một mũi tên đỏ, không
+phải cây bút. Nay là một cây bút bi thật: thân trắng, một đai đỏ ở đầu, nòi sắc nhỏ màu mực
+chạm mặt giấy, treo trên một cột đứng mỏng và một kẹp.
+
+### 4 · Sợi trục của tế bào thần kinh (câu 35, câu 36)
+
+Sợi trục trước đây là một khối tím phẳng không texture, không bóng đổ, không màu nhấn: các hạt
+myelin chỉ nằm ở nửa đầu sợi, nên đúng chỗ máy quay đứng là một đoạn ống trơn. Nay các hạt
+myelin kéo dài gần tới cuối sợi trục (mười hạt), vân trên vỏ sợi đậm hơn, và sợi trục có viền
+mực tô trong vật liệu theo góc nhìn — nên nó đọc ra là một sợi có dây, không phải một thanh nhựa.
+
+## Vòng sửa 12 — sau vòng chấm look 9
+
+Vòng chấm 9 còn ba lỗi chặn (vật thể không đọc ra, và một khung không có viền mực) và một loạt
+góp ý về hình. Lỗi chặn đã sửa ở vòng 9 (xem mục 1–4 ở trên). Vòng này sửa phần còn lại của góp ý,
+và thêm hai sửa mà máy không chấm được nhưng người xem thấy ngay.
+
+### 5 · Giường đã có người nằm (câu 1, câu 4)
+
+Nệm nay có một chỗ lõm hình người nằm, và chăn nằm theo đúng chỗ lõm đó; gối bẹp sâu hơn và
+lệch một bên. Trước đây chăn trải phẳng như mặt bàn và gối vuông vắn, đọc ra là giường chưa ai
+nằm — trong khi cảnh mở đầu nói là "người ta nằm xuống ngủ một chút". Lõm nằm trên **nệm**, không
+phải trên chăn: lõm riêng trên chăn thì chăn lọt xuống dưới mặt nệm và để lộ mảng vải trắng,
+đọc ra là vết ố.
+
+### 6 · Tường có tranh (câu 1, câu 52)
+
+Giữa đầu giường và đồng hồ treo tường là một khoảng tường trống trơn. Nay treo một khung tranh
+nhỏ (phong cảnh núi non, tông kem–xanh trùng với tường) ở `(-1.62, 1.74, .03)`.
+
+### 7 · Đồng hồ kim của bảng đo có thang số (câu 15–câu 26)
+
+Mặt đồng hồ trước đây chỉ có vạch, nên câu "tụt tới mức thấp hơn cả lúc chưa ngủ" không đọc được
+mức — người xem chỉ thấy kim chùy xuống. Nay có thang số **0 / 50 / 100**, đỉnh đồng hồ là mức
+cao nhất, kim chùy về trái. Đồng hồ cũng bị đẩy ra khỏi lưới đèn để không đè lên nhau.
+
+### 8 · Mây có khối (câu 22, câu 52)
+
+Mỗi đám mây có thêm một lớp dưới tối hơn, lệch xuống — mây là một khối có bóng chứ không phải
+một miếng bánh dẹt dán trên trời.
+
+### 9 · Thẻ không che dữ liệu (câu 18, câu 21)
+
+Thẻ "BA MƯỜI PHÚT" nay chỉ vào vạch 30 mà không đè lên số trục; thẻ "NỬA TIẾNG" nằm ở góc
+trên-phải mặt đồng hồ báo thức, không che kim giờ.
+
+### 10 · Dải buổi chiều của đồng hồ 24 giờ có viền mực (câu 42)
+
+Dải hồng 13h–17h trên kính đồng hồ trước đây là một dải phẳng không viền, tách khỏi mặt giấy
+kem rất yếu và bị bỏ sót trên màn điện thoại. Nay có viền mực bo tròn hai đầu. Chữ "BUỔI CHIỀU"
+in thẳng trên kính đã bỏ hẳn (nó chồng lên thẻ kem cùng nói câu đó).
+
+### 11 · Tiểu não cùng tông với vỏ não (câu 45, câu 46)
+
+Tiểu não trước đây là một mảng cam-đỏ lọt ra ở mép não, đọc ra như một lát thịt dính bên hông.
+Nay cùng tông với vỏ não, khác hình.
+
+### 12 · Ảnh khung mẫu dựng lại thì y hệt nhau
+
+Mọi vân vải, vân gỗ và mảm vẽ tay trong tập này lấy số ngẫu nhiên từ `Math.random`. Để yên vậy
+thì mỗi lần dựng ra một chút khác, ảnh khung mẫu đổi vân tay, phải chấm lại cả 52 nhát, và
+"cùng một cảnh" giữa hai lần dựng hoá ra là hai cảnh khác nhau. Nay `Math.random` được gieo số
+cố định (`film.js`) trước khi dựng vật: cùng mã nguồn thì ra cùng khung hình.
+
+## Vòng sửa 13 — sau lô chấm đầu của vòng 10
+
+Lô đầu (6 khung) chấm ra một lỗi chặn và một loạt góp ý về hình. Lỗi chặn đã sửa; các góp ý
+rẻ mà sửa được thì sửa luôn trong vòng này, thay vì để vòng chấm kế tiếp phải nói lại.
+
+### 13 · Chốt đỏ ở đầu dải giấy (câu 41) — LỖI CHẶN
+
+Chốt đánh dấu mốc ba mươi phút trên dải giấy là một hộp đỏ trơn không viền mực: người xem
+không biết đó là cái gì, và có người tưởng đó là cây bút (cây bút thật nằm ở đầu kia của
+dải). Nay chốt có viền mực và một mảnh giấy ghi "30" nằm ngửa trên nó — đọc ra là cái cổng
+đánh dấu mốc.
+
+### 14 · Chăn không còn là vải ô vuông (câu 1, câu 4)
+
+Vải chăn ô vuông đều tăm đọc ra là một tấm bàn trải, không phải chăn đã có người nằm. Nay
+là vải sọc sóng, có sợi dệt và viền. Gối cũng lệch hẳn sang một bên, xoay, và bẹp sâu hơn.
+
+### 15 · Vành túi thụ thể khác cỡ, khác màu (câu 29–câu 40, câu 49)
+
+Năm túi thụ thể trước đây gần như y hệt nhau — cùng cỡ, cùng sắc cam — nên đứng thành hàng
+đọc ra là một dãy vòng treo. Nay cỡ lệch nhau rõ, màu thay nhau: một cái vàng, một cái cam
+sẫm, một cái nhạt, một cái cam; vành miệng túi lấy màu sẫm hơn theo màu túi.
+
+### 16 · Đồng hồ 24 giờ không còn chụp chính diện (câu 42)
+
+Máy lùi sang trái, nên mặt đồng hồ thành hình bầu dục chứ không phải hình tròn hoàn hảo, và
+khung có ba lớp: tường phía sau, đồng hồ, rồi cửa sổ và cây ở mép phải. Đèn riêng của đồng
+hồ hạ từ 3.4 xuống 2.2 — ở góc mới, mặt giấy bị đèn đốt cháy thành một vệt trắng.
+
+### 17 · Hai phân tử được gọi tên (câu 39, câu 40)
+
+Ở câu 39 có thẻ "CAFFEINE" chỉ vào đúng phân tử đang chen vào túi; ở câu 40 có thẻ
+"ADENOSINE" chỉ vào phân tử bị đẩy ra khỏi túi. Trước đó hai phân tử giống nhau về màu
+nguyên tử, người xem không biết cái nào bị đẩy đi.
+
+
 

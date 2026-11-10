@@ -1,6 +1,6 @@
 {
  "step": "script",
- "round": 2,
+ "round": 4,
  "items": {
   "c1": {
    "key": "e6ce0f3b7aa55a105459d84fa5c41ff108b94d3a1bf3c6d8f78bc198dbec901d",
@@ -141,24 +141,34 @@
    }
   },
   "c7": {
-   "key": "a1ebf7998ec425e1a0d21681e9f4ef317348245e7b7e9a2e30cadbbd3d44afa0",
+   "key": "aea3675510d8ba9ea5b80f29869538ccbcb652007cfb8124498747b95b0aa77f",
    "verdict": "PASS",
    "fails": 0,
-   "round": 1,
+   "round": 3,
    "rows": {
     "khop-dan-y": [
      "ĐẠT",
-     "Đúng ý #3 và FACTS \"Dùng trong phim\" (đoạn ngủ sóng chậm được tô đậm, dài mười lăm phút).",
+     "Câu đúng ý dàn ý dòng 3 (\"Trong ba mươi phút đó có mười lăm phút ngủ sóng chậm\") và đúng mốc FACTS §2; câu chỉ nói lượng ngủ sóng chậm, không thêm ý mới nào ngoài dàn ý.",
      ""
     ],
     "dung-du-kien": [
      "ĐẠT",
-     "FACTS §2: \"The 30-NAP (14.7 ± 5.7 min) had more slow wave sleep...\"; con số \"mười lăm phút\" là số FACTS yêu cầu đọc (\"Lời kể đọc: mười lăm phút\").",
+     "\"mười lăm phút ngủ sóng chậm\" nằm trong FACTS §2 (30-NAP: 14,7 ± 5,7 phút) và mục đó ghi rõ \"Lời kể đọc: mười lăm phút\"; câu không nói \"ngủ sâu là nguyên nhân\" — điều FACTS cấm.",
      ""
     ],
     "nghe-mot-lan": [
      "ĐẠT",
-     "12 từ; cả \"ba mươi phút\" và \"mười lăm phút\" viết bằng chữ, nằm trọn trong câu; c6 kết thúc bằng \"nó.\" nên không có số bị cắt đôi.",
+     "12 từ; số viết bằng chữ (\"mười lăm phút\"); c6 (\"Người ta đo được phần bên trong của nó.\") không có con số nào nên không có số bị cắt đôi giữa c6 và c7.",
+     ""
+    ],
+    "giong": [
+     "ĐẠT",
+     "Điềm tĩnh, không từ đệm sáo rỗng; nhưng \"ngủ\" xuất hiện ba lần trong 12 từ (\"giấc ngủ\", \"phút ngủ\", \"ngủ sóng chậm\") nghe hơi cộm — gợi ý: \"Trong nửa đầu giấc ngủ, mười lăm phút là ngủ sóng chậm.\"",
+     ""
+    ],
+    "noi-cau": [
+     "ĐẠT",
+     "Vẫn nối được từ c5-c6, nhưng hơi lỏng: dàn ý viết \"trong ba mươi phút đó\", câu viết \"nửa đầu giấc ngủ\", nên người xem phải tự suy ra \"nửa đầu\" là nửa nào — gợi ý: \"Trong ba mươi phút đó có mười lăm phút ngủ sóng chậm.\"",
      ""
     ]
    }
@@ -417,29 +427,29 @@
    }
   },
   "c19": {
-   "key": "06a5199ef986e4ac2c7335cf896f02a8039f34cad738ea4ea2288dbc50b4008d",
+   "key": "8566b633bdd946f3013620bb56ae3db6f71efd724779b6755f15e10705f18666",
    "verdict": "PASS",
    "fails": 0,
-   "round": 1,
+   "round": 3,
    "rows": {
     "khop-dan-y": [
      "ĐẠT",
-     "Diễn lại ý #9 bằng câu đầy đủ (\"từ ba mươi phút trở lên thì phản xạ tụt rõ rệt\"), không thêm ý ngoài dàn ý.",
+     "Nói đúng ý dàn ý dòng 9 phần hai (\"ranh giới nằm ở ba mươi phút\") và FACTS §1 (\"ngủ trưa từ ba mươi phút trở lên thì điểm phản xạ tụt dưới cả lúc chưa ngủ\"); không có ý nào ngoài dàn ý.",
      ""
     ],
     "dung-du-kien": [
      "ĐẠT",
-     "FACTS §1: \"Naps of 30 minutes duration significantly impaired performance below the level of participants who did not take a nap\"; ranh giới ba mươi phút có trong FACTS.",
+     "Mốc ba mươi phút và việc phản xạ tụt đều có trong FACTS §1; \"tụt rõ rệt\" không vượt quá \"significantly impaired performance below the level of participants who did not take a nap\".",
      ""
     ],
     "nghe-mot-lan": [
      "ĐẠT",
-     "15 từ; \"ba mươi phút\" viết bằng chữ và trọn trong câu; c18 kết thúc bằng \"ba mươi phút.\" nên không có số bị cắt đôi sang câu này.",
+     "14 từ; \"mốc đó\" chỉ thẳng về \"ba mươi phút\" ở c18 ngay câu trước nên nghe một lần vẫn hiểu; con số ba mươi phút nằm trọn trong c18, không bị cắt đôi sang c19.",
      ""
     ],
     "noi-cau": [
      "ĐẠT",
-     "GÓP Ý: c19 lặp lại gần nguyên văn hai ý vừa nói ở c16 (\"phản xạ ... tụt rõ rệt\") và c18 (\"ba mươi phút\") trong khoảng ba câu; người xem nghe một lần dễ thấy lặp. Gợi ý: bỏ c19, hoặc đổi c19 thành câu nói khác điểm (ví dụ \"Sắp ba mươi phút thì chuyện đó đã xảy ra rồi\").",
+     "Câu lặp nguyên văn cụm \"phản xạ tụt rõ rệt\" đã nói ở c16 (\"Ngay sau khi dậy, phản xạ của người ta tụt rõ rệt\"), nên sau ba câu liên tiếp người xem phải nghe lại một ý cũ — gợi ý: \"Giấc ngủ trưa từ mốc đó trở lên thì phản xạ tụt xuống dưới cả lúc chưa ngủ.\"",
      ""
     ]
    }
@@ -777,24 +787,24 @@
    }
   },
   "c34": {
-   "key": "5aa55a9096dbe13a85b50672b5fdea3a9b91b37a76e5e02d4b626602fcb61786",
+   "key": "044ade242836e1fc22bccb998d8936b6fb63c990421881a46f29244896d43a0a",
    "verdict": "PASS",
    "fails": 0,
-   "round": 1,
+   "round": 4,
    "rows": {
     "khop-dan-y": [
      "ĐẠT",
-     "Đúng ý #15 (\"Lúc bạn dậy, lượng adenosine vừa tích lại — có thể chính nó làm não chậm lúc dậy\"), không thêm ý.",
+     "Câu \"Lúc bạn dậy, áp lực ngủ vẫn chưa được xả hết.\" nói đúng ý dàn ý đặt ở ô Bảng ý #15 (TREATMENT.md:81, \"Lúc bạn dậy, lượng adenosine vừa tích lại — có thể chính nó làm não chậm lúc dậy\"), và không thêm ý nào ngoài dàn ý: \"áp lực ngủ\" đã được đặt tên ở c31 là adenosine, câu chỉ nói phần đầu của ý #15, phần còn lại (\"có thể chính lượng đó làm não chậm\" + \"chưa ai chắc\") đã để cho c35–c36; cũng không đụng các mục FACTS bị cấm đã loại (thuốc, bệnh lý, ảnh hưởng tới đêm, ngủ sâu là nguyên nhân đã chốt).",
      ""
     ],
     "dung-du-kien": [
      "ĐẠT",
-     "FACTS §4 trích Van Dongen 2001: \"increased adenosine in the brain upon awakening may be the cause of sleep inertia\"; \"vừa tích lại\" nối với \"suốt lúc bạn thức\" ở c29 và c31 nên không hiểu là tích lại trong lúc ngủ.",
+     "Câu chỉ khẳng định một điều: lúc dậy, áp lực ngủ còn chưa được xả hết. Điều này nằm trong FACTS.md mục 4, dựa trên Van Dongen 2001 (FACTS.md:67): \"increased adenosine in the brain upon awakening may be the cause of sleep inertia\" — cũng khớp với mục 4 và với ý \"lượng adenosine vừa tích lại\" ở dàn ý. Câu không đưa thêm số, so sánh hay quan hệ nhân quả nào ngoài FACTS, và không phải điều FACTS cấm nói.",
      ""
     ],
     "nghe-mot-lan": [
      "ĐẠT",
-     "12 từ, không có số; c33 kết thúc bằng \"buồn ngủ.\" nên không có số bị cắt đôi.",
+     "Câu dài 10 từ (\"Lúc bạn dậy, áp lực ngủ vẫn chưa được xả hết\"), không có chữ số nào để phải viết bằng chữ, và không có con số nào bị cắt đôi với c33 (\"Nó bám vào một khía trên thụ thể...\") — c33 cũng không chứa số. Người xem nghe một lần là hiểu ngay.",
      ""
     ]
    }
@@ -1109,29 +1119,29 @@
    }
   },
   "c48": {
-   "key": "547f4020f34105333ab94f135fbc2c1ab3435fb87889160100e684c71fdfa0d4",
+   "key": "346fe6ced3eefa9392b1f6417a6dc95052275bc18fa1d8c87db5d9ec31ddbc96",
    "verdict": "PASS",
    "fails": 0,
-   "round": 1,
+   "round": 3,
    "rows": {
     "khop-dan-y": [
      "ĐẠT",
-     "Là phần bằng chứng của ý #20, khớp FACTS §6 \"Dùng trong phim\" và shot list 2:08, không thêm ý.",
+     "Đúng chỗ dàn ý dòng 20 (giữ giấc trưa ở mức ngủ nông) và là bằng chứng đúng theo FACTS §6; không thêm ý nào ngoài dàn ý.",
      ""
     ],
     "dung-du-kien": [
      "ĐẠT",
-     "FACTS §6 ghi rõ: bài 1999 cắt ngủ đúng lúc hai mươi phút nên \"tất cả đều được đánh thức từ giấc ngủ nhẹ\"; câu nói \"một thí nghiệm đo được\" nên không khai triển thành quy luật.",
+     "FACTS §6 tiêu đề nói thẳng \"giấc ngủ trưa ngắn buổi chiều thường kết ở giấc ngủ nhẹ\", và nơi lấy \"thí nghiệm đo được\" là Hayashi 1999 (giấc ngủ trưa 20 phút buổi chiều, đánh thức lúc 20 phút, đều từ giấc ngủ nhẹ); không vi phạm cấm \"đúng mười lăm phút là chuẩn\".",
      ""
     ],
     "nghe-mot-lan": [
      "ĐẠT",
-     "18 từ; \"hai mươi phút\" viết bằng chữ, trọn trong câu; c47 kết thúc bằng \"đủ.\" nên không có số bị cắt đôi.",
+     "15 từ; \"Một\" viết bằng chữ; số \"hai mươi phút\" nằm trọn trong c17, không bị cắt đôi sang c48.",
      ""
     ],
     "noi-cau": [
      "ĐẠT",
-     "GÓP Ý: \"hai mươi phút\" lặp lại ngay sau c47 trong hai câu liền; người xem nghe một lần dễ thấy lặp. Gợi ý: đổi c48 thành \"Một thí nghiệm đo được: giấc trưa buổi chiều kết ở giấc ngủ nhẹ.\"",
+     "Nối tự nhiên c47 → c48 → c49 (\"Hoặc...\"), nhưng c48 lặp gần như nguyên văn ý c47 (\"giữ giấc trưa ở mức ngủ nông\" / \"giấc ngủ trưa buổi chiều kết ở giấc ngủ nhẹ\") — gợi ý: \"Và một thí nghiệm đo được: hai mươi phút ngủ trưa buổi chiều kết ở giấc ngủ nhẹ.\"",
      ""
     ]
    }

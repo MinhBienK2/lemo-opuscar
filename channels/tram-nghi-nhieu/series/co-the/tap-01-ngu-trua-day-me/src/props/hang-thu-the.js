@@ -58,7 +58,7 @@ const bowl = (rad, depth, seed, amp = .15) => surface(36, 22, (u, v) => {
 
 // Một thụ thể: một protein có túi, miệng túi quay về phía khe. Phân tử
 // adenosine nằm trong miệng túi đó; cà phê chen vào đúng chỗ.
-export function thuThe({ size = .44, color = '#f0b93c', seed = 1 } = {}) {
+export function thuThe({ size = .44, color = '#f0b93c', rimColor = '#a8702f', seed = 1 } = {}) {
   const g = new THREE.Group();
   const m = inkRim(toon(color));
   const dark = toon('#3b2f6b');          // trong túi phải tối hơn miệng túi, nhưng
@@ -72,7 +72,7 @@ export function thuThe({ size = .44, color = '#f0b93c', seed = 1 } = {}) {
   g.add(mesh(lump(r * .74, r * .74, r * .07, seed + 5, .12), dark, [0, 0, -r * .16]));
   // vành miệng túi: một vòng dày lệch nhẹ, nét mực bám vào đó nên miệng
   // túi có đường viền rõ, không tan vào nền
-  const rim = mesh(new THREE.TorusGeometry(r * .95, r * .085, 8, 26), inkRim(toon('#a8702f'), { power: 1.6, amount: 1.1, max: .7 }), [0, 0, -r * .04]);
+  const rim = mesh(new THREE.TorusGeometry(r * .95, r * .085, 8, 26), inkRim(toon(rimColor), { power: 1.6, amount: 1.1, max: .7 }), [0, 0, -r * .04]);
   rim.rotation.z = seed * .7;
   rim.scale.set(1, 1, 1);
   g.add(rim);
@@ -112,13 +112,22 @@ export function hangThuThe({ n = 5, spacing = .44, size = .38 } = {}) {
     },
   }));
 
-  // các thụ thể mọc lên từ màng, xếp theo chiều ngang — cỡ khác nhau và
-  // nghiêng nghiêng, để không thành một hàng ống thẳng hàng giống nhau.
+  // các thụ thể mọc lên từ màng, xếp theo chiều ngang — cỡ khác nhau, màu
+  // khác nhau và nghiêng nghiêng. Năm cái túi giống hệt nhau đứng thành hàng
+  // đọc ra là một dãy vòng treo, không phải một hàng thụ thể thật.
   const doors = [];
   const rnd = (i, s) => Math.abs((Math.sin(i * 12.9898 + s * 78.233) * 43758.5453) % 1);
+  // bốn sắc độ khác nhau: một cái vàng, một cái cam sẫm, một cái nhạt, một
+  // cái cam. Cùng một sắc thì bao túi đứng cạnh nhau thành một khối đồng màu.
+  const COLORS = [
+    { c: '#f0b93c', rim: '#a8702f' },   // vàng
+    { c: '#e0763c', rim: '#96491f' },   // cam sẫm
+    { c: '#e6d089', rim: '#a08a44' },   // nhạt
+    { c: '#e8a04a', rim: '#9c5a28' },   // cam
+  ];
   for (let i = 0; i < n; i++) {
     const j = (k) => rnd(i, k);
-    const sz = size * (.88 + .26 * j(1));
+    const sz = size * (.76 + .48 * j(1));
     const x = (i - (n - 1) / 2) * spacing + (j(2) - .5) * .06;
     const y = .12 + (j(3) - .5) * .14;
     const tilt = (j(4) - .5) * .26;
@@ -127,7 +136,8 @@ export function hangThuThe({ n = 5, spacing = .44, size = .38 } = {}) {
     const bulge = mesh(lump(sz * .46, sz * .42, sz * .14, i * 3 + 5, .20), memMat, [x, y - .02, -.10]);
     bulge.rotation.z = tilt * .6;
     g.add(bulge);
-    const d = thuThe({ size: sz, color: i % 2 ? '#e8a04a' : '#f0b93c', seed: i * 5 + 1 });
+    const col = COLORS[i % COLORS.length];
+    const d = thuThe({ size: sz, color: col.c, rimColor: col.rim, seed: i * 5 + 1 });
     d.position.set(x, y, .02);
     d.rotation.z = tilt;
     d.rotation.y = (j(5) - .5) * .24;

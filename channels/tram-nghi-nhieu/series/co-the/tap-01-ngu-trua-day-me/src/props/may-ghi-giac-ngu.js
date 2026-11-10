@@ -7,6 +7,7 @@
 // các con số phút được in lại, nên nhìn là biết đang ở phút nào.
 import * as THREE from 'three';
 import { PAL, toon, canvasTex, rbox, mesh, clamp, lerp } from '../../../../../rig/kit.js';
+import { inkRim } from './_ink-rim.js';
 
 // ── mặt giấy: đồ thị vẽ bằng canvas, không phải ảnh chụp ───────────────
 // Trục ngang là thời gian (từ phút 0 tới phút 45); trên là đường bậc của các
@@ -49,7 +50,12 @@ function veSoPhut(g, w, h, minute) {
 }
 
 // đường bậc các giai đoạn ngủ và hai đường đo phản xạ, vẽ tới phút `minute`
-function veDuong(g, w, h, minute) {
+//
+// `chieu` = true là BẢN GHI BUỔI CHIỀU: một giấc ngủ trưa giữa ngày thì không có
+// đoạn ngủ sóng chậm nào — đường bậc đi xuống một nhịp rồi đi ngang ở mức ngủ
+// nông. Không tách riêng thì mốc hai mươi phút rơi đúng vào đoạn thấp nhất, và
+// hình thì nói ngược lời kể ("giữ giấc trưa ở mức ngủ nông, hai mươi phút").
+function veDuong(g, w, h, minute, chieu = false) {
   const X = min => min / SPAN * w;
   const top = h * .10, mid = h * .27, bot = h * .44;
   // cổng gạch đậm ở mốc ba mươi phút: chạy dọc cả mặt giấy
@@ -65,31 +71,48 @@ function veDuong(g, w, h, minute) {
     g.strokeStyle = 'rgba(200,40,70,.9)'; g.lineWidth = 4;
     g.beginPath(); g.moveTo(X(30), 0); g.lineTo(X(30), h); g.stroke();
   }
-  const steps = [[0, top], [2, mid], [8, bot], [23, bot], [27, mid], [30, mid],
-    [34, mid], [45, top]];
-  g.strokeStyle = '#2c3152'; g.lineWidth = 7; g.lineJoin = 'round';
-  g.beginPath();
-  steps.forEach(([min, y], i) => {
-    if (min > minute) return;
-    const x = X(min);
-    i ? g.lineTo(x, y) : g.moveTo(x, y);
-  });
-  g.stroke();
-  // phần ngủ sóng chậm được tô đậm: mười lăm phút, và nó NHỎ DẦN về cuối —
-  // sóng chậm mạnh nhất ở đầu giấc ngủ rồi giảm dần.
-  const g2 = Math.min(minute, 23);
-  if (g2 > 8) {
-    const grd = g.createLinearGradient(X(8), 0, X(23), 0);
-    grd.addColorStop(0, 'rgba(90,60,150,.66)'); grd.addColorStop(1, 'rgba(90,60,150,.16)');
-    g.fillStyle = grd;
+  if (chieu) {
+    // ── bản ghi buổi chiều: đi xuống một nhịp rồi đi ngang ở mức ngủ nông ──
+    const steps = [[0, top], [2, mid], [Math.max(3, minute), mid]];
+    g.strokeStyle = '#2c3152'; g.lineWidth = 7; g.lineJoin = 'round';
     g.beginPath();
-    g.moveTo(X(8), bot);
-    g.lineTo(X(8), bot - h * .30);
-    g.quadraticCurveTo(X(16), bot - h * .19, X(23), bot - h * .07);
-    g.lineTo(X(Math.min(g2, 23)), bot);
-    g.closePath(); g.fill();
-    g.strokeStyle = '#2c3152'; g.lineWidth = 5;
-    g.beginPath(); g.moveTo(X(8), bot); g.lineTo(X(g2), bot); g.stroke();
+    steps.forEach(([min, y], i) => {
+      if (min > minute) return;
+      const x = X(min);
+      i ? g.lineTo(x, y) : g.moveTo(x, y);
+    });
+    g.stroke();
+    // dòng chữ trên giấy: bản ghi này là của buổi chiều
+    g.fillStyle = '#2f7f8f'; g.font = '700 46px "Be Vietnam Pro"'; g.textAlign = 'left';
+    g.fillText('BUỔI CHIỀU', X(9), h * .62);
+  } else {
+    const steps = [[0, top], [2, mid], [4, bot], [15, bot], [18, mid], [30, mid],
+      [34, mid], [45, top]];
+    g.strokeStyle = '#2c3152'; g.lineWidth = 7; g.lineJoin = 'round';
+    g.beginPath();
+    steps.forEach(([min, y], i) => {
+      if (min > minute) return;
+      const x = X(min);
+      i ? g.lineTo(x, y) : g.moveTo(x, y);
+    });
+    g.stroke();
+    // phần ngủ sóng chậm được tô đậm: MƯỜI LĂM PHÚT, và chúng nằm ở NỬA ĐẦU
+    // giấc ngủ (từ phút 0 tới phút 15) — mạnh nhất ở đầu rồi nhỏ dần.
+    const g2 = Math.min(minute, 15);
+    if (g2 > 0) {
+      const grd = g.createLinearGradient(X(0), 0, X(15), 0);
+      grd.addColorStop(0, 'rgba(90,60,150,.66)'); grd.addColorStop(1, 'rgba(90,60,150,.16)');
+      g.fillStyle = grd;
+      g.beginPath();
+      g.moveTo(X(0), bot);
+      g.lineTo(X(0), bot - h * .30);
+      if (g2 >= 15) g.quadraticCurveTo(X(7), bot - h * .19, X(15), bot - h * .05);
+      else g.quadraticCurveTo(X(g2 * .47), bot - h * .19, X(g2), bot - h * .05);
+      g.lineTo(X(g2), bot);
+      g.closePath(); g.fill();
+      g.strokeStyle = '#2c3152'; g.lineWidth = 5;
+      g.beginPath(); g.moveTo(X(0), bot); g.lineTo(X(g2), bot); g.stroke();
+    }
   }
   // hai đường đo phản xạ (dưới): trước khi ngủ thì phản xạ còn nguyên, sau
   // khi ngủ thì phản xạ tụt hẳn xuống.
@@ -196,10 +219,11 @@ export function mayGhiGiacNgu() {
   needle.add(mesh(rbox(.008, .062, .006, .002), toon('#c0263f'), [0, .028, 0]));
   needle.add(mesh(new THREE.CylinderGeometry(.010, .010, .008, 12), toon('#2c3152'), [0, 0, .002], { rot: [Math.PI / 2, 0, 0] }));
   // kim chỉ phút: 0 ở trên, quay theo chiều kim đồng hồ
-  const setMinute = (m = 0) => {
+  // `chieu` = true: bản ghi của giấc ngủ trưa buổi chiều (không có sóng chậm)
+  const setMinute = (m = 0, chieu = false) => {
     const a = -Math.PI / 2 + (clamp(m, 0, 45) / 45) * (Math.PI * 5 / 4);
     needle.rotation.z = a - Math.PI / 2;
-    veDo(m);
+    veDo(m, chieu);
   };
   // hai nút vặn
   for (const x of [0.06, 0.16]) {
@@ -218,30 +242,54 @@ export function mayGhiGiacNgu() {
   const paper = mesh(geo, toon('#cfc6ae', { map: tex, side: THREE.DoubleSide }), [0, 0.012, 0.21]);
   g.add(paper);
 
-  // ── cánh bút: một cột, một thanh ngang, đầu bút chạm mặt giấy ──
+  // ── cánh bút: một cây BÚT BI thật, treo trên cột đứng ──
   // Cánh bút chạy theo phút đang đo: nó là thứ viết đồ thị lên giấy. Nó đứng
   // ở mép trái của dải giấy, không che các con số phút in ở mép phải.
+  //
+  // Trước đây đây là một ống xám uốn khúc với đầu đỏ nhọn: đọc ra là một
+  // mũi tên đỏ, không phải cây bút. Giờ là bút bi: thân trắng, một đai đỏ
+  // ở đầu, nòi sắc nhỏ chạm mặt giấy.
   const pen = new THREE.Group(); pen.position.set(-.235, 0.012, 0.235); g.add(pen);
-  pen.add(mesh(new THREE.CylinderGeometry(0.014, 0.016, 0.20, 10), metal, [0, 0.10, 0]));
-  pen.add(mesh(new THREE.CylinderGeometry(0.010, 0.010, 0.16, 8), metal, [0.075, 0.185, 0], { rot: [0, 0, Math.PI / 2] }));
-  pen.add(mesh(new THREE.ConeGeometry(0.016, 0.05, 10), red, [0.15, 0.160, 0], { rot: [0, 0, Math.PI] }));
+  // cột đứng: mảnh, là cái giá đỡ chứ không phải cây bút
+  pen.add(mesh(new THREE.CylinderGeometry(0.0065, 0.008, 0.200, 8), metal, [0, 0.100, 0]));
+  // kẹp giữ bút, dính vào cột
+  pen.add(mesh(rbox(0.038, 0.022, 0.024, 0.005), metal, [0.020, 0.175, 0]));
+  // thân bút: nghiêng, đầu trên trong kẹp, đầu dưới chạm mặt giấy
+  pen.add(mesh(new THREE.CylinderGeometry(0.0135, 0.0135, 0.160, 14), cream, [0.078, 0.099, 0], { rot: [0, 0, 0.50] }));
+  // đai đỏ ở đầu bút
+  pen.add(mesh(new THREE.CylinderGeometry(0.0150, 0.0150, 0.020, 14), red, [0.048, 0.155, 0], { rot: [0, 0, 0.50] }));
+  // nòi: nhỏ, sắc, màu mực — không phải một mũi tên đỏ
+  pen.add(mesh(new THREE.ConeGeometry(0.0075, 0.026, 12), dark, [0.122, 0.018, 0], { rot: [0, 0, 0.50 + Math.PI] }));
 
   // ── cổng ba mươi phút: một chốt đỏ đứng ở vạch ba mươi phút ──
-  const gate = mesh(rbox(0.03, 0.06, 0.05, 0.006), red, [-.15, 0.045, 0.21 + LMAX * (1 - 30 / 45)]);
+  // Chốt này phải có viền mực và một mảnh giấy ghi "30" nằm ngửa lên mặt
+  // chốt. Một hộp đỏ trơn không viền đọc ra là một vật lạ vô nghĩa bỏ quên
+  // trên giấy, không phải cái cổng đánh dấu mốc ba mươi phút.
+  const gateTex = canvasTex(128, 96, (c, w, h) => {
+    c.fillStyle = '#f6efdd'; c.fillRect(0, 0, w, h);
+    c.strokeStyle = '#c0263f'; c.lineWidth = 7; c.strokeRect(4, 4, w - 8, h - 8);
+    c.fillStyle = '#c0263f'; c.font = '900 58px "Be Vietnam Pro"';
+    c.textAlign = 'center'; c.textBaseline = 'middle';
+    c.fillText('30', w / 2, h / 2 + 3);
+  });
+  const gate = new THREE.Group();
+  gate.position.set(-.15, 0.045, 0.21 + LMAX * (1 - 30 / 45));
+  gate.add(mesh(rbox(0.030, 0.060, 0.050, 0.006), inkRim(toon(PAL.red)), [0, 0, 0]));
+  gate.add(mesh(new THREE.PlaneGeometry(0.050, 0.038), toon('#ffffff', { map: gateTex, side: THREE.DoubleSide }), [0, 0.031, 0], { rot: [-Math.PI / 2, 0, 0] }));
   g.add(gate);
 
   // ── vẽ lại đồ thị tới phút đang đo ──
   // Nền giấy giữ riêng (hạt giấy, lưới, thang phút), đồ thị vẽ đè lên nền:
   // đổi phút thì chỉ vẽ lại mấy nét, không vẽ lại cả tờ giấy.
-  let chartMinute = 45;
-  const veDo = (m) => {
+  let chartMinute = 45, chartChieu = false;
+  const veDo = (m, chieu = false) => {
     const mm = Math.round(clamp(m, 0, 45));
-    if (mm === chartMinute) return;
-    chartMinute = mm;
+    if (mm === chartMinute && chieu === chartChieu) return;
+    chartMinute = mm; chartChieu = chieu;
     const { bg, g: cg, W: bw, H: bh } = tex.userData;
     cg.clearRect(0, 0, bw, bh);
     cg.drawImage(bg, 0, 0);
-    veDuong(cg, bw, bh, mm);
+    veDuong(cg, bw, bh, mm, chieu);
     veSoPhut(cg, bw, bh, mm);
     tex.needsUpdate = true;
     pen.position.z = 0.21 + LMAX * (1 - mm / 45);

@@ -72,11 +72,12 @@ const skinTex = seed => canvasTex(1024, 512, (g, w, h) => {
       k = Math.max(k * .90, fis * .80);
       if (k <= .01) continue;
       const i = (y * w + x) * 4;
-      // Rãnh tô vừa đủ: tô đậm quá thì ở góc nhìn nghiêng, mỗi vệt rãnh bị
-      // nén lại thành một mảnh nhọn và mép não thành dải răng cưa.
-      d[i] = d[i] * (1 - k) + 156 * k;
-      d[i + 1] = d[i + 1] * (1 - k) + 92 * k;
-      d[i + 2] = d[i + 2] * (1 - k) + 104 * k;
+      // Rãnh tô ĐẬM: não phải đọc ra là một hình vẽ có nếp, không phải một
+      // quả bóng sơn dầu. Tô vừa thì rãnh chỉ là vết bóng mờ, và cả khối
+      // não mềm nhũn.
+      d[i] = d[i] * (1 - k) + 128 * k;
+      d[i + 1] = d[i + 1] * (1 - k) + 66 * k;
+      d[i + 2] = d[i + 2] * (1 - k) + 78 * k;
     }
   }
   g.putImageData(img, 0, 0);
@@ -99,7 +100,7 @@ export function khoiMoNao({ w = 1.34, d = 1.02, h = .58, seed = 3 } = {}) {
   const skin = toon('#ffffff', { map: skinTex(seed), side: THREE.DoubleSide, grad: gradNao });
   const Rx = w / 2, Rz = d / 2, Ry = h * .5;
 
-  const AMP = .042;      // biên độ nếp cuộn
+  const AMP = .052;      // biên độ nếp cuộn
   const FIS = .110;      // độ sâu rãnh giữa hai bán cầu
 
   // ── hình gốc: quả trứng dẹt đáy, hẹp ở trán ─────────────────────────
@@ -162,7 +163,9 @@ export function khoiMoNao({ w = 1.34, d = 1.02, h = .58, seed = 3 } = {}) {
   // mép của nó ở góc nhìn nghiêng thành một dải răng cưa, đọc ra là lỗi
   // render chứ không phải tiểu não. Vì vậy lá ở đây chỉ gợi ý bằng độ
   // lõm rất nhẹ, còn khối vẫn tròn.
-  const cbSkin = toon('#d0927c', { map: skinTex(seed + 3), side: THREE.DoubleSide, grad: gradNao });
+  // tiểu não phải cùng tông với vỏ não: màu cam-đỏ lọt ra ở mép não đọc ra
+  // như một lát thịt dính bên hông, tách khỏi mặt não. Cùng tông, khác hình.
+  const cbSkin = toon('#fdf3ee', { map: skinTex(seed + 3), side: THREE.DoubleSide, grad: gradNao });
   const cbR = [Rx * .46, Ry * .56, Rz * .44];
   const cb = mesh(surface(56, 38, (u, v) => {
     const phi = u * Math.PI * 2, th = (1 - v) * Math.PI;

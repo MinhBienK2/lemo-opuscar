@@ -14,8 +14,13 @@ export function tachCaPhe({ color = '#e8dcc4', drink = '#4a2a12', saucer = true,
     [.070, .162], [.066, .166], [.062, .160], [.066, .145], [.070, .10], [.066, .05], [.060, .014], [0, .012]]
     .map(([x, y]) => new THREE.Vector2(x, y));
   g.add(mesh(new THREE.LatheGeometry(prof, 28), body, [0, 0, 0]));
-  // quai
-  g.add(mesh(new THREE.TorusGeometry(.042, .012, 10, 22, Math.PI * 1.25), body, [.080, .085, 0], { rot: [0, Math.PI / 2, -0.35] }));
+  // Quai: một vòng C THẬT, nằm trong mặt phẳng thẳng đứng của tách, nhô ra
+  // ngoài thân. Trước đây nó là một vòng xoắn áp sát thân — đọc ra là một
+  // nét xoắn vẽ trên tách, không phải quai.
+  // Quai là một vòng C nằm trong mặt phẳng chứa trục tách. Nhìn dọc theo
+  // hướng quai thì nó thành một nét xoắn vẽ trên thân — nên phim quay cả tách
+  // cho quai luôn nằm ngang với ống kính (xem film.js).
+  g.add(mesh(new THREE.TorusGeometry(.038, .011, 10, 26, Math.PI * 1.42), body, [.086, .086, 0], { rot: [0, 0, -Math.PI * .71] }));
   if (empty) {
     // tách rỗng: đáy tách thấp hơn miệng, và không có váng nào ở miệng
     g.add(mesh(new THREE.CircleGeometry(.058, 28), toon('#e9e3d6'), [0, .052, 0], { rot: [-Math.PI / 2, 0, 0] }));

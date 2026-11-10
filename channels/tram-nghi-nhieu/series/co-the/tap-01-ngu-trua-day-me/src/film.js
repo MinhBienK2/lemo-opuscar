@@ -2,10 +2,17 @@
 // Mỗi nhát bám vào câu nó mang (V.L[id].t0/t1) nên nhịp quay đúng với lời kể.
 import * as THREE from 'three';
 import { film, label, subtitle, toScreen, markBeat, cardWindow } from '../../../../rig/render.js';
-import { PAL, keys, seg, ss, eio, eo, lerp, clamp } from '../../../../rig/kit.js';
+import { PAL, keys, seg, ss, eio, eo, lerp, clamp, mulberry } from '../../../../rig/kit.js';
 import { build } from './timeline.js';
 import { loadVoice } from '../../../../rig/voice.js';
 import { buildPhongNgu, buildKhongMao, buildKhe } from './set.js';
+
+// Mọi vân vải/vân gỗ vẽ tay trong tập này đều lấy số ngẫu nhiên từ Math.random.
+// Để yên vậy thì mỗi lần render cho ra một chút khác: ảnh khung mẫu đổi
+// fingerprint, phải chấm lại toàn bộ 52 nhát, và cảnh "giống nhau" giữa hai
+// lần render thành những cảnh khác nhau. Gieo số trước khi dựng vật: cùng
+// mã nguồn → cùng khung hình.
+Math.random = mulberry(20261110);
 
 // Chữ tiếng Việt trong các texture vẽ tay phải có đúng dấu: nạp font TRƯỚC khi
 // dựng vật, nếu không canvas sẽ vẽ bằng font dự phòng không có dấu ("DẬY LÊN"
@@ -72,12 +79,12 @@ const SHOTS = [
   sh('N1', 'c6', 30, () => off(A.recFace, .10, .22, .74), A.recFace, [.01, 0, -.02]), // đẩy vào mặt máy: đồng hồ nhỏ và hai nút
   sh('N1', 'c7', 32, () => off(A.paper15, .62, .46, .06), A.paper15, [0, 0, -.03]), // mặt giấy: vùng ngủ sóng chậm được tô đậm
   // ── N2 · trong não: sóng chậm dồn lên rồi giảm dần ──
-  sh('N2', 'c8', 32, [-.15, 1.05, 2.35], [-.80, -.12, -.05], [0, 0, -.05]),   // nếp não phồng lên rồi xẹp dần
+  sh('N2', 'c8', 30, [-.42, .72, 1.62], [-.82, .02, -.02], [0, 0, -.05]),   // nếp não phồng lên rồi xẹp dần (máy sát vào đỉnh não)
   // ── N1 · chuông cắt ngang giấc ngủ ──
   sh('N1', 'c9', 30, () => off(A.clockFace, 1.00, .55, 1.22), A.clockTop, [0, 0, -.03]), // chuông reo, mặt đồng hồ rung
   // ── N2 · cách kể quen thuộc: não chưa kịp chạy lại ──
-  sh('N2', 'c10', 30, [-.25, 1.20, 2.15], [-.80, -.06, -.05], [0, 0, -.04]),  // tín hiệu bò trên nếp não
-  sh('N2', 'c11', 26, [-.60, 1.00, 1.70], [-.80, -.02, -.02], [-.02, 0, -.03]), // gần hơn: tín hiệu vẫn bò
+  sh('N2', 'c10', 28, [-.50, .92, 1.62], [-.84, .04, -.02], [0, 0, -.04]),  // tín hiệu bò trên nếp não (máy sát vào vùng đỉnh có đốm)
+  sh('N2', 'c11', 26, [-.66, .68, 1.22], [-.84, .08, -.02], [-.02, 0, -.03]), // gần hơn: tín hiệu vẫn bò
   // ── N2 · các nghiên cứu chia làm đôi ──
   sh('N2', 'c12', 40, [0.00, .72, 2.25], [0.00, -.13, -.02], [0, 0, -.04]),     // hai bản não cạnh nhau trên bàn
   sh('N2', 'c13', 32, [-1.75, 1.15, 2.75], [-.10, -.20, 0], [0, 0, -.03]),    // hai bản não cạnh nhau: bản sáng và bản tối
@@ -99,7 +106,7 @@ const SHOTS = [
   sh('N1', 'c25', 26, () => off(A.dial, .12, .16, .54), A.dial, [0, 0, -.02]),  // kim vẫn chùy: phép đo nói ngược lại
   sh('N1', 'c26', 30, () => off(() => mid(A.green, A.dial), .14, .24, .70), () => mid(A.green, A.dial), [0, 0, -.02]), // đèn xanh sáng, kim chùy — hai chiều ngược nhau
   // ── N2 → N3 · vào bên trong ──
-  sh('N2', 'c27', 32, [-1.30, .95, 2.15], [-.80, -.04, -.05], [0, 0, -.10]),  // đẩy vào trong khối mô não
+  sh('N2', 'c27', 32, [-1.05, .60, 1.35], [-.80, -.10, -.05], [0, 0, -.18]),  // đẩy vào trong khối mô não
   // N3 · khe giữa hai tế bào: củ tế bào ở gần máy, hàng thụ thể ở xa.
   // Máy cận thì đứng ngay trong khe, nhìn thẳng vào hàng khía.
   sh('N3', 'c28', 48, [-.35, .62, -1.18], [.02, .06, 1.25], [0, 0, -.05]),  // rộng: khe giữa hai tế bào
@@ -121,12 +128,12 @@ const SHOTS = [
   // ── N1 · thí nghiệm có cà phê ──
   sh('N1', 'c41', 46, [1.45, 1.20, 2.30], [.15, .56, 1.00], [0, 0, -.04]),   // hai tách, hai bảng đo: kim chạy ngược chiều
   // ── N1 · vì sao hay xảy ra đúng buổi chiều ──
-  sh('N1', 'c42', 34, [-.10, 1.86, 1.45], [-.28, 1.86, .12], [0, 0, -.04]),  // đồng hồ 24 giờ trên tường, dải buổi chiều
+  sh('N1', 'c42', 34, [-1.52, 1.96, 1.12], [-0.26, 1.84, .10], [0, 0, -.04]),  // đồng hồ 24 giờ trên tường, dải buổi chiều — máy lệch hẳn sang trái, mặt đồng hồ thành hình bầu dục chứ không phải hình tròn hoàn hảo
   sh('N1', 'c43', 34, [-.02, 1.92, 1.02], [-.27, 1.79, .12], [0, 0, -.03]),  // cận: kim đen chỉ buổi chiều
   sh('N1', 'c44', 38, [-1.75, 1.35, 2.70], [-.75, .55, 1.20], [0, 0, -.03]), // góc bàn trống: không có gì để ăn
   // ── N2 · đừng rơi quá sâu ──
-  sh('N2', 'c45', 32, [-.55, 1.05, 2.30], [-.80, -.14, -.05], [0, 0, -.05]),  // khối mô não, nếp chỉ thở nhẹ
-  sh('N2', 'c46', 30, [-.95, .95, 1.85], [-.80, -.04, -.05], [0, 0, -.04]),  // nếp não không sâu xuống
+  sh('N2', 'c45', 30, [-.62, .42, 2.40], [-.80, -.14, -.05], [0, 0, -.05]),  // khối mô não, nếp chỉ thở nhẹ
+  sh('N2', 'c46', 30, [-.60, .20, .92], [-.96, -.10, -.02], [0, 0, -.04]),  // nếp não không sâu xuống: cận, khung chỉ còn vài nếp
   // ── N1 · giữ giấc trưa ở mức ngủ nông ──
   sh('N1', 'c47', 30, () => off(A.paper20, .34, .72, .34), A.paper20, [0, 0, -.03]), // mặt giấy: hai mươi phút, đường vẫn ở mức nông
   sh('N1', 'c48', 28, () => off(A.boardFace, .05, .32, 1.30), A.boardFace, [0, 0, -.03]), // bảng đo: đèn vẫn sáng gần hết
@@ -157,20 +164,25 @@ const CARDS = [
   { id: 'benthay', text: 'BÊN THẤY',         at: () => LP(MAO.chunk, -.42, .10, .28).toArray(), lines: ['c13'], size: 30, anchor: 'khối mô não' },
   { id: 'benkhongthay', text: 'BÊN KHÔNG THẤY', at: () => LP(MAO.chunk2, .42, .10, .28).toArray(), lines: ['c13'], size: 30, anchor: 'khối mô não' },
   { id: 'phanxa',  text: 'PHẢN XẠ',           at: () => LP(PHG.board.lamps[7], 0, 0, 0).toArray(), lines: ['c16'], size: 32, anchor: 'bảng đo phản xạ' },
-  { id: 'cong30',  text: 'BA MƯƠI PHÚT',      at: () => LP(PHG.rec.paper, .181, 0, .60 * (1 - 30 / 45)).toArray(), lines: ['c18'], size: 30, hold: 3.2, anchor: 'máy ghi giấc ngủ' },
-  { id: 'nuat',    text: 'NỬA TIẾNG',         at: () => LP(PHG.clock.face, 0, 0, .05).toArray(), lines: ['c21'], size: 30, anchor: 'đồng hồ báo thức' },
+  { id: 'cong30',  text: 'BA MƯƠI PHÚT',      at: () => LP(PHG.rec.paper, .181, 0, .60 * (1 - 30 / 45)).toArray(), lines: ['c18'], size: 30, hold: 3.2, dy: -46, anchor: 'máy ghi giấc ngủ' },
+  { id: 'nuat',    text: 'NỬA TIẾNG',         at: () => LP(PHG.clock.face, .10, .11, .05).toArray(), lines: ['c21'], size: 30, anchor: 'đồng hồ báo thức' },
   { id: 'minhthay',text: 'MÌNH THẤY',         at: () => LP(PHG.board.green, 0, 0, 0).toArray(), lines: ['c23'], size: 30, anchor: 'bảng đo phản xạ' },
   { id: 'tudanhgia',text:'TỰ ĐÁNH GIÁ',       at: () => LP(PHG.board.button, 0, 0, .02).toArray(), lines: ['c24'], size: 28, anchor: 'bảng đo phản xạ' },
   { id: 'lodo',    text: 'LỜ ĐỜ',             at: () => LP(PHG.board.needle, 0, .02, .02).toArray(), lines: ['c26'], size: 32, anchor: 'bảng đo phản xạ' },
   { id: 'nao',     text: 'NÃO',               at: () => LP(MAO.chunk, -.50, .14, .24).toArray(), lines: ['c27'], size: 32, anchor: 'khối mô não' },
-  { id: 'nao45',   text: 'NÃO',               at: () => LP(MAO.chunk, -.46, .10, .30).toArray(), lines: ['c45', 'c46'], size: 32, anchor: 'khối mô não' },
+  { id: 'nao45',   text: 'NÃO',               at: () => LP(MAO.chunk, -.20, .30, .10).toArray(), lines: ['c45', 'c46'], size: 32, anchor: 'khối mô não' },
   { id: 'nao51',   text: 'NÃO',               at: () => LP(MAO.chunk, -.46, .10, .30).toArray(), lines: ['c51'], size: 32, anchor: 'khối mô não' },
   { id: 'adeno',   text: 'ADENOSINE',         at: () => KHE.dockPos(0).toArray(), lines: ['c30'], size: 30, anchor: 'phân tử adenosine' },
   { id: 'thuthe',  text: 'THỤ THỂ',           at: () => KHE.rim1.toArray(), lines: ['c33'], size: 30, anchor: 'hàng thụ thể' },
   { id: 'caphe',   text: 'CAFFEINE',         at: () => KHE.cafePos(.18).toArray(), lines: ['c37'], size: 30, anchor: 'phân tử caffeine' },
+  // c39: cà phê chen vào đúng chỗ adenosine muốn bám. Thẻ "CAFFEINE" chỉ vào
+  // chính phân tử đang chen, không vào túi: người xem phải thấy AI chen vào.
+  { id: 'cafe39',  text: 'CAFFEINE',         at: (tt) => KHE.cafePos(.18 + .82 * clamp((tt - V.L.c39.t0) / (V.L.c39.t1 - V.L.c39.t0))).toArray(), lines: ['c39'], size: 28, anchor: 'phân tử caffeine' },
+  // c40: adenosine bị đẩy ra khỏi túi — thẻ chỉ vào nó đang trôi ra khe.
+  { id: 'adeno40', text: 'ADENOSINE',        at: (tt) => KHE.pushedPos(clamp((tt - V.L.c40.t0) / 1.4)).toArray(), lines: ['c40'], size: 28, anchor: 'phân tử adenosine' },
   { id: 'cocaphe', text: 'CÀ PHÊ TRONG TÁCH',  at: () => LP(PHG.mug, 0, .16, 0).toArray(), lines: ['c41'], size: 28, anchor: 'tách cà phê' },
   { id: 'buoichieu',text:'BUỔI CHIỀU',        at: () => LP(PHG.clock24, -.187, -.187, .012).toArray(), lines: ['c42'], size: 30, anchor: 'đồng hồ 24 giờ treo tường' },
-  { id: 'nhipngay',text: 'NHỊP NGÀY',         at: () => LP(PHG.clock24, -.245, -.105, .030).toArray(), lines: ['c43'], size: 30, anchor: 'đồng hồ 24 giờ treo tường' },
+  { id: 'nhipngay',text: 'TỈNH TÁO TỤT',         at: () => LP(PHG.clock24, -.245, -.105, .030).toArray(), lines: ['c43'], size: 30, anchor: 'đồng hồ 24 giờ treo tường' },
   { id: 'khoongan',text: 'KHÔNG ĂN',          at: () => A.plate(), lines: ['c44'], size: 30, anchor: 'đĩa rỗng' },
   { id: 'ngunong', text: 'HAI MƯỜI PHÚT',      at: () => LP(PHG.rec.paper, .181, 0, .60 * (1 - 20 / 45)).toArray(), lines: ['c47'], size: 30, anchor: 'máy ghi giấc ngủ' },
   { id: 'ngunhe',  text: 'PHẢN XẠ TỐT',      at: () => LP(PHG.board.lamps[7], 0, 0, 0).toArray(), lines: ['c48'], size: 28, anchor: 'bảng đo phản xạ' },
@@ -180,16 +192,16 @@ for (const C of CARDS) Object.assign(C, cardWindow(C, V));
 
 // độ sáng của đèn tập trung theo từng câu: nhát cận cảnh sáng mạnh, nhát toàn cảnh để nhẹ lại
 const FOCUS = {
-  c1: 1.0, c2: 2.2, c3: 2.0, c4: 1.2, c5: 1.8, c6: 2.0, c7: 1.1, c8: 2.0,
-  c9: 2.4, c10: 2.0, c11: 2.2, c12: 1.6, c13: 2.2, c14: 1.4, c15: 1.8,
-  c16: 2.4, c17: 2.4, c18: 1.1, c19: 1.0, c20: 1.8, c21: 2.2, c22: 1.4,
+  c1: 1.0, c2: 2.2, c3: 2.0, c4: 2.4, c5: 1.8, c6: 2.0, c7: 1.1, c8: 2.0,
+  c9: 2.4, c10: 2.0, c11: 2.2, c12: 1.6, c13: 2.2, c14: 1.4, c15: 1.8,  c16: 2.4, c17: 2.4, c18: 1.1, c19: 1.0, c20: 1.8, c21: 2.2, c22: 2.0,
   c23: 2.4, c24: 2.2, c25: 2.4, c26: 2.0, c27: 1.8, c28: 1.8, c29: 2.0,
   c30: 2.4, c31: 1.6, c32: 2.2, c33: 2.4, c34: 1.8, c35: 2.2, c36: 2.4,  c37: 2.2, c38: 1.8, c39: 2.2, c40: 2.4, c41: 1.8, c42: 1.6, c43: 2.2,
   c44: 1.6, c45: 1.4, c46: 2.0, c47: 1.1, c48: 2.0, c49: 2.2, c50: 1.6,
   c51: 2.0, c52: 1.2,
 };
 // hạ sáng đèn phòng ở nhát nào cần góc xa thật tối (nhìn thấy khác hẳn nhát trước)
-const DIM = { c4: .78, c9: .86, c13: .86, c14: .85, c22: .72, c34: .80, c45: .82, c52: .78 };
+// c22 không hạ nữa: câu nói là "phòng ấm lên", hạ sáng nó lại thành phòng lạnh.
+const DIM = { c4: 1.0, c9: .86, c13: .86, c14: .85, c22: .84, c34: .80, c45: .82, c52: .78 };
 
 function shotAt(t) {
   for (let i = 0; i < SHOTS.length; i++) {
@@ -231,17 +243,23 @@ const EV = [...V.ev];                        // mỗi câu kể là một sự k
 const ev = (type, t, extra = {}) => EV.push({ type, t: +t.toFixed(3), ...extra });
 const amb = (kind, t0, t1) => ev('amb', t0, { kind, t1: +t1.toFixed(3) });
 
-// không khí theo nơi chốn: phòng buổi chiều, không gian của não, khe tế bào
-amb('room', 0, 25.40);
+// không khí theo nơi chốn: phòng buổi chiều, không gian của não, khe tế bào.
+// Mỗi nhát não (N2) nghe nền não, khe tế bào (N3) nghe nền khe — ranh giới
+// đặt theo đúng mốc đầu nhát của mỗi nơi chốn.
+amb('room', 0, 19.08);
+amb('low', 19.08, 22.40);
+amb('room', 22.40, 25.40);
 amb('low', 25.40, 37.64);
 amb('room', 37.64, 72.88);
 amb('low', 72.88, 75.70);
 amb('hum', 75.70, 112.57);
-amb('room', 112.57, 128.83);
-amb('low', 128.83, 130.54);
+amb('room', 112.57, 126.19);
+amb('low', 126.19, 130.54);
 amb('room', 130.54, 138.92);
 amb('hum', 138.92, 143.26);
-amb('room', 143.26, V.end);
+amb('room', 143.26, 144.53);
+amb('low', 144.53, 146.98);
+amb('room', 146.98, V.end);
 
 // nhạc: mỗi chặng bắt đầu ở nhát của nó
 for (const [t, cue] of [[0, 'A'], [11.30, 'B'], [30.64, 'C'], [42.03, 'D'],
@@ -250,6 +268,7 @@ for (const [t, cue] of [[0, 'A'], [11.30, 'B'], [30.64, 'C'], [42.03, 'D'],
 
 // foley: chỉ khi vật thể thật sự kêu
 ev('alarm', 2.95, { v: .45 });            // chuông báo thức reo lần đầu
+ev('alarm', 3.70, { v: .45 });            // chuông vẫn reo tới lúc tay chặn
 ev('button', 4.60, { v: .40 });           // tay bấm chặn chuông
 ev('cloth_rustle', 5.60, { v: .35 });     // ngồi dậy, chăn nhàu
 ev('cup_set', 7.20, { v: .40 });          // tách cà phê đặt xuống
@@ -279,7 +298,7 @@ ev('cup_set', 113.40, { v: .35 });
 ev('paper_slide', 130.70, { v: .30 });    // mặt giấy của giấc ngủ hai mươi phút
 ev('blip_up', 139.20, { v: .30 });        // phân tử ngồi chặn trong khía
 ev('cup_set', 143.60, { v: .35 });        // tách cà phê đặt xuống
-ev('button', 145.00, { v: .40 });         // tay tắt chuông
+ev('blip_up', 145.20, { v: .22 });        // tín hiệu trên nếp não vẫn đang bò
 ev('step_soft', 147.60, { v: .35 });      // bước chân ra khỏi giường
 
 // ── mốc nhịp: mỗi câu một điểm trên khung ────────────────────────────────
@@ -365,14 +384,29 @@ window.render = t => {
     // có đèn riêng thì đồ thị không đọc được
     PHG.paperLit(id === 'c7' || id === 'c18' || id === 'c19' || id === 'c47' ? 1 : 0);
     // phút đang đo trên mặt giấy: mỗi câu một mốc, và đồ thị vẽ tới đúng mốc đó
-    PHG.rec.setMinute(id === 'c7' ? 15 : id === 'c18' || id === 'c19' ? 30 : id === 'c47' ? 20 : 45);
-    PHG.ring(t, (id === 'c2' && t > V.L.c2.t0) || (id === 'c9' && t > V.L.c9.t0) ? 1 : 0);
+    PHG.rec.setMinute(id === 'c7' ? 15 : id === 'c18' || id === 'c19' ? 30 : id === 'c47' ? 20 : 45, id === 'c47');
+    // chuông chạy tới đúng lúc tay bấm chặn (4,60) thì mới im: trước đó đồng hồ
+    // rung mà không có tiếng thì hình nói dối người xem
+    PHG.ring(t, (id === 'c2' && t > V.L.c2.t0 && t < 4.60) || (id === 'c9' && t > V.L.c9.t0) ? 1 : 0);
     const [lamps, needle, green] = boardState(id, t);
     PHG.measure(lamps, needle, green);
     // bảng thứ hai (thí nghiệm cà phê): người uống cà phê thì kim đi thẳng,
     // người kia thì kim tụt
     if (id === 'c41') PHG.measure2(.85, .95, 0); else PHG.measure2(0, 0, 0);
     handFor(id, t);
+    // ── quay tách cho quai đọc ra là quai ─────────────────────────────────
+    // Quai tách nằm trong một mặt phẳng đứng. Nhìn DỌC theo hướng quai thì
+    // nó thành một nét xoắn vẽ thẳng lên thân tách — không đọc ra là quai.
+    // Thân tách thì tròn xoay, quay nó không đổi gì cả, nên cứ quay theo ống
+    // kính: quai luôn nằm ngang với khung, đọc ra là một vòng C bám vào tách.
+    {
+      const vd = new THREE.Vector3(s.look[0] - s.pos[0], 0, s.look[2] - s.pos[2]);
+      if (vd.lengthSq() > 1e-6) {
+        vd.normalize();
+        PHG.mug.rotation.y = Math.atan2(vd.x, vd.z);
+        PHG.mug2.rotation.y = PHG.mug.rotation.y + .30;
+      }
+    }
     PHG.update(t, { dim: DIM[id] ?? 1, focus: fx });
   } else if (sh.s === 'N2') {
     // sóng chậm: cực to ở đầu giấc ngủ rồi giảm dần
@@ -420,8 +454,8 @@ window.render = t => {
 
   const set2 = setOf[sh.s];
   F.frame(set2.scene, {
-    t, thick: sh.s === 'N2' ? 2.6 : sh.s === 'N3' ? 3.4 : 3.6,
-    ref: sh.s === 'N2' ? .5 : sh.s === 'N3' ? 1.2 : 1.6,
+    t, thick: sh.s === 'N2' ? 3.0 : sh.s === 'N3' ? 3.4 : 3.6,
+    ref: sh.s === 'N2' ? 2.4 : sh.s === 'N3' ? 1.2 : 1.6,
     key: set2.key,
     fade: Math.min(1, t / .3 + .2, (window.DUR - t) / .4),
     // phụ đề khắc vào hình: lời của câu đang nói, theo đúng mốc thời gian của giọng đã thu

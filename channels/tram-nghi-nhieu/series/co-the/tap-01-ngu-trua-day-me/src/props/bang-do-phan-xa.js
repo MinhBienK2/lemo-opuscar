@@ -40,7 +40,7 @@ export function bangDoPhanXa({ cols = 4, rows = 4 } = {}) {
   const on = toon('#ffe9a8', { emissive: '#ffca63', emissiveIntensity: .26 });
   const off = toon('#6b6f8c');
   for (let i = 0; i < cols * rows; i++) {
-    const cx = (i % cols - (cols - 1) / 2) * 0.088;
+    const cx = (i % cols - (cols - 1) / 2) * 0.078;
     const cy = 0.28 - Math.floor(i / cols) * 0.078;
     const m = mesh(new THREE.SphereGeometry(0.026, 16, 12), on.clone(), [cx, cy, 0.038]);
     m.material = on.clone();
@@ -50,15 +50,33 @@ export function bangDoPhanXa({ cols = 4, rows = 4 } = {}) {
     lamps.push(m);
   }
 
-  // đồng hồ kim: mặt tròn, vạch, kim
-  const dial = new THREE.Group(); dial.position.set(0.215, 0.185, 0.036); panel.add(dial);
-  dial.add(mesh(new THREE.CylinderGeometry(0.075, 0.075, 0.02, 28), cream, [0, 0, 0], { rot: [Math.PI / 2, 0, 0] }));
-  dial.add(mesh(new THREE.TorusGeometry(0.076, 0.009, 8, 28), navy, [0, 0, 0.012]));
-  for (let i = 0; i <= 10; i++) {
+  // ── đồng hồ kim: mặt tròn có THANG ĐO SỐ ────────────────────────────────
+  // Mặt đồng hồ phải có số và mốc 0: chỉ có vạch thì câu "tụt tới mức thấp hơn
+  // cả lúc chưa ngủ" không đọc được mức — người xem chỉ thấy kim chùy xuống.
+  // Thang đo: kim ở vị trí 0 (đỉnh đồng hồ) là phản xạ cao nhất = 100, đầu kim
+  // (góc -125°) là mức thấp nhất = 0.
+  const matMat = () => canvasTex(512, 512, (g, w, h) => {
+    const cx = w / 2, cy = h / 2, R = w * .46;
+    g.fillStyle = '#f4efe1'; g.beginPath(); g.arc(cx, cy, R, 0, 7); g.fill();
+    const A0 = -125 * Math.PI / 180, SPAN = 125 * Math.PI / 180;
+    g.fillStyle = '#2c3152'; g.font = '700 44px "Be Vietnam Pro"';
+    g.textAlign = 'center'; g.textBaseline = 'middle';
+    // đỉnh đồng hồ (góc 0°) là phản xạ cao nhất = 100; đầu kim (-125°) là 0.
+    // Chỉ ba số: đặt năm số dày quá, chúng dính vào nhau và đè lên vạch.
+    [[0, '0'], [SPAN * .5, '50'], [SPAN, '100']].forEach(([f, t]) => {
+      const a = A0 + f;
+      g.fillText(t, cx + Math.sin(a) * R * .60, cy - Math.cos(a) * R * .60);
+    });
+  });
+  const dial = new THREE.Group(); dial.position.set(0.224, 0.185, 0.036); panel.add(dial);
+  dial.add(mesh(new THREE.CylinderGeometry(0.050, 0.050, 0.02, 28), cream, [0, 0, 0], { rot: [Math.PI / 2, 0, 0] }));
+  dial.add(mesh(new THREE.CircleGeometry(0.044, 32), toon('#ffffff', { map: matMat() }), [0, 0, 0.011]));
+  dial.add(mesh(new THREE.TorusGeometry(0.050, 0.008, 8, 28), navy, [0, 0, 0.012]));
+  for (let i = 0; i <= 5; i++) {
     const a = (-125 + i * 25) * Math.PI / 180;
-    dial.add(mesh(rbox(0.008, 0.022, 0.006, 0.002), navy, [Math.sin(a) * 0.058, Math.cos(a) * 0.058, 0.014], { rot: [0, 0, -a] }));
+    dial.add(mesh(rbox(0.005, 0.013, 0.006, 0.002), navy, [Math.sin(a) * 0.034, Math.cos(a) * 0.034, 0.014], { rot: [0, 0, -a] }));
   }
-  const needle = mesh(rbox(0.010, 0.062, 0.006, 0.002), red, [0, 0.030, 0.016]);
+  const needle = mesh(rbox(0.009, 0.040, 0.006, 0.002), red, [0, 0.020, 0.016]);
   const needlePivot = new THREE.Group(); needlePivot.position.z = 0.014; needlePivot.add(needle); dial.add(needlePivot);
   dial.add(mesh(new THREE.CylinderGeometry(0.010, 0.010, 0.012, 12), navy, [0, 0, 0.018], { rot: [Math.PI / 2, 0, 0] }));
 

@@ -12,10 +12,13 @@
 // mắt càng tối. Nền của vật liệu là sRGB, nên màu mực ở đây là giá trị
 // tuyến tính của mực của kênh (#171a2b).
 export function inkRim(material, { power = 2.4, amount = 1.5, max = .88 } = {}) {
+  // Số phải luôn ra dạng số thực có dấu chấm: "2" là số nguyên trong GLSL,
+  // và `pow(x, 2)` không có hàm nạp tương ứng — pass mực sẽ không dựng được.
+  const F = n => (+n).toFixed(3);
   material.onBeforeCompile = sh => {
     sh.fragmentShader = sh.fragmentShader.replace('#include <opaque_fragment>', `#include <opaque_fragment>
-      float fres = pow(1.0 - clamp(dot(normal, normalize(vViewPosition)), 0.0, 1.0), ${power});
-      gl_FragColor.rgb = mix(gl_FragColor.rgb, vec3(0.010, 0.011, 0.024), clamp(fres * ${amount}, 0.0, ${max}));`);
+      float fres = pow(1.0 - clamp(dot(normal, normalize(vViewPosition)), 0.0, 1.0), ${F(power)});
+      gl_FragColor.rgb = mix(gl_FragColor.rgb, vec3(0.010, 0.011, 0.024), clamp(fres * ${F(amount)}, 0.0, ${F(max)}));`);
   };
   material.needsUpdate = true;
   return material;

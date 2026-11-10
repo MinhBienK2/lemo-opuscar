@@ -9,8 +9,13 @@ const matMat = () => canvasTex(1024, 1024, (g, w, h) => {
   g.beginPath(); g.arc(cx, cy, R, 0, 7); g.fill();
   // dải giờ buồn ngủ: 13 giờ tới 17 giờ (nửa dưới mặt đồng hồ)
   const a0 = (13 / 24) * Math.PI * 2 - Math.PI / 2, a1 = (17 / 24) * Math.PI * 2 - Math.PI / 2;
-  g.beginPath(); g.arc(cx, cy, R * .88, a0, a1); g.lineWidth = R * .17;
-  g.strokeStyle = 'rgba(154,91,229,.35)'; g.stroke();
+  // viền mực quanh dải hồng: dải phẳng không có viền thì tách khỏi mặt giấy kem
+  // rất yếu, trên màn điện thoại người xem bỏ sót luôn. Vẽ viền trước, nét hồng
+  // sau, bo tròn hai đầu để viền phủ kín cả hai đầu dải.
+  g.beginPath(); g.arc(cx, cy, R * .88, a0, a1);
+  g.lineWidth = R * .17 + 16; g.lineCap = 'round'; g.strokeStyle = 'rgba(44,49,82,.9)'; g.stroke();
+  g.beginPath(); g.arc(cx, cy, R * .88, a0, a1);
+  g.lineWidth = R * .17; g.strokeStyle = 'rgba(183,118,242,.62)'; g.stroke();
   // vạch giờ: vạch lớn ở 0, 6, 12, 18
   for (let i = 0; i < 24; i++) {
     const a = (i / 24) * Math.PI * 2 - Math.PI / 2;
@@ -28,8 +33,9 @@ const matMat = () => canvasTex(1024, 1024, (g, w, h) => {
     const a = (i / 24) * Math.PI * 2 - Math.PI / 2, r = R * .68;
     g.fillText(t, cx + Math.cos(a) * r, cy + Math.sin(a) * r);
   }
-  g.font = '700 44px "Be Vietnam Pro"'; g.fillStyle = '#7a4fc0';
-  g.fillText('BUỔI CHIỀU', cx, cy + R * .40);
+  // KHÔNG in chữ "BUỔI CHIỀU" lên kính: thẻ "BUỔI CHIỀU" ở câu c42 nằm ngay
+  // chỗ đó, in thêm thì hai chữ chồng lên nhau và chữ in bị cắt cụt. Dải hồng
+  // 13h–17h trên kính là dải buổi chiều; thẻ ở câu c42 chỉ vào đúng dải đó.
 });
 
 export function dongHo24Gio() {

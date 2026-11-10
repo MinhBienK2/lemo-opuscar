@@ -1,0 +1,11 @@
+# Những dòng mà Whisper (mô hình đa ngôn ngữ, bản small) đọc sai thanh điệu tiếng Việt, đã kiểm tra tay.
+# Mỗi dòng: mã câu — lý do. Không sửa lời trong lines.json để chiều theo máy.
+# (Xem core/render/review.sh: đọc file này để biết dòng nào được tha; dòng chưa được tha thì phim FAIL.)
+# Lưu ý cho tập này: câu nào có con số, Whisper viết thành chữ số ("15", "30", "20") — số đọc đúng.
+c7 — "giấc ngủ / mười lăm / sóng chậm" bị nghe thành "chất ngủ / 15 phút / sống chậm": sai thanh điệu, số đọc đúng.
+c18 — "Và ranh giới / ba mươi phút" bị nghe thành "và tranh giới / 30 phút": sai thanh điệu, số đọc đúng.
+c21 — "May mà cơn lờ đờ" bị nghe thành "Mây mà cưng lựa đờ": sai thanh điệu.
+c23 — "Chỉ có một điều" bị nghe thành "Chỉ có mục điều": sai thanh điệu.
+c37 — "Còn cà phê thì làm một việc rất khôn" bị nghe thành "Còn ca phê thì là mục việt trước không?": sai thanh điệu.
+c38 — "xoá adenosine" bị nghe thành "xóa a dancing": từ mượn, nghe sai.
+c50 — "Bạn không hỏng" bị nghe thành "bạn khung hổng": sai thanh điệu.
