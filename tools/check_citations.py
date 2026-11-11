@@ -91,7 +91,12 @@ def check(path):
         print(f'check_citations: cannot read {path}: {e.strerror}')
         return None
     bs = blocks(lines)
-    entries = [b for b in bs if b['kind'] in ('list', 'quote') and is_source(b['text'])]
+    # Một khối trích dẫn (>) là **trích lời**, không phải mục nguồn: nó trích nguyên văn một câu, và
+    # nguồn của nó nằm ở mục nguồn ngay dưới. Nhưng câu trích có thể chứa năm ("1962 U.S. Standard
+    # Atmosphere") và thậm chí cả định danh (URL của nguồn khác) → trông y hệt một mục nguồn. Kiểm
+    # cả khối trích như một mục nguồn là một cái bẫy: nó bắt người làm phải viết lại câu trích cho
+    # khác đi với nguồn, thay vì bắt người làm sửa nguồn.
+    entries = [b for b in bs if b['kind'] == 'list' and is_source(b['text'])]
     found = [b for b in bs if is_source(b['text']) and IDENTIFIER.search(b['text'])]
     bad = []
     for no, line in enumerate(lines, 1):
@@ -190,6 +195,17 @@ def selftest():
   refractive index of water and steam as a function of wavelength, temperature and density.
   Journal of Physical and Chemical Reference Data 27(4), 761–770.
 '''
+    # a QUOTE that contains a year and an identifier — the same shape as a source entry — is still a
+    # quote: its source is the entry below it. Checking quotes as sources forced a maker to rewrite a
+    # verbatim quotation instead of fixing the source.
+    quote_with_year = '''# Facts — Vì sao trời có biến màu?
+
+## 3. Ánh sáng càng đi xa càng mất màu xanh
+
+> "For example, the tables of Link and Neuzil give 38.16 for the horizontal air mass in the 1962 U.S. Standard Atmosphere, which is very similar to the 1959 ARDC model used by Kasten."
+
+Fritz Kasten & Andrew T. Young, *Revised optical air mass tables and approximation formula*, **Applied Optics** 28(22), 1989, p. 4735–4738. DOI: 10.1364/AO.28.004735
+'''
     cases = [
         ('a source with no DOI/PMID/URL is caught', untraceable, 1, 'no DOI/PMID/URL in this source'),
         ('a source written over several lines keeps its DOI', wrapped, 0, 'every source is traceable'),
@@ -199,6 +215,8 @@ def selftest():
         ('every source with a DOI/PMID/URL passes', good, 0, 'every source is traceable'),
         ('a source cited with its identifier elsewhere in the same file is traceable', traceable, 0, 'every source is traceable'),
         ('prose with no year in it is not a source', prose, 0, 'every source is traceable'),
+        ('a quote containing a year and an identifier is a quote, not a source', quote_with_year, 0,
+         'every source is traceable'),
     ]
     failed = 0
     for name, text, code, expect in cases:

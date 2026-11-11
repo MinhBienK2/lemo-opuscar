@@ -7,10 +7,13 @@ Every film of the library, one row each. The one-shots live in `films/`; the epi
 | Film | Folder | Runtime | Movie |
 |---|---|---|---|
 | Vì sao ngủ trưa dậy lại mệt? | `channels/tram-nghi-nhieu/series/co-the/tap-01-ngu-trua-day-me/` | 2:33 | `channels/tram-nghi-nhieu/series/co-the/tap-01-ngu-trua-day-me/tram-nghi-nhieu-series-co-the-tap-01-ngu-trua-day-me.mp4` |
+| Vì sao tay tê khi ngồi lâu? | `channels/tram-nghi-nhieu/series/co-the/tap-02-vi-sao-tay-mo/` | — | `channels/tram-nghi-nhieu/series/co-the/tap-02-vi-sao-tay-mo/tram-nghi-nhieu-series-co-the-tap-02-vi-sao-tay-mo.mp4` |
 | Vì sao phơi quần áo cần gió? | `channels/tram-nghi-nhieu/series/do-vat/tap-01-phoi-quan-ao/` | 2:56 | `channels/tram-nghi-nhieu/series/do-vat/tap-01-phoi-quan-ao/tram-nghi-nhieu-series-do-vat-tap-01-phoi-quan-ao.mp4` |
 | Vì sao nồi cơm điện tự biết lúc nào cơm chín? | `channels/tram-nghi-nhieu/series/do-vat/tap-02-noi-com-dien/` | 2:30 | `channels/tram-nghi-nhieu/series/do-vat/tap-02-noi-com-dien/tram-nghi-nhieu-series-do-vat-tap-02-noi-com-dien.mp4` |
+| Vì sao điện thoại nóng lên khi sạc? | `channels/tram-nghi-nhieu/series/do-vat/tap-03-dien-thoai-nong-khi-sac/` | — | `channels/tram-nghi-nhieu/series/do-vat/tap-03-dien-thoai-nong-khi-sac/tram-nghi-nhieu-series-do-vat-tap-03-dien-thoai-nong-khi-sac.mp4` |
 | Vì sao cầu vồng lại luôn ở hướng đối diện với Mặt Trời? | `channels/tram-nghi-nhieu/series/the-gioi/tap-01-cau-vong/` | 3:49 | `channels/tram-nghi-nhieu/series/the-gioi/tap-01-cau-vong/tram-nghi-nhieu-series-the-gioi-tap-01-cau-vong.mp4` |
 | Vì sao ban ngày trời xanh mà đêm về trời đen? | `channels/tram-nghi-nhieu/series/the-gioi/tap-02-vi-sao-troi-den-ban-dem/` | 2:02 | `channels/tram-nghi-nhieu/series/the-gioi/tap-02-vi-sao-troi-den-ban-dem/tram-nghi-nhieu-series-the-gioi-tap-02-vi-sao-troi-den-ban-dem.mp4` |
+| Vì sao trời có biến màu? | `channels/tram-nghi-nhieu/series/the-gioi/tap-03-bien-luc-trong-to/` | — | `channels/tram-nghi-nhieu/series/the-gioi/tap-03-bien-luc-trong-to/tram-nghi-nhieu-series-the-gioi-tap-03-bien-luc-trong-to.mp4` |
 | Phi vụ triệu đô trong 2 phút — a Money Heist explainer in a talking-head toon | `films/host-toon-test/` | 2:12 | `films/host-toon-test/phi-vu-trieu-do-2-phut.mp4` |
 
 ## Channels
