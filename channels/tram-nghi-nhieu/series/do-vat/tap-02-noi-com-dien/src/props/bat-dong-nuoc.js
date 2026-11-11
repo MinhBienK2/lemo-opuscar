@@ -17,14 +17,22 @@ export function batDongNuoc(opts = {}) {
       return;
     }
     // Vạch chia nằm trên thành ngoài, ở phía gần máy quay: câu cuối tập trỏ
-    // vào bát để xem lại lượng nước, và vạch phải nằm ở chỗ máy quay nhìn
-    // thấy được. Vạch in sâu trong ruột bát thì mặt nước che mất.
-    c.strokeStyle = '#4e6470'; c.fillStyle = '#4e6470'; c.lineWidth = 6;
-    c.font = 'bold 44px sans-serif'; c.textAlign = 'left'; c.textBaseline = 'middle';
-    for (let i = 1; i <= 4; i++) {
-      const y = h * .82 - i * h * .068;
-      c.beginPath(); c.moveTo(68, y); c.lineTo(144, y); c.stroke();
-      c.fillText(String(i), 156, y);
+    // vào bát để xem lại lượng nước. Vạch số 3 phải nằm NGAY DƯỚI mép mặt
+    // nước mà người xem thấy, thì câu mới đọc ra là "nước tới vạch 3".
+    // Mép nước người xem thấy luôn nằm CAO HƠN mực nước thật (vì máy quay
+    // nhìn xuống, mép nước ta thấy là mép ở phía xa của bát), nên số 3 phải
+    // in ở sát miệng bát thay vì đúng cao độ mực nước.
+    c.strokeStyle = '#4e6470'; c.fillStyle = '#3f5566'; c.lineWidth = 4;
+    c.textAlign = 'left'; c.textBaseline = 'middle';
+    // Chỗ các vạch trên tờ: hồ sơ lathe có 9 điểm, v = j/8, hàng 512 ứng với
+    // v = 0 (đáy bát), hàng 256 là miệng bát. Số 3 ở hàng 266 (sát miệng),
+    // số 2 ở hàng 290, số 1 ở hàng 318.
+    for (const [n, y] of [[3, 264], [2, 290], [1, 318]]) {
+      // Vạch kẻ ngay cạnh số, chứ không kẻ xa: thành bát cong, vạch ở xa
+      // hơn sẽ lệch cao độ trên màn hình so với số nó đi kèm.
+      c.beginPath(); c.moveTo(120, y); c.lineTo(133, y); c.stroke();
+      c.font = 'bold 24px sans-serif';
+      c.fillText(String(n), 140, y);
     }
   });
   const bowlMat = toon('#ffffff', { map: tex });
@@ -33,20 +41,16 @@ export function batDongNuoc(opts = {}) {
   if (!marks) bowlMat.emissive = new THREE.Color('#3a4048');
   g.add(mesh(new THREE.LatheGeometry(prof.map(p => new THREE.Vector2(p[0], p[1])), 40), bowlMat));
 
-  // mặt nước trong bát
+  // Mặt nước trong bát. Bán kính mặt nước phải khớp với bán kính ruột bát
+  // đúng tại cao độ mực nước, nếu rộng hơn thì nước trồi ra ngoài thành.
   const wet = new THREE.Group(); g.add(wet);
-  const water = mesh(new THREE.CircleGeometry(R * .86, 36), toon('#8fd3e8', { transparent: true, opacity: .82 }),
-    [0, H * .72, 0], { rot: [-Math.PI / 2, 0, 0] });
+  const WATER_H = H * .72;
+  const water = mesh(new THREE.CircleGeometry(R * .875, 36), toon('#8fd3e8', { transparent: true, opacity: .82 }),
+    [0, WATER_H, 0], { rot: [-Math.PI / 2, 0, 0] });
   wet.add(water);
-  // Gợn sóng trên mặt nước phải lệch tâm và méo, không được là ba vòng đồng
-  // tâm: ba vòng tròn đồng tâm đọc ra như một cái mục tiêu bắn vào, không phải
-  // mặt nước.
-  for (const [i, k] of [[0, .30], [1, .52]]) {
-    const t = mesh(new THREE.TorusGeometry(R * k, .0018, 6, 40), toon('#cdeef8'),
-      [R * (i ? .07 : -.05), H * .72 + .001, R * (i ? .05 : -.03)], { rot: [Math.PI / 2, 0, 0] });
-    t.scale.set(1, .74, 1);
-    wet.add(t);
-  }
+  // Không vẽ gợn sóng trên mặt nước: ở cỡ này vài cung tròn đọc ra như một vệt
+  // trắng vẽ vòng trên mặt nước, không phải gợn sóng. Mặt nước phẳng màu
+  // xanh nhạt đọc ra là nước rõ hơn.
   // khi rót thì nước trong bát biến mất, thay bằng dòng nước bên ngoài
   g.setWater = v => { wet.visible = v; };
   g.rim = H;                         // chiều cao miệng bát

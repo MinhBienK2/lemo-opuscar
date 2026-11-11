@@ -14,6 +14,7 @@ import { toon, glowMat, rbox, mesh, GRAD3 } from '../../../../../rig/kit.js';
 import { vessel } from '../../../../../rig/cutaway.js';
 import { bimetal, button } from '../../../../../rig/parts.js';
 import { section } from '../../../../../rig/section.js';
+import { lopGao } from './gao.js';
 
 const PROFILE_CU = [
   [0, 0], [.150, 0], [.182, .020], [.196, .062], [.198, .120],
@@ -100,9 +101,15 @@ export function noiCuCatNgang(opts = {}) {
   coilGlow.position.y = .086; coilGlow.rotation.x = Math.PI / 2; coilGlow.layers.set(1);
   inside.add(coilGlow);
 
-  // nồi trong
-  const trong = vessel(PROFILE_TRONG, { thick: .012, cut: 0, shell: toon('#8b939c'), face: toon('#767e86') });
+  // nồi trong. Mặt trong của nồi phải TỐI và có dải sáng cong (gradient 3
+  // bậc): một mảng xám sáng lớn ở giữa khung đọc ra như một màn hình phẳng,
+  // và cả cái nồi đọc ra như một hộp điện tử chứ không phải một cái nồi cơm
+  // bị cưa.
+  const trong = vessel(PROFILE_TRONG, { thick: .012, cut: 0, shell: toon('#4a4740', { grad: GRAD3 }), face: toon('#3a3833') });
   trong.group.position.y = .105;
+  // vành miệng nồi trong: một sống nhôm cuộn ở mép. Không có vành này, nồi
+  // trong đọc ra là một tấm phẳng có mép vát, không phải một cái nồi có miệng.
+  trong.group.add(mesh(new THREE.TorusGeometry(.1145, .0042, 8, 44), toon('#b9c0c8'), [0, .1155, 0], { rot: [Math.PI / 2, 0, 0] }));
   inside.add(trong.group);
 
   // ── cưa ngang cả vỏ, cả nồi trong, cả mâm nhiệt ──────────────────────────
@@ -110,6 +117,13 @@ export function noiCuCatNgang(opts = {}) {
   whole.add(shellRoot, inside);
   const cut = section(whole, { normal: [0, 0, 1], at: 0 });
   g.add(cut.group);
+
+  // Lớp cơm trong nồi. Nồi đời đầu được dựng để cơ lưỡng kim ở đáy nhìn ra;
+  // lớp cơm cho người xem biết đây là một cái NỒI CƠM đang nấu, chứ không
+  // phải một cái hộp rỗng. Cơm giữ sẵn nửa sau, đúng như mặt cưa của nồi, nên
+  // đặt sau khi cưa là không cần cưa thêm.
+  const rice = lopGao({ R: .100, y: .110, h: .068, n: 520, seed: 5, half: true, gs: .78 });
+  g.add(rice);
 
   // ── cơ lưỡng kim và tiếp điểm ────────────────────────────────────────────
   // Người xem phải thấy được chuỗi nhân quả: thanh lưỡng kim nằm ngang, đầu tự
@@ -123,49 +137,77 @@ export function noiCuCatNgang(opts = {}) {
   g.add(mech);
 
   // thanh lưỡng kim: hai lớp kim loại ép dính, lớp đồng ở trên. Đầu trái bắt
-  // chốt (có đinh tán), đầu phải tự do, nằm trên hai chân đỡ.
-  const bi = bimetal({ L: .100, w: .026, t: .006, top: '#d98a2b', bottom: '#8f99a6' });
-  bi.position.set(-.048, .0265, 0);
+  // chốt (có đinh tán), đầu phải tự do, nhờ một chân gốm bên trái.
+  const BI_L = .070;
+  const bi = bimetal({ L: BI_L, w: .026, t: .006, top: '#d98a2b', bottom: '#8f99a6' });
+  bi.position.set(-.025, .0295, 0);
   mech.add(bi);
-  // hai chân đỡ thanh lưỡng kim
-  for (const x of [-.042, -.024]) mech.add(mesh(rbox(.018, .0265, .020, .003), toon('#7c828e'), [x, .0132, 0]));
+  // chân gốm bắt chốt trái của thanh
+  mech.add(mesh(rbox(.018, .0295, .020, .003), toon('#7c828e'), [-.016, .0148, 0]));
 
-  // hai tiếp điểm: đặt sang bên phải, ra ngoài đầu tự do của thanh, để lúc
-  // chúng rời nhau người xem thấy rõ. Lá cố định nằm cao trên chân gốm; lá
-  // động bản lề bên phải vươn sang trái. Mát thì lá động bị thanh ép lên,
-  // hai đầu tiếp xúc chạm nhau; nóng lên thì thanh cong, ép lá động nằm xuống,
-  // hai đầu rời nhau.
-  const CTX = .065;
+  // Hai đầu tiếp xúc. Đầu tự do của thanh mang theo một hạt cầu nhỏ treo
+  // dưới nó; đối diện, ở trên, là một lá đồng cố định mang hạt cầu thứ hai.
+  // Mát thì hai hạt cầu chạm nhau (mạch khép, dây điện trở sáng); nóng lên
+  // thì thanh cong xuống, hạt cầu của thanh rơi theo, hai hạt cầu rời nhau
+  // (mạch hở, dây điện trở tắt).
+  //
+  // Trước đây cơ nằm cao hơn và xa lá đồng động, hai đầu tiếp xúc không bao
+  // giờ chạm nhau: trong khung không thấy cái gì bấm vào cái gì, nên câu
+  // "thanh cong ra bấm tách tiếp điểm" không có hình để chỉ. Nay cơ nằm ở đáy
+  // nồi trong, đúng chỗ công tắc nhiệt cơ của nồi đời đầu.
+  const CTX = .040;
   const fixLeaf = new THREE.Group();
-  fixLeaf.add(mesh(new THREE.BoxGeometry(.026, .003, .020), toon('#c07a42'), [CTX + .010, .0225, 0]));
-  fixLeaf.add(mesh(new THREE.SphereGeometry(.005, 14, 10), toon('#e6e9ed'), [CTX, .0240, 0]));
+  fixLeaf.add(mesh(new THREE.BoxGeometry(.055, .003, .020), toon('#c07a42'), [.0475, .0410, 0]));
+  fixLeaf.add(mesh(new THREE.SphereGeometry(.005, 14, 10), toon('#e6e9ed'), [CTX, .0345, 0]));
   mech.add(fixLeaf);
-  mech.add(mesh(rbox(.011, .021, .018, .003), toon('#ece8df'), [CTX + .019, .0105, 0]));   // chân gốm
-  const movLeaf = new THREE.Group();
-  movLeaf.position.set(CTX + .015, .002, 0);
-  movLeaf.add(mesh(new THREE.BoxGeometry(.015, .003, .020), toon('#c07a42'), [-.0075, 0, 0]));
-  movLeaf.add(mesh(new THREE.SphereGeometry(.005, 14, 10), toon('#e6e9ed'), [-.015, .004, 0]));
-  mech.add(movLeaf);
-  mech.add(mesh(rbox(.010, .004, .020, .003), toon('#ece8df'), [CTX + .015, .002, 0]));    // bản lề
+  // chân gốm đứng lá đồng cố định
+  mech.add(mesh(rbox(.012, .0395, .020, .003), toon('#ece8df'), [.070, .0198, 0]));
+  // hạt cầu treo dưới đầu tự do của thanh: đi theo thanh khi thanh cong xuống
+  const ballA = mesh(new THREE.SphereGeometry(.005, 14, 10), toon('#e6e9ed'), [.040, .0245, 0]);
+  mech.add(ballA);
+  // Lá cố định cứng: chính đầu tự do của thanh rơi xuống mới tách hai đầu
+  // tiếp xúc. Không có lá động, không có bản lề ở đây.
   const ct = {
-    leaf: movLeaf,
-    open: k => { movLeaf.rotation.z = -.592 * (1 - clamp01(k)); },
+    leaf: fixLeaf,
+    open: () => {},
   };
-  ct.open(0);
-  // vòng lửa nhỏ ở chỗ hai đầu tiếp xúc rời nhau: bằng chứng thấy được
+  // Vòng lửa nhỏ ở chỗ hai đầu tiếp xúc rời nhau: bằng chứng thấy được
   // rằng mạch vừa bị tách, không chỉ là một hình chi tiết đã đổi vị trí.
-  const arc = new THREE.Mesh(new THREE.SphereGeometry(.0045, 12, 8), glowMat('#bfe6ff', 3, { transparent: true, opacity: 0 }));
-  arc.position.set(CTX, .015, 0);
+  // Vòng lửa phải NHỎ và chỉ lóe đúng lúc tiếp điểm tách: một quả cầu sáng
+  // to đè lên chỗ tách thì câu "mạch mở" lại không thấy được khoảng hở
+  // giữa hai đầu tiếp xúc. Một đốm trắng cháy to che khoảng hở cũng là
+  // lỗi: tia lửa phải nhỏ, vàng ấm, và chỉ lóe một lúc.
+  const arc = new THREE.Mesh(new THREE.SphereGeometry(.0022, 12, 8), glowMat('#ffd9a0', .9, { transparent: true, opacity: 0 }));
+  arc.position.set(CTX, .0295, 0);
   arc.layers.set(1);
   mech.add(arc);
+
+  // Đầu tự do của thanh cong xuống thì hạt cầu treo dưới nó cũng phải đi theo.
+  // Hàm bend() của rig chỉ uốn các đỉnh của thanh, nên hạt cầu phải được đặt
+  // lại theo đúng công thức uốn ấy, nếu không nó đứng lơ lửng giữa không trung.
+  const placeBall = kk => {
+    const bend = clamp01(kk) * .18, y0 = -.005, x0 = BI_L - .005;
+    let x = x0, y = y0;
+    if (bend > 1e-3) {
+      const R = BI_L / (bend * 1.6), a = x0 / R;
+      x = Math.sin(a) * (R + y0);
+      y = Math.cos(a) * (R + y0) - R;
+    }
+    ballA.position.set(-.025 + x, .0295 + y, 0);
+  };
+  placeBall(0);
 
   g.bimetal = bi; g.contacts = ct;
   // k = 0: còn mát, tiếp điểm khép, dây điện trở sáng.
   // k = 1: đã nóng, thanh cong ra bấm tách tiếp điểm, mạch mở, dây điện trở tắt.
   g.setHeat = k => {
     bi.bend(clamp01(k) * .18);
+    placeBall(clamp01(k));
     ct.open(clamp01(k));
-    arc.material.opacity = clamp01(k) * .80;
+    // tia lửa chỉ lóe đúng lúc tiếp điểm tách rồi tắt hẳn: câu "mạch mở" phải
+    // thấy được khoảng hở giữa hai đầu tiếp xúc, không phải một quả cầu sáng
+    const d = Math.abs(clamp01(k) - .82);
+    arc.material.opacity = Math.max(0, 1 - d / .10) * .32;
     coilGlow.material.opacity = clamp01(1 - k) * .26;
     coilMat.color.set('#5d4a40').lerp(new THREE.Color('#b8562a'), clamp01(1 - k));
   };

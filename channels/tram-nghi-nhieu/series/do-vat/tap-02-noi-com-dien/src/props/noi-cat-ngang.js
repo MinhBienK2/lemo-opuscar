@@ -13,10 +13,11 @@
 // phẳng z = 0 (nửa còn lại mang nút bấm), nắp vòm nằm trên trục nên bị cưa thành
 // nửa vòm. Mọi mép cắt vẫn nằm trong một mặt phẳng, không mép nào cong.
 import * as THREE from 'three';
-import { toon, glowMat, canvasTex, rbox, mesh, fxLayer, mulberry, clamp } from '../../../../../rig/kit.js';
+import { toon, glowMat, canvasTex, rbox, mesh, fxLayer, mulberry, clamp, GRAD3 } from '../../../../../rig/kit.js';
 import { vessel } from '../../../../../rig/cutaway.js';
 import { pcb, spring, cable, button } from '../../../../../rig/parts.js';
 import { section } from '../../../../../rig/section.js';
+import { lopGao } from './gao.js';
 
 const PROFILE_BODY = [
   [0, 0], [.145, 0], [.185, .012], [.208, .045], [.218, .085],
@@ -26,6 +27,16 @@ const PROFILE_BODY = [
 const PROFILE_POT = [
   [0, 0], [.140, 0], [.146, .008], [.150, .032], [.150, .060], [.150, .165], [.153, .172],
 ];
+// lòng vỏ: một lớp tối ốp bên trong thân nồi. Không có lớp này thì khoang
+// trong là một mảng kem trơn sáng, và cả cái nồi bị cưa đọc ra y như một mặt
+// nạ hàn: một khung kem bao quanh một ô xám phẳng. Có lớp tối thì khoang
+// trong đọc ra là một hõm hút sáng, có chiều sâu. (Cùng cách lớp lòng vỏ của
+// noi-cu-cat-ngang làm.)
+const LINER = [
+  [.150, .020], [.180, .045], [.192, .085], [.192, .185], [.184, .222], [.164, .244], [.150, .251],
+];
+// vành miệng nồi trong: một sống nhôm cuộn ở mép, để đọc ra độ dày thành
+const POT_RIM = [[.1400, .1665], [.1545, .1665], [.1545, .1755], [.1400, .1755], [.1400, .1665]];
 
 export const Y = {
   base: 0.022,      // mặt trên của đáy vỏ
@@ -36,6 +47,17 @@ export const Y = {
   pot0: 0.048,      // đáy nồi trong (nồi trong đặt ngồi lên mâm nhiệt)
   pot1: 0.220,      // miệng nồi trong
 };
+
+// Dây điện trở quấn quanh vành thành của mâm nhiệt. Ba số này phải đi cùng
+// nhau, và bước xoắn (COIL_Y1 - COIL_Y0) / số vòng là thứ quyết định chữ
+// "xoắn" có đọc được hay không: bước xoắn phải lớn hơn đường kính sợi dây,
+// nếu không các vòng ép vào nhau thành một dải đồng trơn.
+// Vành thành dựng tới đúng bán kính trong của dây (COIL_R - WIRE_R) để dây
+// ôm sát vành chứ không lơ lửng cách vành một khe sáng.
+const COIL_R = .180;      // bán kính đường tròn dây quanh trục
+const COIL_Y0 = .036;     // đáy dải dây
+const COIL_Y1 = .092;     // đỉnh dải dây
+const WIRE_R = .0052;     // bán kính sợi dây (đường kính 10,4 mm)
 
 // Vân vỏ nồi: hạt mịn và vàng vân dọc rất nhạt của khuôn. Vân này cho bề mặt có
 // chiều sâu mà không thành hoa văn. (Cùng vân với vỏ nồi nguyên vẹn.)
@@ -52,6 +74,48 @@ function shellTex() {
       const x = r() * w;
       g.fillStyle = `rgba(120,112,96,${.02 + r() * .025})`;
       g.fillRect(x, 0, 1 + r() * 2, h);
+    }
+  });
+}
+
+// Vân của THÀNH TRONG nồi. Thành trong là một mảng lớn, nhìn thẳng từ phía
+// máy quay: nếu chỉ có một màu toon đều, nó đọc ra y như một ô xám phẳng dán
+// vào khung — đúng cái cảm giác "mặt nạ hàn" mà người xem đã chê. Vân này là
+// ba thứ: thành tối dần về đáy (đáy sâu thì tối, miệng nồi thì sáng), một
+// dải sáng mảnh chạy dọc thành (vệt phản chiếu của thành cong — thành cong mà
+// không có vệt sáng thì đọc ra là một tấm bằng phẳng), và mấy vết ẩm loang
+// nhẹ của thành nồi dùng lâu.
+//
+// Toạ độ v của Lathe: 0 ở đáy ngoài, ~0.46 ở miệng nồi, ~0.92 ở đáy trong.
+// Canvas đảo chiều: y = (1 - v) * h. Nên thành trong nằm ở dải y ≈ 0.08h…0.54h,
+// đáy trong ở mép trên dải đó, miệng nồi ở mép dưới. Toạ độ u chạy vòng quanh
+// nồi; nửa sau của thành (nửa ta thấy) là u ≈ 0.25…0.75.
+function potWallTex() {
+  return canvasTex(512, 512, (g, w, h) => {
+    g.fillStyle = '#ffffff'; g.fillRect(0, 0, w, h);
+    const yTop = .08 * h, yLip = .54 * h;
+    const grad = g.createLinearGradient(0, 0, 0, yLip);
+    grad.addColorStop(0, '#7d7d7d');     // đáy trong: sâu, tối
+    grad.addColorStop(.55, '#bcbcbc');   // giữa thành
+    grad.addColorStop(1, '#ffffff');     // gần miệng nồi: sáng
+    g.fillStyle = grad; g.fillRect(0, 0, w, yLip);
+    // vệt phản chiếu của thành cong: một dải sáng mảnh chạy dọc, lệch trái
+    for (const [cx, wd, a] of [[.38, .055, .34], [.62, .022, .16]]) {
+      const rg = g.createRadialGradient(cx * w, (yTop + yLip) / 2, 0, cx * w, (yTop + yLip) / 2, wd * w);
+      rg.addColorStop(0, `rgba(255,255,255,${a})`);
+      rg.addColorStop(1, 'rgba(255,255,255,0)');
+      g.fillStyle = rg;
+      g.fillRect(cx * w - wd * w, yTop, wd * 2 * w, yLip - yTop);
+    }
+    // vết ẩm loang nhẹ trên thành: mấy vệt mờ, không đều, không thành vòng
+    const r = mulberry(23);
+    for (let i = 0; i < 26; i++) {
+      const x = r() * w, y = yTop + r() * (yLip - yTop);
+      const rr = 14 + r() * 40;
+      const rg = g.createRadialGradient(x, y, 0, x, y, rr);
+      rg.addColorStop(0, `rgba(74,74,74,${(.05 + r() * .07).toFixed(3)})`);
+      rg.addColorStop(1, 'rgba(74,74,74,0)');
+      g.fillStyle = rg; g.beginPath(); g.arc(x, y, rr, 0, Math.PI * 2); g.fill();
     }
   });
 }
@@ -121,7 +185,16 @@ export function noiCatNgang(opts = {}) {
   // Thành nồi trong phải tối: một thành sáng, dưới đèn nồi, thành một mảng kem
   // trơn chiếm nửa khung — người xem không đọc ra đó là thành nồi, và mắt cũng
   // không đi vào đáy nồi. Thành tối thì đáy nồi mới là thứ được nhìn thấy.
-  const alu = toon('#79808b');
+  // Mặt cắt của thành thì tô sáng: độ dày 12 mm phải đọc ra được như một sống
+  // nhôm, để đọc ra "một cái nồi trong một cái nồi".
+  const potWall = toon('#616a77', { grad: GRAD3, map: potWallTex() });
+  const potCutFace = toon('#aab3bd');
+  const potRimMat = toon('#bcc4ce');
+  // lòng vỏ: tối, để khoang trong là một hõm hút sáng chứ không phải một mảng
+  // kem trơn sáng.
+  const linerMat = toon('#4c453b', { grad: GRAD3 });
+  // đồng và gốm cho chân cắm, đầu nối
+  const brassMat = toon('#c9973a'), termMat = toon('#ded7c6');
 
   // ── vỏ nồi, dựng trong hệ toạ độ riêng của nồi (+z là mặt trước) ──────
   // Hệ toạ độ này xoay 90° quanh trục đứng: mặt trước của nồi (bảng công tắc)
@@ -135,6 +208,15 @@ export function noiCatNgang(opts = {}) {
   // chê trước đây.
   const body = vessel(PROFILE_BODY, { thick: .022, cut: 0, shell: bodyMat, face: toon('#cdc6b6'), shine: false });
   cooker.add(body.group);
+
+  // LÒNG VỎ TỐI. Không có lớp này thì phía trong vỏ là một mảng kem trơn sáng,
+  // và cả cái nồi bị cưa đọc ra y như một mặt nạ hàn: một khung kem bao quanh
+  // một ô xám phẳng. Lớp tối biến khoang trong thành một hõm hút sáng, có
+  // chiều sâu, và đáy nồi trong nằm giữa một hõm tối thì đọc ra là ruột của
+  // một chiếc nồi. (Cùng cách lớp lòng vỏ của noi-cu-cat-ngang làm.)
+  const liner = mesh(new THREE.LatheGeometry(LINER.map(p => new THREE.Vector2(p[0], p[1])), 96), linerMat);
+  liner.userData.hollow = true;                 // vỏ mỏng: cưa mà không tô mặt cắt
+  cooker.add(liner);
 
   // vành đế dưới (chân nồi)
   cooker.add(mesh(new THREE.TorusGeometry(.198, .011, 8, 40), accentMat, [0, .012, 0], { rot: [Math.PI / 2, 0, 0] }));
@@ -150,21 +232,36 @@ export function noiCatNgang(opts = {}) {
   const lid = new THREE.Group(); lid.position.set(0, .252, -.175);   // bản lề ở phía sau
   const lidBody = new THREE.Group(); lidBody.position.set(0, 0, .175);
   lid.add(lidBody);
-  const domeOut = [[.176, 0], [.190, .006], [.184, .014], [.160, .034], [.115, .052], [.055, .064], [0, .068]];
-  const domeIn = [[.166, -.002], [.180, .004], [.174, .012], [.152, .030], [.108, .046], [.050, .056], [0, .060]];
+  const domeOut = [[.176, 0], [.191, .007], [.187, .019], [.168, .042], [.128, .064], [.074, .079], [.026, .088], [0, .090]];
+  const domeIn = [[.166, -.003], [.181, .004], [.177, .015], [.158, .035], [.120, .056], [.070, .071], [.024, .079], [0, .081]];
   const domeProf = [...domeOut, ...domeIn.slice().reverse(), domeOut[0]];
   lidBody.add(mesh(new THREE.LatheGeometry(domeProf.map(p => new THREE.Vector2(p[0], p[1])), 48), bodyMat));
+  // Mặt trong của nắp phải có BẬC, không phải một mảng xám phẳng: nắp vòm
+  // thật có vòng dập nổi (vòng đập hút chân không khí). Các vòng này cũng là
+  // thứ cho ta biết đó là một CÁI NẮP úp xuống chứ không phải một vòm trơn.
+  const domeSteps = [
+    [.162, -.002], [.156, .005], [.148, .007], [.146, .014], [.136, .016], [.132, .025],
+    [.120, .027], [.114, .036], [.100, .040], [.092, .049], [.076, .056], [.064, .063],
+    [.048, .069], [.030, .072], [.014, .077], [0, .078],
+  ];
+  const domeStepMesh = mesh(new THREE.LatheGeometry(domeSteps.map(p => new THREE.Vector2(p[0], p[1])), 48),
+    toon('#c9bfa6', { grad: GRAD3 }));
+  domeStepMesh.userData.hollow = true;
+  lidBody.add(domeStepMesh);
   // vành nắm
   lidBody.add(mesh(new THREE.TorusGeometry(.186, .008, 8, 44), accentMat, [0, .004, 0], { rot: [Math.PI / 2, 0, 0] }));
-  // lỗ thoát hơi: một hốc nhỏ trên nắm
-  const vent = new THREE.Group(); vent.position.set(.085, .056, .02);
-  vent.add(mesh(new THREE.CylinderGeometry(.020, .024, .012, 18), toon('#b9b2a4'), [0, .002, 0]));
-  vent.add(mesh(new THREE.CylinderGeometry(.015, .015, .020, 18), toon('#2b2f3a'), [0, -.008, 0]));
+  // lỗ thoát hơi: một hốc nhỏ trên nắm, có vành và một lỗ đen thật
+  const vent = new THREE.Group(); vent.position.set(.070, .073, .018);
+  // vành lỗ: một sọc nhôm nhô lên mặt vòm
+  vent.add(mesh(new THREE.TorusGeometry(.020, .0035, 6, 22), toon('#8f887b'), [0, .0055, 0], { rot: [Math.PI / 2, 0, 0] }));
+  // miệng lỗ: một đĩa đen nằm ngay trên mặt vòm, để lỗ đọc ra là một lỗ
+  vent.add(mesh(new THREE.CylinderGeometry(.016, .016, .004, 18), toon('#1b1f26'), [0, .0055, 0]));
   lidBody.add(vent);
-  // núm cầm
-  const knob = new THREE.Group(); knob.position.set(0, .068, 0);
-  knob.add(mesh(new THREE.CylinderGeometry(.030, .036, .022, 20), accentMat, [0, .011, 0]));
-  knob.add(mesh(new THREE.SphereGeometry(.030, 16, 12), accentMat, [0, .030, 0]));
+  // núm cầm: một cổ + một nắp cầm, để đọc ra là một cái núm để cầm
+  const knob = new THREE.Group(); knob.position.set(0, .090, 0);
+  knob.add(mesh(new THREE.CylinderGeometry(.013, .017, .022, 16), toon('#c6bfae'), [0, .008, 0]));
+  knob.add(mesh(new THREE.CylinderGeometry(.031, .036, .014, 20), accentMat, [0, .024, 0]));
+  knob.add(mesh(new THREE.SphereGeometry(.030, 16, 12), accentMat, [0, .038, 0]));
   lidBody.add(knob);
   cooker.add(lid);
 
@@ -192,11 +289,35 @@ export function noiCatNgang(opts = {}) {
   // bảng là một vật thể riêng gắn lên thân.
   panel.add(mesh(rbox(.214, .108, .020, .014), accentMat, [0, 0, -.004]));
   panel.add(mesh(rbox(.200, .095, .024, .012), toon('#f2ece0'), [0, 0, .006]));
-  const btn = button({ r: .022, color: '#c8cdd8', bezel: '#5b6270', size: .9 });
-  btn.rotation.x = Math.PI / 2; btn.position.set(.050, .008, .020);
+
+  // ĐÈN BÁO trên bảng công tắc: một đĩa nhỏ trong vành tối. Đèn nằm trên bảng
+  // (không phải trên vành vỏ) thì bảng mới đọc ra là bảng công tắc của một
+  // chiếc nồi cơm điện, chứ không phải một mảng vỏ trơn bên hông.
+  const lampBox = new THREE.Group(); lampBox.position.set(.030, .028, .020);
+  lampBox.add(mesh(new THREE.CylinderGeometry(.019, .019, .010, 22), toon('#3a3f4c'), [0, 0, 0], { rot: [Math.PI / 2, 0, 0] }));
+  const lens = mesh(new THREE.CircleGeometry(.013, 24), glowMat('#ff4a3a', 1.6), [0, 0, .006], { cast: false });
+  lens.name = 'den-bao';
+  fxLayer(lens);
+  lampBox.add(lens);
+  panel.add(lampBox);
+
+  // MÀN HÌNH NHỎ: một ô tối có đồng hồ sáng, như bảng điện tử của nồi.
+  const dispTex = canvasTex(256, 128, (c, w, h) => {
+    c.fillStyle = '#10151b'; c.fillRect(0, 0, w, h);
+    c.fillStyle = '#ffb648'; c.font = 'bold 62px monospace'; c.textAlign = 'center';
+    c.fillText('0:45', w / 2, h * .74);
+  });
+  panel.add(mesh(rbox(.046, .026, .005, .003), toon('#1b2028'), [.083, .026, .020]));
+  panel.add(mesh(new THREE.PlaneGeometry(.038, .019), toon('#ffffff', { map: dispTex, emissive: new THREE.Color('#3a2a0c') }),
+    [.083, .026, .0232], { cast: false }));
+
+  // NÚT BẤM to: nút nhỏ trên nền kem biến mất, bảng công tắc không có gì để
+  // bấm nên không đọc ra là bảng công tắc.
+  const btn = button({ r: .026, color: '#c8cdd8', bezel: '#5b6270', size: .9 });
+  btn.rotation.x = Math.PI / 2; btn.position.set(.050, -.014, .020);
   panel.add(btn);
   // nhãn nhỏ dưới nút
-  panel.add(mesh(rbox(.052, .012, .004, .003), toon('#8b8f9c'), [.050, -.028, .020]));
+  panel.add(mesh(rbox(.052, .012, .004, .003), toon('#8b8f9c'), [.050, -.038, .020]));
   cooker.add(panel);
 
   // ── chân đế ─────────────────────────────────────────────────────────────
@@ -231,6 +352,32 @@ export function noiCatNgang(opts = {}) {
   for (let i = 0; i < 7; i++)
     inside.add(mesh(new THREE.SphereGeometry(.0019, 10, 8), toon('#c9a24a'), [-.105 + i * .035, Y.base + .006, -.001]));
 
+  // ── LINH KIỆN THẬT trên bo mạch ───────────────────────────────────────
+  // Bo trần (chỉ có vân mạch in) đọc ra không phải là một bo mạch, mà là một
+  // miếng nhựa xanh. Bo của một nồi cơm phải có tụ điện, điện trở, một con IC
+  // nhỏ và một bộ nối. Chúng đặt sát mép trước của bo — đúng chỗ mặt phẳng
+  // cưa đi qua — nên nhìn vào khung thấy ngay mặt cắt của chúng: một hàng
+  // linh kiện nhỏ dựng đứng giữa bo mạch và mâm nhiệt.
+  const capMat = toon('#2f5fa8'), capTopMat = toon('#c9ced6');
+  const resMat = toon('#d8c9a4'), icMat = toon('#31363e'), conMat = toon('#20252c');
+  const Y_BOARD = Y.base + .006;               // mặt trên của bo
+  // tụ điện
+  const cap1 = new THREE.Group(); cap1.position.set(.040, Y_BOARD, 0);
+  cap1.add(mesh(new THREE.CylinderGeometry(.0095, .0095, .011, 20), capMat, [0, .0055, 0]));
+  cap1.add(mesh(new THREE.CylinderGeometry(.0098, .0098, .0014, 20), capTopMat, [0, .0112, 0]));
+  inside.add(cap1);
+  // điện trở nằm ngang
+  inside.add(mesh(new THREE.CylinderGeometry(.0026, .0026, .018, 10), resMat,
+    [.063, Y_BOARD + .0026, 0], { rot: [0, 0, Math.PI / 2] }));
+  // con IC nhỏ
+  inside.add(mesh(rbox(.018, .005, .011, .001), icMat, [.081, Y_BOARD + .0025, 0]));
+  // bộ nối: một hộp đen với mấy chân đồng
+  const con = new THREE.Group(); con.position.set(.113, Y_BOARD, 0);
+  con.add(mesh(rbox(.022, .009, .017, .002), conMat, [0, .0045, 0]));
+  for (let i = 0; i < 4; i++)
+    con.add(mesh(new THREE.BoxGeometry(.0022, .003, .0022), brassMat, [-.0075 + i * .005, .0098, 0]));
+  inside.add(con);
+
   // ── chân đỡ mâm nhiệt: ba cột nhỏ, để giữa trống cho lò xo và bo mạch ──
   for (let i = 0; i < 3; i++) {
     const a = i / 3 * Math.PI * 2 + .5;
@@ -254,9 +401,12 @@ export function noiCatNgang(opts = {}) {
   const plate = mesh(new THREE.LatheGeometry(plateProf, 64), plateMat);
   plate.name = 'mam-nhiet';
   inside.add(plate);
-  // vành thành đứng quanh chân nồi: một vòng nhôm dựng lên, thành 8 mm
+  // vành thành đứng quanh chân nồi: một vòng nhôm dựng lên. Mép ngoài của
+  // vành dựng đến đúng bán kính trong của sợi dây điện trở, để dây ôm sát
+  // vành — sợi dây mỏng đi thì vành cũng phải trồi ra tương ứng, nếu không
+  // sẽ hở ra một khe sáng giữa dây và vành, đúng thứ phải tránh.
   const collar = mesh(new THREE.LatheGeometry([
-    [.164, Y.plate1 - .002], [.173, Y.plate1 - .002], [.173, Y.plate1 + .034], [.164, Y.plate1 + .034], [.164, Y.plate1 - .002],
+    [.164, Y.plate1 - .002], [COIL_R - WIRE_R, Y.plate1 - .002], [COIL_R - WIRE_R, Y.plate1 + .034], [.164, Y.plate1 + .034], [.164, Y.plate1 - .002],
   ].map(([x, y]) => new THREE.Vector2(x, y)), 56), plateMat);
   collar.name = 'vanh-mam-nhiet';
   inside.add(collar);
@@ -280,33 +430,73 @@ export function noiCatNgang(opts = {}) {
   });
   inside.add(mesh(new THREE.CircleGeometry(.166, 72), toon('#ffffff', { map: spiralTex }),
     [0, Y.plate1 + .0006, 0], { rot: [-Math.PI / 2, 0, 0], cast: false }));
-  // một đĩa nhỏ ở lõ mâm: chỗ đặt lò xo
-  inside.add(mesh(new THREE.CylinderGeometry(R_HOLE, R_HOLE, .004, 28), toon('#9aa0aa'), [0, Y.plate0 + .004, 0]));
+  // VIỀN SÁNG TỐI của mâm nhiệt: một sống nhôm tối ở mép đĩa. Đĩa trơn một
+  // màu đọc ra như một cái đĩa nhạt, có viền sáng-tối thì đọc ra là một bộ
+  // linh kiện có khối lượng.
+  inside.add(mesh(new THREE.TorusGeometry(.1685, .0038, 8, 56), toon('#7e858f'),
+    [0, Y.plate1 - .002, 0], { rot: [Math.PI / 2, 0, 0] }));
+  // một đĩa nhỏ ở lõ mâm: chỗ đặt lò xo. Đĩa này phải nhỏ hơn lỗ của mâm,
+  // để còn chỗ cho hai dây mảnh đi xuống qua lỗ.
+  inside.add(mesh(new THREE.CylinderGeometry(.011, .011, .004, 28), toon('#9aa0aa'), [0, Y.plate0 + .004, 0]));
 
   // ── dây điện trở: một vòng xoắn quanh vành mâm nhiệt ────────────────────
   // Đây là thứ người xem phải nhìn ra được ở câu "quanh thành là dây điện trở
-  // xoắn lại". Dây thật của nồi cơm xoắn TIGHT quanh thành (vòng sát nhau),
-  // khác hẳn một lò xo phòng sự có vòng thưa. Bốn vòng sát nhau cho ra một
-  // dải dây sợi nhỏ mà vẫn là một cuộn xoắn rõ ràng. Dây quấn đúng quanh
-  // vành thành của mâm nhiệt, nên từ ngoài nhìn vào thấy dây ôm lấy cái đĩa.
+  // xoắn lại". Chữ "xoắn" chỉ đọc được khi GIỮA hai vòng còn một khe hở có
+  // bóng: các vòng ép sát nhau thì thành một dải đồng trơn, nhìn từ trên xuống
+  // chỉ thấy một vòng, không thấy dây xoắn mấy vòng. Bốn vòng trên dải cao
+  // 56 mm nghĩa là bước xoắn chỉ 14 mm, mà sợi dây đã dày 14,4 mm — vòng này
+  // nằm đè lên vòng kia, không bao giờ có khe. Nên bớt một vòng (còn 3 vòng,
+  // bước xoắn 18,7 mm) VÀ làm sợi dây mỏng lại (10,4 mm): khe còn 8,3 mm, khe
+  // ấy tự bóng và đọc ra ngay là một cuộn xoắn.
+  // Dây quấn đúng quanh vành thành của mâm nhiệt, nên từ ngoài nhìn vào thấy dây
+  // ôm lấy cái đĩa — vì vậy vành thành dựng tới đúng bán kính trong của dây.
   const coilMat = toon('#8a6248');
   const coilPts = [];
   for (let i = 0; i <= 240; i++) {
-    const u = i / 240, a = u * 2 * Math.PI * 4;
-    coilPts.push(new THREE.Vector3(Math.cos(a) * .178, .038 + u * .048, Math.sin(a) * .178));
+    const u = i / 240, a = u * 2 * Math.PI * 3;
+    coilPts.push(new THREE.Vector3(Math.cos(a) * COIL_R, COIL_Y0 + u * (COIL_Y1 - COIL_Y0), Math.sin(a) * COIL_R));
   }
   const coilCurve = new THREE.CatmullRomCurve3(coilPts);
-  const coil = mesh(new THREE.TubeGeometry(coilCurve, 320, .0052, 8), coilMat);
+  // Dây vẫn phải có khối: một sợi mảnh trên ảnh xa đọc ra như một vòng sơn, không
+  // phải là dây điện trở. 10,4 mm là đủ dày để có mặt sáng lấp lánh, mỏng đến
+  // vừa để còn khe giữa các vòng.
+  const coil = mesh(new THREE.TubeGeometry(coilCurve, 320, WIRE_R, 10), coilMat);
   coil.name = 'day-dien-tro';
   // vòng dây điện trở cũng bị cưa: mặt cắt của ống xiên là một dải dẹt dài,
   // trông như một vải đỏ trải quanh nồi. Để ống rỗng, không tô mặt cắt.
+  // Ống rỗng cũng là chỗ duy nhất người xem thấy các vòng xếp chồng thật sự.
   coil.userData.hollow = true;
   inside.add(coil);
-  const coilGlow = new THREE.Mesh(new THREE.TubeGeometry(coilCurve, 320, .0070, 8),
+  // Vệt sáng bám theo đúng đường xoắn mới, và chỉ dày hơn sợi dây 1,2 mm:
+  // dày hơn nữa là vệt sáng tràn sang khe giữa các vòng, khóa khe lại và biến
+  // cuộn dây thành một dải sáng liền. Lớp 1: không viền mực, không bóng.
+  const coilGlow = new THREE.Mesh(new THREE.TubeGeometry(coilCurve, 320, WIRE_R + .0012, 10),
     glowMat('#ff6a1f', 2, { transparent: true, opacity: 0, depthWrite: false }));
   coilGlow.layers.set(1);
   coilGlow.name = 'day-dien-tro-glow';
   inside.add(coilGlow);
+
+  // HAI ĐẦU NỐI của dây điện trở: hai cục gốm có đinh đồng trên bo mạch, và
+  // hai sợi dây nối từ đầu cuộn dây xoắn xuống hai cục đó. Không có đầu nối
+  // thì cuộn dây trôi lơ lửng, không đọc ra là một linh kiện có mạch.
+  for (const [tx, tz] of [[.100, -.017], [.100, -.044]]) {
+    inside.add(mesh(rbox(.016, .009, .014, .002), termMat, [tx, Y.base + .0045, tz]));
+    inside.add(mesh(new THREE.CylinderGeometry(.0028, .0028, .004, 10), brassMat, [tx, Y.base + .010, tz]));
+  }
+  // hai dây nối từ cuộn dây xuống hai đầu nối. Hai đầu cuộn được lấy thẳng
+  // từ đường xoắn nên dây nối luôn chạm đúng vào dây, dù sau này đổi số vòng
+  // hay độ dày sợi dây: số vòng là số nguyên nên cả hai đầu vẫn nằm ở cùng
+  // một góc quanh trục, đúng chỗ vành mâm.
+  for (const [end, tx, tz] of [[0, .100, -.017], [1, .100, -.044]]) {
+    const ep = coilCurve.getPoint(end);
+    const curve = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(ep.x, ep.y, ep.z),
+      new THREE.Vector3(ep.x * .94, ep.y - .010, ep.z * .94),
+      new THREE.Vector3((ep.x + tx) / 2, Y.base + .014, (ep.z + tz) / 2),
+      new THREE.Vector3(tx, Y.base + .012, tz),
+    ]);
+    inside.add(mesh(new THREE.TubeGeometry(curve, 40, .0016, 8), brassMat));
+  }
 
   // ── lò xo nhấn viên cầu ────────────────────────────────────────────────
   // Lò xo là một cuộn dây thật có vòng hở, đọc ra là lò xo chứ không phải một đống xám.
@@ -342,14 +532,20 @@ export function noiCatNgang(opts = {}) {
   // mảng vỏ, đọc ra như một dải đỏ dẹt trải trên bo, không phải một sợi dây.
   // Vì vậy cả hai dây nằm hoàn toàn sau mặt phẳng cưa (z < 0): chúng không bị
   // cưa nữa, hiện trọn tròn, và dải sáng tín hiệu chạy dọc theo chúng.
-  const wireMat = toon('#c8402f');
   // Hai dây phải TÁCH RA, mỗi dây một sợi tròn: hai sợi nằm sát nhau thì đọc
-  // thành một dải đỏ dẹt trải trên bo, không phải hai sợi dây. Hai sợi cắt nhau
-  // một lần (điểm giữa lệch sang hai bên) như một cặp dây xoắn: người xem thấy
-  // đây là hai sợi riêng, không phải một vệt sơn.
+  // thành một dải đỏ dẹt trải trên bo, không phải hai sợi dây.
+  //
+  // Hai dây đi xuống qua Lỗ của mâm nhiệt, rồi mới chạy dọc trong khe giữa
+  // bo mạch và mâm. Nếu chạy xuyên qua thân mâm thì chúng nằm trong kim loại
+  // và không ai nhìn thấy: câu "hai dây mảnh chạy lên bo mạch" sẽ không có
+  // gì để chỉ. Lỗ của mâm rộng 22 mm, lò xo chiếm 16 mm, nên hai dây đi
+  // sát mép lỗ, cách lò xo một khe.
+  const wireMat = toon('#c8402f');
   const wirePath = [
-    [[-.004, .052, -.004], [-.048, .046, -.013], [-.088, .036, -.024]],
-    [[-.016, .043, -.021], [-.046, .038, -.033], [-.100, .030, -.044]],
+    [[-.005, .0500, -.0030], [-.012, .0485, -.0105], [-.015, .0455, -.0125],
+     [-.015, .0395, -.0125], [-.040, .0330, -.0180], [-.092, .0295, -.0255]],
+    [[.004, .0500, -.0040], [.006, .0485, -.0145], [.009, .0455, -.0165],
+     [.009, .0395, -.0165], [-.030, .0330, -.0215], [-.088, .0290, -.0275]],
   ];
   for (const p of wirePath) {
     const curve = new THREE.CatmullRomCurve3(p.map(v => new THREE.Vector3(...v)));
@@ -374,8 +570,16 @@ export function noiCatNgang(opts = {}) {
   // ── nồi trong: thành nhôm có độ dày, lòng rỗng ─────────────────────────
   // Nồi trong được cưa riêng, nên câu nào cần thấy mâm nhiệt (c7) thì ẩn nồi đi.
   const potRoot = new THREE.Group();
-  const pot = vessel(PROFILE_POT, { thick: .012, cut: 0, shell: alu, face: toon('#5f6672'), shine: false });
+  // Thành nồi trong: xám xanh TỐI. Một thành sáng, dưới đèn nồi, thành một
+  // mảng kem trơn chiếm nửa khung — người xem không đọc ra đó là thành nồi.
+  // Thành tối thì đáy nồi mới là thứ được nhìn thấy.
+  const pot = vessel(PROFILE_POT, { thick: .012, cut: 0, shell: potWall, face: potCutFace, shine: false });
+  pot.group.traverse(o => { if (o.isMesh) o.name = 'thanh-noi-trong'; });
   potRoot.add(pot.group);
+  // VÀNH MIỆNG nồi trong: một sống nhôm cuộn ở mép, và mặt cắt của thành được
+  // tô sáng. Nhờ hai cái đó, 12 mm độ dày của thành đọc ra được: nồi trong là
+  // một cái nồi có thành, nằm trong một cái nồi khác.
+  potRoot.add(mesh(new THREE.LatheGeometry(POT_RIM.map(p => new THREE.Vector2(p[0], p[1])), 56), potRimMat));
   // Mặt đáy nồi trong: một đĩa nhôm có vân xoắn đồng tâm và vành hàn ở mép.
   // Một mặt đáy trơn một màu đọc ra như một mảng kem dán phẳng, không phải
   // đáy nồi — câu "không còn gì để hấp nhiệt" cần một cái đáy nhìn ra được
@@ -398,8 +602,22 @@ export function noiCatNgang(opts = {}) {
   const floor = mesh(new THREE.CircleGeometry(.130, 72), toon('#ffffff', { map: floorTex }),
     [0, .0121, 0], { rot: [-Math.PI / 2, 0, 0], cast: false });
   potRoot.add(floor);
+  // LỚP CƠM ĐỨNG SẴN trong nồi trong. Vật này được chấm đứng một mình, không
+  // có bối cảnh: một khoang nồi trống, tô xám đều, đọc ra như một mặt kính
+  // đặt trong khung máy — và cả cái nồi đọc ra như một mặt nạ hàn. Có lớp cơm
+  // thì người xem biết ngay đây là một NỒI CƠM bị cưa. Trong phim, bối cảnh dựng
+  // lớp cơm riêng (có đội hình sôi, hạt nở, mực nước) nên lớp cố định này
+  // được tắt đi.
+  const riceStatic = lopGao({ R: .128, y: .014, h: .072, n: 520, seed: 3, half: true, gs: .78 });
   potRoot.position.y = Y.pot0;
-  const potCut = section(potRoot, { normal: [0, 0, 1], at: 0 });
+  // Mặt cắt của thành nồi trong tô sáng: độ dày 12 mm phải đọc ra được như
+  // một sống nhôm, chứ không phải một vệt tối.
+  const potCut = section(potRoot, {
+    normal: [0, 0, 1], at: 0,
+    cap: (obj, mat) => obj.name === 'thanh-noi-trong'
+      ? potCutFace
+      : (mat.color ? toon(mat.color.clone().multiplyScalar(.82), { side: THREE.DoubleSide, map: null }) : null),
+  });
 
   // ── cưa ngang ──────────────────────────────────────────────────────────
   // Vỏ: mặt phẳng cưa của hệ xoay 90° là x = 0 (giữ nửa x ≥ 0). Vỏ bị cưa theo
@@ -419,6 +637,12 @@ export function noiCatNgang(opts = {}) {
   g.add(shellCut.group);
   g.add(insideCut.group);
   g.add(potCut.group);
+  // Lớp cơm cố định đặt NGOÀI nhóm bị cưa: lớp cơm đã giữ sẵn nửa sau (đúng
+  // như mặt cưa của nồi) nên không cần cưa nữa, và đặt ngoài thì bối cảnh tắt
+  // được nó bằng `visible` — nếu nằm trong nhóm bị cưa, bản cưa vẫn hiện và
+  // câu "không còn gì để hấp nhiệt nữa" lại có một bát cơm trong khung.
+  riceStatic.position.y = Y.pot0 + .014;
+  g.add(riceStatic);
   // lò xo và viên cầu thêm vào sau khi cưa, nên chúng giữ nguyên khối
   g.add(focus);
 
@@ -430,24 +654,18 @@ export function noiCatNgang(opts = {}) {
   g.potRadius = .150;
   g.chipPos = new THREE.Vector3(-.100, Y.base + .012, -.040);
 
-  // ── đèn báo: một đèn nhỏ trên vành vỏ, phía sau (phía trước đã bị cưa mất) ──
-  // Đèn đứng trên vành sau của vỏ — vành sau là vành còn nguyên sau khi cưa. Đèn
-  // phải nằm trong khoảng trống dưới vòm nắp, không đụng vào vỏ nắp.
-  const lampGrp = new THREE.Group();
-  lampGrp.rotation.y = Math.PI / 2;                    // cùng hệ toạ độ với vỏ
-  const lampBox = new THREE.Group(); lampBox.position.set(.164, .252, 0);
-  lampBox.add(mesh(rbox(.024, .014, .016, .004), toon('#3a3f4c'), [0, .005, 0]));
-  const lens = mesh(new THREE.SphereGeometry(.0065, 12, 8), glowMat('#ff4a3a', 1.6), [0, .012, -.005], { cast: false });
-  fxLayer(lens); lampBox.add(lens);
-  lampGrp.add(lampBox);
-  g.add(lampGrp);
-
   // mâm nhiệt sau khi cưa: bản còn lại trong khung, không phải bản gốc đã bị cưa mất
   let plateCut = null;
   insideCut.group.traverse(o => { if (o.isMesh && o.name === 'mam-nhiet') plateCut = o; });
   g.plate = plateCut || plate;
-  g.lamp = lens;
+  // đèn báo sau khi cưa: bản còn lại trong khung
+  let lampCut = null;
+  shellCut.group.traverse(o => { if (o.isMesh && o.name === 'den-bao') lampCut = o; });
+  g.lamp = lampCut || lens;
   g.potCut = potCut.group;
+  // lớp cơm cố định trong nồi (xem chỗ dựng): bối cảnh tắt đi khi dựng lớp cơm
+  // riêng của phim
+  g.riceStatic = riceStatic;
   // dây điện trở xoắn quanh vành: ở cận cảnh nó là một vòng đỏ dẹt chắn cả
   // khung, và người xem tưởng đó là hai sợi dây. Ở những câu kể về dây mảnh thì
   // vòng dây điện trở phải ẩn đi.

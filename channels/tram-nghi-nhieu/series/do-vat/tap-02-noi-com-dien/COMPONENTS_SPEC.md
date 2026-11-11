@@ -60,16 +60,61 @@ bước 5 là nơi sửa cho đúng. Dựng đúng các mục dưới đây thì
 
 ### 2.2 Nhiệt kế thủy ngữ (`nhiet-ke.js`)
 
-Nhiệt kế là **một vật đặt trong nồi**, không phải một lớp số nổi trên mặt nước. Phải có: thân nhựa trắng
-(thành), **cột thủy ngân đỏ** bên trong, **bóng thủy ngân** ở đáy, và **thang số in trên thân** (vạch 0–120,
-vạch 100 đậm hơn, chữ "SÔI"). Thang số phải nằm **trên mặt thân**, không được là một bảng trắng trôi
-độc lập cạnh vật. Khi nhiệt độ nhảy lên trên 100 °C, cột thủy ngân phải vượt vạch 100.
+Nhiệt kế là **một vật đặt trong nồi**, không phải một lớp số nổi trên mặt nước. Phải có: **ống thủy
+tinh**, **cột thủy ngân đỏ** bên trong khoang ống, **bầu thủy ngân tròn** ở đáy, và **thang số 0–120**
+(vạch 100 đậm hơn, chữ "SÔI").
+
+**Cách nó đang dựng (đã qua bảy vòng chấm — đừng làm ngược lại):**
+
+- Ống thủy tinh là **một vỏ rỗng dựng bằng `LatheGeometry`** — vỏ ngoài đi lên từ đáy bầu, vòng miệng
+  ống, rồi quay ngược xuống vỏ trong và đáy đóng lại. Vì là **một đường viền liền** nên không có mặt
+  cắt nào cắt qua nhau và không có vết seam trên khối đỏ. Đừng dựng ống bằng vài hình trụ chồng nhau:
+  đó là lỗi của vòng 7 (bầu đỏ lổm bổm, chân đế xám lọt ra như mảnh vỡ rời).
+- **Cột thủy ngân và bầu là CÙNG một khối xoay** (`mercuryGeo()`), cùng đỏ `#f04462` của kênh. Cột có
+  **nắp meniscus** ở đỉnh: mặt trên của nắp mới chạm vạch, tâm nắp thấp hơn nửa bán kính.
+- Ống có **nửa trước và nửa sau riêng**: nửa sau ở lớp vật thể (dựng đường viền mực quanh cột), nửa
+  trước ở lớp fx với opacity rất nhỏ, cộng hai vệt sáng sát mép kính để đọc ra là thủy tinh.
+- **"SÔI" là một thẻ kem** (`#fff0d8`) **viền mực** (`#171a2b`) **chữ đỏ đậm** (`#f04462`), nằm ngang
+  hàng vạch 100, giữa vạch và số "100", không đè lên số. Chữ đỏ trần trên nền tối đọc ra như chữ vẽ
+  thêm lên thang, không phải nhãn của vật.
+- **Thang số nằm trên một dải thang tối đứng cạnh ống** (theo LOOK c31), không in lên thân ống.
+  Dải tối phía sau ống là chỗ cột thủy ngân đứng ra. **Số "100" in trên dải nằm ở mép phải** (`w*.96`).
+  Ba nhãn trong `src/film.js` neo vào đúng chỗ này và **đừng dời tấm thang**: "NHIỆT KẾ" ở
+  `[.0609, .1520]` (ngang vạch 100), còn "TRĂM ĐỘ"/"100 °C" ở `[.1148, .1745]` (bên phải dải, ở cao độ
+  cột lúc sôi). Dải thang cao `L = .230`, gốc ở `y = -.030`, nên vạch 100 nằm ở `y ≈ .1507`.
+- `setTemp(độ)` dựng lại hình cột theo độ; `g.top` và `g.tubeX` là hai neo mà `set.js` dùng.
+
+**Góp ý chưa sửa (không chặn):** cả vật vẫn có thể đọc như một bảng số treo tường có que đo dán
+bên. Nếu bước 6 muốn xử lý thì xử ở **cảnh** (cách máy quay vào), không sửa lại hình vật — hình vật
+đã qua bảy vòng chấm.
+
 
 ### 2.3 Hạt gạo (`gao.js`)
 
 Gạo phải là **hạt có khối** (hình trụ bầu dục ba chiều), không phải các bầu dẹt vẽ trên một mặt phẳng. Ở cận
 cảnh (c20–c23), mặt cắt của lớp gạo cho thấy **nửa hạt** thật, có bóng; một hạt riêng lẻ được kéo ra
 siêu cận để thấy nước bị hút vào (c22). Lớp gạo phải có bề mặt gồ ghề, không phải một tấm màu phẳng.
+
+**Điều kiện hình dạng (bổ sung sau vòng 7 — đừng làm ngược lại):**
+
+1. **Hai đầu hạt không nhọn.** Một hạt nhọn hai đầu, có một gân dọc ở giữa mặt và các vệt sọc ngang là
+   **lá**, không phải hạt gạo. Hạt phải thu dần đều về hai đầu và mũi **khum tròn** — vòng 9 siết
+   thêm: hai đầu **bo tròn rồi cắt vát nhẹ** (không nhọn, không nhụng), thân thì **mập**.
+2. **Không có gân nổi chạy dọc ở giữa mặt.** Khe nứt dọc của hạt nằm ở **bụng** và phải **khắc vào**
+   (lõm xuống), không nhô lên.
+3. **Vân vỏ trấu chạy dọc, đứt thành từng đoạn.** Vân cong chậm quanh thân đọc ra là **vân gỗ**.
+4. **Hạt phải nằm sát bàn**, mỗi hạt một vệt bóng riêng chạm mặt bàn. Hạt đứng bằng đầu, không chạm
+   bàn, đọc ra là một hình phẳng có viền.
+5. **Ảnh ba phía của vật phải có một hạt bị cưa**, lộ lớp tinh bột trắng bên trong. Đây là dấu hiệu
+   không nhầm lẫn được của hạt gạo; ba hạt nguyên thì người xem chưa từng thấy hạt gạo vẫn có thể
+   gọi nhầm là lá khô.
+6. **Tiết diện gần tròn, dày khoảng 1/3 chiều dài** (`W ≈ H`, `H ≈ L/3`). Một hạt dẹt như cái
+   **bánh phồng / bánh gạo giòn** là sai dáng; xem `GRAIN` trong `gao.js`.
+7. **Bóng tiếp xúc phải dính sát chân hạt** ở cả ba góc máy: dưới mỗi hạt có một vệt bóng mềm
+   riêng (lớp fx), không phải bóng chung của cả cụm.
+8. **Ba hạt không cắt vào nhau.** Hai hạt vỏ trấu nằm chồng nhau phải có bóng tiếp xúc của hạt trên
+   đè lên hạt dưới, nếu không sẽ đọc ra là hai mảnh phẳng cắt vào nhau.
+
 
 ### 2.4 Lớp nước trong nồi (`nuoc.js`)
 
@@ -158,3 +203,97 @@ túi gạo còn cứng như hộp carton; hạt gạo rơi quanh túi còn là v
 Những điều này **không chặn bước 5**, nhưng chúng là những chỗ phim sẽ bị soi ở bước 6 (và ở vòng chấm
 hình sau này): bát đong nước và túi gạo lên hình ở c47, nhiệt kế ở c19/c27/c42/c43, hạt gạo ở c20–c23,
 máy đo điện trở ở c11, hai nồi cơm ở c1–c6 và c36.
+
+## 8. Vòng chấm props số 7 (11/11/2026) và những gì đã sửa ở vòng 8
+
+Bảy vòng chấm liên tiếp (mỗi vòng chỉ lại những mục đã đổi) đưa bảng vật về
+**8 ĐẠT · 0 MỞ · 2 phải sửa**. Hai mục CHẶN còn lại, và cách đã sửa:
+
+| Tệp | Người chấm thấy | Đã sửa ở vòng 8 |
+|---|---|---|
+| `src/props/gao.js` | **dung-vat**: cả 5 hạt là "những lá/lens nhọn sắc ở cả hai đầu, có một đường gân chạy dọc giữa mặt và các vệt sọc ngang kiểu gỗ" — người xem gọi đúng là *"một đống lá khô rơi"*; **nguyen-ven**: hạt đứng riêng không có bóng chạm bàn, viền mực khép kín cả phía dưới nên trôi lơ lửng | đường viền thân hạt đổi từ siêu-elip nhọn (`PROF=1.7`) sang `prof(x)=(1-\|x\|^2.6)^0.60`: thân thu dần đều, mũi khum tròn, không có điểm nhọn; **bỏ gân nổi giữa bụng**, khe nứt dọc nay **khắc vào** (`CRACK`); vân vỏ trấu viết lại thành **sợi chạy dọc đứt đoạn** (không còn vân gỗ ngang) trên nền ngà vàng để hạt tách khỏi mặt bàn; bảng sáng riêng 5 bậc; `PROP.view` dựng lại: ba hạt **nằm sát bàn** xếp vuông góc với hướng đổ bóng (mỗi hạt một vệt bóng riêng chạm bàn), một hạt ngửa bụng lộ khe nứt, một hạt lăn nghiêng lộ độ dày; **thêm một hạt bị cưa** (mặt cắt lộ lớp tinh bột trắng) — đây là dấu hiệu không nhầm lẫn được của hạt gạo |
+| `src/props/nhiet-ke.js` | **nguyen-ven**: bầu đỏ ở đáy là khối lổm bổm có vết seam màu nhạt chạy ngang, tràn đè lên chân đế xám của ống; chân đế xám lọt ra bên phải như một mảnh vỡ rời | bỏ hẳn chân đế xám lệch bên phải và hai thanh khung ống; thân thủy tinh dựng lại thành **một khối liền** bằng `LatheGeometry` (vỏ ngoài đi lên từ đáy bầu → vòng miệng ống → quay ngược xuống vỏ trong → đáy đóng) nên không còn mặt cắt cắt qua nhau, không còn vết seam; cột thủy ngân và bầu là **cùng một khối xoay** (một `LatheGeometry`), cùng đỏ `#f04462`; ống thủy tinh có **nửa trước (lớp fx) và nửa sau (lớp vật thể)** riêng, nên cột là một ống kính **bên trong** khoang ống chứ không phải sơn dán lên mặt phẳng |
+
+Ghi chú cho người đọc mã `gao.js`: trường `faceTop`/`faceBot` trong `geo.userData` là **biên thật của mặt
+cắt**, lấy từ chính lưới đã dựng — mọi núm tinh bột phải nằm trong đó. Có một lỗi đã sửa trong lúc
+làm: `quadF(A[s], A[s+1], B[s], B + 0, B[s+1])` — `B` là **mảng** chỉ số nên `B + 0` thành chuỗi,
+làm mặt cắt vỡ chỉ số và hiện ra thành mảng đen. Đúng phải là `quadF(A[s], A[s+1], B[s], B[s+1])`.
+
+## 9. Vòng chấm props số 9 (11/11/2026) và những gì đã sửa ở vòng 10
+
+Vòng 9 chấm lại hai mục đã đổi (`gao`, `nhiet-ke`) và trả về: **gao ĐẠT** (chỉ còn góp ý
+không chặn), **nhiệt kế thỗng** — lỗi CHẶN `nguyen-ven`:
+
+- Ở góc nhìn từ trên xuống, **toàn bộ tấm bảng và bầu đỏ ở đáy lơ lửng**, quanh bầu đỏ không có
+  bóng tiếp xúc nào (vùng giấy đồng nhất), và ở góc ngang cũng không có bóng dưới chân tấm bảng.
+- Phía sau tấm bảng có **mảng phẳng xám viền cứng, không có viền mực, trôi lơ lửng**, đọc ra như
+  một mảnh giấy dán rời.
+
+**Ba điều đã sửa ở vòng 10** (đừng làm ngược lại):
+
+1. **Ống thủy tinh được nâng lên** (`TUBE_LIFT = .0065` trong `nhiet-ke.js`) để **đáy bầu thủy ngân
+   trùng với đáy khung** (`-.037`). Trước đó bầu đỏ thấp hơn khung 6,5 mm, nên khi đặt vật xuống
+   sàn thì **chỉ bầu đỏ chạm sàn còn tấm bảng thì bay lơ lửng** — đúng lỗi người chấm nêu.
+2. **Vệt bóng tiếp xúc phải nằm sát sàn** (cao độ `-.0368`, sàn là đáy vật ở `-.037`), không nằm
+   lơ lửng vài milimét. Vệt là một tờ **nền trắng** dùng phép **nhân** (`MultiplyBlending`), không
+   có viền mực — bóng không được có viền, viền làm nó thành mảnh giấy dán.
+3. **Thêm chân đế kim loại** dưới đáy khung (`rbox(W*.46, .006, .026, .002)`, có vân thép riêng):
+   một tấm thang đo đứng một mình không có gì đỡ thì đọc ra là một tấm bảng bay; chân đế ấn xuống
+   sàn, nối vật với mặt bàn và có chất liệu riêng nên không đọc ra là một mảng phẳng dán thêm.
+
+Kèm theo, **thẻ "SÔI" được dựng lại**: thẻ nằm **DỌC** (S/Ô/I xếp chồng, chữ ~69 px, thẻ 96×242 px),
+vạch đậm kết thúc ở `w*.44` để **khe giữa mép vạch và mép số "100" rộng ra**. Thẻ nằm ngang ở khe cũ
+(~70 px) thì cả thẻ đọc ra là một cục đỏ vỡ nát, không đọc ra chữ.
+
+**Hai quy tắc đã học được từ những vòng này — đọc trước khi sửa vật:**
+
+- **Lớp fx của rig không vẽ vật liệu `depthWrite: false`.** Ở `rig/render.js`, lớp fx được vẽ
+  *sau* bước viền mực vào `rtInk`; một vật liệu không ghi độ sâu thì **không hề được vẽ ra** (đã
+  thử: vệt bóng biến mất sạch). Muốn một vệt bóng mềm trên mặt sàn thì phải dùng vật liệu
+  **đục** có texture nền trắng và phép **nhân**.
+- **Công cụ `propcheck` ép mọi mesh của vật phải đổ bóng** (`obj.traverse(o => { o.castShadow =
+  true })` trong `propcheck/main.js`). Nghĩa là **vật không tự tắt được bóng đổ của mình**: mảng xám
+  viền cứng nằm sau nhiệt kế là **bóng đổ của chính tấm bảng** trên sàn xưởng quay, không phải
+  một mảnh vật thể lạ. Muốn nó không đọc ra như một mảnh giấy dán thì phải có **mặt thật** để bóng
+  rơi vào (chân đế, tấm chắn), chứ không sửa được bằng cách tắt `castShadow` trong tệp vật.
+
+Ghi chú cho bước sau (dựng hình): `gao.js` vẽ lớp cơm bằng `riceGrainTex()` và mặt cắt bằng
+`riceCutTex()` (cùng hình hạt `riceShape()`), nên đừng sửa lại hình hạt ở `gachGao()` mà quên
+tờ vân — hai nơi phải khớp nhau.
+
+### 9.1 Vòng 10 (11/11/2026): nhiệt kế ĐẠT, hạt gạo thành MỞ
+
+Vòng 10 chấm lại hai mục: **nhiệt kế thủy ngữ ĐẠT** (cả ba tiêu chí CHẶN đều ĐẠT — vật
+đã cắm xuống bàn ở cả ba góc máy, có bóng tiếp xúc sát chân, thẻ "SÔI" đọc được ba chữ),
+**hạt gạo MỞ** — lỗi CHẶN `dung-vat`:
+
+> Cả ba góc máy, ba vật đọc ra là **ba lát gỗ dẹt bo tròn nằm sàn** (tên mù: "ba đĩa/lát
+> gỗ dẹt, coaster gỗ"): thân là elip **lập lòng đối xứng hai đầu**, mặt trên có vân sợi
+> **chạy song song đều tăm tắp như vân gỗ mộc**, và chiếc úp lộ một mặt trắng lấm tấm
+> như lõi bánh.
+
+**Đã sửa ở vòng 11** (đừng làm ngược lại):
+
+1. **Hạt không còn đối xứng.** `prof()` nay có hai đầu khác nhau: đầu rễ (x = −1) nhọn dần
+   còn ~10% bề rộng (`PROF_TIP_L`), đầu mũi (x = +1) bè còn ~42% (`PROF_TIP_R`). Hạt gạo
+   không có hai đầu giống nhau; hạt đối xứng đọc ra là một lát dẹt. Cả hai đầu vẫn **bo
+   tròn**, không có mũi nhọn như lá (đó là lỗi của vòng 8).
+2. **Thân dài:rộng 3,5:1** (`GRAIN = 7,6 × 2,17 × 2,04 mm`), tiết diện vẫn gần tròn.
+3. **Nếp lõm ở sống lưng** (`CRACK_BACK`): hạt nằm sấp bụng xuống bàn nên **lưng quay lên** —
+   đây là mặt người xem thấy ở góc từ trên xuống, và nếp lõm chạy dọc là dấu hiệu nhận ra hạt
+   gạo. Nếp **lõm vào**, không nổi lên (gân nổi ở giữa mặt là dấu hiệu của lá — lỗi vòng 8).
+4. **Vân vỏ trấu chỉ ở hai đầu.** Thân hạt là **kem trắng bán trong**; vỏ trấu là một lớp
+   mỏng bọc hai đầu, vẽ bằng sợi **ngắn, đứt quãng, dày mỏng không đều, nghiêng nhẹ**.
+   Sợi dài đều tăm tắp chạy song song là **vân gỗ**, đọc ra là lát gỗ dẹt.
+5. **Bảng sáng của hạt ấm hơn** (`GRAIN_GRAD`): các bậc thấp nâng lên, để mặt sườn giữ
+   tông kem–nâu trấu thay vì thành một **dải xám lạnh** dán bên hông hạt (môi trường của
+   xưởng quay có ánh sáng môi trường lạnh, nên albedo tối dễ thành xám lạnh).
+
+**Kết quả vòng 11 (11/11/2026): `gao` ĐẠT.** Bảng vật chốt ở **10 ĐẠT · 0 MỞ · 0 phải sửa** —
+bước 5 (dựng vật) xong.
+
+Góp ý còn lại của vòng 11 (KHÔNG chặn, để bước dựng hình xử nếu thấy cần): dải xám lạnh ở
+mặt sườn hạt vẫn lạch tông; viền mực mép dưới mặt ruột hạt bị cưa đứt thành đoạn; mặt hạt
+nhẵn bóng như nhựa, thiếu chất xơ. Lưu ý khi sửa tiếp: **đừng sửa `gao.js` ở bước dựng hình**
+— sửa là mã vật đổi, bảng vật phải chấm lại (vòng props) trước khi bước hình coi là xong.
+

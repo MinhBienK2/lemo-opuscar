@@ -1,5 +1,15 @@
 // Máy đo điện trở: một cái đồng hồ đo có màn hình số, một nút xoay chọn vị trí,
-// hai que chạm nối vào hai dây của viên cầu. setReading(s) đổi số trên màn hình.
+// hai que chạm nối vào hai dây của viên cầu.
+//
+// Màn hình phải nói được CẢ HAI con số của câu c11 ("mười kiloôm" rồi "một
+// kiloôm") trong cùng một khung: người xem phải thấy số TỤT XUỐNG, chứ không
+// phải thấy một số rồi tự đoán. Nên màn hình vẽ hai hàng — hàng trên là số lúc
+// mát, hàng dưới là số lúc nóng — kèm một mũi tên hổ phách nối từ hàng trên
+// xuống hàng dưới. Số đang đo thì sáng mạnh, số còn lại sáng vừa đủ đọc được.
+//
+// setReading(txt) vẽ MỘT hàng (dùng cho ảnh ba phía của danh mục vật),
+// setReadings(a, b, live) vẽ hai hàng: a trên, b dưới, `live` là giá trị đang
+// sáng (chuỗi '10 kΩ' / '1 kΩ', hoặc 0 = hàng trên, 1 = hàng dưới).
 // Tên vật phải đúng với cái người xem thấy: đây là máy đo, còn viên cầu đầu dò
 // nhiệt là vật nhỏ trong nồi (xem noi-cat-ngang.js).
 import * as THREE from 'three';
@@ -33,17 +43,90 @@ export function cauDoDienTro(opts = {}) {
   g.add(mesh(rbox(.150, .195, .038, .012), body, [0, 0, 0], { rot: [0, 0, 0] }));
   g.add(mesh(rbox(.156, .201, .010, .014), dark, [0, 0, -.016]));
 
-  // màn hình số: một khung đen, số in trên đó
-  const screen = document.createElement('canvas'); screen.width = 256; screen.height = 128;
+  // Màn hình số: một khung tối, hai hàng chữ. Hàng trên là số lúc mát, hàng
+  // dưới là số lúc nóng, một mũi tên hổ phách nối từ hàng trên xuống hàng
+  // dưới để số tụt là thấy ngay, không phải tự đoán.
+  //
+  // Canvas 320x200 giữ tỉ lệ 1.6 đúng bằng hộp màn hình .1152 x .072 ở dưới;
+  // đổi kích thước một bên mà không đổi bên kia thì chữ bị méo.
+  const SCR_W = 320, SCR_H = 200;
+  const SCR_BG = '#1d2a24', SCR_LIVE = '#8ef0b4', SCR_DIM = '#5fbf8d', SCR_ARROW = '#f7bd27';
+  const ROW_PX = 96, ROW_UNIT = 54, ROW_Y = [52, 148], NUM_RIGHT = 130, UNIT_X = 140;
+  const screen = document.createElement('canvas'); screen.width = SCR_W; screen.height = SCR_H;
   const sc = screen.getContext('2d');
-  const draw = txt => {
-    sc.fillStyle = '#1d2a24'; sc.fillRect(0, 0, 256, 128);
-    sc.fillStyle = '#8ef0b4'; sc.font = 'bold 74px monospace'; sc.textAlign = 'center'; sc.textBaseline = 'middle';
-    sc.fillText(txt, 128, 68);
+
+  // '10 kΩ' → ['10', 'kΩ']: số to, đơn vị nhỏ hơn đứng bên phải
+  const splitVal = t => {
+    const s = String(t == null ? '' : t).trim(), i = s.lastIndexOf(' ');
+    return i > 0 ? [s.slice(0, i), s.slice(i + 1)] : [s, ''];
   };
-  draw('—');
+  // số dài hơn chỗ trống thì co chữ lại, chứ không để nó tràn ra ngoài màn hình
+  const fitNum = nums => {
+    let np = ROW_PX;
+    sc.font = `bold ${np}px monospace`;
+    while (np > 24 && nums.some(n => sc.measureText(n).width > NUM_RIGHT - 10)) {
+      np -= 4; sc.font = `bold ${np}px monospace`;
+    }
+    return np;
+  };
+
+  // MỘT hàng: số to giữa màn hình. Dùng cho ảnh ba phía của danh mục vật.
+  const drawOne = txt => {
+    sc.fillStyle = SCR_BG; sc.fillRect(0, 0, SCR_W, SCR_H);
+    const [num, unit] = splitVal(txt);
+    let np = 112, up = 60;
+    sc.font = `bold ${np}px monospace`;
+    let nw = sc.measureText(num).width;
+    sc.font = `bold ${up}px monospace`;
+    let uw = unit ? sc.measureText(unit).width : 0;
+    const total = nw + (unit ? 12 + uw : 0);
+    if (total > SCR_W - 16) {
+      const k = (SCR_W - 16) / total;
+      np = Math.max(24, Math.round(np * k)); up = Math.max(18, Math.round(up * k));
+      sc.font = `bold ${np}px monospace`; nw = sc.measureText(num).width;
+      sc.font = `bold ${up}px monospace`; uw = unit ? sc.measureText(unit).width : 0;
+    }
+    const x0 = (SCR_W - (nw + (unit ? 12 + uw : 0))) / 2;
+    sc.fillStyle = SCR_LIVE; sc.textBaseline = 'middle'; sc.textAlign = 'left';
+    sc.font = `bold ${np}px monospace`; sc.fillText(num, x0, SCR_H / 2);
+    if (unit) { sc.font = `bold ${up}px monospace`; sc.fillText(unit, x0 + nw + 12, SCR_H / 2); }
+  };
+
+  // HAI hàng: hàng trên số lúc mát, hàng dưới số lúc nóng. Số đang đo sáng
+  // mạnh, số kia sáng vừa đủ đọc trên nền màn hình tối — hai số cùng hiện,
+  // người xem tự thấy con số nào đang chạy.
+  const drawTwo = (a, b, live) => {
+    sc.fillStyle = SCR_BG; sc.fillRect(0, 0, SCR_W, SCR_H);
+    const [na] = splitVal(a), [nb] = splitVal(b);
+    // hai hàng dùng chung một cỡ chữ: hàng nào cũng phải to như nhau, không có
+    // hàng nào nhỏ hơn hàng nào, nếu không con số tụt sẽ đọc ra như hai việc
+    // khác nhau chứ không phải một số đổi số
+    const np = fitNum([na, nb]);
+    const row = (txt, cy, color) => {
+      const [num, unit] = splitVal(txt);
+      sc.fillStyle = color; sc.textBaseline = 'middle';
+      sc.textAlign = 'right'; sc.font = `bold ${np}px monospace`;
+      sc.fillText(num, NUM_RIGHT, cy);
+      if (unit) {
+        sc.textAlign = 'left'; sc.font = `bold ${ROW_UNIT}px monospace`;
+        sc.fillText(unit, UNIT_X, cy);
+      }
+    };
+    row(a, ROW_Y[0], live === 0 ? SCR_LIVE : SCR_DIM);
+    row(b, ROW_Y[1], live === 1 ? SCR_LIVE : SCR_DIM);
+    // mũi tên hổ phách: số tụt từ hàng trên xuống hàng dưới
+    sc.strokeStyle = SCR_ARROW; sc.fillStyle = SCR_ARROW;
+    sc.lineWidth = 9; sc.lineCap = 'round';
+    sc.beginPath(); sc.moveTo(286, 44); sc.lineTo(286, 126); sc.stroke();
+    sc.beginPath(); sc.moveTo(272, 126); sc.lineTo(300, 126); sc.lineTo(286, 156); sc.closePath(); sc.fill();
+  };
+
   const stex = new THREE.CanvasTexture(screen); stex.colorSpace = THREE.SRGBColorSpace;
-  g.add(mesh(rbox(.112, .058, .006, .006), toon('#ffffff', { map: stex }), [0, .058, .021]));
+  // Màn hình có đèn sau (như màn LCD thật) nên số mờ vẫn đọc được khi máy
+  // quay đứng xa; không có đèn sau thì hàng số tắt chìm vào nền.
+  g.add(mesh(rbox(.1152, .072, .006, .006),
+    toon('#ffffff', { map: stex, emissive: '#ffffff', emissiveMap: stex, emissiveIntensity: .25 }),
+    [0, .050, .021]));
 
   // nút xoay chọn vị trí: một đĩa có vạch chỉ
   const dial = new THREE.Group(); dial.position.set(0, -.038, .023);
@@ -81,7 +164,15 @@ export function cauDoDienTro(opts = {}) {
     g.add(p); probes.push(p);
   }
 
-  g.setReading = txt => { draw(txt); stex.needsUpdate = true; };
+  // Một số: dùng cho ảnh ba phía của danh mục vật, số to giữa màn hình.
+  g.setReading = txt => { drawOne(txt); stex.needsUpdate = true; };
+  // Hai số: a ở hàng trên, b ở hàng dưới, `live` là giá trị đang sáng
+  // ('10 kΩ' hoặc '1 kΩ'; cũng nhận 0 = hàng trên, 1 = hàng dưới).
+  g.setReadings = (a, b, live) => {
+    const l = (live === 1 || live === b) ? 1 : 0;
+    drawTwo(a, b, l);
+    stex.needsUpdate = true;
+  };
   g.setDial = a => { dial.rotation.z = a; };
   g.probes = probes;
   g.setReading('—');
@@ -89,8 +180,9 @@ export function cauDoDienTro(opts = {}) {
 }
 
 // Trong ảnh ba phía, màn hình phải có một con số: màn hình trống đọc ra là
-// một mảng xanh, và máy đo không có số thì không thấy là máy đo.
+// một mảng xanh, và máy đo không có số thì không thấy là máy đo. Số ở đây là
+// số phim kể ("một kiloôm"), không phải số bịa ra.
 export const PROP = {
   name: 'máy đo điện trở',
-  view: () => { const g = cauDoDienTro(); g.setReading('1.0 kΩ'); return g; },
+  view: () => { const g = cauDoDienTro(); g.setReading('1 kΩ'); return g; },
 };

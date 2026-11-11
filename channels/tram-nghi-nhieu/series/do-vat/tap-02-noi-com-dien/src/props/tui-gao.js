@@ -24,11 +24,12 @@ export function tuiGao(opts = {}) {
   g.add(mesh(rbox(.190, .030, .098, .008), toon('#dccfae'), [0, .262, 0], { rot: [0, 0, -.03] }));
   g.add(mesh(rbox(.176, .018, .020, .006), toon('#c9bb98'), [0, .276, 0], { rot: [0, 0, -.03] }));
 
-  // vài hạt gạo rơi lệch bên cạnh
+  // Vài hạt gạo rơi lệch bên cạnh. Hạt phải ĐỦ TO: ở cỡ này hạt thật bị viền
+  // mực nuốt hết, đọc ra là mấy vệt xanh đậm trên bàn chứ không phải hạt gạo.
   const r = mulberry(11);
-  for (let i = 0; i < 7; i++) {
-    const gr = gachGao({ scale: 1 });
-    gr.position.set(.10 + r() * .10, .006, .02 + (r() - .5) * .10);
+  for (let i = 0; i < 5; i++) {
+    const gr = gachGao({ scale: 3.0 });
+    gr.position.set(.10 + r() * .10, .010, .02 + (r() - .5) * .10);
     gr.rotation.set(r() * 6, r() * 6, r() * 6);
     g.add(gr);
   }

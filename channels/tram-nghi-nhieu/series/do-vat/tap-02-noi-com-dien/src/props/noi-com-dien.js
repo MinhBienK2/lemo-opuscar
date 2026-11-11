@@ -125,12 +125,23 @@ export function noiComDien(opts = {}) {
   // ── hơi nước: mấy mảng mờ bay lên từ lỗ nắm (chất khí vô hình thành vật) ──
   // Hơi nước không được là một quả bóng trắng đặc trên nắm: nó là một mảng mờ
   // không có bóng đổ, sáng đều, nhiều mảng nhỏ chồng lên nhau.
-  const steamMat = new THREE.MeshBasicMaterial({
-    color: new THREE.Color('#e2f3ff'), transparent: true, opacity: .42,
-    depthWrite: false, toneMapped: false,
+  const steamMat = toon('#e2f3ff', {
+    emissive: new THREE.Color('#e2f3ff').multiplyScalar(.5),
+    transparent: true, opacity: .34, depthWrite: false,
   });
+  // mép mảng tan dần: alpha nhạt dần khi mặt mảng nghiêng so với mắt người
+  // xem, nên mảng hơi nước không có đường viền cứng
+  steamMat.onBeforeCompile = sh => {
+    sh.fragmentShader = sh.fragmentShader.replace('#include <normal_fragment_maps>',
+      '#include <normal_fragment_maps>\n  diffuseColor.a *= 1.7 * pow(smoothstep(0., 1., abs(dot(normalize(normal), normalize(vViewPosition)))), 1.5);');
+  };
+  steamMat.customProgramCacheKey = () => 'steam-soft';
   const steam = new THREE.Group();
-  for (const [i, k] of [[1, 1], [.66, .66], [.40, .40]].entries()) {
+  // Bốn mảng hơi nước, mỗi mảng một độ lớn. (Danh sách phải là [chỉ số, độ
+  // lớn] — `[[1,1]].entries()` trả về cặp [chỉ số, MẢNG], không phải [chỉ
+  // số, số]; sai chỗ này thì kích thước mảng hơi nước là NaN và hơi nước
+  // không bao giờ hiện ra.)
+  for (const [i, k] of [[0, 1], [1, .72], [2, .50]]) {
     const p = new THREE.Mesh(new THREE.IcosahedronGeometry(1, 2), steamMat);
     p.userData.k = k; p.scale.setScalar(.001);
     fxLayer(p); steam.add(p);
@@ -155,8 +166,16 @@ export function noiComDien(opts = {}) {
     steam.visible = on;
     if (on) steam.children.forEach((p, i) => {
       const s = p.userData.k;
-      p.scale.setScalar((.012 + .016 * k) * s);
-      p.position.set(.085 + (i - 1) * .007 * s, .296 + .02 * k + i * .016 * s, .02);
+      // Ba mảng hơi nước phải XẾP LỆCH nhau, không chồng thành một quả bóng
+      // xám tròn: mảng dưới to, mảng trên nhỏ và lệch sang bên, bay lên cao
+      // dần. Một khối tròn trắng đục đọc ra như vật rơi lơ lửng, không phải
+      // hơi nước.
+      p.scale.setScalar((.018 + .020 * k) * s);
+      // Hơi nước phải bay CAO HƠN vòm nắp. Hơi nước dán sát mặt nắp trắng
+      // thì trắng trên trắng, người xem không thấy có hơi nước, và câu "đang
+      // nấu" không còn gì để bám vào. Các mảng phải CHỒNG lên nhau thành một
+      // vệt: rời rạc thành một chuỗi hạt tròn là đọc ra khói, không phải hơi.
+      p.position.set(.085 + (i - 1) * .008 * s + i * .006, .345 + i * .020 * s, .02);
       p.rotation.y = i * 1.9;
     });
   };
