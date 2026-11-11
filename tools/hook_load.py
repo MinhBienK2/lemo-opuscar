@@ -33,13 +33,18 @@ SWAP_MAX = int(os.environ.get('LEMO_SWAP_MAX', 0) or 80)
 
 # Việc nặng: dựng hình, tờ nhịp, dựng phim, người chấm. Việc nhẹ thì vẫn cho chạy — người làm
 # phải đọc được báo cáo và sửa được mã trong lúc máy đang kẹt.
+#
+# `review.sh` và `episode.py` KHÔNG nằm trong đây: chúng là người lái, không phải việc nặng. Chúng
+# tự xếp hàng (core/render/slot.mjs giữ hai chỗ dựng cho cả máy), nên chặn chúng chỉ là làm runner
+# chết thay vì cho nó chờ. Việc ăn bộ nhớ thật sự là những lệnh dựng hình.
 HEAVY = re.compile(
-    r'beatsheet\.mjs|video\.mjs|still\.mjs|propcheck\.mjs|render/review\.sh|'
-    r'episode\.py|claude\s+-p|sourcecheck\.mjs|readcheck\.mjs|scenecheck\.mjs|'
-    r'drawcheck\.mjs|filmcheck\.mjs|mux\.sh|build\.sh')
+    r'beatsheet\.mjs|video\.mjs|still\.mjs|propcheck\.mjs|'
+    r'sourcecheck\.mjs|readcheck\.mjs|scenecheck\.mjs|drawcheck\.mjs|filmcheck\.mjs|mux\.sh|build\.sh')
 
-# Bản thân `claude -p` là người chấm: nó mở ảnh cỡ thật, mà ảnh thì nặng.
-CRITIC = re.compile(r'claude\s+-p')
+# `claude -p` là người chấm: nó mở ảnh cỡ thật, mà ảnh thì nặng. Nó không nằm trong HEAVY (vì
+# `git commit -m "… claude -p"` không phải là đang chấm), nên nó có một mẫu riêng: `claude` phải
+# đứng ở vị trí một lệnh (đầu dòng, sau `;`/`&`/`|`, hoặc sau `env VAR=…`).
+CRITIC = re.compile(r'(?:^|[;&|]\s*|\benv\s+(?:\w+=\S+\s+)*)(?:\S*/)?claude\s+-p\b')
 
 # Một mẫu trong `grep -E "beatsheet.mjs"` không phải là việc đang chạy. Nội dung trong dấu nháy bị
 # bỏ trước khi so: `ps ... | grep -E "beatsheet.mjs"` là một câu hỏi trạng thái (vòng dò — hook_poll
@@ -50,10 +55,10 @@ QUOTED = re.compile(r'"[^"]*"|\'[^\']*\'')
 # chạy episode.py. Nên chỉ lệnh mà máy sẽ **chạy** mới tính: công cụ nặng phải là lệnh đầu tiên, hoặc
 # đi sau một lệnh chạy được (python3, node, sh, bash…).
 TOOL = re.compile(r'(?<![\w./-])(beatsheet\.mjs|video\.mjs|still\.mjs|propcheck\.mjs|'
-                   r'review\.sh|episode\.py|sourcecheck\.mjs|readcheck\.mjs|scenecheck\.mjs|'
+                   r'sourcecheck\.mjs|readcheck\.mjs|scenecheck\.mjs|'
                    r'drawcheck\.mjs|filmcheck\.mjs|mux\.sh|build\.sh)(?![\w-])')
 RUNNER = re.compile(r'(?:^|[;&|]\s*|\b(?:python3?|node|sh|bash|npx|env)\s+)\S*'
-                    r'(?:beatsheet\.mjs|video\.mjs|still\.mjs|propcheck\.mjs|review\.sh|episode\.py|'
+                    r'(?:beatsheet\.mjs|video\.mjs|still\.mjs|propcheck\.mjs|'
                     r'sourcecheck\.mjs|readcheck\.mjs|scenecheck\.mjs|drawcheck\.mjs|filmcheck\.mjs|'
                     r'mux\.sh|build\.sh)')
 
@@ -181,6 +186,13 @@ def selftest():
         ('node core/render/still.mjs ep 12.5', 3.0, (6000, 90, 8000), 2),
         ('claude -p "chấm"', 20.0, (6000, 10, 8000), 2),
         ('claude -p "chấm"', 3.0, (6000, 10, 8000), 0),
+        # một tệp được NÊU TÊN trong lệnh khác không phải việc đang chạy
+        ('git add tools/hook_load.py channels/tram-nghi-nhieu/tools/review.py', 20.0, (6000, 10, 8000), 0),
+        ('git commit -m "fix review.py and claude -p path"', 20.0, (6000, 10, 8000), 0),
+        ('ps -eo pid,etime,args | grep -E "beatsheet.mjs" | grep -v grep', 20.0, (6000, 10, 8000), 0),
+        # người lái (review.sh, episode.py) thì không chặn: nó tự xếp hàng, chặn nó chỉ làm nó chết
+        ('sh channels/tram-nghi-nhieu/tools/review.sh ep picture', 20.0, (6000, 10, 8000), 0),
+        ('python3 channels/tram-nghi-nhieu/tools/episode.py ep', 20.0, (6000, 10, 8000), 0),
     ]
     bad = 0
     for cmd, load, mem, want in cases:
