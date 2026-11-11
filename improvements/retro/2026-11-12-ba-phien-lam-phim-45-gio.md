@@ -92,6 +92,24 @@ selftest: một vật mã đã đổi thì quay lại người chấm dù ảnh 
 
 ---
 
+## P2b — critical — Một bước **KẾ HOẠCH đã đóng** vẫn bị mở lại, và nó chặn cả bước sau
+
+**Bằng chứng.** `gate.py:14-15` nói rõ: *"Một bước coi là xong khi mọi mục nó có là PASS hoặc MỞ và
+không có gì đã chấm mà thay đổi: **outline, look — kế hoạch: đóng rồi thì đóng (sửa sau cũng vậy)**"*.
+Nhưng `review.py` quyết phạm vi của một vòng bằng **dấu vân tay ảnh** (`scope()`), nên một vật sửa xong
+làm dấu vân tay của nó đổi → vòng sau chấm lại nó → `_main` tính lại `closed` → **bước đã đóng lại mở** →
+`review.py:561-564` thấy bước trước chưa xong nên **từ chối mở vòng của bước sau** → vòng lặp quay lại.
+
+Đo trên bốn tập đang có, trước khi sửa, bước `look` phải chấm lại **28, 32, 18 mục** chỉ vì dấu vân
+tay ảnh đổi; sau khi sửa: **0**. Vòng `look` của `co-the` đã đi tới **13** vòng vì lý do này.
+
+Đây là M3 của bản ghi 11/11 — *"đánh bóng vật **sau** khi vòng chấm đã đóng xóa vòng chấm đó"* — và
+bản ghi đó đã nêu guard (từ chối mở vòng khi vòng trước đã đóng mà mã đã đổi, trừ khi có `--force`).
+Guard ấy **chưa được dựng**; nay nó đã có, và trùng đúng với cái `gate.py` đã hứa.
+
+**Guard.** `review.py` `scope()`: một bước kế hoạch đã đóng thì giữ nguyên phán quyết, không mở lại vì
+dấu vân tay đổi. Muốn chấm lại thì nói rõ (`--again`).
+
 ## P3 — critical — Một vật sửa lại mã có thể giữ phán quyết **của mã chưa ai nhìn**
 
 **Bằng chứng.** `review.py:209-212` (bản cũ) ghi đè `src` bằng digest **hiện tại** cho mọi mục bị coi là
@@ -244,6 +262,7 @@ nhất; `SKILL.md` nói: **một tập dùng MỘT người chấm suốt tập*
 |---|---|
 | P1 | `tools/hook_poll.py`: khoá đếm theo **kiểu chờ** (`wait:loop`, `wait:sleep`, `wait:proc`, `wait:date+check`); selftest có đúng câu lệnh thật của ba phiên |
 | P2 + P3 | `review.py`: `scope()` hỏi **digest mã nguồn** trước dấu vân tay ảnh; `run()` không ghi đè `src` của mục bị giữ khi mã đã đổi — mã và phán quyết luôn cùng một mã |
+| P2b | `review.py` `scope()`: một bước **KẾ HOẠCH đã đóng thì không mở lại** vì dấu vân tay ảnh đổi (trước khi sửa: `look` chấm lại 28–32 mục; sau: 0) |
 | P4 | `episode.py`: chặng `deliver` xong khi cổng xanh **và** `sourcecheck.mjs` nói phim là phim của mã hiện tại |
 | P5 | `episode.py`: trần số phiên đếm từ `out/sessions.jsonl` của tập — trần của **tập**, không của một lần chạy |
 | P6 | `review.py`: `MAX_ROUNDS` mỗi bước; chạm trần thì phần còn lại thành MỞ và bước đóng lại |
