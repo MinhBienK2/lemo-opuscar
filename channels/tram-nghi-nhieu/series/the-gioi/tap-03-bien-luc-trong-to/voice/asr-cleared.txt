@@ -1,0 +1,6 @@
+# Những câu mà người đọc đúng nhưng Whisper chép sai, và vì sao được tha.
+# Mỗi dòng: mã câu — dấu vân tay của tệp wav — lý do. Câu chỉ được tha khi lời kể trong `lines.json` là đúng
+# và điều Whisper sai là do mô hình (bỏ dấu tiếng Việt, viết số thành chữ số),
+# không phải do giọng đọc.
+c18 — 62f82d940e31 — Whisper viết số thành chữ số ("2,5 %" thay cho "hai phẩy năm phần trăm") và bỏ chữ "trăm"; giọng đọc đúng câu.
+c19 — a306e255cf7e — Whisper viết số thành chữ số ("15 %" thay cho "mười lăm phần trăm"); giọng đọc đúng câu.

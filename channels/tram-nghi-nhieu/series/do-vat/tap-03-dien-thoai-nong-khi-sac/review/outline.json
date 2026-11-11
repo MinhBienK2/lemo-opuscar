@@ -1,0 +1,51 @@
+{
+ "step": "outline",
+ "round": 2,
+ "items": {
+  "dan-y": {
+   "key": "924029613fadeb24586f91eeb1efee9a6b90f3b0fc1cf73711efef82115543bf",
+   "verdict": "PASS",
+   "fails": 1,
+   "round": 2,
+   "rows": {
+    "tra-loi": [
+     "ĐẠT",
+     "TREATMENT:20 trả lời đúng chủ thể (nhiệt trong máy khi sạc, ở vỏ và tế bào pin) và đúng chuỗi nhân quả có nguồn: (1) \"phần chênh lệch ở bộ chuyển đổi ... hoá thành nhiệt\" → FACTS:33-37 (TI BQ25185, PDISS = PSYS + PBAT); (2) \"nhiệt do dòng điện chạy qua điện trở nội của tế bào pin\" → FACTS:13-15 (OpenStax, P = I²R) + FACTS:57-63 (J. Power Sources, điện trở ohmic R1 chiếm ưu thế); (3) \"vỏ máy chỉ có một đường để đẩy nhiệt ra\" → FACTS:112 dựa trên ESWEEK (FACTS:87). Điểm nhỏ: câu trả lời một câu nói \"chỉ có một đường\" cứng hơn \"gần như chỉ có một\" ở TREATMENT:19 và dòng ý 17 (TREATMENT:107), nhưng bảng ý vẫn giữ \"gần như\", người xem không bị hiểu sai.",
+     ""
+    ],
+    "nguon": [
+     "ĐẠT",
+     "Mọi mắt xích có nguồn sơ cấp: điện trở→sinh nhiệt (FACTS:15 OpenStax), cục sạc 5 V (FACTS:25 Samsung), chênh lệch thành nhiệt ở bộ sạc (FACTS:37 datasheet TI), 96,5 % (FACTS:47 datasheet TI), 23 J / 103 J (FACTS:63-65 J. Power Sources), ngưỡng dừng sạc 45 °C JEITA (FACTS:73-77), dải da 34–43 °C (FACTS:95-97 ESWEEK), già theo nhiệt (FACTS:99-103 Joule), không có Wikipedia trong FACTS:125-134. Ba lỗi của lần trước đã sửa: dòng 8 (TREATMENT:98) nay nói rõ \"đó là phép tính của tập phim, không phải số đo một chiếc máy cụ thể\" và hình có chữ nhỏ *theo công thức* dưới mặt số 0,8 W; dòng 20 (TREATMENT:110) nay ghi \"Không có con số nào trên khung này\" (đồng hồ chỉ có kim, đúng với props ở TREATMENT:56); dòng 22 (TREATMENT:112) nay chỉ có dải màu trên vỏ, ghi \"không phải số đo lúc sạc\", không có nhiệt kế. Ghi chú nhỏ: dòng 9 (TREATMENT:99) nói chung \"Máy nào dùng bộ sạc xung thì ít thất hơn nhiều\", trong khi FACTS:50 nói 96,5 % là của một chip cụ thể tại một điểm làm việc — nên câu đó nên neo vào đồng hồ trong khung (cách đang làm) chứ không nói chung.",
+     ""
+    ],
+    "vat-that": [
+     "ĐẠT",
+     "Cột Hình của cả 25 dòng đều dựng từ vật thật có mặt trong bảng \"Vật lên hình\" (TREATMENT:42-62): điện thoại cắt ngang (91, 107), cục sạc cưa ngang có biến áp–chỉnh lưu–tụ (94-95), bo mạch xanh + chip + túi pin (96), túi pin cắt ngang có lớp than/kim loại/tách (101-102), các đồng hồ (công suất 98, hiệu suất 99, đo nhiệt 104-105, sức chứa 113), nhiệt kế có kim (110-111), dải màu trên vỏ (112), bàn tay (91), ổ cắm (93), đồng hồ treo tường (114), ốp điện thoại + quạt nhỏ (115). Thứ vô hình chỉ xuất hiện đúng ở dạng minh hoạ đã khai ở \"Thứ vô hình\" (TREATMENT:66-71): vệt hơi ấm (91), dòng hạt sáng (93), làn nhiệt cam (98), vùng nóng nhấp nháy quanh lớp tách (103), hạt liti (103), sóng xung nhịp bị bóp chậm (110). Không dòng nào chỉ dựng được bằng chữ.",
+     ""
+    ],
+    "du-mat-xich": [
+     "ĐẠT",
+     "Mỗi ý một dòng một lần (25 dòng, không trùng), và mỗi khái niệm có hình ngay tại dòng nó được nói: điện trở→dòng hạt dày lên đổi cam ở chỗ dây bị kẹp (93); bộ sạc tuyến tính vs bộ sạc xung (99-100); điện trở nội trong lớp điện cực (102); nhiệt do trật tự bên trong đổi, có lúc hút nhiệt vào (103); 23 J (104) và 103 J (105) có vật mang số; nhiệt dồn ở khối nhỏ giữa vỏ (107); kính–nhựa–khung chặn luồng nhiệt (108); bộ điều khiển nhiệt (110); chốt dừng sạc 45 °C (111); dải 34–43 °C (112); pin ở nơi nóng già hơn (113). Lưu ý sản xuất (không chặn): đồng hồ sức chứa (113), ốp điện thoại và quạt nhỏ (115) chưa có mặt trong bảng \"Vật lên hình\" (TREATMENT:40-62).",
+     ""
+    ],
+    "mo-dau": [
+     "ĐẠT",
+     "Dòng 1 của bảng (TREATMENT:91) mở bằng hiện tượng quen thuộc đang xảy ra trước mắt: bàn bếp đèn vàng, điện thoại nằm sấp cắm sạc, một bàn tay cầm điện thoại lên, quanh vỏ máy một vệt hơi ấm bốc lên — mọi bối cảnh và nguyên nhân (bộ chuyển đổi, chip, tế bào pin) mới xuất hiện từ dòng 4 trở đi; câu hỏi \"vậy nhiệt ấy đến từ đâu?\" chỉ được đặt ở dòng 2 (92).",
+     ""
+    ],
+    "khac-biet": [
+     "ĐẠT",
+     "Khoảng trống của lần trước đã được bịt: dòng 2 (92) đặt hai chiếc máy giống nhau — chiếc đang sạc có vệt hơi, chiếc không sạc thì không có gì bốc; dòng 19 (109) thêm phía \"chỉ chơi game, không cắm sạc, thì vỏ mát hơn\"; dòng 9-10 (99-100) tách bạch chip tuyến tính và bộ sạc xung trong cùng khung hai vùng sáng; dòng 14-15 (104-105) hai tế bào cạnh nhau với hai đồng hồ 23 J và 103 J; dòng 23 (113) một tế bào ở kệ mát, một ở chỗ nóng. Ghi chú: ở dòng 113 hình chỉ nêu \"đồng hồ sức chứa của tế bào ở chỗ nóng tụt xuống thấp hơn\" — cần thêm đồng hồ của tế bào ở nơi mát để \"thấp hơn\" là so với cái gì (shot list 4:00-4:11 ghi \"đồng hồ sức chứa lệch nhau\", hai đồng hồ, nhưng cột Hình không nêu).",
+     ""
+    ],
+    "ket": [
+     "ĐẠT",
+     "Cảnh kết trả cả hai: dòng 24 (114) quay lại đúng cái điện thoại lúc nửa đêm (màn hình báo sạc, vệt hơi ấm, đồng hồ treo tường chỉ khoảng nửa đêm) — đúng góc nhìn \"nhiệt độ là cái đồng hồ đo điện đang vào và đang mất\" (TREATMENT:25); dòng 25 (115) biến lời khuyên thành hình: điện thoại không ốp ở góc bàn mát, chiếc ốp bỏ ra cạnh đó, một quạt nhỏ hướng vào máy. Ghi chú: góc nhìn mới (nhiệt độ như đồng hồ đo) mới chỉ nằm trong lời, hình ở dòng 114 chưa có vật mang nó như các con số khác trong tập.",
+     ""
+    ]
+   }
+  }
+ },
+ "critic": "claude -p --model claude-opus-5-5",
+ "closed": true
+}

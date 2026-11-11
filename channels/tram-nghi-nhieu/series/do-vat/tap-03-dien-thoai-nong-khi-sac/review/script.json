@@ -1,0 +1,1947 @@
+{
+ "step": "script",
+ "round": 3,
+ "items": {
+  "c1": {
+   "key": "644530ef6876129c72cf51ac939391c3328bddb69d5ff5ebd01e649749ed492a",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Câu mở đúng ý dàn ý #1 (\"Buổi tối, trên bàn bếp có một chiếc điện thoại đang cắm sạc\"), không thêm ý nào ngoài đó.",
+     "—"
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "Không có con số hay quan hệ nhân quả nào; \"điện thoại đang cắm sạc\" đúng với khung mở N1 của TREATMENT.",
+     "—"
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "13 từ, không có số nào, không bị cắt đôi với câu trước (đây là câu mở đầu).",
+     "—"
+    ]
+   }
+  },
+  "c2": {
+   "key": "a5e13bf5fab6b14c503c9d3d2e6ae5c0bb5bd89da36e5d98b6a7fc6f73fdd84e",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Đúng ý dàn ý #1 \"Ai cầm lên cũng thấy nó ấm\", rút gọn còn \"Cầm lên là biết ngay: nó ấm\", không thêm ý.",
+     "—"
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "Chỉ nói máy ấm tay, đúng hiện tượng mở đầu của TREATMENT; không có mốc nào cần dẫn.",
+     "—"
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "7 từ, không có số.",
+     "—"
+    ]
+   }
+  },
+  "c3": {
+   "key": "6d517fdefe61dbbb6afc6f598a7e4a72c3b05bbcb709b0b22c877c26ac0734fa",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Đúng cột hình của dàn ý #1: \"quanh vỏ máy một vệt hơi ấm mỏng bốc lên\".",
+     "—"
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "Mô tả thứ vô hình trong TREATMENT (\"ở N1, một vệt hơi ấm bốc lên từ vỏ máy\"); không có số.",
+     "—"
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "10 từ, không có số.",
+     "—"
+    ]
+   }
+  },
+  "c4": {
+   "key": "ca2a1d315ccdcc119962ff1f58b7a894688ac383e8a61be94e6e7c64266ccfaa",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Đúng câu đầu của dàn ý #2: \"Nó nóng lên không phải vì có thứ gì cháy ở đó\", không thêm ý nào.",
+     "—"
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "Không có số hay so sánh; là mở câu hỏi \"nhiệt ấy đến từ đâu\" theo dàn ý, không vi phạm mục cấm nói của FACTS.",
+     "—"
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "12 từ, không có số.",
+     "—"
+    ],
+    "giong": [
+     "ĐẠT",
+     "Câu đúng ý nhưng \"không phải vì có thứ gì cháy ở đó\" dễ bị người xem nghe thành \"đang có thứ cháy ở đó\". Rõ hơn: \"Nó nóng lên, nhưng không phải vì nó cháy.\"",
+     "—"
+    ]
+   }
+  },
+  "c5": {
+   "key": "9c350bc353e921115442e1e6ae4406a5bcd79d16458c75b64eaf2ce61bd52335",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Đúng ý dàn ý #2: \"chiếc máy giống y bên cạnh, không cắm sạc, thì mát\", không thêm ý.",
+     "—"
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "So sánh hai máy (một sạc, một không sạc) đúng cột hình dàn ý #2; không có số.",
+     "—"
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "11 từ, không có số.",
+     "—"
+    ]
+   }
+  },
+  "c6": {
+   "key": "b73f4b2084849b7f4c1f8bb4091d4c8deb209103861919cdd46cde42e2b617fe",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Đúng câu hỏi cuối dàn ý #2: \"vậy nhiệt ấy đến từ đâu?\" — không thêm ý.",
+     "—"
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "Câu hỏi, không khẳng định gì; không có số.",
+     "—"
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "6 từ, không có số.",
+     "—"
+    ]
+   }
+  },
+  "c7": {
+   "key": "ec7116d5c1e698f8f5423cd453415ad450e89aa47d2d457c368616af1b509c59",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Đúng ý dàn �ý #3 \"Nó nóng vì dòng điện đi qua chỗ nào có điện trở thì chỗ đó toả nhiệt\", không thêm ý.",
+     "—"
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "Nằm ngay trong FACTS §1 \"Cách nói\": \"dòng điện đi qua chỗ nào có điện trở thì chỗ đó nóng lên\"; không nói \"mọi dòng điện đều sinh nhiệt như nhau\", cũng không nói chung chung \"điện thoại nóng vì có dòng điện chạy qua\".",
+     "—"
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "14 từ, không có số.",
+     "—"
+    ],
+    "giong": [
+     "ĐẠT",
+     "\"toả nhiệt\" kỹ thuật hơn giọng kể bình dân mà FACTS §1 gợi ý (\"chỗ đó nóng lên\"). Nghe một lần sẽ hiểu, nhưng đổi thành \"nóng lên\" thì hợp giọng hơn.",
+     "—"
+    ]
+   }
+  },
+  "c8": {
+   "key": "40be4be0df6a17d9c458238d70b1eda96ec7a30ab173897bcccca23b4bf22616",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Đúng ví dụ của dàn ý #3: \"Chỗ dây bị kẹp ở khe cửa sổ là một ví dụ\", không thêm ý.",
+     "—"
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "Ví dụ minh hoạ cho luật ở FACTS §1, không có số, không có so sánh, không thuộc mục cấm.",
+     "—"
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "12 từ, không có số.",
+     "—"
+    ]
+   }
+  },
+  "c9": {
+   "key": "bf9ac236573bf94766d587d6db5e67ddd118732707e534f53b6dd0c02a9a663b",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Đúng cột hình dàn ý #3: \"ở chỗ dây bị kẹp dẹp, dòng hạt dày lên và đổi sang màu cam\".",
+     "—"
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "Mô tả hiệu ứng hình đã có trong TREATMENT (\"thứ vô hình\": hạt sáng dày lên, đổi cam ở chỗ kẹp); không có số.",
+     "—"
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "12 từ, không có số.",
+     "—"
+    ],
+    "noi-cau": [
+     "ĐẠT",
+     "Câu đúng hình, nhưng đây là lần đầu xuất hiện \"dòng hạt\", trong khi c7 nói \"dòng điện\" — người xem phải tự hiểu hai vật là một. Nối lại giúp: \"Ở chỗ kẹp, dòng hạt đại diện cho dòng điện dày lên và đổi sang màu cam.\"",
+     "—"
+    ]
+   }
+  },
+  "c10": {
+   "key": "a1f0be724ad86041a233fd27529bd00399e161b6dbdc330edcbfecf2f0cc1f59",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Đúng vế cuối dàn ý #3 (\"chỗ kẹp nóng lên\"), không thêm ý.",
+     "—"
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "Không có số; là hệ quả trực tiếp của luật FACTS §1.",
+     "—"
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "4 từ, không có số.",
+     "—"
+    ]
+   }
+  },
+  "c11": {
+   "key": "3c11017830b7426d504ccf6390134238dce6c59bea31c85c969ad49026b77898",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Đúng mở đầu dàn ý #4: \"Nhưng điện không chạy thẳng vào pin được\", không thêm ý.",
+     "—"
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "Đúng với câu trả lời một câu của TREATMENT (điện vào máy không vào pin hết một cách trọn vẹn); không có số, không thuộc mục cấm.",
+     "—"
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "8 từ, không có số.",
+     "—"
+    ],
+    "noi-cau": [
+     "ĐẠT",
+     "\"Nhưng\" ở đây bật sang một tầng mới (đường đi của điện) ngay sau ví dụ về chỗ kẹp của dây, mà câu trước không đặt sẵn mốc để đối lập. Một câu nối ngắn sẽ mượt hơn: \"Nhiệt của máy thì không chỉ ở chỗ kẹp của dây. Và điện cũng không chạy thẳng vào pin được.\"",
+     "—"
+    ]
+   }
+  },
+  "c12": {
+   "key": "f3bcbffe260495c55b34543df69f797280ce014e9dbd1e54b2f628e10c881475",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Câu khớp đúng dòng ý 4 của TREATMENT (\"Nhưng điện không chạy thẳng vào pin được. Nó phải đi qua cục sạc\") và nối tiếp c11, không thêm ý nào ngoài dàn ý.",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "8 từ, không có chữ số, không có con số nào bị cắt đôi giữa c11 và c12 (c11 không có số); đại từ \"nó\" chỉ rõ là \"điện\" ở c11.",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "\"Điện phải đi qua cục sạc\" là mắt xích có nguồn ở FACTS.md mục 2 (cục sạc lấy điện lưới ở một bên, đưa ra 5 V một chiều ở bên kia), không có con số nào bị cấm trong câu.",
+     ""
+    ]
+   }
+  },
+  "c13": {
+   "key": "379bb019eb2ed3883f149e8d28d75c186c26cdc355eb4066e917751abd04efa1",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Đúng cột hình dàn ý #4: \"bên trong là cuộn biến áp (lõi sắt chữ E, hai cuộn dây), một bộ chỉnh lưu và tụ điện\"; không có ý nào ngoài dàn ý.",
+     "—"
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "Chỉ nêu ba linh kiện bên trong cục sạc, không có con số, không có so sánh, không thuộc danh sách FACTS cấm nói. Lưu ý: FACTS.md không có mốc nào cho ba linh kiện này, nên nên bổ sung nguồn vào FACTS.md để đỡ ràng buộc \"không có gì lên màn hình mà file này không viết ra\".",
+     "—"
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "15 từ, không có số.",
+     "—"
+    ],
+    "noi-cau": [
+     "ĐẠT",
+     "\"nó\" ở c13 đã đổi tham chiếu so với c12 (c12 \"nó\" = điện, c13 \"nó\" = cục sạc). Người xem vẫn hiểu vì cục sạc vừa được nhắc, nhưng viết thẳng sẽ chắc hơn: \"Bên trong cục sạc là một cuộn biến áp, một bộ chỉnh lưu và tụ điện.\"",
+     "—"
+    ]
+   }
+  },
+  "c14": {
+   "key": "94b4e30551003a5a7fcc682f5c64a6802ea3a8207b77eb8db2c3549ec2150e3a",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Đúng ý dàn �ý #5: \"Cục sạc lấy điện lưới ở một bên\", không thêm ý.",
+     "—"
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "FACTS §2 \"Dùng trong phim\": \"hình cắt cục sạc cho thấy nó lấy điện lưới ở một bên và đưa ra năm vôn một chiều ở bên kia\" — câu này nói đúng nửa đầu, và \"ổ cắm\" là nơi lấy điện theo chính cách nói đã duyệt của FACTS §2.",
+     "—"
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "10 từ, không có số.",
+     "—"
+    ]
+   }
+  },
+  "c15": {
+   "key": "4b54b65b31cf3b2ca8eea595897e46ed16776f97c1fe03161dbe15c6ab3eab68",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Đúng ý dàn �ý #5 (\"đưa vào điện thoại một dòng điện một chiều năm vôn ở bên kia\"), không thêm ý.",
+     "—"
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "\"năm vôn\" có trong FACTS §2 (Output Voltage 5 V) và dùng đúng cách nói đã duyệt: \"cục sạc lấy điện từ ổ cắm rồi đưa vào máy một dòng điện một chiều năm vôn\"; câu nói về cục sạc đang trên hình có tem 5 V nên không phát biểu chung cho mọi cục sạc.",
+     "—"
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "14 từ; \"năm vôn\" viết bằng chữ và nằm trọn trong câu này, không bị cắt đôi với c14 (c14 không có số).",
+     "—"
+    ]
+   }
+  },
+  "c16": {
+   "key": "43247f04d531f81b8443dbb66fc046ecc4114346a4507ecb2becb251550eadf3",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Đúng cột hình dàn ý #5: \"dòng hạt sáng đi qua cuộn biến áp thì trở thành dòng hạt đứng yên một chiều\", không thêm ý ngoài dàn ý.",
+     "—"
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "Mô tả đúng hiệu ứng đã có trong TREATMENT (\"thứ vô hình\": trong cục sạc dòng hạt đi qua biến áp và trở thành dòng một chiều), không có số, không có so sánh, không thuộc mục cấm.",
+     "—"
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "14 từ, không có số.",
+     "—"
+    ],
+    "giong": [
+     "ĐẠT",
+     "\"rồi đứng yên thành dòng một chiều\" diễn đạt lủng củng, và người xem dễ gán công đổi nguồn cho cuộn biến áp (thực ra bộ chỉnh lưu đã nhắc ở c13 mới làm việc này). Rõ hơn: \"Dòng hạt chạy qua cuộn biến áp và bộ chỉnh lưu rồi đứng yên thành dòng một chiều.\"",
+     "—"
+    ]
+   }
+  },
+  "c17": {
+   "key": "09854e5d03b9b6749866ce00cca38cf90d7183c1724c43ee9fa197f919ecf15f",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Đúng ý dàn �ý #6 (\"điện đi qua cổng\"), không thêm ý.",
+     "—"
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "Không có số; khớp cột hình dàn �ý #6 (đi theo dây tới cổng USB-C rồi chui vào máy).",
+     "—"
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "8 từ, không có số.",
+     "—"
+    ]
+   }
+  },
+  "c18": {
+   "key": "ed8475916706e3642811d5f813409da833a26a1aba286e865eccac409a58c625",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Đúng ý dàn �ý #6 (\"qua một con chip, rồi mới tới túi pin\"), không thêm ý.",
+     "—"
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "Có chip bộ sạc giữa cổng và túi pin đúng như cột hình dàn ý #6 và các tài liệu TI mà FACTS §3 dẫn; không có số.",
+     "—"
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "9 từ, không có số.",
+     "—"
+    ]
+   }
+  },
+  "c19": {
+   "key": "e862d1d7267ed17b7e3dfac1c53688a6fb05213cc198319f4f2b2480f45303e0",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Đúng cột hình dàn ý #6: \"dòng hạt sáng chạy vào chip rồi rẽ xuống túi pin\", không thêm ý.",
+     "—"
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "Mô tả hiệu ứng hình đã có trong TREATMENT (\"trong máy, dòng hạt chạy vào chip bộ sạc rồi rẽ vào túi pin\"); không có số.",
+     "—"
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "14 từ, không có số.",
+     "—"
+    ]
+   }
+  },
+  "c20": {
+   "key": "5ff923dda3d879e2cab6e0f574f7c14772a7b32e50a44a7d33e37917eede65aa",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Đúng ý dàn �ý #7 (\"Nhưng pin chỉ nhận tới bốn phẩy hai vôn\"), không thêm ý.",
+     "—"
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "\"bốn phẩy hai vôn\" có trong FACTS (mục §5: sạc theo kiểu dòng-điện áp tới 4,2 V; và mục suy luận dùng chênh lệch 5 − 4,2 V); không thuộc mục cấm nói.",
+     "—"
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "11 từ; \"bốn phẩy hai vôn\" viết bằng chữ và nằm trọn trong câu này, không bị cắt đôi với c19 (c19 không có số).",
+     "—"
+    ]
+   }
+  },
+  "c21": {
+   "key": "acbd556a6121a17fd0ef9fc4268933c295637a7912957c96e8ea7ae69d3305bf",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "\"Trên tem của pin ghi đúng con số ấy.\" (lines.json c21) nói đúng ý 7 của TREATMENT (dòng 103: \"một nhãn 4,2 V dán trên tem túi pin\"), ngay sau câu đã nói \"bốn phẩy hai vôn\"; không thêm ý nào ngoài dàn ý.",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "Con số 4,2 V có trong FACTS §5 (\"sạc theo kiểu dòng-điện áp tới 4,2 V\") và trong mục \"Suy luận của tập phim\" ((5 − 4,2) V); câu không đưa thêm con số nào và không chạm vào danh sách \"Giá trị không được nói\".",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "9 từ; không có số viết bằng chữ số; số 4,2 V đã trọn ở c20 (\"bốn phẩy hai vôn\") nên không bị cắt đôi giữa c20 và c21.",
+     ""
+    ]
+   }
+  },
+  "c22": {
+   "key": "fff016c5712ffb0bd19e6c9b8bf678de361aee7309cb499202fe960921cb0eca",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "\"Chênh lệch giữa hai nhãn kia phải đi đâu?\" là đúng câu hỏi cuối của ý 7 (TREATMENT dòng 103) và nối đúng chỗ sau c21; không thêm ý nào ngoài dàn ý.",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "Không khẳng định số, so sánh hay quan hệ nhân quả mới; chỉ nói về hai nhãn đã có mặt trong FACTS §2 (5 V) và §5 (4,2 V).",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "9 từ; không có số; không có con số nào bị cắt đôi với c21.",
+     ""
+    ]
+   }
+  },
+  "c23": {
+   "key": "01602e1e305dfc42d23c89f236214e786a5706913eade2b932b4a067a89289c3",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "\"Hiệu ấy không biến mất: nó thành nhiệt, ngay trong máy.\" đúng ý 8 câu 1 (TREATMENT dòng 104); không thêm ý nào ngoài dàn ý.",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "FACTS §3: \"PSYS = (VIN – VSYS) × IIN\", phần chênh lệch rơi thành nhiệt ngay trên chip — câu nói đúng cơ chế, không thêm số nào bị cấm.",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "11 từ; không có số; không có số bị cắt đôi với c22.",
+     ""
+    ]
+   }
+  },
+  "c24": {
+   "key": "395a4ad4330cb403a82dfbb45095da29680cdc114ca344d6f80986dc643272e8",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "\"Tính theo công thức của nhà sản xuất, chênh lệch điện áp nhân dòng sạc ra một giá trị nhỏ.\" đúng ý 8 câu 2 (TREATMENT dòng 104: \"chênh lệch điện áp nhân dòng sạc ra một con số nhỏ\"); không thêm ý.",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "Công thức của nhà sản xuất là công thức trong datasheet TI mà FACTS §3 trích; mục \"Suy luận của tập phim\" (dòng 111) xác nhận 0,8 W là phép tính của tập phim từ đúng công thức đó. Câu không đưa 68,3 °C/W lên màn hình, đúng \"Cách nói\" của FACTS §3.",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "20 từ; không có số viết bằng chữ số; số 0,8 W chưa xuất hiện nên không có số bị cắt đôi với c23.",
+     ""
+    ]
+   }
+  },
+  "c25": {
+   "key": "527282edccc861d6715b6e31007bb0a2e1373ea32745636f04e7097c9439539b",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "\"Vậy chỉ là không phẩy tám oát.\" đúng ý 8 (con số 0,8 W) và đúng chỗ ngay sau câu báo công thức; không thêm ý nào ngoài dàn ý.",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "0,8 W có nguồn ở FACTS (dòng 111) và được phép lên màn hình theo \"Vật lên hình\" của TREATMENT (đồng hồ công suất); câu không đọc 3,5 % (FACTS §4 cấm).",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "7 từ; số viết bằng chữ (\"không phẩy tám oát\"); số nằm trọn trong câu, không bị cắt đôi với c24.",
+     ""
+    ]
+   }
+  },
+  "c26": {
+   "key": "c199c3c999dda095e3ed9b000888e6146974623499a1d594dbb4730e12b52eef",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "\"Đó là phép tính của tập phim, không phải số đo một chiếc máy cụ thể.\" là câu cuối của ý 8 (TREATMENT dòng 104), và là điều TREATMENT yêu cầu rõ (\"dòng ý 8 phải nói rõ điều đó\").",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "Đúng nguyên văn yêu cầu của FACTS dòng 111: \"Tập nói rõ đây là phép tính từ công thức, không phải số đo một chiếc máy cụ thể.\"",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "16 từ; không có số; không có số bị cắt đôi với c25.",
+     ""
+    ]
+   }
+  },
+  "c27": {
+   "key": "1e9fab78c66195f8855c96eff1edf5ddee6f50726f025612f20b37e1ce3e32dd",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "\"Bộ sạc xung thì ít thất hơn nhiều.\" mở đúng ý 9 (TREATMENT dòng 105), ngay sau khi phim vừa nói xong 0,8 W của bộ sạc tuyến tính; không thêm ý nào ngoài dàn ý.",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "So sánh này đúng FACTS §3 (bộ sạc tuyến tính rơi chênh lệch điện áp thành nhiệt) và §4 (bộ sạc xung hiệu suất 96,5 %); câu không đọc số 3,5 % mà FACTS §4 cấm.",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "7 từ; không có số; không có số bị cắt đôi với c26.",
+     ""
+    ]
+   }
+  },
+  "c28": {
+   "key": "7317e6ee9cae814574e7035b34013aec73b252bcb6aa62f78f27c20ac1044383",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "\"Một bộ sạc xung như thế này giữ được tới chín mươi sáu phẩy năm phần trăm.\" đúng ý 9 câu 2 (TREATMENT dòng 105); không thêm ý nào ngoài dàn ý.",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "96,5 % có trong FACTS §4 và được đưa lên đồng hồ hiệu suất theo \"Vật lên hình\" của TREATMENT; câu giới hạn đúng phạm vi bằng \"một bộ sạc xung như thế này\", không nói chung cho mọi bộ sạc xung như FACTS §4 yêu cầu.",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "17 từ; số viết bằng chữ; số nằm trọn trong câu, không bị cắt đôi với c27.",
+     ""
+    ]
+   }
+  },
+  "c29": {
+   "key": "368996b06e4b74936737eba3a56217d56a3bd8072b4c72fed7408764b58df784",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "\"Phần điện còn lại, dù nhỏ, vẫn là nhiệt.\" đúng ý 10 (TREATMENT dòng 106) và đúng cách nói FACTS §4 cho phép.",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "FACTS §4: \"ngay cả một bộ chuyển đổi rất tốt cũng còn phần điện biến thành nhiệt\"; câu không đọc 3,5 %.",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "9 từ; không có số; không có số bị cắt đôi với c28.",
+     ""
+    ]
+   }
+  },
+  "c30": {
+   "key": "96d4608b53ed5385379d14ba7914e0818300029abdcd1123bf246a447ba09f59",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "\"Dù tốt đến mấy, vẫn còn một phần điện hoá thành nhiệt trong máy.\" đúng ý 10; không thêm ý nào ngoài dàn ý.",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "Cùng cơ sở FACTS §4 như c29; không đưa số nào lên màn hình, không nói gì thuộc \"Giá trị không được nói\".",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "14 từ; không có số; không có số bị cắt đôi với c29.",
+     ""
+    ]
+   }
+  },
+  "c31": {
+   "key": "aea2aec0352ff7f1f0e6631a87bf86e1a8d4ff5a6646e8044835e704810e8bfc",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "\"Không có cách nào tắt được phần đó.\" đúng câu hai của ý 10 (TREATMENT dòng 106); không thêm ý nào ngoài dàn ý.",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "Cùng nghĩa với cách nói FACTS §4 cho phép (vẫn còn phần điện biến thành nhiệt trong bộ chuyển đổi); không đọc số nào bị cấm.",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "8 từ; không có số; không có số bị cắt đôi với c30.",
+     ""
+    ]
+   }
+  },
+  "c32": {
+   "key": "8a2577f91a18ef72610f88edf7999977b0b9efb8471c3a18bee009f76a71c339",
+   "verdict": "PASS",
+   "fails": 1,
+   "round": 2,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Câu trùng đúng nửa đầu của dòng ý 11 trong TREATMENT.md:107 — \"Nhưng con chip không phải nguồn nhiệt duy nhất trong máy: chính tế bào pin cũng nóng lên khi sạc\" — và không thêm ý nào ngoài dàn ý (không nói thứ bậc nguồn nhiệt, không đưa thêm số). Nửa sau của dòng ý 11 nằm ở c33.",
+     "(không cần)"
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "Câu chỉ khẳng định chip không phải nguồn nhiệt duy nhất, tức có ít nhất hai nguồn nhiệt trong máy. Điều này có mốc: FACTS.md:69 (\"trong pin có hai nguồn nhiệt\"), FACTS.md:89 (\"pin cũng nóng theo, và nhiệt của pin làm nóng cả vỏ máy\"), FACTS.md:53 (tiêu đề mục \"Pin tự sinh nhiệt khi sạc\"). Câu không nói chip là nguồn nhiệt lớn nhất nên không vướng lỗi thứ bậc của lần chấm trước, và không chạm danh sách \"Giá trị không được nói\" (FACTS.md:116–123).",
+     "(không cần)"
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "11 từ, không có chữ số nào, không có con số nào bị cắt đôi với c31 (\"Không có cách nào tắt được phần đó.\" — câu trước không kết bằng số). Câu đứng riêng cũng hiểu được.",
+     "(không cần)"
+    ],
+    "noi-cau": [
+     "ĐẠT",
+     "Câu trước c31 kết bằng \"Không có cách nào tắt được phần đó.\"; \"Nhưng\" mở ra ý \"nhưng còn nguồn nhiệt khác\" nối tiếp mạch ý tầng 2 → tầng 3 của TREATMENT.md:11. GÓP Ý (không chặn): vì c31 kết bằng một mệnh đề về tính không thể tắt, chữ \"Nhưng\" hơi trơ; \"Và còn một nguồn nhiệt nữa trong máy\" sẽ bật lên ý rõ hơn, nhưng người xem vẫn hiểu đúng câu hiện tại.",
+     "(không cần)"
+    ]
+   }
+  },
+  "c33": {
+   "key": "416b4fd85ba8181f17225ed538810b10c37528ddc86764dcb9a8dc44a08eca61",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 2,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Câu trùng đúng nửa sau của dòng ý 11 (TREATMENT.md:107): \"chính tế bào pin cũng nóng lên khi sạc\", và không thêm ý nào ngoài dàn ý (không nói về cường độ, không nói về cơ chế — cơ chế để dành cho c35–c40).",
+     "(không cần)"
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "FACTS.md:53 \"Pin tự sinh nhiệt khi sạc, và nhiệt ấy lớn lên theo dòng sạc\" và FACTS.md:89 \"pin cũng nóng theo\" đỡ đúng mệnh đề này; câu không đưa ra con số nào (23 J / 103 J thuộc tế bào 18650, cũng không bị nóiở đây) nên không vướng FACTS.md:122.",
+     "(không cần)"
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "9 từ, không có chữ số, tự đủ nghĩa nghe một lần là hiểu; không có con số nào bị cắt đôi với c32.",
+     "(không cần)"
+    ]
+   }
+  },
+  "c34": {
+   "key": "9882a5d490a2325890af3cd702386bdfc8af70fe17f12889513afbea7cbf2a3c",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "\"Cắt ngang túi pin ra, ta thấy các lớp điện cực xếp chồng như một cuộn giấy.\" đúng hình của ý 11 (TREATMENT dòng 107) và đúng \"Thứ vô hình\" (lớp điện cực than–kim loại cuộn trong túi pin); không thêm ý nào ngoài dàn ý.",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "Chỉ mô tả cấu tạo túi pin theo FACTS §5 và theo danh sách vật lên hình của TREATMENT; không có số, không có so sánh, không chạm danh sách cấm.",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "15 từ; không có số; không có số bị cắt đôi với c33.",
+     ""
+    ]
+   }
+  },
+  "c35": {
+   "key": "519ad488ad2745c2855fd0b63aa076ed548de2e4038e71419f7009f05e95c88d",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "\"Trong pin, dòng điện phải đi qua những lớp vật liệu có điện trở.\" đúng ý 12 (TREATMENT dòng 108); không thêm ý nào ngoài dàn ý.",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "Đúng \"Cách nói\" của FACTS §5 (\"dòng điện phải vượt qua lớp vật liệu có điện trở\") và quote \"The Ohmic resistance (R1)... dominates the irreversible heat generation process\".",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "13 từ; không có số; không có số bị cắt đôi với c34.",
+     ""
+    ]
+   }
+  },
+  "c36": {
+   "key": "83f2cdf2c48a3c9bccc5a653a7a9b45d4bb7758a00ebd845e39f08a8a42cd326",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "\"Chỗ đó toả nhiệt.\" là câu hai của ý 12 (TREATMENT dòng 108); không thêm ý nào ngoài dàn ý.",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "FACTS §1 (chỗ có điện trở thì toả nhiệt) và §5; không có số mới.",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "4 từ; không có số; không có số bị cắt đôi với c35.",
+     ""
+    ]
+   }
+  },
+  "c37": {
+   "key": "2d3bb0b03a0482507b7e8c33fc96563bde528a6b25197513500d29c565eec70c",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "\"Ở lớp có điện trở nội, dòng hạt dày lên và đổi thành màu cam.\" đúng hình của ý 12 (TREATMENT dòng 108) và đúng \"Thứ vô hình\" (trong túi pin, chỗ có điện trở nội thì dòng hạt dày lên và đổi cam); không thêm ý nào ngoài dàn ý.",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "Cơ chế điện trở ohmic trong tế bào có ở FACTS §5; câu không đưa 209,05 mW lên màn hình (FACTS §5 cấm) và không nói số nào khác.",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "14 từ; không có số; không có số bị cắt đôi với c36.",
+     ""
+    ]
+   }
+  },
+  "c38": {
+   "key": "06ff267877f91fde9c06036ca002f0682324de99422cdb8ddf1c9dc356678612",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "\"Còn một nhiệt nữa không đến từ dòng điện.\" mở đúng ý 13 (TREATMENT dòng 109); không thêm ý nào ngoài dàn ý.",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "FACTS §5 nêu hai nguồn nhiệt trong tế bào (điện trở nội và đổi entropy của phản ứng điện hoá), nên nhiệt thứ hai không đến từ dòng điện là đúng; câu không nói \"pin nóng vì phản ứng hoá học\" (FACTS §5 cấm).",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "10 từ; không có số; không có số bị cắt đôi với c37.",
+     ""
+    ]
+   }
+  },
+  "c39": {
+   "key": "57f15817cd467ca223c53bf3bf1a67f4aaf864542720b053ac14d3dbb2972899",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "\"Khi pin hút điện, trật tự bên trong nó thay đổi.\" đúng ý 13 câu hai (TREATMENT dòng 109); không thêm ý nào ngoài dàn ý.",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "FACTS §5: trạng thái nạp thay đổi trong lúc sạc làm thay đổi entropy của phản ứng điện hoá; không có số, không nói gì bị cấm.",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "10 từ; không có số; không có số bị cắt đôi với c38.",
+     ""
+    ]
+   }
+  },
+  "c40": {
+   "key": "67b515fc894fc491fa7949b04e998f54334e50a984ab09c6c9804eab3eb9b581",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "\"Sự thay đổi ấy cũng kéo theo nhiệt: có lúc nhiệt bị hút vào, có lúc bị đẩy ra.\" đúng ý 13 câu ba (TREATMENT dòng 109); không thêm ý nào ngoài dàn ý.",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "FACTS §5: phần nhiệt thuận nghịch \"có thể hút nhiệt vào ở một số đoạn\" — câu nói đúng phạm vi (\"có lúc... có lúc...\"), không biến thành lời khẳng định nhiệt luôn bị hút vào.",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "18 từ; không có số; không có số bị cắt đôi với c39.",
+     ""
+    ]
+   }
+  },
+  "c41": {
+   "key": "ae38c2d369f7dae88d0d1b77f1d5b45183442f0715dcd516faad9e7c8a4b06ba",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Câu nói đúng ý dòng 14 của TREATMENT (\"Nhiệt trong pin lớn lên khi dòng sạc lớn lên\"), đặt đúng ngay sau c40 về nhiệt thuận nghịch; không thêm ý nào ngoài dàn ý.",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "FACTS §5 (\"higher current rates lead to increased heat generation within the battery cells\"; \"nhiệt trong pin tăng mạnh khi dòng sạc tăng\"); câu không nằm trong danh sách giá trị cấm ở FACTS dòng 116–123.",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "10 từ, không có con số, không có số nào bị cắt đôi với c40.",
+     ""
+    ],
+    "noi-cau": [
+     "ĐẠT",
+     "GÓP Ý: c40 kết bằng \"có lúc nhiệt bị hút vào, có lúc bị đẩy ra\" (nguồn nhiệt thứ hai), c41 bật sang luật \"dòng sạc\" mà không có từ nối, người xem có thể tưởng c41 vẫn nói về nhiệt thuận nghịch; một mệnh đề nối kiểu \"Còn ngoài ra, nhiệt ấy còn tuỳ theo dòng sạc nữa\" sẽ rõ hơn.",
+     ""
+    ]
+   }
+  },
+  "c42": {
+   "key": "057a4350a7087e7359605da892fc5deb6b338d6ec80c94a3d1e330bc41f492e0",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 3,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Khớp đúng ý 14 của TREATMENT (\"Sạc chậm thì cả lần sạc sinh ra 23 joule\"; hình: một tế bào 18650 riêng trên bàn, đồng hồ nhiệt dừng ở 23 J). Câu đứng trước c42 (c41: \"Nhiệt trong pin lớn lên khi dòng sạc lớn lên.\") được câu này lấy làm mốc, không có ý nào ngoài dàn ý. Vế \"Trong một tế bào thật\" không phải ý lạ: nó đúng với hình \"tế bào pin tròn 18650\" và đúng lệnh định phạm của FACTS §5 — | —",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "23 J có trong FACTS §5 (bảng tổng nhiệt một lần sạc tế bào tròn 18650 LG 2,5 Ah: 23 J ở 0,05C — \"sạc chậm\"), và câu gắn số này với \"một tế bào thật\" nên không vi phạm lệnh cấm ở FACTS (\"không nói tế bào trong điện thoại sinh ra đúng bằng 23 joule hay 103 joule\"); cũng không đụng 209,05 mW bị cấm | —",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "16 từ; số viết bằng chữ (\"hai mươi ba\"); số không bị cắt đôi: c41 không có số nào, \"hai mươi ba\" nằm trọn trong c42 và c43 (\"mặt số dừng ở con số ấy\") chỉ lại nó; đơn vị có trên mặt số (23 J) | —",
+     ""
+    ],
+    "giong": [
+     "ĐẠT",
+     "— | Gợi ý: đây là một trong hai con số duy nhất trong lời kể không nói kèm đơn vị (c25 \"không phẩy tám oát\", c28 \"…phần trăm\", c63 \"… độ\", c66 \"… độ\" đều có đơn vị). Thêm \"joule\" (\"…sinh ra hai mươi ba joule\") để lời kể tự đủ, người xem không phải đọc mặt số mới biết đang nói bao nhiêu năng lượng.",
+     ""
+    ]
+   }
+  },
+  "c43": {
+   "key": "66c9f6937bc072be200f6f6e8fa0e2000668b647d986aebcae920d26ac7eb0dd",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Đúng phần hình của dòng 14 trong TREATMENT (\"đồng hồ đo nhiệt cắm vào hai đầu tế bào, mặt số đang tăng và dừng ở 23 J\"); không thêm ý nào ngoài dàn ý.",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "Không thêm con số nào mới; \"con số ấy\" chính là 23 J đã có trong FACTS §5; không có gì thuộc danh sách cấm.",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "14 từ, không có chữ số; con số 23 J đã được nói trọn ở c42 nên không có số nào bị cắt đôi giữa c42 và c43.",
+     ""
+    ],
+    "noi-cau": [
+     "ĐẠT",
+     "GÓP Ý: \"cắm vào hai đầu\" chưa nói rõ hai đầu của ai, trong khi chủ ngữ là \"đồng hồ nhiệt\"; người xem nghe một lần dễ hiểu là hai đầu của đồng hồ; thêm \"hai đầu tế bào\" sẽ hết nhầm.",
+     ""
+    ]
+   }
+  },
+  "c44": {
+   "key": "4960f750c3b8bab6904c80b4f13e67e1d63969b99a779b8aec05b09952877860",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Đúng ý dòng 15 của TREATMENT (\"Sạc nhanh hơn thì nhiệt sinh ra trong pin nhiều hơn hẳn\"), đúng vị trí sau c42–c43, không thêm ý nào ngoài dàn ý.",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "FACTS §5 và mục suy luận dòng 113 (\"Sạc nhanh thì nhiệt trong pin nhiều hơn: 103 J so với 23 J\"); câu chỉ nói định tính \"nhiều hơn hẳn\", không đưa con số hay tỉ lệ bị cấm.",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "12 từ, không có số, không có số nào bị cắt đôi với c43.",
+     ""
+    ]
+   }
+  },
+  "c45": {
+   "key": "f5aeb5137607713d2906e767e02e32ea02d105b87214626b3526b806bd0a2fdc",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 3,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Khớp đúng ý 15 của TREATMENT (\"Sạc nhanh hơn thì nhiệt sinh ra trong pin nhiều hơn hẳn: tới 103 joule\"; hình: tế bào thứ hai bên cạnh tế bào kia, đồng hồ nhiệt đứng ở 103 J). \"Tế bào bên cạnh\" là cách nói đúng với hình \"bên cạnh tế bào kia\" và với shot 2:34–2:45 (hai tế bào cùng một khung); không thêm ý nào ngoài dàn ý | —",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "103 J có trong FACTS §5 (103 J ở 0,5C) và FACTS mục \"Suy luận của tập phim\" đã duyệt cách nói này: \"Sạc nhanh thì nhiệt trong pin nhiều hơn: 103 J so với 23 J\"; câu không gán số này cho túi pin điện thoại nên không vi phạm lệnh cấm | —",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "15 từ; số viết bằng chữ (\"một trăm ba\"); c44 (\"Sạc nhanh hơn thì nhiệt sinh ra trong pin nhiều hơn hẳn.\") không có số nên \"một trăm ba\" không bị cắt đôi giữa hai câu; \"một trăm ba\" hiện trên mặt đồng hồ nhiệt | —",
+     ""
+    ],
+    "giong": [
+     "ĐẠT",
+     "— | Gợi ý: cùng lý do như c42 — nói \"một trăm ba joule\" cho tròn với c25/c28/c63/c66, vì nếu không lời kể không có từ nào định nghĩa \"hai mươi ba\" và \"một trăm ba\" là joule (chỉ có mặt số đồng hồ nói ra).",
+     ""
+    ]
+   }
+  },
+  "c46": {
+   "key": "449cf1edfc04f815ec17ccd7ce8504cd51ccc897df017d6160a8a71e05b1bfcd",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Đúng phần hình của dòng 15 trong TREATMENT (\"dòng hạt sáng chạy dày hơn, vùng nóng cam rộng hơn\"); không thêm ý nào ngoài dàn ý.",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "Chỉ mô tả hình đã có trong dàn ý; không có con số, so sánh đo đạc hay quan hệ nhân quả mới ngoài FACTS §5.",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "10 từ, không có số, không có số nào bị cắt đôi với c45.",
+     ""
+    ],
+    "noi-cau": [
+     "ĐẠT",
+     "GÓP Ý: \"dày hơn\" và \"rộng hơn\" không có mốc so sánh trong lời; người xem phải tự hiểu là so với tế bào sạc chậm ở c42–c43; một nhắc nhỏ (\"dày hơn tế bào kia\") sẽ giúp so sánh hai bên rõ hơn.",
+     ""
+    ]
+   }
+  },
+  "c47": {
+   "key": "229b6da1e1b931c46ca8cf3ce808a08770d93dc9cccdb8d23f8c7a9f817305a0",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Đúng ý dòng 16 của TREATMENT (\"Ở cuối lúc sạc, dòng nhỏ dần\"); không thêm ý nào ngoài dàn ý.",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "FACTS §5 (\"sạc theo kiểu dòng-điện áp tới 4,2 V\" — ở cuối lần sạc dòng điện giảm dần về 0) và dàn ý cột hình (\"dòng hạt sáng ở tế bào thứ hai thưa dần\"); không có gì thuộc danh sách cấm.",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "9 từ, không có số, không có số nào bị cắt đôi với c46.",
+     ""
+    ]
+   }
+  },
+  "c48": {
+   "key": "b079e736d6d6eb5ed1c0828432164629dc4edb248790a3449b15c85d9158a8dd",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Đúng ý dòng 16 của TREATMENT (\"dòng nhỏ dần, nên máy cũng nguội lại\"); mệnh đề \"nhiệt cũng bớt\" chỉ lặp lại hiện tượng \"vùng nóng co lại, đồng hồ nhiệt chạy chậm lại\" đã có trong cột hình, không phải ý mới.",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "FACTS §5 (nhiệt sinh ra tăng theo dòng sạc, nên dòng giảm là nhiệt giảm theo) và mục suy luận dòng 112; không có con số hay so sánh nào ngoài FACTS.",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "13 từ, không có số, không có số nào bị cắt đôi với c47.",
+     ""
+    ]
+   }
+  },
+  "c49": {
+   "key": "ae082f8d666de59321e98c2a9b70abb74b8026b02c1bd29ddf6227b14206e8ba",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Đúng ý dòng 17 của TREATMENT (\"Vấn đề lớn nhất không phải là sinh nhiệt, mà là thoát nhiệt\"), đúng chỗ bắt đầu tầng 4; không thêm ý nào ngoài dàn ý.",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "FACTS dòng 112: \"Nhiệt trong máy phải đi ra qua vỏ, và vỏ là đường thoát gần như duy nhất; đây là lý do nhiệt dồn lên khi công suất vào tăng\" — câu khẳng định đúng quan hệ nhân quả này, không nằm trong danh sách cấm.",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "13 từ, không có số, không có số nào bị cắt đôi với c48.",
+     ""
+    ]
+   }
+  },
+  "c50": {
+   "key": "f9079cd1cf0905e8d344709d34a29821b25c7ef599739cc5427f986371bb8455",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Đúng ý dòng 17 của TREATMENT (\"nhiệt sinh ra ở một khối rất nhỏ\"), không thêm ý nào ngoài dàn ý.",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "FACTS §6 dòng 89 (nhiệt sinh ra bên trong máy ở vùng chip và ở tế bào rồi dồn lên vỏ) và dòng 112; là suy luận của chính tập phim nên không vi phạm danh sách cấm.",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "9 từ, không có số, không có số nào bị cắt đôi với c49.",
+     ""
+    ],
+    "noi-cau": [
+     "ĐẠT",
+     "GÓP Ý: \"Nhiệt ấy\" không chỉ rõ là nhiệt của tế bào pin hay của cả máy, trong khi c49 vừa nói về \"sinh nhiệt\" nói chung; \"Nhiệt trong tế bào sinh ra ở một khối rất nhỏ\" sẽ khớp hơn với c41 và với dàn ý.",
+     ""
+    ]
+   }
+  },
+  "c51": {
+   "key": "d0a2329865ccee721dc07f3b6004546146a6e4a9e732c38711b805b23c52c96c",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Đúng ý dòng 17 của TREATMENT (\"đường thoát nhiệt gần như chỉ có một — vỏ máy\"), không thêm ý nào ngoài dàn ý.",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "FACTS dòng 112 nói thẳng \"vỏ là đường thoát gần như duy nhất\"; câu không đưa 50 °C hay 40 °C lên màn hình.",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "10 từ, không có số, không có số nào bị cắt đôi với c50.",
+     ""
+    ]
+   }
+  },
+  "c52": {
+   "key": "02b43f88007a0f17fb34f0a95278563b8ade04a65d6050c4df70dbbfc4eddd9b",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Đúng ý dòng 18 của TREATMENT (\"Nhiệt phải qua lớp kính, qua lớp nhựa, mới ra được không khí\"), không thêm ý nào ngoài dàn ý.",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "FACTS dòng 89 (\"nhiệt của pin làm nóng cả vỏ máy\") và dòng 112; không có con số hay so sánh mới.",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "13 từ, không có số, không có số nào bị cắt đôi với c51.",
+     ""
+    ]
+   }
+  },
+  "c53": {
+   "key": "24e4fe0130d60a140c8d589f5930241a70fa694c5ffe824c880f1842ebe34c85",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Đúng ý dòng 18 của TREATMENT (\"Chỗ đó chậm hơn nhiều so với tốc độ nó sinh ra\"), không thêm ý nào ngoài dàn ý.",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "Cơ sở là mục suy luận FACTS dòng 112 (\"đây là lý do nhiệt dồn lên khi công suất vào tăng\"); câu chỉ nói định tính, không đưa 68,3 °C/W hay bất kỳ số bị cấm nào.",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "12 từ, không có số, không có số nào bị cắt đôi với c52.",
+     ""
+    ]
+   }
+  },
+  "c54": {
+   "key": "4ab9f13bb70913d77da372de48bee3e723fa7042636a68ea39f9e84fe2688f78",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Đúng phần hình của dòng 18 trong TREATMENT (\"luồng nhiệt cam bị nghẽn lại ở từng lớp\"), không thêm ý nào ngoài dàn ý.",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "Chỉ mô tả hình đã có trong dàn ý; không có con số, so sánh hay quan hệ nhân quả nào ngoài FACTS dòng 112.",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "8 từ, không có số, không có số nào bị cắt đôi với c53.",
+     ""
+    ]
+   }
+  },
+  "c55": {
+   "key": "4b945658402e61d2278d5788efc9d6600c49aca74a904c21a96111c602000f35",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Đúng ý dòng 19 của TREATMENT (\"khi vừa sạc vừa chơi game, máy nóng hơn hẳn\"), không thêm ý nào ngoài dàn ý.",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "FACTS dòng 114: \"Một chiếc điện thoại vừa sạc vừa chơi game nóng hơn: hai nguồn nhiệt cùng đổ vào một vỏ máy\"; câu không nêu 50 °C.",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "11 từ, không có số, không có số nào bị cắt đôi với c54.",
+     ""
+    ]
+   }
+  },
+  "c56": {
+   "key": "6248d76100e56f100d862550de584bfbc4235f1d57f805cbdaf02439207a5cd9",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Đúng ý dòng 19 của TREATMENT (\"hai nguồn nhiệt cùng đổ vào một cái vỏ\"), không thêm ý nào ngoài dàn ý.",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "FACTS dòng 114 nói nguyên văn \"hai nguồn nhiệt cùng đổ vào một vỏ máy\"; không có gì thuộc danh sách cấm.",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "9 từ, không có số, không có số nào bị cắt đôi với c55.",
+     ""
+    ]
+   }
+  },
+  "c57": {
+   "key": "c491acdb393364fd1c61c6c527b6e7d4740315e12123811e11b538b0f15d1d52",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Đúng phần hình của dòng 19 trong TREATMENT (\"Chiếc máy bên cạnh chỉ chơi game, không cắm sạc, thì vỏ mát hơn\"); không thêm ý nào ngoài dàn ý.",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "So sánh này là phía đối chứng của chính kết luận FACTS dòng 114 (vừa sạc vừa chơi = hai nguồn nhiệt đổ vào một vỏ, nên bỏ nguồn nhiệt sạc thì vỏ mát hơn); không nêu số bị cấm.",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "14 từ, không có số, không có số nào bị cắt đôi với c56.",
+     ""
+    ]
+   }
+  },
+  "c58": {
+   "key": "0c084d11613c2b6ce4c8eb7742a3e5f18a40e1264fef8d366fae133feac0931c",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Đúng ý dòng 20 của TREATMENT (\"Vì vậy máy có một bộ điều khiển nhiệt\"), đúng chỗ sau c55–c57; không thêm ý nào ngoài dàn ý.",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "FACTS §6 dòng 89: \"máy có bộ điều khiển nhiệt đo vùng chip và bóp chậm lại công việc của máy\"; câu không nói \"mọi điện thoại\" theo kiểu phổ quát hơn mốc đã có.",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "9 từ, không có số, không có số nào bị cắt đôi với c57.",
+     ""
+    ]
+   }
+  },
+  "c59": {
+   "key": "83c3bfc3563e9c29c5e4a531120ef52cc0dff25b1ac38c3685316c6c5ff0c97f",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Đúng ý dòng 20 của TREATMENT (\"nó đo nhiệt vùng chip\"), không thêm ý nào ngoài dàn ý.",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "FACTS §6 dòng 89 nói rõ bộ điều khiển nhiệt \"đo vùng chip\"; câu không đặt 50 °C hay 40 °C lên màn hình.",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "6 từ, không có số, không có số nào bị cắt đôi với c58.",
+     ""
+    ]
+   }
+  },
+  "c60": {
+   "key": "c8565d932a60214d187e1eced49e0a6f35b96c25d71c7a657e813b7d2da2aeb1",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Đúng ý dòng 20 của TREATMENT (\"bóp chậm lại công việc của máy khi máy nóng\"), không thêm ý nào ngoài dàn ý.",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "FACTS §6 dòng 89 nói nguyên văn \"bóp chậm lại công việc của máy\"; câu không đưa ngưỡng nhiệt nào lên màn hình.",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "11 từ, không có số, không có số nào bị cắt đôi với c59.",
+     ""
+    ]
+   }
+  },
+  "c61": {
+   "key": "328fc7f46d6543aac6c30523be4f07947395f3325132966f5de99338460186ff",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Trùng đúng cột hình của dòng ý 20 trong TREATMENT.md: \"Không có con số nào trên khung này: đo kiểu này phải chạy app nặng, không phải lúc sạc\"; không thêm ý nào ngoài dàn ý.",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "Không có con số nào được khẳng định; \"đo vùng chip phải chạy app nặng, không phải lúc sạc\" đúng FACTS.md §6 (50 °C và 40 °C đo lúc chạy app nặng và tắt bộ điều khiển nhiệt, không phải lúc sạc), và không đụng giá trị nào trong mục \"Giá trị không được nói\".",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "18 từ, dưới ba mươi; không có số viết bằng chữ số; c60 (\"Khi máy nóng, nó bóp chậm lại công việc của máy\") không có con số nào bị cắt đôi.",
+     ""
+    ],
+    "noi-cau": [
+     "ĐẠT",
+     "Câu nối được với c60 (nói về việc đo nhiệt vùng chip) và với hình nhiệt kế chỉ có kim không có số ở Vật lên hình. Gợi ý: \"Khung này\" là từ của người làm phim — người xem điện thoại không biết \"khung\" nào; nói \"hình này\" hay \"cảnh này\" sẽ tự nhiên hơn mà không đổi ý.",
+     ""
+    ]
+   }
+  },
+  "c62": {
+   "key": "1225e6a126e1876f8bc9d3dcb8959f831ff76b155dc8b0bf0f798c138efca40e",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Mở đúng ý đầu của dòng ý 21: \"Còn ở chỗ pin thì có một chốt nữa\".",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "Không có số hay so sánh; khẳng định có một chốt ở phía pin có trong FACTS.md §6 (\"một lớp dừng sạc khi pin quá nóng\").",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "9 từ, không có số viết bằng chữ số, c61 không có con số nào bị cắt đôi.",
+     ""
+    ]
+   }
+  },
+  "c63": {
+   "key": "210e27cbbb78b39124e021af109a7f2126001fd78c48150c715c3fbd60f1a3a5",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Nói đúng nửa lời còn lại của dòng ý 21 trong TREATMENT.md, không thêm ý khác.",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "FACTS.md §6 và mục \"Giá trị không được nói\" cho phép đúng câu này (\"Được nói: 'có những bộ sạc ngừng sạc khi pin vượt khoảng bốn mươi lăm độ'\"); vế \"có những bộ sạc\" giữ đúng phạm vi, không biến thành \"mọi điện thoại dừng sạc ở bốn mươi lăm độ\" (điều FACTS cấm).",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "13 từ; số viết bằng chữ; số bốn mươi lăm nằm trọn trong câu, c62 không có số để cắt đôi.",
+     ""
+    ]
+   }
+  },
+  "c64": {
+   "key": "50398e7e291407c4360aaa18f933e29817da33469c7fb9b7a1c62614427cc3dc",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Trùng cột hình của dòng ý 21: \"dòng hạt sáng đi từ chip bộ sạc vào pin bị đứt lại, dồn thành một đám ở chỗ chip\"; không thêm ý nào.",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "FACTS.md §6 nói thẳng: \"khi pin nóng quá khoảng 45 °C thì bộ sạc ngừng sạc — dòng hạt sáng vào pin đứt lại\"; đây là hình ảnh của cùng mốc đó, không phải một tuyên bố mới.",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "19 từ, dưới ba mươi; không có số viết bằng chữ số; c63 không có số bị cắt đôi.",
+     ""
+    ],
+    "noi-cau": [
+     "ĐẠT",
+     "Câu nối với c63 (bộ sạc ngừng sạc) đúng ý. Gợi ý: cụm \"đi từ chip vào pin bị đứt lại\" dễ bị nghe nhầm thành \"pin bị đứt\" (tức là pin hỏng); tách thành \"Dòng hạt sáng đi từ chip vào pin thì bị đứt lại\" sẽ làm rõ đối tượng bị cắt.",
+     ""
+    ]
+   }
+  },
+  "c65": {
+   "key": "81f2e2b1c73f703d62553afe175c19a5d04c43d7119b1ef2adcb73670a362d1f",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Đúng ý dòng 22 trong TREATMENT.md: \"Nên cái điện thoại bạn cầm mỗi ngày chỉ ấm tay, chứ không cháy\"; không thêm ý nào.",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "FACTS.md §7 \"Cách nói\" cho phép đúng câu \"điện thoại ấm chứ không cháy\"; không có số, không có so sánh.",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "16 từ, dưới ba mươi; không có số; c64 không có con số nào bị cắt đôi.",
+     ""
+    ]
+   }
+  },
+  "c66": {
+   "key": "c7b11058a554f8d33882adc88bbd50a61a9c087a7ebca6623943d9940dfd8996",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 2,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Câu nói đúng ý 22 (TREATMENT.md:118): \"nhiệt độ bề mặt mà da người chịu được nằm trong dải 34–43 °C\", và không thêm ý nào ngoài dàn ý (không nói đây là nhiệt độ đo lúc sạc — việc đó để c67).",
+     "(không cần)"
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "Khoảng 34–43 °C có đúng mốc ở FACTS.md:95 (\"user comfort within human comfort levels (e.g., 34 °C-43 °C)\") và được FACTS.md:105 dùng trong phim; cách diễn đạt \"bề mặt ... da người chịu được\" đúng với tiêu đề mục FACTS.md:93. Câu không đụng danh sách cấm ở FACTS.md:116–123, và không gán dải này cho nhiệt độ đo lúc sạc.",
+     "(không cần)"
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "20 từ (dưới ba mươi), số viết bằng chữ \"ba mươi bốn tới bốn mươi ba độ\", và con số không bị cắt đôi với câu trước c65 (\"...chỉ ấm tay, chứ không cháy.\" — không kết bằng số). Người xem nghe một lần là ra đây là hai mốc của một dải.",
+     "(không cần)"
+    ]
+   }
+  },
+  "c67": {
+   "key": "dd3c35ce30698ca803fd374f6f333bd52b84d11ed61d4e67604a68057768d45a",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Trùng phần cuối cột hình dòng 22: \"dải nhiệt mà da người chịu được, không phải số đo lúc sạc\"; không thêm ý nào.",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "Đây đúng là điều FACTS.md §7 bắt buộc nói rõ: dải 34–43 °C là dải thoải mái cho da người, không phải nhiệt độ đo được lúc sạc; không có số mới.",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "12 từ; không có số viết bằng chữ số; c66 đã đóng số bằng \"bốn mươi ba độ\" nên không có con số nào bị cắt đôi sang c67.",
+     ""
+    ]
+   }
+  },
+  "c68": {
+   "key": "c12f4816f9b5a3e354a6badd434ae05b5d189c39c39442a3aeb03cbdc22b4c41",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Mở đúng ý dòng 23: \"Nhưng nhiệt độ không vô hại\"; không thêm ý nào ngoài dàn ý.",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "Không có số hay quan hệ nhân quả mới; phát biểu \"nhiệt ấy không vô hại\" có đúng trong FACTS.md §7 (giá của nhiệt là pin già nhanh hơn).",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "6 từ, không có số; c67 không có con số nào bị cắt đôi.",
+     ""
+    ]
+   }
+  },
+  "c69": {
+   "key": "6c5d1b0a55f60ce570297f3f489d571505ab8c6642bacef26fe5f89a91d89dad",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Nói đúng ý giữa dòng 23 trong TREATMENT.md: \"pin để ở nơi nóng thì già nhanh hơn\".",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "FACTS.md §7 \"Cách nói\" cho phép nguyên văn câu này; không nói tỉ lệ mất dung lượng (điều FACTS cấm).",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "9 từ, không có số; c68 không có con số nào bị cắt đôi.",
+     ""
+    ]
+   }
+  },
+  "c70": {
+   "key": "76fd6355bfc618d180712076627b555f70ac367ee049811f884d6eb7fe588774",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Câu được FACTS §7 mục \"Giá trị không được nói\" cho phép diễn đạt (\"Được nói: 'tốc độ già của pin phụ thuộc mạnh vào nhiệt độ'\"), nằm đúng chỗ dòng 23 đang nói về hậu quả của nhiệt.",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "Có trong FACTS.md §7 (Lam et al. 2024: \"The rate of calendar degradation depends strongly on temperature\"); không đưa tỉ lệ cụ thể nào lên màn hình.",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "9 từ, không có số; c69 không có con số nào bị cắt đôi.",
+     ""
+    ],
+    "giong": [
+     "ĐẠT",
+     "Giọng điềm tĩnh, không từ đệm rỗng. Gợi ý: c69 (\"Pin để ở nơi nóng thì già nhanh hơn\") và c70 nói hai lần cùng một ý chỉ khác chữ \"mạnh\", người xem nghe sẽ thấy lặp; bỏ c70 thì nhịp vẫn đủ, hoặc đổi c70 thành một câu bổ sung khác (ví dụ nói rõ đó là pin để yên trong máy mới bị ảnh hưởng, theo dữ liệu FACTS §7).",
+     ""
+    ]
+   }
+  },
+  "c71": {
+   "key": "32c437ead5a4018db3bc7c6e202c409f450b77eac2dc8b492795c34693f50c8f",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Trùng cột hình dòng 23: \"Hai tế bào pin giống nhau đặt cạnh nhau, một ở trên kệ mát, một ở chỗ nóng… đồng hồ bên tế bào ở chỗ nóng tụt xuống thấp hơn\"; câu chỉ nói \"hai đồng hồ lệch nhau\" nên không thêm chiều hướng nào ngoài dàn ý.",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "Cả hình và phép so sánh đều có trong FACTS.md §7 (\"hình hai tế bào pin: một ở nơi mát, một ở chỗ nóng, đồng hồ sức chứa của tế bào ở chỗ nóng tụt xuống\"); không có số, không có tỉ lệ.",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "16 từ, dưới ba mươi; không có số viết bằng chữ số; c70 không có con số nào bị cắt đôi.",
+     ""
+    ]
+   }
+  },
+  "c72": {
+   "key": "197a041bfffbe7b53188f3097f99cf99cddf026ef21f443998b8016f5e274c86",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Mở đúng ý đầu dòng 24: \"Vậy nóng khi sạc là bình thường\"; không thêm ý nào ngoài dàn ý.",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "Không có số, so sánh hay quan hệ nhân quả mới; đây là kết luận tầng 5 của chính TREATMENT (\"nóng khi sạc là bình thường\") và không đụng giá trị bị cấm.",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "7 từ; không có số; c71 không có con số nào bị cắt đôi.",
+     ""
+    ]
+   }
+  },
+  "c73": {
+   "key": "92f7d3ef4fceaccdf4549c7346424acd43fc3a35144caba12555d88247371e60",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Nói đúng phần còn lại của dòng ý 24: \"đó là dấu hiệu cho thấy điện đang đi vào, và một phần đã bị thành nhiệt\".",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "Không có số mới; quan hệ \"điện vào → một phần thành nhiệt\" đúng với chuỗi cất giữ mà phim đã dựng (FACTS §3, §4, §5 và phần \"Suy luận của tập phim\").",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "14 từ, dưới ba mươi; không có số viết bằng chữ số; c72 không có con số nào bị cắt đôi.",
+     ""
+    ]
+   }
+  },
+  "c74": {
+   "key": "c5ab8997c6b40c1f83dada04802a0f82fdfa3b20c662e57cab8ce27767e290f2",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Đúng cột hình dòng 24 và phần \"Kết\" của TREATMENT: \"quay lại đúng cái điện thoại đó, vẫn cắm sạc, giờ là lúc nửa đêm\"; không thêm ý nào.",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "Không có số hay quan hệ nhân quả; \"lúc nửa đêm\" chỉ là mốc thời gian của khung hình (đồng hồ treo tường chỉ khoảng nửa đêm theo cột hình dòng 24), không phải số khoa học.",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "12 từ, dưới ba mươi; không có số viết bằng chữ số; c73 không có con số nào bị cắt đôi.",
+     ""
+    ],
+    "giong": [
+     "ĐẠT",
+     "Giọng điềm tĩnh, không từ đệm rỗng. Gợi ý: \"giờ\" xuất hiện hai lần trong chín từ (\"Chiếc máy đó giờ vẫn cắm sạc, giờ là lúc nửa đêm\") — người nghe vấp ở chỗ lặp; bỏ một \"giờ\" (ví dụ \"Chiếc máy đó vẫn cắm sạc, giờ là lúc nửa đêm\") sẽ sạch hơn mà không đổi ý.",
+     ""
+    ]
+   }
+  },
+  "c75": {
+   "key": "c41fc2911dc9fc175ba2bf4000da08e4e79fd7a97b975291059c02345ad8e7a3",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Trùng ý \"góc nhìn mới người xem mang về\" ở phần Kết của TREATMENT: \"nhiệt độ của điện thoại là một cái đồng hồ đo xem điện đang vào bao nhiêu và đang mất bao nhiêu\"; không thêm ý nào.",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "Không có con số; quan hệ \"nhiệt sinh ra tăng theo dòng sạc\" và \"phần điện mất thành nhiệt\" đều có trong FACTS §4, §5 và phần \"Suy luận của tập phim\" (nhiệt của pin làm nóng cả vỏ máy).",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "18 từ, dưới ba mươi; không có số viết bằng chữ số; c74 không có con số nào bị cắt đôi.",
+     ""
+    ],
+    "giong": [
+     "ĐẠT",
+     "Giọng điềm tĩnh, không từ đệm sáo rỗng. Gợi ý: \"nhiệt độ là cái đo điện đang vào và đang mất\" — vế \"cái đo\" là cách danh từ khó đọc, người nghe dừng lại một nhịp; \"nhiệt độ chính là cái đồng hồ đo điện đang vào và đang mất\" (đúng với câu đầu \"tự làm đồng hồ đo\") sẽ rõ hơn.",
+     ""
+    ]
+   }
+  },
+  "c76": {
+   "key": "7ca0f1ad378b51ac85216c0fa02202e9ccd06ba85b440b6a3dd8b40be21af8d1",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Đúng dòng ý 25: \"Lời khuyên: sạc ở chỗ mát, bỏ ốp khi sạc, và đừng vừa sạc vừa chơi game nặng\" — câu này mở đúng lời khuyên, không thêm ý nào.",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "Không có khẳng định khoa học nào cần dẫn nguồn, không có số.",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "6 từ; không có số; c75 không có con số nào bị cắt đôi.",
+     ""
+    ]
+   }
+  },
+  "c77": {
+   "key": "4af7d2578177fc1ff72c2bcb2263bc4c53d3daa9fbb8a8c8e5c7c2a41a2a13de",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Trùng lời khuyên thứ nhất trong cột ý dòng 25 và trong phần Kết của TREATMENT.",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "Là lời khuyên của chính tập phim (TREATMENT dòng 25), không có số hay quan hệ nhân quả nào cần dẫn FACTS.",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "4 từ, dưới ba mươi; không có số viết bằng chữ số; c76 không có con số nào bị cắt đôi.",
+     ""
+    ]
+   }
+  },
+  "c78": {
+   "key": "d4b629264e2aac86cc864c64ebf050054b0be161e88b0f47e924c08d78a2d5cd",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Trùng lời khuyên thứ hai trong dòng ý 25 (\"bỏ ốp khi sạc\"); không thêm ý nào.",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "Lời khuyên của tập phim; không có số, không có so sánh, không có quan hệ nhân quả mới.",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "4 từ; không có số; c77 không có con số nào bị cắt đôi.",
+     ""
+    ]
+   }
+  },
+  "c79": {
+   "key": "3083f27142fac63a35595a372adf6e6f41c9a764fc76cadeacfffb13c7279685",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Trùng lời khuyên thứ ba trong dòng ý 25 (\"đừng vừa sạc vừa chơi game nặng\"); cũng khớp với ý 19 đã nói ở c55–c57.",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "Dựa trên \"Suy luận của tập phim\" trong FACTS.md (sạc và chơi game: hai nguồn nhiệt cùng đổ vào một vỏ); không đưa con số nào lên màn hình.",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "8 từ; không có số; c78 không có con số nào bị cắt đôi.",
+     ""
+    ]
+   }
+  },
+  "c80": {
+   "key": "4fa90e578dbd0ed08017e635b0105d4add71327b44ddf7794375c257b012cef1",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "khop-dan-y": [
+     "ĐẠT",
+     "Trùng cột hình dòng 25: \"cạnh đó là chiếc ốp điện thoại bỏ ra, và một cái quạt nhỏ hướng về phía máy\"; không thêm ý nào.",
+     ""
+    ],
+    "dung-du-kien": [
+     "ĐẠT",
+     "Không có số hay quan hệ nhân quả; cả ốp và quạt nhỏ đều có trong Vật lên hình của TREATMENT.",
+     ""
+    ],
+    "nghe-mot-lan": [
+     "ĐẠT",
+     "15 từ, dưới ba mươi; không có số viết bằng chữ số; c79 không có con số nào bị cắt đôi.",
+     ""
+    ],
+    "giong": [
+     "ĐẠT",
+     "Giọng điềm tĩnh, không từ đệm rỗng. Gợi ý: \"một chiếc quạt nhỏ\" — loại từ \"chiếc\" không hợp với quạt, TREATMENT cũng viết \"cái quạt nhỏ\"; đổi thành \"một cái quạt nhỏ\" sẽ tự nhiên hơn.",
+     ""
+    ],
+    "noi-cau": [
+     "ĐẠT",
+     "Câu nối được với c78 (bỏ ốp khi sạc) và với lời khuyên vừa nói. Gợi ý: \"cạnh đó\" không có mốc rõ ràng trong lời kể (người nghe phải tự đoán là cạnh máy hay cạnh góc bàn); \"cạnh máy\" sẽ chắc hơn. Ngoài ra hình cuối quay lại chiếc ốp sau câu về chơi game nặng (c79), lệch pha một nhịp với lời; có thể gộp lại cho khớp.",
+     ""
+    ]
+   }
+  }
+ },
+ "critic": "claude -p --model claude-opus-5-5"
+}

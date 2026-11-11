@@ -4,7 +4,7 @@ Kênh / channel: **tram-nghi-nhieu** · Tập / episode: `series/the-gioi/tap-03
 
 ## Độ dài (điền sau khi lập bảng ý → hình)
 
-Năm tầng · bảng 15 dòng · ~37 câu thoại · ~4,3 từ/giây → khoảng năm phút rưỡi.
+Năm tầng · bảng 15 dòng · 37 câu thoại · giọng đọc đo được 127 giây lời và 31 giây lặng → phim dài khoảng 2 phút 41 giây. (Ước lượng cũ "khoảng năm phút rưỡi" tính sai: lấy 37 câu chia cho 4,3 từ mỗi giây, coi như mỗi câu dài đúng một giây.)
 Không ngắn hơn được: bỏ dòng nào là mất một mắt xích — cần đủ "ánh sáng bị rẽ mới thành màu trời" (dòng 3–5), đủ "đường đi dài hơn thì mất màu xanh" (dòng 6–8), đủ "vì sao vẫn còn xanh sau khi Mặt Trời lặn" (dòng 12–14); bỏ nửa sau thì câu hỏi bị trả lời nửa, và câu hỏi của tập là "biến màu", tức nhiều lần biến chứ không phải một lần. Không dài hơn: tán xạ Mie cho mây, mưa cầu vồng, màu của Trái Đất nhìn từ không gian, "xanh sẫm" lúc trưa — tất cả đã có nguồn và đều là tập khác; ở đây chúng chỉ làm loãng một chuỗi đã khép.
 
 ## Câu hỏi, tách ra
