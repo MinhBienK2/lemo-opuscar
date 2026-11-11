@@ -1,0 +1,56 @@
+{
+ "step": "outline",
+ "round": 2,
+ "items": {
+  "dan-y": {
+   "key": "0d73f111ac12eded4b06b6c86371149eaebe7948f730e6a49bd7542be6450d0b",
+   "verdict": "PASS",
+   "fails": 1,
+   "round": 2,
+   "rows": {
+    "tra-loi": [
+     "ĐẠT",
+     "Câu trả lời một câu ở TREATMENT.md:17 (\"Bàn tay của bạn mất cảm giác khi ngồi lâu vì… dây thần kinh của bàn tay bị một vật cứng ép vào xương ở một chỗ hẹp, mà dây thần kinh thì có mạch mách của riêng nó — bị ép thì máu tới ít, sợi thần kinh hết năng lượng để truyền tín hiệu, nên mấy ngón mà dây đó phục vụ hết cảm giác cho tới khi bạn đổi tư thế và máu quay lại\") nêu đúng chủ thể đã tách ở TREATMENT.md:16 (\"bàn tay của người ngồi\"), và từng mắt xích trong câu đều có nguồn: bị xương ép ở chỗ hẹp (FACTS.md:5-16, mục 1; FACTS.md:84-103, mục 7), dây có mạch mách riêng + máu tới ít khi bị ép (FACTS.md:31-39, mục 3), thiếu máu thì sợi ngừng dẫn xung (FACTS.md:41-52, mục 4), mỗi dây phục vụ một nhóm ngón (FACTS.md:54-73, mục 5), tự qua sau khi đổi tư thế (FACTS.md:18-29, mục 2) — không có mắt xích nào trong câu là do phim tự thêm.",
+     ""
+    ],
+    "nguon": [
+     "ĐẠT",
+     "Mỗi mắt xích đều có bài bình duyệt sơ cấp kèm DOI trong FACTS.md:138-154, không có Wikipedia: nén ở rãnh xoáy (Kesserwani 2021, Cureus, FACTS.md:9), mạch mách trong dây và lòng mạch mất >70% khi dây nhỏ 10% (Tang 2020, J Biomech, FACTS.md:35), mất dẫn xung khi thiếu máu (Horowitz & Ginsberg-Fellner 1979, Neurology, FACTS.md:45; Hofmeijer 2013, PLoS ONE, FACTS.md:49), bản đồ ngón (Bateman 2026, Shoulder & Elbow, FACTS.md:58; Collins 2025, J Hand Surg, FACTS.md:62; Zhang 2011, PLoS ONE, FACTS.md:66; Sulaiman 2015, FACTS.md:70), biến thiên bản đồ (Keplinger 2018, BJA, FACTS.md:79), gập khuỷu/cổ tay (Mihata 2025, Li & Jordan 2026, Gelberman 1984, Bauknight 2024, FACTS.md:88-100), ong buấm (Ochoa & Torebjörk 1980, Brain; Mogyoros 2000, Muscle & Nerve, FACTS.md:109-113). Hai lỗi lần trước đã sửa: bản đồ ngón ở FACTS.md:72 giờ khớp đúng TREATMENT.md:71 (dây khuỷu = ngón út + nửa sát ngón út của ngón áp út; dây giữa = ngón cái, ngón trỏ, ngón giữa + nửa sát ngón giữa của ngón áp út; dây quay = mặt sau bàn tay và mặt sau ngón cái), và nhãn bắt buộc của FACTS.md:39 đã có trên hình: TREATMENT.md:78 (\"Số đo trong thí nghiệm ép dây ở động vật\"), liệt kê ở TREATMENT.md:47 và ghi trong TREATMENT.md:96. GÓP Ý nhỏ còn lại: ý dòng 1 viết \"chuyện rất thường\" (TREATMENT.md:68) là một mệnh đề tần suất không nguồn, trong khi FACTS.md:128 cấm nói tần suất; nên đổi thành \"một cơn tê rất quen\" để không vượt FACTS.",
+     ""
+    ],
+    "vat-that": [
+     "ĐẠT",
+     "Che cột Ý, đọc cột Hình: mỗi dòng đều là vật thật hoặc cảnh thật dựng được — bàn/đèn/tách trà/đồng hồ treo tường (TREATMENT.md:68), bàn tay và cẳng tay có tay áo + mảng lạnh trên ngón (TREATMENT.md:69), mô hình giải phẫu xương cánh tay–khuỷu–cổ tay–bàn tay xương với ba dây và một mạch mách lớn (TREATMENT.md:70), ngón tay tô màu trên mô hình (TREATMENT.md:71), ba chỗ hẹp phát sáng (TREATMENT.md:72), ba mảnh tư thế nhỏ trên tấm bảng (TREATMENT.md:73), ghế bar cao + người ngủ gật + vùng tê tô đậm (TREATMENT.md:74), mặt cắt dây (TREATMENT.md:75-76), khối trụ ép xuống mặt cắt (TREATMENT.md:77), thước gỗ hai vạch + nhãn chữ (TREATMENT.md:78), máy đo dẫn xung có màn giấy cuộn (TREATMENT.md:80), đốt bao myelin hồi phục (TREATMENT.md:83), tách trà uống (TREATMENT.md:85) — đều có trong bảng vật lên hình TREATMENT.md:34-47. Toàn bộ thứ vô hình (dòng tín hiệu, dòng máu, vùng mất cảm giác, chỗ bị kẹp) chỉ xuất hiện dưới dạng hình minh hoạ đã khai ở TREATMENT.md:53-56; không dòng nào để trống cột Hình.",
+     ""
+    ],
+    "du-mat-xich": [
+     "ĐẠT",
+     "Chuỗi nhân quả đủ, mỗi khái niệm có hình ngay lúc được nói: hiện tượng (TREATMENT.md:68) → nhóm ngón (69) → máu cả cánh tay vẫn chạy, thứ bị chặn là dây sát xương (70) → bản đồ ngón (71) → ba chỗ hẹp (72) → tư thế quyết định chỗ kẹp (73) → ca sáu giờ (74) → vì sao chỉ một dây bị chặn (75) → dây có mạch mách riêng (76) → bị bóp trước (77) → con số 10%/>70% (78) → hết máu thì hết tín hiệu (79) → đo được bằng máy (80) → mất cảm giác (81) → máu về, tín hiệu chạy lại (82) → bao bọc hồi phục (83) → tự qua (84) → cảnh báo (85). \"Bao bọc/sợi\" có hình ngay ở lần đầu nói (TREATMENT.md:75-76 và 83); ba mươi phút có hình (máy đo, TREATMENT.md:80); sáu giờ có hình (đồng hồ quay, TREATMENT.md:74).",
+     ""
+    ],
+    "mo-dau": [
+     "ĐẠT",
+     "Dòng đầu đã thấy hiện tượng trước mọi bối cảnh và nguyên nhân: TREATMENT.md:68 đặt tiền khung là \"bàn tay buông thõng bên tách trà, và trên ngón út cùng ngón áp út đã hiện một mảng bóng mờ màu lạnh\" — vật đang ở trạng thái tê trước mắt; nguyên nhân (khuỷu tay chống mặt bàn) lùi hẳn sang dòng 2 (TREATMENT.md:69) và shot 0:08 (TREATMENT.md:113), còn shot 0:00 ghi rõ \"khung mở không được để tư thế khuỷu chống bàn chiếm chỗ\" (TREATMENT.md:112), đúng như TREATMENT.md:21 và khung hero số 1 (TREATMENT.md:60, \"Màu nhấn: mảng lạnh trên hai ngón tê\"). Lỗi lần trước đã sửa.",
+     ""
+    ],
+    "khac-biet": [
+     "ĐẠT",
+     "Mỗi khác biệt đều có cả hai phía trong hình: dòng 2 (hai ngón lạnh / năm ngón kia giữ màu ấm, TREATMENT.md:69), dòng 3 và 8 (mạch mách lớn vẫn đỏ và dòng máu vẫn chạy ngay cạnh dây bị bóp, TREATMENT.md:70, 75), dòng 11 (hai vạch 10% cạnh >70%, TREATMENT.md:78), dòng 14 (vùng tê vẫn lạnh trên hai ngón / năm ngón kia đã ấm lại / dòng mạch cẳng tay vẫn chạy, TREATMENT.md:81), dòng 14→17 (trước / sau khi nhả vật ép, TREATMENT.md:82, 84). Dòng 8 đã đổi câu hỏi từ \"tê chứ không phải đau\" sang \"tê chứ không phải cả cánh tay lạnh?\" (TREATMENT.md:75) và hình đã có cả hai phía. GÓP Ý nhỏ: dòng 2 tô mảng lạnh phủ cả ngón áp út (TREATMENT.md:69) trong khi dòng 4 chia ngón áp út làm hai nửa màu (TREATMENT.md:71) — người xem tinh có thể hỏi sao cả ngón mất cảm giác khi chỉ một nửa thuộc dây khuỷu; nên tô mảng lạnh chỉ trên nửa sát ngón út, hoặc thêm lời \"tê từ ngón út sang cạnh ngón áp út\".",
+     ""
+    ],
+    "ket": [
+     "ĐẠT",
+     "Kết trả về một việc dùng được ngay và một cảnh báo, và thứ tự shot đã đọc đúng: dòng 17 (đổi tay, xoa tay, đồng hồ quay thêm vài tiếng, vùng tê tắt hẳn, TREATMENT.md:84) → dòng 18 (người cầm tách trà uống, \"Khung cuối không có mảng tê nào trên hình\", TREATMENT.md:85) → câu cảnh báo \"đi khám\" nói trên khung uống trà (shot 2:34, TREATMENT.md:130; chốt ở TREATMENT.md:22 và 87), đúng điều FACTS.md:133 bắt buộc. Cảnh \"đổi tay rồi vẫn còn tê\" đã bị bỏ hẳn và lý do được ghi rõ ở TREATMENT.md:89, nên lỗi đọc ngược lần trước không còn.",
+     ""
+    ],
+    "gon": [
+     "LỖI",
+     "Có hai chỗ kéo dài không thêm mắt xích. (a) Dòng 3 (TREATMENT.md:70, \"Máu trong cả cánh tay vẫn chạy bình thường — thứ bị chặn là một sợi dây điện nhỏ nằm sát xương\") và dòng 8 (TREATMENT.md:75, \"Vì máu trong mạch lớn vẫn chạy — chỉ có một sợi dây bị chặn\") là cùng một ý, và cùng một hình (mạch mách lớn đỏ, dòng máu vẫn chạy) lặp lại sau ~53 giây; dòng 8 chỉ thêm đúng một việc là chui vào mặt cắt. (b) Hai shot cuối là cùng một khung: 2:40 và 2:46 (TREATMENT.md:131-132) đều là \"toàn cảnh bàn làm việc buổi tối\" với cùng một cử động \"máy lùi ra xa (9 %)\" và cùng lý do \"kết tập về đúng nơi mở đầu\", trong khi 2:34 đã \"lùi tiếp cho toàn cảnh bàn làm việc\" (TREATMENT.md:130) — tức ~12 giây cùng một toàn cảnh không có gì mới, đẩy tổng thời lượng vượt mốc \"khoảng 2,7 phút\" ở TREATMENT.md:7.",
+     "(a) Bỏ phần \"máu trong mạch lớn vẫn chạy\" ở dòng 8, đổi ý dòng 8 thành câu dẫn tầng: \"Bên trong sợi dây có gì?\" — phần \"vì sao chỉ một dây bị chặn\" đã nói ở dòng 3 và dòng 14, và giữ nguyên việc máy đi vào mặt cắt. (b) Bỏ một trong hai shot 2:40 / 2:46 (giữ một toàn cảnh kết), hoặc đổi 2:46 thành một cử động khác hẳn (đèn bàn tắt dần, người đứng dậy bước ra khỏi khung) để khung cuối có việc gì đó xảy ra."
+    ]
+   }
+  }
+ },
+ "critic": "claude -p --model claude-opus-5-5",
+ "closed": true
+}

@@ -1,0 +1,13 @@
+# Những dòng mà Whisper (mô hình đa ngôn ngữ, bản small) đọc sai thanh điệu tiếng Việt, đã kiểm tra tay.
+# Mỗi dòng: mã câu — dấu vân tay của tệp wav — lý do. Không sửa lời trong lines.json để chiều theo máy.
+# (Xem core/render/review.sh: đọc file này để biết dòng nào được tha; dòng chưa được tha thì phim FAIL.)
+# Lưu ý cho tập này: câu nào có con số, Whisper viết thành chữ số ("6", "10%", "70%") — số đọc đúng.
+c10 — b0eee937 — "Dây khuỷu / ngón út" bị nghe thành "Giây khủ / ngón Úc": sai thanh điệu.
+c17 — 9089585f — "Rãnh xoáy giữa xương cánh tay" bị nghe thành "Rảnh xóa giữa sương cánh tay": sai thanh điệu.
+c21 — db0e27c0 — "Khuỷu chống / rãnh sau khuỷu bị siết" bị nghe thành "Khủ chống / rảnh sau khủ bị sít": sai thanh điệu.
+c24 — a6f830cb — "Tay cứ ở đó suốt sáu tiếng" bị nghe thành "Tây cứ ở đó suốt 6 tiếng": sai thanh điệu, số đọc đúng.
+c26 — f5cdb4ce — "Sáu tiếng là đủ" bị nghe thành "6 tiếng là đủ": số đọc đúng.
+c29 — a91dc21b — "hai mạch mách nhỏ nằm song song" bị nghe thành "hai mặt mắt nhỏ nằm xong xong": sai thanh điệu.
+c32 — 7506941d — "dây chỉ nhỏ đi mười phần trăm" bị nghe thành "dây chỉ nhỏ đi 10%": số đọc đúng.
+c33 — 6d71ce94 — "mất hơn bảy mươi phần trăm" bị nghe thành "mất hơn 70%": số đọc đúng.
+c44 — 06d39143 — "Ngón tay bắt đầu ong buấm" bị nghe thành "Ngón tay bắt đầu ông Bún": sai thanh điệu.
