@@ -13,10 +13,12 @@
 // phẳng z = 0 (nửa còn lại mang nút bấm), nắp vòm nằm trên trục nên bị cưa thành
 // nửa vòm. Mọi mép cắt vẫn nằm trong một mặt phẳng, không mép nào cong.
 import * as THREE from 'three';
-import { toon, glowMat, canvasTex, rbox, mesh, fxLayer, mulberry, clamp, GRAD3 } from '../../../../../rig/kit.js';
+import { toon, glowMat, canvasTex, rbox, mesh, fxLayer, mulberry, clamp, lerp, ss, GRAD3 } from '../../../../../rig/kit.js';
 import { vessel } from '../../../../../rig/cutaway.js';
-import { pcb, spring, cable, button } from '../../../../../rig/parts.js';
+import { pcb, cable, button } from '../../../../../rig/parts.js';
 import { section } from '../../../../../rig/section.js';
+import { flow, glowDots, halos, setDot, setHalo } from '../../../../../rig/fx.js';
+import { fitFlow } from './_flowbox.js';
 import { lopGao } from './gao.js';
 
 const PROFILE_BODY = [
@@ -76,6 +78,77 @@ function shellTex() {
       g.fillRect(x, 0, 1 + r() * 2, h);
     }
   });
+}
+
+// ── lò xo nén được ────────────────────────────────────────────────────
+// Lò xo nhấn viên cầu phải NÉN ĐƯỢC: câu "lò xo ép nó thẳng vào đáy nồi"
+// chỉ đọc được khi ta thấy lò xo co lại. Lò xo sẵn có của rig không làm
+// được: chiều dài "kín" của nó lớn hơn chiều dài tự do, nên squeeze() chỉ
+// làm dây dài ra. Ở đây tự dựng lại, giữ nguyên dáng cuộn dây có vòng
+// hở và hai đầu phẳng, và cho nén thật: các vòng dồn sát nhau, đúng như
+// một lò xo đang chịu tải.
+function springCoil({ r = .014, len = .026, turns = 6, wire = .0024, color = '#9aa3b2' } = {}) {
+  const g = new THREE.Group(), mat = toon(color);
+  const e = .7 / turns;                       // hai đầu phẳng chiếm .7 vòng mỗi đầu
+  const geoAt = L => {
+    const pts = [], N = turns * 36;
+    for (let i = 0; i <= N; i++) {
+      const u = i / N, a = u * turns * Math.PI * 2;
+      const y = u < e ? u / e * wire * 1.1
+        : u > 1 - e ? L - (1 - u) / e * wire * 1.1
+        : lerp(wire * 1.1, L - wire * 1.1, (u - e) / (1 - 2 * e));
+      pts.push(new THREE.Vector3(Math.cos(a) * r, y + wire, Math.sin(a) * r));
+    }
+    return new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), N * 2, wire, 8, false);
+  };
+  const coil = mesh(geoAt(len), mat);
+  g.add(coil);
+  let last = len;
+  // k = 0: tự do. k = 1: nén tới mức các vòng chạm nhau.
+  g.compress = k => {
+    const solid = turns * wire * 1.06;
+    const L = lerp(len, solid, clamp(k));
+    if (Math.abs(L - last) < .00005) return;
+    last = L;
+    coil.geometry.dispose();
+    coil.geometry = geoAt(L);
+  };
+  g.userData.part = 'spring';
+  return g;
+}
+
+// Đĩa sáng mềm: một vệt tròn toả dần từ tâm. Mép phải mềm, nếu mép cứng thì
+// nó đọc ra là một miếng dán, không phải một vệt sáng.
+let _glowTex = null;
+function glowTex() {
+  if (_glowTex) return _glowTex;
+  _glowTex = canvasTex(128, 128, (c, w, h) => {
+    const g = c.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, w / 2);
+    g.addColorStop(0, 'rgba(255,255,255,1)');
+    g.addColorStop(.22, 'rgba(255,255,255,.82)');
+    g.addColorStop(.45, 'rgba(255,255,255,.46)');
+    g.addColorStop(.72, 'rgba(255,255,255,.15)');
+    g.addColorStop(1, 'rgba(255,255,255,0)');
+    c.fillStyle = g; c.fillRect(0, 0, w, h);
+  });
+  return _glowTex;
+}
+
+// ── câu đang kể ────────────────────────────────────────────────────────
+// Mỗi vật tự biết mình đang được kể ở câu nào: window.EV có sự kiện
+// 'voice' cho từng câu, và câu đang kể là câu bắt đầu gần nhất trước thời
+// điểm này. Nhờ vậy vật tự lo được nhịp của mình mà không ai phải bảo.
+function voiceLine(t) {
+  const ev = (typeof window !== 'undefined' && window.EV) || null;
+  if (!ev) return null;
+  const vs = [];
+  for (const e of ev) if (e.type === 'voice' && typeof e.t === 'number') vs.push(e);
+  if (!vs.length) return null;
+  vs.sort((a, b) => a.t - b.t);
+  let i = -1;
+  for (let k = 0; k < vs.length; k++) if (vs[k].t <= t + 1e-4) i = k;
+  if (i < 0) return null;
+  return { id: vs[i].id, t0: vs[i].t, t1: i + 1 < vs.length ? vs[i + 1].t : Infinity };
 }
 
 // Vân của THÀNH TRONG nồi. Thành trong là một mảng lớn, nhìn thẳng từ phía
@@ -498,12 +571,49 @@ export function noiCatNgang(opts = {}) {
     inside.add(mesh(new THREE.TubeGeometry(curve, 40, .0016, 8), brassMat));
   }
 
+  // ── DÒNG ĐIỆN VÀ HƠI NÓNG TRÊN DÂY ĐIỆN TRỞ ──────────────────────────
+  // Dây điện trở đang có dòng điện chạy suốt lúc nồi nấu. Ở hai câu kể về
+  // nó (c7, c8) thì dòng điện ấy phải thấy được: đó là thứ chuyển động
+  // lớn nhất trong hai khung hình ấy, vì cả cái nồi đứng yên.
+  //
+  // Quầng sáng: các vệt sáng mềm bám đúng đường xoắn của dây. Một quầng
+  // sáng toả quanh dây thì đọc ra là "dây đang nóng", chứ không phải một
+  // sợi dây sơn cam. Quầng chỉ đặt trên NỬA CÒN LẠI của vòng dây: nửa bị
+  // cưa mất thì không có gì ở đó, và một quầng sáng lơ lửng ở chỗ trống
+  // sẽ đọc ra là lỗi dựng.
+  //
+  // Ba nửa vòng: cuộn dây có ba vòng, mỗi vòng bị cưa mất nửa trước
+  // (phía +z), nên còn lại ba nửa vòng phía sau. Biên u của mỗi nửa vòng
+  // là lúc đường xoắn cắt qua mặt phẳng z = 0.
+  const HALO_ARCS = [0, 1, 2].map(k => [1 / 6 + k / 3, 1 / 3 + k / 3]);
+  const HALO_N = 30, HALO_S = .052;
+  const ringHalo = halos(HALO_N, '#ff7a2a', 1.7, glowTex());
+  ringHalo.name = 'day-dien-tro-sang';
+  g.add(ringHalo);
+  // dòng điện: một hạt sáng chạy vòng quanh từng nửa vòng, mờ dần ở hai
+  // đầu (nơi dây bị cưa) để không có vệt sáng nào bật lên giữa chừng.
+  const arcDot = glowDots(3, .0072, '#ffd9a0', 4);
+  arcDot.name = 'day-dien-tro-sang';
+  g.add(arcDot);
+
+  // ── hơi nóng bốc lên từ mâm nhiệt ────────────────────────────────────
+  // Ở c7 và c8 cái nồi trong bị cưa mất, nên mâm nhiệt phơi ra: hơi nóng
+  // bốc lên từ mâm thì thấy được. Đây cũng là ngôn ngữ của phim (nhiệt
+  // thì thành làn hơi), và nó báo trước cho câu c16 ("dây điện trở nóng
+  // lên trước").
+  const heatUp = flow(new THREE.Vector3(-.050, .050, -.055), new THREE.Vector3(-.050, .185, -.055),
+    { color: '#ff9a3c', size: .013, lift: .045, n: 34, rate: .55, seed: 4, opacity: .20 });
+  const heatUp2 = flow(new THREE.Vector3(.045, .050, -.070), new THREE.Vector3(.045, .175, -.070),
+    { color: '#ff9a3c', size: .012, lift: .040, n: 30, rate: .48, seed: 9, opacity: .18 });
+  fitFlow(heatUp, heatUp2);
+  g.add(heatUp, heatUp2);
+
   // ── lò xo nhấn viên cầu ────────────────────────────────────────────────
   // Lò xo là một cuộn dây thật có vòng hở, đọc ra là lò xo chứ không phải một đống xám.
   // Lò xo và viên cầu không nằm trong phần bị cưa: chúng là tâm của cảnh, phải
   // giữ tròn trọn thì người xem mới tin được là lò xo đang ép viên cầu xuống.
   const focus = new THREE.Group();
-  const sp = spring({ r: .014, len: .026, turns: 6, wire: .0024, color: '#9aa3b2' });
+  const sp = springCoil({ r: .014, len: .026, turns: 6, wire: .0024, color: '#9aa3b2' });
   sp.position.set(0, Y.spring0, 0);
   focus.add(sp);
   // chân lò xo: một bản nhỏ trên bo mạch
@@ -519,8 +629,74 @@ export function noiCatNgang(opts = {}) {
   // kim loại cắm xuyên qua lò xo. Hạt cầu ngồi trên vòng trên cùng của lò xo
   // và đỉnh của nó chạm đúng mặt trong của đáy nồi (y = 60 mm), nên câu "lò xo
   // ép nó thẳng vào đáy nồi" đúng ngay trong hình.
-  bead.add(mesh(new THREE.SphereGeometry(.007, 24, 18), toon('#f2e9d4')));
+  const beadMat = toon('#f2e9d4');
+  bead.add(mesh(new THREE.SphereGeometry(.007, 24, 18), beadMat));
   focus.add(bead);
+
+  // QUẦNG NÓNG QUANH VIÊN CẦU: viên cầu ép sát đáy nồi, nên nó nóng ngang
+  // với đáy nồi — nhiệt phải hiện ra. Viên cầu chỉ 14 mm, trong cận cảnh
+  // c9–c10 nó chiếm chưa tới một phần mười khung; đổi màu riêng nó thì
+  // không ai thấy nổi, nên nhiệt được vẽ thành một quầng ấm toả quanh
+  // hạt cầu, đúng ngôn ngữ của kênh (nhiệt thì thành quầng và làn).
+  //
+  // Quầng này KHÔNG cộng sáng: quầng cộng sáng trên một mặt nhôm sáng thì
+  // không đổi một tí nào (mặt đã trắng, cộng thêm sáng cũng vẫn trắng), và
+  // người xem không thấy nhiệt. Quầng pha thường thì nó tô màu ấm lên cả
+  // mặt đáy nồi quanh hạt cầu — đó mới là cái ta thấy.
+  //
+  // Màu của quầng phải đậm (hồng nóng chứ không phải cam nhạt): trên mặt
+  // nhôm sáng, một quầng nhạt chỉ dịch được vài điểm sáng, đủ để người
+  // xem không thấy; quầng đậm thì mỗi nhịp phập phồng đổi hẳn một vệt
+  // trên mặt đáy, và đó là cái nhịp của đáy nồi đang nóng.
+  const beadHot = new THREE.Sprite(new THREE.SpriteMaterial({
+    map: glowTex(), color: new THREE.Color('#ff5a18'),
+    transparent: true, opacity: 0, depthWrite: false, depthTest: false, toneMapped: false,
+  }));
+  beadHot.scale.set(.032, .032, 1);
+  beadHot.position.set(0, 0, 0);
+  fxLayer(beadHot);
+  bead.add(beadHot);
+
+  // ── VỆT SÁNG ẤM Ở ĐÁY NỒI (c14, c15, c17) ────────────────────────────
+  // Ở cận cảnh thì viên cầu tự nói ra cái nóng của nó. Ở câu rộng thì viên
+  // cầu chỉ là một chấm, còn CÁI ĐÁY NỒI mới là một mảng lớn — mà câu "con
+  // số đó là nhiệt độ của đáy nồi" chỉ đọc được khi người xem thấy đáy
+  // nồi ấm. Vệt sáng nằm ngay trên mặt đáy và CỘNG sáng: nó là ánh sáng
+  // phát ra từ chỗ ấm, nên nó sáng dần lên trên thành nồi tối.
+  //
+  // Nó đặt SAU mặt cưa (z < 0) để lớp gạo và lớp nước ở câu c15–c17 che
+  // mất phần dưới: người xem chỉ thấy ánh sáng hắt lên từ đáy chứ không
+  // thấy một vệt sáng nằm đè lên gạo.
+  const bottomWarm = new THREE.Sprite(new THREE.SpriteMaterial({
+    map: glowTex(), color: new THREE.Color('#ff7a2a'),
+    transparent: true, opacity: 0, depthWrite: false, depthTest: true,
+    blending: THREE.AdditiveBlending, toneMapped: false,
+  }));
+  bottomWarm.position.set(0, Y.pot0 + .020, -.020);
+  bottomWarm.scale.set(.20, .20, 1);
+  fxLayer(bottomWarm);
+  g.add(bottomWarm);
+
+  // ── CON CHIP ĐANG CHẠY (c13) ─────────────────────────────────────────
+  // Câu "mạch điện đo điện trở ấy và tính ra một con số nhiệt độ" cần một
+  // cái gì đó động ngay ở con chip. Con chip không phát sáng, nhưng chip
+  // đang chạy thì nó NÓNG: một quầng ấm nhỏ quanh con chip, phập phồng,
+  // đọc ra là "nó đang tính". Quầng cộng sáng trên con chip xám đen thì
+  // thấy rõ, khác hẳn quầng pha thường trên nền sáng.
+  //
+  // Quầng vẽ ĐÈ lên con chip (không bị che): đặt vào trong thân chip thì
+  // chính thân chip che mất nó, và câu kể lại đứng yên đúng chỗ nó cần
+  // chạy. Ở câu c13 không có vật nào đứng trước con chip, nên vẽ đè lên
+  // không hỏng gì.
+  const chipWarm = new THREE.Sprite(new THREE.SpriteMaterial({
+    map: glowTex(), color: new THREE.Color('#ffb066'),
+    transparent: true, opacity: 0, depthWrite: false, depthTest: false,
+    blending: THREE.AdditiveBlending, toneMapped: false,
+  }));
+  chipWarm.position.set(-.100, Y.base + .012, -.040);
+  chipWarm.scale.set(.050, .050, 1);
+  fxLayer(chipWarm);
+  g.add(chipWarm);
 
   // ── hai dây mảnh từ viên cầu chạy xuống bo mạch ───────────────────────
   // Hai dây phải thấy được từ viên cầu xuống tới con chip ở đầu kia bo mạch,
@@ -540,12 +716,18 @@ export function noiCatNgang(opts = {}) {
   // và không ai nhìn thấy: câu "hai dây mảnh chạy lên bo mạch" sẽ không có
   // gì để chỉ. Lỗ của mâm rộng 22 mm, lò xo chiếm 16 mm, nên hai dây đi
   // sát mép lỗ, cách lò xo một khe.
+  // Hai dây kết thúc ở CHÂN CẮM của con chip, không phải ở giữa thân chip:
+  // con chip nằm ở x = -0,100, hàng chân bên phải của nó ở x = -0,0735 và
+  // các chân nằm ở z = -0,0242 và z = -0,0287. Trước đây hai dây kéo dài tới
+  // x = -0,092/-0,088, tức là chui vào DƯỚI thân chip, và ở góc máy thấp của
+  // câu c12 sợi dây cắt ngang đúng khối chân màu kem — người xem đọc là dây
+  // xuyên qua linh kiện chứ không phải cắm vào chân.
   const wireMat = toon('#c8402f');
   const wirePath = [
     [[-.005, .0500, -.0030], [-.012, .0485, -.0105], [-.015, .0455, -.0125],
-     [-.015, .0395, -.0125], [-.040, .0330, -.0180], [-.092, .0295, -.0255]],
+     [-.015, .0395, -.0125], [-.040, .0330, -.0180], [-.056, .0318, -.0212], [-.0735, .0307, -.0242]],
     [[.004, .0500, -.0040], [.006, .0485, -.0145], [.009, .0455, -.0165],
-     [.009, .0395, -.0165], [-.030, .0330, -.0215], [-.088, .0290, -.0275]],
+     [.009, .0395, -.0165], [-.030, .0330, -.0215], [-.054, .0315, -.0252], [-.0735, .0305, -.0287]],
   ];
   for (const p of wirePath) {
     const curve = new THREE.CatmullRomCurve3(p.map(v => new THREE.Vector3(...v)));
@@ -669,7 +851,9 @@ export function noiCatNgang(opts = {}) {
   // dây điện trở xoắn quanh vành: ở cận cảnh nó là một vòng đỏ dẹt chắn cả
   // khung, và người xem tưởng đó là hai sợi dây. Ở những câu kể về dây mảnh thì
   // vòng dây điện trở phải ẩn đi.
+  let coilOn = true;
   g.setCoil = v => {
+    coilOn = v;
     g.traverse(o => { if (o.name && o.name.startsWith('day-dien-tro')) o.visible = v; });
   };
   g.setLamp = state => {
@@ -679,11 +863,132 @@ export function noiCatNgang(opts = {}) {
     lens.material.color.copy(c).multiplyScalar(state === 'off' ? .5 : state === 'amber' ? 1.12 : 1.8);
   };
   g.setLamp('red');
+  let heatK = .2;                                              // mức nóng do phim đưa vào
   g.setHeat = k => {                                         // dây điện trở đỏ lên
+    heatK = clamp(k);
     plateMat.color.set('#b9bdc4').lerp(new THREE.Color('#c8b6a6'), clamp(k) * .5);
     coilMat.color.set('#8a6248').lerp(new THREE.Color('#c8401a'), clamp(k));
     coilGlow.material.opacity = clamp(k) * .50;
   };
+
+  // ══ ĐỘNG CƠ ══════════════════════════════════════════════════════════
+  // Nhịp của cơ chế, theo câu đang kể:
+  //   c7, c8 — dây điện trở: dòng điện chạy vòng quanh vành, dây nóng lên,
+  //            hơi nóng bốc lên từ mâm nhiệt phơi ra (nồi trong bị cưa mất).
+  //   c9     — lò xo ăn hết khe hở của mình rồi đẩy viên cầu thật sát vào
+  //            đáy nồi: lò xo co lại thật nhanh, đúng lúc lời kể tới "ép".
+  //   c10    — viên cầu nóng lên cùng đáy nồi: quầng nóng toả quanh hạt cầu
+  //            và hạt cầu chuyển màu ấm.
+  //   c16    — dây điện trở nóng lên thật: quầng sáng bùng mạnh.
+  const _hp = new THREE.Vector3(), _idQ = new THREE.Quaternion();
+  let spK = 0;                    // lò xo đã ăn hết khe hở chưa (0…1)
+  let warmK = 0;                  // viên cầu đã nóng tới đâu (0…1)
+  g.updateProp = t => {
+    if (!g.visible) return;
+    const L = voiceLine(t);
+    const id = L ? L.id : null;
+    const u = L && isFinite(L.t1) ? clamp((t - L.t0) / (L.t1 - L.t0)) : 0;
+    const camQ = (typeof window !== 'undefined' && window.__cam) ? window.__cam.quaternion : _idQ;
+
+    // ── dây điện trở: quầng sáng và dòng điện ───────────────────────────
+    // Quầng sáng quanh dây: mờ khi dây còn nguội, rực lên khi dây nóng.
+    // Nhịp thở của nó là nhịp dòng điện chạy, không phải đèn nhấp nháy.
+    const breathe = .5 + .5 * Math.sin(t * 3.4);
+    const hot = id === 'c16' ? 1 : id === 'c17' ? .75 : id === 'c7' || id === 'c8' ? .62 : heatK;
+    ringHalo.material.opacity = coilOn ? (.10 + .30 * hot) * (.72 + .28 * breathe) : 0;
+    ringHalo.visible = coilOn;
+    arcDot.visible = coilOn;
+    // đặt quầng sáng lên đúng đường xoắn, mỗi nửa vòng mười vệt
+    let hi = 0;
+    for (const [u0, u1] of HALO_ARCS) {
+      for (let k = 0; k < 10; k++) {
+        coilCurve.getPoint(lerp(u0, u1, (k + .5) / 10), _hp);
+        setHalo(ringHalo, hi++, _hp, HALO_S, camQ);
+      }
+    }
+    ringHalo.count = hi;
+    ringHalo.instanceMatrix.needsUpdate = true;
+    // dòng điện: một hạt sáng chạy vòng quanh từng nửa vòng
+    for (let k = 0; k < 3; k++) {
+      const [u0, u1] = HALO_ARCS[k];
+      const ph = (t * .42 + k / 3) % 1;
+      coilCurve.getPoint(lerp(u0, u1, ph), _hp);
+      const fade = Math.min(1, ph * 7, (1 - ph) * 7);
+      setDot(arcDot, k, _hp, fade * (.6 + .5 * hot));
+    }
+    arcDot.count = 3;
+    arcDot.instanceMatrix.needsUpdate = true;
+
+    // ── hơi nóng bốc lên từ mâm nhiệt ──────────────────────────────────
+    // Chỉ lúc mâm nhiệt phơi ra (c7, c8) thì hơi nóng bốc lên được: các
+    // câu sau đó nồi trong che kín, hơi nóng bị giữ trong nồi.
+    const bare = id === 'c7' || id === 'c8';
+    heatUp.visible = bare;
+    heatUp2.visible = bare;
+    if (bare) { heatUp.update(t, 1); heatUp2.update(t, 1); }
+
+    // ── lò xo ăn khe hở rồi đẩy viên cầu sát đáy nồi ──────────────────
+    // Lò xo nhấn viên cầu vào đáy nồi: lò xo ăn hết khe hở của mình (đáy
+    // nồi nhô lên khi nóng dần) rồi đẩy hạt cầu thật sát vào đáy. Việc ăn
+    // khe hở xảy ra một lần và nhanh — nếu nó trườn dài thì không ai đọc
+    // được, và người xem cũng không thấy lò xo nào "ép" gì cả.
+    //
+    // Nhưng một nhịp thì câu kể chỉ sống ở nửa đầu câu, nửa sau thì hình
+    // đứng yên. Nên lò xo siết theo HAI nhịp: nhịp một là ăn hết khe hở,
+    // nhịp hai (nửa giây sau) là nó tìm được chỗ tựa và siết tới chốt.
+    // Lò xo thật luôn có hai tiếng khi chạm chốt.
+    if (id === 'c9') {
+      const e = t - L.t0;
+      spK = Math.max(spK, .62 * ss(e / .18) + .38 * ss((e - .56) / .30));
+    } else if (id === 'c10') spK = 1 + .16 * ss((t - L.t0) / .55);
+    sp.compress(spK * .34);
+
+    // ── viên cầu nóng lên cùng đáy nồi ─────────────────────────────────
+    // Viên cầu ép sát đáy nồi nên nó nóng ngang đáy nồi. Nhiệt hiện bằng
+    // một quầng ấm toả quanh hạt cầu (hạt cầu quá nhỏ để tự nói), và
+    // màu của hạt chuyển ấm theo. Quầng nóng phập phồng theo nhịp nước
+    // sôi dưới đáy: đáy nồi lúc nóng lúc nhạt, và chính cái nhịp đó là
+    // cái mà đầu dò nhiệt đang đo. Quầng bật lên dần chứ không bật tắt
+    // đột ngột: một quầng sáng bật lên giữa khung là một vết sáng dán.
+    if (id === 'c9') warmK = Math.max(warmK, ss((t - L.t0) / .30));
+    else if (id === 'c10') warmK = .55 + .45 * ss((t - L.t0) / .45);
+    const beat = .5 + .5 * Math.sin(t * 5.6);
+    beadHot.material.opacity = warmK * (.03 + .85 * beat);
+    beadHot.visible = warmK > .01;
+    // cận cảnh (c9, c10) quầng phải rộng: hạt cầu chỉ 14 mm, quầng hẹp thì
+    // chỉ là một chấm sáng trên hạt cầu chứ không phải một vệt nhiệt.
+    const hs = (id === 'c9' ? .044 : id === 'c10' ? .036 : .048) * (.85 + .15 * beat);
+    beadHot.scale.set(hs, hs, 1);
+    // màu của hạt cầu cũng phập phồng theo: hạt cầu lúc nóng lúc nhạt
+    beadMat.color.set('#f2e9d4').lerp(new THREE.Color('#ffb066'), warmK * (.45 + .55 * beat));
+
+    // ── vệt sáng ở đáy nồi, ở các câu rộng ─────────────────────────────
+    // Ở câu rộng thì viên cầu không đủ lớn để nói thay đáy nồi, nên đáy
+    // nồi tự nói: một vệt sáng ấm toả lên từ mặt đáy, phập phồng theo cùng
+    // nhịp. Vệt sáng cộng sáng nên nó sáng dần lên thành nồi tối, và người
+    // xem đọc ra là "chỗ này nóng" chứ không phải một vệt sáng dán.
+    // Cỡ vệt sáng phải theo cỡ khung: ở c14–c15 khung rộng, vệt phải to
+    // bằng cả lòng nồi thì mới đủ nặng để đọc ra nhiệt.
+    const wide = id === 'c14' || id === 'c15' || id === 'c17';
+    bottomWarm.visible = wide;
+    if (wide) {
+      const s = id === 'c14' ? .30 : id === 'c15' ? .40 : .32;
+      bottomWarm.scale.set(s, s, 1);
+      bottomWarm.material.opacity = .05 + .60 * beat;
+    }
+
+    // ── con chip đang chạy ─────────────────────────────────────────────
+    // Con chip đo điện trở thì đang tính, mà tính thì nóng: một quầng ấm
+    // nhỏ quanh con chip, phập phồng. Nó là thứ duy nhất chạy trong khung
+    // bo mạch, và nó nằm đúng chỗ câu kể đang chỉ.
+    chipWarm.visible = id === 'c13';
+    if (id === 'c13') {
+      chipWarm.material.opacity = .04 + .46 * beat;
+      const cs = .046 + .008 * beat;
+      chipWarm.scale.set(cs, cs, 1);
+    }
+  };
+  g.updateProp(0);
   return g;
 }
 

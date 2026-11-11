@@ -198,7 +198,7 @@ export function nuocNoi(opts = {}) {
   rebuild(opts.level ?? bottom + .05);
 
   // bọt bốc lên ở mặt nước
-  let boil = 0;
+  let boil = 0;          // cờ sôi của phim
   const V = { rIn: yy => rAt(yy) * .90, level: level, bottom, cut: Math.PI };
   const F = fizz(V, { n: 110, sites: 10, seed: 9, rate: () => boil, r0: .0022, rDetach: .007, grow: .009, rise: .55, acc: 1.4 });
   // bọt nằm trên lớp hiệu ứng: không có viền mực, nếu không mỗi bọt lại thành một
@@ -211,11 +211,30 @@ export function nuocNoi(opts = {}) {
   // soi vật) sẽ thấy đúng quả cầu đó.
   F.update(0);
 
+  // ── cường độ sôi của lớp nước ──
+  // Lớp nước sôi khi phim bật cờ sôi. Ngoài ra, lớp nước cuối cùng còn trong
+  // nồi gặp một nồi đã nóng thì cũng sôi: nó bốc hơi và mực nước tụt dần.
+  // Mực nước tụt chính là tín hiệu của cái phần, nên phần nước cuối phải sôi
+  // mạnh chứ không nằm yên — và phần hơi của nó là thứ nhìn thấy được khi
+  // nước đã gần hết.
+  let boilK = 0;     // cờ sôi đã mượt dần, để bọt không bật lên đột ngột
+  let tNow = 0;      // thời điểm của khung đang dựng: mọi thứ tính theo nó
+  let fillT = -99;   // lúc nước vừa được rót vào nồi
+  const dryAmt = () => {
+    const d = level - bottom;
+    return clamp((.013 - d) / .008) * clamp(d / .004);
+  };
+  // Nước đang được rót vào thì nó cuốn lại: bong bóng sủi lên trong cột nước.
+  // Đó là thứ đọc ra được là nồi đang được đổ nước, chứ không phải một tấm
+  // kính đứng yên.
+  const fillK = () => clamp(1 - (tNow - fillT) / .9);
+  const churn = () => clamp(boilK + dryAmt() * .85 + fillK() * .45);
+
   // ── dải bọt sôi ở vạch nước ──
   // Lớp nước nằm ở đáy nồi, lớp gạo nằm trên, nên mặt nước không thấy từ trên
   // xuống; dải bọt sôi dâng dọc theo mép mặt cắt là thứ đọc ra được là nước đang
   // sôi. Không bọt thì mặt nước phẳng lì.
-  const foamN = 22;
+  const foamN = 30;
   const foam = new THREE.InstancedMesh(new THREE.SphereGeometry(1, 12, 8),
     toon('#e8f6ff', { emissive: new THREE.Color('#9fd0e4').multiplyScalar(.08) }), foamN);
   foam.frustumCulled = false; foam.castShadow = false;
@@ -223,36 +242,162 @@ export function nuocNoi(opts = {}) {
   g.add(foam);
   const fr = mulberry(5);
   const foams = [];
-  for (let i = 0; i < foamN; i++) foams.push({ x: (i / (foamN - 1) - .5) * 2 * (R - MEN_W) * .94, p: fr(), s: .6 + fr() * .8 });
+  for (let i = 0; i < foamN; i++) foams.push({ x: (i / (foamN - 1) - .5) * 2 * (R - MEN_W) * .94, p: fr(), q: fr(), s: .6 + fr() * .8 });
   const fM = new THREE.Matrix4(), fP = new THREE.Vector3(), fQ = new THREE.Quaternion(), fS = new THREE.Vector3();
 
   // Dải bọt cũng phải có vị trí ngay từ lúc dựng, lý do như bong bóng ở trên.
-  const layoutFoam = t => {
-    const k = clamp(boil);
+  const layoutFoam = () => {
+    const k = churn();
     for (let i = 0; i < foamN; i++) {
       const f = foams[i];
-      const w = Math.sin(t * 2.4 + f.p * 6.3) * .5 + .5;
-      const rr = (.0011 + .0012 * w) * f.s * k;   // nước chưa sôi thì không có bọt
-      fP.set(f.x, surfY(f.x) - .0016 - rr * .3, .0026);
-      fS.set(rr * 1.5, rr * .60, rr);
+      // Bọt nhấp nháy nhanh, mỗi bọt một nhịp riêng. Bộ đo chỉ xem mười hai
+      // hình mỗi giây: bọt chậm thì đứng yên giữa hai hình, không ai thấy nó
+      // sôi.
+      const w = (.5 + .5 * Math.sin(tNow * 11 + f.p * 6.3)) * (.55 + .45 * Math.sin(tNow * 4.7 + f.q * 6.3));
+      const rr = (.0016 + .0040 * w) * f.s * k;   // nước chưa sôi thì không có bọt
+      const x = f.x + Math.sin(tNow * 2.4 + f.p * 5.1) * .004;
+      fP.set(x, surfY(f.x) - .0016 - rr * .3, .0026);
+      fS.set(rr * 1.7, rr * .70, rr);
       fM.compose(fP, fQ, fS);
       foam.setMatrixAt(i, fM);
     }
     foam.instanceMatrix.needsUpdate = true;
   };
 
+  // ── bong bóng nổi lên trên mặt cắt ──
+  // Lớp nước đứng yên đọc ra là một tấm kính xanh, không phải nước. Nước sôi
+  // thì mặt cắt của nó phải sôi theo: bong bóng mọc ở đáy, phình ra, nổi lên,
+  // vỡ ở mặt nước. Bong bóng nằm ngay trên mặt cắt (z > 0) vì đó là chỗ
+  // người xem nhìn thấy nước; đặt sau mặt cắt thì bong bóng bị mặt nước che.
+  const bubN = 40;
+  const bub = new THREE.InstancedMesh(new THREE.SphereGeometry(1, 12, 8),
+    toon('#e4f4fd', { emissive: new THREE.Color('#9fd0e4').multiplyScalar(.05) }), bubN);
+  bub.frustumCulled = false; bub.castShadow = false; bub.layers.set(1);
+  bub.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+  g.add(bub);
+  const br = mulberry(31);
+  const bubs = [];
+  for (let i = 0; i < bubN; i++) {
+    // Có bong bóng nhỏ liên tục và vài bong bóng to trồi lên: bong bóng to là
+    // thứ đọc ra được nước đang sôi mạnh, bong bóng nhỏ cho mặt nước lấm tấm.
+    const big = i % 5 === 0;
+    bubs.push({
+      x: br() * 2 - 1,          // chỗ mọc bong bóng, theo bán kính đáy nồi
+      per: .70 + br() * .50,    // thời gian một vòng: phình ra, nổi lên, vỡ
+      ph: br(),
+      r0: big ? .0060 + .0040 * br() : .0011 + .0026 * br(),
+      wob: br() * 6.3,
+    });
+  }
+  const bM = new THREE.Matrix4(), bP = new THREE.Vector3(), bQ = new THREE.Quaternion(), bS = new THREE.Vector3();
+  const layoutBub = () => {
+    const k = churn();
+    const y0 = bottom + .005;
+    const yTop = level - .0015;
+    const span = Math.max(.003, yTop - y0);
+    for (let i = 0; i < bubN; i++) {
+      const b = bubs[i];
+      const c = (tNow / b.per + b.ph) % 1;
+      let y, r;
+      if (c < .26) {                        // bám đáy, phình ra
+        y = y0; r = b.r0 * .7 * (c / .26);
+      } else {
+        const q = (c - .26) / .62;          // nổi lên, nhanh dần
+        y = y0 + span * q * q;
+        r = b.r0 * (.7 + .5 * q);
+        if (q > .87) r *= 1 - (q - .87) / .13;   // vỡ tan ở mặt nước
+      }
+      r *= k;
+      const x = b.x * rAt(y0) * .86 + Math.sin(tNow * 7 + b.wob) * .0025;
+      bP.set(x, y, .0013);
+      bS.set(r, r, r * .85);
+      bub.setMatrixAt(i, bM.compose(bP, bQ, bS));
+    }
+    bub.instanceMatrix.needsUpdate = true;
+  };
+
+  // ── hơi lúc nước cạn ──
+  // Nước cuối cùng còn trong nồi gặp nồi đã nóng thì bốc thành hơi. Không có
+  // cột hơi thì câu "nồi bên phải cạn nước trước" chỉ là một vệt nước nhỏ
+  // xíu biến mất — người xem không thấy nồi đang mất nước.
+  const stN = 26;
+  const steamMat = toon('#f4fcff', {
+    emissive: new THREE.Color('#d9f0fa').multiplyScalar(.45),
+    transparent: true, opacity: .42, depthWrite: false,
+  });
+  // mép mềm: cụm hơi nhạt dần ở rìa, chồng lên nhau thành một sợi hơi chứ
+  // không thành một đám bi cầu nhựa
+  steamMat.onBeforeCompile = sh => {
+    sh.fragmentShader = sh.fragmentShader.replace('#include <normal_fragment_maps>',
+      '#include <normal_fragment_maps>\n  diffuseColor.a *= 1.7 * pow(smoothstep(0., 1., abs(dot(normalize(normal), normalize(vViewPosition)))), 1.5);');
+  };
+  steamMat.customProgramCacheKey = () => 'nuoc-steam';
+  const steam = new THREE.InstancedMesh(new THREE.SphereGeometry(1, 12, 8), steamMat, stN);
+  steam.frustumCulled = false; steam.castShadow = false; steam.layers.set(1);
+  steam.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+  g.add(steam);
+  const sr = mulberry(77);
+  const puffs = [];
+  for (let i = 0; i < stN; i++) {
+    puffs.push({
+      dTrig: .0115 - i * .00037,      // mực nước lúc cụm hơi này bắt đầu bốc
+      t0: 0, y0: level, on: false,
+      x: (sr() * 2 - 1) * .04,
+      z: .004 + sr() * .004,
+      rise: .20 + sr() * .20,         // tốc độ bay lên
+      r0: .006 + .008 * sr(),         // cụm hơi nhỏ, bay lên thì loãng dần
+      life: .50 + sr() * .30,
+      sp: sr(),
+    });
+  }
+  const sM = new THREE.Matrix4(), sP = new THREE.Vector3(), sQ = new THREE.Quaternion(), sS = new THREE.Vector3();
+  const layoutSteam = () => {
+    const d = level - bottom;
+    const fade = clamp(d / .0018);       // hơi tắt dần khi nồi đã cạn hẳn
+    for (let i = 0; i < stN; i++) {
+      const p = puffs[i];
+      if (!p.on && d > 0 && d <= p.dTrig) { p.on = true; p.t0 = tNow; p.y0 = level; }
+      if (p.on && (d > p.dTrig + .0015 || tNow - p.t0 > p.life)) p.on = false;
+      let s = 0;
+      const age = p.on ? tNow - p.t0 : 0;
+      const u = age / p.life;
+      if (p.on && u >= 0 && u < 1) {
+        s = p.r0 * (.5 + 1.3 * u);
+        if (u < .12) s *= u / .12;          // cụm hơi mọc ra, không bật lên
+        if (u > .55) s *= (1 - u) / .45;    // rồi tan đi
+        s *= fade;
+      }
+      sP.set(p.x + Math.sin(age * 3.4 + p.sp * 6.3) * .012, p.y0 + p.rise * age, p.z);
+      sS.set(s, s * .88, s);
+      steam.setMatrixAt(i, sM.compose(sP, sQ, sS));
+    }
+    steam.instanceMatrix.needsUpdate = true;
+  };
+
   g.setBoil = k => { boil = clamp(k); };
   g.setLevel = y => {
+    if (y > level + 1e-5) fillT = tNow;     // nước đang được rót vào
     rebuild(y);
     V.level = y;
     F.update(0);
-    layoutFoam(0);
+    layoutFoam();
+    layoutBub();
+    layoutSteam();
   };
+  let lastT = 0;
   g.update = t => {
+    const dt = Math.min(.12, Math.max(0, t - lastT));
+    lastT = t;
+    tNow = t;
+    boilK += (boil - boilK) * Math.min(1, dt * 5);   // bọt không bật lên đột ngột
     F.update(t);
-    layoutFoam(t);
+    layoutFoam();
+    layoutBub();
+    layoutSteam();
   };
-  layoutFoam(0);
+  layoutFoam();
+  layoutBub();
+  layoutSteam();
   g.faceMat = faceMat; g.bodyMat = bodyMat; g.surfMat = surfMat;
   return g;
 }

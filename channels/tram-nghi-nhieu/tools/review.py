@@ -31,7 +31,21 @@ LIB = os.path.abspath(os.path.join(CHANNEL, '..', '..'))
 STEP_DIR = {'outline': 'step1-outline', 'script': 'step2-script', 'look': 'step3-storyboard',
             'props': 'step5-props-code', 'picture': 'step6-assembly', 'final': 'step7-delivery'}
 BATCH = {'outline': 1, 'script': 200, 'look': 12, 'props': 12, 'picture': 20, 'final': 1}
+# Lô quá lớn thì người chấm không trả lời đủ: một lô mười hai khung hình thì người chấm
+# bỏ dở, và vòng chấm không chấm được gì cả. `LEMO_CRITIC_BATCH` giới hạn lô nhỏ lại
+# cho một vòng cần chạy nhanh (nhiều lô nhỏ hơn, mỗi lô chắc chắn hết).
+_LIMIT = os.environ.get('LEMO_CRITIC_BATCH')
+if _LIMIT:
+    BATCH = {k: min(v, int(_LIMIT)) for k, v in BATCH.items()}
 TRIES = 3   # failures before an item is OPEN
+# Trần số vòng cho MỖI BƯỚC. Một bước chấm đi mãi thì không có đường ra: vòng N+1 chấm lại đúng
+# những mục vòng N vừa chấm, và mỗi vòng lại mở ra một vòng mới (M1). Khi vòng chạm trần, bước đóng
+# lại với những mục còn lại ở trạng thái MỞ — cùng luật "sai ba lần thì thành MỞ" áp cho cả bước.
+# Số vòng đã chạy nằm trong state (`round`), nên trần này sống qua cả những lần khởi chạy lại.
+MAX_ROUNDS = {'outline': 4, 'script': 6, 'look': 8, 'props': 8, 'picture': 8, 'final': 1}
+_ROUND_LIMIT = os.environ.get('LEMO_MAX_ROUNDS')
+if _ROUND_LIMIT:
+    MAX_ROUNDS = {k: int(_ROUND_LIMIT) for k in MAX_ROUNDS}
 OLD_FLAGS = {'--outline': 'outline', '--script': 'script', '--storyboard': 'look', '--props': 'props',
              '--final': 'final'}
 
@@ -152,11 +166,21 @@ def prompt_for(rubric_text, crit, batch, prev, cwd, extra=''):
 # ——— one round: decide the scope, ask, record ———
 
 def scope(st, items, again=()):
-    """split the items into (to judge, still failing and unchanged, unchanged and closed)"""
+    """split the items into (to judge, still failing and unchanged, unchanged and closed)
+
+    "Has this item changed?" is answered by the *source* that made it, not by the picture alone.
+    The picture fingerprint is a 48x27 grey blur: it cannot see a shape that moved inside it, so a
+    vật whose code was rewritten came out "unchanged" and kept a verdict nobody gave it (M13) — and
+    the gate then reported that code as judged. The digest of the source is exact and free
+    (`props_catalog.digest` already hashes the prop and the helpers it imports), so it is asked
+    first: if the source moved, the item is judged again whatever the blur says.
+    """
     judge, failing, kept = [], [], []
     for it in items:
         rec = st['items'].get(it['id'])
         same = bool(rec) and rec.get('key') == it.get('key') and ('fp' not in it or fp_close(rec.get('fp'), it['fp']))
+        if rec and it.get('src') and rec.get('src') and rec.get('src') != it.get('src'):
+            same = False   # the code moved: this is a different item, not the one that was judged
         if not same or 'all' in again or it['id'] in again or rec.get('verdict') not in ('PASS', 'OPEN', 'FAIL'):
             judge.append(it)
         elif rec['verdict'] == 'FAIL':
@@ -191,10 +215,31 @@ def judge(st, crit, batch, ask, rnd):
         failed = any(rows[c][0] == 'LỖI' for c in must)
         tries = old.get('fails', 0) + (1 if failed else 0)
         verdict = 'PASS' if not failed else ('OPEN' if tries >= TRIES else 'FAIL')
+        # OPEN là kết cục, không phải một phán quyết tạm: "sai ba lần thì thành MỞ, bước đóng và đi
+        # tiếp, mục đó nằm trong báo cáo cho người dùng" (SKILL.md). Một vòng sau đạt ĐẠT thì phán
+        # quyết đó biến mất khỏi báo cáo (M15). Nó giữ nguyên MỞ; số lần sai vẫn đếm lên.
+        if old.get('verdict') == 'OPEN':
+            verdict = 'OPEN'
         rec = {k: v for k, v in it.items() if k in ('key', 'fp', 'src', 'name')}
         rec.update(verdict=verdict, fails=tries, round=rnd, rows=rows)
         st['items'][it['id']] = rec
     return missing
+
+
+def judge_changed(st, critic):
+    """the judge of this step changed since the last round — say so, loudly.
+
+    Một mục được người A chấm ĐẠT rồi người B chấm LỖI thì vòng sau phải chấm lại, và người đọc báo
+    cáo không biết tiêu chuẩn nào đã dùng cho mục nào (P9). Một tập nên dùng MỘT người chấm suốt tập;
+    đổi người giữa chừng là một quyết định có chủ ý, và những mục đã chấm phải chấm lại (`--again all`)
+    để tiêu chuẩn là một.
+    """
+    seen = st.get('critic')
+    if seen and seen != critic:
+        return (f'người chấm của bước này đã đổi: vòng trước dùng "{seen}", vòng này dùng "{critic}". '
+                f'Mọi mục đã chấm phải chấm lại để tiêu chuẩn là một '
+                f'(chạy lại với --again all), nếu không thì hai tiêu chuẩn nằm chung một báo cáo.')
+    return None
 
 
 def run(ep, step, items, crit, ask, again=(), report=None):
@@ -203,13 +248,33 @@ def run(ep, step, items, crit, ask, again=(), report=None):
     todo, failing, kept = scope(st, items, again)
     for it in kept:   # unchanged and closed: refresh what the gate checks (a source edit that changed no pixel)
         for k in ('key', 'src', 'name'):
-            if k in it: st['items'][it['id']][k] = it[k]
+            # 'src' is refreshed ONLY when the source itself did not move. A source that moved is
+            # exactly what scope() sends back for judging, so a kept item's 'src' is its own by
+            # definition — overwriting it here is what turned "nobody looked at this code" into
+            # "ĐẠT" (M13). Keep the verdict's own digest.
+            if k in it and not (k == 'src' and st['items'][it['id']].get('src') != it.get('src')):
+                st['items'][it['id']][k] = it[k]
     missing = []
     if todo:
         st['round'] = st.get('round', 0) + 1
-        for i in range(0, len(todo), BATCH[step]):
-            missing += judge(st, crit, todo[i:i + BATCH[step]], ask, st['round'])
-            gate.save(ep, step, st)
+        cap = MAX_ROUNDS.get(step)
+        if cap and st['round'] > cap:
+            # Chạm trần số vòng. Bước này không chấm nữa: mọi mục còn lại thành MỞ, bước đóng lại,
+            # và báo cáo nói rõ vì sao (M1). Một bước chấm đi mãi không có đường ra — nó chỉ có
+            # đường ra khi ai đó nói "dừng lại".
+            st['round'] = cap
+            for it in todo:
+                rec = st['items'].get(it['id'], {})
+                rec = dict(rec)
+                rec.update(verdict='OPEN', fails=max(rec.get('fails', 0), TRIES), round=st['round'])
+                st['items'][it['id']] = rec
+            say(f'bước {step} đã chạm trần {cap} vòng: {len(todo)} mục chưa được chấm là ĐẠT '
+                f'chuyển thành MỞ và bước đóng lại.')
+            todo = []
+        else:
+            for i in range(0, len(todo), BATCH[step]):
+                missing += judge(st, crit, todo[i:i + BATCH[step]], ask, st['round'])
+                gate.save(ep, step, st)
     ids = {it['id'] for it in items}
     st['items'] = {k: v for k, v in st['items'].items() if k in ids}   # items the episode no longer has
     gate.save(ep, step, st)
@@ -534,8 +599,19 @@ def _main(ep, step, again, W):
         say(f'người chấm đang chấm {len(batch)} mục ({step})…')
         return ask_raw(prompt_for(rubric_text, crit, batch, prev, W, extra), W,
                        900 + (90 if images else 10) * len(batch))
+    # P9: người chấm là một phần của tiêu chuẩn. Nếu nó đổi giữa chừng thì những mục đã chấm phải
+    # chấm lại để tiêu chuẩn là một; nếu không, báo cáo có hai tiêu chuẩn trong một state.
+    critic = critic_id()
+    before = gate.load(ep, step)
+    changed = judge_changed(before, critic)
+    if changed and 'all' not in again:
+        say(changed)
+        say('chạy lại với --again all để chấm lại toàn bộ dưới người chấm mới.')
+        return 2
     st, todo, failing, missing = run(ep, step, items, crit, ask, again,
                                      report=lambda s, j, m: write_reports(ep, step, crit, s, j, m))
+    st['critic'] = critic
+    capped = st.get('round') and st['round'] >= MAX_ROUNDS.get(step, 10 ** 6) and not todo and not missing
     if step == 'picture' and not missing:
         st['src'] = gate.picture_src(ep)   # every frame of this code has been looked at
     if step in gate.PLANS:
@@ -551,6 +627,9 @@ def _main(ep, step, again, W):
     if missing:
         say(f"người chấm không trả lời đủ cho: {', '.join(i['id'] for i in missing)} — chạy lại lệnh này"); return 2
     if fails: return 1
+    if capped:
+        print(f'review {step}: XONG (đã chạm trần {MAX_ROUNDS[step]} vòng — mục chưa ĐẠT nằm ở MỞ, xem {rel}/review/{step.upper()}.md)')
+        return 0
     print(f'review {step}: XONG')
     return 0
 
@@ -595,6 +674,56 @@ def selftest():
         answers.clear(); items[0]['key'] = 'k1b'
         st, todo, failing, missing = run(ep, 'script', items, crit, ask)
         expect(st['items']['c1']['verdict'] == 'PASS' and st['items']['c2']['verdict'] == 'OPEN', 'OPEN stays open')
+
+        # M13: a source that moved is a different item, even when the picture looks the same. The
+        # 48x27 blur cannot see a shape that moved inside it, so the digest of the source decides.
+        ep2 = os.path.join(tmp, 'tap2'); os.makedirs(os.path.join(ep2, 'review'))
+        pitems = [{'id': 'p1', 'key': 'k1', 'src': 'digest-A'}]
+        answers.clear(); answers[('p1', 'a')] = 'ĐẠT'; answers[('p1', 'b')] = 'ĐẠT'
+        calls.clear()
+        st, todo, failing, missing = run(ep2, 'props', pitems, crit, ask)
+        expect(len(calls) == 1 and st['items']['p1']['verdict'] == 'PASS', 'a new prop is judged once')
+        calls.clear()
+        st, todo, failing, missing = run(ep2, 'props', pitems, crit, ask)
+        expect(not calls and st['items']['p1']['src'] == 'digest-A', 'an unchanged prop is not judged again')
+        pitems[0]['src'] = 'digest-B'   # the code moved; the picture may still look the same
+        calls.clear()
+        st, todo, failing, missing = run(ep2, 'props', pitems, crit, ask)
+        expect(calls == [['p1']], 'a prop whose source moved goes back to the critic even if the picture is the same')
+        expect(st['items']['p1']['src'] == 'digest-B', 'and the verdict now belongs to the new source')
+
+        # M15: OPEN là kết cục — một vòng sau đạt ĐẠT thì phán quyết MỞ không bị xoá.
+        ep3 = os.path.join(tmp, 'tap3'); os.makedirs(os.path.join(ep3, 'review'))
+        oitems = [{'id': 'o1', 'key': 'ko'}]
+        answers.clear(); answers[('o1', 'a')] = 'LỖI'; answers[('o1', 'b')] = 'LỖI'
+        st, todo, failing, missing = run(ep3, 'script', oitems, crit, ask)
+        expect(st['items']['o1']['verdict'] == 'FAIL', 'a failing item is FAIL')
+        for n in range(2):
+            oitems[0]['key'] = 'ko' + str(n + 1)   # the fixer changed it: judge it again
+            st, todo, failing, missing = run(ep3, 'script', oitems, crit, ask)
+        expect(st['items']['o1']['verdict'] == 'OPEN', 'three failures → OPEN')
+        answers.clear(); answers[('o1', 'a')] = 'ĐẠT'; answers[('o1', 'b')] = 'ĐẠT'
+        oitems[0]['key'] = 'ko3'
+        st, todo, failing, missing = run(ep3, 'script', oitems, crit, ask)
+        expect(st['items']['o1']['verdict'] == 'OPEN' and st['items']['o1']['fails'] == 3,
+               'an OPEN item stays OPEN in the report even when a later round passes it')
+
+        # M1: a step has a round cap; at the cap the rest becomes OPEN and the step closes.
+        ep4 = os.path.join(tmp, 'tap4'); os.makedirs(os.path.join(ep4, 'review'))
+        cap = MAX_ROUNDS.get('script', 0)
+        xitems = [{'id': 'x1', 'key': 'kx'}]
+        answers.clear(); answers[('x1', 'a')] = 'ĐẠT'; answers[('x1', 'b')] = 'ĐẠT'
+        for n in range(cap + 2):
+            xitems[0]['key'] = 'kx' + str(n)
+            st, todo, failing, missing = run(ep4, 'script', xitems, crit, ask)
+        expect(st['round'] <= cap, f'the round counter never passes the cap ({cap})')
+        expect(st['items']['x1']['verdict'] == 'OPEN', 'at the cap the rest of the step becomes OPEN')
+
+        # P9: người chấm là một phần của tiêu chuẩn — đổi người giữa chừng thì phải chấm lại.
+        expect(judge_changed({'critic': 'a'}, 'a') is None, 'the same judge is fine')
+        msg = judge_changed({'critic': 'a'}, 'b')
+        expect(msg is not None and '--again all' in msg, 'a changed judge says so and asks for --again all')
+        expect(judge_changed({}, 'b') is None, 'a step with no judge yet is not a change')
 
         def lazy(batch, prev):
             return '\n'.join(f"{it['id']} | a | ĐẠT | thấy" for it in batch)

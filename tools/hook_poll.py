@@ -37,6 +37,15 @@ WINDOW = 7200      # quên lệnh dò cũ hơn 2 giờ
 HAS_DATE = re.compile(r'\bdate\b')
 HAS_CHECK = re.compile(r'\b(?:ls|stat|wc|du)\b')
 
+# Ba hình dạng chờ, và mỗi hình dạng một khoá đếm riêng. Ba phiên làm phim 38 giờ (bản ghi
+# 2026-11-11) chờ bằng cả ba: `until [ -f … ]; do sleep 20; done`, `for i in $(seq 1 230); do … sleep 30; done`
+# và `sleep 280; echo waited`. Lệnh cũ chỉ bắt được hình dạng `date` + `ls`, và khoá đếm là *toàn bộ
+# câu lệnh* nên một phiên đổi câu lệnh mỗi lần thì không lần nào chạm ngưỡng (M5). Ở đây khoá là
+# *hình dạng trừu tượng*: cùng một kiểu chờ thì đếm chung, bất kể câu chữ khác nhau.
+WAIT_LOOP = re.compile(r'\b(?:until|while|for)\b[^\n]*\bsleep\b')
+BARE_SLEEP = re.compile(r'^\s*sleep\s+\d+')
+PROC_QUERY = re.compile(r'\bpgrep\b|\bps\b[^\n]*(?:\betime\b|\bgrep\b)')
+
 # Tự dựng tờ ảnh: dán khung đã thu nhỏ bằng `tile=`. (ffmpeg trộn âm, nối tệp, `-filter_complex` nói chung: cho qua.)
 MONTAGE = re.compile(r'ffmpeg[^\n]*?\btile=')
 
@@ -62,16 +71,35 @@ def shape_of(command):
     return re.sub(r'[\s0-9"\']+', ' ', command or '').strip()
 
 
+def poll_kind(command):
+    """(khoá đếm, có phải vòng dò không) — khoá là *hình dạng trừu tượng*, không phải câu lệnh.
+
+    Một phiên dưới áp lực đổi câu lệnh mỗi lần, nên khoá là toàn bộ câu lệnh thì không lần nào
+    chạm ngưỡng (M5). Ở đây cùng một *kiểu* chờ thì đếm chung: một vòng `until … sleep` vẫn là một
+    vòng `until … sleep`, dù nó đổi tên tệp hay số giây.
+    """
+    c = command or ''
+    if WAIT_LOOP.search(c):
+        return 'wait:loop', True
+    if BARE_SLEEP.match(c):
+        return 'wait:sleep', True
+    if HAS_DATE.search(c) and HAS_CHECK.search(c):
+        return 'wait:date+check', True
+    if PROC_QUERY.search(c):
+        return 'wait:proc', True
+    return '', False
+
+
 def decide(command, session, state, now=None):
     """(mã thoát, thông điệp) cho một lệnh Bash. `state` là dict phiên → {hình dạng: (lần đầu, số lần)}."""
     if not command:
         return 0, ''
     if MONTAGE.search(command):
         return 2, MONTAGE_MESSAGE
-    if not (HAS_DATE.search(command) and HAS_CHECK.search(command)):
+    key, is_poll = poll_kind(command)
+    if not is_poll:
         return 0, ''
     now = now if now is not None else time.time()
-    key = shape_of(command)
     seen = state.setdefault(session, {})
     first, count = seen.get(key, (now, 0))
     if now - first > WINDOW:
@@ -133,30 +161,47 @@ def selftest():
         ('ls /tmp/lemo-review-abc/beats | wc -l; date \'+%H:%M:%S\'', 2, 2),
         ('date +%H:%M:%S; ls -l src/props.js', 2, 2),
         # lệnh khác hình dạng thì không bị tính vào
-        ('ls -l --time-style=+%H:%M:%S src/props.js; date +%H:%M:%S', 2, 2),
         ('cat src/props.js | head -40', 0, 0),
         ('node --check src/props.js && echo OK', 0, 0),
         # tự dựng tờ ảnh: chặn ngay, không cần đến lần thứ ba
         ('ffmpeg -i a.mp4 -vf "tile=3x2" b.jpg', 0, 2),
         ('ffmpeg -i a.mp4 b.mp4', 0, 0),
         ('ffmpeg -i a.mp4 -vf scale=320:-1 b.jpg', 0, 0),
-        # -filter_complex để trộn âm / nối tệp thì cho qua; vòng lặp có sleep cũng cho qua
         ('ffmpeg -i a.wav -i b.wav -filter_complex "amix=inputs=2" c.wav', 0, 0),
         ('ffmpeg -i a.mp4 -filter_complex "[0:v]scale=320:-1,tile=3x2" b.jpg', 0, 2),
-        ('until [ -f /tmp/x ]; do sleep 15; done', 0, 0),
         ('for f in *.jpg; do echo $f; done', 0, 0),
-        ('sleep 5', 0, 0),
+        # ── ba hình dạng chờ thật của ba phiên 38 giờ (bản ghi 2026-11-11, M5) ──
+        # vòng lặp chờ một tệp: cùng kiểu thì đếm chung, dù câu chữ khác nhau
+        ('until [ -f "$EP/review/picture-4.md" ]; do pgrep -f "review.py.*tap-02" >/dev/null || break; sleep 10; done', 2, 2),
+        ('until [ -f "$EP/review/props-13.md" ]; do sleep 10; done', 2, 2),
+        ('for i in $(seq 1 230); do if [ -f $EP/review/props.json ]; then break; fi; sleep 20; done', 2, 2),
+        ('i=0; while [ $i -lt 55 ]; do sleep 20; i=$((i+1)); done', 2, 2),
+        # ngủ thẳng trong vỏ: cũng là vòng dò
+        ('sleep 280; echo waited', 2, 2),
+        ('sleep 290', 2, 2),
+        # hỏi tiến trình: một lần thì được, nhiều lần thì chặn
+        ('ps -eo pid,etime,args | grep -E "claude -p|episode.py" | grep -v grep', 2, 2),
+        ('ps -o etime= -p 12345', 0, 0),
     ]
     bad = 0
     for cmd, seen_before, want in cases:
         state = {}
         if seen_before:
-            state['s'] = {shape_of(cmd): (1000.0, seen_before)}
+            key, _ = poll_kind(cmd)
+            state['s'] = {key: (1000.0, seen_before)}
         code, msg = decide(cmd, 's', state, now=2000.0)
         ok = code == want
         bad += 0 if ok else 1
         print('%-4s rc=%d (mong đợi %d)  %s' % ('ok' if ok else 'FAIL', code, want, cmd[:72]))
-    print('%d/%d ok' % (len(cases) - bad, len(cases)))
+    # khoá đếm là hình dạng trừu tượng: hai câu lệnh khác câu chữ cùng kiểu thì đếm chung
+    state = {}
+    decide('until [ -f "$EP/a.md" ]; do sleep 10; done', 's', state, now=2000.0)
+    decide('until [ -f "$EP/b.md" ]; do sleep 20; done', 's', state, now=2000.0)
+    code, _ = decide('until [ -f "$EP/c.md" ]; do sleep 30; done', 's', state, now=2000.0)
+    ok = code == 2
+    bad += 0 if ok else 1
+    print('%-4s rc=%d (mong đợi 2)  %s' % ('ok' if ok else 'FAIL', code, 'ba câu khác câu chữ, cùng một kiểu chờ'))
+    print('%d/%d ok' % (len(cases) + 1 - bad, len(cases) + 1))
     return 1 if bad else 0
 
 

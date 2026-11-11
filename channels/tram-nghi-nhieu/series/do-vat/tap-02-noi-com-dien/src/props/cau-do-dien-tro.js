@@ -12,8 +12,17 @@
 // sáng (chuỗi '10 kΩ' / '1 kΩ', hoặc 0 = hàng trên, 1 = hàng dưới).
 // Tên vật phải đúng với cái người xem thấy: đây là máy đo, còn viên cầu đầu dò
 // nhiệt là vật nhỏ trong nồi (xem noi-cat-ngang.js).
+//
+// ── Đèn sau của màn hình ────────────────────────────────────────────────
+// Màn hình LCD có đèn sau: đó là một vệt sáng xanh lọt ra khỏi mặt kính, đọn
+// vào vỏ máy quanh màn hình. Ở đây đèn sau đó là thứ LÀM ĐỘNG cho cả câu c11:
+// nó thở theo nhịp đo (màn hình sáng lên rồi tụi xuống) và nó BẬT LÊN thật mạnh
+// đúng lúc số đổi từ "10 kΩ" xuống "1 kΩ" — một vệt sáng chiếm gần cả mặt
+// máy, đủ để khung hình đổi mạnh, đúng như lời kể "số tụt xuống".
+// Không có đèn sau thì màn hình là một mảng sơn tĩnh: số đổi xong thì hình
+// đứng yên, người xem thấy câu kể chạy trên một tấm bảng.
 import * as THREE from 'three';
-import { toon, canvasTex, rbox, mesh, fxLayer, PAL, mulberry } from '../../../../../rig/kit.js';
+import { toon, canvasTex, rbox, mesh, fxLayer, mulberry } from '../../../../../rig/kit.js';
 
 // Vân vỏ máy đo: một mảng vàng phẳng ở tiền cảnh đọc ra như bìa carton, không
 // phải vỏ máy. Vân này là hạt nhựa mịn và một chút tối dần ở đáy.
@@ -33,6 +42,23 @@ function meterTex() {
   });
 }
 
+// Đĩa sáng mềm: một vệt tròn toả dần từ tâm. Dùng cho đèn sau của màn hình.
+// Vân của nó phải mềm ở rìa, nếu mép cứng thì nó đọc ra là một miếng dán
+// hình bầu dục, không phải một vệt sáng.
+let _soft = null;
+function softTex() {
+  if (_soft) return _soft;
+  _soft = canvasTex(128, 128, (c, w, h) => {
+    const g = c.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, w / 2);
+    g.addColorStop(0, 'rgba(255,255,255,1)');
+    g.addColorStop(.42, 'rgba(255,255,255,.60)');
+    g.addColorStop(.72, 'rgba(255,255,255,.20)');
+    g.addColorStop(1, 'rgba(255,255,255,0)');
+    c.fillStyle = g; c.fillRect(0, 0, w, h);
+  });
+  return _soft;
+}
+
 export function cauDoDienTro(opts = {}) {
   const g = new THREE.Group();
   const mtex = meterTex();
@@ -48,7 +74,9 @@ export function cauDoDienTro(opts = {}) {
   // dưới để số tụt là thấy ngay, không phải tự đoán.
   //
   // Canvas 320x200 giữ tỉ lệ 1.6 đúng bằng hộp màn hình .1152 x .072 ở dưới;
-  // đổi kích thước một bên mà không đổi bên kia thì chữ bị méo.
+  // đổi kích thước một bên mà không đổi bên kia thì chữ bị méo. Cũng KHÔNG
+  // được dời vị trí các hàng: nhãn "MỘT KILOÔM" trong film.js chỉ vào đúng
+  // chữ "1" ở toạ độ canvas này, dời hàng là nhãn chỉ trượt khỏi con số.
   const SCR_W = 320, SCR_H = 200;
   const SCR_BG = '#1d2a24', SCR_LIVE = '#8ef0b4', SCR_DIM = '#5fbf8d', SCR_ARROW = '#f7bd27';
   const ROW_PX = 96, ROW_UNIT = 54, ROW_Y = [52, 148], NUM_RIGHT = 130, UNIT_X = 140;
@@ -70,8 +98,20 @@ export function cauDoDienTro(opts = {}) {
     return np;
   };
 
+  // Đèn sau: một lớp sáng phủ lên màn hình, cộng thêm (không thay) màu cũ.
+  // Khi số đổi thì đèn sáng mạnh lên: toàn bộ mặt màn hình và vệt sáng quanh
+  // nó cùng đổi, nên câu kể "số tụt xuống" là một CỬ ĐỘNG nhìn thấy được, không
+  // phải một dòng chữ đổi màu trên một tấm bảng đứng yên.
+  const backlight = (bf) => {
+    if (bf <= .002) return;
+    sc.globalCompositeOperation = 'lighter';
+    sc.fillStyle = `rgba(70,130,95,${bf})`;
+    sc.fillRect(0, 0, SCR_W, SCR_H);
+    sc.globalCompositeOperation = 'source-over';
+  };
+
   // MỘT hàng: số to giữa màn hình. Dùng cho ảnh ba phía của danh mục vật.
-  const drawOne = txt => {
+  const drawOne = (txt, bf = 0) => {
     sc.fillStyle = SCR_BG; sc.fillRect(0, 0, SCR_W, SCR_H);
     const [num, unit] = splitVal(txt);
     let np = 112, up = 60;
@@ -90,18 +130,27 @@ export function cauDoDienTro(opts = {}) {
     sc.fillStyle = SCR_LIVE; sc.textBaseline = 'middle'; sc.textAlign = 'left';
     sc.font = `bold ${np}px monospace`; sc.fillText(num, x0, SCR_H / 2);
     if (unit) { sc.font = `bold ${up}px monospace`; sc.fillText(unit, x0 + nw + 12, SCR_H / 2); }
+    backlight(bf);
   };
 
   // HAI hàng: hàng trên số lúc mát, hàng dưới số lúc nóng. Số đang đo sáng
   // mạnh, số kia sáng vừa đủ đọc trên nền màn hình tối — hai số cùng hiện,
   // người xem tự thấy con số nào đang chạy.
-  const drawTwo = (a, b, live) => {
+  //
+  // Dải sáng nền đứng sau hàng đang đo: số đang đo có một ô nền sáng riêng,
+  // và ô nền ấy NHẢY từ hàng trên xuống hàng dưới đúng lúc số đổi. Người xem
+  // thấy ngay một vệt sáng dịch xuống — số tụt xuống là thấy, không phải đoán.
+  const drawTwo = (a, b, live, bf = 0) => {
     sc.fillStyle = SCR_BG; sc.fillRect(0, 0, SCR_W, SCR_H);
     const [na] = splitVal(a), [nb] = splitVal(b);
     // hai hàng dùng chung một cỡ chữ: hàng nào cũng phải to như nhau, không có
     // hàng nào nhỏ hơn hàng nào, nếu không con số tụt sẽ đọc ra như hai việc
     // khác nhau chứ không phải một số đổi số
     const np = fitNum([na, nb]);
+    // ô nền của hàng đang đo
+    const liveRow = live === 1 ? 1 : 0;
+    sc.fillStyle = 'rgba(142,240,180,.13)';
+    sc.beginPath(); sc.roundRect(8, ROW_Y[liveRow] - 44, 288, 88, 14); sc.fill();
     const row = (txt, cy, color) => {
       const [num, unit] = splitVal(txt);
       sc.fillStyle = color; sc.textBaseline = 'middle';
@@ -119,6 +168,7 @@ export function cauDoDienTro(opts = {}) {
     sc.lineWidth = 9; sc.lineCap = 'round';
     sc.beginPath(); sc.moveTo(286, 44); sc.lineTo(286, 126); sc.stroke();
     sc.beginPath(); sc.moveTo(272, 126); sc.lineTo(300, 126); sc.lineTo(286, 156); sc.closePath(); sc.fill();
+    backlight(bf);
   };
 
   const stex = new THREE.CanvasTexture(screen); stex.colorSpace = THREE.SRGBColorSpace;
@@ -127,6 +177,35 @@ export function cauDoDienTro(opts = {}) {
   g.add(mesh(rbox(.1152, .072, .006, .006),
     toon('#ffffff', { map: stex, emissive: '#ffffff', emissiveMap: stex, emissiveIntensity: .25 }),
     [0, .050, .021]));
+
+  // ── đèn sau của màn hình: vệt sáng xanh lọt ra khỏi mặt kính ──────────
+  // Một mảng sáng mềm đặt ngay trước màn hình, rộng hơn màn hình: nó phủ
+  // lên mặt kính và loang ra trên vỏ máy, đúng như ánh sáng sau màn LCD thật.
+  // Nó phải ở lớp fx (sau bước viền mực) và KHÔNG ghi độ sâu, nếu không nó
+  // không được vẽ ra; nó cũng không được có viền mực — ánh sáng không có mép.
+  const halo = new THREE.Mesh(
+    new THREE.PlaneGeometry(.152, .106),
+    new THREE.MeshBasicMaterial({
+      map: softTex(), color: new THREE.Color('#7cf0b0'), blending: THREE.AdditiveBlending,
+      transparent: true, opacity: .08, depthWrite: false, toneMapped: false,
+    }));
+  halo.position.set(0, .050, .0268);
+  fxLayer(halo); g.add(halo);
+
+  // Đèn nhỏ "đang đo" trên vỏ máy: một nút kính nhỏ, sáng lên khi máy đang
+  // đo và nhấp nháy theo nhịp đo. Nó nhỏ thôi, nhưng nó cho người xem biết
+  // máy này đang SỐNG chứ không phải một tấm bảng dán số.
+  const led = mesh(new THREE.SphereGeometry(.0055, 12, 8),
+    toon('#8ef0b4', { emissive: new THREE.Color('#8ef0b4'), transparent: true, opacity: .9 }),
+    [-.062, .086, .022]);
+  g.add(led);
+  const ledGlow = new THREE.Sprite(new THREE.SpriteMaterial({
+    map: softTex(), color: new THREE.Color('#8ef0b4'), blending: THREE.AdditiveBlending,
+    transparent: true, opacity: .3, depthWrite: false, depthTest: false, toneMapped: false,
+  }));
+  ledGlow.scale.set(.020, .020, 1);
+  ledGlow.position.set(-.062, .086, .024);
+  fxLayer(ledGlow); g.add(ledGlow);
 
   // nút xoay chọn vị trí: một đĩa có vạch chỉ
   const dial = new THREE.Group(); dial.position.set(0, -.038, .023);
@@ -164,17 +243,66 @@ export function cauDoDienTro(opts = {}) {
     g.add(p); probes.push(p);
   }
 
+  // ── trạng thái đo ───────────────────────────────────────────────────────
+  // Số đang đo luôn được nhớ lại: đổi số là một SỰ KIỆN, và sự kiện đó bật
+  // đèn sau lên thật mạnh. film.js gọi setReadings mỗi khung hình, nên máy
+  // tự biết lúc nào số đổi mà không cần ai bảo.
+  let lastLive = '10 kΩ', pendingFlash = false, bf = 0, flashT = -1;
+  let twoRows = null;          // ['10 kΩ', '1 kΩ', hàng đang sáng] khi có hai hàng
+  let oneRow = null;           // '—' khi màn hình chỉ có một hàng
+  const paint = () => {
+    if (twoRows) drawTwo(twoRows[0], twoRows[1], twoRows[2], bf);
+    else if (oneRow !== null) drawOne(oneRow, bf);
+    stex.needsUpdate = true;
+  };
+
   // Một số: dùng cho ảnh ba phía của danh mục vật, số to giữa màn hình.
-  g.setReading = txt => { drawOne(txt); stex.needsUpdate = true; };
+  g.setReading = txt => { oneRow = String(txt); twoRows = null; paint(); };
   // Hai số: a ở hàng trên, b ở hàng dưới, `live` là giá trị đang sáng
   // ('10 kΩ' hoặc '1 kΩ'; cũng nhận 0 = hàng trên, 1 = hàng dưới).
   g.setReadings = (a, b, live) => {
     const l = (live === 1 || live === b) ? 1 : 0;
-    drawTwo(a, b, l);
-    stex.needsUpdate = true;
+    oneRow = null;
+    twoRows = [String(a), String(b), l];
+    // số đang đo đổi: đèn sau bật lên
+    if (live !== lastLive) { lastLive = live; pendingFlash = true; }
+    paint();
   };
   g.setDial = a => { dial.rotation.z = a; };
   g.probes = probes;
+
+  // ── chuyển động của máy ─────────────────────────────────────────────────
+  // Máy đo không phải một tấm bìa carton có số in lên: nó đang đo, nên nó
+  // sống. Đèn sau thở theo nhịp đo, và lúc số đổi thì nó sáng bừng lên rồi
+  // tụi xuống — vệt sáng ấy loang ra trên vỏ máy, nên cả khung hình đổi mạnh
+  // đúng lúc lời kể sang "khi nóng lên chỉ còn khoảng một kiloôm".
+  g.updateProp = t => {
+    if (!g.visible) return;
+    if (pendingFlash) { pendingFlash = false; flashT = t; }
+    // nhịp thở của đèn sau: sáng lên rồi tụi xuống, chậm và đều
+    const breathe = .55 + .45 * Math.sin(t * 2.2);
+    // vụng sáng lúc số đổi: tắt dần trong khoảng nửa giây
+    const fl = flashT >= 0 ? Math.exp(-(t - flashT) * 4.6) : 0;
+    bf = .055 + .030 * breathe + fl * .40;
+    halo.material.opacity = .04 + bf * .55;
+    const hs = 1 + .18 * fl;
+    halo.scale.set(hs, hs, 1);
+    // đèn nhỏ nhấp nháy theo nhịp đo
+    const blink = .55 + .45 * Math.sin(t * 7.5);
+    led.material.opacity = .35 + .55 * blink;
+    ledGlow.material.opacity = .12 + .38 * blink * (0.4 + fl);
+    const ls = .016 + .010 * blink + .014 * fl;
+    ledGlow.scale.set(ls, ls, 1);
+    // hai que chạm hơi lắc: máy đang cầm trên tay, dây đu đưa
+    for (let i = 0; i < probes.length; i++) {
+      const p = probes[i], s = i ? 1 : -1;
+      p.rotation.z = s * .22 + Math.sin(t * 1.7 + i) * .035;
+      p.rotation.x = .20 + Math.sin(t * 1.3 + i * 2) * .025;
+    }
+    // vẽ lại màn hình khi đèn sau đổi: số phải sáng theo đèn sau
+    paint();
+  };
+
   g.setReading('—');
   return g;
 }

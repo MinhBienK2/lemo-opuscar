@@ -172,6 +172,38 @@ def check(ep, step='render'):
     return None
 
 
+def stale_reasons(ep, step):
+    """vì sao mục này lại "chưa chấm hay đã đổi": tệp nào đổi, đổi lúc mấy giờ.
+
+    Một bước chấm đóng rồi bị mở lại vì một tệp đổi sau đó — và người làm chỉ thấy một con số
+    ("6 mục chưa chấm hay đã đổi") nên tưởng bước tự hỏng. Tệp nào đổi và đổi lúc mấy giờ là thứ
+    biết được, nên nó được nói ra.
+    """
+    out = []
+    st = load(ep, step)
+    if step in PLANS or not st.get('items'):
+        return out
+    if step == 'props':
+        import props_catalog
+        try:
+            items = props_catalog.catalog(ep)
+        except Exception:
+            return out
+        for x in items:
+            rec = st['items'].get(x['id'])
+            if not rec or rec.get('src') == props_catalog.digest(ep, x):
+                continue
+            out.append(f'{x["id"]}: mã đã đổi sau vòng chấm (vật {x["name"]})')
+        return out
+    if step == 'picture':
+        src = st.get('src')
+        now = picture_src(ep)
+        if src and src != now:
+            out.append('mã của phim đã đổi sau vòng chấm hình cuối — vòng hình kế tiếp phải chấm lại')
+        return out
+    return out
+
+
 def status(ep):
     if not os.path.isdir(ep):
         print(f'tập chưa có thư mục: {ep}')
@@ -190,6 +222,10 @@ def status(ep):
         print(f"{step:<8} {'XONG' if why is None else 'CHƯA XONG: ' + why}{counts}")
         opened = [k for k, r in st['items'].items() if r.get('verdict') == 'OPEN']
         if opened: print(f"         mở (đã sai 3 lần, ghi vào báo cáo): {', '.join(opened)}")
+        # M3: một mục "chưa chấm hay đã đổi" là vì một tệp đã đổi sau vòng chấm. Báo TỆP NÀO đổi và
+        # đổi lúc mấy giờ: nếu không biết, người làm chỉ thấy con số và tưởng bước tự hỏng.
+        for r in stale_reasons(ep, step)[:4]:
+            print(f'         {r}')
     movies = glob.glob(os.path.join(ep, '*.mp4')) + glob.glob(os.path.join(ep, 'out', '*.mp4'))
     print('phim:', ', '.join(os.path.relpath(m, ep) for m in movies) if movies else 'chưa có')
     import layout

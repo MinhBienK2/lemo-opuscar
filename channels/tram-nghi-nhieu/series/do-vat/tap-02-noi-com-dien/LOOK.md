@@ -85,8 +85,8 @@ hình (nhiệt, tín hiệu điện, hơi nước) mới thành vật minh hoạ
 | 44 | c44 | 134.88–137.22 | N1 · fov 36: nồi cơm điện ngập trong bóng, cửa sổ ló ở góc — lời: "Như vậy, nồi cơm điện không biết cơm chín." | kết luận phải có một hình trầm, không phải một hình kỹ thuật |
 | 45 | c45 | 137.41–138.74 | N2 · fov 30: nhìn xuống đáy nồi trong — lớp cơm đã cạn nằm sát đáy, trên thành còn vệt nước ở đúng mực nước cũ, nhãn VẾT NƯỚC chỉ vào vệt đó, nhãn ĐÁY NỒI chỉ vào đáy nồi đã cạn — lời: "Nó biết nước đã cạn." | máy xuống đáy: nước cạn là một sự kiện ở đáy nồi, và phải thấy được vệt nước còn lại |
 | 46 | c46 | 138.94–141.36 | N1 · fov 36: bàn tay nắm vành nắp rồi nâng lên, ngón tay quàng lên vành nắp, hơi nước tụt, lớp cơm trắng lộ ra — lời: "May mắn là lúc nước cạn thì cơm cũng vừa chín." | khoảnh khắc mở nắp là cảnh duy nhất có cơm trắng trong phim |
-| 47 | c47 | 142.16–143.68 | N1 · fov 30: nhìn thẳng vào túi gạo (trái) và bát đong nước (phải) đứng cạnh nhau, mấy hạt gạo rơi giữa bàn — lời: "Lời khuyên thì đơn giản thôi." | lời khuyên cần thấy trước mắt cái bát nước và túi gạo |
-| 48 | c48 | 143.88–147.18 | N1 · fov 32: bát đong nước có sóng nước và vạch chia in trên thành bát, bên cạnh là túi gạo và mấy hạt gạo rơi — lời: "Nếu nồi báo chín muộn bất thường, hãy xem lại lượng nước bạn đổ." | câu cuối trỏ về một vật cụ thể: máy đẩy vào bát nước |
+| 47 | c47 | 142.16–143.68 | N1 · fov 32: nhìn thẳng vào túi gạo (trái) và bát đong nước (phải) đứng cạnh nhau, mấy hạt gạo rơi giữa bàn — cả hai vật nằm trọn trong khung — lời: "Lời khuyên thì đơn giản thôi." | lời khuyên cần thấy trước mắt cái bát nước và túi gạo |
+| 48 | c48 | 143.88–147.18 | N1 · fov 32: bát đong nước có mặt nước xanh nhạt và vạch chia số 1-2-3 in trên thành bát, bên cạnh là túi gạo và mấy hạt gạo rơi — lời: "Nếu nồi báo chín muộn bất thường, hãy xem lại lượng nước bạn đổ." | câu cuối trỏ về một vật cụ thể: máy đẩy vào bát nước |
 
 ## Ghi chú cho người làm phim
 
@@ -237,3 +237,31 @@ Còn ba mục MỞ (không chặn bước, đã sai 4–6 lần):
   một dải bạc hà đồng nhất.
 - **t_95.40** — khung cận đỉnh cột thủy ngữ: ánh sáng đều tải, vùng sáng nhất chưa rơi vào đỉnh cột, và còn
   một mũi tên đỏ thừa chĩa vào ống kính ở cao độ thấp hơn đỉnh cột.
+
+## Vòng 10
+
+- **Thấy:** vòng này không xét lại khung đứng yên nữa — vòng 9 đã đóng phần đó. Vòng này xét **phim chạy**:
+  đo mọi khung hình liên tiếp và xem cái gì thật sự động, cái gì chỉ là tường đứng.
+- **Sửa:** trước vòng này phim gần như đứng hình — máy quay có di chuyển nhưng trong khung không có gì
+  chuyển động. Đã làm cho mọi vật thật trong khung có sự sống.
+
+Mười việc đã làm, mỗi việc gắn với đúng một câu kể:
+
+1. **Cột hơi nước** (c1–c3): hơi bốc thành cột, mỗi bông hơi có tốc độ leo và lắc riêng; tới lúc "sôi tắt
+   hẳn" (c3) cột hơi gục hẳn trong 0.13 giây.
+2. **Đèn nồi** (c3): bóng đèn hổ phách sáng dần và thở, thấy rõ lúc chuyển từ đỏ sang hổ phách.
+3. **Vệt nắng trên tường** (c27): nắng chiều dịch ngang tường trong lúc đồng hồ chạy — đồng hồ đứng yên thì
+   thời gian cũng đứng yên, đó là điều câu đó nói.
+4. **Nước sôi** (c11, c17, c41): bọt bốc trên mặt cưa nước, băng bọt ở miệng nồi, hơi mỏng bốc lên.
+5. **Nước hấp thụ** (c28): có nước thật chảy vào hạt gạo, vệt ướt loang, vòng sóng nhỏ trên mặt gạo.
+6. **Thanh lưỡng kim** (c38–c39): thanh cong dần theo nhiệt, tới đúng lúc tiếng "cạch" thì bấm tách tiếp
+   điểm, lóe tia lửa, dây điện trở tắt hẳn và thanh nguội xuống.
+7. **Nồi cạn nước** (c42): mực nước nồi phải tụt thật xuống đáy rồi mới tắt hẳn, không biến mất bằng một
+   cú cắt giữa khung.
+8. **Cơm nở** (c20, c21, c23): lớp gạo phồng lên theo nhịp sôi; hạt gạo cắt đôi nở ra.
+9. **Bao gạo và bát đong** (c47, c48): bao gạo lắc đặt lên đáy, bát đong rung lên và nước dâng tới vạch "3".
+10. **Mâm nhiệt và cột thủy ngữ** (c11, c19, c35): đầu dò nhiệt rung khi nóng; cột thủy ngữ run nhẹ lúc sôi
+    và dừng đúng vạch 70 độ lúc chuyển sang giữ ấm.
+
+Ba mục MỞ của vòng 9 (t_67.69, t_70.23, t_95.40) vẫn để mở, đã sai 4–6 lần và không chặn bước.
+

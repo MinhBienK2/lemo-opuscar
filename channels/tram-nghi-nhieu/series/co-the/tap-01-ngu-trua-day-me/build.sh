@@ -61,6 +61,11 @@ const r = p => JSON.parse(fs.readFileSync('$HERE/' + p)); const T = build(r('voi
 fs.writeFileSync('$OUT/cues.json', JSON.stringify(T.cues.map(c => ({ t0: c.t0, t1: c.t1, text: c.text }))));"
 "$LIB/.venv/bin/python" core/render/srt.py "$OUT/cues.json" "$OUT/$NAME.transcript.srt"
 sh core/render/mux.sh "$OUT/video.mp4" "$OUT/mix.wav" "$OUT/$NAME.mp4" 24 0
+# The picture-only intermediate is 1.1 GB per episode and the finished film is already muxed from it.
+# Three episodes in flight on one disk need ~3 GB of it, and a machine whose disk is 96 % full cannot
+# hold a fourth. The intermediate is regenerable (build.sh renders it again), so it goes once the
+# finished film exists.
+rm -f "$OUT/video.mp4"
 # the poster is a frame of this film, at 40% of its length — never a time copied from another film
 PS=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$OUT/$NAME.mp4" 2>/dev/null | cut -d, -f1)
 if [ -n "$PS" ]; then PS=$(LC_ALL=C awk -v d="$PS" 'BEGIN { printf "%.1f", d * 0.4 }'); else PS=1; fi

@@ -2,9 +2,11 @@
 // tay cầm hai bên, bảng điều khiển ở mặt trước với nút bấm và đèn báo hai màu
 // (đỏ khi đang nấu, hổ phách khi chuyển sang giữ ấm), chân đế và dây điện.
 import * as THREE from 'three';
-import { toon, glowMat, canvasTex, rbox, mesh, fxLayer, PAL, mulberry } from '../../../../../rig/kit.js';
+import { toon, glowMat, canvasTex, rbox, mesh, fxLayer, mulberry, TEX, clamp, ss } from '../../../../../rig/kit.js';
 import { vessel } from '../../../../../rig/cutaway.js';
 import { button, cable } from '../../../../../rig/parts.js';
+import { flow } from '../../../../../rig/fx.js';
+import { fitFlow, fitEffect } from './_flowbox.js';
 
 // thân nồi: hình trụ bọc tròn, vai thuôn, miệng hơi trong
 const PROFILE_BODY = [
@@ -97,6 +99,15 @@ export function noiComDien(opts = {}) {
   lamp.add(mesh(new THREE.CylinderGeometry(.021, .021, .008, 20), toon('#3a3f4c'), [0, 0, 0], { rot: [Math.PI / 2, 0, 0] }));
   const bulb = mesh(new THREE.CircleGeometry(.016, 20), glowMat('#ff4a3a', 1.6), [0, 0, .006], { cast: false });
   fxLayer(bulb); lamp.add(bulb);
+  // Quầng sáng quanh đèn. Đèn đổi màu là một SỰ KIỆN: nếu chỉ có một chấm
+  // nhỏ đổi màu thì người xem đọc ra một ô màu đổi, không đọc ra một cái đèn
+  // vừa chuyển trạng thái. Quầng sáng nở ra rồi co lại làm cho lần đổi màu
+  // đó thành một việc xảy ra trước mắt.
+  const halo = new THREE.Sprite(new THREE.SpriteMaterial({
+    map: TEX.radial('rgba(255,236,200,1)'), color: 0xff7a4a, transparent: true, opacity: .30,
+    blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false,
+  }));
+  halo.scale.set(.044, .044, 1); fxLayer(halo); lamp.add(halo);
   panel.add(lamp);
   // nút bấm
   const btn = button({ r: .026, color: '#c8cdd8', bezel: '#6b7280', size: .9 });
@@ -113,74 +124,200 @@ export function noiComDien(opts = {}) {
 
   // ── dây điện: chạy ra sau nồi rồi lên tường, cắm vào ổ cắm ──
   // Đầu dây không được nằm vắt ngang trên mặt bàn: nồi đang nấu mà phích
-  // cắm rời nằm trên bàn thì cảnh vô lý. Dây phải đi tới ổ cắm trên tường
-  // (điểm cuối toạ độ cục bộ của nồi: ứng với (-1.00, .30, .03) trong không
-  // gian, đúng chỗ có ổ cắm dựng trong set).
-  const cord = cable({
-    points: [[0, .05, -.21], [-.02, .03, -.40], [.06, .10, -.55], [.18, .25, -.62], [.255, .30, -.667], [.255, .30, -.70]],
-    r: .008, color: '#2c2f36', plug: 'wall', size: 1,
-  });
-  g.add(cord);
+  // cắm rời nằm trên bàn thì cảnh vô lý. Dây phải đi tới ổ cắm trên tường.
+  // Nhưng dây KHÔNG thuộc về cái nồi: nó là phụ kiện của cảnh, dựng riêng
+  // (noiComDienCord) và cảnh bếp gắn vào nồi. Nếu dây nằm trong nhóm nồi,
+  // khung đo vật phải trải tới tận tường và nồi rút lại thành một chấm
+  // giữa khung — bước chấm vật không đọc ra là nồi cơm điện.
 
-  // ── hơi nước: mấy mảng mờ bay lên từ lỗ nắm (chất khí vô hình thành vật) ──
-  // Hơi nước không được là một quả bóng trắng đặc trên nắm: nó là một mảng mờ
-  // không có bóng đổ, sáng đều, nhiều mảng nhỏ chồng lên nhau.
-  const steamMat = toon('#e2f3ff', {
-    emissive: new THREE.Color('#e2f3ff').multiplyScalar(.5),
-    transparent: true, opacity: .34, depthWrite: false,
-  });
+  // ── hơi nước: một cột hơi nước thật, bay lên từ lỗ nắm ───────────────
+  // Hơi nước là thứ vô hình, nên kênh này vẽ nó thành vật: một cột mềm bốc
+  // lên từ lỗ nắm, mỗi mảng một nhịp lắc riêng, đổi hình mỗi khung. Cột này
+  // là VIỆC xảy ra trước mắt người xem ở những câu đầu: khung hình đứng
+  // yên thì câu kể chết, dù lời kể có hay.
+  const RISE = .88;    // cột hơi nước cao bao nhiêu
+  const LIFE = .80;    // một mảng hơi nước sống bao lâu
+  const PN = 52;       // số mảng trong cột
+
   // mép mảng tan dần: alpha nhạt dần khi mặt mảng nghiêng so với mắt người
   // xem, nên mảng hơi nước không có đường viền cứng
-  steamMat.onBeforeCompile = sh => {
-    sh.fragmentShader = sh.fragmentShader.replace('#include <normal_fragment_maps>',
-      '#include <normal_fragment_maps>\n  diffuseColor.a *= 1.7 * pow(smoothstep(0., 1., abs(dot(normalize(normal), normalize(vViewPosition)))), 1.5);');
+  const steamMat = () => {
+    const m = toon('#e2f3ff', {
+      emissive: new THREE.Color('#e2f3ff').multiplyScalar(.5),
+      transparent: true, opacity: .30, depthWrite: false,
+    });
+    m.onBeforeCompile = sh => {
+      sh.fragmentShader = sh.fragmentShader.replace('#include <normal_fragment_maps>',
+        '#include <normal_fragment_maps>\n  diffuseColor.a *= 1.7 * pow(smoothstep(0., 1., abs(dot(normalize(normal), normalize(vViewPosition)))), 1.5);');
+    };
+    m.customProgramCacheKey = () => 'steam-soft';
+    return m;
   };
-  steamMat.customProgramCacheKey = () => 'steam-soft';
-  const steam = new THREE.Group();
-  // Bốn mảng hơi nước, mỗi mảng một độ lớn. (Danh sách phải là [chỉ số, độ
-  // lớn] — `[[1,1]].entries()` trả về cặp [chỉ số, MẢNG], không phải [chỉ
-  // số, số]; sai chỗ này thì kích thước mảng hơi nước là NaN và hơi nước
-  // không bao giờ hiện ra.)
-  for (const [i, k] of [[0, 1], [1, .72], [2, .50]]) {
-    const p = new THREE.Mesh(new THREE.IcosahedronGeometry(1, 2), steamMat);
-    p.userData.k = k; p.scale.setScalar(.001);
-    fxLayer(p); steam.add(p);
+
+  // Cột hơi nước: PN mảng mềm, mỗi mảng bay lên với tốc độ riêng và lắc
+  // ngang theo nhịp riêng. Chỗ mảng nhỏ, chỗ mảng to; mảng nhỏ ở gần lỗ nắm,
+  // mảng to ở trên cao — đó là hình một cột hơi nước, không phải một quả
+  // bóng trắng đặc dán trên nắm. Cột hơi nước là CON của lỗ nắm: mở nắp thì
+  // hơi nước phải đi theo cái lỗ, không đứng lơ lửng trên miệng nồi.
+  const plume = new THREE.Group();
+  const puffs = [];
+  const rnd = mulberry(23);
+  for (let i = 0; i < PN; i++) {
+    const p = new THREE.Mesh(new THREE.IcosahedronGeometry(1, 2), steamMat());
+    p.userData = {
+      ph: i / PN + (rnd() - .5) * .02,
+      r0: .037 + rnd() * .045,       // bán kính gốc của mảng
+      sw: .066 + rnd() * .140,       // biên độ lắc ngang
+      fw: .50 + rnd() * .90,         // tần số lắc
+      dx: (rnd() - .5) * .13,        // lệch ngang khi bay lên
+      dz: .08 + rnd() * .16,         // cột hơi nước nghiêng về phía người xem
+      sp: .95 + rnd() * .10,         // mảng nhanh hơn mảng chậm một chút
+    };
+    fxLayer(p); plume.add(p); puffs.push(p);
   }
-  g.add(steam);
-  g.steam = steam;
+  // Lúc dựng, hơi nước chưa bật: các mảng phải nằm gọn ở lỗ nắm và tắt hẳn,
+  // chứ không phải quả cầu trắng bán kính 1 đè lên nồi. Khung đầu tiên của
+  // phim gọi updateProp và xếp lại mảng theo cột.
+  plume.visible = false;
+  for (const p of puffs) { p.position.set(0, 0, 0); p.scale.setScalar(.002); p.material.opacity = 0; }
+  vent.add(plume);
+  g.plume = plume;
+
+  // ── dòng hơi nước bay lên: chuyển động liên tục của khung mở đầu ──
+  // Cột hơi nước trên là một vật đứng yên; khung mở đầu của phim phải có một
+  // việc xảy ra trước mắt người xem. Dòng hạt mềm này bay lên từ lỗ nắm,
+  // đổi hình mỗi khung — cũng là cách kênh này vẽ thứ vô hình.
+  const steamFlow = flow(new THREE.Vector3(0, .012, 0), new THREE.Vector3(.05, .74, .05),
+    { color: '#e2f3ff', size: .030, n: 120, rate: 1.05, opacity: .26, seed: 7 });
+  fitFlow(steamFlow);
+  vent.add(steamFlow);
 
   // ── trạng thái ──
   // Đèn báo có ba trạng thái: tắt, đỏ khi đang nấu, hổ phách khi chuyển sang
   // giữ ấm. Hổ phách phải ĐỌC RA là hổ phách: nhân màu lên quá mạnh sẽ cắt
   // mất kênh xanh, màu vàng thuần, và câu kể "chuyển từ đỏ sang hổ phách" sẽ
   // không đúng với cái đèn trên màn hình.
-  const RED = new THREE.Color('#ff4a3a'), AMBER = new THREE.Color('#ffa42b');
+  const RED = new THREE.Color('#ff4a3a'), AMBER = new THREE.Color('#ffa42b'), DARK = new THREE.Color('#4a4438');
+  const WHITE = new THREE.Color('#ffffff');
+  const indColor = RED.clone();
+  let indK = 1.8;         // độ sáng của đèn theo trạng thái
+  let indState = 'red', indChanged = false;
   g.setIndicator = state => {
-    const c = state === 'off' ? new THREE.Color('#4a4438') : state === 'amber' ? AMBER : RED;
+    const c = state === 'off' ? DARK : state === 'amber' ? AMBER : RED;
     const k = state === 'off' ? .5 : state === 'amber' ? 1.12 : 1.8;
-    bulb.material.color.copy(c).multiplyScalar(k);
+    indColor.copy(c);
+    indK = k;
     bulb.material.opacity = 1;
+    if (state !== indState) { indState = state; indChanged = true; }
   };
-  g.setSteam = k => {
-    const on = k > .02;
-    steam.visible = on;
-    if (on) steam.children.forEach((p, i) => {
-      const s = p.userData.k;
-      // Ba mảng hơi nước phải XẾP LỆCH nhau, không chồng thành một quả bóng
-      // xám tròn: mảng dưới to, mảng trên nhỏ và lệch sang bên, bay lên cao
-      // dần. Một khối tròn trắng đục đọc ra như vật rơi lơ lửng, không phải
-      // hơi nước.
-      p.scale.setScalar((.018 + .020 * k) * s);
-      // Hơi nước phải bay CAO HƠN vòm nắp. Hơi nước dán sát mặt nắp trắng
-      // thì trắng trên trắng, người xem không thấy có hơi nước, và câu "đang
-      // nấu" không còn gì để bám vào. Các mảng phải CHỒNG lên nhau thành một
-      // vệt: rời rạc thành một chuỗi hạt tròn là đọc ra khói, không phải hơi.
-      p.position.set(.085 + (i - 1) * .008 * s + i * .006, .345 + i * .020 * s, .02);
-      p.rotation.y = i * 1.9;
-    });
-  };
+
+  // ── hơi nước: film.js yêu cầu mức hơi nước, nồi tự giữ trạng thái ──
+  let steamK = 0;        // mức hơi nước film.js yêu cầu
+  let cookK = 0;         // mức mạnh nhất lúc nồi đang nấu
+  let boilT = -1;        // lúc đèn chuyển sang hổ phách: nồi ngừng sôi
+  let seeT = -1;          // lúc khung toàn cảnh mở ra
+  const HOLD = .40;       // hơi nước còn bay thêm chừng này rồi mới tắt hẳn
+  let collapseT = -1;    // lúc cột hơi nước tắt hẳn
+  let flashT = -99;      // lúc đèn báo chớp sáng
+
+  g.setSteam = k => { steamK = k; };
   g.setLid = k => { lid.rotation.x = -k * 1.15; };      // 0 = đậy, 1 = mở
   g.setButton = k => btn.press(k);
+
+  // Khung hình đứng yên thì câu kể chết. Mọi thứ trên nồi tự động động:
+  //  · cột hơi nước bốc lên từ lỗ nắm, mỗi mảng lắc một nhịp riêng
+  //  · đèn báo chớp sáng đúng lúc đổi màu
+  //  · lúc nồi ngừng sôi, cột hơi nước tắt hẳn trong khung đang quay cả nồi
+  g.updateProp = t => {
+    // ── đèn báo: đổi trạng thái thì chớp sáng một lần ──
+    if (indChanged) { indChanged = false; flashT = t; }
+    // Nhịp thở của đèn giữ ấm. Nồi đang giữ ấm thì dây điện trở bật tắt
+    // (câu c34 kể việc ấy), nên đèn hổ phách không đứng yên: nó thở chậm và
+    // đều. Ở câu c5 (cận thân nồi, không còn hơi nước nào bay) đây là thứ
+    // duy nhất trên nồi còn chuyển động. Ở câu c3 thì máy đang nhìn thẳng
+    // vào đèn để xem nó đổi màu, nên đèn phải đứng yên cho đúng sự kiện.
+    let keep = 1;
+    if (indState === 'amber') {
+      const cam2 = window.__cam;
+      if (cam2) {
+        const lp = lamp.getWorldPosition(new THREE.Vector3());
+        const fw = cam2.getWorldDirection(new THREE.Vector3());
+        const toL = lp.sub(cam2.position).normalize();
+        if (toL.dot(fw) < .985) keep = .78 + .22 * Math.sin(t * 2.6);   // lệch khỏi tâm khung
+      }
+    }
+    const fa = Math.max(0, t - flashT);
+    const fl = Math.exp(-fa * 1.7);        // lần chớp tắt dần trong khoảng 2 s
+    const grow = ss(fa / .14);             // quầng sáng nở ra rồi co lại
+    const hs = .050 + .150 * grow * fl;
+    halo.scale.set(hs, hs, 1);
+    halo.material.opacity = (.34 + .30 * fl) * keep;
+    // Lõi của một đèn sáng thật thì trắng, không phải đúng màu kính màu. Quầng
+    // sáng lúc chớp phải trắng hơn, thì mới đọc ra là đèn vừa bật. Nhưng quầng
+    // sáng không được xoá mất cái vành đen quanh đèn: xoá hết thì đèn biến
+    // thành một vệt sáng tròn, không còn là một cái đèn.
+    halo.material.color.copy(indColor).lerp(WHITE, .35 * fl);
+    // Đĩa đèn phồng lên theo lần chớp: một cái đèn vừa chuyển trạng thái thì
+    // lõi của nó sáng hơn, không phải chỉ đổi màu.
+    bulb.scale.setScalar(1 + .22 * fl);
+    // Lõi của đèn sáng thì sáng hơn lúc vừa chuyển trạng thái, và đèn giữ
+    // ấm thì thở theo nhịp máy.
+    bulb.material.color.copy(indColor).multiplyScalar(indK * (1 + .30 * fl) * keep);
+
+    // ── hơi nước ──
+    if (steamK > .01) cookK = Math.max(cookK, steamK);
+    if (boilT < 0 && indState === 'amber') boilT = t;
+
+    // Khung đủ gần để thấy trọn cột hơi nước thì câu "tiếng sôi tắt hẳn" phải
+    // ĐƯỢC THẤY: cột hơi nước còn sống thêm một nhịp rồi tắt hẳn ngay trong
+    // khung đó. Ở khung toàn cảnh thì cột hơi nước chỉ là một sợi nhỏ, tắt ở
+    // đó không đọc ra gì.
+    let see = false;
+    const cam = window.__cam;
+    if (cam) {
+      vent.updateWorldMatrix(true, false);
+      const v = vent.getWorldPosition(new THREE.Vector3());
+      const d = cam.position.distanceTo(v);
+      see = d > 1.12 && d < 1.66;
+      if (see && seeT < 0) seeT = t;
+    }
+    // Cột hơi nước phải TẮT HẲN đúng lúc lời kể nói "tắt hẳn", tức là sau
+    // khi khung toàn cảnh vừa mở ra một nhịp: người xem phải kịp THẤY hơi
+    // nước còn bay thì mới đọc được cú tắt đó. Tắt ngay tại giây mở khung
+    // thì hơi nước chỉ nháy lên rồi mất, đọc ra như lỗi dựng hình.
+    if (collapseT < 0 && boilT >= 0 && see) collapseT = seeT + HOLD;
+
+    let amt = 0, burst = 0;
+    if (collapseT >= 0) {
+      const a = t - collapseT;
+      if (a < .6) {
+        amt = cookK * (1 - ss(a / .13));                       // tắt hẳn trong một tám giây
+        burst = ss(a / .06) * (1 - ss((a - .06) / .45));        // hơi nước văng ra rồi tan
+      } else amt = steamK;
+    } else if (boilT >= 0 && see) amt = cookK;                  // hơi nước dưới nắm còn đẩy ra
+    else amt = steamK;
+
+    const vis = amt > .012;
+    plume.visible = vis;
+    steamFlow.visible = vis;
+    if (vis) {
+      for (let i = 0; i < PN; i++) {
+        const d = puffs[i].userData;
+        const u = (t * d.sp / LIFE + d.ph) % 1;                 // vị trí của mảng trong cột
+        const sway = Math.sin(t * d.fw * 6.2832 + d.ph * 9.1) * d.sw * (.30 + u);
+        puffs[i].position.set(
+          d.dx * u + sway,
+          .012 + u * RISE + burst * .05,
+          d.dz * u + Math.cos(t * d.fw * 4.3 + d.ph * 6.7) * .05 * u);
+        const r = d.r0 * (.30 + 2.20 * u) * (1 + .22 * Math.sin(t * 2.1 + d.ph * 12.));
+        puffs[i].scale.setScalar(r * (1 + burst * 2.1));
+        puffs[i].material.opacity = amt * .40 * ss(u / .10) * (1 - ss((u - .70) / .30));
+      }
+      steamFlow.amount(clamp(amt));
+      steamFlow.update(t, 1);
+    }
+  };
+
   g.setIndicator('red');
   g.setSteam(0);
   g.setLid(0);
@@ -188,3 +325,14 @@ export function noiComDien(opts = {}) {
 }
 
 export const PROP = { name: 'nồi cơm điện', view: () => noiComDien() };
+
+// Dây điện của nồi, dựng riêng khỏi thân nồi: dây chạy tới ổ cắm trên
+// tường (toạ độ cục bộ của nồi), nên nếu gộp vào nhóm nồi thì khung đo vật
+// bị kéo dài tới tận tường và nồi co lại thành một chấm trong khung chấm vật.
+// Cảnh bếp gắn dây này vào nồi (cooker.add(noiComDienCord())).
+export function noiComDienCord() {
+  return cable({
+    points: [[0, .05, -.21], [-.02, .03, -.40], [.06, .10, -.55], [.18, .25, -.62], [.255, .30, -.667], [.255, .30, -.70]],
+    r: .008, color: '#2c2f36', plug: 'wall', size: 1,
+  });
+}

@@ -1,10 +1,10 @@
 {
  "step": "props",
- "round": 11,
+ "round": 13,
  "items": {
   "bat-dong-nuoc": {
    "name": "bát đong nước",
-   "src": "17ab75897d7d3d054c0d19fb8c29e90b3e6d55f9a2ace81746f9f885c2dfa141",
+   "src": "b3075f72cc4fa3c4f96d512779cb22a14ed3687de87f3e87f6eb24b27a14e06a",
    "key": "",
    "fp": "qrXAy9Ta3+Lh3trTysC0qZ+ps73Eyc7Pz83KxL20qKCotcDL1Nvh4+Lf2tPKwLSrrLfDztfd4uXk4t3XzsO3q6Krtr/HzM/R0dDNyMC2q6Krt8PO2N7k5+bj3dfNw7etr7rH0trh5efo5uHa0ce6raStucPJztHS09PQysO6rqStusfS2uLn6uzn4NnRx7qusL3K1N3l6Orr6OPd1Mq9r6WwvMXM0tPT1dTSzsa9saavvcrU3uXR0+3r49zUyr2ws8DM1+Dn7O7u6+bg18zAsaizvsjP0tTU1dXU0ci+s6ixwMzX4dfE6fHs5d/Wy7+ztsLO2uLp8fT08Ojh2s7CtKu1wMrQ09TU1tfV0svAtqu0ws7a4sbi/Pzv5ODZzsK2uMTQ2+Ps9ff39Ovi29DEtay3wcvR09TV1tnZ083Ct6y1xNDc38f1+fny4OHb0MS3ucXS3OTu+f39+Ojj3NPGt664w8zR1NTV2Nze1c3Eua63xdLc29T59PLv3uHb0sa4u8jU3uXu/f38/Ojk3dXHt6+6xc3Tz9TW3efr2M/Guq+4yNTe2uH27uvn3uLc1Ma5vMnW4OTu/Pn5+urk39XJubG9yNHTzOHl8Pr029LIvbG6ydbg2ujy6unk3uHe1Mi7vMrX3+Tl9PX28+Dl4NXKvLrI1Nzf0N/m7/r15t7Tybu8ytfg3Oru6unk3OHe1cq9vcrW3+Xi5O/08OLl39fLvbzJ1d3h0Nzm7fnz5t/Wy729ytfg3+jr6ujk1N/e1su+vsvX4OXm6+ny+evl4NjLvb3K1t7h0drm6/fv5d/Xyr29y9fg4uPp6efdz97f18q+vsvY4OTj8fv8+ujk4NfLvb3K1t7h09fl6fPr5N/Xyr29y9jh4uDo6OXYzt7f18q+vsrY4OTY7fj8+enl4NfLvb3K197h1dLk6Ozm49/Wyr29y9jg4d7m5uHV0ODf1sq+vsrX4OXS5/X89efl4NfLvL3K1t7i2Mzi6Orl5N/Wyry9ytfg49vk5NrT0OLf1sq9vcrV3+TT4PH57+Pk39bKu7zJ1NzStsLf5+fi497Vybu8ytXf49jY2NbR1ePe1cm8vMjU3uPV2e7y6OHk3tXJu7vH09ilkLra5ePh4t3Uybu7yNTd49fP1tbL3OPd1Mm8u8fU3uLd0+zu3+Pk3dTHurrH09zNsq/AzMbg4tzTx7q6x9Te4t7K1tTL4+Lc08e7ucXT3OLjzdnc0eTj3NLGubjF0tvg39XKzdri4dvSxbm4xtLc4ePXzcrb5OHb0sW5t8TR2+Dj38fI3+Tg29HEt7bD0Nnf4uLi4uHh39rQw7e3xNDa4OLj3d7k4t/a0MO4tsLP2d/j5OTl5OLf2c/CtbXCztjd4eLi4uLg3tjOwrW1ws7Y3uLj5eXk4d7YzsK2sr/L1t7i5OPk4+Le18y/s7K/y9Xc4OLh4uHg3dbLv7Oyv8vV3eHj4+Tj4d3Wy7+zsb3J09zg4+Pj4+Db1Mm+sLG9yNLa3+Hh4uHf2tPIvrCwvcnS29/i4uPi39vTyb6xr7rG0dne4eLh4d7Y0Ma7r666xtDY3eDh4ODd19DGuq+uusbR2N3h4uHg3djQxrqwrLfEztbb3uDg3tvVzcO3rKu3w83V2t3f393a1czCtqyst8PO1tre39/e2tXMwratqrTAytPY293e3NnSysC0qqq0wMrS2Nrd3dvY0srAtKqqtMDK0tjb3d3c2NLKwLSq",
    "verdict": "PASS",
@@ -45,38 +45,43 @@
   },
   "cau-do-dien-tro": {
    "name": "máy đo điện trở",
-   "src": "99363948397da53ddde56aece3f52103d835d7c8c1c0b48811815712b8d90291",
+   "src": "572abd887a10bc3e23a76eea3a61fe1f35db4765bdc7a5c85b0f8fe19e519779",
    "key": "",
-   "fp": "qbS/ytLW29zc2tfRyb+zqZ+ps73Eyc3PzszJxLyzqKCotL/J0tbb3dza19HJv7SrrLbCzNXZ0Mzd3drVzMK2qqKrtr/Hy8/R0M/Mx7+2q6KqtsLM0M/d397d2tXMwresrrnG0NfcwZmlydvX0Ma6rKOtucPJzMnKy8rNycK5rqSsucbQyp7G3uDf3NfQxrqusLzJ0tres7GwlsTa08m9rqawvMXMzaGIiaPMzMW8saauvMnSyY6RweHh3trTyb2ws7/L1d3fiFSNssXd1cq/saizvsfOznpAOn3Pz8e+s6ixv8vV0JCFoN3h4N3Vy7+ztsLN197fi0dEnMne183CtKu1wMrQznpXS3/Q0MrAtau0wc3X15Fmitni4N7YzcK2t8PP2d7gjVZJmsre2c/Dtay3wsvQznpeZIDR0MvCt6y1w8/Z26agc7Hf4d7Z0MS3ucXR2d/ij2dZm8zf2tLFtq64w8vR0HtLQX7R0czEuK22xNHZ37W+tYCj3N/a0sW4usfT2+HikkBGnM3g29PGt6+6xc3T0Hw8PH/R0s3Gua64x9Pb4b60w7yIqeDb1Ma5vMjV3eHguGZGm83h3dTIubG8yNDTz6iQj6vR08/HvLC5yNXd4MFzpsG/uOHd1Mi7vMnV3eHhx6uCos/i3dTJvLnH09re2b2xscHb39vSx7q7ydXd4cteXJm9yeLd1Mm9vcnV3eHhxZSutNDh3dXKvbzJ1d3h27yPj8De4d3Vyr28ydXd4dNwWU2OzuLd1cq+vsrW3uHhvoCXtNHh3tbKvb3K1t7h27l+fr3d4d7Wyr29ytbe4dusak500uHe1sq+vsrW3uHhvXeNtNLg3tbKvb3K1t7h27NnZ7fe4N7Wyr29ytbe4d+1aluC1uDe1sq9vsrX3uHiwmV9sdPh3tbKvb3K197g3LpwcL3e4d7Wyr29ytfe4eG0YnSu2uHe1sq9vsrW3uLiv3iWstTh3tbKvL3K1t7h3LeRkbve4d7Wyry9ydbe4uK/kXy73uHe1sq9vcnU3eLiroCosNTh3dXJu7zJ1N3h3LCjo7Pd4d3Vybu8ydTd4eLg3qqy4OHd1cm7vMfT3OHhrG6Lq9Th3NTIu7vH09zh3ZyOjp7d4dzUyLu7x9Pc4eHi4tHF4eHc1Mi7u8fT3ODhsnBsrN7h29LHurrH09zg4bKutLri4dvSx7q6x9Pc4OHi4uHh4uHb0se6uMXS2+DiwHqAtuHg2tHFuLjF0drg4a66x7/h4NrRxbi4xdHa4OLi4uHh4eDa0cW5t8PQ2d/hw6KUs+De2dDDt7bD0MOtr4q/y7ng3tnQw7e2w9DZ3+Hi4uLh4N7Z0MO4tcLO193h3Neoud/d187BtbXBzseUiWmjyLPf3dfOwbW1wc7X3eHh4uHh393XzsG1sr/L1dzg4uG9st/c1cu/s7K/y9TCkmWEpKze3NXLv7Oyv8vV3ODi4eHh39zVy7+zsb3I0tre4eHWyN7a08i+sLG9yNLZy5C7r7Ld2tPIvbCwvcjS2t7h4eHh3trTyL6xr7nG0Njd4OHg393Xz8a6rq65xtDY3Nrg3dvd18/Fuq6uucbQ2Nzf4eDf3dfPxbqvrLfDzdXa3d7e3drUzMK2rKu3w83V2t3e3t3a1MzCtqyrt8PN1drd3t7d2tTMwratqrTAytLY2tzd29fSysC0qaq0wMrS19rc3NvX0srAs6mptL/K0tfa3Nzb19LKv7Oq",
+   "fp": "qbS/ytLX3N7d29jRyb+zqZ+ps73Eyc7Pz83JxLyzqKCotL/K0tfb3dzb19HJv7SrrLbCzdXb19ff3tvVzMK2qqKrtr/HzNHS0c/Mx7+2q6KqtsLM0tLd397d2tXMwresrrnG0NjdxZy01dzX0Ma6rKOtucPJz9DOzszOycK5rqSsucbQy6PL3+Df3dfQxrqusLzJ09rhzbmpl8ra08m9rqawvMXM0b+koa/NzMW8saauvMnTypCVxeHh3trTyb2ws7/L1d3hoHSks8bd1cu/saizvsjP0ZJhVofPz8e+s6ixv8vV0JKIot7h4N3Vy7+ztsHN2N7hm2haosre2M3CtKu1wMrQ0IuDbonQ0MrAtau0wc3Y15NqkNri4N7YzcK2t8PP2d/hnoVinsze2c/Etay3wsvQ0IqPk4zR0MvCt6y1w8/Z3Keac7vh4d7Zz8S3ucXR2eDjn5t6n83f2tLFtq64w8vR0Yh9bYrS0czEuK22xNHa37jBsYCv3t/a0sW4usfT2+HjnW1loM7g29PGt6+6xc3T0YVWUobR0s3Gua64x9Pc4cjDxbmDsODb08a5vMjV3eHhuHBXn87h3dTIubC7x8/Sz6WMi6fR08/Gu7C5yNXd4c+PrsO9t+Hd1Mi7vMnW3eHiyq1/o9Di3dTJu7nG0trd2r+2tsPb39rRxrm7ydXd4c9wc6S+yuLd1Mm9vcrV3eHhx5uxtNHi3dXKvbzJ1d3h3L2Tk8He4t3Vyr28ydXd4dV+fmOVz+Ld1cq+vsrW3uHhwYKatdHh3tbKvb3K1t7h3LuCg7/e4d7Wyr29ytbe4dywiG170+He1sq+vsvX3uHhvnuRtdLg3tbKvb3K1t7h3LNpaLfe4N7Wyr29ytbe4eC4dWuI1+De1sq9vsrX3uHiwmd+stPh3tbKvb3K197h3LpwcL7e4d7Wyr29ytfe4eK3Z3iv2uHe1sq9vsrW3uLiwXeVstTh3tbKvL3K1t7i3LiNjbze4t7Wyry9ydbe4uLAkX283+He1sq9vcnU3eLjsIKosdTh3dXJu7zJ1N3i3bKlpbXd4d7Vybu8ydTd4uPg3qu04OHd1cm7vMjT3OHirW6OrNXh3NTIu7vH09zh3Z2NjZ/d4dzUyLu7yNPc4eLi4tHG4uHc1Mi7u8fT3ODhs3BtrN7h29PHurrH09zg4bKtsbni4dzSx7q6x9Pc4OHi4uHh4uHb0se6uMXS2+DiwXqAt+Hg2tHFuLjF0dvg4rC6xsDh4NrRxbi4xdLb4OLj4uLh4eDa0cW5t8PQ2d/hw6GUs+He2dDDt7bD0MWxso2+yrrh3tnQw7e2w9DZ3+Hi4uLh4N7Z0MO4tcLO197h29aouuDd187BtbXBzseUiWukyLTf3dfOwbW1wc7X3eHh4uLh393XzsG1sr/L1dzg4uG9s9/d1cu/s7K/y9TCkmaDpa3f3NXLv7Oyv8vV3ODi4eLh39zVy7+zsb3I0tre4eHVyN7a08i+sLG9yNLZy465rrLe2tPIvbCwvcjS2t7h4eHh3trTyL6xr7nG0Njd4OHg393Xz8a6rq65xtDY3Nrg3dvc18/Fuq6uucbQ2N3g4eDf3dfPxbqvrLfDzdXa3d/f3drUzMK2rKu3w83V2t3e3t3a1MzCtqyrt8PN1drd3t7d2tTMwratqrTAytLY2tzd29fSysC0qaq0wMrS19rc3NvX0srAs6mptL/K0tfa3Nzb19LKv7Oq",
    "verdict": "PASS",
    "fails": 0,
-   "round": 6,
+   "round": 12,
    "rows": {
     "dung-vat": [
      "ĐẠT",
-     "Cả ba góc đều cho đủ bộ phận đặc trưng: thân vàng dạng hộp đứng, màn LCD tối hiện \"1 kΩ\", nút xoay tròn đen có 8 vạch chia toả quanh, hai cổng ở đáy có que đo đen và đỏ cắm vào — người không biết tên định dựng gọi đúng là đồng hồ vạn ôm cầm tay, khớp tên mù.",
+     "Màn LCD xanh in rõ \"1 kΩ\", núm xoay có vạch chọn đại lượng, hai que đo đen/đỏ ở đáy — đọc ra ngay là đồng hồ đo điện, đúng tên mù.",
      ""
     ],
     "nguyen-ven": [
      "ĐẠT",
-     "Không có mảnh rời trôi lơ lửng, không mặt thủng: que đo nối liền với thân qua cổng/đầu cắm ở đáy, nút xoay là trụ liền mặt trước, các vạch chia bám đúng quanh nút. Chữ \"1 kΩ\" đúng chiều ở góc chéo và góc ngang tầm mắt; ở góc từ trên xuống mặt phẳng bị ép nặng nhưng sau khi nắn phẳng vùng LCD thì chữ vẫn đọc đúng là \"1 kΩ\" (không bị đảo gương). Nút xoay lấn lên góc dưới-trái màn hình ở góc trên xuống là hệ quả của nút nhô ra khỏi mặt phẳng, không phải mặt xuyên sai chỗ.",
+     "Không có mảnh rời trôi, không mặt thủng/mất mặt; núm xoay và hai que đều gắn liền thân, không có phần xuyên nhau sai chỗ.",
      ""
     ],
     "khoi-3d": [
      "ĐẠT",
-     "Góc chéo cho thấy vỏ sau màu navy lộ ra sau mặt trước vàng ở cạnh trên và cạnh phải (dải navy ~12px so với mặt trước rộng ~175px), góc từ trên xuống lộ viền trên vỏ và bóng đổ của khối; nút xoay là trụ có mặt trên sáng và thân tối, que đo là trụ tròn có mảng sáng tối, bóng đổ có khối — không phải tấm phẳng.",
+     "Góc từ trên xuống (ảnh phải) lộ dải vỏ navy dày ~25px ở mép trên và mặt trên bo cong; thân có mặt sáng (vàng) và mặt tối (navy), núm xoay nhô ra có bóng đổ.",
      ""
     ],
     "dep": [
      "LỖI",
-     "Hai que đo vẫn là hai trụ nhựa màu cụt (đen/đỏ) đầu bo tròn, không có đầu kim loại nhọn và không có dây nối, nên trông như hai chân của máy chứ không phải que đo; thân máy vẫn mỏng (vỏ navy chỉ ~12px sau mặt 175px) nên ở góc từ trên xuống chỉ lộ một sợi viền mỏng chứ không lộ mặt trên và cạnh dày; nút xoay không có nhãn dải, cổng cắm không có nhãn.",
-     "Cho mỗi que đo có thân nhựa + đầu kim loại nhọn (và dây đỏ/đen rủ xuống) để đọc ra là que đo; dày vỏ lên khoảng 1/3 bề rộng và đặt góc thứ ba nhiêu hơn để lộ mặt trên vỏ cùng cạnh dày; thêm nhãn jack (COM/VΩ) và nhãn dải quanh nút xoay."
+     "Hai que đo vẫn là hai trụ nhựa cụt (navy và đỏ) đầu bo tròn, không có đầu kim loại nhọn, không có dây nối (ảnh trái x≈340–460,y≈250–390; ảnh phải x≈1930–2000,y≈330–390) nên đọc thành hai chân của máy chứ không phải que đo — lần trước yêu cầu này chưa làm; không có nhãn jack COM/VΩ, núm xoay chỉ có vạch trắng không có dải chữ; thêm một quả bóng trắng cháy dán ở góc trên-trái vỏ (ảnh phải x≈1900–1935,y≈140–175).",
+     "cho mỗi que có thân nhựa + đầu kim loại nhọn + dây đen/đỏ rủ xuống; thêm nhãn jack COM/VΩ và dải chữ quanh núm xoay; bỏ hoặc thu nhỏ bóng trắng ở góc vỏ."
+    ],
+    "muc-sang": [
+     "LỖI",
+     "Mặt vỏ vàng là một dải chuyển sắc mượt không chia bậc toon, không texture; viền mực chỉ là một đường navy mảnh bao ngoài (ảnh giữa x≈1000–1130,y≈60–300).",
+     "chia mặt vỏ thành 2–3 bậc sáng toon có viền mực, thêm texture sơn/nhựa."
     ]
    }
   },
   "gao": {
    "name": "hạt gạo",
-   "src": "da168d1434cf9445f7768cb68a61f6e65d524c24f58eee4f0681b7bf0b69959b",
+   "src": "ca772df2392c84b753cb5c09482a5ee0ec86ed9da46000556c08ac74057c032e",
    "key": "",
    "fp": "qrS/ytLX293c2tfRycC0qZ+os7zEyc3OzszJw7yzqKCotL/J0tbb3dza19HJv7OrrLbCzNXZ3d/e3drVzMK2qqKrtr/Hy8/Q0M/Mx7+2qqKqtsLM1dnd397d2tTMwrasrrnG0Nfc3t/g39zX0Ma6rKStucPJztDR0tHOycK5rqOsucbQ19ze3+Df3NfPxrqusLzJ0trf4OHh4d7a08m9rqWxvMXM0dLS09LQzMW8saWuvMnS2t/g4OHg3trSyb2ws7/L1d3g4eHh4d/d1cu/saizvsfO0tPT09PRz8e9s6ixv8vV3ODh4eHh393Vyr+ztsHN2N7h4uLi4uDe183Cs6u1wMrQ0tTT09TS0Mm/tau0wc3X3uDi4eLh4N7XzcK2t8PP2d7h4eLi4uHe2c/Dtay3wcvQ0tPU09PT0MvCt6y1w8/Z3uDh4uHh4d7Zz8O3ucXR2d/i4uLi4uLf2tLFtq64w8vR1NTU1NPT0czEuK22xNDZ3+Lh4OHh4t/a0cW4usfT2+Hi4uLh4eHg29PGt6+6xc3T1NTU09PT0s3Fua64x9Pb4eLfy9bf4eDb08a5vMjV3eDh4uHh4eHh3dTIubG8yNDT1NXT1NTT08/Gu7C5yNXd4OHXzNfc4eHc1Mi7vMnV3eHi4uHh4uHi3dTJvLrH09vf4ODg4N/f4NvSx7q7ydXd4OHY4eLe4eLd1Mm8vcnV3eHg4Nrb3uLh3dXKvbzJ1d3h4uLj4uLi4d3Vyry8ydXd4eHdx8Dd4eHd1cq9vsrW3t7b19Dh3eHh3tbKvb3K1t7g2t3d3t/g4d7Wyr29ytXe4eDg283JzeDd1sq9vsrW3tra6Metxdzg3tbKvb3K1t7b2OTh1dfc4N7Wyr29ytbe4MS21NCr09/e1sq9vcrX3tSdutLBztng3tbKvb3K197evra4qbbP4d7Wyry9ytbe0afC18G52+De1sq9vsrW3uG6qtLX2tDg3tbKvLzK1t7cwa7HyLDU4d7Wyry9ytbe1djd37/L2eHd1sq9vcnU3eLaz9a8qdLh3dXJu7zJ1N3g29rf4uDh4d3Vybu8ydTd38yu1sXD1OHd1Mm8vMfT3OHi4eDJutzh3NTJu7vH09zh4uLi4eHi4dzUyLu7x9Pc4da72Mq92eHc1Mi7usfT3ODh4uLg3eHh29LHurnH09zg4eLi4eLi4dvTx7q6x9Pc4N/X39rU3+Hb0sa6uMXR2+Di4+Li4eHg2tHFuLjF0tvg4uLi4eHh4NrRxbi4xdLb4OLi4eHg4eDa0cW5t8PQ2d/h4uLi4eDe2dDDt7bD0Nnf4eLi4uDg3tnQw7e2w9DZ3+Hi4uLg4N7Z0MO3tcLO193h4eLi4d/d187BtbXBztfd4eHh4uHf3dfOwbW1wc7X3eHh4uLh393XzcG1s7/L1dzg4uHh4d/c1cu/s7K/y9Xc4OHh4eHf3NXLv7Oyv8vV3ODi4eHh39zVyr+zsb3I0tre4eHh4d7a08i+sLC9yNLa3uHh4uHe2tPIvrCwvcjS2t7h4eHg3trTyL2wr7nG0Njd3+Hg39zXz8W6rq65xtDY3eDh4N/c18/Fuq6uucbQ2N3g4eDf3NfPxbqvrLfDzdXa3d7e3drUzMK2rKu3w83V2t3e3t3a1MzCtqyrt8PN1drd3t7d2tTMwratqrTAytLY2tzc29fSysCzqaq0wMrS19rc3NvX0cm/s6mptL/J0tja3N3c19LJv7Oq",
    "verdict": "PASS",
@@ -122,222 +127,212 @@
   },
   "nhiet-ke": {
    "name": "nhiệt kế thủy ngữ",
-   "src": "6896dc440b885a3429892288fd3be8c6c9e6f5e52c4abebf347076aedf6b6490",
+   "src": "2f2619b41f82930bc19f7d64616bbb4e06d947d74d5d868094d41815a0b4042a",
    "key": "",
-   "fp": "qbS/ydLX293c29fRyb+0qZ+os73Eyc7Qz83KxLyzqKCntL/J0tfb3Nza19HJv7SrrLbCzNXa2t7f3trVzMK2qqGrtr/HzNDS0dDNx7+2qqKqtsLM1dnd397d2tXMwrasrrnG0Nfcqp/P393Xz8a6rKOtucPJzcXDwsbPycK5rqSsucbQz8rd3+Df3NfPxrqusLzJ0trgnlZoptva0sm9rqWwvMXMxXpqY4TOzMW8saWuvMnSzZu+3uHh3trSybyws7/L1d3hpV1Vbtfd1cq/saizvsjPw2tldJHPz8e9s6ixv8vV1ZiPv+Hh4N3Vyr+ztsHN197hqXKCgtje2M3Cs6u1wMrQxGyEiYjQ0Mq/tau0wc3X2p6HquHi4N7YzcG2t8PO2d7hqpCOfNre2c/Etay2wcvRxGybln3R0MvCt6y1w87Z3Z5nmN7i4d7Zz8S3ucTQ2d/jrJqQdNzf2tHFtq64w8vRxm+itZfR0czEuK22xNDZ36hJZ8Hh4t/a0cW4usfT2+Hjr52th9zg29PGt6+6xc3TxnKmpIbR0s3Gua64x9Pb4bZcS2i03+Db08a5u8jV3eDhsJqWgN3h3dTIubC8x9DTxXKfl4DR08/Gu7C5yNXd4MJuYVRdyOHc1Mi7vMnV3eHisId6et3i3dTJu7nH09rez3KDg5nc39vSx7q7ydXd4c12i4tjxuLd1Mm8vcnV3eHhsGRui97i3dXKvLzJ1d3h0XFkWYPf4t3Vyry8ydXd4dV8mZ1xzuHd1cq9vsrW3uHhsVxPft7h3tbKvb3K1t7h0XBZUITf4d7Wyr29ytbe4duEe3141ODe1sq9vsrW3uHhs1tSgd/g3tbKvb3K1t7h0nBgXJff4N7Wyr29ytbe4d+PYVx92uDe1sq9vcrX3uHis1Rai9/h3tbKvLzK197h0m5TRX3f4d7Wyry9ydbe4OGbWVOE3uHe1sq9vcrW3uLis1lDfeDh3tbKvLzK1t7i0m1SSoXf4d7Wyry8ytbe4eK3XU+M4OHd1sq9vcnU3eHitFNXid/h3dXJu7zJ1N3i021aVZLe4d3Vybu8ydTd4eLQgVWW4eHd1cm7u8fT3OHhtlVKiODh3NTIurvH09zh0mxPP3ne4dzUyLq7x9Pc4eHet4+44eHc1Mi7usfT3ODht1VJhuDh29LHubnH09zg0mxSTYze4dzSx7q6x9Pc4OHi2cnb4uHb0se6uMXR2uDiulZUkODg2tHFuLfF0dvg02xVToze4NrRxbi3xdHa4OLi4eDg4eDa0cW5t8PQ2d/hx2NAhuDe2dDDt7bD0Mu2q2VQPXjd3tnQw7e2w9DZ3+Hi4uLh4N7Z0MO3tcHO193h03tLj9/d187BtLXBzs+ig15TQ4jc3dfOwbW0wc7X3eHh4uHh393XzsG1sr/L1dzg3q9tkN/c1cu/srK/y9XPlWVWQIDc3NXLv7Kyv8vV3ODh4eHh39zVy7+zsb3I0tre4Na2v97a08i9sLC9yNLayIdoXJXc2tPIvbCwvcjS2t7h4eHg3trTyL2wr7nG0Njc3+Db3dzXz8W6rq65xtDY3NXGxdfc18/Fuq6uucbQ2Nzf4eDf3NfPxbqvrLbDzdXZ3d7e3drUzMK2rKu2w83V2t3e3t3a1MzCtqyrtsPN1dnd3t7d2tTMwratqrS/ydHX2tzc29fSyb+zqam0v8nR19rc3NvX0cm/s6mptL/K0dfa3Nzb19LKv7Oq",
+   "fp": "qbS/ydLX293c29fRyb+0qZ+os73Eyc7Qz83KxLyzqKCntL/J0tfb3Nza19HJv7SrrLbCzNXa2t7f3trVzMK2qqGrtr/HzNDS0dDNx7+2qqKqtsLM1dnd397d2tXMwrasrrnG0Nfcqp/P393Xz8a6rKOtucPJzcXDwsbPycK5rqSsucbQz8rd3+Df3NfPxrqusLzJ0trgnlZoptva0sm9rqWwvMXMxXpqY4TOzMW8saWuvMnSzZu+3uHh3trSybyws7/L1d3hpV1Vbtfd1cq/saizvsjPw2tldJHPz8e9s6ixv8vV1ZiPv+Hh4N3Vyr+ztsHN197hqXKCgtje2M3Cs6u1wMrQxGyEiYjQ0Mq/tau0wc3X2p6HquHi4N7YzcG2t8PO2d7hqpCOfNre2c/Etay2wcvRxGybln3R0MvCt6y1w87Z3Z5nmN7i4d7Zz8S3ucTQ2d/jrZqQdNzf2tHFtq64w8vRxm6htZfR0czEuK22xNDZ36hJZ8Hh4t/a0cW4usfT2+Hjr5yth9zg29PGt6+6xc3Txm6ipIbR0s3Gua64x9Pb4bZcS2i03+Db08a5u8jV3eDhsJmWgN3h3dTIubC8x9DTxW2bl4DR08/Gu7C5yNXd4MJuYVRdyOHc1Mi7vMnV3eHisIZ6et3i3dTJu7nH09rez21/g5nc39vSx7q7ydXd4c12iotjxuLd1Mm8vcnV3eHhsWNui97i3dXKvLzJ1d3h0WxfWYPf4t3Vyry8ydXd4dV8lp1xzuHd1cq9vsrW3uHhsltPft7h3tbKvb3K1t7h0WtVUITf4d7Wyr29ytbe4duEeX141ODe1sq9vsrW3uHhs1pSgd/g3tbKvb3K1t7h0mtcXJff4N7Wyr29ytbe4d+OX1x92uDe1sq9vcrX3uHis1Nai9/h3tbKvLzK197h0mlORX3f4d7Wyry9ydbe4OGbWFOE3uHe1sq9vcrW3uLitFhDfeDh3tbKvLzK1t7i0mhNSoXf4d7Wyry8ytbe4eK3XU+M4OHd1sq9vcnU3eHitVJXid/h3dXJu7zJ1N3i02hWVZLe4d3Vybu8ydTd4eLQgVWW4eHd1cm7u8fT3OHhtVVKiODh3NTIurvH09zh0mdLP3ne4dzUyLq7x9Pc4eHet4+44eHc1Mi7usfT3ODht1VJhuDh29LHubnH09zg0mhOTYze4dzSx7q6x9Pc4OHi2cnb4uHb0se6uMXR2uDiulZUkODg2tHFuLfF0dvg021VToze4NrRxbi3xdHa4OLi4eDg4eDa0cW5t8PQ2d/hx2NAhuDe2dDDt7bD0Mu2q2VQPXjd3tnQw7e2w9DZ3+Hi4uLh4N7Z0MO3tcHO193h03tLj9/d187BtLXBzs+ig15TQ4jc3dfOwbW0wc7X3eHh4uHh393XzsG1sr/L1dzg3q9tkN/c1cu/srK/y9XPlWVWQIDc3NXLv7Kyv8vV3ODh4eHh39zVy7+zsb3I0tre4Na2v97a08i9sLC9yNLayIdoXJXc2tPIvbCwvcjS2t7h4eHg3trTyL2wr7nG0Njc3+Db3dzXz8W6rq65xtDY3NXGxdfc18/Fuq6uucbQ2Nzf4eDf3NfPxbqvrLbDzdXZ3d7e3drUzMK2rKu2w83V2t3e3t3a1MzCtqyrtsPN1dnd3t7d2tTMwratqrS/ydHX2tzc29fSyb+zqam0v8nR19rc3NvX0cm/s6mptL/K0dfa3Nzb19LKv7Oq",
    "verdict": "PASS",
-   "fails": 2,
-   "round": 10,
+   "fails": 3,
+   "round": 13,
    "rows": {
     "dung-vat": [
      "ĐẠT",
-     "Đúng là bảng nhiệt kế thủy ngữ: tấm bảng navy dựng đứng có thang số 0–120 với vạch kem bên phải, ống kính tròn ở bên trái với cột thủy ngân đỏ chạy từ bầu tròn ở đáy lên tới vạch 100, và thẻ nhãn kem ghi \"SÔI\" ngay tại vạch 100; tên mù \"bảng nhiệt kế\" đúng vật.",
+     "Bảng navy dọc (ảnh giữa x≈1102–1282, y≈30–390) có thang 0–120 với vạch và số trắng, ống kính đứng dọc có cột thuỷ ngân đỏ và bóng đỏ tròn ở đáy (x≈1125–1150, y≈330–390), thẻ kem viền đỏ ghi \"SÔI\" đặt ngang vạch 100 (x≈1187–1212, y≈87–170) — đúng tên mù \"nhiệt kế\".",
      ""
     ],
     "nguyen-ven": [
      "ĐẠT",
-     "Vật đã được cắm xuống bàn ở cả ba góc máy: ở góc ngang tấm bảng chạm mặt bàn và có bóng tiếp xúc sát chân (x 1180–1210, y 425–440; bóng đổ nêm kéo sang trái x 800–1180, y 330–430), ở góc chéo có bóng mềm ôm sát mép dưới tấm bảng (x 360–470, y 345–385), ở góc từ trên xuống có bóng đổ nằm dưới mép dưới của bảng (x 1960–2075, y 265–305, nền giấy tối từ 240 xuống ~200). Tấm bảng xám phía sau bị tấm bảng che (x 1835–1995, y 35–115) nên không phải mảnh rời trôi lơ lửng; không thấy mặt thủng, mất mặt hay phần xuyên cắt nhau.",
+     "Bảng, ống kính, bóng thuỷ ngân và thẻ nhãn liền khối, không mảnh rời; ở góc ngang bảng đứng chạm sàn và có bóng tiếp xúc với bóng đổ dưới chân bảng; ống kính không xuyên sai qua mép bảng, không mất mặt. Lỗi \"bảng lơ lửng, không chân đế\" của lần trước đã hết ở góc ngang.",
      ""
     ],
     "khoi-3d": [
      "ĐẠT",
-     "Vật có khối và độ dày thật: khung tấm bảng có mặt sền đặc nhìn thấy ở mép trái và mép dưới (x 265–285, y 30–290 và x 330–400, y 300–320 ở góc chéo), ống kính là một trụ tròn có highlight và khoang tối bên trong (x 1145–1175, y 30–130), bầu thủy ngân là một khối tròn 3D ở đáy (x 1930–1965, y 250–280 ở góc từ trên xuống), không phải tấm phẳng hay hộp vuông.",
-     ""
-    ],
-    "muc-sang": [
-     "ĐẠT",
-     "Chữ \"SÔI\" đã sửa được: ở góc chéo (x 395–425, y 105–150) và góc ngang (x 1200–1225, y 45–125) đọc rõ ba chữ S-Ô-I màu đỏ nằm trọn trong thẻ, không tràn lên viền; viền mực của tấm bảng, vạch số và ống kính đều rõ. Điểm còn lại (không chặn): thẻ nhãn là một dải trắng cháy sáng không có viền mực nên không tách bằng nét mực khỏi tấm bảng, và quầng bloom quanh thẻ làm chữ đỏ nhạt hóa thành hồng — nên viền mực cho thẻ và dùng đỏ đậm hơn.",
+     "Góc chéo cho thấy bề dày thật của bảng (mặt hông tối ở x≈372–382, y≈60–330), ống kính là trụ kính có vát sáng chạy dọc, bảng đổ bóng xuống sàn; có mặt sáng/mặt tối rõ chứ không phải tấm phẳng.",
      ""
     ],
     "nho-van-doc": [
-     "LỖI",
-     "Cả vật thì vẫn đọc ra là nhiệt kế khi thu nhỏ, nhưng thẻ nhãn \"SÔI\" thì không: ở cỡ một panel rộng ~390px (tức cỡ màn hình điện thoại) thẻ chỉ còn là một vệt trắng hồng ~10×18px, không đọc nổi chữ nào, mà đây chính là chữ mang thông điệp của cảnh.",
-     "làm thẻ nhãn to hơn và chữ lớn hơn (ví dụ \"SÔI\" viết ngang trên thẻ rộng ~1/5 bề ngang tấm bảng, hoặc tăng khoảng cách giữa các chữ theo chiều dọc), và giữ tỷ lệ đó ở cả ba góc máy."
+     "ĐẠT",
+     "Bảng đã rộng ~180px/800px (22%) và cao ~360px/450px, thu về cỡ điện thoại (ảnh 1170px) thì các số 120/100/80…0 và cột thuỷ ngân đỏ vẫn đọc được; riêng chữ \"SÔI\" trong thẻ vẫn xếp dọc và nhỏ nên không đọc được chữ, chỉ thấy thẻ kem viền đỏ.",
+     ""
     ],
     "dep": [
      "LỖI",
-     "Tấm bảng xám gập phía sau vẫn là một mảng phẳng không chất liệu: cả mảng xám (140,134,134)/(144,135,136) tại x 1870–1930, y 45–100 ở góc từ trên xuống, có cạnh thẳng cứng, không texture, không viền mực, đọc như một miếng bìa xám dán lơ lửng sau vật thay vì một chân đế kim loại/gỗ có chất liệu; mặt tấm bảng navy cũng là một mảng gần như phẳng, chỉ có nhiễu rất mỏng, chưa có chất liệu sơn/nhựa.",
-     "dựng tấm chân đế sau thật (kim loại xước hoặc gỗ ấm) có viền mực, có độ dày và bề mặt có vân, nối liền khớp với tấm bảng; thêm texture nhẹ (vân sơn/nét gờ) cho mặt bảng navy; và bóng tiếp xúc dưới bầu đỏ ở góc từ trên xuống (nền giấy dưới bầu hiện vẫn đồng nhất 240–242) để chân vật không bị cảm giác lơ lửng."
+     "Ở góc chéo và góc từ trên xuống bảng không có sàn và không có bóng tiếp xúc (nền phẳng xám-be toàn khung), chỉ góc ngang mới có bóng đổ → bảng trông lơ lửng trước nền trơn ở 2/3 góc; mặt bảng navy phẳng không vân, thang số chỉ là nét trắng mảnh; thẻ \"SÔI\" có quầng trắng chói (bloom) bao quanh.",
+     "cho cả ba góc đều có sàn và bóng tiếp xúc dưới bảng, thêm vân sơn/nhám cho mặt bảng, hạ bloom quanh thẻ nhãn."
     ]
    }
   },
   "noi-cat-ngang": {
    "name": "nồi cơm điện bị cưa ngang",
-   "src": "110d78145d46f68fa8811f0ce31449c8ed0fd27dcbeaa35ad9ac9455b2b4a95e",
+   "src": "5da89c64c44c82fd53d24fb772f0a8fdba7f0fadeab076008c558d2c83ee729a",
    "key": "",
-   "fp": "qbS/ydLX29zc2tfRyb+zqZ+os73Eyc3OzszJw7yzqKCntL/J0tfb3dzb19HJv7SrrLbCzNXZ3d/e3drVzMK2qqGqtr/Hy8/Q0M/Mx7+2q6GqtsLM1dnd397e2tXMwrasrrnG0Nfc3t/g39zX0Ma6rKOtucLJztDR0tHOycK5rqOsucbQ19zf3+Dg3NfQxrqusLzI0trf4OHh4d7a08m9rqWwvMXM0dLS09LQzMS8sKWuvMnS2uDg4eHh3trSyb2ws7/L1d3g4eHh4eDd1cq/saizvsfO0tPS09LRz8e9sqixv8vV3eDh4eHh4N3Vy7+ztsHN197g4uLi4uDe2MzCs6u1wMnQ0tPT09PSz8q/tau0wc3X3uHi4uLi4d7YzcK2t8PP2d7g4eLi4uHe2c/Dtay2wcvQ0tPSudHT0MvCt6y1w8/Z3uHi4+Li4t/Zz8S3ucTQ2d/i4uLj4uLf2tHFtq63w8vR1NPMisvT0MzEuK23xNDZ3+Lh4ePj4t/a0sW4usfT2+Hi4sTe4uLg29PGt6+6xc3S1NTOpM3T0s3Fua64x9Pb4eG9p8zj4uHb08a5u8jV3eDh35fS4+Lh3NTIubC7xs7S0tCmg6bP0s7GurC5yNXd4dWXjKvh4+Ld1Mi7vMnV3eHgx6DM5OLi3dTJu7bDz9ba27uCf3i229fOw7e6ydXd4cSHjoXI4+Pe1Mm8vcnV3eHXgG/b5+Pi3dXKvLzJ1d3g35lTUFmV4N3Vyry8ydXd4aVjv9HS5OPd1sq9vsrW3uHOZlqs6eLh3tbKvb3K1t7h3oY/Oj6D3t7Wyb29ytbe4aOj7PXm5OLe18q9vsrW3uHIdFlz2OHg3tbKvb3K1t7h3H9SNz57297Wyr29ytbe4a3C8+Xv4+He1sq9vcrW3uDGaFpSr97h3tbKvLzJ1t7g23hWOTt32d7Wyry8ydfe4cPI3tj05OLe1sq9vcnW3uLJboBhneHi3tbKvLzK1t7h23hud1dq0d3Wyry8ytbe4tCRrMj45ePe1sq9vMnU3eHMi8yrnN/h3dXJu7zJ1N3h3HylwKBs0d3Vybu8ydTd4teQyNbz3eLe1cm7u8fT3OHTpMO8ltLh3NTIurvH09zg24uxxK990dzUyLq6x9Pc4d6tvdfS1+Ld1Mm7usfT3ODSn7u3mcfh29LHurnH09zYnY+gm56V19vSx7q5x9Pc4OLbsrmnzOLc08e6uMXR2uDbtZ2wkcbh2tHFuLjF0drQfYyYfZaj29rRxbi4xdLb4OLj0a+SwOHb0cW5t8PP2d/h1ZSVjsve2dDDt7bDz9nbtqCyprO02tnQw7e2w9DZ3+Lj49+90N/Z0MO3tcHO193g4MGlksrd183BtbTBztfd39nX1Nfa3dfNwbW0wc7X3eHi4+Pi4N7YzsG1sr/L1dzg4eDKpNbd1cu/srK/y9Xc4OHh4eHf3NXLv7Kyv8vV3ODi4uLi4N3Wy7+zsb3I0tre4eHf0N7a08i9sLC9yNLa3uDh4eDe2tPIvbCwvcjS2t/h4eLh39rTyL2xrrnG0Njc3+Hg393Xz8W6rq65xtDY3N/h39/c18/Fuq6uucbQ2N3g4eDg3dfPxbqvq7bDzdXZ3d7e3drUzMK2rKu2w83V2t3e3t3a1MzCtqyrtsPN1drd39/d2tXMwratqrS/ytHX2tzd29fSyr+zqam0v8nR19rc3NvX0cm/s6mptL/K0tja3N3c2NLKwLOq",
+   "fp": "qbS/ydLW29zc2tfRyb+zqZ+os73Eyc3OzszJw7yzqKCntL/J0tfb3dzb19HJv7SrrLbCzNXZ3d/e3drVzMK2qqGqtr/Hy8/Q0M/Mx7+2q6GqtsLM1drd397d2tXMwrasrrnG0Nfc3t/g39zX0Ma6rKOtucLJztDR0tHOycK5rqOsucbQ19zf4ODg3dfQxrqusLzJ0trf4OHh4d7a08m9rqWwvMXM0dLS09LQzMS8sKWuvMnT2uDg4eHh3trSyb2ws7/L1d3g4eHh4eDd1cq/saizvsfO0tPS09LRz8e9sqixv8vV3eDh4eHh4N3Vyr+ztsHN197g4uLi4uDe2M3Cs6u1wMnQ0tTT09PSz8q/tau0wc3X3uHi4uLi4d7YzcK2t8PP2d7g4eLi4uHe2c/Dtay2wcvQ0tPQrNDT0MvCt6y1w8/Z3+Hi4+Pj4t/Zz8S3ucTR2d/i4uHi4uLf2tHFtq63w8vR1NPMi8zT0czEuK23xNDZ3+Le2+Lj49/a0sW4usfT2+Hi4bbb4uLg29PGt6+6xc3S1NTLqcvT0s3Fua64x9Pb4d+wnMjj4+Hb08a5u8jV3eDh3pnP4+Lh3NTIubC7xs7R0s2ZfZfM0s7Fuq+5yNXd4dCTjazg4+Ld1Mi7vMnV3eHfuaHU5OLi3dTJu7bCztXZ2bR6eHOv2tbNwra6ydXd4b+Dj4jI4+Pe1Mm8vcnV3eHVdF/Q6OPi3dXKvLzJ1d3h35ZJRE+T4N3Vyry8ydXd4aNmxdjV5OPd1sq9vsrW3uHObl6f5+Lh3tbKvb3K1t7h3opIPUGF3t7Wyb29ytbe4aSn7vXn5OLe18q9vsrW3uHJcVlnzuDg3tbKvb3K1t7h3H9UNz5+3N7Wyr29ytbe4bDD8+Lv4+He1sq9vcrW3uHJal1Rpd/h3tbKvLzJ1t7g3HtaQj942d7Wyry8ytfe4cbD2NX15OLe1sq9vcrW3uLLeqd6ouLi3tbKvLzK1t7h3H2Mpnpu093Wyry8ytbe4tKNrsn45ePe1sq9vMnU3eHPnd/End3h3dXJu7zJ1N3h3YfB3bx4093Vybu8ydTd4tiV2OHx2+Le1cm7u8fT3OHVsdvIm8/h3NTIurvH09zg15nB07+L09zUyLq6x9Pc4d+1yebO1+Ld1Mm7usfT3ODUpMXJl8Xh29LHurnH09zVhYicjpqc2tvSx7q5x9Pc4OLfucGnyuLc08e6uMXR2+DdtJi0j8vg2tHFuLjF0drUjpOpkKmv29rRxbi4xdLb4OLk1riUwOHb0cW5t8PQ2d/h0paWjsve2dDDt7bDz9narpOal5m43NnQw7e2w9DZ3+Lj4+HE09/Z0MO3tcHO193h4cWnl87d183BtbTBztfd3dLQztDW3dfNwbW0wc7X3eHi4+Pj4d7YzsG1sr/K1dzg4uDCodrd1cu/srK/y9Xc4OHh4eHf3NXLv7Kyv8vV3ODi4uPi4N3Wy7+zsb3I0tre4eHg1N7a08i9sLC9yNLa3uDh4eDe2tPIvbCwvcjS2t/h4eLh39rTyL2xrrnG0Njc4OHg39zXz8W6rq65xtDY3N/h4N/c18/Fuq6uucbQ2N3g4eDg3dfPxbqvq7bDzdXa3d7e3drUzMK2rKu2w83V2t3e3t3a1MzCtqyrtsPN1drd39/d2tXMwratqrS/ytLX2tzd29fSyr+zqam0v8nR19rc3NvX0cm/s6mptL/K0tja3N3c2NLKwLOq",
    "verdict": "PASS",
-   "fails": 2,
-   "round": 7,
+   "fails": 3,
+   "round": 13,
    "rows": {
     "dung-vat": [
      "ĐẠT",
-     "Đúng là nồi cơm điện bị cưa ngang: vỏ tròn kem với nắp vòm có núm hơi, mặt trước cưa lộ ruột nồi kim loại chứa mẻ cơm hạt, bo mạch xanh có relay/capacitor, đèn LED đỏ, núm xoay, dây điện và chân đế. Tên mù \"nồi cơm điện (vẽ cắt lớp)\" đúng vật.",
+     "Tên mù ghi trong BLIND.md (\"máy nướng bánh mì\") không còn khớp ảnh này, nhưng ảnh có đủ bộ phận đặc trưng của nồi cơm điện bị cưa ngang: vỏ kem cưa ngang, ruột nồi nhôm có thành (ảnh giữa x≈1140–1200), cơm trắng hạt nằm trong ruột (x≈1150–1295, y≈255–300), thanh nhiệt đỏ ở hai bên khoang, bo mạch xanh có linh kiện chạy đáy (x≈1150–1290, y≈310–325), dây điện đen, nắp vòm crom có núm navy, bảng nút đỏ + núm xoay vân sọc.",
      ""
     ],
     "nguyen-ven": [
      "ĐẠT",
-     "Các mảnh nối liền nhau: mép cưa có mặt cắt dày, thành nồi trong bám chặt bo mạch, chân đế chạm nền, không có mảnh rời trôi lơ lửng, không mặt thủng hay vết nhấp nháy chồng lên.",
+     "Mặt cắt liền khối: miệng cắt vỏ có độ dày, nắp vồm còn gắn với núm, ruột nồi ôm cơm, bo mạch và khung kim loại nằm đúng đáy, dây điện nối ra ngoài; không mảnh rời trôi, không mất mặt, không có phần xuyên nhau sai chỗ.",
      ""
     ],
     "khoi-3d": [
      "ĐẠT",
-     "Vỏ có độ dày rõ ở mép cưa và quanh miệng, nắp vòm có khối với núm hơi, nồi trong có thành bạc dày, bo mạch, relay và chân đế đều có thể tích; mặt sáng/mặt tối toon rõ trên nắp và vỏ.",
-     ""
-    ],
-    "mau": [
-     "ĐẠT",
-     "Vỏ và nắp kem, dây và chân navy, LED đỏ theo bảng màu kênh; bo mạch xanh lá là màu vật liệu thực và đọc được rõ ở cả ba phía.",
+     "Vỏ có bề dày nhìn thấy ở miệng cắt, nắp vòm có khối, khoang trong có chiều sâu, khung kim loại và bo mạch nằm trong không gian 3D phía dưới; có mặt sáng/mặt tối, không phải tấm phẳng.",
      ""
     ],
     "muc-sang": [
      "LỖI",
-     "Mảng xám-navy trong khoang (mặt trong vỏ phía sau) chiếm gần 1/3 khung ở góc ngang và góc chéo là một dải chuyển sắc liên tục từ (47,42,64) tới (94,90,78), không chia bậc toon và mép trên không có viền mực. (Lỗ thoát hơi trên nắp giờ đã đọc được là lỗ có trong bóng.)",
-     "chia mặt trong vỏ thành 2–3 bậc sáng có viền mực rõ ở mép trên."
-    ],
-    "nho-van-doc": [
-     "ĐẠT",
-     "Thu về 390px vẫn đọc ra là nồi cơm điện cưa ngang có mẻ cơm, bo mạch xanh, núm và đèn đỏ.",
-     ""
+     "Mặt trong khoang vẫn là dải chuyển sắc liên tục chứ không chia bậc toon: đo ngang tại y=215, x=1150→1230 thấy (108,107,121) → (51,54,71) → (46,49,66); mép trên khoang không có viền mực đen (ảnh giữa x≈1140–1300, y≈190–215); mặt trong nắp là vệt nâu nhòe không có nét (ảnh phải x≈1955–2065, y≈200–280).",
+     "chia mặt trong khoang thành 2–3 bậc sáng có viền mực ở mép trên và quanh miệng cắt, dựng lại vân mặt trong nắp."
     ],
     "dep": [
      "LỖI",
-     "Vẫn không thấy mâm nhiệt xoắn ốc dưới nồi trong: hai mảng nâu-đồng ở đáy khoang chỉ là một đường cong mỏng áp sát mép mẻ cơm (góc ngang x≈1140–1190,y≈266 và x≈1300–1320,y≈285), không đọc ra cuộn dây nhiệt; dưới nồi trong ngoài bo mạch không còn gì khác.",
-     "dựng mâm nhiệt là cuộn dây nhiệt có độ dày nằm ngay dưới đáy nồi trong, với hai đầu nối xuống bo mạch."
+     "Khối \"cơm\" có mặt trên phẳng nhẵn và mặt cắt thẳng đứng (ảnh giữa x≈1167–1278, y≈250–262) nên đọc như một ổ bánh hơn là cơm; dây điện ở góc từ trên xuống là sợi đen góc vuông, thanh dạng thanh phẳng nằm sát sàn (ảnh phải x≈1935–2010, y≈170–215); mặt trong nắp có vệt nâu nhòe.",
+     "làm cơm thành khối hạt rõ (mặt trên có hạt, không phẳng), uốn dây điện thành sợi tròn có võng, dựng lại vân mặt trong nắp."
+    ],
+    "nho-van-doc": [
+     "ĐẠT",
+     "Vật đã rộng ~260px/800px (32%) ở góc ngang, thu cỡ điện thoại vẫn đọc được vỏ kem, núm navy, khối cơm trong ruột nhôm và bo mạch xanh ở đáy.",
+     ""
     ]
    }
   },
   "noi-com-dien": {
    "name": "nồi cơm điện",
-   "src": "18e393cfa3df546a422113e62be8597165e99bfb636e1a5dff7fafadb68767f4",
+   "src": "570b3b89f73f150df7d6d6a7eb9d936a25b66e3be952e4de74b5c5416d605912",
    "key": "",
-   "fp": "qbS/ydLX293c2tfRyb+0qJ+os7zDyMzOzszJw7uzp6CntL/J0dbb3Nza19HJv7OqrLbCzNXZ3d/e3drVzMK2qqGqtr/Gy87Qz8/Lxr61qqGqtsLM1Nnd397d2tTMwrasrrnG0Nfc3t/g393X0Ma6rKOtucLJztDR0tHOycK5raOsucXQ19ze3+Df3NfPxrqusLzI0trf4ODh4d7a08m9rqWwvMXM0dLS09LPzMS7sKWuvMjS2Nzg4OHg3trSybyws7/L1dzg4eHh4eDd1cu/saizvsfO0tPS0tLRzse9sqewv8vV1MLg4eHh4N3Vyr+ztsHN197g4uHi4uHe2M3CtKu1wMnQ0tTT09PSz8m/taqzwc3X2Z7Y4eLi4d7YzcG1t8PP2d7g4eLi4uLe2c/Dtay2wcvQ0tPT09PT0MvBt6y1w87Z3bvQ4uLi4t7Zz8O3ucTQ2d/hzuDi4uLf2tLFtq24w8vR1NPU1NPT0MzDuK22xNDZ39XQ4uLi4t/a0cW4usfT2+Hht9fi4uLh29PGt6+6xc3S1NTT09PT0c3Fua63xtLb4NfP4uHi4+Hb08a5u8jV3eDh1tri4+Pi3dTIubC7x8/S0tPS083Q0s7Fuq+5yNTd4NfN4ca33+Ld1Mi7vMnV3eDh0Nvj5OTj3tTJu7XCztXQwtna2r7N2tbNwra6ydXd4NrM3KCQweTe1Mm8vcnV3eHhydrjyODj3dXKvbzJ1d3WuNzi297h393Vyry8ydXd4d7L1ZrAzOPe1cq9vsrW3uHhz9vgzuLi3tbKvb3K1t7h09niy7rA2N3Wyby8ytXd4eDLz6nu6eHf1sq9vsrW3uHh0tjh+O/e39bKvb3K1t7h1tjh1cXL4t7Wyby9ytbe4OHQxrrm6uHf1sq9vcrW3uHh0NPQ9OXc39bKvbzJ1t7g2NPgzaKy297Wyry8ytbd4OHZq7zh6ODf1sq9vcnW3uLi1MHRxdLi39bKvLzK1t3f3Mbdxcjd197Wyry8ytXd4eHh0cj29Nzf1sq9vcnU3eHi372p4e3e3tXJu7zJ1Nzd3MKfkcjV1N3Vybu8ydTd4eLh3tD08Nvf1cm7u8fT3OHh4tmT1uLW3dTIu7vH09zh4NzOoYqWzdzUyLq7x9Pc4OHh4dPl5ODe1Mi7usfT3ODh4trE6dXX3NPHurrH09zg4eLi4NfZ4NvSxrm6x9Pc4OHi4tXK2ODc0se6uMXR2uDi4t+10b7b29HFuLfF0drg4eLh4eDh4NrRxbi3xdHb4OLi4s2g3eHb0cW5t8PP2d/h4uLLnLze2dDDt7bDz9nf4eLh4eDg3tnQw7e2w9DZ3+Hi4t3A3+Da0MO3tcHO193h4eLi39/e2M7BtbXBztfd4OHh4eHf3dfOwbW1wc7X3eHh4uLi4d7YzsG1sr/L1dzg4eHi4eDd1su/srK/ytXc4OHh4eHf3NXLv7Kyv8vV3ODi4eLi4N3Wyr6zsb3I0tre4eHh4d/a08i+sLC9yNLa3uDh4eDe2tPIvbCwvcjS2t7h4eLh39rTyL2wrrnG0Njc4OHg393Xz8W6rq65xtDX3N/h39/c18/Fuq6uucbQ2N3g4eDg3dfPxbqvq7bDzdXa3d7e3drUzMK2rKu2w83V2tze3t3a1MzCtqyrtsPN1drd3t7d2tXMwrasqrS/ytHX2tzd29fSyr+zqam0v8nR19rc3NvX0cm/s6mptL/K0dfa3N3b2NLJv7Op",
+   "fp": "qbS/ytLX293c29jRyb+0qJ+os7zDyM3OzszJw7yzqKCntL/J0tfc3d3b2NHJv7OqrLbCzNXZ3d/e3drVzMK2qqGqtr/Gy87Q0M/Mxr+1qqGqtsLM1dre4N/e29XMwrasrrnG0Nfc3+Dh4N3X0Ma6rKOtucLJztDR0tHOycK5rqOsucbQ193f4eLh3djQxrqusLzJ09rg4eHi4t/b08m9rqWwvMXM0dLS09LQzMS8sKWuvMjT2uDh4+Pi39vTybyws7/L1d3h4uLj4uHd1cu/saizvsfO0tPT09PRzse9sqewv8vV3eHi4OTk4d7Vyr+ztsHN2N7h4+Pk5OLe2M3CtKu1wMrQ0tTT09PSz8m/taqzwc3Y3uHDrdvl49/YzcK1t8PP2d/h4+Tk5OPf2s/Etay2wcvQ0tPU09TT0MvBtqu1w8/Z39mflr/m5ODaz8O3ucTR2d/j5OHg5ePg2tLFtq24w8vR1NTNzdTT0MvDuK22xNDZ4MyXxtje5eDa0sW4usfT2+Hj5czC5+Th29PGt6+6xc3T1NSztNXT0c3Fua63x9Pb4LKq8vfe5eLc08a5u8jV3eHi49LJ6+Ti3dTIubC7xs7S0tTGyNXT0s7Fuq+5yNXd3Z3B+Pvp4+Pd1Mi7vMnV3eHg4vTx7uLj3dTJu7bDz9ba2t3w8+Ha29fOw7e6ydXd3ZPP5+fw4uTe1Mm8vcnV3eHT3Pr68N7j3dXKvLzJ1d3h16eprbLa4d3Vyry8ydXd4J/a29j04uTe1sq9vsrW3uLRy/f74Nri3tbKvb3K1t7h0tng4eTY4N3Wyby9ytbe4bTg7evz4uPe1sq9vsrW3uHgxcXOxt/h3tbKvb3K1t7dn9Xr7ump3N7Wyby9ytbe4s/j+/nvzuLe1sq9vcrX3uHg6NTS27Hh3tbKvbzK1t7dpdDj6+iy3t7Wyry8ytfe4djg+fzrqN7f1sq9vcnW3uLh6fHyyovf3tbKvLzK1t7i09Pcyubg4t7Wyry8ytbe4t7Y9/zfo+De1sq8vcnU3eLi6O/xzKvh3tXJu7vJ1N3h1tDBv+Li4d3Vybu8ydTd4uLT8PfTtuLe1cm7u8fT3OHazeDu6Nvh3NTIurrH09zdwMnQv+Lh4dzUyLq7yNPc4uLYz9Pe4uPd1Mi7usfT3OHZx9Tu49jh3NLHurrH09zGjqDI19DX4dvSx7m6x9Pd4eLg4d/o5OLc0se6uMXS2+DXr9PqxNTg2tHFuLfF0drcsWaDkIvS4NrRxbi4xdLb4ePb5efg5OHb0cW5t8PQ2d/grq21pd3e2dDDt7bD0Nnf37+jpsbg3tnQw7e2w9Da4OPi0NXh4t/a0MO3tcHO197h2KKVz+Dd187BtbXBztfd4eHi4uHg3dfOwbW1wc7Y3uLk4OHj4d7XzsG1sr/L1d3g4uHg4uDd1cu/srK/y9Xc4OHh4eHf3NXLv7Kyv8vV3eHk5OXj4N3Vy7+zsb3I0trf4eLi4d/a08i+sLC9yNLa3uDh4eDe2tPIvbCwvcjS2+Di4+Pi39rTyL2wrrnG0Njd4OHg4N3Xz8W6rq65xtDY3d/h4N/d18/Fuq6uucbQ2d3h4uHg3dfPxbqvq7bDzdXa3d/e3drUzMK2rKu2w83V2t3e3t3a1MzCtqyrt8PN1tve4N/e2tXMwrasqrS/ytLY2tzd29jSyr+zqam0v8nR19rc3NvX0sm/s6mptL/K0tjb3d3c2NLKv7Op",
    "verdict": "PASS",
-   "fails": 0,
-   "round": 3,
+   "fails": 1,
+   "round": 13,
    "rows": {
     "dung-vat": [
      "ĐẠT",
-     "Tên mù \"nồi cơm điện\" đúng: thân tròn có nắp vòm, núm nắp navy, viền nắp và đế navy, núm xoay trắng bên hông phải, công tắc đỏ và dây điện có phích cắm.",
+     "Thân tròn kem, nắp vồm có núm navy, viền đế navy tách riêng, hai quai cầm hai hông, bảng điều khiển trước có nút đỏ + núm xoay + ô hiển thị (ảnh giữa x≈1160–1230, y≈270–320) — đúng nồi cơm điện như tên mù.",
      ""
     ],
     "nguyen-ven": [
      "ĐẠT",
-     "Vật nguyên vẹn ở ba góc: nắp khép kín với thân, núm nắp liền nắp, quai navy liền thân, dây điện liền phích, không mảnh rời trôi lơ lửng, không mặt thủng, không mặt nhấp nháy.",
+     "Vỏ, nắp, núm, quai, viền đế và bảng nút liền khối, không mảnh rời, không mất mặt; ở góc ngang nồi đứng chạm sàn, có bóng đổ (ảnh giữa x≈1000–1360, y≈330–350). Lỗi \"toàn bộ vật mất mặt trong khối trắng\" của lần trước đã hết.",
      ""
     ],
     "khoi-3d": [
      "ĐẠT",
-     "Thân là khối tròn có thắt eo, nắp vòm có độ cong riêng, góc trên xuống cho thấy nắp là hình tròn với vành navy — có mặt sáng mặt tối, không phải hộp vuông.",
+     "Nắp vồm có khối và bóng đổ riêng, viền đế navy là vòng dày có độ dày, quai cầm nhô ra hai hông, thân có mặt sáng/mặt tối rõ; không phải hộp vuông.",
      ""
     ],
     "mau": [
      "LỖI",
-     "Núm nắp ở góc từ trên xuống vẫn ra màu xám tím nhạt (khoảng 150,147,161) trong khi vành nắp ngay cạnh là navy, nên cùng một núm mà đổi màu theo góc; yêu cầu \"giữ núm navy ở mọi góc\" của lần trước chưa làm.",
-     "dùng chung vật liệu navy cho núm nắp ở cả ba góc, không để ánh sáng từ trên xuống làm núm xám đi."
-    ],
-    "muc-sang": [
-     "LỖI",
-     "Bóng trong góc từ trên xuống là một mảng xám phẳng viền cứng, lởm chởm như mảnh bìa cắt, không có bậc toon hay nét viền mềm; bóng của dây điện ở góc ngang vẫn là một sợi mảnh nằm sát sàn chạy song song với dây.",
-     "làm bóng mềm, to dần theo hướng ánh sáng, có bậc sáng tối toon thay vì một mảng xám cắt phẳng; bóng dây điện phải mềm và to hơn sợi dây."
-    ],
-    "nho-van-doc": [
-     "LỖI",
-     "Ở cỡ điện thoại nồi chỉ chiếm khoảng 1/5 bề ngang khung (thân ~160 px trong khung 800 px), nút đỏ là một chấm đỏ 2–3 px và núm xoay là một vết trắng nhỏ bên hông, không đọc ra là gì; yêu cầu \"phóng to nồi, cho nút đỏ và núm xoay to rõ\" của lần trước chưa làm.",
-     "đưa nồi chiếm khoảng 2/3 bề ngang khung, làm nút đỏ và núm xoay to rõ có viền mực."
+     "Núm nắp ở góc từ trên xuống không còn màu navy mà là xám tím nhạt (đo tại x≈1995–2000, y≈175–190: 152,148,162) trong khi ở góc ngang núm là navy xanh; mặt nắp sáng tới (251,250,248) nên núm không tách ra; lỗ thoát hơi ở x≈2033–2055, y≈210–227 đọc thành một hạt sỏi kem chứ không phải lỗ.",
+     "giữ núm navy ở mọi góc (hạ bloom ở mặt nắp), khoét lỗ thoát hơi có bóng trong để đọc ra lỗ."
     ],
     "dep": [
      "LỖI",
-     "Nồi vẫn nhỏ và lơ lửng ở góc phải khung với phần lớn diện tích là nền trống; thân là một mảng kem trơn không texture, không nút bấm/đồng hồ/hãng ghi trên mặt; quai navy ở giữa thân đọc như một miếng tem dán phẳng chứ không phải tay cầm. Dây điện đã có độ võng (sửa được một phần) nhưng vẫn không có đoạn cuộn.",
-     "đưa nồi chiếm 2/3 khung, dựng quai thành tay cầm có chỗ cầm thật, thêm texture/toon step và chi tiết mặt trước, cho dây điện có một đoạn cuộn."
+     "Ở góc từ trên xuống nồi đọc thành một đĩa tròn trắng: núm là vệt xám mờ không có viền mực, lỗ thoát hơi như hạt sỏi dính trên nắp; ở góc chéo không có sàn/bóng tiếp xúc nên nồi như lơ lửng trên nền trơn.",
+     "vẽ viền mực quanh núm và quanh lỗ thoát hơi, cho cả ba góc có bóng tiếp xúc dưới đế."
     ]
    }
   },
   "noi-com-doi-dau": {
    "name": "nồi cơm đời đầu",
-   "src": "5514b8838920c24584019d58e83f2ae16881dd6aa6c7b106b5d28a68402d465a",
+   "src": "fc758aa36fb00a9871d30d0065c2700dc58c05bfbeef13a0be52692d1b77e64c",
    "key": "",
-   "fp": "qbS/ydLX293c29jRyb+zqJ+osrzEyM3OzszJw7uzp6CntL/J0tfb3dzb2NLJv7OrrLbCzNXZ3d/e3trVzMK2qqGqtb/Hy8/Q0M/Mx7+2qqGqtsLM1drd397e29XMwrasrrnF0Nfc3+Dh4N3Y0Ma6rKOtucLJztDR0tHPycK5rqOsucXQ19zf4OHg3djQxrqusLzI0trg4eLj4t/b08m9rqWwu8TL0dLT09PQzMW8sKWuvMjS2uDh4eLh39vTyb2wsr/L1d3g4uLj4+He1cu/sKiyvsfO0tPT09PSz8e9sqiwv8vV3eHi4uLi4d7Vy7+ztsHN197h4+Pl5ePf2M3Cs6q0v8nP0tPU1NXT0Mq/taqzwc3X3uHj4+Pk4t/YzcK1t8LO2d7h4uXl5uTg2s/Dtay2wcvQ0tPU1dbU0cvBt6u1ws/Z3uHi5OTk5ODa0MS3uMTQ2d/i4+Xo6Obh29LFtq23w8vR09PU1tjW0czEuK22xNDZ3+Pj19nl5eHb0sW4usbT2+Hj5Obq6+fj3NTGt666xc3S09TU2d/Y083Fua63xtLb4ePfoKPi5uPd1Ma5u8jU3eDh5Ofu8enk3tTIua+7xs7R0tPT5vLe1M7Fuq+5yNTd4d61h5PX6OXe1Mi7u8nV3eHi4+f3+O3l3tTJu7XBzdTY2dnX5/Hl29XMwbW6ydXd4dWimcPn6ubf1cm8vMnV3eHh4ur8/PDl3tbKvLzJ1d3g4ODOsr7a493Vyry8ydXd4eDNp+v47+ff1sq9vcrV3uHh4eT6++/l39fKvLzK1d3g4OHf6e/t4t3Wyby8ytXe4eHStfb88ufg18q9vcrW3uHi0srr9e3k39bKvLzK1t7g4eHZ5vDr4d7Wyby8ytbe4eLUwfr89Ofg18q9vcnW3uHivc7S7e/l39bKvLzJ1t3g4eG/zd3U3t7Wyry8ydbe4eLWyfr99Ofg1sq9vcnV3uLi2uP0+erl39bKvLzJ1d3h4eCtkJW0393Vyry8ydXe4uLbz/n88ufg1sq9vMnU3eLj2tby89rk3tXJurvJ1Nzhw6yxxsPj4N3Uybq7ydTd4uPg0vT77+fg1sm8u8fT3OHi27HW0Mvk3dTIurrH0tvgtLCorMLa4NzTyLq6x9Pc4eLj1Ob06+fe1Mm7usbT3ODh3bemt93j3NPHubnG09zf2rWHepXO4NvSxrm5xtPc4OLk1uDn5ubd08e6uMTR2uDi37Xc4dzi29HFuLfF0drg4du0kqPU39rRxbi3xdHb4OLk1dLa4uTc0sW5tsPP2d/h4bCtwdrf2tDDt7bDz9ne4eHg2dzg3tnPw7a2w8/Z3+Lj3r3S5OHb0MO3tcHN193h4dbD0+De187BtLTBzdfd4OHh4eHf3dfNwbS0wc7X3eHi4M/k4+DYzsG1sr7K1dzg4uHi4eDd1su/srG+ytTb3+Hg4eHf3NXKvrKxvsrV3ODi4uLj4t7Wy7+zsbzI0trf4eHi4d/a08i9sLC8yNHa3uDg4eDe2dLIvbCwvMjS2t/h4uPi4NvTyL6wrrnF0Njd4OHg4N3Xz8W6rq25xc/X3N/g39/c18/Fuq6uucXQ2N3g4uHh3tjQxrqvq7bCzdXa3d7f3drVzMK2rKu2ws3V2dze3t3Z1MzCtqurtsPN1drd39/e29XMwratqrO/ydHX2tzd29fSyb+zqamzv8nR19rb3NvX0cm/s6mps7/J0tjb3d3c2NLKwLOq",
+   "fp": "qbS/y9Tb4+z28uLXy8G0qZ+os73Fy9Lf9OPPxr20qKCntMDM19/p8ff28uzgzLuvrLbDztfe5fD59eXaz8S3qqGqtsDIzdPj+ObRycC2q6GqtsPP2uLr9Pn59vDizr2wrrnG0dng5/H79ufd0se6rKOtucPK0NXn+OTTy8O6rqOsucfT3eXt9fz7+PHj0cCysLzJ1Nzk6fL89eng1cu9rqWwvMXM09bm9N/Uzsa9saWuvcrW3+jt9vz8+PDi08O0sr/L1t/l6vL78+ri18y/saizvsjP1Nfl79vW0ci+s6ixv8zY4ujR4Pz8+PDj1MS2tcHN2eDk6/P68+rj2s7CtKu1wMrQ1Njk6dvW0crAtaqzws7a49222Pz9+O/k1ce4t8PP2uHk6/P48+zk3NHEtay2wcvR1Nfg5NzX0szCt6y1w9Dc5NGx4P38+O/l18i6uMTR2+Lm6/b69e3k3NPGtq24w8zS1djk7ODY0s3EuK22xdLc5Mq48v389+7k2Mm7usfT3ePm6/r8+O7l3tXHt666xc3T1dzz+OnY1M7Gua63x9Te5sfJ+v389u7k2sq8u8jV3uPk7fr8+u7m39XIubC7x8/T09/x9e/Y1M/Gu7C5yNbg5cjY+/z89e7l2cu9vMnW3uPj6Pn9+u7n4NXKu7bDz9ba2K+tuNDe3dfOw7e6ydbf5crg/P389e7l2cy+vcnW3uPi0/T89e3n39fLvLzJ1d3h4Nvh5e/n493Vyry8ydbf5c3k/f389e3k2s2/vcrW3+Pj18nj8u7l4NjKvbzK1d7h3+Lw8fHm4t7Wyry8ytfg5dDl/f378uvk28y/vcrW3+Li7Orw+uzl4NfKvbzK1t7h3d3t8PDl4d7Wyry8ytjg5dfk/P378erk2sy+vcnX3+Lf6PP39+fl4NfKvLzJ1t7h1tHn7Obf4d7Wyry8ytjg5N/h+vz67+rk2sy+vcnW3+Pa3vH18N3l4NfKvLzJ1d7ixYSUnZjM4t7Wyry8ytfg5ePe9Pv37eri2cy+vMnU3uPZu+zy0tLk39bJu7vJ1N3h1reemc3f4d3Vybq7ydXf5ePd4uzw6uji2Mu8u8fT3eLfpqOurd7k3tTJurrH09zh183Jr+bh4dzUyLq6x9Te4+TZ6Orn6ejg1sq8usbT3eHetq6/3uPj3dPHubnG09zYsrfX2dzf4dvSxrm5x9Te4+XU5u3b6ubf1Mi7uMXS2+HgxM7s19/i29LFuLfF0drIjYmftMfg4NrRxbi3xdLc4uXct8Xg6OTd08a5tsPQ2d/hs7XJweDf2tDDt7bDz9nXo36BicDg3tnPw7a2w9Db4eTfu9nm5eLb0cS4tcHO2N7h0qe12eHe2M7BtLTBzdfd166fsNTf3dfNwbS0wc7Y3+Pk4eXl4+DZz8K1sr7K1dzg4t/e4eDd1su/srG+ytTc3+Dd4OHf3NXKvrKxv8vV3uLk5OXk4t/XzL+zsbzI0trf4eLi4d/b08i9sLC8yNHa3uDh4eDe2tLIvbCwvcjS2+Dj5OTj4dzUyb6xrrnG0Njd4OHg4N3Xz8W6rq25xc/X3N/g39/c18/Fua6uucbQ2d7h4+Lh39nQxrqvq7bDzdXa3d/f3drVzMK2rKu2ws3V2dze3t3Z1MzCtqurtsPN1tve4ODf29XNw7atqrO/ydLX2tzd29jSyb+zqamzv8nR19rc3NvX0cm/s6mptL/K0tjc3d7d2dLKwLOq",
    "verdict": "PASS",
    "fails": 0,
-   "round": 1,
+   "round": 13,
    "rows": {
     "dung-vat": [
      "ĐẠT",
-     "Nắp vòm trắng có núm tròn ở đỉnh, vành teal ở đáy nắp và quanh thân, công tắc cam ở mặt trước, chân nhỏ và dây điện có phích cắm — khớp tên mù \"nồi cơm điện\".",
+     "Thân hình trứ kem, vòng ngang teal quanh thân và quanh nắp, hơi nước bốc lên từ núm nắp tròn, mặt trước có van vàng + nút đỏ, đứng trên chân thấp, không có ô hiển thị số — đúng tên mù \"nồi hấp / nồi hơi nước\".",
      ""
     ],
     "nguyen-ven": [
      "ĐẠT",
-     "Vành teal, núm, công tắc, chân và dây đều liền thân, không có mảnh rời trôi lơ lửng.",
+     "Vỏ, nắp, núm, vòng teal, van vàng, nút đỏ và các chân đều liền khối, không mảnh rời trôi, không mất mặt; chân có bóng tiếp xúc dưới sàn (ảnh giữa x≈1110–1140 và x≈1255–1290, y≈335–352).",
      ""
     ],
     "khoi-3d": [
      "ĐẠT",
-     "Góc chéo cho thấy vòm nắm có khối với núm nổi, mặt trước sáng và mặt phải tối, chân có bóng đổ xuống mặt bàn.",
+     "Thân trứ có khối với vòng teal nhô ra, nắp vồm có núm tròn dạng cầu, chân thấp có bóng đổ riêng, có mặt sáng/mặt tối rõ.",
      ""
+    ],
+    "mau": [
+     "LỖI",
+     "Mặt nắp cháy trắng ở cả hai góc (góc từ trên xuống x≈1900–2105, y≈110–310 đo 253–255; góc ngang đo 255,252,251) nên mất hẳn màu kem của vỏ; lõi hơi nước vẫn 251–252 (x≈1192–1285, y≈22–191) không có bậc sáng toon.",
+     "hạ cường độ ánh sáng/bloom để nắp lộ 2–3 bậc kem, dựng hơi nước bằng các bậc xám toon thay vì một khối gần trắng."
+    ],
+    "muc-sang": [
+     "LỖI",
+     "Ở góc từ trên xuống mặt nắp không có viền mực đen (chỉ có một cung teal mảnh ở x≈1895–1910, y≈165–280), núm nắp cũng không có nét nên dính vào nền trắng; cùng lỗi ở mép nắp góc chéo.",
+     "vẽ viền mực đậm quanh nắp và quanh núm ở cả ba góc."
     ],
     "dep": [
      "LỖI",
-     "Công tắc cam là một khối méo như bong bóng chứ không ra hình nút bấm; dây điện thẳng cứng như que; ở góc từ trên xuống núm nắp gần như biến mất (chỉ còn một cung vòng mờ) nên vật trông như một đĩa trắng tròn.",
-     "dựng công tắc cam thành nút bấm có núm, cho dây điện có độ võng, và giữ bóng núm rõ trong góc nhìn từ trên."
+     "Ở góc từ trên xuống núm nắp biến mất hoàn toàn, nồi đọc thành một đĩa tròn trắng với cột hơi nước trắng; ở góc chéo chỉ thấy một chân ở bên phải (x≈1262–1290, y≈330–352), thân kem xỉn mất chất liệu.",
+     "giữ núm có khối và bóng rõ ở góc từ trên xuống, dựng đủ bộ chân, hạ sáng thân để lộ màu kem ấm."
     ],
     "nho-van-doc": [
-     "LỖI",
-     "Nồi nhỏ ở giữa khung, dây điện và vệt bóng chiếm hơn nửa khung; công tắc cam không đọc nổi ở cỡ điện thoại.",
-     "cắt bớt dây, đưa nồi sát camera."
+     "ĐẠT",
+     "Nồi đã rộng ~230px/800px (28%), ở cỡ điện thoại đọc được thân trứ, vòng teal, van vàng và nút đỏ; riêng góc từ trên xuống vẫn không đọc ra gì ngoài một đĩa trắng.",
+     ""
     ]
    }
   },
   "noi-cu-cat-ngang": {
    "name": "nồi cơm đời đầu bị cưa ngang",
-   "src": "ea2e2f8c48821365898544061234382f75d029c95da515973e658cf2eddb2c90",
+   "src": "1a9be6c940695e7b79d3aa4a867e4e613a21c05f7cd2852af3aea5e057bfddac",
    "key": "",
-   "fp": "qbS/ydLX293c29fRyb+zqJ+osrzEyMzOzszJw7uzqKCntL/J0tfc3d3b2NLJv7OrrLbCzNXa3t/f3trVzMK2qqGqtb/Hy87Qz8/Mxr61qqGqtsLM1dre39/e29XMwrasrrnG0Nfc3+Hh4N3Xz8a6rKOtucLJztDR0tHOycK5rqOsucbQ193f4OHg3djQxrqusLzI0trg4eLj4t/a08m9rqWwu8TL0dHS09LPzMS8sKWuvMnT2uDh4eLh39vTyb2wsr/L1d3h4+Pj4+Hd1cq/sKizvsfO0tPS0tLRzse9sqewv8vV3eHi4uLi4d7Vy7+ztcHN197h5OXl5OLe2M3Bs6q1wMnP0tPS09PRz8m/taqzwc3Y3uLk4+Tj4t/YzcK1t8PO2d/h4uXn5ePf2c/DtKy2wcvQ0tLP0NPS0MvBt6u1w8/Z39zM3+Xk49/az8O3uMTQ2d/j4ebr5uTg2tHFtq23w8vR08yhpc7T0MvDuK22xNDa4LyUuuXl5ODb0sW4usfS2+Hf0uXx6eTh29PGt666xc3S0qZgX6XS0czFua63x9Pc26GSod3m5eLc1Ma5u8jU3eHLmMv27OXi3dTIuLC7xs7Sx39fXHbI0s7Fuq+5yNXd0ZWYrdbo5ePe1Mi7u8nV3d/GfpDq8OXj3dTJu7fEz9fbwXdlYGm73NjPxLi6ydXdzZXB7erq5uTe1Mm8vMnV3eClX2jF8ebj3dXKvLzJ1d3gtFA+OlG74d3Vyry8ydXdz6Pl9/bs6OTe1sq9vcrV3t+EXmWb6ubi3tbJvLzK1d3gmk1HN0ep4N3Wyby8ytbez7fx/Pzx6eTf18q9vcrW3tx4fZWN2ubh3tbKvLzK1t7fiFiJgVOb393Wyby8ytbe0cn1/Pz16uPf1sq9vcnW3tp4rNem3ubi3tbKvLzJ1t7denbAvnKQ393Vyby8ydfe1bDL8fz36uTf1sq9vcnV3th1rseZ1+Xj3tbKvLzJ1d3dcnvDw3mI393Vyru8ydbe2oev6Pn36eXf1sq9vMnU3dt/mMKLw+Li3tXJurvJ1NzXa2eMjG6A2t3Uybq7ydTd346p4vH05uTf1cm7u8fT3NyIf5uHs9zi3NTIurrH0tzVb3BzcW5/2tzUyLq6x9Pc4bmFuNng4+Td1Mm7usbT3N6XinWEqtni3NLHubnG09zZdWVcVFyE2tvSxrm5x9Pd4eCzhae33+Td08e6uMXR2t+ta2V5kdTg2tHFuLfE0dnLdnBoaWCC2drRxLi3xdHb4eTkvoaP0uPb0sW5tsPP2d/WkVVvidXe2dDDtrbDz9Ccd3peYGSO29jPwra2w9Da4OPl5caX1ODa0MO4tcHN193h0IBokNXd183BtLTBzdOlkJqYmJSw3NfNwbS0wc7Y3uLk5eXb4d/YzsG1sr7K1dzg4cWBktfc1cq+srG+ytTSytTV1dPU3NXKvrKxvsvV3eHj5OXk4t7Wy7+zsbzI0trf4d+6q9va08i9sLC8yNHa3uHi4uHe2dLIvbCwvcjS29/i4+Tj4NvTyL2wrrnF0Njd4OHa09zXz8W6rq25xdDX3ODh4N/c18/Fua6uucbQ2N3g4uHh3tjQxbqvq7bDzdXa3d/f3drUzMK2rKu2w83V2t3e3t3Z1MzCtqurtsPN1tre39/e29XMwrasqrS/ydHX2tzd29fRyb+zqamzv8nR19rc3NvX0cm/s6mptL/K0tjb3d3c2NLKwLOp",
-   "verdict": "PASS",
-   "fails": 1,
-   "round": 5,
+   "fp": "qbS/ydLX293c29jRyb+zqJ+osrzEyMzOzszJw7yzqKCntL/J0tfc3d3b2NLJv7OrrLbCzNXa3d/f3trVzMK2qqGqtb/Hy87Q0M/Lxr+1qqGqtsLM1dre39/e29XMwrasrrnG0Nfc3+Hh4N3Xz8a6rKOtucLJztDR0tHOycK5rqOsucbQ193f4OHg3djQxrqusLzI0trg4eLj4t/a0sm9rqWwu8TL0dLS09LPzMS8sKWuvMnT2uDh4eLh39vTyb2wsr/L1d3h4+Pj4+Hd1cq+sKizvsfO0tPS0tLRzse9sqewv8vV3eHj4uLi4d7Vy7+ztcHN197h5OXl5OLf2M3Bs6q1wMnP0tPT09PSz8m/taqzwc3Y3uLk5OTj4t/YzcK1t8PO2d/h4uXn5ePf2c/DtKy2wcvQ0tPP0NPT0MvBt6u1w8/Z39zM3uXk49/az8O3uMTQ2d/j4ebr5uTg2tHFtq23w8vR1M2hps7T0MvDuK22xNDa4LyUuuXl5ODb0sW4usbT2+Hf0eTx6eTh29PGt666xc3S0qZhYabS0c3Fua63x9Pc26GSod3m5eLc1Ma5u8jU3eHLmMn27OXi3dTIuLC7xs7SyIBgXnfI0s7Fuq+5yNXe0ZWYrtbo5ePd1Mi7u8nV3d/Gf5Dq8OXj3dTJu7fE0NfbwXlnYmq83NjPxLi6ydXdzpXC7erq5uTe1Mm8vMnV3eCmYWnE8ebj3dXKvLzJ1d3gtVREQFS84d3Vyry8ydXdz6Pl9/ft6OTe1sq9vcrV3t+GYGeb6ubi3tbJvLzK1d7gnFFQQUyq4N3Wyby8ytbez7jx/Pzx6eTf18q9vcrW3tx7hZ6P2ubh3tbKvLzK1t7fimObk1uc397Wyry8ytbe0cj1/Pz16uPf1sq9vcnW3tp8v+Wr3ubi3tbKvLzJ1t7efYjh3oCR397Vyby8ydfe1a/K8vz36uTf1sq9vcnW3tl6xt+g1+bj3tbKvLzJ1d3ddZDk4omK393Vyru8ydbe24az7fn36eXf1sq9vMnU3duCqN6Uw+Li3tXJurvJ1NzYbnmppXmC293Uybq7ydTd34+y7vT05eTf1cm7u8fT3NyLha6Rs9zi3NTIurrH09zWcXZ6d3KA2tzTyLq6x9Pc4buIw+Df4+Td1Mm7usbT3N6YjHuJqtni3NLHubnG09zZd2hgWF+F2tvSxrm5x9Pd4eC2iKy23uTd08e6uMXR2t+ubWN6kdTg2tHFuLfF0dnLeHJpaWKD2drRxbi3xdHb4eTkwIeO0uPb0sW5tsPP2d/XlFVvidXe2dDDtrbDz9GcenteXWSQ29nPwra2w9DZ4OPl5ciZ1ODa0MO4tcHN197h0YRnkdXd183BtLTBzdOnkpuYmJSx3NfNwbS0wc7Y3uLk5eXc4d/YzsG1sr7K1dzg4ceCktfc1cq+srG+ytTTy9TV1dPU3NXKvrKxvsvV3eHj5OXk4t7Wy7+zsbzI0trf4d+7q9va08i9sLC8yNHa3uHi4uHe2tLIvbCwvcjS29/i4+Tj4NvTyL2wrrnF0Njd4OHb1NzXz8W6rq25xdDY3ODh4N/c18/Fua6uucbQ2N3g4uHh3tjQxbqvq7bDzdXa3d/f3drUy8K2rKu2w83V2t3e3t3Z1MzCtqurtsPN1tre39/e29XMwrasqrS/ydHX2tzd29fRyb+zqamzv8nR19rc3dvX0cm/s6mptL/K0tjb3d3c2NLKwLOp",
+   "verdict": "OPEN",
+   "fails": 3,
+   "round": 13,
    "rows": {
     "dung-vat": [
-     "ĐẠT",
-     "Vỏ kem dạng vòm với nắp vòm bật ngược có núm cầu tròn kem trên đế cam (góc chéo, bên trái ảnh), bản lề keo xanh teal ở cả hai hông, núm công tắc cam nhô ra ở sườn phải, mặt cưa ngang lộ khoang trong có khối cơm be và bệ khung thép có thanh cam — người xem không cần biết tên cũng gọi đúng là nồi cơm điện đời đầu bị cưa ngang. (Phần \"nồi trong\" bên trong chưa đúng vật thật, xem dòng dep.)",
-     ""
+     "LỖI",
+     "Ảnh bị đọc thành một vật thật khác, đúng như tên mù: đây là một lò nướng bánh gọn mở cắt ngang — khoang lò sâu với một ổ bánh mì kem có mái vòm tròn và đáy phẳng nằm ngang trên một kệ tối (ảnh giữa x≈1125–1275, y≈225–278), thanh điện trở cam nằm bên dưới kệ (x≈1120–1240, y≈300–315) đúng logic lò nướng (bánh trên giá, sưởi dưới). Không có ruột nồi ôm cơm, không có mâm nhiệt lò xo dưới đáy nồi, không có cơm mà có ổ bánh.",
+     "dựng lại đúng nồi cơm đời đầu bị cưa ngang: ruột nồi có thành ôm cơm hạt, cơm đặt trực tiếp trên mâm nhiệt lò xo (dây cuộn + tấm kim loại) có hai đầu nối xuống công tắc có trục bấm, nắp vòm có núm tròn, chân đế thấp."
     ],
     "nguyen-ven": [
      "ĐẠT",
-     "Cả ba góc đều liền khối: mép cưa có mặt cắt kín (lề kem liên tục quanh vòm), nắp–núm–bản lề–công tắc đều dính vào vỏ; hai chấm trắng nhỏ ở hai góc trên của khung trong (ảnh giữa, x≈1110 và x≈1284, y≈195) có cuống nối lên thanh khung nên không trôi lơ lửng; không thấy mặt thủng, mất mặt hay mặt nhấp nháy chồng lên nhau. Bóng đổ dưới vỏ (ảnh chéo, dưới mép phải) là bóng nền mềm, không phải mảnh rời.",
+     "Vỏ cưa ngang có miệng cắt liền với thân, nắp vồm còn gắn, khung nhiệt kim loại, thanh điện trở, công tắc và núm hổ phách bên hông đều chạm đúng chỗ; không mảnh rời trôi, không mất mặt.",
      ""
     ],
     "khoi-3d": [
      "ĐẠT",
-     "Nhìn cả ba phía, vỏ nồi có khối và độ dày thật: lề kem của mép cưa dày ~8 px ở ảnh giữa, vòm nắp cong có mặt sáng (kem 215,209,195) và mặt tối (khoang trong ~68,65,69), núm cầu, bản lề và núm công tắc đều nhô ra có khối chứ không phẳng dính vỏ. Riêng các bộ phận bên trong (khung \"nồi trong\" và bệ sàn) là mảng dẹt — xem dep.",
+     "Vỏ có bề dày ở miệng cắt, nắp vồm có khối và bóng riêng, khoang trong sâu có chiều sâu, khung nhiệt ở đáy nằm trong không gian 3D; có mặt sáng/mặt tối rõ.",
      ""
-    ],
-    "mau": [
-     "LỖI",
-     "Chưa sửa. Khoảng trong vẫn là một mảng xám-nâu rất tối trải liên tục (ảnh giữa, x 1090–1330, y 190–350; trung bình RGB 68,65,69, chỗ tối nhất 42,30,30) không chia bậc sáng nên bản lề teal, thanh điện trở cam và công tắc cam bị chìm trong tối; riêng hai vệt cam trên miệng khung dưới (ảnh giữa, x 1129–1265, y 275–285) lại nhạt thành nâu đỏ bết. Tấm \"nồi trong\" và bệ khung thép là xám trung tính lạnh (133,133,139), không phải nhôm ấm và không thuộc bảng kem/vàng/navy/tím/đỏ/cyan/cam; khối cơm be vàng (183,164,133) giống vụn bánh mì hơn cơm trắng.",
-     "sáng khoang trong lên 2–3 bậc nâu ấm/tím nhạt có viền mực, đổi tấm xám lạnh và khung thép thành nhôm bạc ấm chia bậc sáng, giữ cam và cyan làm điểm nhấn nổi trên nền trong sáng dần."
     ],
     "muc-sang": [
      "LỖI",
-     "Chưa sửa. Mặt trong vỏ và khung \"nồi trong\" (khung bo tròn bao quanh khối be) vẫn là dải chuyển sắc mượt, không viền mực, không bậc sáng toon, ranh giới với nền tối rất nhạt nên khối cơm không tách ra; bệ khung thép phía dưới (chân trái ở x 1100–1130, y 300–345, thanh ngang ở x 1129–1300, y 288) cũng là sắc xám trắng nhạt không viền mực, chỗ tiếp giáp với khoang tối và với mép cưa đều nhòe. Viền mực ở vỏ kem, mép cưa, nắp, bản lề và núm cam thì rõ.",
-     "vẽ viền mực quanh khung \"nồi trong\", quanh bệ khung và quanh thanh điện trở cam; chia mặt trong vỏ thành các bậc sáng riêng biệt thay cho dải chuyển sắc mượt."
+     "Mặt trong khoang là dải chuyển sắc liên tục không chia bậc toon: đo ngang tại y=280, x=1100→1280 thấy (115,115,127) → (100,92,89) → (95,87,84) → (93,85,82); miệng cắt không có viền mực; ở góc từ trên xuống mặt nắp không có viền mực, chỉ là một vùng trắng cháy.",
+     "chia mặt trong khoang thành 2–3 bậc sáng có viền mực, vẽ viền mực đậm quanh nắp và quanh miệng cắt."
     ],
-    "nho-van-doc": [
-     "ĐẠT",
-     "Thu nhỏ còn ~160 px (màn hình điện thoại) thì vẫn đọc ra nồi: vòm kem, nắp mở, mặt cưa, bản lề teal và núm cam còn tách bạch; phần trong gộp thành một vệt be-xám nhoè nên không còn phân biệt được \"cơm trong nồi\" với bánh mì, nhưng không làm sai nhận dạng vật.",
-     ""
+    "mau": [
+     "LỖI",
+     "Nắp trắng cháy: 6129px ≥252 ở góc từ trên xuống (x=1882–2106, y=193–328) và 1992px ở góc chéo (x=377–484, y=139–265) → vỏ kem mất hẳn chất liệu, trên nắp chỉ còn vệt hổ phách của cổ núm.",
+     "hạ bloom/cường độ ánh sáng, cho nắp có 2–3 bậc kem và có nét viền."
     ],
     "dep": [
      "LỖI",
-     "Chưa sửa. \"Nồi trong\" vẫn là một khung bo tròn xám dẹt ôm khối be, không có miệng nồi, không có thành cong, không có đáy — ở góc chéo và góc trên vẫn đọc như một tấm panel có khung, không phải ruột nồi; bệ sàn bên dưới là một khung chữ nhật xám-trắng giống khung tranh, bên trong chỉ có một que cam đặt trên hai chân nhỏ trông như cái bàn chụp, không có bảng nhiệt lò xo (dây cuộn + tấm kim loại) cạnh thanh điện trở; khối cơm là một khối vân vụn hộp, màu vàng, đọc như vụn bánh mì; hai bóng đèn tròn chỉ là hai chấm trắng có cuống, trông như vết bẩn; công tắc là núm cam bo tròn dán trên sườn, có khối nhưng phẳng, chưa có cần/đòn bấm.",
-     "dựng ruột nồi có miệng tròn và đáy cong (thành và đáy nhôm cắt ngang) đặt trên bệ, thêm bảng nhiệt lò xo (dây cuộn + tấm kim loại) cạnh thanh điện trở, làm công tắc thành núm/cần bấm có khối, và cho khối cơm bề mặt hạt rõ (cơm trắng kem) thay vì vân vụn vàng."
+     "Góc từ trên xuống là một vòm trắng trơn, núm chỉ còn một vòng hổ phách mờ (x≈1985–2015, y≈290–305) nên không đọc ra nắp/núm; khoang lò quá trống và sâu so với ổ bánh nhỏ ở giữa, lệch tỉ lệ một nồi cơm; khối \"bánh\" có mặt trên phẳng nhẵn.",
+     "giữ núm có khối và bóng rõ ở góc từ trên xuống, thu nhỏ khoang lò cho sát thể tích nồi, làm cơm có bề mặt hạt."
+    ],
+    "nho-van-doc": [
+     "ĐẠT",
+     "Vật đã rộng ~300px/800px (37%) ở góc ngang, thu cỡ điện thoại vẫn đọc được vỏ kem, khối bánh/cơm và khung nhiệt xám ở đáy.",
+     ""
     ]
    }
   },
   "nuoc": {
    "name": "lớp nước trong nồi",
-   "src": "5131a13547bd056592fb665a6cab6a64c46c7e66036eae074871db91b2bd0f15",
+   "src": "c1ea4f71e61b0e3d3c729b9cbb0334e87a380889415cacffb3ddb9cbd0cd4fad",
    "key": "",
    "fp": "qbO/ydHW29zc2tfRyL+zqJ6osrzDyMzOzczJw7uzqKCns77J0dba3Nva19HIv7OrrLbCzNTZ3N7e3dnUzMK2qqGqtb/Gy87Qz87Lxr+1qqGqtsLM1Nnc3t7d2dTMwrasrrnF0Nbc3t/g39zWz8W5rKOtucLJztDR0dHOycK5rqOsucXQ1tve3+Df3NbPxbmusLzI0tnf3+Dh4N7a0si8rqWwu8TL0dHS09LPzMS8sKWuvMjS2d/g4OHg3drSyLyws7/L1Nzg4eDg4N/c1cq+sKizvsfO0tPS0tLRzse9sqixv8rV3ODh4ODg39zUyr6ytcHM193g4eHh4eDd18zBs6q1v8nP0tPT09PRz8m/taqzwczX3eDg3+Hh393XzMG1t8LO2N7g4eHh4eHe2c/DtKy2wcvQ0tLT09PS0MvBt6u0w87Z3tWsqdTh4N7Zz8O3uMTQ2d/i4OHh4eHe2dHFtq23w8vR09PT09PT0MvDuK22xNDZ26mHjabZ4d7Z0cW4usbS293Hr63A3OHf2tPGt666xczS09PT0tPT0c3Fua63xtLbyo6ZpJi34N/a08a5u8jU2rWanJqWsN3g3NPHubG9ydHT0tPS0dLT1NDIvLG5yNTcrpS8x7ee1eDc08e6u8nV1aGpubmoksXh3dTJu7rI1NSxrqyrpKKep9TTyLq7ydXXnK7Hyceqw+Hd08m8vMnV1rDDwcXHp6rf3NXKvLvJ1dGen5ubkI2DidHVyry8ydXPmr/S29O8s9/c1cq9vcrV2LK3tLXDwKXa3dbJvLzK1dKko5SZkpKYntLWyby8ytXJosnQzNDHrdvd1sm9vcrW2qSkvMTDyK/Y3dbJvLzK1tOkoKGhoKGgo9PVyby8ytbKrs3KwszMr9Td1sm9vcnW2piMqb/FybXZ3dXJvLzJ1tOWioqKioqKltPVyby8ydbLt83CwcTNtM3d1cm9vcnV3KF3jqbBw6na3dXKvLzJ1dKJdHR0dHR0idPVyry8ydXVrcLEx8PMuMnd1cq9vMnU3NaPd4+os6Ta3dTJurvJ1L12ZGZmZmVkfdLUybq7ydTbs5y9zMTMusbd1Mi7u8fS2+DRiHiPo6Xc3NPIurrH0s+yrK2srKytttfTyLq6x9Lb3LWawsTNvMXc08i7usbT3N/gzIF5j6Pc29LGubnG09zf4OHh4eLh4NvSxrm5xtPc3968mbTPvsXb0sa6uMTR2t/h4cV8eqDc2tHEuLfE0drf4eLh4eDh39rRxbi3xdHa3+Hgwpi4vMba0cW5tsPP2d7h4eC+eaHb2c/CtrbDz9ne4eHh4eDg3dnPwra2w8/Z3uHh4MeXosXZz8K3tcHN193g4eHfubPc183BtLTBzdfd4OHh4eDf3dfNwbS0wc3X3eDh4eDLn8zXzcG1sr7K1Nzf4eDh3tnc1cq+srG+ytTc3+Hg4eDf3NTKvrKxvsrU3N/h4OHg19nVyr6zsbzI0dre4ODh4N7Z0si9sLC8yNLa3uDg4eDe2dLIvbCwvMjR2t7g4OHg3tnSyL2wrrnF0Nfc3+Df39zWz8W6rq25xdDX3N/g39/c1s7Fua6tucXP19zf4N/f3NbPxbqvq7bCzdXZ3N7e3dnUy8K2q6u2wszV2dze3t3Z1MzCtqurtsLN1dnc3t7d2dTMwrasqbO/ydHX2tvc29fRyb+zqamzv8nR19rb3NvX0cm/s6mps7/J0dfa29zb19HJv7Op",
    "verdict": "PASS",
@@ -383,7 +378,7 @@
   },
   "tui-gao": {
    "name": "túi gạo",
-   "src": "bc8f92715e3138e14cff9e93c73c0bb778f14820142bd94cc60515ff1117f7cd",
+   "src": "7559135591777977c49c877dd8627835bc886e218d17517ded77b07259629df7",
    "key": "",
    "fp": "qbS/ydHW2tzc2tfRyL+zqJ+osrzEyMzOzczJw7yzp6CntL7J0dba3Nza19HIv7OrrLbCzNTZ3N7e3dnUzMK2qqGqtb/Gy87Qz8/Lxr61qqGqtsLM09jc3t3d2dTMwrasrrnF0Nfc3t/g39zWz8W5rKOtucLIztDR0tHOycG5raOsucXQxb7c3+Df3NbPxbmusLzI0tnd2N7h4N3a0sm8rqWwu8TL0dLS09LPzMS7sKWuvMjSt4623OHg3drSybywsr/L1dzYzdPb4N/c1Mq+sKiyvcfOzMrLzNHRzse9sqiwv8vUroyNuODg39zUyr6ytcHM193b39HQ29/d18zBs6q1v8nP0tXT0dLSz8m/taqzwczWpbGvo93h4N3XzMG1t8LO2N3U2uHZ2eDe2c7DtKy2wcrPy87P0NLTz8vBt6y0ws7Yq8LixNjh4d7Zz8O2uMTQ2d7d1tjc0ODe2dHFtq23wsvQ2eHg3dXT0MvDuK22xNDZucDd5tzd4d7Z0cS4usbS29+52dnS2ODf2tPGt666xc3QpbnDvcfT0czFua63xtLaycrR2+Xe4d/b08a5u8jU3N+gqNjfxd/g3NPHuLC7xs7PiZSkgK/S0s7Fuq+5yNTc2ODZztjc4ODc08e6u8nV3OClpaWssODh3dPJu7jF0dnZip2tg7bd3tnQxbm6ydXc3eLn287V4eHd1Mm8vMnV3ODNqZN5suHh3NXKvLzJ1d3esqelksLh4dzVyry8ydXd3dfi6N7Y4eHc1cq9vcrV3eDa05h3w+Hg3dbJvLzK1d3f3OHi393h4N3Wyby8ytXd2bjW4ubd4eDd1sm9vcrW3uDd4dGs1eHf3dbKvLzK1t7f2uHg3t7h393Wyby8ytbe3ay+193c4eDd1sm9vcnW3eDd2d7d2uHg3dXJvLzJ1t3e3dvU4t/h4N3Vyby8ydbd39jEv9Da4eDe1cm9vcnV3eHe2tvc1+Hh3dXJu7zJ1d3f3dvR4t7h4d3Vyby8ydXd4d7cvZzT4eHd1cq8vMnU3OHe3+Hf2uHg3dTJurvJ1Nzf3uPg5N3g4N3Uybq7ydTc4d3c2cPN3ODd1Mm7u8fS2+Dc4OLe2uHg3NPIurrH0tve3eLX497h4NzTyLq6x9Lb4ODa4N/c3+Dc08i7usbS29/e4ubf3OHg29LGubnG09vc3Ofl5N/h4NvSxrm5xtPc3+Dh29rd3+Db0sa6uMTR2t/c4uLf2uHf2tHEuLfE0LSkyuDg393h39rRxLi3xNHa3+Hi4N3d4N/a0cW5tsLP2d7f2+Lc2N/d2c/CtrbDzqmKyOXj4dbZ3dnPwra2w8/Z3uDi4eHb393Zz8O3tcHN193g3dze1Nvc183BtLTBzc6gx+Tm5NHK3NfNwbS0wc3X3eDh4eHg39zXzcG1sr7K1Nzf4drY19nc1cq+srG+ytTNxMvMztrT3NXKvrKxvsrU3N/h4OHg39zVyr6zsLzI0dre4ODd0NzZ0si9sLC8yNHa3uDf3t/d2dLHvbCwvMjR2t7g4OHg3tnSyL2wrrnFz9fc3+Dd19zWz8W5rq25xc/X3N/g39/c1s/Fua6tucXQ19zf4N/f3NbPxbmvq7bCzdXZ3N7d3dnUy8K2q6u2ws3V2dze3t3Z1MvCtqyrtsLN1dnc3t7d2dTMwrasqrO/ydHX2dzc29fRyb+zqamzv8nR19rb3NvX0cm/s6mps7/J0dfZ3Nzb19HJv7Op",
    "verdict": "PASS",

@@ -48,11 +48,45 @@ def done(ep, step):
     """is this leg done, by what the gate and the folder show"""
     if not os.path.isdir(ep): return False
     if step == 'deliver':
-        return bool(glob.glob(os.path.join(ep, '*.mp4')))
+        # Chặng bàn giao xong khi CỔNG BÀN GIAO xanh và phim trên đĩa là phim của mã nguồn hiện tại.
+        # Chỉ có một tệp .mp4 trong thư mục thì chưa đủ: một phim cũ nằm lại đó trong khi src/ đã
+        # đi tiếp, và runner sẽ báo "mọi chặng đã xong" với một phim không còn thuộc về mã này (M17).
+        if not glob.glob(os.path.join(ep, '*.mp4')): return False
+        if gate.why_open(ep, 'picture') is not None: return False
+        snap = os.path.join(ep, 'out', 'source-fingerprint.json')
+        if not os.path.isfile(snap): return False
+        r = subprocess.run(['node', os.path.join(LIB, 'core', 'render', 'sourcecheck.mjs'), ep, snap],
+                           capture_output=True, text=True, cwd=LIB)
+        return r.returncode == 0
     if gate.why_open(ep, step) is not None: return False
     if step == 'script':
         return os.path.isfile(os.path.join(ep, 'src/timeline.js'))
     return True
+
+
+def used_tries(ep):
+    """{leg: how many sessions that leg has already had}, read from the episode's own log.
+
+    The budget "mỗi chặng tối đa TRIES phiên" has to survive the runner being restarted — which is
+    exactly what happens when it is killed (a busy machine) or when someone re-runs it with --from.
+    A counter that lives in the runner's memory resets on every restart, so a leg that never
+    finishes gets an unlimited number of sessions (M14). The log in out/sessions.jsonl is the
+    episode's own record of what already ran, so it is what the budget is counted from.
+    """
+    out = {}
+    log = os.path.join(ep, 'out', 'sessions.jsonl')
+    if not os.path.isfile(log): return out
+    try:
+        for line in open(log, encoding='utf-8'):
+            line = line.strip()
+            if not line: continue
+            row = json.loads(line)
+            leg = str(row.get('leg', ''))
+            if not leg: continue
+            out[leg] = out.get(leg, 0) + (1 if not row.get('error') else 0)
+    except (OSError, ValueError):
+        pass
+    return out
 
 
 def next_leg(ep, start=None):
@@ -118,7 +152,7 @@ def main(argv):
     ep, question = os.path.abspath(a[0]), (a[1] if len(a) > 1 else '')
     if not os.path.isdir(ep) and not question:
         print('episode: tập chưa có thư mục: cho câu hỏi của tập làm tham số thứ hai', file=sys.stderr); return 2
-    tries = {}
+    tries = used_tries(ep)
     while True:
         leg = next_leg(ep, start)
         if leg is None:
@@ -166,8 +200,19 @@ def selftest():
         p = prompt(ep, next_leg(ep), '')
         expect('đúng một chặng' in p and 'bước 3' in p and 'bước 4' not in p, 'a prompt names its own leg and no other')
         expect(next_leg(ep, '6')[0] == '6', '--from starts at the leg named')
+        # M17: một tệp .mp4 trong thư mục CHƯA phải là phim đã bàn giao. Chặng bàn giao xong khi
+        # cổng bàn giao xanh và phim là phim của mã nguồn hiện tại.
         open(os.path.join(ep, 'x.mp4'), 'w').write('')
-        expect(done(ep, 'deliver'), 'an mp4 in the folder is a delivered film')
+        expect(not done(ep, 'deliver'), 'an mp4 alone is not a delivered film: the gate and the source check decide')
+        # trần số phiên của một chặng sống qua lần khởi chạy lại của runner (M14)
+        os.makedirs(os.path.join(ep, 'out'), exist_ok=True)
+        with open(os.path.join(ep, 'out', 'sessions.jsonl'), 'w', encoding='utf-8') as f:
+            f.write(json.dumps({'leg': '3', 'session': 's1', 'error': False}) + '\n')
+            f.write(json.dumps({'leg': '3', 'session': 's2', 'error': False}) + '\n')
+            f.write(json.dumps({'leg': '4', 'session': 's3', 'error': True}) + '\n')
+        used = used_tries(ep)
+        expect(used.get('3') == 2 and used.get('4') == 0,
+               'the retry budget counts the sessions already in the log, and a failed one does not use a try')
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
     print('episode selftest:', 'PASS' if ok else 'FAIL')

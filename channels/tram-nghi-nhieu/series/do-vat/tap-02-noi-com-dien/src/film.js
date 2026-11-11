@@ -45,31 +45,57 @@ const A = {
 
 const SHOTS = [
   // ── N1 · buổi sáng: cái nồi đang nấu ──
-  sh('N1', 'c1', 46, [-.30, .80, 1.50], [-1.00, .42, .74], [0, 0, -.05]),   // cả bếp: bàn gỗ, cửa sổ nắng, nồi cơm đang nấu
+  // c1: câu kể ba thứ — nồi cơm điện, mặt bàn gỗ, và CỬA SỔ. Khung cũ chỉ có
+  // một góc cửa sổ ở mép trên, người xem không đọc ra "dưới cửa sổ"; máy phải
+  // ngẩng lên một chút để cửa sổ vào khung, còn nồi vẫn giữ đúng cỡ.
+  sh('N1', 'c1', 46, [-.10, 1.05, 2.30], [-.95, .50, .40], [0, 0, -.03]),   // cả bếp: bàn gỗ, cửa sổ nắng, nồi cơm đang nấu
   sh('N1', 'c2', 34, () => off(A.cooker, .52, .30, .92), A.cooker, [0, 0, -.02]), // vỏ nồi: một khối kín, không có mắt mũi
   sh('N1', 'c3', 26, () => off(A.lamp, .15, .09, .40), A.lamp, [0, 0, -.01]),   // đèn báo chuyển từ đỏ sang hổ phách
   sh('N1', 'c4', 36, () => off(A.cooker, .62, .34, 1.15), A.cooker, [0, 0, -.03]), // cả cái nồi: đèn hổ phách, hơi nước đã tắt
   sh('N1', 'c5', 28, () => off(A.cooker, .30, .06, .58), A.cooker, [0, 0, -.02]), // nhìn thấp vào thân nồi: một vật kín
-  sh('N1', 'c6', 34, [-.72, .52, 1.30], [-1.05, .20, .78], [0, -.10, -.14]), // máy bắt đầu đi xuống đáy nồi
+  // c6: câu kể là "nó chỉ biết một thứ thôi: nhiệt", nên hình phải là cái đèn
+  // báo hổ phách — thứ duy nhất trên nồi lúc này còn nói về nhiệt. Máy đứng
+  // thấp ở mặt trước, đủ rộng để nắp VÀ mặt đèn cùng nằm trong khung; trước
+  // đây máy đứng sát nắp nên đèn bị mép dưới và phụ đề cắt mất. Đèn lệch tâm
+  // khung nên nó "thở" được (xem noi-com-dien.js): khung này có nhịp.
+  sh('N1', 'c6', 32, [-.98, .40, 1.82], [-.90, .185, .90], [0, -.02, -.10]), // máy đẩy vào cái đèn hổ phách
   // ── N2 · dưới đáy nồi: mâm nhiệt, đầu dò nhiệt ──
   sh('N2', 'c7', 34, [.150, .430, .360], [0, .045, 0], [0, 0, -.025]),      // cả thiết bị: mâm nhiệt tròn, dây điện trở xoắn quanh vành
   sh('N2', 'c8', 32, [.150, .245, .340], [0, .055, -.005], [0, 0, -.015]),         // chính giữa mâm nhiệt: viên cầu trên lò xo
   sh('N2', 'c9', 22, [.022, .075, .200], [0, .048, -.003], [0, 0, -.010]),        // lò xo ép viên cầu vào đáy nồi
   sh('N2', 'c10', 14, [.055, .092, .150], [0, .052, -.002], [0, 0, -.009]), // cận viên cầu: đầu dò nhiệt
   sh('N2', 'c11', 34, [.56, .36, .72], [.335, .145, .29], [0, 0, -.03]),      // cầu đo điện trở: mười kiloôm rồi một kiloôm
-  sh('N2', 'c12', 26, [-.178,.066,.130], [-.062,.032,-.022], [0, 0, -.015]), // hai dây chạy từ viên cầu xuống bo mạch
-  sh('N2', 'c13', 24, [-.008, .072, .100], [-.088, .031, -.040], [0, 0, -.012]), // bo mạch đo điện trở, tính ra nhiệt độ
+  // c12: hai dây mảnh nằm trong khe giữa bo mạch và mâm nhiệt, nên máy phải
+  // xuống THẤP hơn mặt đáy nồi: từ trên xuống, mặt đáy và mâm nhiệt che hết
+  // hai sợi dây. Máy ở độ cao của mặt đáy thì khung chỉ có bo mạch.
+  // c12 và c32 nhìn vào khe dưới mâm nhiệt: máy phải nghiêng XUỐNG một chút,
+  // nếu không tấm mâm nhiệt trên đầu chiếm mất nửa trên khung — một mảng
+  // kem phẳng không có gì đọc được.
+  // Máy nay đứng sát mặt phẳng cưa và lệch sang trái: con chip ở đầu bên trái
+  // nằm trọn trong khung (trước đây bị cắt ở mép), hai dây chạy chéo ra bên
+  // phải về phía lỗ mâm, và dải bàn trống ở đáy khung chỉ còn một dải mỏng.
+  sh('N2', 'c12', 26, [-.030, .044, .060], [-.072, .030, -.025], [0, 0, -.005]), // hai dây chạy từ viên cầu xuống bo mạch
+  sh('N2', 'c13', 24, [-.010, .052, .092], [-.072, .0255, -.042], [0, 0, -.012]), // bo mạch đo điện trở, tính ra nhiệt độ
   sh('N2', 'c14', 36, [.34, .18, .50], [0, .05, 0], [0, 0, -.02]),          // con số là nhiệt độ đáy nồi
   sh('N2', 'c15', 42, [.34, .26, .54], [0, .115, 0], [0, 0, -.03]),          // rộng: cơm trên cao, cảm biến sát đáy
   sh('N2', 'c16', 30, [.240, .195, .400], [0, .050, 0], [0, 0, -.02]),         // dây điện trở nóng lên trước
-  sh('N2', 'c17', 38, [.42, .26, .66], [0, .115, 0], [0, 0, -.03]),          // nhiệt đi từ đáy nồi lên nước và lên gạo
+  // c17: "đáy nồi ấm lên, nước và gạo nóng theo" — hình phải thấy được cả ba
+  // tầng (đáy, lớp nước, lớp gạo) và làn nhiệt đi từ đáy lên qua nước vào
+  // gạo. Máy đẩy sát vào mặt cưa, lệch sang phải, để mặt cưa chiếm gần hết
+  // khung thay vì để nửa khung là tường gạch trơn và một phần ba là mặt bàn
+  // trống. Góc cũ (xa, cao) không đọc ra được đáy nồi nào đang nóng.
+  sh('N2', 'c17', 32, [.220, .145, .360], [.050, .130, .005], [0, 0, -.012]), // nhiệt đi từ đáy nồi lên nước và lên gạo
   sh('N2', 'c18', 30, [.245, .275, .480], [.130, .150, .010], [0, 0, -.012]), // lớp nước sôi, nhiệt kế ở vạch sôi
   sh('N2', 'c19', 34, [.150, .186, .112], [.075, .170, .010], [0, 0, -.006]), // nhiệt kế: cột thủy ngữ ở vạch sôi
   sh('N2', 'c20', 30, [.34, .30, .50], [0, .140, 0], [0, 0, -.02]),         // lớp nước ở đáy, lớp gạo nằm trên
   // hai câu cận hạt: máy vào sát mặt cắt, khung phải là hạt gạo, không phải cả
   // lớp nước bên dưới
   sh('N2', 'c21', 18, [-.062, .148, .055], [-.048, .1255, .004], [0, 0, -.006]), // hạt gạo cưa: tinh bột bắt đầu hồ hóa
-  sh('N2', 'c22', 20, [-.060, .150, .056], [-.046, .1205, .004], [0, 0, -.006]), // nước bị hút vào hạt gạo
+  // c22 phải có hình riêng, không lặp lại c21: c21 là cận cảnh nhìn xuống
+  // mặt cắt của hạt, c22 là cận cảnh NHÌN NGANG ở mặt nước, từ bên phải,
+  // nơi nước thấm vào hạt — máy ở ngang mực nước nên người xem thấy rõ
+  // giọt nước mọc lên từ mặt nước và chui vào thân hạt.
+  sh('N2', 'c22', 15, [-.014, .126, .052], [-.048, .1215, .004], [0, 0, -.004]), // nước bị hút vào hạt gạo
   sh('N2', 'c23', 30, [.300, .215, .490], [0, .130, 0], [0, 0, -.020]),     // nồi còn sôi mà cơm đã chín
   // c24: máy hạ xuống sát đáy nồi, không đứng xa nhìn cả cái nồi. Ở khung này
   // phải đọc được ba thứ cùng lúc: mặt cưa của lớp nước nằm ngay trên đáy
@@ -78,7 +104,7 @@ const SHOTS = [
   // không nổi; khung sát thì đáy nồi lại không có mặt cưa để nhận ra.
   sh('N2', 'c24', 30, [.145, .130, .430], [.035, .095, .010], [0, 0, -.020]),   // đáy nồi bị ghim ở vạch sôi
   sh('N2', 'c25', 30, [.330, .195, .520], [0, .110, 0], [0, 0, -.020]),     // nồi đứng yên, chờ
-  sh('N2', 'c26', 26, [.430, .150, .330], [0, .115, 0], [0, 0, -.018]),     // nhìn ngang: nồi đứng yên đó, chờ
+  sh('N2', 'c26', 26, [.430, .118, .215], [.020, .092, -.010], [0, 0, -.018]),     // nhìn ngang: nồi đứng yên đó, chờ
   // ── N1 · đồng hồ trên tường chạy ──
   sh('N1', 'c27', 30, () => off(A.clock, .30, .17, .78), A.clock, [0, 0, -.02]), // kim đồng hồ chạy nhanh
   // ── N2 · nước cạn, nhiệt độ nhảy vọt ──
@@ -92,7 +118,12 @@ const SHOTS = [
   // máy đứng bên trái cột, nhìn chéo sang phải: cột thủy ngữ phải đứng trên
   // nền tối của tấm thang, không đứng trên nền sáng của thành nồi
   sh('N2', 'c31', 16, [.020, .192, .085], [.062, .1870, .012], [0, 0, -.004]), // đỉnh cột thủy ngữ: đó là tín hiệu
-  sh('N2', 'c32', 26, [-.150, .070, .130], [-.045, .034, -.020], [0, 0, -.02]),  // dải sáng trên dây chạy nhanh hơn
+  // c32: dải sáng chạy trên hai dây, nên máy cũng phải xuống thấp, vào đúng khe
+  // giữa bo mạch và mâm nhiệt — từ trên xuống thì dây bị mâm nhiệt che.
+  // c32: máy nhìn TỪ phía con chip ngược lại, nên dải sáng chạy ra về phía máy
+  // quay và kết thúc ở con chip. Cùng góc với c12 thì hai câu thành một
+  // khung, mà câu này kể chuyện khác (dải sáng) nên phải có hình riêng.
+  sh('N2', 'c32', 28, [-.028, .040, .082], [-.082, .0290, -.022], [0, 0, -.006]),  // dải sáng trên dây chạy nhanh hơn
   sh('N2', 'c33', 32, [.31, .14, .54], [0, .045, 0], [0, 0, -.02]),         // bo mạch ra lệnh, dây điện trở tắt
   sh('N2', 'c34', 30, [.27, .15, .43], [0, .050, 0], [0, 0, -.02]),         // dây điện trở bật tắt
   // khung phải có cả cột thủy ngữ ở bảy mươi độ lẫn vạch sôi: câu kể là "thấp
@@ -100,20 +131,24 @@ const SHOTS = [
   sh('N2', 'c35', 30, [.100, .168, .160], [.085, .1440, .010], [0, 0, -.010]), // giữ ở bảy mươi độ
   // ── N1 → N3 · về những nồi cơm đời đầu ──
   sh('N1', 'c36', 46, [.35, .95, 2.05], [-.75, .22, .82], [0, 0, -.05]),    // nồi hiện đại và nồi đời đầu cạnh nhau
-  sh('N3', 'c37', 30, [.070, .090, .190], [.005, .022, -.062], [0, 0, -.006]), // nồi cơm đời đầu bị cưa: công tắc nhiệt cơ ở đáy
-  sh('N3', 'c38', 24, [.045, .060, .135], [.015, .024, -.068], [0, 0, -.008]), // thanh lưỡng kim cong ra bấm tách tiếp điểm
-  sh('N3', 'c39', 22, [.115, .028, .110], [.068, .014, -.068], [0, 0, -.006]), // tiếp điểm đã tách, dây điện trở tắt
+  sh('N3', 'c37', 30, [.420, .300, .520], [0, .130, -.010], [0, 0, -.006]), // nồi cơm đời đầu bị cưa: công tắc nhiệt cơ ở đáy
+  sh('N3', 'c38', 28, [.052, .052, .160], [.010, .030, -.068], [0, 0, -.008]), // thanh lưỡng kim cong ra bấm tách tiếp điểm
+  sh('N3', 'c39', 13, [.052, .036, .100], [.041, .027, -.068], [0, 0, -.006]), // tiếp điểm đã tách, dây điện trở tắt
   // ── N1 · thử: hai nồi, một nhiều nước một ít nước ──
   sh('N1', 'c40', 38, [.850, .510, 1.250], [.665, .295, .858], [0, 0, -.02]),  // rót nhiều nước vào nồi trái
   sh('N1', 'c41', 44, [.930, .380, 1.800], [.930, .085, .820], [0, 0, -.03]), // hai nồi cạnh nhau, một nhiều một ít nước
-  sh('N1', 'c42', 42, [1.44, .260, 1.28], [1.235, .135, .80], [0, 0, -.010]), // nồi phải cạn nước, đèn chuyển sang giữ ấm
+  // c42: máy phải thấy ĐÈN của nồi phải. Ở góc cũ, đèn báo nằm sau vỏ nồi nên
+  // khung chỉ có đèn đỏ của nồi trái — người xem không thấy "đèn chuyển sang
+  // giữ ấm". Góc mới lùi sang phải: đèn hổ phách của nồi phải lọt vào khung,
+  // đèn đỏ của nồi trái vẫn còn ở mép trái, và cột thủy ngữ vẫn vượt vạch 100.
+  sh('N1', 'c42', 42, [1.62, .270, 1.30], [1.29, .125, .83], [0, 0, -.010]), // nồi phải cạn nước, đèn chuyển sang giữ ấm
   sh('N1', 'c43', 24, [.395, .165, 1.065], [.615, .110, .820], [0, 0, -.015]), // nồi trái vẫn còn nước, vẫn sôi
   // ── N1 · kết ──
-  sh('N1', 'c44', 36, () => off(A.mouth, .58, .34, 1.00), A.mouth, [0, 0, -.03]), // nồi chỉ biết mực nước
+  sh('N1', 'c44', 36, () => off(A.mouth, .50, .22, .86), A.mouth, [0, 0, -.03]), // nồi chỉ biết mực nước
   sh('N2', 'c45', 30, [.200, .230, .340], [-.020, .090, -.020], [0, 0, -.015]),   // đáy nồi khô: vệt nước còn lại trên thành
   sh('N1', 'c46', 36, [-.340, .920, 1.580], [-1.030, .400, .760], [0, 0, -.02]), // bàn tay mở nắp: cơm trắng, hạt nở ra
-  sh('N1', 'c47', 30, [-.500, .340, .930], [-.480, .095, .420], [0, 0, -.02]),   // lời khuyên: túi gạo và bát đong nước
-  sh('N1', 'c48', 32, [-.235, .180, .690], [-.300, .055, .440], [0, 0, -.015]), // bát đong nước: xem lại lượng nước đã đổ
+  sh('N1', 'c47', 32, [-.520, .330, 1.020], [-.470, .130, .430], [0, 0, -.02]),   // lời khuyên: túi gạo và bát đong nước
+  sh('N1', 'c48', 32, [-.092, .180, .656], [-.240, .076, .502], [0, 0, -.015]), // bát đong nước: xem lại lượng nước đã đổ
 ];
 
 const MARK = SHOTS.map(s => ({ t0: V.L[s.ids[0]].t0, t1: V.L[s.ids[s.ids.length - 1]].t1 }));
@@ -121,43 +156,131 @@ const MARK = SHOTS.map(s => ({ t0: V.L[s.ids[0]].t0, t1: V.L[s.ids[s.ids.length 
 // ── thẻ thuật ngữ ───────────────────────────────────────────────────────
 const CARDS = [
   { id: 'mamnhiot', text: 'MÂM NHIỆT', at: () => [-.095, .049, -.055], lines: ['c7'], size: 28 },
-  { id: 'daydientro', text: 'DÂY ĐIỆN TRỞ', at: () => [-.110, .060, -.120], lines: ['c7'], size: 22, dx: 200 },
+  // "DÂY ĐIỆN TRỞ" phải chỉ vào DÂY: mũi tên phải chạm vào cuộn dây quanh
+  // vành, không chỉ vào vành trắng trên. Neo đặt đúng lên một điểm của cuộn
+  // dây (cuộn dây là đường xoắn quanh vành, bán kính 180 mm, ba vòng nối dần
+  // từ 36 mm lên 92 mm). Không dùng dx: ở thẻ nhãn, dx đẩy cả mũi tên đi theo,
+  // nên mũi tên lệch khỏi điểm neo.
+  //
+  // Điểm neo phải nằm TRÊN ĐƯỜNG XOẮN, không chỉ đúng góc quanh trục: đường
+  // xoắn có ba vòng nên cùng một góc ấy có ba cao độ khác nhau. Neo cũ
+  // ([-.055,.0704,-.1693]) rơi vào khoảng giữa hai vòng, nên mũi tên dừng ở
+  // dải kem của vành mâm chứ không chạm vào dây. Neo nay lấy đúng vòng trên
+  // cùng (vòng 3, cao độ 88,6 mm) ở góc quanh trục 270°, và đó cũng là chỗ
+  // duy nhất của vòng đó không bị vành mâm che: mũi tên rơi đúng vào dải
+  // dây nâu đồng, tách bạch với mâm nhiệt mà nhãn kia chỉ vào.
+  { id: 'daydientro', text: 'DÂY ĐIỆN TRỞ', at: () => [.0113, .0886, -.1796], lines: ['c7'], size: 22 },
   { id: 'daudo', text: 'ĐẦU DÒ NHIỆT', at: () => [0, .060, .006], lines: ['c10'], size: 26 },
   // "BO MẠCH" phải chỉ vào mặt bo xanh trống, không phải lên mặt con chip: nhãn gọi
   // tên vật thì mũi tên phải chỉ đúng vật đó, không chỉ vào thứ nằm trên nó.
-  { id: 'bomach', text: 'BO MẠCH', at: () => [.040, .028, -.028], lines: ['c13'], size: 28 },
-  { id: 'nhietke', text: 'NHIỆT KẾ', at: () => [.061, .195, .0154], lines: ['c19'], size: 26 },
+  // Neo phải nằm trong khung: nếu neo vượt ra ngoài khung thì thẻ bị dồn sát mép
+  // phải và bị cắt. Mũi tên chỉ vào khoảng bo xanh trống giữa con chip và
+  // chỗ hai dây vừa chạm bo.
+  { id: 'bomach', text: 'BO MẠCH', at: () => [-.050, .0235, -.038], lines: ['c13'], size: 28 },
+  // Mũi tên phải chỉ vào CỘT THỦY NGỮ ĐỎ, không phải vào phần ống kính trống
+  // phía trên: ống kính màu xám trên nền xám không tự nó đọc ra là nhiệt kế.
+  // Cột đỏ ở vạch sôi (100 °C) dừng ở cao độ 170 mm; neo đặt thấp hơn một chút,
+  // trong lòng cột, để mũi tên chạm vào thứ đang đỏ.
+  { id: 'nhietke', text: 'NHIỆT KẾ', at: () => [.0609, .1520, .012], lines: ['c19'], size: 26 },
   // Neo của thẻ là chỗ MŨI TÊN chạm tới: rig đặt đầu mũi tên đúng vào điểm
   // chiếu của neo, còn thân thẻ luôn nằm ở bên trên-phải mũi tên. Thẻ không
   // bao giờ nằm bên trái mục tiêu, nên mũi tên không thể chỉ vào mép trái của
   // vạch — chỉ chỉ vào mép phải được. Vạch sôi nằm sát chữ "100", mà chữ "120"
   // lại nằm ngay phía trên nó, nên thẻ chỉ vào mép phải của chữ "100" rồi trôi
   // sang nền tối bên phải thang: không đè lên số nào cả.
-  { id: 'tramnuoc', text: 'TRĂM ĐỘ', at: () => [.1148, .1745, .012], lines: ['c18'], size: 30 },
+  // Nhãn phải đủ lâu để người xem đọc xong: thẻ vào (pop-in) mất 0,35 s và
+  // thẻ ra (pop-out) mất 0,2 s, nên phần đọc được chỉ còn cửa sổ trừ 0,55 s.
+  // Thẻ này KHÔNG dẫn sớm (lead 0): dẫn 0,5 s là thẻ hiện lên ở cuối câu
+  // trước (c17), nên câu c17 lại có "TRĂM ĐỘ" trong danh sách nhãn mà khung
+  // của c17 không có thẻ nào — người chấm hình đọc đúng là khung và danh sách
+  // không khớp. Nay thẻ hiện đúng lúc hết câu c17, tức trong khoảng lặng
+  // giữa hai câu, và câu c18 ("nước sôi ở khoảng một trăm độ") đọc nó kèm.
+  // Cửa sổ còn 2,19 s nên phần đọc được dài 1,64 s — đủ cho một thẻ hai chữ.
+  { id: 'tramnuoc', text: 'TRĂM ĐỘ', at: () => [.1148, .1745, .012], lines: ['c18'], size: 30, hold: 0.15 },
   { id: 'tramnuoc2', text: 'TRĂM ĐỘ', at: () => [.1148, .1745, .012], lines: ['c24'], size: 30 },
   { id: 'tramnuoc3', text: 'TRĂM ĐỘ', at: () => [.1148, .1745, .012], lines: ['c35'], size: 30 },
   { id: 'vuottram', text: '100 °C', at: () => [.1148, .1745, .012], lines: ['c30'], size: 32 },
-  { id: 'dinhtop', text: 'ĐỈNH CỘT', at: () => [.0609, .1868, .012], lines: ['c31'], size: 22 },
+  // Thẻ này có 2,02 s cửa sổ nên đọc được 1,47 s nếu không dẫn sớm. Dẫn
+  // 0,5 s là thẻ hiện lên ở cuối câu trước (c30), nên câu c30 lại có "ĐỈNH
+  // CỘT" trong danh sách nhãn mà khung của c30 không có thẻ nào — cùng lớp
+  // lỗi với thẻ "TRĂM ĐỘ" ở c17/c18. Nay thẻ hiện đúng lúc hết câu c30,
+  // tức trong khoảng lặng giữa hai câu, và câu c31 ("và đó chính là tín hiệu")
+  // đọc nó kèm. Thẻ "100 °C" ở câu trước đã tắt trước đó (xem khối sửa
+  // bên dưới) nên không có lúc hai thẻ cùng trên một cái thang nhiệt.
+  { id: 'dinhtop', text: 'ĐỈNH CỘT', at: () => [.0609, .1868, .012], lines: ['c31'], size: 22, hold: 0.3 },
   { id: 'hohoa', text: 'HỒ HÓA 60 °C', at: () => [-.050, .128, .010], lines: ['c21'], size: 26 },
-  { id: 'nuocvaohat', text: 'NƯỚC HÚT VÀO HẠT', at: () => [-.0448, .1192, .004], lines: ['c22'], size: 22 },
+  // Mũi tên phải chỉ vào HẠT GẠO, đúng chỗ nước chui vào, chứ không chỉ vào
+  // mặt nước phẳng bên dưới: chỉ vào nước trơn thì người xem không biết nước
+  // bị hút vào đâu. Điểm neo lấy từ chính bối cảnh (điểm nước chui vào hạt).
+  // Cửa sổ của thẻ này dài 2,02 s, tức phần đọc được là 1,47 s. Thẻ KHÔNG
+  // dẫn sớm nữa (lead 0): dẫn 0,95 s là thẻ hiện lên ở cuối câu trước
+  // (c21), nên câu c21 lại có "NƯỚC HÚT VÀO HẠT" trong danh sách nhãn mà
+  // khung của c21 không có thẻ nào — người chấm hình đọc đúng là khung và
+  // danh sách không khớp. Nay thẻ hiện đúng lúc hết câu c21, tức trong khoảng
+  // lặng giữa hai câu, và câu c22 ("và nước thì bị hút vào hạt gạo") đọc nó
+  // kèm. Giữ thêm 0,4 s ở cuối để phần đọc được dài 1,88 s; thẻ tắt hẳn
+  // trước khi câu c23 bắt đầu nên không dính vào câu sau.
+  { id: 'nuocvaohat', text: 'NƯỚC HÚT VÀO HẠT', at: () => CAT.absorb.at.toArray(), lines: ['c22'], size: 22, hold: 0.7 },
   { id: 'baymuoi', text: 'BẢY MƯỜI ĐỘ', at: () => [.0749, .1440, .012], lines: ['c35'], size: 26 },
-  { id: 'vetnuoc', text: 'VẾT NƯỚC', at: () => [-.095, .118, -.095], lines: ['c45'], size: 24, dx: -250, dy: 20 },
-  { id: 'daynnhoi', text: 'ĐÁY NỒI', at: () => [-.055, .062, .002], lines: ['c45'], size: 24 },
-  { id: 'luoigkim', text: 'THANH LƯỠNG KIM', at: () => [-.010, .038, -.068], lines: ['c37', 'c38'], size: 24 },
+  // Mũi tên VẾT NƯỚC phải chạm vào DẢI NÂU trên thành nồi (vệt nước cũ ở
+  // đúng mực nước cũ), không chỉ vào một mảng thành trơn: neo đặt đúng lên
+  // dải nâu, ở phía bên phải khung nơi dải nâu lộ ra rõ.
+  // Đo từ khung: dải nâu ở x=1250 chạy quanh y=495, nên neo là điểm trên
+  // mặt phẳng của dải (z=.0185) ở đúng chỗ đó — trước đây neo đặt cao hơn,
+  // mũi tên rơi xuống mặt cơm trắng và gọi nhầm sang vật khác.
+  //
+  // Thẻ này chỉ ở câu c29, KHÔNG ở câu c28: ở c28 lớp cơm đã rơi xuống đáy
+  // và mặt cưa của nó (đến cao độ .147) che kín vệt nước cũ (cao độ .118) —
+  // mũi tên chỉ vào một hạt cơm, người xem không thấy vệt nước thì thẻ gọi
+  // tên vô nghĩa. Ở c29 lớp cơm đã đi khỏi khung, dải nâu lộ ra rõ và mũi
+  // tên chạm đúng vào nó.
+  //
+  // Thẻ "ĐÁY NỒI" thì giữ ở cả c28 và c29: đáy nồi luôn lộ ra ở đáy khung.
+  // Câu c28 đọc ra là "nồi cạn nước" bằng cảnh lớp cơm rơi sát đáy, đáy nồi
+  // trơn không còn lớp nước nào, và thẻ "ĐÁY NỒI" chỉ vào đúng chỗ đó.
+  { id: 'vetnuoc', text: 'VẾT NƯỚC', at: () => [.0641, .1245, .0185], lines: ['c29'], size: 24, hold: 0.5 },
+  // Mũi tên ĐÁY NỒI phải chạm vào dải xám của đáy nồi nằm DƯỚI lớp cơm,
+  // không chỉ vào đường viền giữa lớp cơm và đáy.
+  { id: 'daynnhoi', text: 'ĐÁY NỒI', at: () => [-.055, .052, .002], lines: ['c28', 'c29'], size: 24 },
+  // Cùng một câu gọi tên nhưng HAI khung hình, hai toạ độ: thẻ luôn nằm ở
+  // bên trên-phải mũi tên, nên mũi tên chỉ vào được đúng vật thì thẻ phải nằm
+  // chỗ trống. Ở c38 (cận cảnh thanh lưỡng kim) thẻ nằm cao hơn; Ở c37 (cảnh
+  // rộng, thẻ nằm ngay trên dải cam) thẻ phải sát dải cam hơn, không được đè
+  // lên cục tiếp điểm màu cam ở mép phải.
+  { id: 'luoigkim37', text: 'THANH LƯỠNG KIM', at: () => [.008, .0325, -.070], lines: ['c37'], size: 24, dy: -9 },
+  { id: 'luoigkim38', text: 'THANH LƯỠNG KIM', at: () => [.008, .0325, -.070], lines: ['c38'], size: 24, dy: -110 },
   // Đầu mũi tên của nhãn phải chạm vào đèn, nhưng thẻ nhãn luôn nằm ở bên
   // trên-phải mũi tên: neo đúng tâm đèn thì thẻ nằm đè lên đèn. Neo ở mép
   // trên của đèn thì thẻ nằm ngay trên đèn, không đè lên.
-  { id: 'dengiao', text: 'ĐÈN BÁO', at: () => LP(BEP.cooker.lamp, 0, .022, 0).toArray(), lines: ['c3'], size: 24 },
-  { id: 'nhietdo', text: 'NHIỆT ĐỘ', at: () => [-.100, .034, -.040], lines: ['c14'], size: 26 },
-  { id: 'muoikiloo', text: 'MƯỜI KILOÔM', at: () => [.352, .186, .292], lines: ['c11'], size: 24, dy: -70 },
-  { id: 'moikiloo', text: 'MỘT KILOÔM', at: () => [.352, .186, .292], lines: ['c11'], size: 24, dy: -70 },
+  { id: 'dengiao', text: 'ĐÈN BÁO', at: () => LP(BEP.cooker.lamp, 0, .012, 0).toArray(), lines: ['c3'], size: 24 },
+  // "NHIỆT ĐỘ" không được chỉ vào con chip — con chip là nơi TÍNH ra con số,
+  // còn câu kể là con số đó là nhiệt độ của ĐÁY NỒI. Mũi tên chỉ vào viên
+  // cầu đầu dò nhiệt, tức đúng chỗ đo, nằm sát đáy nồi.
+  { id: 'nhietdo', text: 'NHIỆT ĐỘ', at: () => [0, .0535, .005], lines: ['c14'], size: 26 },
+  // c11 kể HAI con số. Màn hình đồng hồ hiện cả hai ("10 kΩ" và "1 kΩ") nên
+  // người xem thấy số tụt xuống ngay trong khung. Chỉ một nhãn thôi — "MỘT
+  // KILOÔM" — và nó chỉ hiện từ lúc lời kể sang "khi nóng lên"; trước đó không
+  // có nhãn nào, để người xem không phải đoán nhãn nào là nhãn nào.
+  // Neo đúng chữ "1" trên màn hình (màn hình nằm ở [0,.050,.021] trong máy đo,
+  // canvas 320×200; chữ "1" của hàng dưới nằm ở canvas x≈72…130, y=148):
+  // mũi tên chạm vào CON SỐ, không chạm vào khung màn hình.
+  { id: 'moikiloo', text: 'MỘT KILOÔM', at: () => [.3058, .1305, .2765], lines: ['c11'], size: 24 },
 ];
 for (const C of CARDS) Object.assign(C, cardWindow(C, V));
-// câu c11 kể hai con số: đồng hồ đổi số đúng lúc lời kể sang "khi nóng lên" (sau
-// câu "lúc mát là mười kiloôm"), và thẻ đổi theo đúng nhịp đó
+// Thẻ "100 °C" ở câu c30 và thẻ "ĐỈNH CỘT" ở câu c31 cùng chỉ vào một cái
+// thang nhiệt: thẻ "ĐỈNH CỘT" hiện sớm 0,5 s trước câu c31, nên thẻ "100 °C"
+// phải tắt trước đó, không để hai thẻ cùng lúc trên màn hình.
 {
-  const a = V.L.c11, T = a.t0 + 1.04;
-  CARDS.find(c => c.id === 'muoikiloo').t1 = T;
+  const vt = CARDS.find(c => c.id === 'vuottram');
+  vt.t1 = V.L.c30.t1 - 0.55;
+}
+// câu c11 kể hai con số: đồng hồ đổi số đúng lúc lời kể sang "khi nóng lên"
+// (sau câu "lúc mát là mười kiloôm"), và thẻ đổi theo đúng nhịp đó.
+// Nhãn hiện ra ở đúng lúc số tụt xuống, và sớm hơn 0,2 s so với lúc số tụt
+// trước đây, để nhãn còn đủ thời gian đọc (thẻ vào mất 0,35 s, thẻ ra mất
+// 0,2 s, nên phần đọc được ngắn hơn cửa sổ 0,55 s).
+{
+  const a = V.L.c11, T = a.t0 + 0.84;
   const m = CARDS.find(c => c.id === 'moikiloo');
   m.t0 = T; m.t1 = a.t1;
 }
@@ -205,8 +328,12 @@ function stateBep(id, t) {
   // đèn báo trên nồi: đỏ khi đang nấu, hổ phách từ lúc chuyển sang giữ ấm
   const k = clamp((t - V.L.c3.t0) / 1.4);
   B.cooker.setIndicator(id === 'c1' || id === 'c2' ? 'red' : (k >= 1 ? 'amber' : 'red'));
-  // hơi nước: dày lúc đang nấu, mỏng đi rồi tắt hẳn
-  let steam = id === 'c1' ? 1 : id === 'c2' ? .85 : id === 'c3' ? .85 * (1 - k) : 0;
+  // hơi nước: dày lúc đang nấu, mỏng đi rồi tắt hẳn; ở câu c44 nồi đã chuyển
+  // sang giữ ấm nên vẫn còn một sợi hơi mỏng bay lên từ lỗ nắm.
+  // Ở c6 KHÔNG có hơi nước: câu c4 đã nói "tiếng sôi tắt hẳn" và khung c5
+  // hoàn toàn không có hơi, câu c6 lại bốc hơi lên thì hình phủ định lại câu
+  // trước. Câu c6 nói về nhiệt, nên hình của nó là cái đèn hổ phách.
+  let steam = id === 'c1' ? 1 : id === 'c2' ? .85 : id === 'c3' ? .85 * (1 - k) : id === 'c44' ? .30 : 0;
   // nắp: đóng cho tới câu mở nắp
   if (id === 'c46') {
     const kk = clamp((t - V.L.c46.t0) / 1.0);
@@ -217,7 +344,7 @@ function stateBep(id, t) {
   } else {
     B.cooker.setLid(0);
   }
-  B.cooker.setSteam(steam);
+  B.cooker.setSteam(steam, t);
   // cơm trong nồi: nở ra khi đã chín
   B.rice.setCooked(id === 'c46' || id === 'c47' || id === 'c48' ? 1 : .25);
 
@@ -251,6 +378,15 @@ function stateBep(id, t) {
 
   // đồng hồ trên tường: chạy bình thường, ở c27 thì chạy thật nhanh
   B.setHour(id === 'c27' ? 8 + (t - V.L.c27.t0) * 6 : 8 + (t / 60) * .02);
+  // vệt nắng trượt trên tường: chỉ ở câu về đồng hồ. Kim đồng hồ quay nhanh
+  // nhưng chỉ là một sợi mảnh, người xem không thấy thời gian trôi; vệt nắng
+  // chạy qua tường và qua mặt đồng hồ thì thấy rõ.
+  if (id === 'c27') {
+    const kk = clamp((t - V.L.c27.t0) / Math.max(.001, V.L.c27.t1 - V.L.c27.t0));
+    B.setSunPatch(1, 1.05 + kk * 1.45);
+  } else {
+    B.setSunPatch(0, 1.05);
+  }
 
   // hai nồi thí nghiệm: nồi trái nhiều nước, nồi phải ít nước nên cạn trước
   if (expOn) {
@@ -258,13 +394,18 @@ function stateBep(id, t) {
     const dry = id === 'c42' || id === 'c43';
     if (id === 'c40') { B.wA.setLevel(lerp(.085, .130, kk)); B.wB.setLevel(.085); }
     else if (id === 'c41') { B.wA.setLevel(.130); B.wB.setLevel(lerp(.085, .108, kk)); }
-    // câu "nồi bên phải cạn nước trước": mực nước phải tụt nhanh, đến giữa câu đã
-    // cạn hẳn, để khung hình đúng lúc ấy đọc ra là nồi đã cạn chứ không phải
-    // nồi còn đầy nước
-    else if (id === 'c42') { B.wA.setLevel(.130); B.wB.setLevel(lerp(.070, .060, Math.min(1, kk * 2.2))); }
+    // câu "nồi bên phải cạn nước trước": mực nước phải tụt thật, tới đáy
+    // rồi mới tắt hẳn — nước không được biến mất bằng một cú cắt giữa
+    // khung, vì lúc đó người xem thấy nước bốc hơi chứ không thấy nồi cạn.
+    else if (id === 'c42') { B.wA.setLevel(.130); B.wB.setLevel(lerp(.100, .063, Math.min(1, Math.max(0, (kk - .10) / .78)))); }
     else { B.wA.setLevel(.130); B.wB.setLevel(.062); }
     B.wA.setBoil(id === 'c41' || dry ? 1 : 0);
     B.wB.setBoil(id === 'c41' ? 1 : 0);
+    // Nồi phải đã cạn thì nước phải biến mất hẳn: một vũng nước còn lại ở
+    // đáy nồi làm nồi trông như còn nước, và câu "nồi bên phải cạn nước trước"
+    // sẽ không đúng.
+    if (id === 'c42') B.wB.visible = kk < .92;
+    else if (id === 'c43') B.wB.visible = false;
     B.tA.setTemp(100);
     B.tB.setTemp(dry ? 108 : 100);
     B.expA.setLamp('red'); B.expB.setLamp(dry ? 'amber' : 'red');
@@ -321,7 +462,10 @@ function stateCat(id, t) {
   C.thermo.visible = inRange(id, 18, 27) || inRange(id, 30, 31) || id === 'c35';
   C.water.setBoil(inRange(id, 18, 25) && id !== 'c21' && id !== 'c22' ? 1 : 0);
   C.heat.visible = id === 'c16' || id === 'c17' || id === 'c34';
-  C.signal.visible = inRange(id, 12, 14) || inRange(id, 32, 33);
+  // Dải sáng chỉ lên ở hai câu kể về nó (c32, c33). Ở câu c12 người xem phải
+  // thấy HAI DÂY mảnh đỏ chạy lên bo; dải sáng bật sớm thì câu đó không còn
+  // hình riêng, và c12 với c32 thành hai khung giống nhau.
+  C.signal.visible = inRange(id, 32, 33);
   C.meter.visible = id === 'c11';
   C.steam.visible = id === 'c18' || id === 'c19';
   // đèn nhỏ trước bo mạch: chỉ bật ở câu nhìn vào chip
@@ -338,21 +482,30 @@ function stateCat(id, t) {
   // Dải sáng phải chạy trọn dọc theo dây: giấu bớt các đám sáng thì dải sáng
   // đứt thành vài chấm rời rạc, người xem không thấy nó chạy trên dây.
   C.signal.update(t, 1);
+  // dòng nước hút vào hạt cũng phải được cập nhật mỗi khung hình, nếu không
+  // các hạt nước đứng yên ở gốc toạ độ và dòng hút nước không có trong hình
+  if (C.absorb.visible && C.absorb.update) C.absorb.update(t, 1);
   C.steam.update(t, 1);
   // gạo: nở ra khi cơm chín
   if (C.rice.setCooked) C.rice.setCooked(inRange(id, 23, 27) ? 1 : .35);
   if (C.riceDry.setCooked) C.riceDry.setCooked(1);
-  // cầu đo điện trở: mười kiloôm lúc mát, một kiloôm khi nóng — đổi đúng lúc lời kể
-  // chuyển sang "khi nóng lên"
+  // cầu đo điện trở: màn hình hiện CẢ HAI số (mười kiloôm lúc mát, một kiloôm
+  // khi nóng), số đang đo thì sáng, số kia mờ — người xem thấy số tụt xuống
+  // ngay trong khung, chứ không phải chờ câu sau mới thấy.
   if (id === 'c11') {
-    C.meter.setReading(t - V.L.c11.t0 < 1.04 ? '10 kΩ' : '1 kΩ');
+    const live = t - V.L.c11.t0 < .84 ? '10 kΩ' : '1 kΩ';
+    if (C.meter.setReadings) C.meter.setReadings('10 kΩ', '1 kΩ', live);
+    else C.meter.setReading(live);
   }
 }
 
 function stateCu(id, t) {
   const U = CU;
-  // thanh lưỡng kim cong dần, tách tiếp điểm, dây điện trở tắt
-  const k = id === 'c39' ? 1 : id === 'c38' ? clamp((t - V.L.c38.t0) / (V.L.c38.t1 - V.L.c38.t0)) : 0;
+  // Thanh lưỡng kim cong dần, bấm tách tiếp điểm, dây điện trở tắt.
+  // Cong tới hết cỡ đúng lúc tiếng "cạch" (119.82) chứ không phải hết câu
+  // trước (119.22): tiếp điểm phải còn khép cho tới khi thanh cong đủ độ,
+  // và tia lửa chỉ lóe lúc hai đầu rời nhau.
+  const k = clamp((t - V.L.c38.t0) / (119.82 - V.L.c38.t0));
   U.old.setHeat(k);
 }
 

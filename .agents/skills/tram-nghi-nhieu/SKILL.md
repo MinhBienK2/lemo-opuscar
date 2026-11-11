@@ -39,7 +39,12 @@ trả lời từng mục: dàn ý, từng câu lời, từng khung hình chính,
 - Một mục **phải sửa** thì `review/<BƯỚC>.md` ghi nó sai ở câu nào, người chấm thấy gì, và cách sửa. Sửa đúng mục đó
   rồi chạy lại bước đó. Chỉ những mục mới hay vừa đổi mới được chấm lại; mục đã ĐẠT giữ nguyên.
 - Muốn chấm lại một mục chưa đổi: `--again <mã>,<mã>` (hoặc `--again all`).
-- Một mục sai ba lần thì thành **MỞ**: bước đóng và đi tiếp, mục đó nằm trong báo cáo cho người dùng.
+- Một mục sai ba lần thì thành **MỞ**: bước đóng và đi tiếp, mục đó nằm trong báo cáo cho người dùng. Một mục đã MỞ
+  thì **giữ nguyên MỞ** — vòng sau có đạt ĐẠT thì nó vẫn nằm trong báo cáo.
+- **Mỗi bước có trần số vòng** (xem `review.py` `MAX_ROUNDS`). Khi chạm trần, vòng đó không chạy nữa: phần còn lại
+  thành MỞ, bước đóng lại, và báo cáo nói rõ vì sao. Một bước chấm đi mãi không có đường ra.
+- **Một tập dùng MỘT người chấm suốt tập.** Đổi người chấm giữa chừng là một quyết định có chủ ý: mọi mục đã
+  chấm phải chấm lại (`--again all`) để tiêu chuẩn là một.
 
 Cổng (`gate.py`) đọc các kết quả đó: giọng đọc cần `outline` và `script` xong; dựng phim cần cả năm bước chấm xong.
 

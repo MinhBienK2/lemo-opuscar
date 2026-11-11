@@ -5,6 +5,26 @@
 import * as THREE from 'three';
 import { toon, mesh, mulberry, clamp, canvasTex, fxLayer } from '../../../../../rig/kit.js';
 
+// ── vật tự biết mình đang ở câu nào ────────────────────────────────────────
+// film.js đặt sẵn window.DIAG(t) (câu đang chiếu) và window.EV (mốc đầu
+// mỗi câu). Vật đọc thẳng hai thứ đó, nên vật tự lo nhịp của mình: không cần
+// ai bảo, và không phải gõ tay mốc thời gian vào trong vật.
+function lineNow(t) {
+  // Câu đang nói: sự kiện 'voice' gần nhất đã bắt đầu. Đọc thẳng danh sách
+  // sự kiện của phim, không đoán theo cảnh: một cảnh có thể chứa nhiều câu,
+  // nên "câu hiện tại" phải là câu đang được kể, không phải câu đầu của cảnh.
+  const ev = (window.EV || []).filter(e => e.type === 'voice');
+  let id = '';
+  for (const e of ev) { if (e.t <= t) id = e.id; else break; }
+  return id;
+}
+function lineSpan(id) {
+  const ev = (window.EV || []).filter(e => e.type === 'voice');
+  const i = ev.findIndex(e => e.id === id);
+  if (i < 0) return null;
+  return { t0: ev[i].t, t1: i + 1 < ev.length ? ev[i + 1].t : ev[i].t + 2 };
+}
+
 // Kích thước thật của một hạt gạo khô: dài 7,6 mm, rộng 2,2 mm, dày 2,0 mm.
 // Thân dài:rộng 3,5:1, tiết diện gần tròn, một đầu nhọn dần (đầu rễ) và
 // một đầu bè (đầu tròn), mặt bụng dẹp có một khe nứt dọc (khe gạo), mặt
@@ -558,6 +578,21 @@ export function gachGaoCat(opts = {}) {
     g.add(m);
   }
   g.scale.setScalar(s);
+  // ── hạt phình ra khi tinh bột hồ hóa ───────────────────────────────────
+  // Câu "tinh bột trong hạt gạo bắt đầu hồ hóa": hạt gạo hút nước, tinh bột
+  // trương lên và thân hạt PHÌNH RA. Đây là đổi trạng thái thật, và nó phải
+  // thấy được: hạt cứng đứng yên thì câu kể không có hình.
+  let gT = null;
+  g.updateProp = t => {
+    if (!gT) {
+      const sp = lineSpan('c21');
+      gT = sp ? sp : null;
+    }
+    if (!gT) return;
+    const k = clamp((t - gT.t0) / Math.max(.5, gT.t1 - gT.t0));
+    const e = k * k * (3 - 2 * k);
+    g.scale.setScalar(s * (1 + .11 * e));
+  };
   return g;
 }
 
@@ -590,19 +625,19 @@ function riceGrainTex(count = 1400, len = 20) {
     const r = mulberry(23);
     // kẽ giữa các hạt phải đủ tối: mặt trên lớp gạo dưới đèn trong nồi thì
     // trắng bệch, đọc ra là một tấm đĩa trơn chứ không phải một mớ cơm.
-    g.fillStyle = '#c3ad80'; g.fillRect(0, 0, w, h);
+    g.fillStyle = '#d8ccb2'; g.fillRect(0, 0, w, h);
     for (let i = 0; i < count; i++) {
       const x = r() * w, y = r() * h, a = r() * Math.PI, L = len + r() * len;
       g.save(); g.translate(x, y); g.rotate(a);
-      g.fillStyle = 'rgba(112,90,55,.60)';                    // kẽ giữa các hạt
+      g.fillStyle = 'rgba(126,110,80,.55)';                   // kẽ giữa các hạt
       riceShape(g, L * 1.04, L * .36); g.fill();
-      g.fillStyle = r() > .5 ? '#f7eeda' : '#e6d5ad';          // thân hạt
+      g.fillStyle = r() > .5 ? '#fdfaf1' : '#f2ead6';         // thân hạt
       riceShape(g, L, L * .32); g.fill();
-      g.fillStyle = 'rgba(255,252,240,.40)';                  // sáng trên hạt
+      g.fillStyle = 'rgba(255,253,246,.40)';                  // sáng trên hạt
       g.beginPath(); g.ellipse(-L * .06, -L * .05, L * .30, L * .07, 0, 0, 7); g.fill();
-      g.strokeStyle = 'rgba(98,78,46,.60)'; g.lineWidth = 1.8; g.stroke();
+      g.strokeStyle = 'rgba(120,104,74,.55)'; g.lineWidth = 1.8; g.stroke();
       // rãnh dọc: nét mảnh chạy dọc thân hạt, đúng dấu hiệu của hạt gạo
-      g.strokeStyle = 'rgba(120,98,62,.42)'; g.lineWidth = 1.4;
+      g.strokeStyle = 'rgba(140,120,88,.40)'; g.lineWidth = 1.4;
       g.beginPath(); g.moveTo(-L * .40, 0); g.lineTo(L * .40, 0); g.stroke();
       g.restore();
     }
@@ -618,18 +653,18 @@ function riceGrainTex(count = 1400, len = 20) {
 function riceCutTex(count = 1400, len = 46, hpx = 680) {
   return canvasTex(2048, hpx, (g, w, h) => {
     const r = mulberry(31);
-    g.fillStyle = '#b8a479'; g.fillRect(0, 0, w, h);                 // kẽ giữa các hạt
+    g.fillStyle = '#cec3a8'; g.fillRect(0, 0, w, h);         // kẽ giữa các hạt
     for (let i = 0; i < count; i++) {
       const x = r() * w, y = r() * h, a = (r() - .5) * 1.1, L = len * (.7 + r() * .6);
       g.save(); g.translate(x, y); g.rotate(a);
-      g.fillStyle = 'rgba(84,66,38,.55)';
+      g.fillStyle = 'rgba(104,90,62,.45)';
       riceShape(g, L * 1.05, L * .38); g.fill();
       const grd = g.createLinearGradient(0, -L * .17, 0, L * .17);
-      grd.addColorStop(0, '#fff8e6'); grd.addColorStop(.55, r() > .5 ? '#f2e7c8' : '#eadfc0');
-      grd.addColorStop(1, '#cdbb93');
+      grd.addColorStop(0, '#fffdf6'); grd.addColorStop(.55, r() > .5 ? '#f8f2e2' : '#f2ead6');
+      grd.addColorStop(1, '#ded2b4');
       g.fillStyle = grd;
       riceShape(g, L, L * .33); g.fill();
-      g.strokeStyle = 'rgba(104,84,50,.65)'; g.lineWidth = 1.6; g.stroke();
+      g.strokeStyle = 'rgba(126,110,80,.55)'; g.lineWidth = 1.6; g.stroke();
       g.restore();
     }
   });
@@ -649,11 +684,15 @@ export function lopGao({ R = .130, y = 0, h = .055, n = 520, seed = 5, cooked = 
     prof.push(new THREE.Vector2(R * (1 - .10 * u), h * .94 * u));
   }
   prof.push(new THREE.Vector2(R * .80, h), new THREE.Vector2(0, h));
-  const coreMat = toon('#e6dcc2');
+  const coreMat = toon('#efe9d8');
   const coreGeo = half
     ? new THREE.LatheGeometry(prof, 40, Math.PI / 2, Math.PI)
     : new THREE.LatheGeometry(prof, 40);
-  const core = mesh(coreGeo, coreMat, [0, 0, 0], { parent: g });
+  // Nhóm trong của lớp gạo: phần "thân" của mớ cơm. Nhịp phồng của cơm
+  // bóp nhóm này theo trục Y, nên đáy lớp gạo vẫn đứng yên trên mặt nước,
+  // chỉ phần trên cao phồng lên — đúng như mớ cơm sôi trong nồi.
+  const noi = new THREE.Group(); g.add(noi);
+  const core = mesh(coreGeo, coreMat, [0, 0, 0], { parent: noi });
 
   // mặt trên: một đĩa tròn có vân hạt, nằm trên đỉnh khối cơm
   //
@@ -671,7 +710,7 @@ export function lopGao({ R = .130, y = 0, h = .055, n = 520, seed = 5, cooked = 
     : new THREE.CircleGeometry(R * .80, 40);
   // màu vật liệu trắng: để vân hạt trên tấm thể hiện đúng màu đã vẽ, không bị
   // nhân thêm một lớp kem làm mặt trên thành một tấm đĩa trơn
-  const top = mesh(topGeo, toon('#ffffff', { map: topTex }), [0, h + .0008, .0008], { parent: g });
+  const top = mesh(topGeo, toon('#ffffff', { map: topTex }), [0, h + .0008, .0008], { parent: noi });
   top.rotation.x = -Math.PI / 2;
 
   // ── mặt cắt của lớp gạo (nửa sau): từng hạt là một vật thể có khối ──
@@ -697,11 +736,11 @@ export function lopGao({ R = .130, y = 0, h = .055, n = 520, seed = 5, cooked = 
     }
     UV.needsUpdate = true;
     // nền sau các nửa hạt: một mặt tối, chỉ để các nửa hạt đổ bóng xuống
-    const back = mesh(cutGeo, toon('#8a7952'), [0, 0, -.0048], { parent: g });
+    const back = mesh(cutGeo, toon('#8a7952'), [0, 0, -.0048], { parent: noi });
     back.receiveShadow = true;
     // mặt cưa vẽ bằng vân: dùng cho các khung rộng, khi hạt thật quá nhỏ mà
     // viền mực của chúng dính thành một mảng đen
-    const cutFace = mesh(cutGeo, toon('#ffffff', { map: cutTex }), [0, 0, -.0012], { parent: g });
+    const cutFace = mesh(cutGeo, toon('#ffffff', { map: cutTex }), [0, 0, -.0012], { parent: noi });
     cutFace.receiveShadow = true;
 
     // các nửa hạt: một nửa hạt kín (thân hạt + mặt cưa phẳng), thân quay vào
@@ -718,7 +757,7 @@ export function lopGao({ R = .130, y = 0, h = .055, n = 520, seed = 5, cooked = 
     // nửa hạt phải nằm ở lớp 0: lớp 1 không được vẽ vào bản đồ bóng, hạt ở
     // lớp 1 thì không đổ bóng, mà bóng giữa các hạt mới là thứ cho ta biết đó
     // là một mớ cơm thật chứ không phải một bức tranh hạt vẽ
-    g.add(cutIm);
+    noi.add(cutIm);
     const cM = new THREE.Matrix4(), cP = new THREE.Vector3(), cQ = new THREE.Quaternion(),
       cS = new THREE.Vector3(), cE = new THREE.Euler();
     let ci = 0;
@@ -765,7 +804,7 @@ export function lopGao({ R = .130, y = 0, h = .055, n = 520, seed = 5, cooked = 
   im.layers.set(1);
   im.castShadow = true;
   im.receiveShadow = false;
-  g.add(im);
+  noi.add(im);
   const M = new THREE.Matrix4(), P = new THREE.Vector3(), Q = new THREE.Quaternion(), Sc = new THREE.Vector3(), E = new THREE.Euler();
   // chiều cao mặt trên theo bán kính, để hạt nằm đúng trên mặt khối cơm
   const topY = rad => (rad <= R * .80 ? h : h * .94 * Math.min(1, (1 - rad / R) / .10));
@@ -775,11 +814,28 @@ export function lopGao({ R = .130, y = 0, h = .055, n = 520, seed = 5, cooked = 
     const x = Math.cos(a) * rad, z = Math.sin(a) * rad;
     if (half && z > 0) { i--; continue; }                 // chỉ rải ở nửa sau
     if (half && Math.abs(z) < .010) { i--; continue; }    // chừa mặt cắt cho tấm vân
-    grains.push({ x, z, y: topY(rad) + .0012 * gs, rx: (r() - .5) * .9, ry: r() * 6, rz: (r() - .5) * .9, s: .75 + r() * .45 });
+    grains.push({ x, z, y: topY(rad) + .0012 * gs, rx: (r() - .5) * .9, ry: r() * 6, rz: (r() - .5) * .9, s: .75 + r() * .45, ph: r() * 6.283 });
   }
   im.count = grains.length;
+  let cookedK = clamp(cooked);
+  // đặt lại các hạt rời lên mặt lớp gạo. dy là độ nâng từng hạt (m): bọt sôi
+  // đẩy hạt lên rồi hạt rơi xuống, nên mỗi hạt có một pha riêng.
+  const applyGrains = (dy, ph) => {
+    const c = cookedK, sw = 1 + .12 * c;
+    for (let i = 0; i < grains.length; i++) {
+      const gr = grains[i];
+      const sc = gr.s * (1 + .18 * c);
+      P.set(gr.x, gr.y * sw + (dy ? dy * Math.sin(ph + gr.ph) : 0), gr.z);
+      E.set(gr.rx, gr.ry, gr.rz); Q.setFromEuler(E);
+      Sc.setScalar(sc * gs);
+      M.compose(P, Q, Sc);
+      im.setMatrixAt(i, M);
+    }
+    im.instanceMatrix.needsUpdate = true;
+  };
   const set = k => {
     const c = clamp(k);
+    cookedK = c;
     const sw = 1 + .12 * c;
     core.scale.y = sw;
     coreMat.color.set('#e6dcc2').lerp(new THREE.Color('#f7f0dc'), c);
@@ -790,22 +846,37 @@ export function lopGao({ R = .130, y = 0, h = .055, n = 520, seed = 5, cooked = 
     top.material.emissive.setRGB(e * .82, e * .78, e * .66);
     mat.color.set('#e6dcc2').lerp(new THREE.Color('#f7f0dc'), c);
     mat.emissive.setRGB(e * .6, e * .58, e * .5);
-    for (let i = 0; i < grains.length; i++) {
-      const gr = grains[i];
-      const sc = gr.s * (1 + .18 * c);
-      P.set(gr.x, gr.y * sw, gr.z);
-      E.set(gr.rx, gr.ry, gr.rz); Q.setFromEuler(E);
-      Sc.setScalar(sc * gs);
-      M.compose(P, Q, Sc);
-      im.setMatrixAt(i, M);
-    }
-    im.instanceMatrix.needsUpdate = true;
+    applyGrains(0, 0);
   };
   set(cooked);
   g.setCooked = set;
   g.position.y = y;
   g.grains = im;
   g.top = top;
+
+  // ── nhịp sôi của mớ cơm ────────────────────────────────────────────────
+  // Cơm trong nồi đang sôi thì mớ cơm phồng lên rồi xẹp xuống: bọt sôi đẩy
+  // cả lớp gạo lên. Nhịp này phải NHANH — phồng chậm thì hai khung liền nhau
+  // gần như y hệt nhau, khung hình đứng yên và người xem không thấy cơm đang
+  // sôi. Biên độ theo câu: nồi đang sôi thì phồng mạnh, nồi đứng yên thì mớ
+  // cơm phẳng.
+  const SWELL = {
+    c18: .045, c19: .045, c20: .065, c21: .050, c22: .050, c23: .065,
+    c24: .045, c25: .030, c26: .024, c27: .024,
+    c46: .018, c47: .016, c48: .016,
+  };
+  g.updateProp = t => {
+    const id = lineNow(t);
+    const A = SWELL[id] || 0;
+    if (A <= 0) { noi.scale.y = 1; return; }
+    const ph = t * 2 * Math.PI * 1.45;
+    // hai nhịp chồng lên: nhịp chính của bọt sôi và nhịp gợn nhỏ, để mớ cơm
+    // phồng không đều như cơm thật
+    const s = A * (.74 * Math.sin(ph) + .26 * Math.sin(ph * 2.17 + 1.3));
+    noi.scale.y = 1 + s;
+    // các hạt rời nằm trên mặt mớ cơm nhấc lên rồi rơi xuống theo bọt sôi
+    applyGrains(A * .022, ph * 1.7);
+  };
   return g;
 }
 

@@ -3,6 +3,8 @@
 // setTemp(độ) đưa ĐỈNH cột lên đúng vạch của độ đó.
 import * as THREE from 'three';
 import { toon, canvasTex, rbox, mesh, fxLayer, glowMat, mulberry } from '../../../../../rig/kit.js';
+import { squiggle } from '../../../../../rig/fx.js';
+import { fitEffect } from './_flowbox.js';
 
 const TUBE_X = -.034;                 // trục ống kính nằm bên trái tấm thang chia
 const TUBE_Z = .012;                  // trục ống đứng trước mặt tấm thang
@@ -13,6 +15,24 @@ const TUBE_Z = .012;                  // trục ống đứng trước mặt t�
 const TUBE_LIFT = .0065;
 
 const V = (r, y) => new THREE.Vector2(r, y);
+
+// Đĩa sáng mềm: một vệt tròn toả dần từ tâm, dùng cho quầng nóng quanh
+// đỉnh cột thủy ngân. Vân của nó phải mềm ở rìa, nếu mép cứng thì nó đọc ra
+// là một miếng dán, không phải một vệt sáng.
+let _glow = null;
+function glowTex() {
+  if (_glow) return _glow;
+  _glow = canvasTex(128, 128, (c, w, h) => {
+    const g = c.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, w / 2);
+    g.addColorStop(0, 'rgba(255,255,255,1)');
+    g.addColorStop(.22, 'rgba(255,255,255,.82)');
+    g.addColorStop(.45, 'rgba(255,255,255,.46)');
+    g.addColorStop(.72, 'rgba(255,255,255,.15)');
+    g.addColorStop(1, 'rgba(255,255,255,0)');
+    c.fillStyle = g; c.fillRect(0, 0, w, h);
+  });
+  return _glow;
+}
 
 // Vệt bóng tiếp xúc: một vệt mềm trải ra trên mặt sàn, dính sát chân vật.
 // Vẽ ở lớp fx (sau bước viền mực) nên nó không có viền mực — bóng không
@@ -258,22 +278,108 @@ export function nhietKe(opts = {}) {
     [TUBE_X, TUBE_LIFT, TUBE_Z]);
   g.add(merc);
 
-  g.setTemp = deg => {
+  // Trạng thái cột: đích do setTemp đặt, cột thật do lò xo dẫn tới.
+  // Lò xo phải ĐỦ NHANH và đủ giảm chấn: cột phải tới đích trong nửa giây,
+  // vì câu kể đang đợi ở đích đó — ở c35 cột phải kịp tụt về bảy mươi độ
+  // (nhãn "BẢY MƯỜI ĐỘ" chỉ vào vạch bảy mươi, cột đứng cao hơn vạch sôi thì
+  // câu kể và hình cãi nhau), và ở c30 nó phải BẬT lên qua vạch một trăm như
+  // một cái nhảy. Lò xo nhẹ quá (tần số thấp, giảm chấn nhỏ) thì cột bay
+  // mãi không đứng yên: nó vọt quá đáy thang rồi lên tới đỉnh thang, đọc ra
+  // như cái cột điên chứ không phải nhiệt kế.
+  const SPR_W = 13, SPR_Z = .55;          // tần số lò xo và tỉ lệ giảm chấn
+  let tgtDeg = 100, curDeg = 100, vel = 0, lastT = 0, hasT = false;
+  // vạch của độ d nằm ở cao độ (-0.03 + k·L) tính từ đáy tấm thang; đỉnh cột
+  // chạm đúng vạch của độ d. Khối cột được nâng lên TUBE_LIFT, nên hình
+  // dựng phải nhấn xuống đúng bằng lượng nâng ấy, đỉnh cột vẫn nằm trên vạch.
+  const topOf = deg => {
     const k = Math.max(0, Math.min(1, (deg - T0) / (T1 - T0)));
-    // vạch của độ d nằm ở cao độ (-0.03 + k·L) tính từ đáy tấm thang; đỉnh cột
-    // chạm đúng vạch của độ d. Khối cột được nâng lên TUBE_LIFT, nên hình
-    // dựng phải nhấn xuống đúng bằng lượng nâng ấy, đỉnh cột vẫn nằm trên
-    // vạch.
-    const top = Math.max(.004, -.030 + k * L) - TUBE_LIFT;
+    return Math.max(.004, -.030 + k * L) - TUBE_LIFT;
+  };
+  const setTop = deg => {
+    const top = topOf(deg);
     if (merc.userData.top === top) return;
     merc.userData.top = top;
     merc.geometry.dispose();
     merc.geometry = mercuryGeo(top);
   };
+
+  g.setTemp = deg => {
+    // Chỉ nhớ ĐÍCH. Cột không nhảy tức thì: nó chạy tới chỗ mới bằng một
+    // lò xo có vọt quá (xem updateProp), để câu "nhiệt độ nhảy vọt lên" (c30)
+    // và "cột tụt xuống" (c35) đều thấy được bằng mắt chứ không phải một
+    // cú nhảy giữa hai hình.
+    tgtDeg = deg;
+  };
   g.setTemp(100);                       // mặc định: cột đứng ở vạch sôi
-  g.top = L - .03;                      // đỉnh của cột thủy ngữ
-  g.tubeX = TUBE_X;
   g.scale.setScalar(sc);
+
+  // ── quầng nóng và gợn nhiệt quanh đỉnh cột ────────────────────────────
+  // Cột vượt vạch sôi là cột đang nóng hơn nước sôi: nhiệt phải bốc lên từ
+  // đỉnh cột. Quầng này là vùng sáng nhất của siêu cận c31 (LOOK c31) và là
+  // thứ chuyển động rõ nhất của cả ba câu c30–c31: cột thủy ngân mỏng lắm,
+  // cột nó chạy lên có mảnh mà không ai thấy nổi.
+  const hot = new THREE.Sprite(new THREE.SpriteMaterial({
+    map: glowTex(), color: new THREE.Color('#ff8a3c'), blending: THREE.AdditiveBlending,
+    transparent: true, opacity: 0, depthWrite: false, depthTest: false, toneMapped: false,
+  }));
+  hot.scale.set(.026, .026, 1);
+  fxLayer(hot); g.add(hot);
+
+  // Gợn nhiệt bốc lên từ đỉnh cột: thứ vô hình thành vật thấy được, đúng
+  // ngôn ngữ của kênh (nhiệt thì thành làn, gợn, bọt).
+  const heat = squiggle('#ffb060', '#f04462');
+  heat.U.uLen.value = .055; heat.U.uWidth.value = .011;
+  heat.U.uAmp.value = .0035; heat.U.uFreq.value = 58;
+  fitEffect(heat);
+  g.add(heat);
+
+  // ── cột thủy ngân chuyển động ─────────────────────────────────────────
+  // Lò xo: cột chạy tới đích rồi vọt quá rồi đứng lại. Ở vạch sôi nó rung
+  // nhẹ (nước sôi làm nhiệt kế rung); lúc nồi giữ ấm, dây điện trở bật tắt
+  // nên nhiệt độ cũng run quanh vạch — cột bật tắt theo nhịp bật tắt đó.
+  g.updateProp = t => {
+    if (!g.visible) return;
+    const dt = hasT ? Math.min(.05, Math.max(1 / 240, t - lastT)) : 1 / 24;
+    hasT = true; lastT = t;
+    // bước lò xo
+    vel += (SPR_W * SPR_W * (tgtDeg - curDeg) - 2 * SPR_Z * SPR_W * vel) * dt;
+    curDeg += vel * dt;
+    // rung: ở vạch sôi nước sôi làm nhiệt kế rung (biên độ nhỏ, chỉ là một
+    // sự lấp lánh ở đỉnh cột); lúc nồi giữ ấm, dây điện trở bật tắt nên
+    // nhiệt độ chạy quanh vạch — cột run theo nhịp bật tắt đó.
+    let deg = curDeg;
+    if (deg > 95) deg += .45 * Math.sin(t * 17.3);
+    else if (deg > 58) deg += .90 * Math.sin(t * 4.4);
+    setTop(deg);
+
+    const top = topOf(deg);
+    // nóng: cột trên vạch sôi. ấm: nồi đang giữ ấm (dây điện trở bật tắt).
+    const boil = Math.max(0, Math.min(1, (deg - 96) / 16));
+    const warm = Math.max(0, Math.min(1, (deg - 60) / 30));
+    // quầng nóng thở: lúc sôi thì phồng-xẹp nhẹ; lúc giữ ấm thì nhấp nháy
+    // theo nhịp bật tắt của dây điện trở (sóng vuông mềm).
+    const cyc = .5 + .5 * Math.tanh(2.4 * Math.sin(t * 2.9));
+    const beat = boil > .05 ? (.62 + .38 * Math.sin(t * 4.1)) : cyc;
+    const amt = (boil * .85 + warm * .85) * beat;
+    hot.material.opacity = amt * .62;
+    // quầng lúc giữ ấm rộng hơn lúc sôi: hơi ấm toả ra chậm và rộng, còn lúc
+    // sôi thì nóng gắn quanh đỉnh cột.
+    const hs = (.026 + .012 * warm * (1 - boil)) * (1 + .16 * (beat - .5) * 2);
+    hot.scale.set(hs, hs, 1);
+    hot.position.set(TUBE_X, TUBE_LIFT + top, TUBE_Z + .004);
+    hot.visible = amt > .012;
+
+    // gợn nhiệt: chỉ khi cột nóng hơn nước sôi
+    heat.visible = boil > .06;
+    if (heat.visible) {
+      const age = (t * .62) % 1;
+      heat.position.set(TUBE_X, TUBE_LIFT + top, TUBE_Z + .002);
+      if (typeof window !== 'undefined' && window.__cam) heat.quaternion.copy(window.__cam.quaternion);
+      heat.U.uHead.value = .055 * (.12 + .88 * age);
+      heat.U.uAlpha.value = boil * Math.sin(age * Math.PI) * .95;
+      heat.U.uPhase.value = t * 3.6;
+    }
+  };
   return g;
 }
 
