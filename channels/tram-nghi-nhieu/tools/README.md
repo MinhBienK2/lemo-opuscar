@@ -21,6 +21,25 @@ không phải phán quyết về phim). Nó ghi vào `review/` của tập:
 - `review/<bước>-<vòng>.md` — lời của người chấm ở vòng đó.
 - `review/FINAL-QA.md` — báo cáo nghiệm thu (bước `final`, không chặn gì).
 
+**Phạm vi một vòng.** Chỉ mục **đã đổi** mới được chấm lại: "đã đổi" là **digest của mã nguồn** đổi, hoặc
+dấu vân tay của ảnh đổi (ảnh thu 48×27 xám). Digest đứng trước vì ảnh thu đó không nhìn thấy một hình
+học đổi bên trong nó — nếu không, một vật đã sửa mã có thể giữ phán quyết của mã chưa ai nhìn, và cổng
+báo "đã chấm" cho mã đó.
+
+**Một bước KẾ HOẠCH (`outline`, `look`) đã đóng thì không mở lại.** Sửa một vật làm dấu vân tay của nó
+đổi, nhưng bước kế hoạch đã đóng thì vẫn đóng — nếu không, một bước đã đóng mở lại, chặn bước sau, và
+vòng lặp quay lại. Muốn chấm lại thì nói rõ: `--again <mã>` (hoặc `--again all`).
+
+**Trần số vòng mỗi bước** (`review.py` `MAX_ROUNDS`; đặt bằng `LEMO_MAX_ROUNDS`). Khi chạm trần, vòng đó
+không chạy nữa: mọi mục còn lại thành **MỞ**, bước đóng lại, và báo cáo nói rõ vì sao. Cùng luật "sai ba
+lần thì thành MỞ" áp cho cả bước.
+
+**Một mục đã MỞ thì giữ MỞ.** Vòng sau đạt ĐẠT không xoá dấu vết "sai ba lần" khỏi báo cáo.
+
+**Một người chấm cho cả tập** (`LEMO_CRITIC_MODEL`). `review.py` ghi người chấm vào state và **từ chối mở
+vòng** dưới người khác, trừ khi có `--again all`: hai tiêu chuẩn trong một state là phán quyết không so
+được với nhau.
+
 Mỗi bước chạy các kiểm tra máy trước người chấm; lỗi máy dừng vòng trước khi tốn một lần gọi người chấm:
 
 | Bước | Máy kiểm trước | Người chấm nhìn |
@@ -37,7 +56,7 @@ Mỗi bước chạy các kiểm tra máy trước người chấm; lỗi máy d
 | Lệnh | Nó làm gì |
 |---|---|
 | `python3 channels/tram-nghi-nhieu/tools/fixbrief.py <tập> look\|props\|picture [mã…]` | bản giao việc cho subagent sửa các mục phải sửa: lời người chấm, câu phải ĐẠT, tệp được sửa (kèm `tệp:dòng` của câu trong mã và `LOOK.md`), lệnh dựng lại, mẫu trả lời. Props: một bản mỗi vật (`=== BRIEF <mã> ===`); look/picture: tối đa 8 mục một bản, dòng `=== CÒN …` là bản kế |
-| `python3 channels/tram-nghi-nhieu/tools/episode.py <tập> ["Câu hỏi?"]` | làm cả tập, mỗi chặng (1, 2, 3, 4–5, 6, 7) trong một phiên `claude -p` mới; chặng xong theo cổng; mỗi chặng tối đa 2 phiên; chi phí từng phiên vào `out/sessions.jsonl`. `--dry-run` in prompt của chặng kế; `--from <chặng>` |
+| `python3 channels/tram-nghi-nhieu/tools/episode.py <tập> ["Câu hỏi?"]` | làm cả tập, mỗi chặng (1, 2, 3, 4–5, 6, 7) trong một phiên `claude -p` mới; chặng xong theo cổng; mỗi chặng tối đa 2 phiên **đếm từ `out/sessions.jsonl` của tập** (khởi chạy lại runner không xoá trần); chi phí từng phiên vào cùng sổ. Chặng 7 (bàn giao) xong khi cổng bàn giao xanh **và** `core/render/sourcecheck.mjs` nói phim là phim của mã nguồn hiện tại — có một tệp `.mp4` trong thư mục thì chưa đủ. `--dry-run` in prompt của chặng kế; `--from <chặng>` |
 
 ## Công cụ khác
 
