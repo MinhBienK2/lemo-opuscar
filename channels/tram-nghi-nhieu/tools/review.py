@@ -174,14 +174,21 @@ def scope(st, items, again=()):
     the gate then reported that code as judged. The digest of the source is exact and free
     (`props_catalog.digest` already hashes the prop and the helpers it imports), so it is asked
     first: if the source moved, the item is judged again whatever the blur says.
+
+    Một bước KẾ HOẠCH (`gate.PLANS`: outline, look) đã đóng thì không mở lại: "sau đó có sửa thì
+    cũng vậy" (gate.py:14). Nếu nó mở lại thì bước kế tiếp bị chặn và vòng lặp quay lại (M3) — đó là
+    cái đã giữ ba tập 45 giờ. Muốn chấm lại thì nói rõ: `--again`.
     """
     judge, failing, kept = [], [], []
+    plan_closed = bool(st.get('closed')) and not again
     for it in items:
         rec = st['items'].get(it['id'])
         same = bool(rec) and rec.get('key') == it.get('key') and ('fp' not in it or fp_close(rec.get('fp'), it['fp']))
         if rec and it.get('src') and rec.get('src') and rec.get('src') != it.get('src'):
             same = False   # the code moved: this is a different item, not the one that was judged
-        if not same or 'all' in again or it['id'] in again or rec.get('verdict') not in ('PASS', 'OPEN', 'FAIL'):
+        if plan_closed and rec and rec.get('verdict') in gate.CLOSED:
+            kept.append(it)   # bước kế hoạch đã đóng: giữ phán quyết cũ
+        elif not same or 'all' in again or it['id'] in again or rec.get('verdict') not in ('PASS', 'OPEN', 'FAIL'):
             judge.append(it)
         elif rec['verdict'] == 'FAIL':
             failing.append(it)
@@ -615,7 +622,15 @@ def _main(ep, step, again, W):
     if step == 'picture' and not missing:
         st['src'] = gate.picture_src(ep)   # every frame of this code has been looked at
     if step in gate.PLANS:
-        st['closed'] = not missing and all(r.get('verdict') in gate.CLOSED for r in st['items'].values())
+        # Một BƯỚC KẾ HOẠCH (outline, look) đã đóng thì đóng: "sau đó có sửa thì cũng vậy" (gate.py).
+        # Nhưng phạm vi của vòng lại quyết bằng dấu vân tay ảnh, nên một vật sửa xong làm dấu vân
+        # tay của nó đổi, vòng sau chấm lại nó, và `closed` bị tính lại thành False — bước kế tiếp bị
+        # chặn, và vòng lặp quay lại (M3). Nay một bước kế hoạch đã đóng thì KHÔNG mở lại; muốn chấm
+        # lại thì nói rõ (`--again`).
+        if st.get('closed') and not again:
+            pass                      # đã đóng thì giữ nguyên đóng
+        else:
+            st['closed'] = not missing and all(r.get('verdict') in gate.CLOSED for r in st['items'].values())
     gate.save(ep, step, st)
     if not todo: summary(ep, step, crit, st)
     fails = [k for k, r in st['items'].items() if r.get('verdict') == 'FAIL']
@@ -724,6 +739,28 @@ def selftest():
         msg = judge_changed({'critic': 'a'}, 'b')
         expect(msg is not None and '--again all' in msg, 'a changed judge says so and asks for --again all')
         expect(judge_changed({}, 'b') is None, 'a step with no judge yet is not a change')
+
+        # M3: một bước KẾ HOẠCH (outline, look) đã đóng thì không mở lại. Nếu nó mở lại thì bước kế
+        # tiếp bị chặn, và vòng lặp quay lại — đó là cái đã giữ ba tập 45 giờ.
+        ep5 = os.path.join(tmp, 'tap5'); os.makedirs(os.path.join(ep5, 'review'))
+        from PIL import Image
+        fa = os.path.join(tmp, 'fpA.png'); fb = os.path.join(tmp, 'fpB.png')
+        Image.new('RGB', (480, 270), (120, 120, 120)).save(fa)
+        im = Image.new('RGB', (480, 270), (120, 120, 120))
+        for x in range(300, 400):
+            for y in range(20, 60): im.putpixel((x, y), (250, 250, 250))
+        im.save(fb)
+        answers.clear(); answers[('l1', 'a')] = 'ĐẠT'; answers[('l1', 'b')] = 'ĐẠT'
+        litems = [{'id': 'l1', 'key': '', 'fp': fingerprint(fa)}]
+        st, todo, failing, missing = run(ep5, 'look', litems, crit, ask)
+        expect(st.get('round') == 1 and st['items']['l1']['verdict'] == 'PASS', 'the first look round judges the item')
+        st['closed'] = True
+        gate.save(ep5, 'look', st)
+        litems[0]['fp'] = fingerprint(fb)   # vật được sửa -> dấu vân tay đổi
+        calls.clear()
+        st, todo, failing, missing = run(ep5, 'look', litems, crit, ask)
+        expect(not calls, 'a closed plan step is not re-judged when a fingerprint moves')
+        expect(st.get('closed') is True, 'and it stays closed')
 
         def lazy(batch, prev):
             return '\n'.join(f"{it['id']} | a | ĐẠT | thấy" for it in batch)
