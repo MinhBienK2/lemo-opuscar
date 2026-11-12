@@ -416,6 +416,18 @@ của tập — nơi có phim đã bàn giao, mã nguồn, dàn ý; **từ chố
 mục gốc, vì lúc đó `out/` có thể đang là nơi làm việc của một lần dựng đang chạy; và ghi
 `out/cleaned.log` — cái gì đã xoá, lấy lại bao nhiêu byte.
 
+## P21 — medium — Hợp đồng bố cục **chỉ in ra**, nên một phim vi phạm vẫn được bàn giao với cổng xanh
+
+**Bằng chứng.** Bố cục được kiểm ở mọi vòng chấm, nhưng `review.py:579` ghi rõ *"never blocks: the
+round goes on"* và `gate.py status` chỉ in. Cổng bàn giao (`core/render/review.sh`) thì không hề
+gọi tới nó. Hệ quả: một tập có `src/sets/` nằm ngoài hợp đồng vẫn bàn giao được, cổng vẫn xanh,
+và không có gì nhắc ai cả.
+
+**Guard.** `core/render/review.sh` có thêm bước `layout`, chạy công cụ của chính kênh
+(`$BCH/tools/layout.py`): kênh viết hợp đồng xuống, thư viện chỉ hỏi kênh. Các vòng chấm giữa vẫn
+chỉ in ra — một tệp lạ giữa chừng không được đóng băng cả tập. Kiểm chứng trên tám tập của kênh:
+bảy tập bố cục đúng, một tập có `src/sets/` (tập của tôi; sẽ dồn phẳng trước khi bàn giao).
+
 ## P20 — high — Cái chặn tải coi **swap đầy** là hết RAM, và chặn cả việc dựng trên máy còn 6 GB trống
 
 **Bằng chứng.** 12-11 lúc 12:20–12:30: `swap` báo **99 %** trong khi `MemAvailable` là **6,1–8,4 GB**.
@@ -451,6 +463,10 @@ hề thiếu RAM. Đây là cái chặn tự dựng để chống OOM, và nó l
 | P15 | Vân tay được viết **cạnh chính phim** lúc bàn giao (`<tên>.fingerprint.json`); `sourcecheck.mjs` ưu tiên nó, và `build.sh` của mọi tập copy ảnh chụp của lần dựng sang đó. **Và tệp bàn giao mới phải vào hợp đồng bố cục** — nếu không, chính `layout.py` báo "tệp ngoài bố cục" cho mọi tập dùng nó (bắt được bởi phiên bên kia; `layout.py` + `docs/layout.md` + `CHANNEL.md` đã sửa) |
 | P16 | `review.py` (chạm trần): mục bị ép MỞ mang `key`/`src`/`name` hiện tại, nên `gate.tally()` đếm nó là MỞ chứ không phải "chưa chấm", và bước đóng lại |
 | P17 | `sourcecheck.diffFiles()` so tệp mà ảnh chụp cũ không phủ bằng mốc sửa của nó với lúc chụp — phim cũ vẫn xanh, lỗ hổng vẫn bị bắt |
+| P18 | Ba guard cho cái bệnh hỏi-đọc-lại-sửa: `hook_stale_read` chặn lần đọc cả tệp thứ 10 trong một phiên (tệp vừa sửa không lọt nữa), `hook_poll` đếm lệnh hỏi theo **lớp** (ngưỡng 20), `hook_edit_count` chặn lần sửa thứ 21 của cùng một tệp và chỉ đường gom sửa bằng `tools/replace.py --batch` |
+| P19 | `tools/clean_episode.py`: dọn một tập đã bàn giao thì chỉ xoá thứ dựng lại được, **không bao giờ** chạm thư mục gốc, từ chối chạy khi tập chưa có phim, và ghi `out/cleaned.log` |
+| P20 | `hook_load.overload()`: swap chỉ tính khi RAM **cũng** đang cạn (`LEMO_SWAP_NEEDS_RAM_MB`, mặc định 3000 MB); RAM cạn thì luật cũ vẫn chặn (`LEMO_MEM_MIN_MB` = 1200 MB). Selftest: 20 ca |
+| P21 | `core/render/review.sh` (cổng bàn giao) có bước `layout` chạy công cụ của kênh: hợp đồng bố cục chặn được chứ không chỉ in ra. Các vòng chấm giữa vẫn chỉ in |
 Tất cả đều có selftest: `review.py --selftest` (31 ca), `episode.py --selftest` (17 ca),
 `gate.py --selftest`, `hook_poll.py --selftest` (22 ca), `hook_load.py --selftest` (13 ca).
 
