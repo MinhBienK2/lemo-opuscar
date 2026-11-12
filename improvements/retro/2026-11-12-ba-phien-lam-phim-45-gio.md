@@ -450,6 +450,46 @@ mất — ví dụ sau khi dồn `src/sets/` — thì digest của vật đượ
 **Guard.** `props_catalog.problems()` báo rõ tệp vật nào import `./…` mà tệp đó không có. Đo trên
 năm tập đã có vật: không tập nào dính, nên cái chặn này không tạo tiếng ồn. Selftest: 24 ca.
 
+## P24 — high — **Ba vòng đầu hội tụ thật; các vòng sau là MỘT mục lặp** — và thời gian nằm ở người chấm, không ở số vòng
+
+**Câu hỏi của người dùng:** "sửa nhiều lần thì phim tốt lên không, hay chỉ là lặp? Có cần tới 6–9 vòng mới ổn, hay 3 vòng là đủ?"
+
+**Số mục được chấm ở từng vòng** (đọc từ `review/<bước>-<n>.md`):
+
+| bước | các vòng | đọc |
+|---|---|---|
+| `do-vat` props | 15 → 8 → **1 → 1 → 1 → 1 → 1 → 1 → 1** | 14 vật hội tụ trong 2 vòng; 7 vòng sau chỉ chấm **một** vật (`vo-may`) |
+| `the-gioi` props | 10 → **1 → 1 → 1 → 1** → 2 | cùng hình dạng (`dong-sang-re`) |
+| `do-vat` look | 27 → 25 → 1 | hội tụ ở vòng 2 |
+| `the-gioi` look | 37 → 30 → 13 → 10 | thu taper đều |
+| `co-the` look | 50 → 50 → 35 → 17 → 10 → **22** | vòng 6 **tăng lên** — sóng lùi: sửa 10 mục thì hỏng 12 mục khác |
+| `do-vat` picture | 80 → 4 mục sai | **không mục nào sai lần thứ hai**; 71/80 đạt ngay vòng đầu |
+| `the-gioi` picture | 37 → 4 mục sai | như trên |
+
+**Kết luận.** Sửa nhiều vòng **có thật sự làm phim tốt lên** — nhưng chỉ trong **2–3 vòng đầu**:
+đường hội tụ thu rõ (80 → 4 mục sai; 27 → 1). Từ vòng thứ tư trở đi, những gì còn lại là **một mục
+duy nhất** bị chấm lại mãi, và mỗi vòng ấy **không** mua được gì (cùng một lời phàn nàn). Nên con số
+"6–9 vòng" mà skill từng ghi là **đo sai**: nó đo lúc chạm trần, không phải lúc hội tụ.
+
+**Chỗ thời gian thực sự chảy** (từ `out/sessions.jsonl`):
+
+| tập | chặng 1 | chặng 2 | chặng 3 (hình) | chặng 4-5 (vật) | chặng 6 | tổng |
+|---|---|---|---|---|---|---|
+| `do-vat/tap-03` | 0h27 | 0h34 | **6h16** | 3h13 | — | 10h34 |
+| `co-the/tap-02` | 0h44 | 0h23 | **7h11** | — | — | 8h20 |
+| `the-gioi/tap-03` | 0h21 | 0h17 | **8h26** | 3h53 | 1h14 | 14h12 |
+
+Chặng hình ăn 6–8 tiếng, nhiều hơn tất cả các chặng khác cộng lại — và các phiên ấy chỉ có 1–39
+lượt. Thời gian không nằm ở lượt của agent: nó nằm ở **người chấm mở 20 ảnh cỡ thật rồi viết 60
+dòng trả lời** — mỗi lượt viết lại phải trả lại toàn bộ 20 ảnh đã mở (mỗi ảnh 1920×1080 vào
+ngữ cảnh là vài chục nghìn token).
+
+**Guard.**
+- `review.py` `scope()`: mục đã MỞ thì nằm yên (chỉ được chấm lại thêm một lần) → đuôi vòng lặp bị
+  cắt, mà chất lượng không đổi (xem P23).
+- Lời nhắc cho người chấm: **mở một ảnh, trả lời ngay mọi câu của ảnh đó, rồi mở ảnh tiếp theo** —
+  cùng ảnh, cùng cỡ thật, chỉ đổi thứ tự làm, để ảnh nằm trong ngữ cảnh đúng lúc nó còn dùng.
+
 ---
 
 ## Đã làm
