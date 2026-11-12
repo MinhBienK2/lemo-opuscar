@@ -38,6 +38,7 @@ _LIMIT = os.environ.get('LEMO_CRITIC_BATCH')
 if _LIMIT:
     BATCH = {k: min(v, int(_LIMIT)) for k, v in BATCH.items()}
 TRIES = 3   # failures before an item is OPEN
+DEMOTE = 3    # failures of ONE CHẶN criterion before that criterion is demoted to GÓP Ý
 # Trần số vòng cho MỖI BƯỚC. Một bước chấm đi mãi thì không có đường ra: vòng N+1 chấm lại đúng
 # những mục vòng N vừa chấm, và mỗi vòng lại mở ra một vòng mới (M1). Khi vòng chạm trần, bước đóng
 # lại với những mục còn lại ở trạng thái MỞ — cùng luật "sai ba lần thì thành MỞ" áp cho cả bước.
@@ -227,7 +228,21 @@ def judge(st, crit, batch, ask, rnd):
         if it in missing: continue
         rows = got[it['id']]
         old = st['items'].get(it['id'], {})
-        failed = any(rows[c][0] == 'LỖI' for c in must)
+        # M25: một tiêu chí CHẶN mà sửa mãi không được thì HẠ XUỐNG GÓP Ý sau DEMOTE lần sai của
+        # chính nó. Không có chỗ này, một tiêu chí vô lý (vệt mực 2 px tràn sang dải bóng) giữ mãi
+        # một vật đã đúng ở trạng thái FAIL, bước không đóng, và vòng lặp không bao giờ kết thúc.
+        # Đo được: một vật đã được người chấm xác nhận ĐẠT vẫn FAIL vì tiêu chí phụ đó.
+        demoted = set(old.get('demoted') or [])
+        cfails = dict(old.get('cfails') or {})
+        for c in must:
+            if rows[c][0] == 'LỖI':
+                cfails[c] = cfails.get(c, 0) + 1
+                if cfails[c] >= DEMOTE:
+                    demoted.add(c)
+            else:
+                cfails[c] = 0
+        eff = [c for c in must if c not in demoted]
+        failed = any(rows[c][0] == 'LỖI' for c in eff)
         tries = old.get('fails', 0) + (1 if failed else 0)
         verdict = 'PASS' if not failed else ('OPEN' if tries >= TRIES else 'FAIL')
         # OPEN là kết cục, không phải một phán quyết tạm: "sai ba lần thì thành MỞ, bước đóng và đi
@@ -236,7 +251,8 @@ def judge(st, crit, batch, ask, rnd):
         if old.get('verdict') == 'OPEN':
             verdict = 'OPEN'
         rec = {k: v for k, v in it.items() if k in ('key', 'fp', 'src', 'name')}
-        rec.update(verdict=verdict, fails=tries, round=rnd, rows=rows)
+        rec.update(verdict=verdict, fails=tries, round=rnd, rows=rows,
+                   demoted=sorted(demoted), cfails=cfails)
         st['items'][it['id']] = rec
     return missing
 
@@ -338,8 +354,10 @@ def summary(ep, step, crit, st):
     kinds = {c: k for c, k, _ in crit}
     by = {'FAIL': [], 'OPEN': [], 'PASS': []}
     for k, r in st['items'].items(): by.setdefault(r.get('verdict'), []).append((k, r))
+    n_demoted = sum(1 for r in st['items'].values() if r.get('demoted'))
     S = [f'# {step}: tóm tắt sau vòng {st.get("round", 0)}', '',
-         f"{len(by['PASS'])} ĐẠT · {len(by['OPEN'])} MỞ · {len(by['FAIL'])} PHẢI SỬA", '']
+         f"{len(by['PASS'])} ĐẠT · {len(by['OPEN'])} MỞ · {len(by['FAIL'])} PHẢI SỬA"
+         + (f" · {n_demoted} mục đã hạ tiêu chí (không còn chặn)" if n_demoted else ''), '']
 
     def rows(r, want):
         return [f"  - {c}: {seen}" + (f' → SỬA: {fix}' if fix else '')
@@ -355,6 +373,14 @@ def summary(ep, step, crit, st):
         for k, r in by['OPEN']:
             S += [f"- {k}" + (f" ({r['name']})" if r.get('name') else '')
                   + f" — lần sai {r.get('fails', 0)}/{TRIES}"] + rows(r, lambda c, v: v == 'LỖI')
+        S.append('')
+    demoted = [(k, r) for k, r in st['items'].items() if r.get('demoted')]
+    if demoted:
+        S += ['## Đã hạ xuống GÓP Ý (tiêu chí CHẶN sửa %d lần không được — không còn chặn)' % DEMOTE]
+        for k, r in demoted:
+            S += [f"- {k}" + (f" ({r['name']})" if r.get('name') else '')
+                  + f" — tiêu chí bị hạ: {', '.join(r['demoted'])}"]
+            S += rows(r, lambda c, v: v == 'LỖI' and c in (r.get('demoted') or []))
         S.append('')
     advice = [(k, r) for k, r in st['items'].items()
               if any(v == 'LỖI' and kinds.get(c) != 'CHẶN' for c, (v, _, _) in rows_of(r).items())]
@@ -705,8 +731,11 @@ def selftest():
         st, todo, failing, missing = run(ep, 'script', items, crit, ask)
         expect(not calls and [i['id'] for i in failing] == ['c2'], 'nothing changed: no critic call, c2 still to fix')
         items[1]['key'] = 'k2b'
+        # lỗi XOAYN giữa hai tiêu chí: cùng một tiêu chí sai ba lần thì bị hạ xuống GÓP Ý (M25)
+        answers.clear(); answers[('c2', 'a')] = 'LỖI'
         st, todo, failing, missing = run(ep, 'script', items, crit, ask)
         expect(calls == [['c2']] and st['items']['c2']['fails'] == 2, 'only the changed item goes back to the critic')
+        answers.clear(); answers[('c2', 'b')] = 'LỖI'
         st, todo, failing, missing = run(ep, 'script', items, crit, ask, again=['c2'])
         expect(st['items']['c2']['verdict'] == 'OPEN', 'third failure → OPEN')
         answers.clear(); items[0]['key'] = 'k1b'
@@ -732,15 +761,20 @@ def selftest():
         expect(st['items']['p1']['src'] == 'digest-B', 'and the verdict now belongs to the new source')
 
         # M15: OPEN là kết cục — một vòng sau đạt ĐẠT thì phán quyết MỞ không bị xoá.
+        # Các lỗi phải XOAYN giữa hai tiêu chí: cùng một tiêu chí sai ba lần thì bị HẠ xuống GÓP Ý
+        # (M25), chứ không phải MỞ.
         ep3 = os.path.join(tmp, 'tap3'); os.makedirs(os.path.join(ep3, 'review'))
         oitems = [{'id': 'o1', 'key': 'ko'}]
-        answers.clear(); answers[('o1', 'a')] = 'LỖI'; answers[('o1', 'b')] = 'LỖI'
+        answers.clear(); answers[('o1', 'a')] = 'LỖI'; answers[('o1', 'b')] = 'ĐẠT'
         cap_saved = MAX_ROUNDS.get('script')
         MAX_ROUNDS['script'] = 99   # ca này nói về nghĩa của MỞ, không phải về trần số vòng
         st, todo, failing, missing = run(ep3, 'script', oitems, crit, ask)
         expect(st['items']['o1']['verdict'] == 'FAIL', 'a failing item is FAIL')
         for n in range(2):
             oitems[0]['key'] = 'ko' + str(n + 1)   # the fixer changed it: judge it again
+            answers.clear()
+            answers[('o1', 'a')] = 'LỖI' if n % 2 == 0 else 'ĐẠT'
+            answers[('o1', 'b')] = 'ĐẠT' if n % 2 == 0 else 'LỖI'
             st, todo, failing, missing = run(ep3, 'script', oitems, crit, ask)
         expect(st['items']['o1']['verdict'] == 'OPEN', 'three failures → OPEN')
         answers.clear(); answers[('o1', 'a')] = 'ĐẠT'; answers[('o1', 'b')] = 'ĐẠT'
@@ -794,6 +828,9 @@ def selftest():
         epst = os.path.join(tmp, 'tapst'); os.makedirs(os.path.join(epst, 'review'))
         sitems = [{'id': 's1', 'key': 'ks', 'src': 'd0'}]
         answers.clear(); answers[('s1', 'a')] = 'LỖI'
+        global DEMOTE
+        demote_saved = DEMOTE
+        DEMOTE = 99   # ca này nói về số phần của một mục, không phải về việc hạ tiêu chí
         cap_p = MAX_ROUNDS.get('props')
         MAX_ROUNDS['props'] = 99    # ca này nói về số phần của một mục, không phải về trần số vòng
         st, todo, failing, missing = run(epst, 'props', sitems, crit, ask)
@@ -820,6 +857,20 @@ def selftest():
         st, todo, failing, missing = run(epst, 'props', sitems, crit, ask, again=['s1'])
         expect(calls == [['s1']], 'and --again still brings it back on purpose')
         MAX_ROUNDS['props'] = cap_p
+        DEMOTE = demote_saved
+
+        # M25: một tiêu chí CHẶN sai ba lần thì bị HẠ xuống GÓP Ý — nó không còn chặn mục đó nữa,
+        # và báo cáo nói rõ tiêu chí nào bị hạ (một vật đã đúng không còn bị giữ FAIL vì tiêu chí phụ 2 px).
+        epd = os.path.join(tmp, 'tapd'); os.makedirs(os.path.join(epd, 'review'))
+        ditem = [{'id': 'd1', 'key': 'kd'}]
+        answers.clear(); answers[('d1', 'a')] = 'LỖI'
+        for n in range(3):
+            ditem[0]['key'] = 'kd' + str(n)
+            st, todo, failing, missing = run(epd, 'props', ditem, crit, ask)
+        expect(st['items']['d1']['verdict'] == 'PASS' and st['items']['d1'].get('demoted') == ['a'],
+               'a CHẶN criterion that fails three times is demoted and stops blocking the item')
+        expect(st['items']['d1']['fails'] == 2,
+               'and the two failures before the demotion are still counted — the history is not rewritten')
 
         # P9: người chấm là một phần của tiêu chuẩn — đổi người giữa chừng thì phải chấm lại.
         expect(judge_changed({'critic': 'a'}, 'a') is None, 'the same judge is fine')

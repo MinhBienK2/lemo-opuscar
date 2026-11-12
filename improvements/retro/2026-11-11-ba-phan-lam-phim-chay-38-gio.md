@@ -1,5 +1,9 @@
 # Retro — ba phiên làm phim chạy song song 38 giờ, không tập nào đóng được (2026-11-11)
 
+> **Cập nhật 13/11:** các tập mà bản ghi này đo — kể cả `the-gioi/tap-02-vi-sao-troi-den-ban-dem`
+> (23 vòng chấm hình, ~25 giờ) — đã bị **xoá** theo yêu cầu của người dùng. Các số đo ở đây vẫn là
+> bằng chứng về cách vòng lặp chấm tiêu thời gian; các guard sinh ra từ đó thì còn nguyên.
+
 Bản ghi này đọc lại ba phiên Claude Code đang chạy suốt 38 giờ trên ba tập của kênh Trạm Nghĩ Nhiều,
 đối chiếu từng khẳng định với mã nguồn công cụ. Nó **không sửa gì** trong ba tập: mọi việc dựng hình và
 chấm đang chạy, nên bản ghi chỉ là tài liệu, để cải thiện sau khi ba tập này xong.

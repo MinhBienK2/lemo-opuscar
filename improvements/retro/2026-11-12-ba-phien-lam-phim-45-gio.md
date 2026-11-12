@@ -1,5 +1,12 @@
 # Retro — ba phiên làm phim 09–11/11: hai ngày cho ba tập, và mười ba giờ chờ trong vòng dò (2026-11-12)
 
+> **Các tập mà bản ghi này đo đã bị xoá** (13/11, theo yêu cầu của người dùng):
+> `do-vat/tap-03-dien-thoai-nong-khi-sac`, `co-the/tap-02-vi-sao-tay-mo`,
+> `the-gioi/tap-03-bien-luc-trong-to` và `the-gioi/tap-02-vi-sao-troi-den-ban-dem`. **Các số đo ở
+> đây vẫn đúng** — chúng là bằng chứng về cách vòng lặp chấm tiêu thời gian — nhưng không còn tệp
+> phim nào để mở lại. Những gì bản ghi này sinh ra (các guard, cơ chế, `review.py`, `gate.py`,
+> `props_catalog.py`, `hook_*.py`) thì **còn nguyên** và đang chạy.
+
 Bản ghi này đọc lại **ba phiên Claude Code** đã làm ba tập của kênh Trạm Nghĩ Nhiều từ 09/11 19:01
 UTC đến 11/11 17:59 UTC — hai ngày — và **đo** lại chúng thay vì đọc lại lời kể. Nó bổ sung bản ghi
 11/11 (`2026-11-11-ba-phan-lam-phim-chay-38-gio.md`, M1–M17): bản ghi đó đã tìm ra *nguyên nhân* của vòng
@@ -525,9 +532,23 @@ Ngoài ra: **lùi (mục ĐẠT rồi lại FAIL) xuất hiện đúng lúc đ�
 
 Trường hợp xấu nhất đo được: `the-gioi/tap-02` bước `picture` — **23 vòng, ~25 giờ, phần lớn câu vẫn MỞ**.
 
----
+## P25 — high — Một **tiêu chí CHẶN sửa ba lần không được** thì hạ xuống GÓP Ý, thay vì giữ vật ở FAIL
 
-## Đã làm
+**Bằng chứng.** `may-ghi-giac-ngu` (props của `co-the/tap-01`): vòng 10, người chấm xác nhận **yêu cầu
+chính đã ĐẠT** — *"đúng một thiết bị bàn đếm giấc ngủ: khối hộp kem bo tròn, mặt trước có màn hình in
+GHI GIỚ NGỦ + đồng hồ 00:45…"* — nhưng mục vẫn FAIL vì một tiêu chí phụ: vệt mực 2 px tràn sang dải
+bóng đổ. Vật đã đúng, mà bước vẫn không đóng, và mỗi vòng lại sinh ra một lỗi vi mô mới.
+
+**Guard.** `review.py`: mỗi tiêu chí CHẶN có bộ đếm riêng; tiêu chí nào sai `DEMOTE = 3` lần thì **bị hạ
+xuống GÓP Ý** — nó không còn chặn mục đó nữa, mà lịch sử sai vẫn còn (mục vẫn mang `fails` và các
+dòng bằng chứng). Báo cáo có mục riêng *"Đã hạ xuống GÓP Ý"*, và dòng tóm tắt nói có bao nhiêu mục
+bị hạ.
+
+Luật MỞ được giữ nguyên cho trường hợp **lỗi xoayn giữa các tiêu chí** (không tiêu chí nào đủ ba
+lần): mục đó vẫn thành MỞ sau ba lần sai. Hai luật không tranh nhau: *một tiêu chí* không sửa được →
+hạ; *cả mục* không sửa được → MỞ.
+
+---
 
 | Phát hiện | Guard |
 |---|---|
@@ -552,6 +573,8 @@ Trường hợp xấu nhất đo được: `the-gioi/tap-02` bước `picture` �
 | P19 | `tools/clean_episode.py`: dọn một tập đã bàn giao thì chỉ xoá thứ dựng lại được, **không bao giờ** chạm thư mục gốc, từ chối chạy khi tập chưa có phim, và ghi `out/cleaned.log` |
 | P20 | `hook_load.overload()`: swap chỉ tính khi RAM **cũng** đang cạn (`LEMO_SWAP_NEEDS_RAM_MB`, mặc định 3000 MB); RAM cạn thì luật cũ vẫn chặn (`LEMO_MEM_MIN_MB` = 1200 MB). Selftest: 20 ca |
 | P21 | `core/render/review.sh` (cổng bàn giao) có bước `layout` chạy công cụ của kênh: hợp đồng bố cục chặn được chứ không chỉ in ra. Các vòng chấm giữa vẫn chỉ in |
+| P24 | Đường hội tụ của các vòng chấm đo được: vòng 2 sửa được 94 mục, vòng 3 còn 37, từ vòng 4 trở đi 132 mục nhưng ăn 80 % thời gian. Vòng chết có bốn nguyên nhân: yêu cầu tự mâu thuẫn, hai ngôn ngữ (hình học vs bề mặt), tiêu chí phụ không bao giờ đóng, và ảnh chấm bị cũ |
+| P25 | `review.py`: mỗi tiêu chí CHẶN có bộ đếm riêng; sai `DEMOTE = 3` lần thì bị **hạ xuống GÓP Ý** — không còn chặn mục đó, lịch sử sai vẫn còn, báo cáo có mục riêng. Luật MỞ giữ cho trường hợp lỗi xoayn giữa các tiêu chí |
 Tất cả đều có selftest: `review.py --selftest` (31 ca), `episode.py --selftest` (17 ca),
 `gate.py --selftest`, `hook_poll.py --selftest` (22 ca), `hook_load.py --selftest` (13 ca).
 

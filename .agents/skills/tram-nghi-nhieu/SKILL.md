@@ -54,6 +54,9 @@ trả lời từng mục: dàn ý, từng câu lời, từng khung hình chính,
 - Muốn chấm lại một mục chưa đổi: `--again <mã>,<mã>` (hoặc `--again all`).
 - Một mục sai ba lần thì thành **MỞ**: bước đóng và đi tiếp, mục đó nằm trong báo cáo cho người dùng. Một mục đã MỞ
   thì **giữ nguyên MỞ** — vòng sau có đạt ĐẠT thì nó vẫn nằm trong báo cáo.
+- Một **tiêu chí CHẶN** sửa ba lần mà không được thì bị **hạ xuống GÓP Ý**: nó không còn chặn mục đó nữa,
+  và báo cáo ghi rõ tiêu chí nào bị hạ. Lý do: một tiêu chí vô lý (vệt mực 2 px tràn sang dải bóng) giữ mãi
+  một vật đã đúng ở trạng thái FAIL, bước không đóng, và vòng lặp không bao giờ kết thúc.
 - **Mỗi bước có trần số vòng** (cột "Vòng chấm" trong bảng trên, và `review.py` `MAX_ROUNDS`). Khi chạm trần,
   vòng đó không chạy nữa: phần còn lại thành MỞ, bước đóng lại, và báo cáo nói rõ vì sao. Một bước chấm
   đi mãi không có đường ra.
