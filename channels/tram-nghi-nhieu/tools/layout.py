@@ -10,7 +10,7 @@ moves or deletes anything.
 import fnmatch, os, re, sys
 
 ROOT_FILES = ('TREATMENT.md', 'LOOK.md', 'COMPONENTS_SPEC.md', 'CREDITS', 'film.json', 'index.html', 'build.sh',
-              'events.json', 'poster.jpg', 'mk_timeline.py', '*.mp4', '*.transcript.srt')
+              'events.json', 'poster.jpg', 'mk_timeline.py', '*.mp4', '*.transcript.srt', '*.fingerprint.json')
 ROOT_DIRS = ('research', 'voice', 'src', 'review', 'out')   # research, voice, out: anything inside
 SRC_FILES = ('*.js', 'MAP.md')
 SRC_DIRS = {'props': ('*.js',)}
@@ -105,7 +105,8 @@ def selftest():
     try:
         ep = os.path.join(tmp, 'tap')
         for f in ('TREATMENT.md', 'LOOK.md', 'COMPONENTS_SPEC.md', 'CREDITS', 'film.json', 'index.html', 'build.sh',
-                  'events.json', 'poster.jpg', 'tap.mp4', 'tap.transcript.srt', 'research/FACTS.md',
+                  'events.json', 'poster.jpg', 'tap.mp4', 'tap.transcript.srt', 'tap.fingerprint.json',
+                  'research/FACTS.md',
                   'voice/lines.json', 'voice/c1.wav', 'src/film.js', 'src/set.js', 'src/shots.js', 'src/MAP.md',
                   'src/props.js', 'src/props/am-dun.js', 'src/props/_vai.js', 'review/outline.json',
                   'review/OUTLINE.md', 'review/outline-3.md', 'review/FINAL-QA.md', 'review/.lock-props',

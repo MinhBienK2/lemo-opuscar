@@ -68,6 +68,7 @@ series/<cột>/<tập>/
 │   └── <bước>.json, <BƯỚC>.md, <bước>-<vòng>.md, FINAL-QA.md
 ├── out/                           mọi thứ dựng ra; mọi bản thử trong out/scratch/. Không commit, xoá được
 └── <tên>.mp4, <tên>.transcript.srt, poster.jpg    phim thành phẩm
+    <tên>.fingerprint.json                          vân tay mã của chính phim đó (đi cùng phim)
 ```
 
 Một tập gọi code kênh bằng đường dẫn tương đối, không sao chép công cụ hay rig vào tập:

@@ -32,7 +32,7 @@ about them. This file is the contract the tools are built against; the glossary 
 │           ├── voice/              # lines.json and the generated speech of this episode
 │           ├── events.json
 │           ├── out/                # render output (never committed)
-│           └── *.mp4, poster.jpg, *.transcript.srt
+│           └── *.mp4, poster.jpg, *.transcript.srt, *.fingerprint.json
 ├── films/                          # the one-shot films: films that belong to no channel
 │   └── <film>/                     # the same shape as an episode
 ├── FILMS.md                        # the index of every film, generated from the manifests
@@ -187,6 +187,14 @@ template, and `templates/NEXT.txt` replaces the generic next steps):
 
 The scaffold never copies a previous episode: an episode starts empty of identity, so a copied
 treatment, research file or build name cannot happen.
+
+**A film carries the fingerprint of the code it was built from.** `build.sh` writes it next to the
+film when the film is delivered — `<tên phim>.fingerprint.json` beside `<tên phim>.mp4` — so the two
+always belong to each other. The delivery gate compares that file with the code on disk now: a
+movie whose code has moved on is stale, even when every timestamp says otherwise. (The build's own
+snapshot, `out/source-fingerprint.json`, describes the code a build *started* from; it is the
+fallback for a film made before the sidecar existed, and it lives in `out/` because nothing reads
+it after the film is delivered.)
 
 ## The cast
 
