@@ -312,6 +312,15 @@ def problems(ep):
         if len(fs) > 1:
             out.append('export `%s` có ở nhiều tệp (%s): `export *` trong src/props.js sẽ bỏ nó đi âm thầm'
                        % (e, ', '.join(fs)))
+    # Một tệp dùng chung (`_`) mà tệp vật import mà KHÔNG TỒN TẠI: `_closure` bỏ qua nó âm thầm, nên
+    # digest của vật băm thiếu mà không báo — phán quyết của vật không đổi dù mã đã đổi. Đây là
+    # loại lỗi im lặng, nên nó phải được nói ra (M28).
+    for i in props + helpers:
+        text = _read(os.path.join(_pdir(ep), i + '.js'))
+        for g in IMPORT_RE.findall(text):
+            if not os.path.isfile(os.path.join(_pdir(ep), g)):
+                out.append('src/props/%s.js import "./%s" mà tệp đó không có — digest của vật sẽ băm '
+                           'thiếu mà không báo' % (i, g))
     p = _barrel(ep)
     if not os.path.isfile(p):
         out.append('src/props.js chưa có — chạy props_catalog.py --write-index')
@@ -420,6 +429,18 @@ def selftest():
         a = digest(sp, catalog(sp)[1])
         w(sp, 'src/props/_shared.js', "export const M = {a: 2};\nexport function rbox() {}\n")
         case('digest theo _ bắc cầu', a != digest(sp, catalog(sp)[1]))
+        # M28: một tệp dùng chung (`_`) mà tệp vật import mà không tồn tại — `_closure` bỏ qua nó
+        # âm thầm, nên digest băm thiếu mà không báo. Đó là loại lỗi im lặng: phải nói ra.
+        w(sp, 'src/props/kep.js',
+          "import { rbox } from './_khong-co.js';\nexport function kep() { return {group: rbox}; }\n"
+          "export const PROP = {\n  name: \"kẹp gỗ\",\n  view: () => kep().group,\n};\n")
+        ps = problems(sp)
+        case('tệp dùng chung không tồn tại thì báo',
+             any('_khong-co.js' in x and 'không có' in x for x in ps), ps)
+        # trả lại tệp vật về hình dạng lành lặn, để các ca sau đo trên một tập sạch
+        w(sp, 'src/props/kep.js',
+          "import { rbox } from './_shared.js';\nexport function kep() { return {group: rbox}; }\n"
+          "export const PROP = {\n  name: \"kẹp gỗ\",\n  view: () => kep().group,\n};\n")
         # a new file is appended, not sorted in
         w(sp, 'src/props/aa-moi.js', "export const PROP = { name: 'mới', view: () => ({}) };\n")
         case('thêm tệp mà chưa sinh lại thì báo', any('thiếu aa-moi' in p for p in problems(sp)), problems(sp))
