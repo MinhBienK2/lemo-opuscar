@@ -739,6 +739,34 @@ def selftest():
         expect(st['round'] <= cap, f'the round counter never passes the cap ({cap})')
         expect(st['items']['x1']['verdict'] == 'OPEN', 'at the cap the rest of the step becomes OPEN')
 
+        # M24(c): chạm trần số vòng thì bước `props` phải ĐÓNG. Trước đây mục bị ép MỞ không mang
+        # digest hiện tại, nên gate.tally() đếm nó là "chưa chấm hay đã đổi" và bước không đóng —
+        # tập không đi tiếp được, dù chặng không hỏng.
+        epcap = os.path.join(tmp, 'tapcap')
+        os.makedirs(os.path.join(epcap, 'review'))
+        os.makedirs(os.path.join(epcap, 'src', 'props'))
+        with open(os.path.join(epcap, 'src', 'props', 'ly.js'), 'w', encoding='utf-8') as f:
+            f.write("export const PROP = { name: 'ly', build() { return null; } };\n")
+        import props_catalog
+        cat = props_catalog.catalog(epcap)
+        expect(len(cat) == 1 and cat[0]['id'] == 'ly', 'the fixture prop is in the catalog')
+        yitems = [{'id': cat[0]['id'], 'key': 'ky', 'src': props_catalog.digest(epcap, cat[0]),
+                   'name': cat[0]['name']}]
+        pcap = MAX_ROUNDS.get('props', 0)
+        answers.clear(); answers[('ly', 'a')] = 'LỖI'
+        prop_file = os.path.join(epcap, 'src', 'props', 'ly.js')
+        for n in range(pcap + 2):
+            # người sửa sửa tệp vật → digest thật của mã đổi → mục đi lại vòng chấm
+            with open(prop_file, 'a', encoding='utf-8') as f:
+                f.write(f'// sửa lần {n}\n')
+            yitems[0]['src'] = props_catalog.digest(epcap, cat[0])
+            st, todo, failing, missing = run(epcap, 'props', yitems, crit, ask)
+        expect(st['items']['ly']['verdict'] == 'OPEN', 'at the cap the prop becomes OPEN')
+        expect(gate.why_open(epcap, 'props') is None,
+               'and the props step CLOSES: the forced-OPEN item carries the digest of the code on disk')
+        expect(gate.tally(epcap, 'props')['OPEN'] == ['ly'],
+               'and the gate counts it as MỞ, not as "chưa chấm hay đã đổi"')
+
         # P9: người chấm là một phần của tiêu chuẩn — đổi người giữa chừng thì phải chấm lại.
         expect(judge_changed({'critic': 'a'}, 'a') is None, 'the same judge is fine')
         msg = judge_changed({'critic': 'a'}, 'b')
