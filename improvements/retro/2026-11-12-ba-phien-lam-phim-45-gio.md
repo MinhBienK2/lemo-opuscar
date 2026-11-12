@@ -416,6 +416,18 @@ của tập — nơi có phim đã bàn giao, mã nguồn, dàn ý; **từ chố
 mục gốc, vì lúc đó `out/` có thể đang là nơi làm việc của một lần dựng đang chạy; và ghi
 `out/cleaned.log` — cái gì đã xoá, lấy lại bao nhiêu byte.
 
+## P20 — high — Cái chặn tải coi **swap đầy** là hết RAM, và chặn cả việc dựng trên máy còn 6 GB trống
+
+**Bằng chứng.** 12-11 lúc 12:20–12:30: `swap` báo **99 %** trong khi `MemAvailable` là **6,1–8,4 GB**.
+Linux giữ các trang đã swap ở lại cho tới khi chúng được đụng tới, nên swap đầy mà RAM dư thì
+KHÔNG phải chuyện sắp hết bộ nhớ. Cái chặn (`hook_load.py`) coi `swap% >= SWAP_MAX` là quá tải
+độc lập với RAM, nên nó chặn **mọi** việc dựng hình — đúng ba tập đang chạy — trên một máy không
+hề thiếu RAM. Đây là cái chặn tự dựng để chống OOM, và nó lại chặn nhầm vì tín hiệu sai.
+
+**Guard.** `hook_load.overload()`: swap chỉ tính khi RAM **cũng** đang cạn
+(`LEMO_SWAP_NEEDS_RAM_MB`, mặc định 3000 MB). RAM cạn thì luật cũ vẫn chặn như trước
+(`LEMO_MEM_MIN_MB` = 1200 MB). Selftest: 20 ca.
+
 ---
 
 ## Đã làm
