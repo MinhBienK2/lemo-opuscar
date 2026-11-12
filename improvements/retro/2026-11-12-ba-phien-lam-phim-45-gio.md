@@ -256,6 +256,65 @@ nhất; `SKILL.md` nói: **một tập dùng MỘT người chấm suốt tập*
 
 ---
 
+## P10 — high — Một sự cố **hạ tầng** bị quy oan là một chặng hỏng, vì hai bộ đếm trả lời khác nhau
+
+**Bằng chứng.** Cả ba tập dừng ở chặng 3 với cùng một thông điệp: *"chặng 3 (look) chưa xong sau 2
+phiên … đây là chỗ cần người quyết"*. Không có chặng nào hỏng: sổ của cả ba tập cho thấy hai hàng
+của chặng 3 đều là `error: true`, và transcript cho thấy cả hai chết vì
+`API Error: 530 … The host is configured as a Cloudflare Tunnel, but Cloudflare is currently
+unable to reach it` — phiên dài nhất đã làm xong phần lớn việc rồi mới chết (do-vat: 3 722 s,
+433 lượt, 77,91 USD; co-the: 3 333 s, 469 lượt; the-gioi: 5 127 s, 161,44 USD).
+
+Hai bộ đếm cùng hỏi "chặng này đã dùng mấy lượt" và **không đồng ý**:
+
+| Bộ đếm | Chỗ | Câu hỏi | Câu trả lời |
+|---|---|---|---|
+| Đọc từ sổ | `episode.py:86` (`1 if not row.get('error')`) | phiên lỗi có dùng lượt không | **không** — chặng 3 = 0 lượt |
+| Trong RAM | `episode.py:166` (tăng trước khi chạy, không hoàn lại) | phiên lỗi có dùng lượt không | **có** — chặng 3 = 2 lượt |
+
+Nên trong một lần chạy của runner, hai phiên chết vì 530 đã ăn hết ngân sách của chặng, và runner
+dừng với lời quy oan. Ba tập cùng dừng đúng lúc đó (12-11 04:48).
+
+**Guard.** `episode.py` có `budget(ep)` — **một** bộ đếm, đọc lại từ `out/sessions.jsonl` của tập mỗi
+vòng; `is_crash()` tách *chết vì hạ tầng* (không có kết quả; có `api_error_status`; nhắc tunnel
+hay reset) khỏi *lỗi của chặng* (hết lượt `error_max_turns`, hết tiền `error_max_budget_usd`) —
+chết vì hạ tầng không dùng lượt của chặng, lỗi của chặng thì dùng. Hàng cũ (không có trường `crash`)
+mà `error=true` thì đọc là crash, nên ba tập đang dở giữ nguyên ngân sách. Quá `MAX_CRASHES` lần thì
+runner dừng với thông điệp **nói đúng là cổng inference**, không phải "cần người quyết". Dòng sổ bị
+cắt giữa chừng không còn làm mất ngân sách của các dòng sau nó.
+
+## P11 — high — Bàn giao của một chặng nằm trong **stdout của runner**, nên nó chết theo runner
+
+**Bằng chứng.** `episode.py` yêu cầu phiên kết thúc bằng "tóm tắt cho phiên sau, tối đa tám dòng",
+nhưng tám dòng đó chỉ được in ra stdout của runner. Runner chết (530, OOM) là mất bàn giao — và
+chặng sau là một phiên mới, không có gì để đọc. Việc này đo được ở cả ba tập sau khi chặng 3 chết:
+
+| Tập | Việc còn trên đĩa | Việc chặng sau phải làm lại |
+|---|---|---|
+| do-vat/tap-03 | `LOOK.md` 148 dòng (80 dòng bảng), `src/film.js` 385 dòng, `src/set.js` 687 dòng, 15 vật, 80 câu giọng đọc | dựng 27 ảnh hero (0/27), chấm lại `look` |
+| the-gioi/tap-03 | 37 ảnh hero **cũ hơn code 7 phút**, `review/look.json` 12 mục | dựng lại 37 ảnh, vá 7 dòng bảng lệch, chấm lại |
+| co-the/tap-02 | `src/film.js` 413 dòng, `src/set.js` 765 dòng, `LOOK.md` 87 dòng — **chưa được git theo dõi** | dựng 50 ảnh hero (bộ cũ đã lỗi thời) |
+
+Một thứ nữa: `review.py` chỉ so **dấu vân tay ảnh**, không so mã nguồn, nên the-gioi chấm lại 8 mục
+FAIL trên 37 ảnh cũ sẽ không bao giờ thoát FAIL — vòng chấm tự nó là một vòng lặp vô tận.
+
+**Guard.** Bàn giao nằm **trong tập**: `out/leg-<n>.md`, và prompt của chặng sau mang theo nó. Ghi chú
+tiếp tục (`out/resume-note.md`) cho phiên kế tiếp — ghi chú ghi "leg: N" thì chỉ dùng cho chặng N, nên
+một ghi chú cũ không lái sai chặng sau. Lần chạy lại hôm nay, ba tập nhận đúng ghi chú còn dở và bắt
+đầu ở "phiên 1/2" thay vì bị quy oan.
+
+## P12 — medium — Ảnh kiểm tra vật **dựng lại ra một vật khác**, vì một bên seed hạt giống còn bên kia thì không
+
+**Bằng chứng.** `src/film.js` seed `Math.random = mulberry(20261112)`; `propcheck/main.js` thì không
+seed gì cả. Bốn vật trong mười lăm vật dựng ra hai hình khác nhau giữa hai lần chạy — mỗi lần dựng
+lại là một vật khác, nên vòng chấm vật không bao giờ ổn định và mọi lần sửa lại phải chấm từ đầu.
+
+**Guard.** `propcheck/main.js` seed `Math.random` bằng `mulberry` (mặc định 20261112), và
+`tools/propcheck.mjs` đọc hạt giống của tập từ `src/film.js` rồi truyền qua `?seed=` — ảnh vật
+trùng với phim chứ không chỉ trùng với chính nó. Kiểm chứng: hai lần dựng, 28 ảnh, md5 giống hệt.
+
+---
+
 ## Đã làm
 
 | Phát hiện | Guard |
@@ -269,9 +328,12 @@ nhất; `SKILL.md` nói: **một tập dùng MỘT người chấm suốt tập*
 | P7 | `review.py`: verdict không đổi từ OPEN sang PASS |
 | P8 | `tools/hook_load.py` dựng lại: chặn việc nặng khi máy quá tải, và nêu đang có gì chạy |
 | P9 | `review.py` ghi người chấm vào state; `gate.py status` in người chấm gần nhất |
+| P10 | `episode.py`: **một** bộ đếm `budget(ep)` đọc từ sổ của tập mỗi vòng; `is_crash()` tách chết-vì-hạ-tầng (không dùng lượt) khỏi lỗi-của-chặng (có dùng lượt); `MAX_CRASHES` và thông điệp nói đúng là cổng inference |
+| P11 | `episode.py`: bàn giao của chặng nằm trong tập (`out/leg-<n>.md`) và được đưa vào prompt của chặng sau; ghi chú tiếp tục (`out/resume-note.md`) chỉ dùng cho đúng chặng của nó |
+| P12 | `propcheck/main.js` seed `Math.random` bằng `mulberry`; `tools/propcheck.mjs` truyền hạt giống của tập (`?seed=`) đọc từ `src/film.js` |
 
-Tất cả đều có selftest: `review.py --selftest` (31 ca), `episode.py --selftest` (8 ca),
-`gate.py --selftest`, `hook_poll.py --selftest` (22 ca), `hook_load.py --selftest` (8 ca).
+Tất cả đều có selftest: `review.py --selftest` (31 ca), `episode.py --selftest` (17 ca),
+`gate.py --selftest`, `hook_poll.py --selftest` (22 ca), `hook_load.py --selftest` (13 ca).
 
 ## Không thể có guard — chỉ ghi lại
 
