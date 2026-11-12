@@ -448,7 +448,7 @@ hề thiếu RAM. Đây là cái chặn tự dựng để chống OOM, và nó l
 | P12 | `propcheck/main.js` seed `Math.random` bằng `mulberry`; `tools/propcheck.mjs` truyền hạt giống của tập (`?seed=`) đọc từ `src/film.js` |
 | P13 | `gate.py` `hero_stale(ep)`: `gate.py status` báo ảnh hero nào dựng trước khi `src/` đổi lần cuối — cảnh báo, không phải phán quyết |
 | P14 | `sourcewatch.fingerprint()` đi **đệ quy** vào `src/` (và `rig/`): vân tay phải thấy `src/props/**`, nơi kênh này để một tệp cho mỗi vật |
-| P15 | Vân tay được viết **cạnh chính phim** lúc bàn giao (`<tên>.fingerprint.json`); `sourcecheck.mjs` ưu tiên nó, và `build.sh` của mọi tập copy ảnh chụp của lần dựng sang đó |
+| P15 | Vân tay được viết **cạnh chính phim** lúc bàn giao (`<tên>.fingerprint.json`); `sourcecheck.mjs` ưu tiên nó, và `build.sh` của mọi tập copy ảnh chụp của lần dựng sang đó. **Và tệp bàn giao mới phải vào hợp đồng bố cục** — nếu không, chính `layout.py` báo "tệp ngoài bố cục" cho mọi tập dùng nó (bắt được bởi phiên bên kia; `layout.py` + `docs/layout.md` + `CHANNEL.md` đã sửa) |
 | P16 | `review.py` (chạm trần): mục bị ép MỞ mang `key`/`src`/`name` hiện tại, nên `gate.tally()` đếm nó là MỞ chứ không phải "chưa chấm", và bước đóng lại |
 | P17 | `sourcecheck.diffFiles()` so tệp mà ảnh chụp cũ không phủ bằng mốc sửa của nó với lúc chụp — phim cũ vẫn xanh, lỗ hổng vẫn bị bắt |
 Tất cả đều có selftest: `review.py --selftest` (31 ca), `episode.py --selftest` (17 ca),
