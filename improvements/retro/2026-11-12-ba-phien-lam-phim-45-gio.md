@@ -315,6 +315,19 @@ trùng với phim chứ không chỉ trùng với chính nó. Kiểm chứng: ha
 
 ---
 
+## P13 — medium — Ảnh hero **cũ hơn mã** vẫn giữ phán quyết của nó, và vòng chấm không bao giờ thoát
+
+**Bằng chứng.** `the-gioi/tap-03-bien-luc-trong-to`: 37 ảnh trong `review/hero/` dựng lúc 04:30,
+`src/` sửa tới 04:46. Bước `look` chỉ so **dấu vân tay ảnh**, không so mã nguồn — nên chấm lại 8 mục
+FAIL trên 37 ảnh cũ là chấm lại đúng cái ảnh cũ đó, và các mục đó không bao giờ thoát LỖI. Một bước
+chấm không hội tụ vì lý do nó tưởng.
+
+**Guard.** `gate.py` có `hero_stale(ep)`: ảnh nào dựng trước mốc `src/` đổi lần cuối thì báo trong
+`gate.py status` — lệnh mà mọi chặng đọc đầu tiên. Đây là **cảnh báo cho người làm**, không phải một
+phán quyết: ảnh cũ vẫn được chấm theo đúng những gì nó thể hiện. Khi sửa, ảnh phải dựng lại.
+
+---
+
 ## Đã làm
 
 | Phát hiện | Guard |
@@ -331,7 +344,7 @@ trùng với phim chứ không chỉ trùng với chính nó. Kiểm chứng: ha
 | P10 | `episode.py`: **một** bộ đếm `budget(ep)` đọc từ sổ của tập mỗi vòng; `is_crash()` tách chết-vì-hạ-tầng (không dùng lượt) khỏi lỗi-của-chặng (có dùng lượt); `MAX_CRASHES` và thông điệp nói đúng là cổng inference |
 | P11 | `episode.py`: bàn giao của chặng nằm trong tập (`out/leg-<n>.md`) và được đưa vào prompt của chặng sau; ghi chú tiếp tục (`out/resume-note.md`) chỉ dùng cho đúng chặng của nó |
 | P12 | `propcheck/main.js` seed `Math.random` bằng `mulberry`; `tools/propcheck.mjs` truyền hạt giống của tập (`?seed=`) đọc từ `src/film.js` |
-
+| P13 | `gate.py` `hero_stale(ep)`: `gate.py status` báo ảnh hero nào dựng trước khi `src/` đổi lần cuối — cảnh báo, không phải phán quyết |
 Tất cả đều có selftest: `review.py --selftest` (31 ca), `episode.py --selftest` (17 ca),
 `gate.py --selftest`, `hook_poll.py --selftest` (22 ca), `hook_load.py --selftest` (13 ca).
 
