@@ -19,7 +19,8 @@ code read again after each compaction). A fresh session per leg starts small, re
 ends when its leg is done. What one leg must tell the next lives in the episode's files, not in a context.
 
 Each session's cost lands in <episode>/out/sessions.jsonl: leg, seconds, turns, tokens in and out, cost, session id.
-Env: LEMO_STEP_CLI (default claude), LEMO_STEP_MODEL (model for the sessions).
+Env: LEMO_STEP_CLI (default claude), LEMO_STEP_MODEL (model for the sessions), LEMO_TRIES (how many
+sessions one leg may have; default 2 — raise it for a leg that needs many review rounds).
 """
 import glob, json, os, re, subprocess, sys, time
 
@@ -29,7 +30,7 @@ import gate  # noqa: E402
 
 CHANNEL = os.path.dirname(HERE)
 LIB = os.path.abspath(os.path.join(CHANNEL, '..', '..'))
-TRIES = 2
+TRIES = int(os.environ.get('LEMO_TRIES', 2) or 2)
 MAX_CRASHES = 5   # how many times one leg may die on the wire before the runner blames the gateway
 
 LEGS = [
