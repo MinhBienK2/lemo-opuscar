@@ -29,11 +29,15 @@ Làm đến bước nào thì chỉ mở `GUIDE.md` của bước đó.
 **Ba vòng là trần của mọi bước** (`review.py` `MAX_ROUNDS`; đặt bằng `LEMO_MAX_ROUNDS`). Khi chạm trần,
 vòng đó không chạy nữa: phần còn lại thành **MỞ**, bước đóng lại, và báo cáo nói rõ vì sao.
 
-Biết trước để khỏi lặp: trên các tập chạy thật, chặng dàn ý và chặng lời hội tụ trong 1–3 vòng, nhưng
-chặng hình và chặng vật cần **3–9 vòng**. Nên với trần 3, hai chặng sau **thường sẽ đóng với mục MỞ** —
-đó là cái đánh đổi của trần này, và các mục đó nằm trong báo cáo cho người dùng. Vì vậy: **mỗi vòng
-phải đổi được cái gì**; và nếu bạn thấy mình sửa cùng một thứ lần thứ ba thì dừng và ghi vào báo cáo
-mục nào không sửa được, thay vì chạy vòng nữa.
+Biết trước để khỏi lặp: đo trên các tập chạy thật, phần lớn mọi thứ **hội tụ ở vòng 2–3** — bước hình
+80 câu còn 4 câu sai ở vòng 2, bước vật 15 vật còn 1 vật ở vòng 2, bước hình bối cảnh 37 câu còn 10
+câu ở vòng 4. Những gì còn lại **sau đó thường là MỘT mục khó sửa**, và mỗi vòng nữa không mua được
+gì (cùng một lời phàn nàn lặp lại). Nên với trần 3, phần còn lại thành **MỞ** và nằm trong báo cáo
+cho người dùng — đó là cái đánh đổi của trần này.
+
+Vì vậy: **mỗi vòng phải đổi được cái gì**; nếu bạn thấy mình sửa cùng một thứ lần thứ ba thì dừng
+và ghi vào báo cáo mục nào không sửa được, thay vì chạy vòng nữa. Và **mỗi vòng phải đổi được nhiều
+thứ**: sửa một mục thường làm hỏng mục khác, nên sửa theo lô, đừng sửa lẻ tẻ.
 
 `sh channels/tram-nghi-nhieu/tools/review.sh <tập> <bước>` chạy ở chế độ nền của harness (`run_in_background`), rồi
 đọc kết quả một lần khi harness báo xong.
