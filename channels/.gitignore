@@ -22,3 +22,9 @@
 **/*.mp4
 */series/_*/
 
+# The Trạm Nghĩ Nhiều episodes stay on this machine entirely — the whole series folder is ignored, not
+# just its renders and its films. The episodes that were already in the index were taken out of it
+# (git rm --cached), so the index does not grow with a hundred review files and a finished film per
+# episode. The work is not lost: it stays in this working tree and in the history of this repository.
+tram-nghi-nhieu/series/
+

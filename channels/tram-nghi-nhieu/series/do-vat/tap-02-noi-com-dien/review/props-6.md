@@ -1,9 +1,0 @@
-# props — vòng 6
-
-Người chấm: claude -p --model claude-opus-5-5 · 2026-11-11 06:09 · 1 mục được chấm
-
-## cau-do-dien-tro — PASS (máy đo điện trở)
-- dung-vat [CHẶN] ĐẠT: Cả ba góc đều cho đủ bộ phận đặc trưng: thân vàng dạng hộp đứng, màn LCD tối hiện "1 kΩ", nút xoay tròn đen có 8 vạch chia toả quanh, hai cổng ở đáy có que đo đen và đỏ cắm vào — người không biết tên định dựng gọi đúng là đồng hồ vạn ôm cầm tay, khớp tên mù.
-- nguyen-ven [CHẶN] ĐẠT: Không có mảnh rời trôi lơ lửng, không mặt thủng: que đo nối liền với thân qua cổng/đầu cắm ở đáy, nút xoay là trụ liền mặt trước, các vạch chia bám đúng quanh nút. Chữ "1 kΩ" đúng chiều ở góc chéo và góc ngang tầm mắt; ở góc từ trên xuống mặt phẳng bị ép nặng nhưng sau khi nắn phẳng vùng LCD thì chữ vẫn đọc đúng là "1 kΩ" (không bị đảo gương). Nút xoay lấn lên góc dưới-trái màn hình ở góc trên xuống là hệ quả của nút nhô ra khỏi mặt phẳng, không phải mặt xuyên sai chỗ.
-- khoi-3d [CHẶN] ĐẠT: Góc chéo cho thấy vỏ sau màu navy lộ ra sau mặt trước vàng ở cạnh trên và cạnh phải (dải navy ~12px so với mặt trước rộng ~175px), góc từ trên xuống lộ viền trên vỏ và bóng đổ của khối; nút xoay là trụ có mặt trên sáng và thân tối, que đo là trụ tròn có mảng sáng tối, bóng đổ có khối — không phải tấm phẳng.
-- dep [GÓP Ý] LỖI: Hai que đo vẫn là hai trụ nhựa màu cụt (đen/đỏ) đầu bo tròn, không có đầu kim loại nhọn và không có dây nối, nên trông như hai chân của máy chứ không phải que đo; thân máy vẫn mỏng (vỏ navy chỉ ~12px sau mặt 175px) nên ở góc từ trên xuống chỉ lộ một sợi viền mỏng chứ không lộ mặt trên và cạnh dày; nút xoay không có nhãn dải, cổng cắm không có nhãn. → SỬA: Cho mỗi que đo có thân nhựa + đầu kim loại nhọn (và dây đỏ/đen rủ xuống) để đọc ra là que đo; dày vỏ lên khoảng 1/3 bề rộng và đặt góc thứ ba nhiêu hơn để lộ mặt trên vỏ cùng cạnh dày; thêm nhãn jack (COM/VΩ) và nhãn dải quanh nút xoay.
