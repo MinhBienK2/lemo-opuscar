@@ -4,7 +4,12 @@
 import * as THREE from 'three';
 import { film, Q } from '../rig/render.js';
 import { keyLight, ambience } from '../rig/lights.js';
-import { toon } from '../rig/kit.js';
+import { toon, mulberry } from '../rig/kit.js';
+
+// Hạt giống cố định: một vật có nhiễu ngẫu nhiên phải dựng ra CÙNG một hình mọi lần, nếu không
+// mỗi lần dựng lại là một vật khác, và vòng chấm vật không bao giờ ổn định (M20).
+// `?seed=` là hạt giống của chính tập, đọc từ src/film.js — cùng hạt giống với phim.
+Math.random = mulberry(Number(Q.get('seed')) || 20261112);
 
 await document.fonts.load('900 54px "Be Vietnam Pro"');
 const { PROPS } = await import(Q.get('mod') || './rig.js');

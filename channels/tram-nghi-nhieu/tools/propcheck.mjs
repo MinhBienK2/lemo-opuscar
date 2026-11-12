@@ -18,6 +18,12 @@ if (ep) {
   const mod = path.join(path.resolve(ep), 'src/props.js');
   if (!fs.existsSync(mod)) { console.error(`propcheck: ${mod} is missing — put every object of the episode there (export const PROPS = {…})`); process.exit(2); }
   q = 'mod=' + encodeURIComponent('/' + path.relative(LIB, mod));
+  // Hạt giống của tập, đọc từ src/film.js: ảnh vật phải giống hệt phim, và phải giống nhau mọi lần dựng (M20).
+  const filmJs = path.join(path.resolve(ep), 'src/film.js');
+  if (fs.existsSync(filmJs)) {
+    const m = fs.readFileSync(filmJs, 'utf8').match(/mulberry\((\d+)\)/);
+    if (m) q += (q ? '&' : '') + 'seed=' + m[1];
+  }
 }
 fs.mkdirSync(out, { recursive: true });
 const { browser, page } = await openDemo(path.join(HERE, '../propcheck'), { q });
