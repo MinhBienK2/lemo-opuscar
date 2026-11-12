@@ -6,7 +6,6 @@ Every film of the library, one row each. The one-shots live in `films/`; the epi
 
 | Film | Folder | Runtime | Movie |
 |---|---|---|---|
-| Phi vụ triệu đô trong 2 phút — a Money Heist explainer in a talking-head toon | `films/host-toon-test/` | 2:12 | `films/host-toon-test/phi-vu-trieu-do-2-phut.mp4` |
 
 ## Channels
 
