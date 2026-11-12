@@ -440,6 +440,16 @@ hề thiếu RAM. Đây là cái chặn tự dựng để chống OOM, và nó l
 (`LEMO_SWAP_NEEDS_RAM_MB`, mặc định 3000 MB). RAM cạn thì luật cũ vẫn chặn như trước
 (`LEMO_MEM_MIN_MB` = 1200 MB). Selftest: 20 ca.
 
+## P22 — medium — Digest băm **thiếu một tệp** thì phán quyết sai mà không ai nói
+
+**Bằng chứng.** `props_catalog._closure()` bỏ qua âm thầm tệp không tồn tại
+(`if not os.path.isfile(p): continue`). Nếu một tệp vật import một tệp dùng chung (`_`) đã biến
+mất — ví dụ sau khi dồn `src/sets/` — thì digest của vật được băm **thiếu mà không báo**, và
+`scope()` tưởng mã không đổi: phán quyết của vật không còn nói về mã thật, mà cổng vẫn xanh.
+
+**Guard.** `props_catalog.problems()` báo rõ tệp vật nào import `./…` mà tệp đó không có. Đo trên
+năm tập đã có vật: không tập nào dính, nên cái chặn này không tạo tiếng ồn. Selftest: 24 ca.
+
 ---
 
 ## Đã làm
