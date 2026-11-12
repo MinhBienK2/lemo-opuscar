@@ -241,17 +241,18 @@ if [ -n "$MP4" ]; then
   # artifact freshness: the movie must not be older than the sources it was built from
   echo "--- freshness: $MP4"
   STALE=0
-  for src in "$FOLDER"/src/*.js "$FOLDER"/voice/lines.json; do
+  # every source file, at any depth: this channel keeps one file per prop in src/props/, and a
+  # loop over src/*.js alone never looks at them (M24)
+  find "$FOLDER/src" -type f \( -name '*.js' -o -name '*.mjs' -o -name '*.css' -o -name '*.html' \) 2>/dev/null > "$TMP/srcs.txt"
+  echo "$FOLDER/voice/lines.json" >> "$TMP/srcs.txt"
+  while read -r src; do
     if [ -f "$src" ] && [ "$src" -nt "$MP4" ]; then
       echo "    FAILED: source file $src is newer than $MP4 — the delivered movie is stale; run build.sh again"
       FAIL=$((FAIL + 1))
       STALE=1
       break
     fi
-  done
-  if [ "$STALE" -eq 0 ]; then
-    echo "    ok: movie is up to date with source files"
-  fi
+  done < "$TMP/srcs.txt"
   if [ "$STALE" -eq 0 ]; then
     echo "    ok: movie is up to date with source files"
   fi
@@ -260,7 +261,14 @@ if [ -n "$MP4" ]; then
   # cannot say which version — a file edited *during* the build ends up newer than the movie, and
   # the movie still shows the old code. The build writes the fingerprint of the code it started
   # from; this compares it with the code that is on disk now.
-  SNAP="$FOLDER/out/source-fingerprint.json"
+  #
+  # The fingerprint that belongs to THIS film is the one written NEXT TO it when it was delivered.
+  # The build's own snapshot (out/source-fingerprint.json) describes the code a build started from,
+  # so a build that was abandoned after writing it leaves a snapshot that vouches for a film that
+  # was never made (M24). The sidecar wins; the snapshot is the fallback for a film built before it.
+  BASE=$(basename "$MP4"); BASE=${BASE%.*}
+  SNAP="$FOLDER/$BASE.fingerprint.json"
+  [ -f "$SNAP" ] || SNAP="$FOLDER/out/source-fingerprint.json"
   if [ -f "$SNAP" ]; then
     if node "$HERE/core/render/sourcecheck.mjs" "$FOLDER" "$SNAP" >"$TMP/src.txt" 2>&1; then
       echo "    ok: the movie was built from the code that is on disk now"
