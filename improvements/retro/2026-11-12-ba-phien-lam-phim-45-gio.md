@@ -392,10 +392,29 @@ bắt vòng lặp chờ, không bắt được: nó đếm theo **hình dạng c
 tục (`ls` → `ls -la` → `cat log` → `python3 -c "…"`), nên mỗi lần là một hình dạng mới và khoá đếm
 không bao giờ chạm ngưỡng.
 
-**Chưa có guard.** Một cách đo được: đếm lệnh **dò trạng thái theo lớp** (`ls`/`ps`/`cat` một tệp
-log/`gate.py status`/`python3 -c` đọc trạng thái) và chặn lần thứ N với ngưỡng cao (15–20), thông
-điệp nói rõ đây là *hỏi* chứ không phải *đọc*. Rủi ro: nó có thể chặn nhầm việc thật — liệt kê để
-biết trong thư mục có gì. Vì chưa dựng, nó chỉ ghi ở đây.
+**Guard (đã dựng, commit `3f1d59d`).** Ba cái, cùng một bệnh:
+- `hook_stale_read.py`: đọc **cả tệp** quá **10 lần trong một phiên** thì chặn, bất kể tệp có đổi
+  hay không — tệp bị đọc lại nhiều nhất là tệp **vừa sửa**, mà luật "tệp không đổi" không bắt được.
+- `hook_poll.py`: khoá đếm theo **LỚP** câu hỏi (`ls`/`stat`/`wc`/`du`, `cat`/`tail` tệp log,
+  `gate.py status`, `python3 -c` đọc trạng thái, `ps`), ngưỡng **20 lần hỏi** trong một phiên;
+  thông điệp phân biệt **hỏi** với **đọc** (`grep`, `Read` với `offset`/`limit` không bị đếm).
+- `hook_edit_count.py` (mới, matcher `Edit|Write`): chặn lần sửa thứ **21 của cùng một tệp** trong
+  một phiên, kèm cách làm đúng: gom các sửa vào một lần bằng `tools/replace.py --batch`.
+
+Ngưỡng cố ý cao hơn nhiều so với việc thật, vì một cái chặn chặn nhầm thì bị tắt trong một tuần.
+
+## P19 — high — Dọn một tập đã bàn giao mà **không để lại dấu vết**, thì lần sau không ai biết phim đi đâu
+
+**Bằng chứng.** Ngày 12-11 lúc 02:35, phim của `do-vat/tap-02` biến mất khỏi thư mục tập, và không ai
+để lại dấu vết: không ai biết đó là do một lần dọn tay hay do một lần dựng hỏng. Người dọn thì nhớ
+là mình dọn — nhưng người đọc báo cáo thì không có cách nào biết, và một phim biến mất không để lại
+dấu vết là lỗi của công cụ chứ không phải lỗi của người.
+
+**Guard.** `tools/clean_episode.py` (mới, có selftest 8 ca): chỉ xoá thứ **dựng lại được**
+(`out/video.mp4`, `out/scratch/`, `out/sbx/`, `voice/.cache/`); **không bao giờ** chạm vào thư mục gốc
+của tập — nơi có phim đã bàn giao, mã nguồn, dàn ý; **từ chối chạy** nếu tập chưa có phim nào ở thư
+mục gốc, vì lúc đó `out/` có thể đang là nơi làm việc của một lần dựng đang chạy; và ghi
+`out/cleaned.log` — cái gì đã xoá, lấy lại bao nhiêu byte.
 
 ---
 
