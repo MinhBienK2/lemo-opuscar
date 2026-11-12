@@ -26,7 +26,7 @@ if [ ! -f "$HERE/src/film.js" ]; then
   exit 1
 fi
 cd "$LIB"
-# the timeline: generated from the script by the episode's own mk_timeline.py, or else by the channel's
+# the timeline: generated from the script by the episode's own mk_timeline.py, or else the channel's
 # (FILM=this folder), which only writes a timeline.js it wrote itself: one written by hand is left alone
 if [ -f "$HERE/mk_timeline.py" ]; then
   "$LIB/.venv/bin/python" "$HERE/mk_timeline.py"
@@ -45,6 +45,7 @@ fi
 if [ ! -f "$HERE/voice/proc/dur.json" ]; then
   echo "no voice yet in $HERE/voice — the cues are timed from it. Make it first:" >&2
   echo "  $LIB/.venv/bin/python \"$CHANNEL/voice/tts_vi.py\" voice/lines.json voice/" >&2
+  echo "  $LIB/.venv/bin/python \"$CHANNEL/voice/process.py\" voice/" >&2
   exit 1
 fi
 FILM=$HERE "$LIB/.venv/bin/python" "$CHANNEL/mix.py"
@@ -92,6 +93,13 @@ fi
 # The captions are already burned into the picture: the .srt is the transcript for the platform, and it is not
 # named like the film so that a player does not load it on top of the captions that are in the picture.
 cp "$OUT/$NAME.mp4" "$OUT/$NAME.transcript.srt" "$OUT/poster.jpg" "$HERE/"
+# The fingerprint of the code this film was built from, written NEXT TO the film it describes. The
+# build's own snapshot (out/source-fingerprint.json) says what the code was when the build STARTED,
+# so a build that was abandoned after writing it leaves a snapshot that claims a film nobody has.
+# This one is copied when the film is delivered, so the two always belong together (M24).
+if [ -f "$OUT/source-fingerprint.json" ]; then
+  cp "$OUT/source-fingerprint.json" "$HERE/$NAME.fingerprint.json"
+fi
 # the review gate: the checks must pass before the film is called done (REVIEW=0 skips it)
 if [ "${REVIEW:-1}" = "1" ]; then
   set +e
