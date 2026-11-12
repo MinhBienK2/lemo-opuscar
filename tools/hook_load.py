@@ -30,6 +30,7 @@ CORES = os.cpu_count() or 4
 LOAD_MAX = float(os.environ.get('LEMO_LOAD_MAX', 0) or CORES * 1.5)
 MEM_MIN_MB = int(os.environ.get('LEMO_MEM_MIN_MB', 0) or 1200)
 SWAP_MAX = int(os.environ.get('LEMO_SWAP_MAX', 0) or 80)
+SWAP_NEEDS_RAM_MB = int(os.environ.get('LEMO_SWAP_NEEDS_RAM_MB', 0) or 3000)
 
 # Việc nặng: dựng hình, tờ nhịp, dựng phim, người chấm. Việc nhẹ thì vẫn cho chạy — người làm
 # phải đọc được báo cáo và sửa được mã trong lúc máy đang kẹt.
@@ -119,8 +120,13 @@ def overload(load=None, mem=None):
         return True, f'tải máy {load:.1f} (trần {LOAD_MAX:.1f} trên {CORES} lõi)'
     if avail_mb < MEM_MIN_MB:
         return True, f'bộ nhớ khả dụng chỉ còn {avail_mb} MB (cần ≥ {MEM_MIN_MB} MB)'
-    if swap_pct >= SWAP_MAX:
-        return True, f'swap đã dùng {swap_pct}% (trần {SWAP_MAX}%)'
+    # Swap đã dùng nhiều **mà RAM vẫn còn trống** thì không phải áp lực bộ nhớ: Linux giữ các
+    # trang đã swap ở lại cho tới khi chúng được đụng tới, nên một máy dư 6 GB RAM vẫn có thể
+    # báo swap 99 %. Trước đây cái chặn này chặn cả việc dựng hình trên một máy không hề thiếu
+    # RAM. Nên swap chỉ tính khi RAM cũng đang cạn (M28).
+    if swap_pct >= SWAP_MAX and avail_mb < SWAP_NEEDS_RAM_MB:
+        return True, (f'swap đã dùng {swap_pct}% (trần {SWAP_MAX}%) '
+                      f'và RAM chỉ còn {avail_mb} MB')
     return False, ''
 
 
@@ -183,7 +189,14 @@ def selftest():
         ('node core/render/still.mjs ep 12.5', 3.0, (6000, 10, 8000), 0),
         ('node core/render/still.mjs ep 12.5', 20.0, (6000, 10, 8000), 2),
         ('node core/render/still.mjs ep 12.5', 3.0, (500, 10, 8000), 2),
-        ('node core/render/still.mjs ep 12.5', 3.0, (6000, 90, 8000), 2),
+        ('node core/render/still.mjs ep 12.5', 3.0, (6000, 90, 8000), 0),
+        # M28: swap đầy mà RAM vẫn còn trống thì KHÔNG phải áp lực bộ nhớ — Linux giữ trang đã
+        # swap cho tới khi được đụng tới. Máy dư 6 GB RAM mà swap báo 99 % thì việc dựng vẫn
+        # phải chạy được.
+        ('node core/render/still.mjs ep 12.5', 3.0, (6000, 99, 8000), 0),
+        # còn RAM cùng swap đều cạn thì chặn
+        ('node core/render/still.mjs ep 12.5', 3.0, (2500, 99, 8000), 2),
+        ('node core/render/still.mjs ep 12.5', 3.0, (2500, 90, 8000), 2),
         ('claude -p "chấm"', 20.0, (6000, 10, 8000), 2),
         ('claude -p "chấm"', 3.0, (6000, 10, 8000), 0),
         # một tệp được NÊU TÊN trong lệnh khác không phải việc đang chạy
