@@ -103,12 +103,12 @@ function selftest() {
     // M24: a file BELOW src/ is part of the code. A channel keeps one file per prop in src/props/,
     // and a fingerprint that only reads the top of src/ sees none of them.
     fs.writeFileSync(path.join(ep, 'voice', 'lines.json'), '[]\n');
-    const snap2 = fingerprintOf(ep);
-    assert('src/props/bo-sac.js' in snap2, 'vân tay phải có tệp trong src/props/');
     fs.mkdirSync(path.join(ep, 'src', 'props'), { recursive: true });
     fs.writeFileSync(path.join(ep, 'src', 'props', 'bo-sac.js'), 'export const P = 1;\n');
-    const snap3 = fingerprintOf(ep);
-    assert('src/props/bo-sac.js' in snap3, 'vân tay phải có tệp trong src/props/');
+    const snap2 = fingerprintOf(ep);
+    assert('src/props/bo-sac.js' in snap2, 'vân tay phải có tệp trong src/props/');
+    console.log('ok   vân tay có tệp trong src/props/');
+    const snap3 = snap2;
     fs.writeFileSync(path.join(ep, 'src', 'props', 'bo-sac.js'), 'export const P = 2;\n');
     d = diffFiles(snap3, fingerprintOf(ep));
     assert(d.length === 1 && d[0] === 'src/props/bo-sac.js', JSON.stringify(d));

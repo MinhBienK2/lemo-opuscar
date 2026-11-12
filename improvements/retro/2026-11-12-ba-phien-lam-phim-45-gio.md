@@ -372,6 +372,33 @@ bằng **mốc sửa của nó với lúc ảnh chụp được chụp** — t�
 
 ---
 
+## P18 — medium — Phiên MiniMax **hỏi trạng thái nhiều hơn là làm**, và `hook_poll` không bắt được vì nó đếm theo hình dạng
+
+**Bằng chứng.** Đo trên các phiên `2tocom/MiniMax-M3.1-Flash` (đọc transcript dòng một, không nạp cả tệp):
+
+| phiên | lượt có công cụ | đọc lại cùng một tệp | lệnh dò trạng thái | sửa lại |
+|---|---|---|---|---|
+| A | 98 | 18/28 lần đọc (64 %) | 11/69 lệnh shell | `set.js` đọc 13× |
+| B | 222 | Bash 144 · Read 66 | `cd <tập>` 11×, `ls` 7×, `ls -la` 5× | cùng một ảnh hero đọc 3–4× |
+| C | 437 | 31/91 lần đọc (34 %) | 43/215 lệnh shell (20 %) | `khongkhi.js` sửa 65×, `film.js` sửa 41× |
+| D | 3 865 | Bash 2 579 · Edit 472 | — | `cat` chính transcript của nó 28× |
+
+Bốn dấu hiệu: **sửa cùng một tệp hàng chục lần** (mỗi lượt trả lại toàn bộ ngữ cảnh), **đọc lại
+tệp vừa sửa** (tệp bị đọc lại nhiều nhất là tệp vừa sửa), **dò trạng thái chiếm 16–20 % lệnh
+shell**, và **đọc lại chính transcript của mình**.
+
+Khác với P1: ở đây phiên **không chờ** — nó hỏi liên tục, không có `sleep`. Nên `hook_poll.py`, vốn
+bắt vòng lặp chờ, không bắt được: nó đếm theo **hình dạng câu lệnh**, mà MiniMax đổi hình dạng liên
+tục (`ls` → `ls -la` → `cat log` → `python3 -c "…"`), nên mỗi lần là một hình dạng mới và khoá đếm
+không bao giờ chạm ngưỡng.
+
+**Chưa có guard.** Một cách đo được: đếm lệnh **dò trạng thái theo lớp** (`ls`/`ps`/`cat` một tệp
+log/`gate.py status`/`python3 -c` đọc trạng thái) và chặn lần thứ N với ngưỡng cao (15–20), thông
+điệp nói rõ đây là *hỏi* chứ không phải *đọc*. Rủi ro: nó có thể chặn nhầm việc thật — liệt kê để
+biết trong thư mục có gì. Vì chưa dựng, nó chỉ ghi ở đây.
+
+---
+
 ## Đã làm
 
 | Phát hiện | Guard |
