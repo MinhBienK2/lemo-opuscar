@@ -198,6 +198,30 @@ def _closure(ep, fname):
     return [fname] + sorted(f for f in seen if f != fname)
 
 
+def _rig_dir(ep):
+    """thư mục `rig/` dùng chung của kênh — nơi có ánh sáng, vật liệu, hàm dựng mà mọi vật dùng"""
+    d = os.path.abspath(ep)
+    while True:
+        parent = os.path.dirname(d)
+        if parent == d:
+            return ''
+        d = parent
+        if os.path.isfile(os.path.join(d, 'CHANNEL.md')):
+            rig = os.path.join(d, 'rig')
+            return rig if os.path.isdir(rig) else ''
+
+
+def _rig_files(rig):
+    out = []
+    try:
+        for n in sorted(os.listdir(rig)):
+            if n.endswith(('.js', '.mjs')):
+                out.append(n)
+    except OSError:
+        pass
+    return out
+
+
 def digest(ep, item):
     h = hashlib.sha256()
     if item['layout'] == 'legacy':
@@ -205,6 +229,16 @@ def digest(ep, item):
     else:
         for f in _closure(ep, os.path.basename(item['file'])):
             h.update(f.encode() + b'\0' + open(os.path.join(_pdir(ep), f), 'rb').read() + b'\0')
+        # M24: rig/ dùng chung CŨNG quyết định ảnh của vật (ánh sáng, vật liệu, hàm dựng). Không
+        # băm nó thì sửa rig → ảnh đổi → mà digest không đổi → vòng chấm vẫn nhìn ảnh CŨ và người
+        # chấm lặp lại đúng lời phàn nàn cũ. Đo được: một vật bị chấm 8 vòng với cùng một ảnh.
+        rig = _rig_dir(ep)
+        for n in _rig_files(rig):
+            p = os.path.join(rig, n)
+            try:
+                h.update(('rig/' + n).encode() + b'\0' + open(p, 'rb').read() + b'\0')
+            except OSError:
+                pass
     return h.hexdigest()
 
 
@@ -414,6 +448,18 @@ def selftest():
         c = catalog(sp)
         case('split: thứ tự = thứ tự máy sinh (sắp theo id lần đầu)', [x['id'] for x in c] == ['ao', 'gian-phoi', 'kep'], c)
         case('split: tên đọc từ PROP', [x['name'] for x in c] == ['áo', 'giàn phơi {x}', 'kẹp gỗ'], c)
+        # M24: rig/ dùng chung quyết định ảnh của vật — sửa rig thì digest phải đổi, nếu không
+        # vòng chấm nhìn ảnh CŨ và lặp lại đúng lời phàn nàn cũ (đo được: một vật, 8 vòng).
+        ch = os.path.join(root, 'chan')
+        w(ch, 'CHANNEL.md', '# kênh\n')
+        w(ch, 'rig/kit.js', 'export const A = 1;\n')
+        w(ch, 'series/tap/src/props/ao.js',
+          "export const PROP = { name: 'áo', view: () => ({group: 1}) };\n")
+        ep2 = os.path.join(ch, 'series', 'tap')
+        h0 = digest(ep2, catalog(ep2)[0])
+        w(ch, 'rig/kit.js', 'export const A = 2;\n')
+        h1 = digest(ep2, catalog(ep2)[0])
+        case('đổi rig dùng chung thì digest của vật đổi', h0 != h1, (h0, h1))
         case('split: sau khi sinh thì sạch', problems(sp) == [], problems(sp))
         idx = _read(_barrel(sp))
         case('barrel có đủ dòng', "export * from './props/_shared.js';" in idx and 'Object.fromEntries' in idx
