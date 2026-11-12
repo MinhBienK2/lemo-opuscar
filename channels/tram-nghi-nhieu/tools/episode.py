@@ -21,7 +21,7 @@ ends when its leg is done. What one leg must tell the next lives in the episode'
 Each session's cost lands in <episode>/out/sessions.jsonl: leg, seconds, turns, tokens in and out, cost, session id.
 Env: LEMO_STEP_CLI (default claude), LEMO_STEP_MODEL (model for the sessions).
 """
-import glob, json, os, subprocess, sys, time
+import glob, json, os, re, subprocess, sys, time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
@@ -30,6 +30,7 @@ import gate  # noqa: E402
 CHANNEL = os.path.dirname(HERE)
 LIB = os.path.abspath(os.path.join(CHANNEL, '..', '..'))
 TRIES = 2
+MAX_CRASHES = 5   # how many times one leg may die on the wire before the runner blames the gateway
 
 LEGS = [
     ('1', 'outline', 'bước 1 (`step1-outline/GUIDE.md`)', 'review outline XONG'),
@@ -64,29 +65,59 @@ def done(ep, step):
     return True
 
 
-def used_tries(ep):
-    """{leg: how many sessions that leg has already had}, read from the episode's own log.
+def is_crash(row):
+    """did this session die on the wire, rather than on the leg's own account?
 
-    The budget "mỗi chặng tối đa TRIES phiên" has to survive the runner being restarted — which is
-    exactly what happens when it is killed (a busy machine) or when someone re-runs it with --from.
-    A counter that lives in the runner's memory resets on every restart, so a leg that never
-    finishes gets an unlimited number of sessions (M14). The log in out/sessions.jsonl is the
-    episode's own record of what already ran, so it is what the budget is counted from.
+    A crash is infrastructure: the gateway 5xx'd, the tunnel fell, the process died before it
+    printed a result. It does NOT spend the leg's session budget, because the leg never got a
+    fair session. A session that ran and blew its own budget (max turns, max USD) is not a
+    crash — that IS the leg's account, and it spends the budget (M18).
+
+    Rows written before M18 carry no 'crash' field; an error row without one is read as a crash,
+    so the three episodes that lost a leg to the 530 keep that leg's budget.
     """
-    out = {}
+    if 'crash' in row:
+        return bool(row['crash'])
+    return bool(row.get('error'))
+
+
+def budget(ep):
+    """({leg: sessions spent}, {leg: crashes}) — both counted from the episode's own log.
+
+    One source of truth for both counters, and it survives the runner being restarted — which is
+    exactly what happens when it is killed (M14). A counter that lives in the runner's memory
+    resets on every restart, and it counted a crashed session too, so a gateway outage looked
+    like a stuck leg and the runner stopped with "đây là chỗ cần người quyết" (M18).
+    """
+    tries, crashes = {}, {}
     log = os.path.join(ep, 'out', 'sessions.jsonl')
-    if not os.path.isfile(log): return out
+    if not os.path.isfile(log): return tries, crashes
     try:
-        for line in open(log, encoding='utf-8'):
-            line = line.strip()
-            if not line: continue
+        lines = list(open(log, encoding='utf-8'))
+    except OSError:
+        return tries, crashes
+    for line in lines:
+        line = line.strip()
+        if not line: continue
+        try:
             row = json.loads(line)
-            leg = str(row.get('leg', ''))
-            if not leg: continue
-            out[leg] = out.get(leg, 0) + (1 if not row.get('error') else 0)
-    except (OSError, ValueError):
-        pass
-    return out
+        except ValueError:
+            continue          # one torn line must not drop every row after it
+        if not isinstance(row, dict): continue
+        leg = str(row.get('leg', ''))
+        if not leg: continue
+        tries.setdefault(leg, 0)
+        crashes.setdefault(leg, 0)
+        if is_crash(row):
+            crashes[leg] = crashes.get(leg, 0) + 1
+        else:
+            tries[leg] = tries.get(leg, 0) + 1
+    return tries, crashes
+
+
+def used_tries(ep):
+    """the leg's spent sessions; a session that died on the wire does not spend one"""
+    return budget(ep)[0]
 
 
 def next_leg(ep, start=None):
@@ -97,6 +128,42 @@ def next_leg(ep, start=None):
     return None
 
 
+def handover_path(ep, leg_id):
+    return os.path.join(ep, 'out', f'leg-{leg_id}.md')
+
+
+def write_handover(ep, leg_id, text, session=None):
+    """the leg's own summary, kept in the episode so the NEXT leg can read it.
+
+    The summary used to live only in the runner's stdout, which dies with the runner — so the
+    next leg started blind and re-derived what the previous one already knew (M19).
+    """
+    if not text.strip(): return None
+    p = handover_path(ep, leg_id)
+    os.makedirs(os.path.dirname(p), exist_ok=True)
+    with open(p, 'w', encoding='utf-8') as f:
+        f.write(f'<!-- bàn giao chặng {leg_id} · phiên {session or "?"} -->\n\n')
+        f.write(text.strip() + '\n')
+    return p
+
+
+def resume_note(ep, leg_id):
+    """the note a crashed leg left for its successor, if it names this leg.
+
+    The file's first line may say `leg: 3`; a note for another leg is stale and is ignored, so
+    a note left behind by an earlier leg cannot mislead a later one.
+    """
+    p = os.path.join(ep, 'out', 'resume-note.md')
+    if not os.path.isfile(p): return ''
+    try:
+        text = open(p, encoding='utf-8').read()
+    except OSError:
+        return ''
+    m = re.search(r'leg:\s*([0-9\-]+)', text[:400])
+    if m and m.group(1) != leg_id: return ''
+    return text.strip()
+
+
 def prompt(ep, leg, question):
     rel = os.path.relpath(ep, LIB)
     n, step, what, crit = leg
@@ -105,16 +172,82 @@ def prompt(ep, leg, question):
         ep_rel = os.path.relpath(ep, os.path.join(LIB, 'channels', 'tram-nghi-nhieu'))
         first = (f'Thư mục tập chưa có: tạo nó bằng scaffold trước, rồi làm bước 1.\n'
                  f'  sh core/render/new_episode.sh tram-nghi-nhieu {ep_rel} "{question}"\n')
+    hands = []
+    for lg, _name, _w, _c in LEGS:
+        if lg == n: break
+        hp = handover_path(ep, lg)
+        if os.path.isfile(hp):
+            try:
+                ht = open(hp, encoding='utf-8').read().strip()
+            except OSError:
+                ht = ''
+            if ht:
+                hands.append(f'  - {os.path.relpath(hp, LIB)} (chặng {lg}):\n' +
+                             '\n'.join('    ' + s for s in ht.splitlines()))
+    hand = ''
+    if hands:
+        hand = ('Các chặng trước đã để lại bàn giao trong tập; đọc trước khi làm, đừng dò lại từ đầu:\n'
+                + '\n'.join(hands) + '\n')
+    note = resume_note(ep, n)
+    if note:
+        hand += (f'Ghi chú tiếp tục cho chặng này (do phiên trước bỏ lại) — đọc và làm theo:\n{note}\n')
     return (f'Dùng skill `tram-nghi-nhieu`. Tập: `{rel}`' + (f' — câu hỏi: "{question}"' if question else '') + '.\n'
             + first +
             f'Phiên này làm đúng một chặng: {what}. '
             + ('Đây là chặng đầu tiên, chưa chặng nào xong trước đó. ' if n == '1'
                else 'Các chặng trước đã xong; ') + 'Chặng sau do một phiên mới làm.\n'
             f'Bắt đầu bằng `python3 channels/tram-nghi-nhieu/tools/gate.py status {rel}`: nó cho biết tập đang ở đâu.\n'
+            + hand +
             f'Chặng xong khi: {crit}.\n'
             'Phiên chạy không có người dùng: điền chỗ thiếu bằng mặc định hợp lý của skill, và đi tiếp.\n'
             'Khi chặng xong, câu trả lời cuối của bạn là tóm tắt cho phiên sau, tối đa tám dòng: đã làm gì, các mục MỞ, '
             'và điều chặng sau cần biết mà tệp của tập chưa nói. Rồi dừng.')
+
+
+TRANSPORT_MARKERS = ('API Error', 'Cloudflare', 'ECONNRESET', 'ECONNREFUSED', 'fetch failed',
+                     'socket hang up', 'overloaded', 'tunnel', '502', '503', '529')
+
+
+def parse_result(stdout):
+    """the CLI's JSON result, if one arrived. A crash often prints noise before it, so the first
+    '{' that parses is taken; no result at all is None — and that IS a crash."""
+    text = (stdout or '').strip()
+    if not text: return None
+    try:
+        return json.loads(text)
+    except ValueError:
+        pass
+    dec = json.JSONDecoder()
+    for i, ch in enumerate(text):
+        if ch != '{': continue
+        try:
+            obj, _ = dec.raw_decode(text, i)
+        except ValueError:
+            continue
+        if isinstance(obj, dict): return obj
+    return None
+
+
+def classify(res, parsed, returncode):
+    """(crash, api_status) for one finished session.
+
+    The wire died: no result at all, or an HTTP status from the API, or the CLI's own words
+    about a tunnel or a reset. The leg's own account: the session ran and stopped because it
+    used up its turns or its dollars — that spends the budget (M18).
+    """
+    if not parsed:
+        return True, None
+    api = res.get('api_error_status')
+    if not res.get('is_error', returncode != 0):
+        return False, api
+    if (res.get('subtype') or '') in ('error_max_turns', 'error_max_budget_usd'):
+        return False, api
+    if api is not None:
+        return True, api
+    text = str(res.get('result') or '') + ' ' + str(res.get('error') or '')
+    if any(m in text for m in TRANSPORT_MARKERS):
+        return True, api
+    return False, api
 
 
 def run_session(ep, leg, question):
@@ -124,20 +257,29 @@ def run_session(ep, leg, question):
           (['--model', model] if model else []) + [prompt(ep, leg, question)]
     t0 = time.time()
     r = subprocess.run(cmd, cwd=LIB, stdin=subprocess.DEVNULL, capture_output=True, text=True)
-    try:
-        res = json.loads(r.stdout)
-    except ValueError:
-        res = {'result': (r.stdout or r.stderr)[-2000:], 'is_error': True}
+    res = parse_result(r.stdout)
+    parsed = res is not None
+    if not parsed:
+        res = {}
+    crash, api = classify(res, parsed, r.returncode)
+    errored = bool(res.get('is_error', r.returncode != 0))
     u = res.get('usage') or {}
     row = {'leg': leg[0], 'at': time.strftime('%Y-%m-%d %H:%M'), 'seconds': round(time.time() - t0),
            'turns': res.get('num_turns'), 'session': res.get('session_id'),
            'tokens_in': sum(u.get(k, 0) or 0 for k in ('input_tokens', 'cache_read_input_tokens', 'cache_creation_input_tokens')),
-           'tokens_out': u.get('output_tokens'), 'cost_usd': res.get('total_cost_usd'), 'error': res.get('is_error', r.returncode != 0)}
+           'tokens_out': u.get('output_tokens'), 'cost_usd': res.get('total_cost_usd'), 'error': errored,
+           'crash': crash, 'api_error_status': api,
+           'error_kind': ('crash' if crash else ('leg' if errored else None))}
     if os.path.isdir(ep):
         os.makedirs(os.path.join(ep, 'out'), exist_ok=True)
         with open(os.path.join(ep, 'out', 'sessions.jsonl'), 'a', encoding='utf-8') as f:
             f.write(json.dumps(row, ensure_ascii=False) + '\n')
-    return row, res.get('result') or ''
+    text = res.get('result') or ''
+    if not text and not parsed:
+        text = (r.stdout or r.stderr)[-2000:]
+    if not crash:
+        write_handover(ep, leg[0], text, res.get('session_id'))
+    return row, text
 
 
 def main(argv):
@@ -152,7 +294,6 @@ def main(argv):
     ep, question = os.path.abspath(a[0]), (a[1] if len(a) > 1 else '')
     if not os.path.isdir(ep) and not question:
         print('episode: tập chưa có thư mục: cho câu hỏi của tập làm tham số thứ hai', file=sys.stderr); return 2
-    tries = used_tries(ep)
     while True:
         leg = next_leg(ep, start)
         if leg is None:
@@ -163,15 +304,25 @@ def main(argv):
         if dry:
             print(f'=== chặng {leg[0]} ({leg[1]}) chưa xong; phiên sẽ nhận:\n{prompt(ep, leg, question)}')
             return 0
-        tries[leg[0]] = tries.get(leg[0], 0) + 1
-        if tries[leg[0]] > TRIES:
+        # Một bộ đếm, đọc lại từ sổ của tập mỗi vòng: không có bộ đếm thứ hai trong RAM để tranh với nó (M14, M18).
+        tries, crashes = budget(ep)
+        spent = tries.get(leg[0], 0)
+        dead = crashes.get(leg[0], 0)
+        if spent >= TRIES:
             print(f'episode: chặng {leg[0]} ({leg[1]}) chưa xong sau {TRIES} phiên. '
                   f'`gate.py status {os.path.relpath(ep, LIB)}` cho biết vì sao; đây là chỗ cần người quyết.')
             return 1
-        print(f'episode: chặng {leg[0]} ({leg[1]}), phiên {tries[leg[0]]}/{TRIES}…', flush=True)
+        if dead >= MAX_CRASHES:
+            print(f'episode: chặng {leg[0]} ({leg[1]}) đã chết {dead} lần vì hạ tầng (không phải vì chặng). '
+                  f'Cổng inference có còn sống không? Xem `api_error_status` trong {os.path.relpath(ep, LIB)}/out/sessions.jsonl.')
+            return 1
+        print(f'episode: chặng {leg[0]} ({leg[1]}), phiên {spent + 1}/{TRIES}…', flush=True)
         row, text = run_session(ep, leg, question)
         print(f"episode: xong phiên sau {row['seconds']} s · {row['turns']} lượt · "
               f"{(row['tokens_in'] or 0) / 1e6:.1f} M token vào · {row['tokens_out']} ra")
+        if row.get('crash'):
+            print(f"episode: phiên chết vì hạ tầng (api {row.get('api_error_status')}); "
+                  f"chặng này chưa dùng lượt nào — thử lại.")
         print('\n'.join('  ' + s for s in text.strip().splitlines()[-12:]), flush=True)
 
 
@@ -213,6 +364,38 @@ def selftest():
         used = used_tries(ep)
         expect(used.get('3') == 2 and used.get('4') == 0,
                'the retry budget counts the sessions already in the log, and a failed one does not use a try')
+        # M18: phiên chết vì hạ tầng không dùng lượt của chặng; một dòng sổ bị cắt không làm mất
+        # ngân sách của các dòng sau nó; hai bộ đếm là hai điều khác nhau.
+        with open(os.path.join(ep, 'out/sessions.jsonl'), 'a', encoding='utf-8') as f:
+            f.write('{"leg": "5", "session": "s4", "cra\n')                       # dòng bị cắt giữa chừng
+            f.write(json.dumps({'leg': '5', 'session': 's5', 'crash': True}) + '\n')
+            f.write(json.dumps({'leg': '5', 'session': 's6', 'crash': False}) + '\n')
+        tries, crashes = budget(ep)
+        expect(tries.get('5') == 1 and crashes.get('5') == 1,
+               'a session that died on the wire does not spend the leg, and a torn line does not drop the rows after it')
+        expect(classify({'is_error': True, 'api_error_status': 530}, True, 0)[0],
+               'an API error from the gateway is a crash, not the leg own account')
+        expect(not classify({'is_error': True, 'subtype': 'error_max_turns'}, True, 0)[0],
+               'a session that ran out of turns spends the leg budget')
+        expect(not classify({'is_error': False}, True, 0)[0] and classify({}, False, 1)[0],
+               'a clean session is not a crash, and a session with no result at all is')
+        expect(parse_result('noise before {"is_error": true, "api_error_status": 503}') is not None,
+               'a result that arrives behind noise is still read')
+        # M19: bàn giao của một chặng nằm trong tập, nên chặng sau đọc được thay vì dò lại từ đầu.
+        write_handover(ep, '2', 'đã làm: lời kể 3 câu\nmục MỞ: c02')
+        expect(os.path.isfile(handover_path(ep, '2')), 'a leg leaves its handover inside the episode')
+        p2 = prompt(ep, next_leg(ep), '')
+        expect('leg-2.md' in p2 and 'đã làm: lời kể 3 câu' in p2,
+               'the next leg is pointed at the previous leg handover and the text is in the prompt')
+        # ghi chú tiếp tục: chỉ dùng khi nó nói đúng chặng đang làm
+        with open(os.path.join(ep, 'out/resume-note.md'), 'w', encoding='utf-8') as f:
+            f.write('<!-- leg: 3 -->\nđừng dựng lại ảnh cũ\n')
+        expect('đừng dựng lại ảnh cũ' in prompt(ep, next_leg(ep), ''),
+               'a note left for this leg is passed to the session')
+        with open(os.path.join(ep, 'out/resume-note.md'), 'w', encoding='utf-8') as f:
+            f.write('<!-- leg: 9 -->\nnhầm chặng\n')
+        expect('nhầm chặng' not in prompt(ep, next_leg(ep), ''),
+               'a note for another leg is stale and is not passed on')
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
     print('episode selftest:', 'PASS' if ok else 'FAIL')
