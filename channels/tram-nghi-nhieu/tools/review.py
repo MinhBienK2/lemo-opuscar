@@ -158,7 +158,9 @@ def prompt_for(rubric_text, crit, batch, prev, cwd, extra=''):
           f"- Mỗi mục phải có một dòng cho MỖI tiêu chí CHẶN: {', '.join(must)}.",
           f"- Tiêu chí GÓP Ý ({', '.join(advice) or 'không có'}): chỉ viết khi có điều đáng nói.",
           '- "thấy gì" là bằng chứng bạn tự thấy trong tệp hay ảnh. Một lời chung chung thì không phải bằng chứng.',
-          '- Mở ảnh ở cỡ thật, từng ảnh một.',
+          '- **Mở một ảnh, trả lời ngay MỌI câu của ảnh đó, rồi mở ảnh tiếp theo.** Đừng mở hết ảnh rồi mới trả lời: '
+          'mỗi lượt bạn trả lời lại phải trả lại toàn bộ những ảnh đã mở, và đó là lý do một vòng chấm '
+          'mất hàng giờ. Ảnh mở ở cỡ thật.',
           'Viết xong các dòng thì dừng. Đừng để việc nào chạy nền sau câu trả lời.']
     return '\n'.join(T)
 
