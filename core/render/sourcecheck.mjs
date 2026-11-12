@@ -15,15 +15,46 @@
 import fs from 'fs';
 import path from 'path';
 import os from 'os';
-import { fingerprintOf } from './sourcewatch.mjs';
-
+import { fingerprintOf, filmFingerprint } from './sourcewatch.mjs';
 const [dir, snapshotPath] = process.argv.slice(2);
 
-export function diffFiles(before, now) {
+// Which snapshot describes the film on disk. The one written NEXT TO the film wins: the build's own
+// snapshot (out/source-fingerprint.json) describes the code a build started from, so a build that was
+// abandoned after writing it leaves a snapshot that says "the movie is current" about a film that
+// was never made (M24).
+function snapshotFor(dir, given) {
+  const side = filmFingerprint(dir);
+  if (side) return side;
+  if (given && fs.existsSync(given)) return given;
+  return given || '';
+}
+
+// The files that differ between the snapshot and the code now.
+//
+// A file the snapshot does not cover (an old snapshot, taken before the fingerprint learned to walk
+// src/props/) cannot be compared by digest. For those, the file's own mtime against the moment the
+// snapshot was taken is the only honest answer: a file touched after the snapshot moved on, a file
+// that has not moved since did not.
+export function diffFiles(before, now, opts = {}) {
+  const { dir = '', at = 0 } = opts;
   const diff = [];
-  for (const k of Object.keys(now)) if (before[k] !== now[k]) diff.push(k);
+  for (const k of Object.keys(now)) {
+    if (k in before) {
+      if (before[k] !== now[k]) diff.push(k);
+      continue;
+    }
+    if (!at || !dir) { diff.push(k); continue; }
+    const p = path.join(dir, k);
+    let m = 0;
+    try { m = fs.statSync(p).mtimeMs; } catch (e) { /* gone between the two calls */ }
+    if (m > at) diff.push(`${k} (đổi sau lần chụp vân tay; ảnh chụp cũ không phủ tệp này)`);
+  }
   for (const k of Object.keys(before)) if (!(k in now)) diff.push(`${k} (removed)`);
   return diff;
+}
+
+function snapshotAt(snapshotPath) {
+  try { return fs.statSync(snapshotPath).mtimeMs; } catch (e) { return 0; }
 }
 
 function selftest() {
@@ -68,7 +99,48 @@ function selftest() {
     d = diffFiles(snap, fingerprintOf(ep));
     assert(d.some(x => x.includes('removed')), JSON.stringify(d));
     console.log('ok   xoá một tệp nguồn → phim bị coi là cũ');
-    console.log('4 ca đều đúng');
+
+    // M24: a file BELOW src/ is part of the code. A channel keeps one file per prop in src/props/,
+    // and a fingerprint that only reads the top of src/ sees none of them.
+    fs.writeFileSync(path.join(ep, 'voice', 'lines.json'), '[]\n');
+    const snap2 = fingerprintOf(ep);
+    assert('src/props/bo-sac.js' in snap2, 'vân tay phải có tệp trong src/props/');
+    fs.mkdirSync(path.join(ep, 'src', 'props'), { recursive: true });
+    fs.writeFileSync(path.join(ep, 'src', 'props', 'bo-sac.js'), 'export const P = 1;\n');
+    const snap3 = fingerprintOf(ep);
+    assert('src/props/bo-sac.js' in snap3, 'vân tay phải có tệp trong src/props/');
+    fs.writeFileSync(path.join(ep, 'src', 'props', 'bo-sac.js'), 'export const P = 2;\n');
+    d = diffFiles(snap3, fingerprintOf(ep));
+    assert(d.length === 1 && d[0] === 'src/props/bo-sac.js', JSON.stringify(d));
+    console.log('ok   sửa một tệp trong src/props/ → phim bị coi là cũ');
+    fs.unlinkSync(path.join(ep, 'src', 'props', 'bo-sac.js'));
+    d = diffFiles(snap3, fingerprintOf(ep));
+    assert(d.some(x => x.includes('removed')), JSON.stringify(d));
+    console.log('ok   xoá một tệp trong src/props/ → phim bị coi là cũ');
+
+    // M24: a snapshot that does not cover a file cannot compare it by digest. The file's mtime
+    // against the moment the snapshot was taken is the honest answer for those.
+    const old = { 'src/film.js': 'x' };
+    const now = { 'src/film.js': 'x', 'src/props/a.js': 'y' };
+    const at = Date.now();
+    fs.writeFileSync(path.join(ep, 'src', 'props', 'a.js'), 'export const A = 1;\n');
+    fs.utimesSync(path.join(ep, 'src', 'props', 'a.js'), (at - 60000) / 1000, (at - 60000) / 1000);
+    d = diffFiles(old, now, { dir: ep, at });
+    assert(d.length === 0, JSON.stringify(d));
+    console.log('ok   tệp không có trong ảnh chụp cũ mà chưa bị đụng → không bị coi là cũ');
+    fs.utimesSync(path.join(ep, 'src', 'props', 'a.js'), (at + 60000) / 1000, (at + 60000) / 1000);
+    d = diffFiles(old, now, { dir: ep, at });
+    assert(d.length === 1 && d[0].includes('src/props/a.js'), JSON.stringify(d));
+    console.log('ok   tệp không có trong ảnh chụp cũ mà đã đổi sau đó → phim bị coi là cũ');
+
+    // M24: the fingerprint next to the delivered film wins over the build's snapshot.
+    fs.mkdirSync(path.join(ep, 'out'), { recursive: true });
+    fs.writeFileSync(path.join(ep, 'phim.mp4'), 'x');
+    const side = path.join(ep, 'phim.fingerprint.json');
+    fs.writeFileSync(side, JSON.stringify(snap2));
+    assert(filmFingerprint(ep) === side, 'vân tay cạnh phim là vân tay của phim');
+    console.log('ok   vân tay cạnh chính phim được chọn');
+    console.log('8 ca đều đúng');
   } finally {
     fs.rmSync(tmp, { recursive: true, force: true });
   }
@@ -85,14 +157,19 @@ if (process.argv[1] && process.argv[1].endsWith('sourcecheck.mjs') && process.ar
     console.error('usage: node sourcecheck.mjs <episode-dir> <snapshot.json>');
     process.exit(2);
   }
-  let before;
-  try {
-    before = JSON.parse(fs.readFileSync(snapshotPath, 'utf8'));
-  } catch (e) {
-    console.error(`cannot read the snapshot ${snapshotPath}: ${e.message}`);
+  const snap = snapshotFor(dir, snapshotPath);
+  if (!snap || !fs.existsSync(snap)) {
+    console.error(`cannot read the snapshot ${snap}`);
     process.exit(2);
   }
-  const diff = diffFiles(before, fingerprintOf(dir));
+  let before;
+  try {
+    before = JSON.parse(fs.readFileSync(snap, 'utf8'));
+  } catch (e) {
+    console.error(`cannot read the snapshot ${snap}: ${e.message}`);
+    process.exit(2);
+  }
+  const diff = diffFiles(before, fingerprintOf(dir), { dir, at: snapshotAt(snap) });
   if (!diff.length) {
     console.log('the movie was built from the code that is on disk now');
     process.exit(0);

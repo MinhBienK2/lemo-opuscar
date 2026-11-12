@@ -52,10 +52,15 @@ def done(ep, step):
         # Chặng bàn giao xong khi CỔNG BÀN GIAO xanh và phim trên đĩa là phim của mã nguồn hiện tại.
         # Chỉ có một tệp .mp4 trong thư mục thì chưa đủ: một phim cũ nằm lại đó trong khi src/ đã
         # đi tiếp, và runner sẽ báo "mọi chặng đã xong" với một phim không còn thuộc về mã này (M17).
-        if not glob.glob(os.path.join(ep, '*.mp4')): return False
+        films = glob.glob(os.path.join(ep, '*.mp4'))
+        if not films: return False
         if gate.why_open(ep, 'picture') is not None: return False
+        # Vân tay thuộc về chính phim đó: tệp viết CẠNH phim lúc phim được bàn giao. Vân tay của
+        # lần dựng (out/source-fingerprint.json) nói về mã lúc lần dựng BẮT ĐẦU, nên một lần dựng
+        # bị bỏ dở để lại một vân tay bảo lãnh cho một phim không tồn tại (M24).
         snap = os.path.join(ep, 'out', 'source-fingerprint.json')
-        if not os.path.isfile(snap): return False
+        sides = [os.path.splitext(f)[0] + '.fingerprint.json' for f in films]
+        if not any(os.path.isfile(s) for s in sides) and not os.path.isfile(snap): return False
         r = subprocess.run(['node', os.path.join(LIB, 'core', 'render', 'sourcecheck.mjs'), ep, snap],
                            capture_output=True, text=True, cwd=LIB)
         return r.returncode == 0

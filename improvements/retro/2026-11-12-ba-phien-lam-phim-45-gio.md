@@ -328,6 +328,50 @@ phán quyết: ảnh cũ vẫn được chấm theo đúng những gì nó thể
 
 ---
 
+## P14 — critical — Vân tay mã nguồn **không thấy `src/props/`**, nên cổng nói xanh về một phim cũ
+
+**Bằng chứng.** `core/render/sourcewatch.mjs` đọc `src/` bằng `fs.readdirSync(src)` **không đệ quy**,
+chỉ lấy tệp ở cấp trên cùng. Kênh này để **một tệp cho mỗi vật** trong `src/props/` — `co-the/tap-01`
+có 17 tệp ở đó — và không tệp nào trong ảnh chụp vân tay có đường dẫn `props/`. Nghĩa là phần lớn mã
+vẽ nằm ngoài vân tay: sửa một vật, cổng vẫn in *"the movie was built from the code that is on disk
+now"*. Đo trên `co-the`: phim 01:51, `src/film.js` 02:14, `sourcecheck` vẫn mã 0.
+
+**Guard.** `sourcewatch.fingerprint()` đi **đệ quy** (`walk()`), và `fingerprintOf()` cũng vậy cho
+`rig/`. Selftest của `sourcecheck.mjs` có: sửa một tệp trong `src/props/` → phim bị coi là cũ; xoá
+một tệp trong `src/props/` → phim bị coi là cũ.
+
+## P15 — high — Ảnh chụp vân tay nói về lần dựng **BẮT ĐẦU**, không phải về phim đã bàn giao
+
+**Bằng chứng.** `core/render/video.mjs` ghi `out/source-fingerprint.json` ở **đầu** mỗi lần dựng,
+còn `episode.py` và `review.sh` so ảnh đó với mã hiện tại. Một lần dựng bị bỏ dở cũng đã ghi đè
+ảnh chụp → cổng báo phim là của mã hiện tại trong khi phim trên đĩa cũ hơn mã. Đo trên `co-the`: phim
+01:51, mã 02:14, ảnh chụp 02:22 → `episode.done(ep,'deliver')` trả True với một phim cũ hơn mã 23 phút.
+
+**Guard.** Vân tay được viết **cạnh chính phim** lúc phim được bàn giao (`<tên>.fingerprint.json`),
+nên vân tay và phim luôn thuộc về nhau. `sourcecheck.mjs` ưu tiên vân tay cạnh phim; `episode.py` và
+`review.sh` dùng nó. Vân tay của lần dựng vẫn là dự phòng cho phim cũ chưa có vân tay cạnh.
+
+## P16 — high — Chạm trần số vòng thì bước `props` **không đóng**, vì mục bị ép MỞ không mang mã của nó
+
+**Bằng chứng.** `review.py` ép MỞ các mục còn lại khi chạm trần, nhưng **không** ghi `src`/`key` hiện
+tại vào mục đó. `gate.tally()` so `rec.get('src')` với digest hiện tại → mục bị đếm *"chưa chấm hay đã
+đổi"* → `gate.why_open()` trả lý do → **bước không đóng**, và tập không đi tiếp được.
+
+**Guard.** `review.py` (nhánh chạm trần) ghi `key`/`src`/`name` hiện tại vào mục bị ép MỞ: phán quyết
+"MỞ" là của mã đang nằm trên đĩa.
+
+## P17 — medium — Ảnh chụp vân tay cũ không phủ hết tệp thì **không thể so bằng digest**
+
+**Bằng chứng.** Khi `fingerprint()` bắt đầu đi đệ quy, mọi ảnh chụp cũ trên đĩa thiếu mục cho
+`src/props/**` — và nếu coi mọi mục thiếu là "đã đổi", thì mọi phim đã bàn giao trước đó bị coi là cũ
+và phải dựng lại (một lần dựng là hàng chục phút), dù vật của chúng chẳng hề đổi.
+
+**Guard.** `sourcecheck.diffFiles()` nhận thêm `{dir, at}`: một tệp mà ảnh chụp không phủ thì được so
+bằng **mốc sửa của nó với lúc ảnh chụp được chụp** — tệp chưa bị đụng thì không phải đã đổi; tệp bị
+đụng sau đó thì phim cũ. Như vậy phim cũ vẫn xanh, và lỗ hổng của nó (tệp đổi sau lần dựng) vẫn bị bắt.
+
+---
+
 ## Đã làm
 
 | Phát hiện | Guard |
@@ -345,6 +389,10 @@ phán quyết: ảnh cũ vẫn được chấm theo đúng những gì nó thể
 | P11 | `episode.py`: bàn giao của chặng nằm trong tập (`out/leg-<n>.md`) và được đưa vào prompt của chặng sau; ghi chú tiếp tục (`out/resume-note.md`) chỉ dùng cho đúng chặng của nó |
 | P12 | `propcheck/main.js` seed `Math.random` bằng `mulberry`; `tools/propcheck.mjs` truyền hạt giống của tập (`?seed=`) đọc từ `src/film.js` |
 | P13 | `gate.py` `hero_stale(ep)`: `gate.py status` báo ảnh hero nào dựng trước khi `src/` đổi lần cuối — cảnh báo, không phải phán quyết |
+| P14 | `sourcewatch.fingerprint()` đi **đệ quy** vào `src/` (và `rig/`): vân tay phải thấy `src/props/**`, nơi kênh này để một tệp cho mỗi vật |
+| P15 | Vân tay được viết **cạnh chính phim** lúc bàn giao (`<tên>.fingerprint.json`); `sourcecheck.mjs` ưu tiên nó, và `build.sh` của mọi tập copy ảnh chụp của lần dựng sang đó |
+| P16 | `review.py` (chạm trần): mục bị ép MỞ mang `key`/`src`/`name` hiện tại, nên `gate.tally()` đếm nó là MỞ chứ không phải "chưa chấm", và bước đóng lại |
+| P17 | `sourcecheck.diffFiles()` so tệp mà ảnh chụp cũ không phủ bằng mốc sửa của nó với lúc chụp — phim cũ vẫn xanh, lỗ hổng vẫn bị bắt |
 Tất cả đều có selftest: `review.py --selftest` (31 ca), `episode.py --selftest` (17 ca),
 `gate.py --selftest`, `hook_poll.py --selftest` (22 ca), `hook_load.py --selftest` (13 ca).
 

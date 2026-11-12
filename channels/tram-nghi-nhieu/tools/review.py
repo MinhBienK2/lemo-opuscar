@@ -274,6 +274,11 @@ def run(ep, step, items, crit, ask, again=(), report=None):
                 rec = st['items'].get(it['id'], {})
                 rec = dict(rec)
                 rec.update(verdict='OPEN', fails=max(rec.get('fails', 0), TRIES), round=st['round'])
+                # The verdict belongs to the code that is on disk NOW. Without the current digest,
+                # gate.tally() counts the item as "chưa chấm hay đã đổi" instead of MỞ, so the step
+                # never closes and the episode cannot move on (M24).
+                for k in ('key', 'src', 'name'):
+                    if k in it: rec[k] = it[k]
                 st['items'][it['id']] = rec
             say(f'bước {step} đã chạm trần {cap} vòng: {len(todo)} mục chưa được chấm là ĐẠT '
                 f'chuyển thành MỞ và bước đóng lại.')

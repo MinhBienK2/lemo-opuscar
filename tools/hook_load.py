@@ -37,11 +37,12 @@ SWAP_MAX = int(os.environ.get('LEMO_SWAP_MAX', 0) or 80)
 # `review.sh` và `episode.py` KHÔNG nằm trong đây: chúng là người lái, không phải việc nặng. Chúng
 # tự xếp hàng (core/render/slot.mjs giữ hai chỗ dựng cho cả máy), nên chặn chúng chỉ là làm runner
 # chết thay vì cho nó chờ. Việc ăn bộ nhớ thật sự là những lệnh dựng hình.
-HEAVY = re.compile(
-    r'beatsheet\.mjs|video\.mjs|still\.mjs|propcheck\.mjs|'
-    r'sourcecheck\.mjs|readcheck\.mjs|scenecheck\.mjs|drawcheck\.mjs|filmcheck\.mjs|mux\.sh|build\.sh')
+HEAVY_TOOLS = ('beatsheet.mjs', 'video.mjs', 'still.mjs', 'propcheck.mjs',
+               'sourcecheck.mjs', 'readcheck.mjs', 'scenecheck.mjs',
+               'drawcheck.mjs', 'filmcheck.mjs', 'mux.sh', 'build.sh')
+TOOL_ALT = '|'.join(re.escape(t) for t in HEAVY_TOOLS)
 
-# `claude -p` là người chấm: nó mở ảnh cỡ thật, mà ảnh thì nặng. Nó không nằm trong HEAVY (vì
+# `claude -p` là người chấm: nó mở ảnh cỡ thật, mà ảnh thì nặng. Nó không nằm trong danh sách trên (vì
 # `git commit -m "… claude -p"` không phải là đang chấm), nên nó có một mẫu riêng: `claude` phải
 # đứng ở vị trí một lệnh (đầu dòng, sau `;`/`&`/`|`, hoặc sau `env VAR=…`).
 CRITIC = re.compile(r'(?:^|[;&|]\s*|\benv\s+(?:\w+=\S+\s+)*)(?:\S*/)?claude\s+-p\b')
@@ -52,15 +53,14 @@ CRITIC = re.compile(r'(?:^|[;&|]\s*|\benv\s+(?:\w+=\S+\s+)*)(?:\S*/)?claude\s+-p
 QUOTED = re.compile(r'"[^"]*"|\'[^\']*\'')
 
 # Một tệp được *nêu tên* trong một lệnh khác không phải việc đang chạy: `git add …/episode.py` không
-# chạy episode.py. Nên chỉ lệnh mà máy sẽ **chạy** mới tính: công cụ nặng phải là lệnh đầu tiên, hoặc
-# đi sau một lệnh chạy được (python3, node, sh, bash…).
-TOOL = re.compile(r'(?<![\w./-])(beatsheet\.mjs|video\.mjs|still\.mjs|propcheck\.mjs|'
-                   r'sourcecheck\.mjs|readcheck\.mjs|scenecheck\.mjs|'
-                   r'drawcheck\.mjs|filmcheck\.mjs|mux\.sh|build\.sh)(?![\w-])')
-RUNNER = re.compile(r'(?:^|[;&|]\s*|\b(?:python3?|node|sh|bash|npx|env)\s+)\S*'
-                    r'(?:beatsheet\.mjs|video\.mjs|still\.mjs|propcheck\.mjs|'
-                    r'sourcecheck\.mjs|readcheck\.mjs|scenecheck\.mjs|drawcheck\.mjs|filmcheck\.mjs|'
-                    r'mux\.sh|build\.sh)')
+# chạy episode.py. Nên chỉ lệnh mà máy sẽ **chạy** mới tính: công cụ nặng phải do một lệnh chạy
+# được (python3, node, sh, bash…) gọi, và lệnh đó phải đứng ở vị trí một lệnh.
+#
+# Vì sao vị trí quan trọng: mẫu cũ khớp "sh " bên trong một đường dẫn, nên `cp …/build.sh …` bị kết
+# luận là "đang chạy build.sh" — cái chặn chặn nhầm việc nhẹ, và người làm phải vòng qua nó bằng cách
+# viết câu lệnh khác đi (M25).
+CMD = r'(?:^|\n|[;&|]\s*|\benv\s+(?:\w+=\S+\s+)*)'
+RUNNER = re.compile(CMD + r'\s*(?:\S*/)?(?:python3?|node|sh|bash|npx)\s+\S*(?:' + TOOL_ALT + r')(?![\w-])')
 
 
 def strip_quoted(command):
@@ -193,6 +193,14 @@ def selftest():
         # người lái (review.sh, episode.py) thì không chặn: nó tự xếp hàng, chặn nó chỉ làm nó chết
         ('sh channels/tram-nghi-nhieu/tools/review.sh ep picture', 20.0, (6000, 10, 8000), 0),
         ('python3 channels/tram-nghi-nhieu/tools/episode.py ep', 20.0, (6000, 10, 8000), 0),
+        # M25: một TÊN TỆP trong đường dẫn không phải việc đang chạy — "sh " bên trong "…/build.sh "
+        # khớp mẫu cũ, nên lệnh nhẹ cũng bị chặn
+        ('cp channels/tram-nghi-nhieu/series/co-the/tap-01/build.sh channels/tram-nghi-nhieu/series/co-the/tap-01/build.sh.new',
+         20.0, (6000, 10, 8000), 0),
+        ('diff core/render/review.sh core/render/review.sh.new', 20.0, (6000, 10, 8000), 0),
+        # nhưng lệnh THẬT sự gọi công cụ nặng thì vẫn phải chặn
+        ('cd tap-01 && sh build.sh', 20.0, (6000, 10, 8000), 2),
+        ('node core/render/sourcecheck.mjs ep snap', 20.0, (6000, 10, 8000), 2),
     ]
     bad = 0
     for cmd, load, mem, want in cases:
