@@ -38,6 +38,7 @@ import time
 
 STATE = os.path.join(os.environ.get('TMPDIR', '/tmp'), 'lemo-stale-reads.json')
 LIMIT = 3          # chặn từ lần đọc thứ 3 của cùng một tệp khi tệp không đổi
+TOTAL = 10         # chặn từ lần đọc thứ 10 của cùng một tệp trong cả phiên — kể cả khi tệp vừa được sửa
 WINDOW = 7200      # quên tệp đã đọc quá 2 giờ trước đó
 BIG = 8 * 1024     # tệp nhỏ hơn thì đọc cả cũng được
 
@@ -53,6 +54,13 @@ IMAGE_MESSAGE = (
     'Cách làm đúng: nhìn **tờ sheet** trước để quyết định cả phim; chỉ mở ảnh riêng cho câu có cờ máy, '
     'câu phủ dưới 15 %%, hoặc câu bạn nghi ngờ. Muốn xem lại cùng một ảnh thì dùng công cụ xem ảnh '
     'của riêng bạn, đừng mở lại vào ngữ cảnh.\n')
+
+TOTAL_MESSAGE = (
+    'Bạn đã đọc tệp %s %d lần trong phiên này. Lần đọc gần nhất là sau lần **sửa của chính bạn**, '
+    'nên nó không mang gì mới: nội dung tệp đó nằm trong ngữ cảnh của bạn rồi. Mỗi lần đọc cả tệp '
+    'là hàng chục nghìn token của phiên (luật R11).\n'
+    'Cách làm đúng: đọc **đúng đoạn** cần (Read với `offset`/`limit`) hoặc `grep -n "<tên hàm>" %s`; '
+    'và giữ `src/MAP.md` (tên hàm → dòng) bên cạnh mã — `python3 tools/check_map.py <tập>` kiểm tra nó.\n')
 
 
 def mtime_of(path):
@@ -88,14 +96,27 @@ def decide(path, session, state, now=None, ranged=False):
     if size < BIG:          # tệp nhỏ: đọc cả cũng rẻ, không chặn
         return 0, ''
     seen = state.setdefault(session, {})
-    first, last_mt, count = seen.get(path, (now, mt, 0))
+    rec = seen.get(path)
+    if rec is None:
+        first, last_mt, count, total = now, mt, 0, 0
+    elif len(rec) == 4:
+        first, last_mt, count, total = rec
+    else:                       # state cũ, chỉ có ba số
+        first, last_mt, count = rec
+        total = count
     if now - first > WINDOW:
-        first, count = now, 0
-    if last_mt != mt:       # tệp đã đổi: đọc lại là việc, không phải lãng phí
-        seen[path] = (first, mt, 1)
+        first, count, total = now, 0, 0
+    total += 1
+    changed = (last_mt != mt)     # tệp đã đổi: đọc lại là việc, không phải lãng phí
+    count = 1 if changed else count + 1
+    seen[path] = (first, mt, count, total)
+    # Tệp bị đọc lại nhiều nhất trong các phiên đo được là **tệp vừa sửa** — mà tệp vừa sửa thì
+    # mtime đã đổi, nên luật "tệp không đổi" không bao giờ bắt được nó. Nên có thêm một luật: đọc
+    # cả tệp quá TOTAL lần trong một phiên thì chặn, bất kể tệp có đổi hay không (M26).
+    if total > TOTAL:
+        return 2, TOTAL_MESSAGE % (path, total, path)
+    if changed:
         return 0, ''
-    count += 1
-    seen[path] = (first, mt, count)
     if count < LIMIT:
         return 0, ''
     if is_image(path):
@@ -210,13 +231,27 @@ def selftest():
                     os.unlink(img)
                 except OSError:
                     pass
+        # M26: tệp VỪA SỬA thì luật "tệp không đổi" không bắt được — nhưng đọc lại tệp vừa sửa
+        # cũng không mang gì mới, nên có thêm luật: đọc cả tệp quá TOTAL lần trong một phiên thì chặn
+        state5 = {}
+        for i in range(TOTAL):
+            time.sleep(0.001)
+            with open(big, 'a') as f:
+                f.write('\n// sửa\n')
+            rc, _ = decide(big, 's6', state5)
+            assert rc == 0, (i, rc)
+        print('ok   %d lần đọc (mỗi lần sau một lần sửa) → rc=0' % TOTAL)
+        rc, msg = decide(big, 's6', state5)
+        assert rc == 2, rc
+        assert 'vừa sửa' in msg or 'sửa của chính bạn' in msg, msg
+        print('ok   lần đọc thứ %d (dù tệp vừa được sửa) → rc=2' % (TOTAL + 1))
     finally:
         for p in (big, small):
             try:
                 os.unlink(p)
             except OSError:
                 pass
-    print('%d ca đều đúng' % 10)
+    print('%d ca đều đúng' % 12)
     return 0
 
 

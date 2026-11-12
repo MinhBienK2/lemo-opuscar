@@ -30,6 +30,7 @@ import time
 
 STATE = os.path.join(os.environ.get('TMPDIR', '/tmp'), 'lemo-polls.json')
 LIMIT = 3          # chặn từ lần thứ 3 của cùng một hình dạng lệnh dò
+ASK_LIMIT = 20     # chặn từ lần hỏi trạng thái thứ 20 trong phiên — tính theo LỚP, không theo hình dạng
 WINDOW = 7200      # quên lệnh dò cũ hơn 2 giờ
 
 # Dấu hiệu của "còn chạy không?": lệnh có hỏi trạng thái một tệp (`ls`, `stat`, `wc`, `du`) VÀ có hỏi
@@ -48,6 +49,29 @@ PROC_QUERY = re.compile(r'\bpgrep\b|\bps\b[^\n]*(?:\betime\b|\bgrep\b)')
 
 # Tự dựng tờ ảnh: dán khung đã thu nhỏ bằng `tile=`. (ffmpeg trộn âm, nối tệp, `-filter_complex` nói chung: cho qua.)
 MONTAGE = re.compile(r'ffmpeg[^\n]*?\btile=')
+
+# ── HỎI, không phải CHỜ (M26) ──
+#
+# Một phiên `2tocom/MiniMax-M3.1-Flash` đo được: 16–20 % lệnh shell của nó là lệnh **hỏi trạng
+# thái**, và 34–64 % số lần đọc là đọc lại cùng một tệp. Luật "cùng một hình dạng" ở trên không bắt
+# được: hình dạng đổi liên tục (`ls` → `ls -la` → `cat log` → `python3 -c`), nên khoá đếm không bao
+# giờ chạm ngưỡng. Nên ở đây khoá đếm là **lớp**: mọi lệnh hỏi trạng thái cùng nhau đếm.
+#
+# "Hỏi" khác "đọc": `ls` để biết trong thư mục có gì, `cat` một tệp log, `ps` xem tiến trình còn
+# sống không — đó là hỏi. Đọc mã thì là `Read`/`grep`, và luật đó thuộc hook khác.
+ASK_FILES = re.compile(r'^\s*(?:ls|stat|wc|du)\b')
+ASK_LOG = re.compile(r'^\s*(?:cat|tail|head)\b[^\n]*\.(?:log|txt|out)\b')
+ASK_GATE = re.compile(r'gate\.py\s+status')
+ASK_PY = re.compile(r'python3?\s+-c\b[^\n]*(?:json\.load|open\()')
+
+ASK_MESSAGE = (
+    'Bạn đã hỏi trạng thái %d lần trong phiên này (lần này: %s). **Hỏi** là vòng dò, không phải việc '
+    '(luật R9): câu trả lời đã không đổi, mà mỗi lần lại tốn một lượt của phiên — và mỗi lượt trả lại '
+    'toàn bộ ngữ cảnh.\n'
+    'Cách làm đúng: việc nặng thì chạy ở chế độ nền (`run_in_background=true`) rồi **đợi harness báo '
+    'xong**; cần hỏi tiến độ thì hỏi **một lần** bằng `ps -o etime= -p <pid>`, đừng hỏi lại.\n'
+    'Còn nếu bạn muốn **đọc** — xem trong thư mục có gì, đọc một đoạn mã — thì đó không phải hỏi: đọc '
+    'thẳng tệp (`Read` với `offset`/`limit`) hoặc `grep -n`.\n')
 
 POLL_MESSAGE = (
     'Bạn đã chạy lệnh dò trạng thái này %d lần trong phiên này:\n'
@@ -90,6 +114,24 @@ def poll_kind(command):
     return '', False
 
 
+def ask_kind(command):
+    """(lớp của câu hỏi, có phải câu hỏi trạng thái không) — lớp, không phải hình dạng."""
+    c = (command or '').strip()
+    if not c:
+        return '', False
+    if ASK_GATE.search(c):
+        return 'ask:gate', True
+    if ASK_LOG.match(c):
+        return 'ask:log', True
+    if ASK_PY.search(c):
+        return 'ask:py', True
+    if ASK_FILES.match(c):
+        return 'ask:files', True
+    if PROC_QUERY.search(c):
+        return 'ask:proc', True
+    return '', False
+
+
 def decide(command, session, state, now=None):
     """(mã thoát, thông điệp) cho một lệnh Bash. `state` là dict phiên → {hình dạng: (lần đầu, số lần)}."""
     if not command:
@@ -97,18 +139,29 @@ def decide(command, session, state, now=None):
     if MONTAGE.search(command):
         return 2, MONTAGE_MESSAGE
     key, is_poll = poll_kind(command)
-    if not is_poll:
-        return 0, ''
     now = now if now is not None else time.time()
     seen = state.setdefault(session, {})
-    first, count = seen.get(key, (now, 0))
+    if is_poll:
+        first, count = seen.get(key, (now, 0))
+        if now - first > WINDOW:
+            first, count = now, 0
+        count += 1
+        seen[key] = (first, count)
+        if count < LIMIT:
+            return 0, ''
+        return 2, POLL_MESSAGE % (count, command.strip()[:160])
+    # M26: hỏi trạng thái, tính theo LỚP — mọi lệnh hỏi cùng nhau đếm, bất kể câu chữ khác nhau
+    akey, is_ask = ask_kind(command)
+    if not is_ask:
+        return 0, ''
+    first, count = seen.get(akey, (now, 0))
     if now - first > WINDOW:
         first, count = now, 0
     count += 1
-    seen[key] = (first, count)
-    if count < LIMIT:
+    seen[akey] = (first, count)
+    if count < ASK_LIMIT:
         return 0, ''
-    return 2, POLL_MESSAGE % (count, command.strip()[:160])
+    return 2, ASK_MESSAGE % (count, command.strip()[:120])
 
 
 def load_state():
@@ -201,7 +254,24 @@ def selftest():
     ok = code == 2
     bad += 0 if ok else 1
     print('%-4s rc=%d (mong đợi 2)  %s' % ('ok' if ok else 'FAIL', code, 'ba câu khác câu chữ, cùng một kiểu chờ'))
-    print('%d/%d ok' % (len(cases) + 1 - bad, len(cases) + 1))
+    # ── M26: hỏi trạng thái tính theo LỚP: hình dạng đổi liên tục thì khoá theo hình dạng không
+    # bao giờ chạm ngưỡng, nên ở đây mọi lệnh hỏi cùng nhau đếm
+    state = {}
+    asks = ['ls src/props', 'ls -la src', 'cat out/build.log', 'ps -eo pid,args | grep node',
+            'python3 -c "import json;print(json.load(open(\'review/look.json\')))"']
+    for i, cmd in enumerate(asks):
+        code, _ = decide(cmd, 's', state, now=2000.0)
+        want = 0 if i < ASK_LIMIT - 1 else 2
+        ok = code == want
+        bad += 0 if ok else 1
+        print('%-4s rc=%d (mong đợi %d)  %s' % ('ok' if ok else 'FAIL', code, want, cmd[:64]))
+    # đọc mã thì không phải hỏi: nó không bị đếm
+    state = {}
+    for i in range(ASK_LIMIT + 5):
+        code, _ = decide('grep -n "buildSanThuong" src/set.js', 's', state, now=2000.0)
+        assert code == 0, code
+    print('ok   đọc mã (grep) không phải hỏi → không bị đếm')
+    print('%d/%d ok' % (len(cases) + 1 + len(asks) + 1 - bad, len(cases) + 1 + len(asks) + 1))
     return 1 if bad else 0
 
 

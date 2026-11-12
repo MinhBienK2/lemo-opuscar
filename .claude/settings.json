@@ -18,7 +18,7 @@
           },
           {
             "type": "command",
-            "command": "python3 \"${CLAUDE_PROJECT_DIR:-.}/tools/hook_load.py\""
+            "command": "env LEMO_SWAP_MAX=96 python3 \"${CLAUDE_PROJECT_DIR:-.}/tools/hook_load.py\""
           }
         ]
       },
@@ -28,6 +28,15 @@
           {
             "type": "command",
             "command": "python3 \"${CLAUDE_PROJECT_DIR:-.}/tools/hook_stale_read.py\""
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PROJECT_DIR:-.}/tools/hook_edit_count.py\""
           }
         ]
       }
