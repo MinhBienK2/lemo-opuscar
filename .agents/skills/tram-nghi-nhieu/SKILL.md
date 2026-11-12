@@ -1,7 +1,7 @@
 ---
 name: tram-nghi-nhieu
 description: Đạo diễn và dựng một tập của kênh Trạm Nghĩ Nhiều — câu hỏi "tại sao" đời thường, trả lời bằng diorama 3D toon (three.js) có ánh sáng thật, viền mực vẽ tay, máy quay đi vào bên trong vật, mọi vật dựng đúng là nó, chỉ thứ vô hình mới thành hình minh hoạ; một giọng kể tiếng Việt. Dùng khi làm bất kỳ tập nào của kênh.
-version: 17.0.0
+version: 17.1.0
 ---
 
 # Một tập Trạm Nghĩ Nhiều
@@ -16,15 +16,23 @@ viện. Lệnh của từng công cụ, và việc cần làm khi một công c�
 
 Làm đến bước nào thì chỉ mở `GUIDE.md` của bước đó.
 
-| Bước | Làm gì | Hướng dẫn | Chấm (`review.sh <tập> <bước>`) |
-|---|---|---|---|
-| 1 | `research/FACTS.md`, `TREATMENT.md` (bảng Ý → Hình) | `step1-outline/GUIDE.md` | `outline` |
-| 2 | `voice/lines.json`, rồi giọng đọc và `src/timeline.js` | `step2-script/GUIDE.md` | `script` |
-| 3 | góc máy, ánh sáng, khung hình chính trong `review/hero/`, `LOOK.md` | `step3-storyboard/GUIDE.md` | `look` |
-| 4 | `COMPONENTS_SPEC.md`: mọi vật, bộ phận, bối cảnh, đèn | `step4-component-breakdown/GUIDE.md` | — (bước 5 đọc nó) |
-| 5 | mỗi vật một tệp `src/props/<mã>.js` | `step5-props-code/GUIDE.md` | `props` |
-| 6 | `src/film.js`: cảnh, diễn hoạt, nhãn, tờ nhịp | `step6-assembly/GUIDE.md` | `picture` |
-| 7 | âm thanh, dựng phim, cổng bàn giao | `step7-delivery/GUIDE.md` | `final` (chỉ báo cáo) |
+| Bước | Làm gì | Hướng dẫn | Chấm (`review.sh <tập> <bước>`) | Vòng chấm |
+|---|---|---|---|---|
+| 1 | `research/FACTS.md`, `TREATMENT.md` (bảng Ý → Hình) | `step1-outline/GUIDE.md` | `outline` | tối đa 4, thường **2** |
+| 2 | `voice/lines.json`, rồi giọng đọc và `src/timeline.js` | `step2-script/GUIDE.md` | `script` | tối đa 6, thường **3** |
+| 3 | góc máy, ánh sáng, khung hình chính trong `review/hero/`, `LOOK.md` | `step3-storyboard/GUIDE.md` | `look` | tối đa 8, thường **3–5** |
+| 4 | `COMPONENTS_SPEC.md`: mọi vật, bộ phận, bối cảnh, đèn | `step4-component-breakdown/GUIDE.md` | — (bước 5 đọc nó) | — |
+| 5 | mỗi vật một tệp `src/props/<mã>.js` | `step5-props-code/GUIDE.md` | `props` | tối đa 8, thường **6–9** |
+| 6 | `src/film.js`: cảnh, diễn hoạt, nhãn, tờ nhịp | `step6-assembly/GUIDE.md` | `picture` | tối đa 8, thường **1–3** |
+| 7 | âm thanh, dựng phim, cổng bàn giao | `step7-delivery/GUIDE.md` | `final` (chỉ báo cáo) | 1 (chỉ báo cáo) |
+
+**Con số "thường" là số đo được trên các tập chạy thật** — nó để bạn biết mình đang *hội tụ* hay đang
+*lặp*. Nếu bạn đã vượt quá số "thường" mà **số mục phải sửa không giảm**, bạn đang lặp chứ không tiến:
+đừng chạy vòng nữa, hãy ghi vào báo cáo mục nào không sửa được và vì sao. Trần cứng nằm trong
+`review.py` (`MAX_ROUNDS`) — khi chạm trần, phần còn lại thành MỞ và bước đóng lại.
+
+Một vòng chấm chỉ đáng chạy khi **có thứ gì đổi**: mục mới, mục vừa được sửa, hoặc `--again`. Vòng mà
+không mục nào đổi là một vòng lãng phí — và mỗi vòng của bước 6 là một lần **dựng lại toàn bộ phim**.
 
 `sh channels/tram-nghi-nhieu/tools/review.sh <tập> <bước>` chạy ở chế độ nền của harness (`run_in_background`), rồi
 đọc kết quả một lần khi harness báo xong.
@@ -41,8 +49,9 @@ trả lời từng mục: dàn ý, từng câu lời, từng khung hình chính,
 - Muốn chấm lại một mục chưa đổi: `--again <mã>,<mã>` (hoặc `--again all`).
 - Một mục sai ba lần thì thành **MỞ**: bước đóng và đi tiếp, mục đó nằm trong báo cáo cho người dùng. Một mục đã MỞ
   thì **giữ nguyên MỞ** — vòng sau có đạt ĐẠT thì nó vẫn nằm trong báo cáo.
-- **Mỗi bước có trần số vòng** (xem `review.py` `MAX_ROUNDS`). Khi chạm trần, vòng đó không chạy nữa: phần còn lại
-  thành MỞ, bước đóng lại, và báo cáo nói rõ vì sao. Một bước chấm đi mãi không có đường ra.
+- **Mỗi bước có trần số vòng** (cột "Vòng chấm" trong bảng trên, và `review.py` `MAX_ROUNDS`). Khi chạm trần,
+  vòng đó không chạy nữa: phần còn lại thành MỞ, bước đóng lại, và báo cáo nói rõ vì sao. Một bước chấm
+  đi mãi không có đường ra.
 - **Một tập dùng MỘT người chấm suốt tập.** Đổi người chấm giữa chừng là một quyết định có chủ ý: mọi mục đã
   chấm phải chấm lại (`--again all`) để tiêu chuẩn là một.
 
