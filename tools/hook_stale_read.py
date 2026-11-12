@@ -245,13 +245,35 @@ def selftest():
         assert rc == 2, rc
         assert 'vừa sửa' in msg or 'sửa của chính bạn' in msg, msg
         print('ok   lần đọc thứ %d (dù tệp vừa được sửa) → rc=2' % (TOTAL + 1))
+        # M26: hai tập khác nhau có cùng một tên tệp (src/film.js) — bộ đếm phải tính theo ĐƯỜNG DẪN
+        # ĐẦY ĐỦ, nếu không thì phiên làm ba tập sẽ bị chặn oang vì tệp của tập này.
+        other = None
+        try:
+            with tempfile.NamedTemporaryFile('w', suffix='.js', delete=False, dir=os.path.dirname(big)) as f:
+                f.write('x' * (BIG + 500))
+                other = f.name
+            state6 = {}
+            for i in range(TOTAL + 2):
+                with open(big, 'a') as f:
+                    f.write('\n// sửa\n')
+                rc, _ = decide(big, 's7', state6)
+            assert rc == 2, rc
+            rc, _ = decide(other, 's7', state6)
+            assert rc == 0, rc
+            print('ok   cùng tên tệp ở tập khác → bộ đếm riêng (đường dẫn đầy đủ)')
+        finally:
+            if other:
+                try:
+                    os.unlink(other)
+                except OSError:
+                    pass
     finally:
         for p in (big, small):
             try:
                 os.unlink(p)
             except OSError:
                 pass
-    print('%d ca đều đúng' % 12)
+    print('%d ca đều đúng' % 13)
     return 0
 
 
