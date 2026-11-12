@@ -1,4 +1,7 @@
-// Phần dùng chung của các bối cảnh: dải màu trời, chùm sáng, dải sóng, thước đo.
+// Phần dùng chung của các vật dựng: dải màu trời, dải sóng, toạ độ.
+// Tệp `_` này không có PROP: sửa nó là sửa mọi vật dùng nó, nên những vật
+// đó được chấm lại (đúng như bản ghi props_catalog.digest ghi).
+//
 // Bối cảnh của tập — năm nơi chốn:
 //   N1 · Sân thượng nhà, chiều muộn (và lúc xế chiều)
 //   N2 · Trong không khí, ban ngày
@@ -10,8 +13,7 @@
 // cây chuối có lá cong, Trái Đất có lục địa. Thứ vô hình (ánh sáng bị rẽ, độ dài
 // đường đi, lớp ozon) mới dựng thành hình minh hoạ: chùm sáng, thước đo, vỏ mỏng.
 import * as THREE from 'three';
-import { PAL, toon, glowMat, canvasTex, TEX, rbox, mesh, fxLayer, mulberry, clamp, lerp } from '../../../../../rig/kit.js';
-import { keyLight, ambience } from '../../../../../rig/lights.js';
+import { PAL, toon, canvasTex, fxLayer, mulberry, clamp } from '../../../../../rig/kit.js';
 
 export const V3 = (x, y, z) => new THREE.Vector3(x, y, z);
 
@@ -76,53 +78,6 @@ export function skyTexture({ stops, sunDir, sunCol, sunCore, sunR = 3.4, rays = 
   return t;
 }
 
-// Một chùm sáng: những lát mỏng tròn xếp dọc trục, cộng dồn thành một thân sáng.
-export function beamSlices({ n = 22, from, to, r0 = .55, r1 = .9, colorAt, opacity = .13 }) {
-  const g = new THREE.Group();
-  const A = V3(...from), B = V3(...to), dir = B.clone().sub(A);
-  const q = new THREE.Quaternion().setFromUnitVectors(V3(0, 0, 1), dir.clone().normalize());
-  const tex = TEX.radial('rgba(255,255,255,1)');
-  for (let i = 0; i < n; i++) {
-    const u = i / (n - 1);
-    const r = lerp(r0, r1, u);
-    const m = new THREE.Mesh(new THREE.PlaneGeometry(r * 2, r * 2),
-      new THREE.MeshBasicMaterial({
-        map: tex, color: colorAt(u), transparent: true, opacity,
-        blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false, side: THREE.DoubleSide,
-      }));
-    m.position.copy(A).addScaledVector(dir, u);
-    m.quaternion.copy(q);
-    m.renderOrder = 6; fxLayer(m); g.add(m);
-  }
-  return g;
-}
-
-// Một thân chùm sáng: vỏ trụ trong suốt, mềm ở mép, chạy dọc trục.
-// Các lát đĩa của beamSlices chỉ đọc được khi nhìn DỌC theo chùm; nhìn ngang
-// thì chúng chồng thành một đường. Thân trụ thì đọc được cả hai chiều: nhìn
-// ngang thành một sợi sáng nằm ngang, nhìn dọc thành một ống sáng.
-export function beamShaft({ from, to, r0 = .12, r1 = .18, color = '#ffffff', opacity = .16, seg = 20 }) {
-  const A = V3(...from), B = V3(...to);
-  const dir = B.clone().sub(A), len = dir.length();
-  const g = new THREE.Group();
-  const geo = new THREE.CylinderGeometry(r1, r0, len, seg, 1, true);
-  const mat = new THREE.MeshBasicMaterial({
-    color: new THREE.Color(color), transparent: true, opacity,
-    blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false, side: THREE.DoubleSide,
-  });
-  // mép vỏ trụ mờ dần: chỗ nào mặt trụ quay ngang về máy thì sáng thêm
-  mat.onBeforeCompile = sh => {
-    sh.fragmentShader = sh.fragmentShader.replace('#include <normal_fragment_maps>',
-      '#include <normal_fragment_maps>\n  diffuseColor.a *= 1.5 * pow(smoothstep(0., 1., abs(dot(normalize(normal), normalize(vViewPosition)))), 1.4);');
-  };
-  mat.customProgramCacheKey = () => 'beam-shaft-soft';
-  const m = new THREE.Mesh(geo, mat);
-  m.position.copy(A).addScaledVector(dir, .5);
-  m.quaternion.setFromUnitVectors(V3(0, 1, 0), dir.clone().normalize());
-  m.renderOrder = 6; fxLayer(m); g.add(m);
-  return g;
-}
-
 // Một dải sóng ánh sáng: ống tròn chạy theo đường sin.
 export function waveRibbon({ len = .8, amp = .03, waves = 6, thick = .012, color = PAL.cyan }) {
   const pts = [];
@@ -136,18 +91,3 @@ export function waveRibbon({ len = .8, amp = .03, waves = 6, thick = .012, color
   fxLayer(tube); g.add(tube);
   return g;
 }
-
-// Một thước đo có vạch: thanh dài + các vạch nhô lên.
-export function ruler({ len = 20, ticks = 39, mat }) {
-  const g = new THREE.Group();
-  const rod = new THREE.Mesh(new THREE.BoxGeometry(len, .09, .09), mat);
-  rod.castShadow = true; g.add(rod);
-  for (let i = 0; i < ticks; i++) {
-    const x = -len / 2 + (i + .5) * (len / ticks);
-    const big = i % 5 === 0;
-    const b = new THREE.Mesh(new THREE.BoxGeometry(.022, big ? .22 : .13, .10), mat);
-    b.position.set(x, .11, 0); b.castShadow = true; g.add(b);
-  }
-  return g;
-}
-

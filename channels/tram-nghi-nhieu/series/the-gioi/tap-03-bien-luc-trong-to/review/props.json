@@ -1,0 +1,318 @@
+{
+ "step": "props",
+ "round": 1,
+ "items": {
+  "cay-chuoi": {
+   "name": "cây chuối có chùm quả",
+   "src": "b63b3921d6487a67e619ac2e4fd18a406752039e5e465db391af92e4a7c10045",
+   "key": "",
+   "fp": "o7O/ytLX293c2tfRxripn56ps73Eyc3PzszKxLyzqKCotL/K0tfb3dza19HJv7SrrLbCzNXZ3d/e3drVzMK1p6Grtr/Hy8/R0M/Mx7+2q6KqtsLM1dnd397d2tXMwratrrnG0Nfc39/g39zX0Ma6rKStucPJztDR0tHOycK5rqSsucbQ19va3ODf3NfPxrqusL3J0trg4OHh4d7a08m9rqWxvMXM0dLT09PQzMW8saavvcnS2s6szODh3trTyb2xs7/L1d3g4eHh4eDd1cq/saizvsjP0tPT09PSz8e+s6ixv8vV3MKLmMrh4N3Vy7+ztsHN2N7g4uHh4uDe2M3CtKu1wMrQ0tTU1NTS0Mq/tqu0wc3Y1Z15gLzi4N7YzcK2uMPP2d/euZqa2eHe2c/Etay3wcvQ0tHNz9PT0MvCt6y1w8/Z26ZsXYjK4N7Zz8O3ucXR2d/bgk1SlNzf2tLFtq64w8vRxYhqdp3O0czEuK23xdHZ37luUliO4N/a0sW4usfT2+Hdgk5QYarf29PGt6+6xc3TrGhRT4e80s3Guq64x9Pb4KBgVFGR4ODb1Ma5vMjV3eDHY1tdkrLf3dTIubC8x8/Sw5KBXrfQ08/Gu7C5yNXd3pdRVFNmxuHd1Mi7vMnV3eHEnIaXv+Di3dTJurG8yM/SysCDlNDT1M/GvLG6ydXd4L1cU1FVjd/d1Mm9vcnV3eHa2Zy73+Li3dbKu7K8x8/T0tGMsdTU08/IvbK7ydXd4cdtT1Fxw+Hd1cq+vsrW3uHgyYWt3+Lh3tbKvLS/ytLU1NSawtXV1NHKvrO8ytbe4ctpUVKY4eHe1sq+vsrX3uHhtniJzOLg3tbKvbzJ1d3f3+Ck0ODg39zVyby9ytbe4clqUFON4eDe1sq9vcrX3uHep32Ov+Hh3tbKvb3K197h4eKo0OLi4d7Wyr29ytfe4d2gUGOf3uHe1sq9vcrW3uLftJGs3eHh3tbKvL3K1t7i4uGu0OHi4t7Wyry9ytbe4uKiX3rZ4eLe1sq9vcnU3eHh2azF4eHh3dXJu7zJ1N3i4uG20OHh4d7Vybu8ydTd4eKimpDe4eHe1cm8vMjT3OHh4b/G4eHh3NTIu7vH09vPtrWrzeHh4dzUyLu7yNPc4eG1y67g4eHc1Mm7u8fT3ODh4szJ4uLh29PHurrH09u+lJqiy+Li4dzTx7q6x9Pc4OHX4NTi4uHc08e7uMXS2+Di4t/e4eHg2tHFubjF0tvb0NS4z+Hh4NrRxbi4xdLb4OLi4uHh4eDa0cW5t8PQ2d/h4uLi4eHe2dDDt7bD0Nnf4eLh4eHh3tnQw7e2w9DZ3+Hi4uLh4N7Z0MO4tcLO2N3h4eLh4d/d187CtbXCztfd4eHi4eHf3dfOwbW1ws7X3eHh4uHh393XzsG2sr/L1dzg4uHh4d/d1cu/s7K/y9Xc4OLh4eHf3NXLv7Oyv8vV3ODi4eHh393Vy7+zsb3I0tre4eHh4N7a08i+sLG9yNLa3uHh4eHe2tPIvrCwvcjS2t7h4eHg3trTyL6xr7rG0Njd4OHg393Xz8W6rq66xtDY3eDh4N/d18/Fuq+uucbQ2N3g4eDf3NfPxbqvrLfDzdXa3d7e3drVzMK2rKu3w83V2t3e3t3a1MzCtqyrt8PN1drd397d2tTMwratqrTAytLX2tzd29jSysCzqaq0wMrS2Nrc3NvX0srAs6mqtMDK0tja3Nzb2NLKwLSq",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "dung-vat": [
+     "ĐẠT",
+     "Góc nhìn từ trên: tán gồm 8 lá bản rộng có gân giữa và gân phụ toả từ tâm, ở chính giữa là chùm quả nhiều trái chuối xanh xếp hàng trên cuồng cong màu nâu, cuồng kéo xuống có bầu hoa; góc chéo cũng thấy rõ chùm quả. Bộ phận đặc trưng (chùm chuối + lá bản) đủ để không đọc nhầm sang cây dừa như tên mù.",
+     "-"
+    ],
+    "nguyen-ven": [
+     "ĐẠT",
+     "Không có mảnh rời trôi lơ lửng, không mặt thủng; chùm quả gắn liền cuồng vào tâm tán, các lá chồng lên nhau đúng trật tự, thân liền từ gốc lên tán.",
+     "-"
+    ],
+    "khoi-3d": [
+     "ĐẠT",
+     "Lá là mặt cong có gân uốn khúc, sáng tối đổ theo hướng; thân là trụ thon có vân vòng, nhìn từ trên vẫn thấy thân và bóng đổ đúng hình tán lá.",
+     "-"
+    ]
+   }
+  },
+  "chum-sang-ngang": {
+   "name": "chùm sáng ngang của Mặt Trời",
+   "src": "4302c0cdc3833f9b2670520f2ef358213223385f3e1d31c621c80238e972621f",
+   "key": "",
+   "fp": "qbS/ytLX3N3d29jSycC0qZ+ptL7Gy8/R0M/Lxb20qKCotcDL09jd3t7c2dLKwLSrrLbDzdba3uDf3tvVzcO3qqKrt8DJzdHT0tHOyMC3q6Kqt8PN1tvf4eDf3NbNw7etrrnG0djd3+Di4N3Y0Ma6rKSuusTL0NPU1dPRy8O6r6StusfR2d7h4uLh3tjRx7qusLzJ09vh4eLj4t/b08m9rqaxvcbO1NXV1tXSzsa9saauvcrU3OLj5OTj4NzUyr2ws7/L1t7i4+Pj4uDe1su/sam0v8nR1dfW1tbU0cm/s6ixwMzX3+Tl5eTj4t/Wy7+ztsHN2d/j5OTk5OLf2M3CtKu2wczT1tjY2NjW0szBtqu0ws7a4eXn5ubl4+DZzcK2uMPP2uDj5eXl5OPg2tDEta23w87V2Nrb2trY1M7DuKy1xNDb4ubo6Ofm5OHb0MS3ucXR2uHl5ebm5eTg29LFtq65xc/W29ze3dza1c/Fua63xdLc5Onq6unn5eLc08a5usfT3OPm5+fm5eXi3NTHt6+7x9HZ3d/g393b19DHuq+4yNTe6O3t6+no5uPd1Me5vMnV3uPp6+jn5uXk3tTIubG8ydPZ3uLi4eDc2NLIvLC5ydbh7fPy7evq5+Tf1ci7vMrW3uTw8u7q5+bl39XKu7K/zNbe5Ojq6ebh3NXKv7O6ytfh8/v59O/r6Obg1cq9vcrW3uX1+vfw6ufl39bLvbzK1uHs8/b49/Xx6uDWyr28ytfh8fz8+/Xu6ubg18u+vsvW3+Xw+/z48Onl4NfKvb3L1+Pz+/z9/fv57+HYyr29y9fh7Pj9/fv07Obg2Mq+vsvX3+Tq9vz8+O/l4NfKvb3L2OT4/f39/f399eLYy729y9jh6fP7/f378ufh2Mu+vcrX3+Pn7vf7/Pbp4NfKvb3L2ePy+/z8/Pz57+LXy729ytjh5u31+/39+Ovh18u+vsrX3+Tm6e73+/vt4NfKvL3L2OLt9ff3+PXy6+HXy7y9ytfh5+ru9Pr8/PHh18u9vcrV3uTm5+nv9fnw4NbJu7zK1uDp7vDx8e7r5+DWyru8ytbf5unr7/T3+vTh1sq8vMjT3ePl5ujp7fDq39XJu7vI1N/m6uzt6+ro5d/Vybu7yNTe5efq7O3w8u7g1cm8usfU3eLk5ufn6erm3dPHurrH1d/l6Orr6uro5d7Ux7q6yNTe4+bp6uvs7Ojf1Me7ucbS2+Hk5ebm5ebj3NLFubjG093k5+np6efm5N3Sxrm4xtPc4+Xo6ero6OXd08a5t8TQ2uDj5eXm5eTh29HDt7fE0dzi5ufo5+Xk4dvRxLe3xNHb4eTm5+jn5eLc0cS4tsLO2N7i4+Tl5OLg2c/CtbXCz9ng5OXm5eXj4NnPwrW1ws/Z3+Pk5ebm4+DZz8K2s7/L1d3h4+Pk4+Le18u/s7LAzNbe4+Xk5OTi3tfLv7Oyv8vW3uLk5OXl49/XzL+0sb3J0tvf4uLj4uDb1Mm+sLG+ydPc4ePj5OPg3NTJvrCxvsnT3ODj4+Tj4dzVyb6xr7nG0dne4eLh4d7Y0Ma6r666x9Ha3+Hj4uHe2NDGuq6uusfR2d7h4+Lh3tjQxruvrLfDztbb3t/f3tvVzcO3rKu3xM7X3N/g4N/b1s3Dtqyrt8TO1tvf4ODf29bNw7etqrTAytLY293d3NjSysC0qaq0wMvT2dze3t3Z08vAtKmqtMDK09nc3t7d2dPKwLSq",
+   "verdict": "FAIL",
+   "fails": 1,
+   "round": 1,
+   "rows": {
+    "dung-vat": [
+     "LỖI",
+     "Góc ngang tầm mắt: vật chỉ là một vệt sáng trắng nhạt bị cắt ở góc phải khung; góc chéo và góc từ trên: một mảng trắng dẹt có mép lông vũ trơn, không tia nào, không lõi chùm, không hướng bay — người xem gọi đây là \"chiếc lá lớn\", không đọc ra chùm sáng ngang của Mặt Trời.",
+     "Dựng chùm sáng thành nhiều tia có ranh giới rõ (lõi trắng + mép mờ), cho tia hội tụ từ một hướng nguồn sáng và đặt ngang tầm mắt để nhìn ngang là thấy ngay một chùm, không phải một vệt trắng trên sàn."
+    ],
+    "nguyen-ven": [
+     "ĐẠT",
+     "Vật liền mạch, không có mảnh rời, không mặt thủng, không mặt nào chồng lên nhau.",
+     "-"
+    ],
+    "khoi-3d": [
+     "LỖI",
+     "Hình nhìn từ trên y hệt hình nhìn chéo: một mảng sáng dẹt nằm sát sàn, không độ dày, không mặt sáng/mặt tối, không lõi sáng vỏ tối.",
+     "Cho chùm sáng có khối (lõi sáng + lớp vỏ bán trong suốt), sao cho nhìn từ trên và nhìn chéo phải ra hai hình khác nhau."
+    ]
+   }
+  },
+  "chum-sang-truc-tiep": {
+   "name": "chùm sáng đi thẳng tới mắt",
+   "src": "299270f2a036546bff413928760b9f5c13cda8dd2e53a2cfc759e6f6ddfb338e",
+   "key": "",
+   "fp": "qrTAytPY3d7e3NnSysC0qZ+ptL3Fys7Q0M7Lxb20qKCotMDK09ne39/d2dLKwLSrrLfDzdbb3+Hg39zWzcO3qqKrtsDIzdDS0tHOyMC2q6Kqt8PO19zg4uHg3NbNw7etrrnG0dne4eLi4d7Z0ce6rKSuusTKz9LT1NPQy8O6rqStusfS2d/i4+Pi39nRx7qusb3J1Nzi4+Pk4+Dc1Mq9r6axvMbN09TU1dTSzsa9saauvcrU3ePk5OXk4d3Uyr2xs8DM19/k5eTk5OLf18y/samzv8nQ1NXV1dXU0cm+s6ixwMzY4OXn5uXl49/XzMCztsLO2uHl5+bm5ePg2c7CtKu2wcvS1dfW19fV0szAtqu0ws/b4ubp6Ofn5OHazsO2t8TQ2+Ll5+jn5uXh29DEta23w83T1tfY2NjX1M7DuK21xNDc5Ojq6uno5uLc0cS3ucXS3OTp6erp5+bi3NPGt664xM7V2Nna2trZ1c/Gua63xdLe5+3s7Ovq6OTd08a5usjU3ufs7evp6Ofk3tXHuK+7xtDX2dvb29va19HIuq+4yNXg3eLv7uzr6ubf1ce6vMnW4Ojw8e3r6ujm4NbJubG8ydLX2dzb3N3c2dPIvLC5ydfj5dva6O/u6+jh1sm8vMrX4Or39/Pw7ern4dbKu7G9ydPa3t/g4eLj4dXJvbK6ytfj8vnt3ODs7+vj18u9vcrW4Ov6/Pr18e7p4djLvbrH097n6+zw8fP18eDUyLq8ytfk9vn6+evd4uzk2My+vsvX4enu+/379/Ps49nLvb3L1+Py9vj7+/v79+bYyr29y9jk8vn4/Pz25erm2cu+vsvY4efc8P38/Pnx5dnLvb3L2OT2+/z8/P39+efYy729y9jj7fb7+vz9/Pfo2su+vsrY4ebo3fX8/Pz35tjLvb3K2OPv9Pb4+fv79+bYy729y9nj6vH4+vr9/fnp2cu+vsrX4ebq5t34+vr35tjLvb3K1+Lr7u7w8vT18+TYy7y9y9ji6e3z+Pr6/fno2cu+vcrV3+Xp6+Lh+fTs5dfKu7zK1tvS1NXX2tvg6uLXyru8ytbh6Ovv9Pr5+vnn2Mq8vMjU3uTn6uze5vnu4tbJu7vI1N3f4OLi4eHg5ODWybu7yNXf5uns8PX6+vfl18q8u8fU3uPm6err2uju4NXIurrH1N7j5efo5+jn5d7Ux7q6yNXf5ejr7fH3+/Xj1si7ucbS3OPl6Onq6Nvp3tPGubjG093j5ebm5+Xm5N3Txrm4xtPd5Ofq6+7x9vPh1Ma6t8TR2+Hk5ufp6ejk3dHEt7fE0Nvh5OXl5eTk4dvRxLe3xNHc4ubo6uvt7+vf0sS4tsLO2d/j5Obn6OXi2s/CtbXCztnf4+Tk5OTi39nPwrW1ws/Z4OTm6Onq6ubc0MK2s7/L1t7i5OXm5uTg2MzAs7K/y9bd4uPj4+Ph3tbLv7Oyv8zW3+Pm5ujo5+PZzcC0sb3J09zg4+Tl5OLd1cm+sbG9ydPb4OLi4+Lg29TJvrCxvcnT3OHk5ebm5N/Wyr+xr7rH0dne4uPj4t/Z0ca6r666xtHZ3uHi4eHe2NDGuq+uusfR2t/j5OTk4dvSx7uwrLfEztbc3+Hh4NzWzcO3rKu3w87W297g4N7b1c3Dtqyrt8TO19zg4eLh3dfOxLetqrTAytPZ3N7f3dnTy8G0qqq0wMrS2Nvd3tzY08rAtKmqtMDL09rd3+De2tTLwbSq",
+   "verdict": "FAIL",
+   "fails": 1,
+   "round": 1,
+   "rows": {
+    "dung-vat": [
+     "LỖI",
+     "Vật là một thanh dài trắng xòe, một đầu tròn, nằm ngang sàn, không có hình nón hội tụ, không có tia lệch, không có quầng sáng hướng về người xem; chỉ có một sợi thanh mảnh nằm song song — người xem gọi đây là \"dây khóa áo\", không đọc ra chùm sáng đi thẳng tới mắt.",
+     "Cho chùm sáng hội tụ thành hình nón/trục đi thẳng về phía máy quay, có lõi sáng và các tia lệch, thêm vầng sáng ở đầu chiếu vào người xem."
+    ],
+    "nguyen-ven": [
+     "ĐẠT",
+     "Thanh sáng liền mạch suốt chiều dài, sợi thanh mảnh nằm song song không bị cắt, không có mảnh rời trôi lơ lửng.",
+     "-"
+    ],
+    "khoi-3d": [
+     "LỖI",
+     "Nhìn từ trên, chùm sáng là một hình chữ nhật phẳng, một mảng trắng đều tuyệt đối, không có mặt trên/mặt sườn/mặt dưới; góc ngang tầm mắt cũng chỉ là thanh trắng đều.",
+     "Dựng chùm sáng có tiết diện và chiều sâu (lõi sáng + vỏ mờ), nhìn từ trên phải thấy dạng khối chứ không phải tấm phẳng."
+    ]
+   }
+  },
+  "dai-song-anh-sang": {
+   "name": "dải sóng ánh sáng",
+   "src": "5ecbe40c1bc2423b32b9b035d4ad8e2853aa256e37199a05d4a4d36f1a4d727c",
+   "key": "",
+   "fp": "qrW/y9PZ3d/e3NnTysC0qaCps77Gy9DR0c/Mxb20qKCotL/K09jd3t7c2NLKwLSrrLfDztfc3+Hg39zWzcO3qqKrtsHJztLU09LOycC2q6Kqt8PO1tvf4ODf29bNw7asrrnG0tnf4uLj4t/Z0ce6rKSuusXL0dPU1dTRy8S6rqSsucfS2d7h4eLh3tjQx7qusL3K1N3j5OXl4+Dc1Mq9r6axvcfO1dXW19bTz8e9saauvcrU3OPj4+Pi4NzTyr2xs7/M1+Hl5+bm5eLf18y/saizwMrS19jY2NjW0sq/s6ixv8zY4OXm5eTj4d7Wy7+ztsLO2uPn6eno5+Tg2s7CtKu2ws3V2Nra2trY1M3Btqu0ws7b4+bo5+bl4t/ZzsK2t8TQ3OTp6+vq6Obi3NHEta23xM/X2tzd3d3b1tDEuKy1w9Dd5Ojo6Ofm5ODb0MS3ucXS3efu7u3s6ujj3dPGt665xtHZ3t/g4N/e2NHHua23xdLe6Ozr6uno5uHb0sa5usjU3+vz8u/t7Onm3tXHt6+7ydPd4ePj4uHg29PJuq64yNXh7/Hu7Ono5+Pd1Me5vMnW4e349/Pw7uvo4dbJubG9y9jh5ejn5+bk4NbKvbG5ydfl9fbz7uvq6OXf1ci7vMrX4e/7+/n18e3q4tbKvLrI1uPu8vP09PPx7uLVyLq7ytfl+Pr39PDs6efg1sq9vcrX4e76/Pz59fHr49jLvbzK2ej3+fr7+/r69ubZy728ytfk9vv69PPv6+jh18u+vsvX4u35/P38+fXt5NnLvb3L2ev6+/z9/Pv8+Ojay729y9jk8vn7+fj07uji2Mu+vsvY4uv1+/38/Pnw5dnLvb3L2uv6/Pz9/Pz8+eray729y9jj7fT6/Pv59Ovj2Mu9vcvY4unx+Pv8/Pz15tnLvb3L2un3+/v6+/v7+evZy729y9ni6e/1+fv7+fHk2Mu+vsrX4eju8/f7/Pz359nLvL3L2ef0+fn3+fn59unZy7y9ytji6Ozv9Pn7+/bl2Mu9vcrW4Ofs7/P4+vv459jKu7zK1+Tv9PT09fPz8ObYyru8ytbg5+rs8PT3+vfl18q8vMjU3+bq7fDz9/r45tfKu7vJ1uLr7vDw7+/u6+PXyru7yNTf5ejq7O7y9vbj1sm8usfU3+To6+7w9Pf25dXIurrI1uHo6+7u7e7s6OHVyLq6x9Te5Ofp6uvu8O/h1Me7uMbT3OPn6uvt7vHv4tTGubjG1N/m6uzs7Orp5t/Uxrm4xtLc4ubo6Orq6+nf08a5t8TR2+Hm6Onr6+zo39LEt7fE0d3k6Onp6ejn493SxLe3xNHa4OTn5+jo5+Td0cS4tcLP2d/k5ufp6ujk3NDCtbXCz9rh5ufn5+fk4drPwrW1ws/Y3+Pk5ufn5eLaz8K2sr/M1t7j5ebn6Obi2cy/s7K/zNff5Obl5uXj39fMv7Oyv8zW3eLk5OXl5ODXzL+0sb3J09zh5OTm5uPe1sq+sbG9ydTc4eTk5eTh3NTJvrCxvcnT2+Dj4+Tk4d3Vyb6xr7nH0dnf4uTj4+Da0ce7r666x9La3+Lj4uLf2dHGuq+uucfR2d7h4+Lh3tnRxrqvrLfDztfc3+Hh4NzWzcO3rKu3w8/X3N/h4d/c1s3Dt6yrt8PO1tve4ODf29bNw7atqrTAy9PZ3N7f3trTy8C0qaq0wMvT2dze393Z08vAtKmqtMDL0tnb3d7d2dPLwLOq",
+   "verdict": "FAIL",
+   "fails": 1,
+   "round": 1,
+   "rows": {
+    "dung-vat": [
+     "LỖI",
+     "Nhịp sóng chỉ hiện ở góc từ trên (những lưỡi liềm cyan lặp dọc mặt trên); góc chéo và góc ngang tầm mắt thì dải sáng trắng cháy hoàn toàn, không thấy sóng nào — người xem gọi đây là \"con sâu\" (thân trụ đốt lặp, lỗ lưỡi liềm ở giữa), không thấy dải sóng ánh sáng.",
+     "Cho các lưỡi liềm (đỉnh sóng) ăn theo cạnh dải để nhìn ngang tầm mắt cũng thấy sóng, và dùng độ trong/xuyên sáng để dải đọc ra là ánh sáng chứ không phải một thân đặc."
+    ],
+    "nguyen-ven": [
+     "ĐẠT",
+     "Dải sáng liền mạch, lỗ lưỡi liềm ở giữa có mép gọn, không có mảnh rời trôi lơ lửng, không mặt nào chồng lên nhau.",
+     "-"
+    ],
+    "khoi-3d": [
+     "ĐẠT",
+     "Ở góc ngang tầm mắt thấy dải có mặt trên cong và mặt sườn tối hơn, nhìn từ trên thấy mặt cắt tròn đều — có khối và có sáng/tối.",
+     "-"
+    ]
+   }
+  },
+  "dong-ho-do-phan-tram": {
+   "name": "đồng hồ đo phần trăm",
+   "src": "65dfa1be6cea0050cb0df9f9b68d15bd72891f57b4f3a933add66405f7155db2",
+   "key": "",
+   "fp": "qrTAytPY3d/e3NnTysC0qZ+ptL7GzNDS0dDMxr20qKCotL/K0tfb3dzb2NHJv7OrrLbDzdbb3+Hg39zWzcO3qqKrt8HKz9PU1NPPysG3q6KqtsLM1drd39/e2tXMwrasrrnG0dne4eLj4t/Z0ca6rKSuusXM0tXW19XSzMS6r6SsucbQ193f4OHg3dfQxrqusL3J1Nzi4+Tl4+Hc1Mq9rqaxvcfP1dfY2djUz8e9saauvMnT2s3I4OLh3tvTyb2ws8DM19/k5d3g5OLf1su/sai0v8rS19rLzNnW0sq/s6ixv8vV26aSyOLi4N3Vy7+ztsLO2eDk5MHE4uTg2c7CtKu2wc3U2d3Cyd3Y1M3Btqu0wc3Y1ZmModzj4d7YzcK2uMPQ2+Hl4b7V2eXh29DEta23w87V2t7Cxt3b1c7DuKy1w8/ZzZGMkMfj4t/az8O3ucXS2+Lm1sTa2uPi3NPFtq65xc/X3tjHydTd1s/Gua22xdHazJKaoLHi49/a0sW4usfU3eTlz8zW3t7j3dTHt6+7x9HZ3tPVzdLc2NDIuq64x9Pb0JisuLjZ4+Hb1Ma5u8nW3+Ti1uva4tzk3tXIubG8ydLZ29ny6trb2dLIvLC5yNXd1q/XwrjH4eLd1Mi7vMrW3+Th4vrv5dvl39XKu7PAzNXb2uX8+ebb3NXLv7S6ydbd3dDZzsfA1uPe1Mm8vcrW3+Xj6vz46dvk39fLvbzK1t/l2u38++/g5t/Wyr28ydXd4c7AvNDRyuLd1sq9vsvX4OXo9/z67d3j4NjKvb3L1+Hl2vL8/Pfm5uDYy729ytbe4tbg3tHjyd/e18q9vsvX4OXo9/v78t/i4NjKvb3L2OHl6fv9/Pzq5eHYy729ytbe4uHz8uHi1t7e1sq9vcrY4OTo9vv8+OLi4NfKvb3K2OHl7fz6+/zr5uHXy729ytfe4uPs8/Xl4ODe1sq9vsrX4OXl8Pz8+eLj4NfLvL3L2OHm7Pz7/Pvr5+HXy7y8ytbe4+Xn7/nu4eLe1sq9vcrV3+Xj6Pz9+OHk39bKu7zK1uDm6/v8/frp5uDWyru8ydTd4+Xm5/Do2eHe1cm8vMjU3uTk3/v89+Pl3tXJurvI1N/m5/n9/Pjo5t/Vybu7x9Pc4uTm5+bf3uLc1Mi7usfU3uPn2/T88+bl3dTHurrI1d/l5PT9/fTo5t7Ux7q6x9Pd4ePl5ufm5OLc08e6uMXT3OPn4en26eXj3NPFuLjG09i7uOf6+uzn5d3Txri4xdLb4ePl5ebk4+Hb0cW5t8TR2+Hm6Obs2+Ph29HEt7fE0cyam8vw8eXn49zRxLe2w9Da3+Pk5OXj4t/Z0MO3tcLP2eDl6OjXyePg2c/CtbXCz9jHra/b3NHm4dnPwrW1wc7Y3uLj5OTj4d7YzsG1sr/L1t7j5+jm5OTf18u/s7K/zNff4d3g4ePl4NfMv7Oyv8vV3eHj4uPi4N3Wy7+zsb3J09zh5ebm5eLc1Mm+sLC9ydTd4+fo6efj3dXJvrCwvcjS29/h4uLi39rTyL6xrrrH0dnf4+Xk49/Z0Ma6rq66x9La4OTm5eTg2dHHuq+uucbQ2N3g4uDg3dfPxbqvrLfEztfc4OHi4NzWzcO2rKu3xM/X3eHi4+Hd1s3Dt6yrtsPN1trd39/d2tXMwratqrTAy9PZ3d7f3tnTy8C0qaq0wMvT2t3f4N7a08vAtKmptMDK0tjb3N3c2NLKwLOq",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "dung-vat": [
+     "ĐẠT",
+     "Đĩa tròn có kim chỉ từ trục giữa, vòng chia ô màu cam xen ô trắng, nút nhỏ trên đỉnh — đúng là mặt đồng hồ đo (tên mù cũng là đồng hồ đo/tốc độ).",
+     "-"
+    ],
+    "nguyen-ven": [
+     "ĐẠT",
+     "Kim gắn chặt ở trục giữa, nút trên đỉnh có chân đế, không có phần rời, không mặt thủng.",
+     "-"
+    ],
+    "khoi-3d": [
+     "ĐẠT",
+     "Đĩa có vành dày, mặt kính nổi, đổ bóng xuống sàn; nhìn từ trên thấy cả vành sau, trục kim và mặt lưng.",
+     "-"
+    ]
+   }
+  },
+  "dong-sang-re": {
+   "name": "dòng sáng bị rẽ",
+   "src": "62f2324d09c36c60919d62467162ed51415e6a712a395fe710e985c3f77cbce7",
+   "key": "",
+   "fp": "nqizvcXN0dDPzcrEvLOon56os73Eyc3PzszJw7yzp6CntL/K0tfc3d3b19HJv7Oqoaq2wM7Z3dvV0MzIv7aroKCrtsDHzM/R0M/Mx7+2qqGqtsLN1dre4N/e29XMwraso627zNje4OHh3NTKwrmuoqKtucTKztHR0tHOycK5rqOsucbQ2N3g4OHg3dfQxrqupbPG1Nvh4uLj4t/Yy76wpKSwvMbN0tPT1NLQzMW8sKWuvMnT2+Hh4uPi39vTybywrL7M197j5OPj4uHd1cm5qKezv8nQ1NXU1NPRz8e9sqexv8zW3uLj4+Pi4N3Vyr+ytsLO2eDk5uXk5OHf2M3Cs6u1wMvR1NbV1dTSz8m/taq0wc7Y3+Pl5eTj4d7YzcG1t8PQ2+Pm5ufl5OPf2s/Dtay3ws3T1tbX1dTT0MvCt6y1w9Da4eTl5OXk49/az8O3ucXR3Ofr6Ono5ePg2tLFtq64xM3W2tjZ2NXT0czEuK22xdHb4uPY1efk4+Da0cW4usfU3u3w7ezp5ePh3NTGt6+6xs/e39vd2tXT0s3Fua64x9Tb4eDJ2+nl4+Hb08a5vMnW4Ovz8fDq5ePi3dTIubC8yNHd5t/l39XU087Gu6+5ydXQrLvT4enn4+Ld1Me7vMrW4Orx9PPr5uPj3tTJurG9yNHZ5+Xs3tbU1M/GvLG6ydbayr/S09vo5OPd1Mm8vcrW3+jv9PTt5+Tj3tbKu7K9yNHZ4e3t3NbV1M/HvbG7ytbh6+Pi9PPr5OPd1cq9vsvX4Obt8/Xw6OTi3tfKu7K+ydHX3ejq29bU09DIvLK7y9fi8PD19vLp5OLe1sm9vsrX4NzV7Orx6+Xi39fKvLbBztfc4+Xl4dza2NXOwra8y9fj8vb19e7o5OLf1sq9vcrY4OPgy8Tq7uXj39bKvb3K19/k7ezm6+Xk4t/Wyry9ytjj7/P08ern2eLf1sq9vsrX4OXjycnM4uXj39bKvLzK1t/m7+3m6eXl497Wyry8ytfi6+/u7Ojm4+Tf1sq8vcrV3uTn4+Ll4+Xj3tXJu7zJ1d7l7Onn5OTl497Vybu8ytXg5+rq6ufm5+Te1cm7vMjT3ePl5+fn6Ojk3dTJu7vH09fazszZ3+Xo5N3UyLu7yNTe5efo6Obm6OTd1Mi7usfU3eLk5ebm6erj3NPHurrH0tPWzNbh4+Xg4tzTx7q5x9Te4+Xn5uXm6uTc0sa6uMXS3OHk5eXl6O7k29LFuLjF0tzi5OXk5OPi4tvSxbi4xtLc4uXm5OTj5eLb0cW5t8PQ2uDj5OTk6Ofh2tDDt7bD0Nrg4+Tk4+Pj4NrQw7e2xNHa4OPk5OTj5ODa0MO3tcLO2N7i4+Pk4uXg2M7BtbXCztjf4uPj4+Ph3tjOwbW1ws7Y3+Lj4+Pj4d7YzsG1sr/L1d3h4+Pj5OPe1su/s7K/y9Xd4ePi4+Lg3dbLv7Kyv8vV3eHj4+Pj4d3Wyr6zsb3J0tvf4uLj4+Db08i+sLC9ydLb3+Li4uLf29PIvrCwvcnT2+Di4uPi39vTyL2wr7nG0dne4OLh4d7Y0Ma6rq65xtHY3eDh4ODd18/Fuq6uucbR2d7h4uHh3tjPxbqvrLfDztbb3t/g39vVzcK2rKu2w83W2t3f397a1czCtqyrt8PO1tve3+De29XMwrasqrTAytLY293e3NjSysCzqam0wMrS2Nvd3dzY0sq/s6mptMDK0tjb3d3c2NLKv7Op",
+   "verdict": "FAIL",
+   "fails": 1,
+   "round": 1,
+   "rows": {
+    "dung-vat": [
+     "LỖI",
+     "\"Dòng sáng\" được dựng thành hai thanh cyan đặc, mặt phẳng, có viền mực cứng như ống nhựa, giao nhau thành chữ X; ở giữa giao điểm có một tấm kính nhỏ trên cọc nên trông như trục chốt — người xem gọi đây là \"cối quạt gió 4 cánh\", không thấy một tia sáng bị rẽ.",
+     "Bỏ viền mực cứng, cho tia có quầng sáng mờ và trong suốt, và dựng lại sao cho một tia dừng ở mặt kính còn tia kia đi tiếp ra (góc lệch phải rõ, tia phải dài hơn) để nhìn là thấy \"rẽ\"."
+    ],
+    "nguyen-ven": [
+     "LỖI",
+     "Tại điểm giao: viền mực của thanh phía sau bị vẽ cắt ngang mặt thanh phía trước; tấm kính ở góc dưới bên phải lộ ra một mảnh hình răng cưa như mảnh vỡ; hai thanh xuyên qua nhau thay vì một thanh kết thúc tại mặt kính.",
+     "Dựng lại chỗ giao để một tia dừng ở mặt kính, tia kia phát ra từ điểm đó, và không để mặt kính hay viền mực cắt qua mặt tia phía trước."
+    ],
+    "khoi-3d": [
+     "ĐẠT",
+     "Thanh sáng là trụ có đầu bo tròn, nhìn từ trên thấy mặt cắt tròn và có mặt sáng/mặt tối; tấm kính là tấm dày có độ dày thật trên cọc.",
+     "-"
+    ]
+   }
+  },
+  "hat-bui-mo": {
+   "name": "hạt bụi mờ",
+   "src": "3e9d728136143fd2d5c8c8b6756a75009092b5edfee008c00a7d1e092cb25a75",
+   "key": "",
+   "fp": "qbS/ydHW29zc2tfRyL+zqJ+osrzDyM3OzszJw7uzp6Cns7/J0dbb3Nza1tHIv7OrrLbCzNXZ3d/e3drUzMK2qqGqtb/Gy87Qz8/Lxr61qqGqtsLM1Nnc3t3d2tTMwrasrrnF0Nfc3t/g39zXz8W5rKOtucLJztDR0tDOyMK5raOsucXQ19ze3+Df3NbPxbmusLzI0trf4OHh4d7a0sm8rqWwu8TL0dHS09LPy8S8sKWuvMjS2d/f4OHg3drSybywsr/L1d3g4eHh4d/d1cq+sKiyvsfO0tPS0tLRzse9sqewv8vV3ODh4ODg39zUyr6ytcHN197h4uLi4uDd18zBs6q0v8nP0tPT09PRz8m/taqzwc3X3eDh4eHh4N3XzMG1t8PP2d7h4uPj4+Le2c/DtKy2wcvQ0tPT09PT0MvBt6u1ws/Y3uDh4uHh4d7Zz8O2uMTQ2d/j4+Tj4+Lf2tHFtq23w8vQ09PT09PT0MvDuK22xNDZ3+Lh4uLh4d7Z0cW4usbS2+Hj5OTj4+Lg29PGt666xc3S09PT0tLT0czFua63xtLb4OLi4uHh4d/b08a5u8jU3eDi5OTk4+Lh3NPHuK+7xs7R0tPS0tPS0s7Fuq+5yNTd4ODi4eLi4eDc08e7vMnV3eHi5Onp5OLi3dTJu7fEz9ba29vb29vb29fOxLe6ydXd4OHh4+Ti4eHd08m8vMnV3eHi5PDv5OPi3dXKvLzJ1d3g4ODi4uHh4dzVyry8ydXc4OHh5eXi4uHc1cq9vcrV3eHi5fXy5OLh3dbJvLzK1d3g4OHj4eHh4N3Wyby8ytXd4ODi6Ofh4eDd1sm9vcrW3uHi5vfy5ePg3tbJvLzK1t7g4OHj4eHh4N3Wyby8ytbe4OHi6uji4uDd1sm9vcnW3uHi5vbw5OLh3tXKvLzJ1t3g4eHh4OHh4N3Vyby8ydbe4OHi6ufi4eDd1cm9vcnW3uLj5fLt5OPh3dXKvLzJ1d3h4eHg4eHh4d3Vyry8ydXd4eHi6Obi4uHd1cm8vMnU3eHj5ero4+Lh3dTJurvJ1Nzh4uHg4eDg4N3UyLq7ydTc4eLi5OTh4eDd1Mi7u8fT3OHi5Obl4+Lh3NPIurrH0tvg4eHh4OHh4NzTyLq6x9Lb4OHi4+Lh4eDc08i7usbT3ODi5OTk5OLg29LGubnG09zf4OLh4eLh4NvSxrm5xtPc3+Hi4uLi4eDb0sa6uMXR2uDi5OPj4uHg2tHFuLfF0drf4eLh4eDh39rRxLi3xdHa3+Hi4uHh4d/a0cS5tsPP2d/i4+Pj4eHe2c/DtrbDz9ne4eLh4eDg3dnPwra2w8/Z3uHi4eHg4N7Zz8O3tcHN193h4uLi4d/d183BtLTBzdfd4OHh4eDf3dfNwbS0wc3X3eDh4eHh393XzcG1sr7K1Nzg4uHh4d/c1cq+srG+ytTc3+Hg4eDf3NXKvrKxvsrU3N/h4eHg39zVyr6zsbzI0tre4eHh4d7a08i9sLC8yNHa3uDg4eDe2dLIvbCwvMjR2t7g4OHg3tnSyL2wrrnF0Njc3+Hg39zXz8W6rq25xdDX3N/g39/c1s7Fuq6uucXQ19zf4N/f3NfPxbmvq7bDzdXa3d7e3drUzMK2q6u2ws3V2dze3t3Z1MvBtqurtsPN1dnc3t7d2dTLwrasqrO/ydHX2tzc29fRyb+zqamzv8nR19rb3NvX0cm/s6mps7/J0dfa3Nzb19HJv7Op",
+   "verdict": "FAIL",
+   "fails": 1,
+   "round": 1,
+   "rows": {
+    "dung-vat": [
+     "ĐẠT",
+     "Ở góc chéo, vật là một đốm trắng mờ nhỏ lơ lửng giữa không trung, đúng là một hạt bụi mờ được soi sáng; ảnh không chứa chi tiết nào của một vật thật khác (không lông vũ, không sợi, không mảnh vỡ).",
+     "-"
+    ],
+    "nguyen-ven": [
+     "ĐẠT",
+     "Vật là một khối liền mạch, không mảnh rời, không mặt thủng.",
+     "-"
+    ],
+    "khoi-3d": [
+     "LỖI",
+     "Ở góc nhìn từ trên vật chỉ là một mảnh lưỡi liềm trắng dẹt, mép cứng, không độ dày; ở góc ngang tầm mắt vật gần như biến mất — đó là hành vi của một tấm phẳng đặt cố định, không phải một hạt có khối.",
+     "Dựng hạt thành cụm cầu nhỏ có khối (như hạt rực sáng) để từ cả ba góc đều thấy mặt sáng/mặt tối."
+    ]
+   }
+  },
+  "hat-khong-khi": {
+   "name": "hạt không khí",
+   "src": "a32964a5dd00572612ce64842ccecfb7c7e93637a4a40050126826c1d462d5d7",
+   "key": "",
+   "fp": "qbS/ydHW29zb2tfRyL+zqJ+osrzEyMzOzczJw7uzqKCntL/J0dbb3Nva19HIv7OqrLbCzNTZ3N7e3dnUzMK2qqGqtb/Gy87Qz8/Lxr61qqGqtsLM1Nnd3t7d2dTMwrasrrnF0Nbc3t/g39zXz8W5rKOtucLJztDR0tHOycG5rqOsucXQ1tze3+Df3NfPxbmusLzI0tnf3+Dh4N3a0sm8rqWwu8TL0dHS09LPzMS8sKWuvMjS2d/e1ODg3dnSybywsr/L1dzg4eDg4N/c1Mq+sKizvsfO0tPS0tLRzse9sqewv8vV3ODdv93g39zUyr6ytsHM193g4eHh4eDd18zBs6q1v8nP0tPT09PRz8m/taqzwc3X3d/Y193h4N3XzMG1t8LO2N7g4eHh4eHe2c/DtKy2wcvQ0tPT09PS0MvBtqu1ws7Y3t3K3uDh4d7Zz8O2uMTQ2d/h4eHh4eHe2dHFtq23w8vQ09PT09PT0MvDuK22xNDZ3+HZ4OHh4d7Z0cW4usbS2+Dh4eHd4OHf2tPGt666xc3S09PT0tPS0czFua63xtLb4OHg3ODh4d/b08a5u8jU3ODg4eDb3+Hg3NPHuK+7xs7R0tLT0tLT0c3Fuq+5yNTc4ODez+Dh4eDc08e7u8nV3ODf3Nzf4OHh3dTJurXCzdXY2dja2dnY2tbNwra6ydXc4ODaz9/h4eHd1Mm8vMnV3eDa29nU3eHh3NXKvLzJ1dzg4NnX3eDg4dzVyry8ydXc4MzS193Y4eHc1cq9vcrV3d/b2c3T2uDg3dbJvLzJ1d3g4N/X29zg4N3Wyby8ytXd4MLJzsvA3uDd1sm9vcrW3t/a29ff2t/g3dbJvLzK1t7g3tzZ29ve393Wyby8ytbe4NjY2tLL29/d1sm9vcnW3uDaytPc3tzg3dXJvLzJ1t3g3tvd3t7g4N3Vyby8ydbd4MfG1t/W3eDd1cm9vcnV3eHZy9Xd3d/h3dXKvLzJ1d3h4NnV4N/h4d3Vyby8ydXd4ba+wd3c3uHd1cm9vMnU3OHHw87Vx9zg3dTIurvJ1Nzh29HV3dng4N3UyLq7ydTc4cm5tNTc2+Dd1Mm7u8fS2+DMt8Db1t/g3NPIurrH0tvezMzO1dfg4NzTyLq6x9Pb4Nm6x9bf3uDc08i7usbS3N/c2sjd4OHg29LGubnG09zezcfV2+Lh4NvSxrm5xtPc393Q2Nnh4eDb0sa6uMXR2t/h4uDh4OHf2tHEuLfE0drf4eHh4eDh39rRxLi3xdHa39/b2Nvg4d/a0cS5tsPP2d7g4eHh4ODd2M/CtrbDz9ne4OLh4eDg3djPwra2w8/Z3t7b4N7g4N3Zz8K3tcHN193g4eHh4d/d183BtLTBzdfd4OHh4eHf3dfNwbS0wc3X3eDg4eHg393XzcG1sr7K1Nvf4eDh4N/c1cq+srG+ytTc3+Hg4eHf3NXKvrKxvsrU3N/h4OHg39zVyr6zsbzI0dre4ODh4N7Z0si9sLC8yNHa3uDg4eDe2dLIvbCwvMjR2t7g4OHg3tnSyL2wrrnF0Nfc3+Df39zWz8W5rq25xdDX3N/g39/c1s/Fua6tucXP19zf4N/f3NbPxbmvq7bCzdXZ3N7e3NnUzMK1q6u2ws3V2dze3tzZ1MzCtqurtsLN1Nnc3t7c2dTMwrasqrO/ydHX2tvc29fRyb+zqamzv8nR19rb3NvX0cm/s6mps7/J0dfa29zb19HJv7Op",
+   "verdict": "FAIL",
+   "fails": 1,
+   "round": 1,
+   "rows": {
+    "dung-vat": [
+     "ĐẠT",
+     "Một cụm đốm nhỏ màu xanh nhạt lơ lửng rải rác, mỗi đốm có một bóng tròn dưới cho chiều sâu — đọc được là các hạt nhỏ trong không khí; ảnh không mô tả một vật thật nào khác.",
+     "-"
+    ],
+    "nguyen-ven": [
+     "LỖI",
+     "Ở góc ngang tầm mắt, cặp hạt chồng nhau bên trái: viền mực của hạt phía sau bị vẽ cắt ngang mặt hạt phía trước, thấy rõ vòng cung viền cắt ngang bên trong đĩa trước.",
+     "Sửa lớp viền mực để không vẽ viền của vật ở sau lên mặt vật ở trước."
+    ],
+    "khoi-3d": [
+     "LỖI",
+     "Các hạt là đĩa phẳng tô một màu xanh nhạt đều, có viền mực tròn; nhìn từ trên và nhìn ngang vẫn là những hình tròn phẳng y hệt, không có mặt sáng/mặt tối, không có khối cầu.",
+     "Dựng hạt thành cầu nhỏ có bóng đổ sáng/tối riêng (như hạt rực sáng) thay vì đĩa phẳng."
+    ]
+   }
+  },
+  "hat-ruc-sang": {
+   "name": "hạt rực lên sát chùm sáng",
+   "src": "34dba460f3c86b823df0406fe4923f1cccd708bf17793687ac16d6b928d61025",
+   "key": "",
+   "fp": "qbS/ytLX3N3d29jRyb+zqJ+os73Fys7Qz83KxLyzqKCntL/K0tfc3t3b2NHJv7OrrLbCzdXa3uDf3tvVzMK2qqGqtr/IzNDS0dDNyL+2q6GqtsLN1dre4N/e29XMwrasrrnG0djd4OHi4N3Y0Ma6rKOtucPKz9LT09LQysK5rqOsucbR2N3g4eLg3djQxrqusLzJ09vh4uLj4t/b08m8rqWwvMXN09PU1dTRzcW8saWuvMnT2+Hi4uPi39vTyb2ws7/L1t7i4+Pj4uHe1cu/saizvsjQ1NXV1dTT0Mi+s6ixv8zX3+Pk4+Pi4N7Vy7+ztsHN2d/j5eTk5OLf2M3Cs6u1wMvR1NbW1tXU0cvAtaq0ws7Z4eTl5eTj4d7YzcK1t8PP2uHk5ubk5OPg2tDEtay3wszS1dbX1tbV0s3Ct6y1w9Db4uXm5uXk49/a0MS3uMTR2+Ln6enm5OTg29LFtq64xM3U2NnZ2NfX087FuK22xdLc5Ojo5+bk5ODb0sW4usfT3eTo7+zm5OTi3NTGt6+6xs/W29/b2NnZ1dDHuq64x9Te6OHb6ebl5OLd1Ma5u8jV3+Xo9O/n5uXj3tTIubC8yNHW3Ore2Nzd19HHu6+5yNbi7OPb6+fm5OPe1Mi7vMnW3+bt9fDp6ejl39XJu7fF0trg5fTo4ujr4dvRxbi6ydfi7/Lz7+nl5uXg1cm8vcnW3+ny8/Dq7ezm39fKvLzK1+Dm6fPt6O3x5+DXyry8ydfi9vn58ubR6ebg18q9vcrW4Ov48vHs8fDm4NjKvb3K1+Lp6u/t6eru6eLYyry9ytfj9Pf58OzW7Obh2Mq9vcrX4Ov39fTw8fDm4djKvb3L2OTt7u/w7Oru7uTYyr29ytjj7/L39/Pt8uji2Mq9vcrX4Ojx9/nz7u7o4tfKvL3K2eb08vP18Ony9uXXyry9ytji6e3w9PLv9Ovj18q9vcrW4Ojt8vTy3O7t49jKvLzK2Of69vf28ejz+ebXyry8ytfh5+nr7+/s5+3k18q9vMnV3+Xp7enp4/Py5NbJu7vK1uTy7PPp6OPp8OTWybu7ytXf5ejp6+vo7Pfl1sm7u8fT3uTn6evq7fn349XJu7vI1eHq7u/n6Ofm6uHVybu7yNTe5Obo6Ojp9Pbj1cm7usfU3uPl5+jo7Pf249THurnH1eHp6uvp5+fo6N/Ux7q5x9Te4uXm5+fq8vDh1Me6uMXS3OLl5+bn6e3s4NPFuLjF097l5+jm5uTl5N3Txbi4xdLc4uTl5ebn6+ne08W5t8PQ2uDk5eXm6Ozp3tHDt7bE0dzi5ebl5eTj4dvRw7e2w9Da4OPl5OXl5uPc0cO3tcHO2N7j5OTl5+fk28/CtbXCztng5OXk5OTi39nOwbS0ws7Y3uLj5OTl4+Haz8G1sr/L1d3h4+Pk5eTh2My/srK/zNbe4uTj4+Ph3tbLv7Kyv8vV3eHj4+Pk4t/Xy7+zsb3I0tvf4uPk5OLd1cm+sLC9ydPc4OPj4+Lg29TIvbCwvcjS29/i4uPj4dzUyb6xrrnG0Njd4eLi4t/Z0ca6rq65xtHZ3uHi4eDd2NDGuq6uucbQ2N3h4uHh3tjQxrqvq7bDztbb3uDg39zWzcO2rKu2w87W2t7f397a1czCtqyrtsPN1tre3+De29XMwratqrS/ytLY293e3dnTysCzqam0wMrS2Nvd3dzY0sq/s6mptL/K0tjb3d3c2NLKwLOp",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "dung-vat": [
+     "ĐẠT",
+     "Các khối cầu trắng tụ lại thành cụm sáng rực, có hào quang, đúng là một hạt được chiếu sáng mạnh lên; ảnh không mô tả một vật thật khác.",
+     "-"
+    ],
+    "nguyen-ven": [
+     "ĐẠT",
+     "Các cụm cầu liền khối, không mảnh rời; các mảng nâu ở góc từ trên là bóng đổ trên sàn (có mép mảnh, nằm phẳng dưới vật), không phải mảnh vỡ tách rời.",
+     "-"
+    ],
+    "khoi-3d": [
+     "ĐẠT",
+     "Là cụm cầu thật, có mặt trên sáng và mặt dưới nâu, khối đổ bóng; nhìn từ trên vẫn thấy các mặt cầu phân tách.",
+     "-"
+    ]
+   }
+  },
+  "lan-can-sat": {
+   "name": "lan can sắt có nan",
+   "src": "28bc04778c5695ddb2ace5be2ad42f337520f5a2b8b1d4811497e0cb08e38be4",
+   "key": "",
+   "fp": "nqiyvMTIzM7OzMnDu7Onnp2osrzEyMzOzczJw7yzp6CntL7J0dba3Nza19HIv7OroKq1v8bN09HPz8zGvrWqoKCqtb/Gy87Qz8/Lxr61qqGqtsLM1Nnc3t3d2dTMwrasoq25wsvY3tzX0s7JwbmuoaKtucLIztDR0tHOycG5raOsucXQ1tze3+Df3NbPxbmupLC7yNff3+Dg3dXMxLywpKSwu8TL0dLS09LPzMS7sKWuvMjS2d/f4OHg3drSybywp7LC09zg4eDg4N7ZzL6ypqayvcfO0tPS0tLRzse9sqiwv8vV3ODh4ODg39zUyr6yqrrM193g4eHh4d/d18m5qam1v8nP0tPT09PSz8m/taqzwczX3eDh4eHh4N3XzMG1ssLO2N7g4eHh4eDe2c7Dsqu2wcrQ0tPT09PTz8vBt6y0ws7Z3uDh4eHh4d7Zz8O2uMTQ2d/i4eHh4eHe2dHFtq23wsvQ09PT09PT0MvDuK22xNDZ3+Hh4eHh4d7Z0cS4usbS2+Di4eHg4eHf2tPGt666xc3S09PT0tPT0czFua63xtLY1+Hh4eDh4d/b08a5u8jU3NrS4eDg4eHg3NPHuLC7xs/S0tPS0tPT0s7Guq+5yNTVq8vg4ODh4eDc08e6u8nV3NGaw+Dh4eHh3dPJurC8x87S09LT09PT08/GvLG5ydXVfpDE3+Hh4eHd1Mm8vMnV3M6CkLne4eHh3NXKu7G8x8zLysrLy8vLy83HvbG6ydXcsmiGvd3h4eHc1cq9vcrV3duVc46r2+Hg3dbJu7fEz8eYlZWTk5WVl8bPw7e7ytXd37ttfLTa4eDd1sm9vcrW3uDammyKo9bf3dbKvLzK1s2gnp6amp6foMzWyby8ytbe4ODGdXSs1t/d1sm9vcnW3eDh3J5sj5zO3dXJvLzJ1sZ4cHBvb3BxeMfVyby8ydbd4OHhzn9tpNLd1cm9vcnV3eHh4Nyka46d1tXJu7zJ1drU09LS0tLT1NrVyby8ydXd4eHg4NWLZ6nb1cq8vMnU3OHi4eHeqWiT1NTJurvJ1Nzh4uHg4eDg4N3Uybq7ydTc4eLh4OHZmG3I1Mm7u8fS2+Dh4eHg3q9+0tPIurrH0tvg4eHh4OHh4NzTyLq6x9Lb4OHh4eDh3bfR08i7usbS29/g4uHh4t/K19LGubnG09zf4OLh4eLh4NvSxrm5xtPc3+Di4eHi4eDb0sa6uMTR2t/h4uHh4OHf2tHEuLfE0drf4eLh4eDh39rRxLi3xNHa3+Hi4eHg4d/a0cW5tsLP2d7h4eHh4ODd2c/CtrbDz9ne4eHh4eDg3dnPwra2w8/Z3uDi4eHg4N3Zz8O3tcHN193g4eHh4N/c183BtLTBzdfd4OHh4eHf3NfNwbS0wc3X3eDh4eHg39zXzcG1sr7K1Nzf4eDh4N/c1cq+srG+ytTb3+Hg4eDf3NXKvrKxvsrU3N/h4OHg39zVyr6zsLzI0dre4ODh4N7Z0si9sLC8yNHa3uDg4eDe2dLHvbCwvMjR2t7g4OHg3tnSyL2wrrnFz9fc3+Df39zWz8W5rq25xc/X3N/g39/c1s/Fua6tucXQ19zf4N/f3NbPxbmvq7bCzdXZ3N7d3dnUy8K2q6u2ws3V2dze3t3Z1MvCtqyrtsLN1dnc3t7d2dTMwrasqrO/ydHX2dzc29fRyb+zqamzv8nR19rb3NvX0cm/s6mps7/J0dfZ3Nzb19HJv7Op",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "dung-vat": [
+     "ĐẠT",
+     "Góc chéo: thanh dọc đều nhau (nan) giữa xà trên và xà giữa, dải đặc ở dưới, giữa có đôi cánh cổng khép lại với cặp trụ dọc — đúng là lan can có nan và cổng.",
+     "-"
+    ],
+    "nguyen-ven": [
+     "ĐẠT",
+     "Nan và xà liền, đầu mút có trụ chắn, không có mảnh rời, không mặt thủng hay mất mặt.",
+     "-"
+    ],
+    "khoi-3d": [
+     "ĐẠT",
+     "Góc chéo thấy rõ mặt trên của xà trên và độ dày của dải đặc phía dưới; nan có chiều sâu, có mặt sáng/mặt tối.",
+     "-"
+    ]
+   }
+  },
+  "nha-thang": {
+   "name": "nhà thang có cửa sổ và cửa cổng",
+   "src": "897864202a99a82087086362e323855628da4e53e7699b0e94de903192a27a55",
+   "key": "",
+   "fp": "nqm4ydHX29zc2M/FvLOonp2os7zEyc3Pz83KxLyzqKCntL/Jz7bQ3Nza19HIv7Oro7PCzNXZ3d/e3drTx7mrn6Cqtb/HzM/R0dDNyL+2q6GqtsLMz5edzd3d2tTMwrasrbnF0Nfc3t/g39zXz8W3p6KtucPJz9HS09LPysK5rqOsuMXQy457k8Te3NfPxbmusLzI0trf39zh4d7a0sm8rqWwvMXM0tPT1NPRzcW8saWuvMjSxYt3cpnb3drSybyws7/L1dzfyJm22uDd1cq/sKizvsjPzczMzMzN0Mi9s6iwv8vVvYeCe37J3tzUyr6ytcHN19q5joWCk8Da18zBs6q1wMrNjHByc3SPzsrAtaqzwc3XsYWDg3+Cu9vXzMG1t8PO2byGhYaGhILA2c/DtKy2wcvOhk1QU1OMz8zCt6y0w87XpIWDg4OBf8TZz8O2uMTQ2bFteoaGhYvR2tHFtq23w8vRuJ6foJ66083EuK22xNDUmoWDg4ODiMnZ0cW4usfT29N9W3OEgJ3c29PGt666xc3TxcLAwr/I1M7Gua63xtLUm4SEg4ODjNDb08a5u8jU3dy8iF1oirne3dPHuLC7x8/TxMLBxsTL1tDGu7C5yNTbsYOEg4ODj9Xc08e7vMnV3d3FuptspL7f3dTJurC8x8/TxcHFz83O19DHvLG5ydXcwISDg4SDlNrd08m8vcnV3d7Gv8KotL/f3dXKu7G8x8/TxcHJ3t3S19DIvbK6ydXdyIaDhISEmt3d1cq9vcrW3t/Hwsm8usDf3tbJu7K9x9DTxcLO8/LW1tDJvbK7ytXeyIeEhISEoN7d1sm9vcrW3t/IyNbCtbne3tbKu7XAzNTXx8LP9fTa2dXNwbW7ytbevoSEhYSEqN/d1sm9vcnW3t/Jz+3Nprff3tbKvLzJ1t7hzcLO9PTe49/Wyry8ydberX+EhYWFsODe1cm9vcnW3uDK0ffbpLng3dbKu7zJ1d7izsLK6unb5N/Wyry8ydXdw3l/hYaFuOHd1cq8vMnU3eDL0ffeprfg3dXJurvJ1N3izsK7rKvN497Vybu7ydTc37N4gImGv+Hd1Mm7u8fT3ODKxerdnrfg3NTIurrH09vdy8G/vLvS493UyLq6x9Lb4M2vg4eKxuHc08i7usbT3N/IvLzLlbfg29PGubnG08qhpMHBxMPT49zTxrm5xtPc39C+wJ6FzODb0sa6uMXS29+8vbmqjLjg2tHFuLfFz6WJlLe4urfP4tvRxbi3xNHa39i4tNeYzuDa0cW5tsPQ2d65q8C1h8Le2dDDtrbDzbySjaCkpaTI39rQw7e2w8/Z3uHYsavB3t7Zz8K3tcHO197Rqq+zjNHd183BtLTBzda/lKOlp6bI3tjOwbS0wc3X3eDi3LTA4N3XzcG1sr7K1dzgyKWoq97c1cu+srG+ytXawLKys7TN3dbLv7KxvsrU3ODi4t3a39zVyr6zsL3I0trf4Lynzd/a0si9sLC8yNLa3t/f4N/e2tPIvbCwvMjS2t7h4eLh3trSyL2wrrnG0Njd4Nu72N3Xz8W6rq25xdDY3eDh4ODd18/Fuq6tucXQ19zg4eDg3NfPxbqvq7bDzdXa3d/c3drVzMK2rKu2w83V2t3f393a1czCtqyrtsPN1dnd397d2tTMwrasqrO/ydLY29zd3NjSyb+zqamzv8nR19rc3dzY0sq/s6mps7/J0dfa3N3b19HJv7Oq",
+   "verdict": "FAIL",
+   "fails": 1,
+   "round": 1,
+   "rows": {
+    "dung-vat": [
+     "ĐẠT",
+     "Nhà gỗ váy ván, mái tôn gân, cửa đỏ có nút vàng, một ô cửa sổ sáng lên màu vàng — đúng là nhà thang có cửa sổ và cửa cổng.",
+     "-"
+    ],
+    "nguyen-ven": [
+     "LỖI",
+     "Ở góc chéo, bên trái khung cửa sổ có một dải sáng hẹp chạy từ xà mái xuống tận bệ cửa, cao hơn hẳn mép trên của ô sáng, và khung cửa bên trái bị khứa một khúc (bậc thềm ở giữa) — miếng sáng không nằm gọn trong lỗ cửa.",
+     "Cắt lại lỗ cửa sổ và khung theo đúng kích thước miếng sáng, không để dải sáng tràn lên trên khung."
+    ],
+    "khoi-3d": [
+     "ĐẠT",
+     "Nhà có thân tường dày, mái có xà ngang, gờ mái và mặt tôn gân nhô ra; đổ bóng đúng hình khối trên sàn.",
+     "-"
+    ]
+   }
+  },
+  "thung-nuoc": {
+   "name": "thùng nước có nắp tháo, thang leo và vòi",
+   "src": "eb76c0098c5fcdaf57eb1fafe4baa1a8f7822d26ed0176b4cf7b81b4e154989b",
+   "key": "",
+   "fp": "qbS/ydLX3N7d29jSyb+zqJ6osrzDyMzNzcvIwruyp5+ms77J0tfc3t3c2NLJv7OqrLbCzNXa3uDg39vVzMK2qqGqtb/Gys3Pz87Lxr60qaCptcLM1dre4ODf29bMwrasrrnG0Nfd4OHj4t7Y0Ma6rKOtucLIzc/Q0dDNyMG4raKruMXQ193g4uPi39jQxrqtsLzI0trg4ePl5ODb08m9rqWwu8TL0dHR0tHPy8S7sKStu8jS2uDi3uTk4dzTybyws7/L1d3h4+Tl5ePe1cq/sKizvsfO0tPS0tLQzca8sqewvsrV3eHUrdjm5N/Wy76ytcHN197h5Obp6OTf2M3Cs6q1v8nP0tPS0tLRzsi+tKmzwMzY3uG7m8bp5uHZzcG1t8LO2d7h4+jp5ebg2s/Dtay2wcvQ0tLT09LMyMrAtqu0ws7Z3+CvoL/o6eLbz8O2uMTQ2d/j5Nvb0d/h2tLFtq23w8vQ09O6pqmzvsvDt6y1w9DZ3+Gtp8DQ6ePb0sW4usbS2+Hj49Xz7NHf29PGt666xczS09OUeJOpwMzEuK23xtLb4eKzsdze5OXd1Ma4u8jU3eDh49Lu68Lc3dTIubC7xs7S0tOjm7G0ws3Fuq+4x9Td2tLBvfDv4ufe1Mi6u8nV3eHe4MfLy7Dc3dTJurC8x87S09KroLKzxc7Fu7C5yNXd0bDKyfj24uff1Mm8vMnV3eHDw8bFxLDe3dXKu7G8x87Sw6mdh5eoxs7GvLG6yNTd1aHG0Pf54+ff1sq9vcrV3uG4r7q8uKfe3tbJvLjF0Njaq5CGhaGwztjQxLi8ytXe2Zi80fT14uTf18q9vcrW3uG3pq+spqff3tbKvLzK1t7aoJGLrKmt1N3Wyby8ytbe3aKszfHy29fg1sq9vcnW3uC5mpikoKjg3tbKvLzJ1t3VmpGEiX6m1t7Vyby8ydfe4Likyevsz9bg1sq9vcnV3uK8k4Odlabi3tbKvLzJ1d3TmI6EmIqp2N3Vyry8ydbe4s2iw9XXudPf1sq9vMnU3eHFlYJyeLPh3tXJurvJ1NzUlYiX19TR3t3Uybq7ydTd4t2ttL/GtNff1cm7u8fT3OHMl5Jzfbrh3NTIurrH0tvWm5Gf3OHh4NzTyLq6x9Pc4uPExse1x+Le1Mi7usbT3ODWn7aaodHh29LHubnG09vaopKPvd7h4NvSxrm5x9Pd4ePf29LL2uTc08a6uMTR2uDfu9HDw9vg2tHFuLfE0di7mZCNpMzg39rRxLi3xdLb4ePl5tPd5eLb0cW5tsPP2d/h4eDe2eDe2dDDtrbDz9nRr5nF1Nzf3dnPwra2w9Da4OPk5eTj4+Da0MO3tcHN193h4eLh4d/d183BtLTBzdfd39nf4eDf3dfNwbS0wc7Y3uLj5OTj4d7YzsG1sr7K1dzg4eHh4d/c1cq+srG+ytTc3+Hg4eDf3NXKvrKxv8vV3eHj4+Tj4d3Wy76zsLzI0tre4OHh4N7a08i9sLC8yNHa3uDg4eDe2dLIvbCwvcjS29/i4uPi39vTyL2wrrnF0Nfc3+Hg39zXz8W6rq25xc/X3N/g39/c1s7Fuq6tucbQ2N3h4uHg3djPxbmuq7bCzdXa3d7e3dnUzMK2q6u2ws3V2dze3t3Z1MvCtqurtsPN1tve39/e29XMwrWsqrS/ydHX2tzc29fRyb+zqamzv8nR19rb3NvX0cm/s6mps7/K0tjb3d3c2NLKv7Op",
+   "verdict": "PASS",
+   "fails": 0,
+   "round": 1,
+   "rows": {
+    "dung-vat": [
+     "ĐẠT",
+     "Thùng tròn xám trên khung thép chân đế, nắp tròn dựng nghiêng bên trái, thang bám vào phía phải, và một vòi nước tay vặn đỏ ở đáy thùng — đủ ba bộ phận của thùng nước.",
+     "-"
+    ],
+    "nguyen-ven": [
+     "ĐẠT",
+     "Thân thùng, vành, khung chân và thang liền khối; nắp là một vật riêng cố ý đặt cạnh, không có mảnh rời trôi lơ lửng.",
+     "-"
+    ],
+    "khoi-3d": [
+     "ĐẠT",
+     "Thùng là trụ có vành ở miệng và giữa, đứng trên khung thép có chân và thanh giằng; nhìn từ trên thấy miệng thùng, mặt trong và thang đều có khối.",
+     "-"
+    ]
+   }
+  }
+ }
+}
