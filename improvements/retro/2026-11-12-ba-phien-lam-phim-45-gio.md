@@ -490,6 +490,41 @@ ngữ cảnh là vài chục nghìn token).
 - Lời nhắc cho người chấm: **mở một ảnh, trả lời ngay mọi câu của ảnh đó, rồi mở ảnh tiếp theo** —
   cùng ảnh, cùng cỡ thật, chỉ đổi thứ tự làm, để ảnh nằm trong ngữ cảnh đúng lúc nó còn dùng.
 
+**Phân bố giá trị (đo trên 155 vòng của 6 tập):** vòng 1 chỉ lập mốc (398 mục, 0 sửa). **Vòng 2 là vòng
+đắt nhất: 94 mục sửa được.** Vòng 3 còn 37. Từ vòng 4 trở đi: 132 mục sửa được — nhưng **80 % thời
+gian**. Hiệu suất theo bước:
+
+| bước | vòng 2 | vòng 3 | vòng 4–5 | vòng 6+ |
+|---|---|---|---|---|
+| props | 22 phút/mục | 198 | 1077 | 373 |
+| picture | 25 phút/mục | 90 | — | 164 |
+
+**Các vòng chết không phải vì người sửa vô dụng** — bốn nguyên nhân, đọc từ lời phàn nàn và mã:
+
+1. **Yêu cầu tự mâu thuẫn.** `vo-may`: vòng 9 đòi vừa là "mảnh góc vỏ" (1/3–1/2 máy, chỉ hai mặt cưa
+   lộ lớp) vừa là "còn lỗ camera + lỗ loa + cổng sạc" — mà lỗ camera nằm ở **giữa chiều rộng máy**,
+   ngoài mảnh góc. Làm cả hai thì phải làm mảnh to gần hết máy, mà khi đó đọc ra là "một chiếc điện
+   thoại nguyên vẹn" (đúng lỗi của vòng 4 và 7–8). Tương tự "ranh giới vùng lạnh–ấm": vòng 2 đòi
+   ranh giới chạy dọc ngón, vòng 3 đòi ranh giới dọc chứ không ngang — nhưng mặt cắt phẳng thì đúng
+   thứ mà cùng người chấm đó chê ở mục khác.
+2. **Hai ngôn ngữ khác nhau.** Người sửa dựng bằng **hình học** (cắt ngón thành hai nửa để có ranh
+   giới), người chấm đòi bằng **bề mặt/ánh sáng** (tô màu da, ranh giới màu chứ không phải mặt cắt).
+   Người sửa hiểu đúng ý, nhưng cách làm không bao giờ thoả được tiêu chí — chỉ đạt được bằng vertex
+   colour/shader.
+3. **Tiêu chí phụ không bao giờ đóng.** `may-ghi-giac-ngu`: vòng 10 người chấm xác nhận **yêu cầu chính
+   đã ĐẠT** ("đúng một thiết bị bàn đếm giấc ngủ"), nhưng mục vẫn FAIL vì một tiêu chí khác — vệt mực
+   2 px tràn sang dải bóng. Vật đã đúng vẫn không đóng được.
+4. **Ảnh chấm bị cũ.** `lang-kinh`: vòng 17, người chấm ghi thẳng *"không có bản render mới (trùng
+   md5)"* — đó là **lỗi công cụ**, không phải lỗi nghề. Nguyên nhân: `props_catalog.digest` không băm
+   `rig/` dùng chung, mà rig quyết định ảnh của mọi vật → sửa rig thì ảnh đổi mà digest không đổi →
+   bước `props` không dựng lại → người chấm nhìn ảnh cũ và lặp lại đúng lời phàn nàn cũ. **Đã sửa.**
+
+Ngoài ra: **lùi (mục ĐẠT rồi lại FAIL) xuất hiện đúng lúc đổi người chấm** — 15 mục lùi ở vòng 3 của
+`the-gioi/tap-01`, và ở `co-the/tap-01` người chấm đổi và **GÓP Ý ở vòng 6 bị nâng thành CHẶN ở vòng 7**
+("đúng lỗi đã báo ở lần chấm trước"). Luật "một tập dùng MỘT người chấm" (P9) nay đã có cơ chế chặn.
+
+Trường hợp xấu nhất đo được: `the-gioi/tap-02` bước `picture` — **23 vòng, ~25 giờ, phần lớn câu vẫn MỞ**.
+
 ---
 
 ## Đã làm
