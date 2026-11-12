@@ -18,7 +18,7 @@ A step is closed when every item it has now is PASS or OPEN and nothing judged h
   picture         each line's text, and the film's code (src/, index.html) is what the last picture round saw
 The gate catches mistakes, not forgery: a state file written by hand is not a review.
 """
-import glob, hashlib, json, os, re, sys
+import glob, hashlib, json, os, re, sys, time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
@@ -65,6 +65,33 @@ def hero_files(ep):
         if p.lower().endswith(('.jpg', '.jpeg', '.png')):
             out[os.path.splitext(os.path.basename(p))[0]] = p
     return out
+
+
+def hero_stale(ep):
+    """những ảnh hero dựng TRƯỚC khi mã nguồn đổi lần cuối.
+
+    Một phán quyết của bước `look` là về ẢNH, và bước `look` chỉ so dấu vân tay ảnh — nên ảnh cũ hơn
+    mã thì phán quyết đang nói về một bộ ảnh không còn là phim nữa, và chấm lại nó sẽ không bao giờ
+    thoát LỖI (P13). Đây là cảnh báo cho người làm, không phải một phán quyết: ảnh cũ vẫn được chấm
+    theo đúng những gì nó thể hiện.
+    """
+    heroes = hero_files(ep)
+    if not heroes: return []
+    newest = 0.0
+    for root, _dirs, files in os.walk(os.path.join(ep, 'src')):
+        for fn in files:
+            try:
+                newest = max(newest, os.path.getmtime(os.path.join(root, fn)))
+            except OSError:
+                pass
+    if not newest: return []
+    old = []
+    for stem, p in heroes.items():
+        try:
+            if os.path.getmtime(p) < newest: old.append(stem)
+        except OSError:
+            pass
+    return old
 
 
 def props_keys(ep):
@@ -226,6 +253,12 @@ def status(ep):
         # đổi lúc mấy giờ: nếu không biết, người làm chỉ thấy con số và tưởng bước tự hỏng.
         for r in stale_reasons(ep, step)[:4]:
             print(f'         {r}')
+        if step == 'look':
+            # P13: ảnh hero dựng trước khi src/ đổi — phán quyết của chúng là về một bộ ảnh cũ.
+            old = hero_stale(ep)
+            if old:
+                print(f'         cảnh báo: {len(old)}/{len(hero_files(ep))} ảnh hero dựng trước khi src/ '
+                      f'đổi lần cuối — dựng lại trước khi chấm, nếu không vòng chấm sẽ không bao giờ thoát LỖI')
     movies = glob.glob(os.path.join(ep, '*.mp4')) + glob.glob(os.path.join(ep, 'out', '*.mp4'))
     print('phim:', ', '.join(os.path.relpath(m, ep) for m in movies) if movies else 'chưa có')
     import layout
@@ -299,6 +332,13 @@ def selftest():
         expect(check(os.path.join(tmp, 'khong-co'), 'render') is not None, 'a missing folder is refused')
         demo = os.path.join(tmp, 'demo'); os.makedirs(os.path.join(demo, 'src'))
         expect(check(demo, 'render') is None, 'the channel demo (no words) passes')
+        # P13: ảnh hero dựng trước khi src/ đổi thì phán quyết của nó là về một bộ ảnh cũ.
+        hd = os.path.join(ep, 'review', 'hero'); os.makedirs(hd, exist_ok=True)
+        open(os.path.join(hd, 't1.jpg'), 'w').write('x')
+        os.utime(os.path.join(hd, 't1.jpg'), (time.time() - 3600, time.time() - 3600))
+        expect(hero_stale(ep) == ['t1'], 'a hero still older than the code is reported')
+        os.utime(os.path.join(hd, 't1.jpg'), (time.time() + 60, time.time() + 60))
+        expect(hero_stale(ep) == [], 'a hero still newer than the code is not')
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
     print('gate selftest:', 'PASS' if ok else 'FAIL')
