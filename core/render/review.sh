@@ -55,6 +55,16 @@ run() {   # run a step, keep going when it fails
 }
 
 run filmcheck node "$HERE/core/render/filmcheck.mjs" "$FOLDER"
+# The channel this film belongs to: it is where the channel's own checks live (the layout contract, the
+# treatment shape, the shot board).
+BCH=$(cd "$FOLDER" && while [ ! -f CHANNEL.md ] && [ "$PWD" != / ]; do cd ..; done && pwd)
+# The layout contract: a delivered film may not carry a file or a folder the contract does not allow.
+# The channel's own checker names each thing and says where it belongs (a channel writes the contract
+# down; this library only asks the channel). Without this step the contract is a note: a film with a
+# stray folder ships, and every tool that looks for something by the layout cannot find it (M12).
+if [ -f "$BCH/tools/layout.py" ]; then
+  run layout python3 "$BCH/tools/layout.py" "$FOLDER"
+fi
 # drawcheck audits 2D canvas helpers (rect/path/cel); a three.js film has none, so it is not this check's business
 if grep -rqsE "from ['\"]three['\"]" "$FOLDER/src" "$FOLDER"/*.js 2>/dev/null; then
   echo "--- drawcheck"; echo "    skipped: three.js film (no 2D drawing helpers to audit)"
@@ -62,8 +72,6 @@ else
   run drawcheck node "$HERE/core/render/drawcheck.mjs" "$FOLDER"
 fi
 # the numbers on screen against the numbers the research file supports
-# The channel an episode belongs to: the folder above the episode that holds CHANNEL.md.
-BCH=$(cd "$FOLDER" && while [ ! -f CHANNEL.md ] && [ "$PWD" != / ]; do cd ..; done && pwd)
 if [ -f "$FOLDER/research/FACTS.md" ]; then
   run claims python3 "$HERE/tools/check_claims.py" "$FOLDER"
   run facts python3 "$HERE/tools/check_facts.py" "$FOLDER/research/FACTS.md"
