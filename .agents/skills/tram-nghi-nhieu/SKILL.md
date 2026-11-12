@@ -18,21 +18,22 @@ Làm đến bước nào thì chỉ mở `GUIDE.md` của bước đó.
 
 | Bước | Làm gì | Hướng dẫn | Chấm (`review.sh <tập> <bước>`) | Vòng chấm |
 |---|---|---|---|---|
-| 1 | `research/FACTS.md`, `TREATMENT.md` (bảng Ý → Hình) | `step1-outline/GUIDE.md` | `outline` | tối đa 4, thường **2** |
-| 2 | `voice/lines.json`, rồi giọng đọc và `src/timeline.js` | `step2-script/GUIDE.md` | `script` | tối đa 6, thường **3** |
-| 3 | góc máy, ánh sáng, khung hình chính trong `review/hero/`, `LOOK.md` | `step3-storyboard/GUIDE.md` | `look` | tối đa 8, thường **3–5** |
+| 1 | `research/FACTS.md`, `TREATMENT.md` (bảng Ý → Hình) | `step1-outline/GUIDE.md` | `outline` | tối đa **3** |
+| 2 | `voice/lines.json`, rồi giọng đọc và `src/timeline.js` | `step2-script/GUIDE.md` | `script` | tối đa **3** |
+| 3 | góc máy, ánh sáng, khung hình chính trong `review/hero/`, `LOOK.md` | `step3-storyboard/GUIDE.md` | `look` | tối đa **3** |
 | 4 | `COMPONENTS_SPEC.md`: mọi vật, bộ phận, bối cảnh, đèn | `step4-component-breakdown/GUIDE.md` | — (bước 5 đọc nó) | — |
-| 5 | mỗi vật một tệp `src/props/<mã>.js` | `step5-props-code/GUIDE.md` | `props` | tối đa 8, thường **6–9** |
-| 6 | `src/film.js`: cảnh, diễn hoạt, nhãn, tờ nhịp | `step6-assembly/GUIDE.md` | `picture` | tối đa 8, thường **1–3** |
+| 5 | mỗi vật một tệp `src/props/<mã>.js` | `step5-props-code/GUIDE.md` | `props` | tối đa **3** |
+| 6 | `src/film.js`: cảnh, diễn hoạt, nhãn, tờ nhịp | `step6-assembly/GUIDE.md` | `picture` | tối đa **3** |
 | 7 | âm thanh, dựng phim, cổng bàn giao | `step7-delivery/GUIDE.md` | `final` (chỉ báo cáo) | 1 (chỉ báo cáo) |
 
-**Con số "thường" là số đo được trên các tập chạy thật** — nó để bạn biết mình đang *hội tụ* hay đang
-*lặp*. Nếu bạn đã vượt quá số "thường" mà **số mục phải sửa không giảm**, bạn đang lặp chứ không tiến:
-đừng chạy vòng nữa, hãy ghi vào báo cáo mục nào không sửa được và vì sao. Trần cứng nằm trong
-`review.py` (`MAX_ROUNDS`) — khi chạm trần, phần còn lại thành MỞ và bước đóng lại.
+**Ba vòng là trần của mọi bước** (`review.py` `MAX_ROUNDS`; đặt bằng `LEMO_MAX_ROUNDS`). Khi chạm trần,
+vòng đó không chạy nữa: phần còn lại thành **MỞ**, bước đóng lại, và báo cáo nói rõ vì sao.
 
-Một vòng chấm chỉ đáng chạy khi **có thứ gì đổi**: mục mới, mục vừa được sửa, hoặc `--again`. Vòng mà
-không mục nào đổi là một vòng lãng phí — và mỗi vòng của bước 6 là một lần **dựng lại toàn bộ phim**.
+Biết trước để khỏi lặp: trên các tập chạy thật, chặng dàn ý và chặng lời hội tụ trong 1–3 vòng, nhưng
+chặng hình và chặng vật cần **3–9 vòng**. Nên với trần 3, hai chặng sau **thường sẽ đóng với mục MỞ** —
+đó là cái đánh đổi của trần này, và các mục đó nằm trong báo cáo cho người dùng. Vì vậy: **mỗi vòng
+phải đổi được cái gì**; và nếu bạn thấy mình sửa cùng một thứ lần thứ ba thì dừng và ghi vào báo cáo
+mục nào không sửa được, thay vì chạy vòng nữa.
 
 `sh channels/tram-nghi-nhieu/tools/review.sh <tập> <bước>` chạy ở chế độ nền của harness (`run_in_background`), rồi
 đọc kết quả một lần khi harness báo xong.

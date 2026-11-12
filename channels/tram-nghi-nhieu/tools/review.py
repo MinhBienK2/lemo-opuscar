@@ -42,7 +42,7 @@ TRIES = 3   # failures before an item is OPEN
 # những mục vòng N vừa chấm, và mỗi vòng lại mở ra một vòng mới (M1). Khi vòng chạm trần, bước đóng
 # lại với những mục còn lại ở trạng thái MỞ — cùng luật "sai ba lần thì thành MỞ" áp cho cả bước.
 # Số vòng đã chạy nằm trong state (`round`), nên trần này sống qua cả những lần khởi chạy lại.
-MAX_ROUNDS = {'outline': 4, 'script': 6, 'look': 8, 'props': 8, 'picture': 8, 'final': 1}
+MAX_ROUNDS = {'outline': 3, 'script': 3, 'look': 3, 'props': 3, 'picture': 3, 'final': 1}
 _ROUND_LIMIT = os.environ.get('LEMO_MAX_ROUNDS')
 if _ROUND_LIMIT:
     MAX_ROUNDS = {k: int(_ROUND_LIMIT) for k in MAX_ROUNDS}
@@ -182,12 +182,19 @@ def scope(st, items, again=()):
     judge, failing, kept = [], [], []
     plan_closed = bool(st.get('closed')) and not again
     for it in items:
-        rec = st['items'].get(it['id'])
+        rec = st['items'].get(it['id']) or {}
         same = bool(rec) and rec.get('key') == it.get('key') and ('fp' not in it or fp_close(rec.get('fp'), it['fp']))
         if rec and it.get('src') and rec.get('src') and rec.get('src') != it.get('src'):
             same = False   # the code moved: this is a different item, not the one that was judged
         if plan_closed and rec and rec.get('verdict') in gate.CLOSED:
             kept.append(it)   # bước kế hoạch đã đóng: giữ phán quyết cũ
+        elif rec and rec.get('verdict') == 'OPEN' and rec.get('fails', 0) > TRIES \
+                and 'all' not in again and it['id'] not in again:
+            # MỞ rồi mà mã vẫn cứ đổi: mục đó đã hết lượt của nó (sai 3 lần + 1 lần sửa cuối),
+            # nên nó nằm yên trong báo cáo. Không có chỗ này, một vật khó sửa được kéo cả bước đi
+            # tới vòng 9: đo được ở do-vat/tap-03 (vo-may sai 8 lần) và the-gioi/tap-03
+            # (dong-sang-re sai 4 lần) — 14 vật còn lại hội tụ trong 2 vòng (M23).
+            kept.append(it)
         elif not same or 'all' in again or it['id'] in again or rec.get('verdict') not in ('PASS', 'OPEN', 'FAIL'):
             judge.append(it)
         elif rec['verdict'] == 'FAIL':
@@ -195,7 +202,6 @@ def scope(st, items, again=()):
         else:
             kept.append(it)
     return judge, failing, kept
-
 
 def previous_rows(st, batch):
     rows = []
@@ -254,12 +260,17 @@ def run(ep, step, items, crit, ask, again=(), report=None):
     st = gate.load(ep, step)
     todo, failing, kept = scope(st, items, again)
     for it in kept:   # unchanged and closed: refresh what the gate checks (a source edit that changed no pixel)
+        rec = st['items'].get(it['id'], {})
+        # Một mục đã MỞ và đã hết lượt thì nằm yên: mã đổi cũng vậy. Nó vẫn là "chưa giải quyết",
+        # và nếu không đồng bộ digest thì cổng đếm nó là "chưa chấm hay đã đổi" → bước không đóng.
+        settled = rec.get('verdict') == 'OPEN' and rec.get('fails', 0) > TRIES
         for k in ('key', 'src', 'name'):
             # 'src' is refreshed ONLY when the source itself did not move. A source that moved is
             # exactly what scope() sends back for judging, so a kept item's 'src' is its own by
             # definition — overwriting it here is what turned "nobody looked at this code" into
-            # "ĐẠT" (M13). Keep the verdict's own digest.
-            if k in it and not (k == 'src' and st['items'][it['id']].get('src') != it.get('src')):
+            # "ĐẠT" (M13). Keep the verdict's own digest. (MỞ đã nằm yên thì ngoại lệ: nó không
+            # mang phán quyết về mã nào cả, chỉ nói "cái này chưa xong".)
+            if k in it and (settled or k != 'src' or st['items'][it['id']].get('src') == it.get('src')):
                 st['items'][it['id']][k] = it[k]
     missing = []
     if todo:
@@ -273,7 +284,9 @@ def run(ep, step, items, crit, ask, again=(), report=None):
             for it in todo:
                 rec = st['items'].get(it['id'], {})
                 rec = dict(rec)
-                rec.update(verdict='OPEN', fails=max(rec.get('fails', 0), TRIES), round=st['round'])
+                # Số lần sai phải thật: mục chưa từng được chấm thì là 0, không phải 3. Bịa ra
+                # "sai 3 lần" cho một mục chưa ai nhìn là một lời nói dối trong báo cáo.
+                rec.update(verdict='OPEN', fails=rec.get('fails', 0), round=st['round'])
                 # The verdict belongs to the code that is on disk NOW. Without the current digest,
                 # gate.tally() counts the item as "chưa chấm hay đã đổi" instead of MỞ, so the step
                 # never closes and the episode cannot move on (M24).
@@ -336,9 +349,10 @@ def summary(ep, step, crit, st):
             S += rows(r, lambda c, v: v == 'LỖI' and kinds.get(c) == 'CHẶN')
         S.append('')
     if by['OPEN']:
-        S += ['## Mở (sai 3 lần; bước vẫn đi tiếp, ghi lại để rút kinh nghiệm)']
+        S += ['## Mở (chưa giải quyết được; bước vẫn đi tiếp, ghi lại để rút kinh nghiệm)']
         for k, r in by['OPEN']:
-            S += [f"- {k}" + (f" ({r['name']})" if r.get('name') else '')] + rows(r, lambda c, v: v == 'LỖI')
+            S += [f"- {k}" + (f" ({r['name']})" if r.get('name') else '')
+                  + f" — lần sai {r.get('fails', 0)}/{TRIES}"] + rows(r, lambda c, v: v == 'LỖI')
         S.append('')
     advice = [(k, r) for k, r in st['items'].items()
               if any(v == 'LỖI' and kinds.get(c) != 'CHẶN' for c, (v, _, _) in rows_of(r).items())]
@@ -679,6 +693,8 @@ def selftest():
             calls.append([it['id'] for it in batch])
             return '\n'.join(f"{it['id']} | {c} | {answers.get((it['id'], c), 'ĐẠT')} | thấy {it['id']}" for it in batch for c in ('a', 'b'))
         items = [{'id': 'c1', 'key': 'k1'}, {'id': 'c2', 'key': 'k2'}, {'id': 'c3', 'key': 'k3'}]
+        cap_script = MAX_ROUNDS.get('script')
+        MAX_ROUNDS['script'] = 99   # nhóm ca này nói về phạm vi chấm, không phải về trần số vòng
         answers[('c2', 'b')] = 'LỖI'
         st, todo, failing, missing = run(ep, 'script', items, crit, ask)
         expect(len(todo) == 3 and st['items']['c2']['verdict'] == 'FAIL' and st['items']['c1']['verdict'] == 'PASS',
@@ -694,6 +710,7 @@ def selftest():
         answers.clear(); items[0]['key'] = 'k1b'
         st, todo, failing, missing = run(ep, 'script', items, crit, ask)
         expect(st['items']['c1']['verdict'] == 'PASS' and st['items']['c2']['verdict'] == 'OPEN', 'OPEN stays open')
+        MAX_ROUNDS['script'] = cap_script
 
         # M13: a source that moved is a different item, even when the picture looks the same. The
         # 48x27 blur cannot see a shape that moved inside it, so the digest of the source decides.
@@ -716,6 +733,8 @@ def selftest():
         ep3 = os.path.join(tmp, 'tap3'); os.makedirs(os.path.join(ep3, 'review'))
         oitems = [{'id': 'o1', 'key': 'ko'}]
         answers.clear(); answers[('o1', 'a')] = 'LỖI'; answers[('o1', 'b')] = 'LỖI'
+        cap_saved = MAX_ROUNDS.get('script')
+        MAX_ROUNDS['script'] = 99   # ca này nói về nghĩa của MỞ, không phải về trần số vòng
         st, todo, failing, missing = run(ep3, 'script', oitems, crit, ask)
         expect(st['items']['o1']['verdict'] == 'FAIL', 'a failing item is FAIL')
         for n in range(2):
@@ -727,6 +746,7 @@ def selftest():
         st, todo, failing, missing = run(ep3, 'script', oitems, crit, ask)
         expect(st['items']['o1']['verdict'] == 'OPEN' and st['items']['o1']['fails'] == 3,
                'an OPEN item stays OPEN in the report even when a later round passes it')
+        MAX_ROUNDS['script'] = cap_saved
 
         # M1: a step has a round cap; at the cap the rest becomes OPEN and the step closes.
         ep4 = os.path.join(tmp, 'tap4'); os.makedirs(os.path.join(ep4, 'review'))
@@ -767,6 +787,38 @@ def selftest():
         expect(gate.tally(epcap, 'props')['OPEN'] == ['ly'],
                'and the gate counts it as MỞ, not as "chưa chấm hay đã đổi"')
 
+        # M23: một mục MỞ mà mã vẫn cứ đổi thì KHÔNG được chấm lại vô hạn — nó đã hết lượt của
+        # nó. Không có chỗ này, một vật khó sửa kéo cả bước tới vòng 9 (đo: vo-may sai 8 lần).
+        epst = os.path.join(tmp, 'tapst'); os.makedirs(os.path.join(epst, 'review'))
+        sitems = [{'id': 's1', 'key': 'ks', 'src': 'd0'}]
+        answers.clear(); answers[('s1', 'a')] = 'LỖI'
+        cap_p = MAX_ROUNDS.get('props')
+        MAX_ROUNDS['props'] = 99    # ca này nói về số phần của một mục, không phải về trần số vòng
+        st, todo, failing, missing = run(epst, 'props', sitems, crit, ask)
+        expect(st['items']['s1']['verdict'] == 'FAIL' and st['items']['s1']['fails'] == 1,
+               'a failing item is FAIL with one failure counted')
+        calls.clear()
+        sitems[0]['src'] = 'd1'      # người sửa sửa lại: mã đổi → được chấm lại
+        st, todo, failing, missing = run(epst, 'props', sitems, crit, ask)
+        expect(calls == [['s1']] and st['items']['s1']['fails'] == 2, 'a changed item goes back to the critic')
+        sitems[0]['src'] = 'd2'
+        st, todo, failing, missing = run(epst, 'props', sitems, crit, ask)
+        expect(st['items']['s1']['verdict'] == 'OPEN' and st['items']['s1']['fails'] == 3,
+               'three failures → OPEN')
+        calls.clear()
+        sitems[0]['src'] = 'd3'      # vẫn sửa tiếp: lần sửa cuối được thưởng
+        st, todo, failing, missing = run(epst, 'props', sitems, crit, ask)
+        expect(calls == [['s1']], 'an OPEN item gets one more chance after a change')
+        calls.clear()
+        sitems[0]['src'] = 'd4'
+        st, todo, failing, missing = run(epst, 'props', sitems, crit, ask)
+        expect(not calls and st['items']['s1']['verdict'] == 'OPEN',
+               'and after that it lies still in the report: it does not drag the step along')
+        calls.clear()
+        st, todo, failing, missing = run(epst, 'props', sitems, crit, ask, again=['s1'])
+        expect(calls == [['s1']], 'and --again still brings it back on purpose')
+        MAX_ROUNDS['props'] = cap_p
+
         # P9: người chấm là một phần của tiêu chuẩn — đổi người giữa chừng thì phải chấm lại.
         expect(judge_changed({'critic': 'a'}, 'a') is None, 'the same judge is fine')
         msg = judge_changed({'critic': 'a'}, 'b')
@@ -798,7 +850,10 @@ def selftest():
         def lazy(batch, prev):
             return '\n'.join(f"{it['id']} | a | ĐẠT | thấy" for it in batch)
         items.append({'id': 'c4', 'key': 'k4'})
+        cap_before = MAX_ROUNDS.get('script')
+        MAX_ROUNDS['script'] = 99     # ca này nói về "chưa chấm" chứ không phải về trần số vòng
         st, todo, failing, missing = run(ep, 'script', items, crit, lazy)
+        MAX_ROUNDS['script'] = cap_before
         expect([i['id'] for i in missing] == ['c4'] and 'c4' not in st['items'], 'an item without every CHẶN row stays unjudged')
         from PIL import Image
         a, b, c = (os.path.join(tmp, n) for n in ('a.png', 'b.png', 'c.png'))
