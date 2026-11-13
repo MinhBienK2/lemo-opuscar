@@ -46,6 +46,7 @@ STOP = {
 UNITS = {'g', 'kg', 'kj', 'c', 'o', 'v', 'm', 's', 'n', 'pa', 'hz', '%', '°'}
 
 WORDS = {
+    0: 'không',
     1: 'một', 2: 'hai', 3: 'ba', 4: 'bốn', 5: 'năm', 6: 'sáu', 7: 'bảy', 8: 'tám',
     9: 'chín', 10: 'mười', 11: 'mười một', 12: 'mười hai', 13: 'mười ba',
     14: 'mười bốn', 15: 'mười lăm', 16: 'mười sáu', 17: 'mười bảy', 18: 'mười tám',
@@ -80,6 +81,38 @@ def number_words(n):
         ones = 'lăm' if r == 5 else number_words(r)
         return (head + ' ' + ones).strip()
     return str(n)
+
+
+def decimal_words(dec):
+    """the two ways Vietnamese reads the digits after the comma
+
+    "3,75" được đọc "ba phẩy bảy lăm" (đọc từng chữ số) hoặc "ba phẩy bảy mươi lăm"
+    (đọc như một số); "1,55" được đọc "một phẩy năm lăm" hoặc "một phẩy năm mươi lăm";
+    "0,15" được đọc "không phẩy mười lăm". Máy chỉ nhận một cách đọc thì nó chặn
+    một phim đúng: lời kể đọc đúng cách nhưng khác cách máy đoán.
+    Chữ số 5 ở hàng đơn vị đọc là "lăm" ("bảy lăm", "năm lăm", "mười lăm").
+    """
+    out = []
+    digits = [c for c in dec if c.isdigit()]
+    if digits:
+        parts = []
+        for i, c in enumerate(digits):
+            w = WORDS.get(int(c), '')
+            if c == '5' and i == len(digits) - 1:
+                w = 'lăm'
+            if w:
+                parts.append(w)
+        if parts:
+            out.append(' '.join(parts))
+    try:
+        n = int(''.join(digits))
+    except ValueError:
+        n = None
+    if n is not None:
+        w = number_words(n)
+        if w:
+            out.append(w)
+    return out
 
 
 def tokens(s):
@@ -199,6 +232,24 @@ def is_said(value, spoken, all_said):
             ss = strip_accents(s).lower()
             if w in ss or ss in w:
                 return True
+    frac = value - int(value)
+    if frac > 1e-9:
+        # Số thập phân đọc thành chữ: "hai phẩy năm" là 2,5. Không có nhánh này thì một
+        # nhãn "XANH CÒN 2,5 %" bị coi là con số lời kể không đọc, dù lời kể nói đúng
+        # "hai phẩy năm phần trăm" (tập 03, biến lục trong tô) — máy chặn một phim đúng.
+        # Phần thập phân lấy từ chính con số viết ra, không làm tròn: làm tròn một chữ số
+        # thì 1,55 bị đòi nói "một phẩy sáu" và 0,15 bị đòi nói "không phẩy một", trong
+        # khi lời kể đọc đúng "một phẩy năm lăm" và "không phẩy mười lăm".
+        dec = repr(float(value)).partition('.')[2]
+        if dec:
+            head = strip_accents(number_words(int(value)) + ' phẩy ').lower()
+            for s in spoken:
+                if not s:
+                    continue
+                ss = strip_accents(s).lower()
+                for tail in decimal_words(dec):
+                    if head + strip_accents(tail).lower() in ss:
+                        return True
     # "mot nua" says a half
     if abs(value - 0.5) < 1e-9:
         for s in spoken:
@@ -243,6 +294,27 @@ def selftest():
                          ['quanh bốn mươi lăm độ'])),
         ('lời kể nói "bốn mươi độ" thì 45 chưa được đọc',
          lambda: not is_said(45, ['quanh bốn mươi độ'], ['quanh bốn mươi độ'])),
+        # Số thập phân đọc thành chữ: "hai phẩy năm" là 2,5
+        ('lời kể nói "hai phẩy năm phần trăm" thì 2,5 đã được đọc',
+         lambda: is_said(2.5, ['trong tia chỉ còn khoảng hai phẩy năm phần trăm màu xanh'],
+                         ['trong tia chỉ còn khoảng hai phẩy năm phần trăm màu xanh'])),
+        ('lời kể không nói số thập phân đó thì 2,5 chưa được đọc',
+         lambda: not is_said(2.5, ['một lớp hạt nhỏ'], ['một lớp hạt nhỏ'])),
+        ('"năm phẩy" không phải là 2,5', lambda: not is_said(2.5, ['năm phẩy rơi xuống'],
+                                                              ['năm phẩy rơi xuống'])),
+        ('số 0 đọc thành "không"', lambda: number_words(0) == 'không'),
+        # Số thập phân có hai chữ số: 1,55 đọc là "một phẩy năm mươi lăm". Làm tròn một
+        # chữ số thì máy đòi nói "một phẩy sáu" — chặn một phim đúng (tập 03, tóc ẩm).
+        ('lời kể nói "một phẩy năm mươi lăm" thì 1,55 đã được đọc',
+         lambda: is_said(1.55, ['mô đun của sợi tóc rơi xuống còn một phẩy năm mươi lăm giga pascal'],
+                         ['một phẩy năm mươi lăm'])),
+        ('lời kể nói "không phẩy mười lăm milimét" thì 0,15 đã được đọc',
+         lambda: is_said(0.15, ['một sợi dày chừng không phẩy mười lăm milimét'],
+                         ['không phẩy mười lăm'])),
+        ('lời kể không nói số thập phân đó thì 1,55 chưa được đọc',
+         lambda: not is_said(1.55, ['một lớp hạt nhỏ'], ['một lớp hạt nhỏ'])),
+        ('"một phẩy sáu" không phải là 1,55',
+         lambda: not is_said(1.55, ['một phẩy sáu'], ['một phẩy sáu'])),
     ]
     bad = [name for name, ok in cases if not ok()]
     for name, ok in cases:
