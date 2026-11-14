@@ -109,13 +109,18 @@ case "$FOLDER" in */films/*|films/*|*/channels/*|channels/*) BAND="--band 880";;
 # default is looser), and the delivery review passes them to the check — so the rule a channel writes down is
 # the rule the gate keeps. It also says how the reading check must draw: a channel that draws at 2× on a small
 # GPU loses the browser halfway through the film, and the check that never finished says nothing about the film.
-NUMOPT=""; QOPT=""; MOTION=0; OOPT=""
+NUMOPT=""; QOPT=""; MOTION=0; OOPT=""; LOOKOPT=""
 # The walk starts inside the folder, so the path it compares is absolute: a relative folder turns into "." and
 # dirname(".") is "." forever, and the gate then spins without printing a line until it is killed.
 _d=$(cd "$FOLDER" 2>/dev/null && while [ ! -f CHANNEL.md ] && [ "$PWD" != / ]; do cd ..; done && pwd)
 if [ -f "$_d/CHANNEL.md" ] && [ -f "$_d/scene_rules.json" ]; then
   N=$(python3 -c "import json,sys;print(json.load(open(sys.argv[1])).get('numbersPer20s',''))" "$_d/scene_rules.json" 2>/dev/null || true)
   [ -n "$N" ] && NUMOPT="--numbers-per-20s $N"
+  # how many different looks the film must show in twenty seconds. The library's default is calibrated on a
+  # two-minute film; a channel that makes long episodes states its own limit, and the gate keeps the rule the
+  # channel wrote down.
+  L=$(python3 -c "import json,sys;print(json.load(open(sys.argv[1])).get('looksPer20s',''))" "$_d/scene_rules.json" 2>/dev/null || true)
+  [ -n "$L" ] && LOOKOPT="--looks-per-20s $L"
   Q=$(python3 -c "import json,sys;print(json.load(open(sys.argv[1])).get('readcheckQ',''))" "$_d/scene_rules.json" 2>/dev/null || true)
   [ -n "$Q" ] && QOPT="$Q"
   # A channel that asks for the motion check gets it, even when it has no board.json: the check asks whether
@@ -134,7 +139,7 @@ else
   run readcheck node "$HERE/core/render/readcheck.mjs" "$FOLDER" $BAND $OOPT
 fi
 # a narrated film must stage its story, not read it: text-led frames, different looks, spoken numbers, foley on words
-if [ -n "$BAND" ]; then run scenecheck node "$HERE/core/render/scenecheck.mjs" "$FOLDER" --band 880 $NUMOPT; fi
+if [ -n "$BAND" ]; then run scenecheck node "$HERE/core/render/scenecheck.mjs" "$FOLDER" --band 880 $NUMOPT $LOOKOPT; fi
 
 # the voice: every line has to transcribe back to the script. The run happens in a scratch folder, so the
 # film's own words.json is never rewritten by a check.

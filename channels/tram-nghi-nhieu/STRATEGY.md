@@ -35,6 +35,12 @@ Không có độ dài định trước. Người làm tập (không phải ngư�
 - Hình kể trước, lời theo sau: tắt tiếng vẫn đoán được chuyện gì đang xảy ra.
 - Không quá khoảng hai con số mỗi phút (tập dài trên mười phút: khoảng một); mỗi con số là một vật trong cảnh. Nguồn để trong mô tả video.
 
+## Nhịp hình
+
+- **Một hình mới mỗi 20 giây** trong tập ngắn — hình mới là đổi nơi chốn, đổi ánh sáng, đổi cự ly. Tập dài trên mười phút: **một hình mới mỗi 30 giây**. Một tập 16 phút đòi 50 mảng màu khác nhau thì phim phải thêm những hình mà câu kể không nhắc tới: thêm hình cho có, không phải hình cần.
+- **Hình phải chuyển động *trong khung*.** Một luồng sáng run, một mặt nước sôi lấp loáng, một làn khói đổi mật độ, một đèn thở. Chuyển động của máy quay không tính: người xem thấy một bức tranh trượt, không phải một chuyện.
+- **Không đoạn nào đứng yên quá 10 giây:** câu kể đang nói gì thì hình phải đang làm gì đó.
+
 ## Luật nội dung
 
 - Không tuyên bố hay con số nào thiếu nguồn trong `FACTS.md`; nói rõ khi bằng chứng còn tranh cãi.

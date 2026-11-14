@@ -1,6 +1,8 @@
 {
   "numbersPer20s": 0.67,
   "_numbersPer20s": "Kênh nói tối đa khoảng hai con số mỗi phút (STRATEGY.md, phần 'Giọng kể'): 2 con số / 60 s = 0,67 con số mỗi 20 s. Mặc định của thư viện là 2 mỗi 20 s — lỏng hơn luật của kênh ba lần.",
+  "looksPer20s": 0.6,
+  "_looksPer20s": "Một hình mới mỗi 30 giây (STRATEGY.md, phần 'Nhịp hình'). Mặc định của thư viện là 1 mỗi 20 s — mốc ấy hiệu chỉnh trên phim hai phút; tập dài 15–20 phút của kênh thì đòi ~50 mảng màu khác nhau, tức phải thêm hình chỉ để có. Mốc ở đây (0,6) thấp hơn luật viết ra (0,67) để sai số làm tròn của bộ đo không làm rơi tập.",
   "readcheckQ": "ss=1",
   "_readcheckQ": "Bài kiểm tra đọc hình đo hộp chữ, không đo hình — mà hộp chữ thì không đổi khi bỏ siêu lấy mẫu. Ở ss=1 (1 thay vì 2) trình duyệt sống sót cả phim: ở ss=2 nó chết ở giây 91 trên máy này (6 GB VRAM). Vì thế bài đọc hình chạy ở ss=1, còn ảnh chụp và bản dựng vẫn ở ss=2.",
   "checkMotion": true,
