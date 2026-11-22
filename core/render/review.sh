@@ -115,11 +115,15 @@ NUMOPT=""; QOPT=""; MOTION=0; OOPT=""; LOOKOPT=""
 _d=$(cd "$FOLDER" 2>/dev/null && while [ ! -f CHANNEL.md ] && [ "$PWD" != / ]; do cd ..; done && pwd)
 if [ -f "$_d/CHANNEL.md" ] && [ -f "$_d/scene_rules.json" ]; then
   N=$(python3 -c "import json,sys;print(json.load(open(sys.argv[1])).get('numbersPer20s',''))" "$_d/scene_rules.json" 2>/dev/null || true)
+  # a limit is a NUMBER: a value with a space in it would be split into several
+  # arguments and could smuggle another flag into the check
+  case "$N" in (''|*[!0-9.]*) N='' ;; esac
   [ -n "$N" ] && NUMOPT="--numbers-per-20s $N"
   # how many different looks the film must show in twenty seconds. The library's default is calibrated on a
   # two-minute film; a channel that makes long episodes states its own limit, and the gate keeps the rule the
   # channel wrote down.
   L=$(python3 -c "import json,sys;print(json.load(open(sys.argv[1])).get('looksPer20s',''))" "$_d/scene_rules.json" 2>/dev/null || true)
+  case "$L" in (''|*[!0-9.]*) L='' ;; esac
   [ -n "$L" ] && LOOKOPT="--looks-per-20s $L"
   Q=$(python3 -c "import json,sys;print(json.load(open(sys.argv[1])).get('readcheckQ',''))" "$_d/scene_rules.json" 2>/dev/null || true)
   [ -n "$Q" ] && QOPT="$Q"

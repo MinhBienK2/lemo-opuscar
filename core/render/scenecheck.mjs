@@ -29,7 +29,10 @@ const NUMS = +opt('--numbers-per-20s', 2);
 // how many different looks the film must show in twenty seconds. The default is the library's own, calibrated
 // on a two-minute film; a channel that makes long episodes states its own limit in scene_rules.json and the
 // delivery review passes it here, so the rule a channel writes down is the rule the gate keeps.
-const LOOKS = +opt('--looks-per-20s', 1);
+const LOOKS_RAW = +opt('--looks-per-20s', 1);
+// a limit that is not a positive number is not a limit: the library's own stands,
+// so a typo in a channel's rules cannot switch the check off (0) or void it (NaN)
+const LOOKS = Number.isFinite(LOOKS_RAW) && LOOKS_RAW > 0 ? LOOKS_RAW : 1;
 const snap = fingerprint(dir);
 const { browser, page } = await openDemo(dir, { w: VW, h: VH });
 const readPage = ({ STEP, BAND }) => {

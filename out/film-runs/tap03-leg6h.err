@@ -1,0 +1,3 @@
+⚠ claude.ai connectors are disabled because ANTHROPIC_API_KEY or another auth source is set and takes precedence over your claude.ai login · Unset it to load your organization's connectors
+[claude-code:unrecognized_model] {"model":"2tocom/MiniMax-M3.1-Flash:high[1m]","query_source":"agent:builtin:workflow-subagent"}
+Background tasks still running 10m after the last turn (workflow "Sửa 30 câu hình của bước 6 (tap-03 điện thoại nóng khi sạc) ", workflow "Sửa 30 câu hình của bước 6 (tap-03 điện thoại nóng khi sạc) ", workflow "Sửa 30 câu hình của bước 6 (tap-03 điện thoại nóng khi sạc) ", workflow "Sửa 30 câu hình của bước 6 (tap-03 điện thoại nóng khi sạc) "); stopping them. Set CLAUDE_CODE_PRINT_BG_WAIT_CEILING_MS=0 to wait indefinitely.

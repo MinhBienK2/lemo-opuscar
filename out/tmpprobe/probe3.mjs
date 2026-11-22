@@ -1,0 +1,18 @@
+import './canvas-stub.mjs';
+import * as THREE from 'three';
+const base = '/home/minhbien/Documents/lemo-opuscar/channels/tram-nghi-nhieu/series/do-vat/tap-03-dien-thoai-nong-khi-sac/src/';
+const { buildN5 } = await import(base + 'n5-tui-pin.js');
+const S = buildN5();
+S.scene.updateMatrixWorld(true);
+let withUpd = [];
+S.scene.traverse(o => { if (typeof o.updateProp === 'function') withUpd.push(o.name || o.type); });
+console.log('objects with updateProp in scene:', withUpd);
+const box = new THREE.Box3();
+const grab = nm => { const r=[]; S.scene.traverse(o=>{ if(o.isMesh && o.name===nm) r.push(o); }); return r; };
+const li0 = grab('hat-liti')[0], bub0 = grab('bong-bop')[0];
+console.log('li0 world before update:', li0.getWorldPosition(new THREE.Vector3()).toArray());
+S.update(5.0, { dim: 1, focus: 1 });
+S.scene.updateMatrixWorld(true);
+console.log('li0 world after update(5):', li0.getWorldPosition(new THREE.Vector3()).toArray());
+console.log('bub0 world after update(5):', bub0.getWorldPosition(new THREE.Vector3()).toArray());
+box.setFromObject(li0); console.log('li0 bbox', box.min.toArray().map(v=>v.toFixed(4)), box.max.toArray().map(v=>v.toFixed(4)));

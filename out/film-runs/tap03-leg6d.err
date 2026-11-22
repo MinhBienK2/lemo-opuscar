@@ -1,0 +1,4 @@
+⚠ claude.ai connectors are disabled because ANTHROPIC_API_KEY or another auth source is set and takes precedence over your claude.ai login · Unset it to load your organization's connectors
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+[claude-code:unrecognized_model] {"model":"2tocom/MiniMax-M3.1-Flash:high[1m]","query_source":"agent:builtin:general-purpose"}
+Background tasks still running 10m after the last turn (workflow "Sửa 8 câu hình còn sót của tập 03 (N4/N6) rồi dựng lại tờ nh"); stopping them. Set CLAUDE_CODE_PRINT_BG_WAIT_CEILING_MS=0 to wait indefinitely.
